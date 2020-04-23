@@ -1,0 +1,12 @@
+@import "./assets/styles/colors.scss";
+@import "../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+@import "./assets/styles/fonts.css";
+@import "./assets/styles/global.scss";
+@import "./assets/styles/react-select-search.scss";
+
+html,
+body,
+#root {
+  height: 100%;
+  font-size: 16px;
+}

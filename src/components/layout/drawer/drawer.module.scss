@@ -1,0 +1,45 @@
+@import "../../../assets/styles/colors.scss";
+.style {
+  border: $border;
+  $padding: 10px;
+  width: max-content;
+
+  > div {
+    background-color: white;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: $padding;
+
+    &,
+    * {
+      cursor: pointer;
+    }
+
+    & + .content {
+      border-top: $border;
+    }
+    button.toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      &.flip {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .content {
+    padding: $padding;
+    font-size: 0.9rem;
+    &.hidden {
+      visibility: hidden;
+      height: 0;
+      padding: 0 $padding;
+    }
+  }
+}

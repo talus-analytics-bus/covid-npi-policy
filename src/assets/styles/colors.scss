@@ -1,0 +1,55 @@
+// VARIABLES
+// general colors
+$gray: #999999;
+$light-gray: #676767;
+$light-gray-2: #f1f1f1;
+$dark-gray: #333;
+$dark-blue: #053061;
+$light-red: #dcc4cb;
+$red: #67001f;
+$green: darkgreen;
+$white: #fff;
+$cyan: #53aadd;
+$light-cyan: #d9edf8;
+
+// functional colors
+$selected-blue: #449fb7;
+$dark-selected-blue: $dark-blue;
+$no-data-gray: #b3b3b3;
+
+// general styles
+$border: 1px solid #ccc;
+$border-radius: 5px;
+
+// make colors available to JS
+:export {
+  red: $red;
+  lightred: $light-red;
+  darkblue: $dark-blue;
+  white: $white;
+  cyan: $cyan;
+  lightcyan: $light-cyan;
+  noDataGray: $no-data-gray;
+  gray: $gray;
+  darkSelectedBlue: $dark-selected-blue;
+}
+
+// MIXINS
+@mixin spaceItemsVert($size) {
+  > :not(:first-child) {
+    margin-top: $size;
+  }
+}
+@mixin spaceItemsHoriz($size) {
+  > :not(:last-child) {
+    margin-right: $size;
+  }
+}
+
+@mixin borderItemsVert($size) {
+  > :not(:last-child) {
+    margin-bottom: $size;
+    padding-bottom: $size;
+    border-bottom: $border;
+  }
+}

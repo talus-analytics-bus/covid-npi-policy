@@ -1,0 +1,25 @@
+@import "../../../../assets/styles/colors.scss";
+
+.checkbox {
+  > div {
+    font-weight: bold;
+  }
+  form {
+    display: flex;
+    flex-flow: column;
+  }
+  label {
+    font-weight: normal;
+    color: black;
+    display: flex;
+    flex-flow: row;
+    white-space: normal;
+    cursor: pointer;
+  }
+  input {
+    margin: auto 5px auto 0;
+    &:checked + span {
+      color: $dark-blue;
+    }
+  }
+}

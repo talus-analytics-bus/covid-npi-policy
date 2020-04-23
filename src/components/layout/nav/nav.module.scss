@@ -1,0 +1,255 @@
+@import "../../../assets/styles/colors.scss";
+$nav-height: 90px;
+$logo-height: 50px;
+// $logo-height: 50px;
+
+.navWrapper {
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  .nav {
+    background-color: white;
+    z-index: 3;
+    display: flex;
+    justify-content: left;
+    border-bottom: unset;
+    $navButtonSize: 55px;
+
+    .navButtons {
+      display: flex;
+      flex-flow: row;
+      position: absolute;
+      right: 0;
+      bottom: -$navButtonSize/2;
+    }
+
+    // .navButtons .active {
+    &.loading {
+      .navButtonContainer {
+        // pointer-events: none;
+      }
+    }
+    &.loading .navButtons .active {
+      // Circle
+      .buttonSpinner {
+        opacity: 1;
+        transition: 0.5s opacity;
+      }
+    }
+    .navButtons .buttonSpinner {
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.5s all;
+      -webkit-animation: spin 1s linear infinite;
+      animation: spin 1s linear infinite;
+      transform-origin: center;
+      @keyframes spin {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+    }
+    a {
+      display: flex;
+
+      .img {
+        position: relative;
+        left: 3px;
+        height: $logo-height;
+        margin: auto 0;
+      }
+    }
+
+    .text {
+      display: flex;
+
+      flex-flow: column;
+      text-align: left;
+      justify-content: center;
+      line-height: 1.2;
+
+      .title,
+      .subtitle {
+        color: white;
+        // align-self: center;
+      }
+      .title {
+        font-family: "Gotham Bold", serif;
+        font-size: 2em;
+        color: white;
+        align-self: center;
+      }
+      .subtitle {
+        font-family: "Gotham Book", serif;
+        font-style: italic;
+        color: $gray;
+      }
+    }
+
+    $regionPickerWidth: 300px;
+    .navButtonContainer .locationPicker {
+      background-color: white;
+      opacity: 0;
+      transition: opacity 0.25s;
+      width: $regionPickerWidth;
+      position: absolute;
+      right: 0;
+      top: -10px;
+      border-radius: 10px;
+      box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+      -webkit-box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+      pointer-events: none;
+      line-height: 1.3;
+
+      font-size: 1.25em;
+
+      &.visible {
+        opacity: 1;
+        transition: opacity 0.25s;
+        pointer-events: all;
+
+        & + .navButton {
+          border: 2px solid $light-gray-2;
+          box-shadow: none;
+          -webkit-box-shadow: none;
+        }
+      }
+
+      & + .navButton {
+        cursor: default;
+        &:active {
+          background-color: darken(#5781ab, 15%);
+        }
+      }
+
+      .header {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        font-family: "Gotham Bold";
+        background-color: $light-gray-2;
+        border-radius: 10px 10px 0 0;
+        height: 80px;
+        padding-left: 20px;
+        margin: auto 0;
+      }
+      .content {
+        font-family: "Gotham Book", sans-serif;
+        font-size: 0.66em;
+        .regionContainer {
+          &:nth-last-child(2) .region {
+            border-radius: 0 0 10px 10px;
+          }
+          .region {
+            span {
+            }
+            padding: 20px;
+            cursor: pointer;
+
+            &:hover {
+              background-color: lighten($light-gray-2, 5%);
+            }
+            &[currentitem="true"] {
+              > span {
+                color: $selected-blue;
+                text-decoration: underline;
+              }
+
+              .regionCountryMenu {
+                display: flex;
+                flex-flow: column;
+              }
+            }
+            .regionCountryMenu {
+              $border: 2px;
+              $padding: 20px + 30px;
+              display: none;
+              position: relative;
+              top: -10px;
+              // transition: opacity .25s;
+
+              place-self: center;
+              width: $regionPickerWidth * 0.66;
+              border-radius: 10px;
+
+              overflow-y: scroll;
+              max-height: 75vh;
+
+              background-color: white;
+              box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+              -webkit-box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+            }
+            &.active + .regionTooltip {
+              opacity: 1;
+            }
+          }
+        }
+
+        .country,
+        .countryResult {
+          padding: 10px;
+          color: black;
+          text-decoration: none !important;
+          cursor: pointer;
+
+          &:hover {
+            background-color: lighten($light-gray-2, 5%);
+          }
+          &.active,
+          &.active:hover {
+            background-color: #8fc5d4;
+          }
+
+          .curCountryMarker {
+            height: 15px !important;
+            width: 15px !important;
+            transform: none !important;
+            margin-left: 5px !important;
+            right: 10px;
+            position: absolute !important;
+          }
+        }
+        .countryResult {
+          padding: 10px 20px;
+
+          &:nth-last-child(2) {
+            border-radius: 0 0 10px 10px;
+          }
+        }
+
+        .country {
+          &:last-child {
+            border-radius: 0 0 10px 10px;
+          }
+        }
+
+        .regionTooltip {
+          pointer-events: auto !important;
+          background-color: white;
+          position: absolute;
+          margin: 0;
+          top: 0;
+          opacity: 1;
+
+          $border: 2px;
+          $padding: 20px + 30px;
+          left: -$regionPickerWidth + 2px + 100px;
+          width: $regionPickerWidth * 0.66;
+          border-radius: 10px;
+          padding: 0;
+          overflow-y: scroll;
+          max-height: 30vh;
+
+          background-color: white;
+          box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+          -webkit-box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+        }
+      }
+    }
+  }
+}

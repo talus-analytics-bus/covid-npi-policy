@@ -1,0 +1,13 @@
+@import "../../../assets/styles/colors.scss";
+
+.checkboxSet {
+  .label:empty + .checkboxContainer {
+    margin-left: 0;
+  }
+  .checkboxContainer {
+    font-family: "Open Sans", sans-serif;
+    max-height: 400px;
+    overflow-y: scroll;
+    margin-left: 10px;
+  }
+}
