@@ -5,30 +5,55 @@ $button-font-size: 16px;
 $spacing: 10px;
 
 .footer {
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  text-align: center;
-  color: #555;
-  background: #f2f2f2;
-  margin-top: 10px;
+  width: 100%;
+  border-top: 1px $gray solid;
+  background-color: white;
 
-  > div:first-child {
-    // margin: auto auto 0 0;
-    font-style: italic;
-    font-family: "Gotham Book", sans-serif;
-    color: $dark-gray;
+  &.wide .content {
+    max-width: 1366px;
+  }
+  .content {
+    max-width: 1170px;
   }
 
-  > div {
+  $item-spacing: 30px;
+  .content {
     display: flex;
-    align-items: center;
-    font-weight: 600;
-    font-size: 14px;
-  }
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: flex-end;
 
-  img {
-    height: 42px;
-    padding: 10px;
+    min-height: 70px;
+    padding: 20px 0;
+    margin: 0 auto;
+    div:first-child {
+      font-style: italic;
+      font-family: "Open Sans", sans-serif;
+      color: #999999;
+      font-size: 16px;
+    }
+
+    img {
+      height: 70px;
+      padding: 0 $item-spacing;
+    }
+
+    a:first-child:not(:last-child) img {
+      border-right: 1px solid $gray;
+    }
+    a:last-child img {
+      padding-right: 0;
+    }
+    a {
+      position: relative;
+      > div {
+        position: absolute;
+        top: -25px;
+        left: $item-spacing;
+        font-size: 0.9em;
+        pointer-events: none;
+        color: #333;
+      }
+    }
   }
 }

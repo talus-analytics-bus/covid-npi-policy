@@ -1,27 +1,41 @@
 import React from "react";
 import styles from "./footer.module.scss";
 import talus from "../../../assets/images/logo-talus.png";
+import gu from "../../../assets/images/logo-georgetown.png";
 import Util from "../../misc/Util.js";
 
 const Footer = () => {
   const images = [
     {
+      imgSrc: gu,
+      url: "https://ghss.georgetown.edu/",
+      alt:
+        "Georgetown University Center for Global Health Science and Security",
+      txt: null
+    },
+    {
       imgSrc: talus,
       url: "http://talusanalytics.com/",
-      alt: "Talus Analytics, LLC"
+      alt: "Talus Analytics, LLC",
+      txt: "Built by",
+      style: {
+        height: "60px",
+        position: "relative",
+        top: "5px"
+      }
     }
   ];
 
   return (
     <div className={styles.footer}>
-      <div className={styles.dataAsOf}></div>
-      {images.map((d, i) => (
-        <div>
+      <div className={styles.content}>
+        {images.map(d => (
           <a target="_blank" href={d.url} alt={d.alt}>
-            <img src={d.imgSrc} />
+            <img style={d.style} src={d.imgSrc} />
+            {d.txt && <div>{d.txt}</div>}
           </a>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
