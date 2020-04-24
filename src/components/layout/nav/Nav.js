@@ -6,7 +6,7 @@ import logo from "../../../assets/images/logo-talus.png";
 import ReactTooltip from "react-tooltip";
 
 const Nav = ({ ...props }) => {
-  return <div>Nav placeholder</div>;
+  return <div className={styles.nav}>Nav placeholder</div>;
 };
 
 export default Nav;

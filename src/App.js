@@ -15,7 +15,7 @@ import { Footer } from "./components/layout";
 import Data from "./components/views/data/Data.js";
 
 // // styles
-// import styles from "./App.module.scss";
+import styles from "./App.module.scss";
 // import "material-design-icons/iconfont/material-icons.css";
 
 const defaultComponent = () => {
@@ -28,7 +28,7 @@ const App = () => {
     <BrowserRouter>
       <Nav />
       <Switch>
-        <div>
+        <div className={styles.page}>
           <Route exact path="/" component={defaultComponent} />
         </div>
       </Switch>

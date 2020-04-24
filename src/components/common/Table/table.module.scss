@@ -1,7 +1,6 @@
 @import "../../../assets/styles/colors.scss";
 
 .table {
-  padding: 20px;
   > [role="subheader"] {
     font-size: 26px; // TODO unify
     > span {
@@ -23,15 +22,27 @@
   }
   th {
     text-align: left;
-    font-family: "Lato", serif;
+    font-family: "Open Sans", serif;
+    background-color: $light-gray;
   }
   // clear borders
   table {
+    border: 2px solid $gray !important;
+    td,
+    th {
+      border: none !important;
+      &:not(:last-child) {
+        border-right: 1px solid $gray-2 !important;
+      }
+    }
+    tr {
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-2 !important;
+      }
+    }
     &,
     tbody tr td,
     thead tr th {
-      border: none;
-      border-bottom: 1px solid #808080;
       vertical-align: middle;
       > span {
         display: flex;
@@ -60,17 +71,21 @@
     font-style: italic;
     color: $gray;
   }
-  .notes {
-    @include spaceItemsVert(10px);
-    .note {
-      .username {
-        font-weight: 600;
-      }
-      .text {
-        padding: 10px 5px;
-        margin: 2px;
-        border-left: 1px solid $light-gray;
-      }
+
+  // Bootstrap tables
+  [class="row react-bootstrap-table-pagination"] {
+    display: flex;
+    align-items: center;
+  }
+  [class^="react-bootstrap-table-pagination-list"] {
+    ul {
+      float: right;
+    }
+  }
+  label[for="search-bar-0"] {
+    float: right;
+    font-weight: normal;
+    &::placeholder {
     }
   }
 }

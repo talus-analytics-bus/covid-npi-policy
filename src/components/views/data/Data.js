@@ -50,8 +50,6 @@ const Data = () => {
         policies: Policy({ method: "get" })
       }
     });
-    console.log("results");
-    console.log(results);
     setData(results.policies.data);
   };
 
@@ -61,7 +59,11 @@ const Data = () => {
   else
     return (
       <div className={styles.data}>
-        <h1>Welcome to COVID Policy Tracker</h1>
+        <h1>
+          Welcome to COVID
+          <br />
+          Policy Tracker
+        </h1>
         <div className={styles.columnText}>
           <p>
             The COVID Policy Tracker provides access to a comprehensive list of
@@ -86,7 +88,7 @@ const Data = () => {
             nulla facilisi.
           </p>
         </div>
-        <Drawer />
+        <Drawer {...{ label: <h2>Policy library</h2> }} />
         <Table {...{ columns, data }} />
       </div>
     );

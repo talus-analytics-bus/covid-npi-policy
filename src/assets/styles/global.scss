@@ -1,6 +1,9 @@
+body {
+  font-size: 16px;
+}
 body,
 button {
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
   font-weight: normal;
 }
 
@@ -10,4 +13,21 @@ button {
 
 p {
   margin: 0;
+}
+
+h1,
+h2 {
+  font-family: "Gotham Bold", serif;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.33rem;
+  color: $cyan;
+}
+
+h2 {
+  font-size: 1.84rem;
+  color: $dark-blue;
 }

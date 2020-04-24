@@ -1,1 +1,13 @@
 @import "../../../assets/styles/colors.scss";
+.data {
+  @include spaceItemsVert(40px);
+  .columnText {
+    display: flex;
+    flex-flow: row;
+    font-family: "Rawline", serif;
+    * {
+      line-height: 2;
+    }
+    @include spaceItemsHoriz(40px);
+  }
+}
