@@ -109,7 +109,12 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
 
   // table is expandable if at least on row has children to show
   const expandable = data.some(d => d.children !== undefined);
-
+  const defaultSorted = [
+    {
+      dataField: "date_issued",
+      order: "desc"
+    }
+  ];
   // main jsx for Bootstrap table
   return (
     <div className={styles.table}>
@@ -124,11 +129,29 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
               expandRow={expandable ? expandRow : undefined}
               classes={{ [styles.expandable]: expandable }}
               {...props.baseProps}
+              defaultSorted={defaultSorted}
             />
           </div>
         )}
       </ToolkitProvider>
     </div>
   );
+  // const defaultSorted = [
+  //   {
+  //     dataField: "date_issued",
+  //     order: "desc"
+  //   }
+  // ];
+  // // main jsx for Bootstrap table
+  // return (
+  //   <div className={styles.table}>
+  //     <BootstrapTable
+  // defaultSorted={defaultSorted}
+  //       keyField={"id"}
+  //       data={data}
+  //       columns={columns}
+  //     />
+  //   </div>
+  // );
 };
 export default Table;

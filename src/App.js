@@ -10,13 +10,16 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 // layout
 import { Nav } from "./components/layout";
 import { Footer } from "./components/layout";
-//
+
+// views
+import Data from "./components/views/data/Data.js";
+
 // // styles
 // import styles from "./App.module.scss";
 // import "material-design-icons/iconfont/material-icons.css";
 
 const defaultComponent = () => {
-  return <div>Placeholder component</div>;
+  return <Data />;
 };
 
 //: React.FC

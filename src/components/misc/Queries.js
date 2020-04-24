@@ -6,15 +6,24 @@ const API_URL = process.env.REACT_APP_API_URL;
  */
 export const Policy = async function({ method }) {
   let req;
-  if (method === "get")
+  if (method === "get") {
     req = await axios(`${API_URL}/get_policy`, {
-      params
+      params: {}
     });
-  else {
+  } else {
     console.log("Error: Method not implemented for `Policy`: " + method);
     return false;
   }
   const res = await req;
   if (res.data !== undefined) return res.data;
   else return false;
+};
+
+export const execute = async function({ queries }) {
+  const results = {};
+  for (const [k, v] of Object.entries(queries)) {
+    const res = await v;
+    results[k] = res;
+  }
+  return results;
 };
