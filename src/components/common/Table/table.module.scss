@@ -1,0 +1,76 @@
+@import "../../../assets/styles/colors.scss";
+
+.table {
+  padding: 20px;
+  > [role="subheader"] {
+    font-size: 26px; // TODO unify
+    > span {
+      @include horiz();
+    }
+  }
+  h2 {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: $cyan;
+  }
+
+  // table sorting icons
+  img.sortable {
+    margin-left: 5px;
+    $size: 20px;
+    height: $size;
+    width: $size;
+  }
+  th {
+    text-align: left;
+    font-family: "Lato", serif;
+  }
+  // clear borders
+  table {
+    &,
+    tbody tr td,
+    thead tr th {
+      border: none;
+      border-bottom: 1px solid #808080;
+      vertical-align: middle;
+      > span {
+        display: flex;
+        align-items: center;
+        .caret {
+          margin-left: auto;
+          font-size: 34px;
+          transform: rotate(180deg);
+          transition: transform 0.5s;
+        }
+      }
+    }
+    &.expandable {
+      td:not([class="reset-expansion-style"]) {
+        cursor: pointer;
+      }
+    }
+    tr.expandedParent {
+      .caret {
+        transform: unset;
+        transition: transform 0.5s;
+      }
+    }
+  }
+  .unspecified {
+    font-style: italic;
+    color: $gray;
+  }
+  .notes {
+    @include spaceItemsVert(10px);
+    .note {
+      .username {
+        font-weight: 600;
+      }
+      .text {
+        padding: 10px 5px;
+        margin: 2px;
+        border-left: 1px solid $light-gray;
+      }
+    }
+  }
+}
