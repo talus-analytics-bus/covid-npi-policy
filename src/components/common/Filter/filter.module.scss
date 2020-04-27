@@ -1,0 +1,89 @@
+@import "../../../assets/styles/colors.scss";
+
+.filter {
+  display: flex;
+  flex-flow: column;
+  &:not(:last-child) .filterButton {
+    border-right: $border;
+  }
+  .label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .input {
+    .filterButton {
+      $background-color: white;
+      background-color: $background-color;
+      padding: 5px 20px;
+      cursor: pointer;
+      line-height: 0;
+      &.selected > span.field {
+        font-weight: bold;
+      }
+      span.selections {
+        font-style: italic;
+      }
+      i {
+        vertical-align: middle;
+        margin-left: 20px;
+        width: 20px;
+      }
+      &:hover,
+      &.shown {
+        background-color: darken($background-color, 10%);
+        transition: background-color 0.125s;
+      }
+
+      &:active {
+        background-color: darken($background-color, 20%);
+        @include boxShadow();
+      }
+    }
+    .filterMenu {
+      position: absolute;
+      transition: opacity 0.125s;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+      &.shown {
+        opacity: 1;
+        pointer-events: all;
+        @include boxShadow();
+      }
+
+      > div {
+        height: unset !important;
+      }
+      max-width: max-content;
+      height: unset !important;
+      height: min-content !important;
+
+      .filterMenuWrapper {
+        max-height: max-content !important;
+        height: unset !important;
+        min-height: 100px !important  ;
+      }
+
+      &,
+      div[class^="ReactVirtualized__Grid "] {
+        height: max-content !important;
+
+        div[class="ReactVirtualized__Grid__innerScrollContainer"] {
+          overflow-y: scroll !important;
+          max-height: 200px !important;
+        }
+      }
+
+      div[class^="kn-item__item__"] {
+        & + div {
+          height: max-content !important;
+          position: unset !important;
+        }
+      }
+
+      div[class^="kn-column__column"] {
+        height: max-content !important;
+      }
+    }
+  }
+}

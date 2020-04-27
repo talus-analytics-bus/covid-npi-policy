@@ -4,12 +4,48 @@ import styles from "./data.module.scss";
 import moment from "moment";
 
 // common compoments
-import { Table } from "../../common";
+import { FilterSet, Table } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import { Policy, execute } from "../../misc/Queries.js";
 
 const Data = () => {
+  const [initializing, setInitializing] = useState(true);
+
+  // define data for table
   const [data, setData] = useState(null);
+  const [filters, setFilters] = useState(null);
+
+  // define non-date filters
+  const [filterDefs, setFilterDefs] = useState({
+    primary_ph_measure: {
+      field: "primary_ph_measure",
+      label: "Policy category",
+      getItems: async () => {
+        return [
+          { id: 0, label: "Social distancing", value: "Social distancing" }
+        ];
+      }
+    },
+    ph_measure_details: {
+      field: "ph_measure_details",
+      label: "Policy type",
+      getItems: async () => {
+        return [{ id: 0, label: "School closures", value: "School closures" }];
+      }
+    }
+    // test_attribute: {
+    //   field: "test_attribute",
+    //   label: "Test attribute",
+    //   getItems: async () => {
+    //     return [
+    //       { id: 0, label: "CJE", value: "CJE" },
+    //       { id: 1, label: "Test 2", value: "Test 2" },
+    //       { id: 2, label: "Test 3", value: "Test 3" },
+    //       { id: 3, label: "Test 4", value: "Test 4" }
+    //     ];
+    //   }
+    // }
+  });
   const columns = [
     {
       dataField: "auth_entity.level",
@@ -44,18 +80,46 @@ const Data = () => {
     }
   ];
 
-  const getData = async () => {
+  const getData = async (filters = null) => {
+    const method = filters === null ? "get" : "post";
     const results = await execute({
       queries: {
-        policies: Policy({ method: "get" })
+        policies: Policy({ method, filters })
       }
     });
     setData(results.policies.data);
+    // if page is first initializing, also retrieve filter optionset values for
+    // non-date filters
+    // TODO move this out of main code if possible
+    if (initializing) {
+      setInitializing(false);
+      const queries = {};
+      for (const [k, v] of Object.entries(filterDefs)) {
+        queries[k] = await v.getItems();
+      }
+      const results = await execute({ queries });
+      console.log("results");
+      console.log(results);
+      const newFilterDefs = { ...filterDefs };
+
+      for (const [k, v] of Object.entries(filterDefs)) {
+        filterDefs[k].items = results[k];
+      }
+      setFilterDefs(newFilterDefs);
+      console.log("newFilterDefs");
+      console.log(newFilterDefs);
+    }
   };
 
+  // on initial page load, get all data and filter optionset values
   useEffect(getData, []);
 
-  if (data === null) return <div />;
+  // when filters are changed, retrieve filtered data
+  useEffect(() => {
+    if (!initializing) getData(filters);
+  }, [filters]);
+
+  if (initializing) return <div />;
   else
     return (
       <div className={styles.data}>
@@ -88,7 +152,22 @@ const Data = () => {
             nulla facilisi.
           </p>
         </div>
-        <Drawer {...{ label: <h2>Policy library</h2>, noCollapse: true }} />
+        <Drawer
+          {...{
+            label: <h2>Policy library</h2>,
+            noCollapse: true,
+            content: (
+              <React.Fragment>
+                <FilterSet {...{ filterDefs, filters, setFilters }} />
+                {filters !== null && (
+                  <button onClick={() => setFilters(null)}>
+                    Clear filters
+                  </button>
+                )}
+              </React.Fragment>
+            )
+          }}
+        />
         <Table {...{ columns, data }} />
       </div>
     );
