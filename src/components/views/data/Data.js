@@ -25,6 +25,11 @@ const Data = () => {
       field: "level",
       label: "Organizational level"
     },
+    loc: {
+      entity_name: "Auth_Entity",
+      field: "loc",
+      label: "Specific location"
+    },
     primary_ph_measure: {
       entity_name: "Policy",
       field: "primary_ph_measure",
