@@ -19,10 +19,11 @@
     text-transform: uppercase;
     background-color: $light-blue-2;
     color: $dark-blue;
-
-    &,
-    * {
-      cursor: pointer;
+    &:not(.noCollapse) {
+      &,
+      * {
+        cursor: pointer;
+      }
     }
 
     & + .content {

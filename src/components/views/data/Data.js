@@ -88,7 +88,7 @@ const Data = () => {
             nulla facilisi.
           </p>
         </div>
-        <Drawer {...{ label: <h2>Policy library</h2> }} />
+        <Drawer {...{ label: <h2>Policy library</h2>, noCollapse: true }} />
         <Table {...{ columns, data }} />
       </div>
     );
