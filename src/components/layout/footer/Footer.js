@@ -20,8 +20,8 @@ const Footer = () => {
       txt: "Built by",
       style: {
         height: "60px",
-        position: "relative",
-        top: "5px"
+        position: "relative"
+        // top: "5px"
       }
     }
   ];

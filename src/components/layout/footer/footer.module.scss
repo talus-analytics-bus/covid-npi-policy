@@ -8,24 +8,24 @@ $spacing: 10px;
   width: 100%;
   border-top: 1px $gray solid;
   background-color: white;
+  padding: 10px 20px;
 
-  &.wide .content {
-    max-width: 1366px;
-  }
-  .content {
-    max-width: 1170px;
-  }
+  // &.wide .content {
+  //   max-width: 1366px;
+  // }
+  // .content {
+  //   max-width: 1170px;
+  // }
 
   $item-spacing: 30px;
   .content {
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: flex-end;
 
     min-height: 70px;
-    padding: 20px 0;
-    margin: 0 auto;
+    // margin: 0 auto;
     div:first-child {
       font-style: italic;
       font-family: "Open Sans", sans-serif;
@@ -48,7 +48,7 @@ $spacing: 10px;
       position: relative;
       > div {
         position: absolute;
-        top: -25px;
+        top: -10px;
         left: $item-spacing;
         font-size: 0.9em;
         pointer-events: none;
