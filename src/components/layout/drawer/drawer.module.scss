@@ -1,8 +1,9 @@
 @import "../../../assets/styles/colors.scss";
 .style {
-  border: $border;
-  $padding: 10px;
-  width: max-content;
+  // border: $border;
+  $padding: 15px;
+  // width: max-content;
+  width: 100%;
 
   > div {
     background-color: white;
@@ -15,7 +16,9 @@
     font-size: 1rem;
     font-weight: 700;
     padding: $padding;
-    // text-transform: uppercase;
+    text-transform: uppercase;
+    background-color: $light-blue-2;
+    color: $dark-blue;
 
     &,
     * {
@@ -23,22 +26,39 @@
     }
 
     & + .content {
-      border-top: $border;
+      // border-top: $border;
     }
     button.toggle {
       background: none;
       border: none;
       padding: 0;
+      i {
+        font-size: 3rem;
+        position: relative;
+        vertical-align: middle;
+        line-height: 0;
+      }
       &.flip {
         transform: rotate(180deg);
+      }
+    }
+
+    // e.g., "Download all/filtered data"
+    .action {
+      .primary {
+        font-family: "Rawline", serif;
+        background-color: $blue;
+        color: white;
       }
     }
   }
   .content {
     padding: $padding;
     font-size: 0.9rem;
+    background-color: $light-gray-2;
     &.hidden {
-      visibility: hidden;
+      // visibility: hidden;
+      display: none;
       height: 0;
       padding: 0 $padding;
     }
