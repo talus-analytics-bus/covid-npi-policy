@@ -33,18 +33,6 @@ const Data = () => {
         return [{ id: 0, label: "School closures", value: "School closures" }];
       }
     }
-    // test_attribute: {
-    //   field: "test_attribute",
-    //   label: "Test attribute",
-    //   getItems: async () => {
-    //     return [
-    //       { id: 0, label: "CJE", value: "CJE" },
-    //       { id: 1, label: "Test 2", value: "Test 2" },
-    //       { id: 2, label: "Test 3", value: "Test 3" },
-    //       { id: 3, label: "Test 4", value: "Test 4" }
-    //     ];
-    //   }
-    // }
   });
   const columns = [
     {

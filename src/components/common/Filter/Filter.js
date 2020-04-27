@@ -116,7 +116,11 @@ const Filter = ({
               });
 
               // update filters
-              setFilters({ ...filters, [field]: v.map(d => d.value) });
+              if (v.length === 0) {
+                const newFilters = { ...filters };
+                delete newFilters[field];
+                setFilters(newFilters);
+              } else setFilters({ ...filters, [field]: v.map(d => d.value) });
             }}
           />
         </div>
