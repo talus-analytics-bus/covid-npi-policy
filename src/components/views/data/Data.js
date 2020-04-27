@@ -6,7 +6,7 @@ import moment from "moment";
 // common compoments
 import { FilterSet, Table } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import { Policy, execute } from "../../misc/Queries.js";
+import { Policy, OptionSet, execute } from "../../misc/Queries.js";
 
 const Data = () => {
   const [initializing, setInitializing] = useState(true);
@@ -20,11 +20,12 @@ const Data = () => {
     primary_ph_measure: {
       field: "primary_ph_measure",
       label: "Policy category",
-      getItems: async () => {
-        return [
-          { id: 0, label: "Social distancing", value: "Social distancing" }
-        ];
-      }
+      getItems: async () =>
+        await OptionSet({
+          method: "get",
+          fields: ["primary_ph_measure"],
+          entity_name: "Policy"
+        })
     },
     ph_measure_details: {
       field: "ph_measure_details",
@@ -81,11 +82,15 @@ const Data = () => {
     // TODO move this out of main code if possible
     if (initializing) {
       setInitializing(false);
-      const queries = {};
-      for (const [k, v] of Object.entries(filterDefs)) {
-        queries[k] = await v.getItems();
-      }
-      const results = await execute({ queries });
+      // const queries = {};
+      // for (const [k, v] of Object.entries(filterDefs)) {
+      //   queries[k] = await v.getItems();
+      // }
+      const results = await OptionSet({
+        method: "get",
+        fields: ["primary_ph_measure", "ph_measure_details"],
+        entity_name: "Policy"
+      });
       console.log("results");
       console.log(results);
       const newFilterDefs = { ...filterDefs };

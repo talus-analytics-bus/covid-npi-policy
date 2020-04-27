@@ -41,10 +41,6 @@ export const OptionSet = async function({
 }) {
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/policy`, {
-      params: {}
-    });
-  } else if (method === "post") {
     if (fields === null) {
       console.log("Error: `fields` is required for method GET.");
       return false;
@@ -68,7 +64,7 @@ export const OptionSet = async function({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data;
+  if (res.data !== undefined) return res.data.data;
   else return false;
 };
 

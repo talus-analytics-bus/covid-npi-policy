@@ -45,6 +45,7 @@
       opacity: 0;
       pointer-events: none;
       z-index: 1;
+      background-color: white;
       &.shown {
         opacity: 1;
         pointer-events: all;
@@ -52,37 +53,38 @@
       }
 
       > div {
-        height: unset !important;
+        // height: unset !important;
       }
       max-width: max-content;
-      height: unset !important;
-      height: min-content !important;
+      min-width: 400px;
+      // height: unset !important;
+      // height: min-content !important;
 
       .filterMenuWrapper {
-        max-height: max-content !important;
-        height: unset !important;
-        min-height: 100px !important  ;
+        // max-height: max-content !important;
+        // height: unset !important;
+        // min-height: 500px !important  ;
       }
 
       &,
       div[class^="ReactVirtualized__Grid "] {
-        height: max-content !important;
+        // height: max-content !important;
 
         div[class="ReactVirtualized__Grid__innerScrollContainer"] {
-          overflow-y: scroll !important;
-          max-height: 200px !important;
+          // overflow-y: scroll !important;
+          // max-height: 200px !important;
         }
       }
 
       div[class^="kn-item__item__"] {
         & + div {
-          height: max-content !important;
-          position: unset !important;
+          // height: max-content !important;
+          // position: unset !important;
         }
       }
 
       div[class^="kn-column__column"] {
-        height: max-content !important;
+        // height: max-content !important;
       }
     }
   }
