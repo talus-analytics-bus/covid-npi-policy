@@ -13,27 +13,39 @@ const Data = () => {
 
   // define data for table
   const [data, setData] = useState(null);
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState({});
+  console.log(" filters");
+  console.log(filters);
 
   // define non-date filters
+  // TODO make simpler, probably removing the `field` key
   const [filterDefs, setFilterDefs] = useState({
+    level: {
+      entity_name: "Auth_Entity",
+      field: "level",
+      label: "Organizational level"
+    },
     primary_ph_measure: {
+      entity_name: "Policy",
       field: "primary_ph_measure",
-      label: "Policy category",
-      getItems: async () =>
-        await OptionSet({
-          method: "get",
-          fields: ["primary_ph_measure"],
-          entity_name: "Policy"
-        })
+      label: "Policy category"
     },
     ph_measure_details: {
+      entity_name: "Policy",
       field: "ph_measure_details",
-      label: "Policy type",
-      getItems: async () => {
-        return [{ id: 0, label: "School closures", value: "School closures" }];
-      }
+      label: "Policy type"
+    },
+    policy_type: {
+      entity_name: "Policy",
+      field: "policy_type",
+      label: "Legal type"
     }
+
+    // policy_type: {
+    //   entity_name: 'Policy',
+    //   field: "policy_type",
+    //   label: "Legal type"
+    // }
   });
   const columns = [
     {
@@ -69,8 +81,8 @@ const Data = () => {
     }
   ];
 
-  const getData = async (filters = null) => {
-    const method = filters === null ? "get" : "post";
+  const getData = async (filters = {}) => {
+    const method = Object.keys(filters).length === 0 ? "get" : "post";
     const results = await execute({
       queries: {
         policies: Policy({ method, filters })
@@ -82,25 +94,19 @@ const Data = () => {
     // TODO move this out of main code if possible
     if (initializing) {
       setInitializing(false);
-      // const queries = {};
-      // for (const [k, v] of Object.entries(filterDefs)) {
-      //   queries[k] = await v.getItems();
-      // }
       const results = await OptionSet({
         method: "get",
-        fields: ["primary_ph_measure", "ph_measure_details"],
+        fields: Object.values(filterDefs).map(d => {
+          return d.entity_name + "." + d.field;
+        }),
         entity_name: "Policy"
       });
-      console.log("results");
-      console.log(results);
       const newFilterDefs = { ...filterDefs };
 
       for (const [k, v] of Object.entries(filterDefs)) {
         filterDefs[k].items = results[k];
       }
       setFilterDefs(newFilterDefs);
-      console.log("newFilterDefs");
-      console.log(newFilterDefs);
     }
   };
 
@@ -151,12 +157,15 @@ const Data = () => {
             noCollapse: true,
             content: (
               <React.Fragment>
+                <span>
+                  Select filters to apply to data.{" "}
+                  {Object.keys(filters).length > 0 && (
+                    <button onClick={() => setFilters({})}>
+                      Clear filters
+                    </button>
+                  )}
+                </span>
                 <FilterSet {...{ filterDefs, filters, setFilters }} />
-                {filters !== null && (
-                  <button onClick={() => setFilters(null)}>
-                    Clear filters
-                  </button>
-                )}
               </React.Fragment>
             )
           }}

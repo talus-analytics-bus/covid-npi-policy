@@ -31,7 +31,7 @@ const Filter = ({
   });
 
   useEffect(() => {
-    if (filters === null) {
+    if (Object.keys(filters).length === 0) {
       setFilterState({ ...filterState, selectedItems: [] });
     }
   }, [filters]);
