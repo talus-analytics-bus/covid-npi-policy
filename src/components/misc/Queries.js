@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const Policy = async function({ method }) {
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get_policy`, {
+    req = await axios(`${API_URL}/get/policy`, {
       params: {}
     });
   } else {
