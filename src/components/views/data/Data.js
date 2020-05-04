@@ -21,15 +21,20 @@ const Data = () => {
   // TODO make simpler, probably removing the `field` key
   const [filterDefs, setFilterDefs] = useState({
     level: {
-      entity_name: "Auth_Entity",
+      entity_name: "Place",
       field: "level",
       label: "Organizational level"
     },
-    loc: {
-      entity_name: "Auth_Entity",
-      field: "loc",
-      label: "Specific location"
+    area1: {
+      entity_name: "Place",
+      field: "area1",
+      label: "State"
     },
+    // loc: {
+    //   entity_name: "Place",
+    //   field: "loc",
+    //   label: "Specific location"
+    // },
     primary_ph_measure: {
       entity_name: "Policy",
       field: "primary_ph_measure",
@@ -45,21 +50,15 @@ const Data = () => {
       field: "policy_type",
       label: "Legal type"
     }
-
-    // policy_type: {
-    //   entity_name: 'Policy',
-    //   field: "policy_type",
-    //   label: "Legal type"
-    // }
   });
   const columns = [
     {
-      dataField: "auth_entity.level",
+      dataField: "place.level",
       text: "Level of government / Organization level",
       sort: true
     },
     {
-      dataField: "auth_entity.desc",
+      dataField: "place.loc",
       text: "Country / Specific location",
       sort: true
     },
