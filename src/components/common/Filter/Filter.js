@@ -72,8 +72,10 @@ const Filter = ({
 
   const getInputLabel = selectedItems => {
     if (!dateRange)
-      if (selectedItems.length === 1) return selectedItems[0].label;
-      else if (selectedItems.length === nMax) return "All selected";
+      if (selectedItems.length === 1) {
+        if (selectedItems[0].label.length < 15) return selectedItems[0].label;
+        else return "1 selected";
+      } else if (selectedItems.length === nMax) return "All selected";
       else if (selectedItems.length > 0) return "Multiple selected";
       else return "None selected";
     else {

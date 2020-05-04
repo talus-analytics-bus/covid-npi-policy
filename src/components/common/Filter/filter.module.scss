@@ -20,7 +20,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      &.selected > span.field {
+      span {
+        white-space: nowrap;
+      }
+      &.selected span.field {
         font-weight: bold;
       }
       span.selections {
