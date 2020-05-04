@@ -16,7 +16,6 @@ import "react-date-range/dist/theme/default.css";
 /**
  * @method Filter
  * create a clickable filter dropdown based on provided items
- * TODO make clickable dropdown
  */
 const Filter = ({
   field,
@@ -27,6 +26,7 @@ const Filter = ({
   activeFilter,
   setActiveFilter,
   dateRange,
+  minMaxDate,
   ...props
 }) => {
   const [show, setShow] = useState(false);
@@ -34,6 +34,7 @@ const Filter = ({
     items,
     selectedItems: []
   });
+  const [showRangeSelection, setShowRangeSelection] = useState(false);
   const initDateRangeState = [
     {
       startDate: undefined,
@@ -109,7 +110,10 @@ const Filter = ({
 
   useEffect(() => {
     if (dateRange) {
-      if (filters[field] === undefined) setDateRangeState(initDateRangeState);
+      if (filters[field] === undefined) {
+        setDateRangeState(initDateRangeState);
+        setShowRangeSelection(false);
+      }
     }
   }, [filters]);
 
@@ -177,6 +181,16 @@ const Filter = ({
             [styles.shown]: show,
             [styles.dateRange]: dateRange
           })}
+          onMouseDown={e => {
+            // reveal blue selected range only when calendar has been
+            // interacted with
+            const el = e.target;
+            const clickedCalDay =
+              el.parentElement.classList.contains("rdrDayNumber") ||
+              el.parentElement.classList.contains("rdrDay");
+            if (!showRangeSelection && clickedCalDay)
+              setShowRangeSelection(true);
+          }}
         >
           {!dateRange && (
             <MultiSelect
@@ -197,14 +211,17 @@ const Filter = ({
           )}
           {dateRange && (
             <DateRange
+              className={showRangeSelection ? "" : styles.hideRangeSelection}
               editableDateInputs={true}
               onChange={item => setDateRangeState([item.selection])}
               moveRangeOnFirstSelection={false}
               ranges={dateRangeState}
-              minDate={new Date("1/1/2020")}
-              maxDate={new Date()}
+              minDate={minMaxDate.min}
+              maxDate={minMaxDate.max}
               startDatePlaceholder={"Start date"}
               endDatePlaceholder={"End date"}
+              onRangeFocusChange={() => console.log("onRangeFocusChange")}
+              onPreviewChange={() => console.log("onPreviewChange")}
             />
           )}
         </div>

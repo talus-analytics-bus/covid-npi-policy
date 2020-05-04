@@ -17,6 +17,10 @@ const Data = () => {
   // define data for table
   const [data, setData] = useState(null);
   const [filters, setFilters] = useState({});
+  const [minMaxDate, setMinMaxDate] = useState({
+    min: undefined,
+    max: undefined
+  });
 
   // define non-date filters
   // TODO make simpler, probably removing the `field` key
@@ -55,7 +59,8 @@ const Data = () => {
       entity_name: "Policy",
       field: "date_start_effective",
       label: "Policy effective start date",
-      dateRange: true
+      dateRange: true,
+      minMaxDate: { min: undefined, max: undefined }
     }
   });
 
@@ -137,6 +142,16 @@ const Data = () => {
       }
     });
     setData(results.policies.data);
+    const policyDates = results.policies.data
+      .map(d => d.date_start_effective)
+      .filter(d => d)
+      .sort();
+    const newMinMaxDate = {
+      min: new Date(moment(policyDates[0]).utc()),
+      max: new Date(moment(policyDates[policyDates.length - 1]).utc())
+    };
+
+    setMinMaxDate(newMinMaxDate);
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
     // TODO move this out of main code if possible
@@ -157,6 +172,7 @@ const Data = () => {
         if (!k.startsWith("date")) filterDefs[k].items = results[k];
         else continue;
       }
+      newFilterDefs.date_start_effective.minMaxDate = newMinMaxDate;
       setFilterDefs(newFilterDefs);
     }
   };

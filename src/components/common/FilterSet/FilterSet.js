@@ -18,6 +18,7 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
           label: v.label,
           items: v.items,
           dateRange: v.dateRange,
+          minMaxDate: v.minMaxDate,
           filters,
           setFilters,
           activeFilter,

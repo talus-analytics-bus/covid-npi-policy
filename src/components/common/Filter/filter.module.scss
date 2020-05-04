@@ -97,4 +97,27 @@
       }
     }
   }
+
+  .hideRangeSelection {
+    width: auto;
+    button[class*="rdrDayToday"] {
+      span::after {
+        background: #3d91ff !important;
+      }
+    }
+    button {
+      &:not([class*="rdrDayPassive"]) {
+        // &:not([class*="rdrDayPassive"]):not([class*="rdrDayToday"]) {
+        [class*="rdrInRange"] {
+          &,
+          * {
+            background: transparent;
+            + span > span {
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+  }
 }
