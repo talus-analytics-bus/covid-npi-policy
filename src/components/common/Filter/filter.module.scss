@@ -17,6 +17,9 @@
       padding: 5px 20px;
       cursor: pointer;
       line-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       &.selected > span.field {
         font-weight: bold;
       }
@@ -55,10 +58,10 @@
       > div {
         // height: unset !important;
       }
-      max-width: max-content;
+      max-width: 50vw;
 
       &:not(.dateRange) {
-        min-width: 400px;
+        min-width: 300px;
       }
       // height: unset !important;
       // height: min-content !important;

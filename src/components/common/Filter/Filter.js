@@ -154,16 +154,18 @@ const Filter = ({
             setShow(!show);
           }}
         >
-          <span className={styles.field}>
-            {getInputLabel(filterState.selectedItems)}
-          </span>
-          <span className={styles.selections}>
-            {" "}
-            {!dateRange && (
-              <span>
-                ({nCur} of {nMax})
-              </span>
-            )}
+          <span>
+            <span className={styles.field}>
+              {getInputLabel(filterState.selectedItems)}
+            </span>
+            <span className={styles.selections}>
+              {" "}
+              {!dateRange && (
+                <span>
+                  ({nCur} of {nMax})
+                </span>
+              )}
+            </span>
           </span>
           <i className={"material-icons"}>arrow_drop_down</i>
         </div>
