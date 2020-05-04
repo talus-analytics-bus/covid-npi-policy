@@ -111,7 +111,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
   const expandable = data.some(d => d.children !== undefined);
   const defaultSorted = [
     {
-      dataField: "date_issued",
+      dataField: "date_start_effective",
       order: "desc"
     }
   ];

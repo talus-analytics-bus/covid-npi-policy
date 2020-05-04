@@ -3525,6 +3525,11 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
+date-fns@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.12.0.tgz#01754c8a2f3368fc1119cf4625c3dad8c1845ee6"
+  integrity sha512-qJgn99xxKnFgB1qL4jpxU7Q2t0LOn1p8KMIveef3UZD7kqjT3tpFNNdXJelEHhE+rUgffriXriw/sOSU+cS1Hw==
+
 debounce@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"
@@ -8667,7 +8672,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@15, prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8967,6 +8972,16 @@ react-browser-detection@^1.2.1:
   dependencies:
     prop-types "^15.5.10"
 
+react-date-range@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-date-range/-/react-date-range-1.0.3.tgz#effd22d7c743c9504583490ea02c10dfa3918eb9"
+  integrity sha512-OJU/UfiXDRnmiBC0fG51SsDIWMuUiRFyIbs9pFPKZLDWTmilhMkdNUdc20O1Kp9FJLQeMtumPpWtRPM9NtYIYg==
+  dependencies:
+    classnames "^2.2.6"
+    prop-types "^15.7.2"
+    react-list "^0.8.13"
+    shallow-equal "^1.2.1"
+
 react-dev-utils@^9.0.1:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.1.0.tgz#3ad2bb8848a32319d760d0a84c56c14bdaae5e81"
@@ -9054,6 +9069,13 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-list@^0.8.13:
+  version "0.8.14"
+  resolved "https://registry.yarnpkg.com/react-list/-/react-list-0.8.14.tgz#97b1cb94564b485372d1504e4631269ca078ee30"
+  integrity sha512-uf4eaocWTGDxww5MJ0gYiNfG4RyIDSE6khA/cRPIZCp8yudK7BzXSY+JxTJGDNwswWsKE4oE4Js3IBW9vB6UfQ==
+  dependencies:
+    prop-types "15"
 
 react-onclickoutside@^6.7.1:
   version "6.9.0"
@@ -9897,6 +9919,11 @@ shallow-clone@^1.0.0:
     is-extendable "^0.1.1"
     kind-of "^5.0.0"
     mixin-object "^2.0.1"
+
+shallow-equal@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/shallow-equal/-/shallow-equal-1.2.1.tgz#4c16abfa56043aa20d050324efa68940b0da79da"
+  integrity sha512-S4vJDjHHMBaiZuT9NPb616CSmLf618jawtv3sufLl6ivK8WocjAo58cXwbRV1cgqxH0Qbv+iUt6m05eqEa2IRA==
 
 shallowequal@^1.1.0:
   version "1.1.0"

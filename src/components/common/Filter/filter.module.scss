@@ -44,7 +44,7 @@
       transition: opacity 0.125s;
       opacity: 0;
       pointer-events: none;
-      z-index: 1;
+      z-index: 3;
       background-color: white;
       &.shown {
         opacity: 1;
@@ -56,7 +56,10 @@
         // height: unset !important;
       }
       max-width: max-content;
-      min-width: 400px;
+
+      &:not(.dateRange) {
+        min-width: 400px;
+      }
       // height: unset !important;
       // height: min-content !important;
 

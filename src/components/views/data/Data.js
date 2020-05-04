@@ -17,8 +17,6 @@ const Data = () => {
   // define data for table
   const [data, setData] = useState(null);
   const [filters, setFilters] = useState({});
-  console.log(" filters");
-  console.log(filters);
 
   // define non-date filters
   // TODO make simpler, probably removing the `field` key
@@ -52,8 +50,15 @@ const Data = () => {
       entity_name: "Policy",
       field: "policy_type",
       label: "Legal type"
+    },
+    date_start_effective: {
+      entity_name: "Policy",
+      field: "date_start_effective",
+      label: "Policy effective start date",
+      dateRange: true
     }
   });
+
   const columns = [
     {
       dataField: "place.level",
@@ -111,11 +116,17 @@ const Data = () => {
       sort: true
     },
     {
-      dataField: "date_issued",
-      text: "Policy issued date",
+      dataField: "date_start_effective",
+      text: "Policy effective start date",
       sort: true,
       formatter: v => moment(v).format("MMM D, YYYY")
     }
+    // {
+    //   dataField: "date_issued",
+    //   text: "Policy issued date",
+    //   sort: true,
+    //   formatter: v => moment(v).format("MMM D, YYYY")
+    // }
   ];
 
   const getData = async (filters = {}) => {
@@ -133,15 +144,18 @@ const Data = () => {
       setInitializing(false);
       const results = await OptionSet({
         method: "get",
-        fields: Object.values(filterDefs).map(d => {
-          return d.entity_name + "." + d.field;
-        }),
+        fields: Object.values(filterDefs)
+          .filter(d => !d.field.startsWith("date"))
+          .map(d => {
+            return d.entity_name + "." + d.field;
+          }),
         entity_name: "Policy"
       });
       const newFilterDefs = { ...filterDefs };
 
       for (const [k, v] of Object.entries(filterDefs)) {
-        filterDefs[k].items = results[k];
+        if (!k.startsWith("date")) filterDefs[k].items = results[k];
+        else continue;
       }
       setFilterDefs(newFilterDefs);
     }

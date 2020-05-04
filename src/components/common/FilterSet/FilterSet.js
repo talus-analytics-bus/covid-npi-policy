@@ -17,6 +17,7 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
           field: v.field,
           label: v.label,
           items: v.items,
+          dateRange: v.dateRange,
           filters,
           setFilters,
           activeFilter,
