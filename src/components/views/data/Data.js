@@ -8,6 +8,9 @@ import { FilterSet, Table } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import { Policy, OptionSet, execute } from "../../misc/Queries.js";
 
+// constants
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Data = () => {
   const [initializing, setInitializing] = useState(true);
 
@@ -61,6 +64,36 @@ const Data = () => {
       dataField: "place.loc",
       text: "Country / Specific location",
       sort: true
+    },
+    {
+      dataField: "doc",
+      text: "Link to policy",
+      formatter: (row, cell) => {
+        if (cell.policy_docs && cell.policy_docs.length > 0) {
+          return cell.policy_docs.map(d => {
+            if (d.pdf && d.pdf !== "")
+              return (
+                <a target="_blank" href={`${API_URL}${d.pdf}`}>
+                  <span>PDF download</span>
+                  <i className={"material-icons"}>insert_drive_file</i>
+                </a>
+              );
+            else if (d.url && d.url !== "")
+              return (
+                <a target="_blank" href={d.url}>
+                  <span>External site</span>
+                  <i className={"material-icons"}>link</i>
+                </a>
+              );
+            else
+              return (
+                <span className={styles.unspecified}>{"None available"}</span>
+              );
+          });
+        } else {
+          return "None";
+        }
+      }
     },
     {
       dataField: "primary_ph_measure",

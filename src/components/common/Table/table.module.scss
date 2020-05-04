@@ -28,8 +28,20 @@
   // clear borders
   table {
     border: 2px solid $gray !important;
+    td > a {
+      display: flex;
+      align-items: center;
+      &,
+      * {
+        text-decoration: none !important;
+      }
+      i {
+        margin-left: 5px;
+      }
+    }
     td,
     th {
+      @include spaceItemsVert(10px);
       border: none !important;
       &:not(:last-child) {
         border-right: 1px solid $gray-2 !important;

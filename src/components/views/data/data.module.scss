@@ -10,4 +10,8 @@
     }
     @include spaceItemsHoriz(40px);
   }
+  .unspecified {
+    font-style: italic;
+    color: $gray;
+  }
 }
