@@ -16,7 +16,10 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get install python3-pip python3-dev g++ build-essential
             sudo pip3 install --upgrade setuptools pytz
-            sudo pip3 install awscli --upgrade --user
+            sudo pip3 install awsebcli --upgrade
+
+      - aws-cli/install
+      - aws-cli/configure
 
       - run:
           name: yarn build
