@@ -1,6 +1,14 @@
 @import "../../../assets/styles/colors.scss";
 .data {
   @include spaceItemsVert(40px);
+  .header {
+    // text-align: center;
+    max-width: 50rem;
+    h1 {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+  }
   .columnText {
     display: flex;
     flex-flow: row;
@@ -13,5 +21,8 @@
   .unspecified {
     font-style: italic;
     color: $gray;
+  }
+  button {
+    // @include btn-primary();
   }
 }

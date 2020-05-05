@@ -95,10 +95,12 @@
     }
   }
   label[for="search-bar-0"] {
-    float: right;
     font-weight: normal;
     margin-bottom: 20px;
     &::placeholder {
+    }
+    input {
+      border-color: #999;
     }
   }
 }
