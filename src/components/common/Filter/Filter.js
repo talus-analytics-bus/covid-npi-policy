@@ -227,6 +227,11 @@ const Filter = ({
               maxDate={minMaxDate.max}
               startDatePlaceholder={"Start date"}
               endDatePlaceholder={"End date"}
+              onPreviewChange={() => {
+                // override default behavior when mousing over the calendar
+                // in order to support custom styling
+                return null;
+              }}
             />
           )}
         </div>
