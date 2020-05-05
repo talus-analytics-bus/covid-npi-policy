@@ -29,10 +29,12 @@
       span.selections {
         font-style: italic;
       }
-      i {
+      i,
+      img {
         vertical-align: middle;
         margin-left: 20px;
         width: 20px;
+        height: 24px;
       }
       &:hover,
       &.shown {

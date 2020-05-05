@@ -7,6 +7,7 @@ import { DateRange } from "react-date-range";
 import moment from "moment";
 
 // assets and styles
+import calendarSvg from "../../../assets/icons/calendar.svg";
 import styles from "./filter.module.scss";
 import classNames from "classnames";
 import "@kenshooui/react-multi-select/dist/style.css";
@@ -173,7 +174,8 @@ const Filter = ({
               )}
             </span>
           </span>
-          <i className={"material-icons"}>arrow_drop_down</i>
+          {dateRange && <img src={calendarSvg} />}
+          {!dateRange && <i className={"material-icons"}>arrow_drop_down</i>}
         </div>
         <div
           id={elId}
