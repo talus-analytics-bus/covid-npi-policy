@@ -94,34 +94,6 @@ const Filter = ({
     window.addEventListener("click", onClick);
   }
 
-  const getInputLabel = selectedItems => {
-    if (!dateRange)
-      if (selectedItems.length === 1) {
-        if (selectedItems[0].label.length < 15) return selectedItems[0].label;
-        else return "1 selected";
-      } else if (selectedItems.length === nMax) return "All selected";
-      else if (selectedItems.length > 0) return "Multiple selected";
-      else return "None selected";
-    else {
-      const startRaw = dateRangeState[0].startDate;
-      const endRaw = dateRangeState[0].endDate;
-      if (startRaw === undefined && endRaw === undefined) {
-        return "None selected";
-      }
-
-      const start = moment(dateRangeState[0].startDate).utc();
-      const end = moment(dateRangeState[0].endDate).utc();
-
-      if (start.isSame(end, "day")) {
-        return `${end.format("MMM D, YYYY")}`;
-      } else if (start.isSame(end, "year")) {
-        return `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
-      } else {
-        return `${start.format("MMM D, YYYY")} - ${end.format("MMM D, YYYY")}`;
-      }
-    }
-  };
-
   useEffect(() => {
     if (show) setActiveFilter(field);
     else if (activeFilter === field) setActiveFilter(null);
@@ -185,7 +157,12 @@ const Filter = ({
         >
           <span>
             <span className={styles.field}>
-              {getInputLabel(filterState.selectedItems)}
+              {getInputLabel({
+                dateRange,
+                nMax,
+                dateRangeState,
+                selectedItems: filterState.selectedItems
+              })}
             </span>
             <span className={styles.selections}>
               {" "}
@@ -256,6 +233,49 @@ const Filter = ({
       </div>
     </div>
   );
+};
+
+/**
+ * Given input parameters returns the label that should be shown for the
+ * filter dropdown.
+ * @method getInputLabel
+ * @param  {[type]}      dateRange      [description]
+ * @param  {[type]}      nMax           [description]
+ * @param  {[type]}      dateRangeState [description]
+ * @param  {[type]}      selectedItems  [description]
+ * @return {[type]}                     [description]
+ */
+export const getInputLabel = ({
+  dateRange,
+  nMax,
+  dateRangeState,
+  selectedItems
+}) => {
+  if (!dateRange)
+    if (selectedItems.length === 1) {
+      if (selectedItems[0].label.length < 15) return selectedItems[0].label;
+      else return "1 selected";
+    } else if (selectedItems.length === nMax) return "All selected";
+    else if (selectedItems.length > 0) return "Multiple selected";
+    else return "None selected";
+  else {
+    const startRaw = dateRangeState[0].startDate;
+    const endRaw = dateRangeState[0].endDate;
+    if (startRaw === undefined && endRaw === undefined) {
+      return "None selected";
+    }
+
+    const start = moment(dateRangeState[0].startDate).utc();
+    const end = moment(dateRangeState[0].endDate).utc();
+
+    if (start.isSame(end, "day")) {
+      return `${end.format("MMM D, YYYY")}`;
+    } else if (start.isSame(end, "year")) {
+      return `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+    } else {
+      return `${start.format("MMM D, YYYY")} - ${end.format("MMM D, YYYY")}`;
+    }
+  }
 };
 
 export default Filter;

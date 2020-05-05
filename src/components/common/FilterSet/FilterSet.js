@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Filter } from "../";
 
+// local functions
+import { getInputLabel } from "../Filter/Filter.js";
+
 // misc
 import { isEmpty } from "../../misc/Util";
 
@@ -54,10 +57,11 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
           onClick={() => {
             const newFilters = { ...filters };
             newFilters[field] = newFilters[field].filter(v => v !== value);
-            if (newFilters[field].length > 0) {
+
+            if (filterDefs[field].dateRange || newFilters[field].length === 0) {
+              delete newFilters[field];
               setFilters(newFilters);
             } else {
-              delete newFilters[field];
               setFilters(newFilters);
             }
           }}
@@ -77,13 +81,28 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
         </div>
         <span>Selected filters</span>
       </div>
+
       <div className={styles.badges}>
         {!isEmpty(filters) &&
-          Object.entries(filters).map(([field, values]) =>
-            values.map(value =>
-              getBadge({ label: filterDefs[field].label, field, value })
-            )
-          )}
+          Object.entries(filters).map(([field, values]) => (
+            <React.Fragment>
+              {!filterDefs[field].dateRange &&
+                values.map(value =>
+                  getBadge({ label: filterDefs[field].label, field, value })
+                )}
+              {filterDefs[field].dateRange &&
+                getBadge({
+                  label: filterDefs[field].label,
+                  field,
+                  value: getInputLabel({
+                    dateRange: true,
+                    dateRangeState: [
+                      { startDate: values[0], endDate: values[1] }
+                    ]
+                  })
+                })}
+            </React.Fragment>
+          ))}
       </div>
     </div>
   );
