@@ -1,10 +1,14 @@
-version: 2
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@0.1.13
+
 jobs:
   deploy-prod:
     working_directory: ~/repo
 
     docker:
-      - image: circleci/node:current
+      - image: circleci/node:10.12.0-stretch
 
     steps:
       - checkout
