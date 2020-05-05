@@ -7,3 +7,77 @@
   grid-gap: 1em 0;
   max-width: 1400px;
 }
+.selectedFilters {
+  padding: 10px;
+  padding-bottom: 0;
+  background-color: white;
+  border: 1px solid #999;
+  @include spaceItemsVert(20px);
+  .header {
+    display: flex;
+    align-items: center;
+    .filterIcon {
+      @include btn-primary();
+      margin-right: 10px;
+      padding: 3px;
+      div {
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 15px;
+        width: 16px;
+        background-size: contain;
+      }
+    }
+  }
+  .badges {
+    display: flex;
+    flex-flow: wrap;
+    margin-bottom: 10px;
+    // TODO reconcile with padding;
+
+    .badge {
+      font-family: "Open Sans", sans-serif;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      border: 2px solid #b3b3b3;
+      color: #333;
+      padding: 5px 10px;
+      margin-bottom: 0.5em;
+      margin-right: 0.5em;
+      .label {
+        text-transform: uppercase;
+      }
+      .close {
+        margin-left: 1em;
+        > a {
+          display: flex;
+          cursor: pointer;
+
+          $background-color: #4682b4;
+          background-color: $background-color;
+          border-radius: 9999px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+
+          $size: 18px;
+          height: $size;
+          width: $size;
+          border: 3px solid $background-color;
+
+          &:hover {
+            background-color: darken($background-color, 5%);
+            border-color: darken($background-color, 5%);
+            text-decoration: none;
+          }
+          &:active {
+            background-color: darken($background-color, 10%);
+            border-color: darken($background-color, 10%);
+            @include boxShadow();
+          }
+        }
+      }
+    }
+  }
+}

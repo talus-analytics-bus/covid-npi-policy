@@ -6,6 +6,9 @@ import MultiSelect from "@kenshooui/react-multi-select";
 import { DateRange } from "react-date-range";
 import moment from "moment";
 
+// misc
+import { isEmpty } from "../../misc/Util";
+
 // assets and styles
 import calendarSvg from "../../../assets/icons/calendar.svg";
 import styles from "./filter.module.scss";
@@ -47,11 +50,30 @@ const Filter = ({
   ];
   const [dateRangeState, setDateRangeState] = useState(initDateRangeState);
 
+  // when master filter list is updated by the "clear" button or by closing
+  // a badge, then update this filter's selected values to match
   useEffect(() => {
-    if (Object.keys(filters).length === 0) {
+    if (isEmpty(filters)) {
+      // const newFilterState = { ...filterState };
+      // delete newFilterState[field];
+      // setFilterState(newFilterState);
       setFilterState({ ...filterState, selectedItems: [] });
+      if (dateRange) {
+        setDateRangeState(initDateRangeState);
+      }
+    } else {
+      if (filters[field] !== undefined) {
+        const curFilters = filterState.selectedItems;
+        const newFilters = curFilters.filter(
+          d => filters[field].includes(d.value) || filters[field].includes(d)
+        );
+        setFilterState({ ...filterState, selectedItems: newFilters });
+      } else {
+        setFilterState({ ...filterState, selectedItems: [] });
+      }
     }
   }, [filters]);
+
   const nMax = items !== undefined ? items.length : 0;
   const nCur = filterState.selectedItems.length;
 
@@ -207,7 +229,13 @@ const Filter = ({
                 });
 
                 // update filters
-                setFilters({ ...filters, [field]: v.map(d => d.value) });
+                if (v.length > 0) {
+                  setFilters({ ...filters, [field]: v.map(d => d.value) });
+                } else {
+                  const newFilters = { ...filters };
+                  delete newFilters[field];
+                  setFilters(newFilters);
+                }
               }}
             />
           )}
@@ -222,8 +250,6 @@ const Filter = ({
               maxDate={minMaxDate.max}
               startDatePlaceholder={"Start date"}
               endDatePlaceholder={"End date"}
-              onRangeFocusChange={() => console.log("onRangeFocusChange")}
-              onPreviewChange={() => console.log("onPreviewChange")}
             />
           )}
         </div>
