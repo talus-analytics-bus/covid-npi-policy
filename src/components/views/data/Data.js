@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styles from "./data.module.scss";
 import moment from "moment";
+import axios from "axios";
 
 // common compoments
 import { FilterSet, Table } from "../../common";
@@ -220,7 +221,34 @@ const Data = () => {
         </div>
         <Drawer
           {...{
-            label: <h2>Policy library</h2>,
+            label: (
+              <React.Fragment>
+                <h2>Policy library</h2>
+                <button
+                  onClick={() => {
+                    // TODO move into Queries.js
+                    axios({
+                      url: API_URL + "/export", //your url
+                      method: "GET",
+                      responseType: "blob" // important
+                    }).then(response => {
+                      const url = window.URL.createObjectURL(
+                        new Blob([response.data])
+                      );
+                      const link = document.createElement("a");
+                      link.href = url;
+                      const dateString = moment().format("YYYY-MM-DD");
+                      const fn = `COVID Policy Tracker dataset - ${dateString}.xlsx`;
+                      link.setAttribute("download", fn); //or any other extension
+                      document.body.appendChild(link);
+                      link.click();
+                    });
+                  }}
+                >
+                  Download all data
+                </button>
+              </React.Fragment>
+            ),
             noCollapse: true,
             content: (
               <React.Fragment>
