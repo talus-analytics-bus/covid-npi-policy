@@ -29,6 +29,20 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
   // sort carets, etc.
   columns.forEach(d => {
     d.sortCaret = sortCaret;
+    if (d.definition) {
+      d.text = (
+        <div>
+          <p>{d.header}</p>
+          <p className={styles.definition}>{d.definition}</p>
+        </div>
+      );
+    } else {
+      d.text = (
+        <div>
+          <p>{d.header}</p>
+        </div>
+      );
+    }
     if (d.formatter === undefined)
       d.formatter = cell =>
         !cell ? (

@@ -6,7 +6,13 @@ import axios from "axios";
 // common compoments
 import { FilterSet, Table } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import { Policy, OptionSet, Export, execute } from "../../misc/Queries.js";
+import {
+  Metadata,
+  Policy,
+  OptionSet,
+  Export,
+  execute
+} from "../../misc/Queries.js";
 import { isEmpty, comma } from "../../misc/Util.js";
 
 // styles and assets
@@ -22,6 +28,7 @@ const Data = () => {
 
   // define data for table
   const [data, setData] = useState(null);
+  const [metadata, setMetadata] = useState(null);
   const [filters, setFilters] = useState({});
   const [buttonLoading, setButtonLoading] = useState(false);
   const [minMaxDate, setMinMaxDate] = useState({
@@ -71,20 +78,20 @@ const Data = () => {
     }
   });
 
-  const columns = [
+  const [columns, setColumns] = useState([
     {
       dataField: "place.level",
-      text: "Level of government / Organization level",
+      header: "Level of government / Organization level",
       sort: true
     },
     {
       dataField: "place.loc",
-      text: "Country / Specific location",
+      header: "Country / Specific location",
       sort: true
     },
     {
       dataField: "doc",
-      text: "Link to policy",
+      header: "Link to policy",
       formatter: (row, cell) => {
         if (cell.policy_docs && cell.policy_docs.length > 0) {
           return cell.policy_docs.map(d => {
@@ -114,41 +121,49 @@ const Data = () => {
     },
     {
       dataField: "primary_ph_measure",
-      text: "Policy category",
+      header: "Policy category",
       sort: true
     },
     {
       dataField: "ph_measure_details",
-      text: "Policy type",
+      header: "Policy type",
       sort: true
     },
     {
       dataField: "desc",
-      text: "Policy description",
+      header: "Policy description",
       sort: true
     },
     {
       dataField: "date_start_effective",
-      text: "Policy effective start date",
+      header: "Policy effective start date",
       sort: true,
       formatter: v => moment(v).format("MMM D, YYYY")
     }
     // {
     //   dataField: "date_issued",
-    //   text: "Policy issued date",
+    //   header: "Policy issued date",
     //   sort: true,
     //   formatter: v => moment(v).format("MMM D, YYYY")
     // }
-  ];
+  ]);
 
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
     const results = await execute({
       queries: {
-        policies: Policy({ method, filters })
+        policies: Policy({ method, filters }),
+        metadata: Metadata({
+          method: "get",
+          fields: columns.map(d => {
+            if (!d.dataField.includes(".")) return "policy." + d.dataField;
+            else return d.dataField;
+          })
+        })
       }
     });
     setData(results.policies.data);
+    setMetadata(results.metadata.data);
     const policyDates = results.policies.data
       .map(d => d.date_start_effective)
       .filter(d => d)
@@ -191,6 +206,19 @@ const Data = () => {
   useEffect(() => {
     if (!initializing) getData(filters);
   }, [filters]);
+
+  useEffect(() => {
+    if (metadata !== null) {
+      const newColumns = [...columns];
+      newColumns.forEach(d => {
+        const key = d.dataField.includes(".")
+          ? d.dataField
+          : "policy." + d.dataField;
+        d.definition = metadata[key].definition || "";
+      });
+      setColumns(newColumns);
+    }
+  }, [metadata]);
 
   if (initializing) return <div />;
   else
@@ -240,7 +268,10 @@ const Data = () => {
                           Download {isEmpty(filters) ? "all" : "filtered"} data
                         </span>
                         <br />
-                        <span>{comma(data.length)} records</span>
+                        <span>
+                          {comma(data.length)} record
+                          {data.length === 1 ? "" : "s"}
+                        </span>
                       </React.Fragment>
                     )}
                     {buttonLoading && (

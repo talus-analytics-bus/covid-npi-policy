@@ -4,6 +4,25 @@ import moment from "moment";
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
+ * Get metadata for specified fields
+ */
+export const Metadata = async function({ method, fields }) {
+  let req;
+  if (method === "get") {
+    const params = new URLSearchParams();
+    fields.forEach(d => {
+      params.append("fields", d);
+    });
+    req = await axios(`${API_URL}/get/metadata`, {
+      params
+    });
+  }
+  const res = await req;
+  if (res.data !== undefined) return res.data;
+  else return false;
+};
+
+/**
  * Get policy data from API.
  */
 export const Policy = async function({ method, filters = null }) {

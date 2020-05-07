@@ -21,9 +21,21 @@
     width: $size;
   }
   th {
+    position: relative;
     text-align: left;
     font-family: "Open Sans", serif;
     background-color: $light-gray;
+    vertical-align: bottom;
+    > div > p:first-child {
+      margin-right: 20px;
+      margin-bottom: 5px;
+    }
+    img {
+      top: 0;
+      right: 7px;
+      margin: 0;
+      position: absolute;
+    }
   }
   // clear borders
   table {
@@ -75,7 +87,7 @@
     &,
     tbody tr td,
     thead tr th {
-      vertical-align: middle;
+      vertical-align: baseline;
       > span {
         display: flex;
         align-items: center;
@@ -122,5 +134,10 @@
     input {
       border-color: #999;
     }
+  }
+  .definition {
+    font-style: italic;
+    font-size: 0.8rem;
+    font-weight: normal;
   }
 }
