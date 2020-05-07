@@ -35,6 +35,18 @@
     border: none;
     border-radius: 4px;
 
+    @media #{$phone} {
+      div {
+        font-size: 1rem;
+        span:last-child {
+          display: none;
+        }
+      }
+      img {
+        height: 30px;
+      }
+    }
+
     &:hover {
       background-color: darken($dark-blue, 10%);
     }
