@@ -66,8 +66,8 @@ $border-radius: 5px;
 }
 
 @mixin boxShadow() {
-  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
 }
 
 @mixin btn-primary() {

@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import styles from "./data.module.scss";
 import moment from "moment";
 import axios from "axios";
 
@@ -8,7 +7,12 @@ import axios from "axios";
 import { FilterSet, Table } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import { Policy, OptionSet, Export, execute } from "../../misc/Queries.js";
-import { isEmpty } from "../../misc/Util.js";
+import { isEmpty, comma } from "../../misc/Util.js";
+
+// styles and assets
+import styles from "./data.module.scss";
+import classNames from "classnames";
+import downloadSvg from "../../../assets/icons/download.svg";
 
 // constants
 const API_URL = process.env.REACT_APP_API_URL;
@@ -19,6 +23,7 @@ const Data = () => {
   // define data for table
   const [data, setData] = useState(null);
   const [filters, setFilters] = useState({});
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [minMaxDate, setMinMaxDate] = useState({
     min: undefined,
     max: undefined
@@ -216,8 +221,36 @@ const Data = () => {
             label: (
               <React.Fragment>
                 <h2>Policy library</h2>
-                <button onClick={() => Export({ method: "post", filters })}>
-                  Download {isEmpty(filters) ? "all" : "filtered"} data
+                <button
+                  className={classNames(styles.downloadBtn, {
+                    [styles.loading]: buttonLoading
+                  })}
+                  onClick={() => {
+                    setButtonLoading(true);
+                    Export({ method: "post", filters }).then(d =>
+                      setButtonLoading(false)
+                    );
+                  }}
+                >
+                  <img src={downloadSvg} />
+                  <div>
+                    {!buttonLoading && (
+                      <React.Fragment>
+                        <span>
+                          Download {isEmpty(filters) ? "all" : "filtered"} data
+                        </span>
+                        <br />
+                        <span>{comma(data.length)} records</span>
+                      </React.Fragment>
+                    )}
+                    {buttonLoading && (
+                      <React.Fragment>
+                        <span>Downloading data</span>
+                        <br />
+                        <span>Please wait...</span>
+                      </React.Fragment>
+                    )}
+                  </div>
                 </button>
               </React.Fragment>
             ),

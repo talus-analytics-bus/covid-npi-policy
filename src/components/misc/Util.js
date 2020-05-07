@@ -1,3 +1,5 @@
+import * as d3 from "d3/dist/d3.min";
+
 /**
  * Returns true if the object has no keys, false otherwise.
  * @method isEmpty
@@ -9,12 +11,5 @@ export const isEmpty = d => {
   else return false;
 };
 
-// const getApiUrl = () => {
-//   if (process.env.NODE_ENV === "production") {
-//     if (window.location.href.search("https") > -1)
-//       return "https://gida-tracking-api.ghscosting.org/";
-//     else return "http://gida-tracking-api-dev.us-west-1.elasticbeanstalk.com/";
-//   } else return "http://localhost:5002";
-// };
-//
-// export const API_URL = getApiUrl();
+// convert number to comma-ized number string
+export const comma = v => d3.format(",.0f")(v);
