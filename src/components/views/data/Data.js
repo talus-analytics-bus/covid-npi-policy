@@ -85,8 +85,8 @@ const Data = () => {
             if (d.pdf && d.pdf !== "")
               return (
                 <a target="_blank" href={`${API_URL}${d.pdf}`}>
-                  <span>PDF download</span>
                   <i className={"material-icons"}>insert_drive_file</i>
+                  <span>Download policy</span>
                 </a>
               );
             else if (d.url && d.url !== "")

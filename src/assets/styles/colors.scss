@@ -2,6 +2,7 @@
 // colors currently used
 $light-blue: #95cbee;
 $light-blue-2: #abdaf4;
+$cyan: #66c8ff;
 $blue: #4682b4;
 $dark-blue: #11315d;
 $light-gray-2: #f2f2f2;
@@ -15,7 +16,6 @@ $light-red: #dcc4cb;
 $red: #67001f;
 $green: darkgreen;
 $white: #fff;
-$cyan: #52a8e6;
 $light-cyan: #d9edf8;
 
 // functional colors
@@ -27,18 +27,18 @@ $no-data-gray: #b3b3b3;
 $border: 1px solid #ccc;
 $border-radius: 5px;
 
-// make colors available to JS
-:export {
-  red: $red;
-  lightred: $light-red;
-  darkblue: $dark-blue;
-  white: $white;
-  cyan: $cyan;
-  lightcyan: $light-cyan;
-  noDataGray: $no-data-gray;
-  gray: $gray;
-  darkSelectedBlue: $dark-selected-blue;
-}
+// // make colors available to JS
+// :export {
+//   red: $red;
+//   lightred: $light-red;
+//   darkblue: $dark-blue;
+//   white: $white;
+//   cyan: $cyan;
+//   lightcyan: $light-cyan;
+//   noDataGray: $no-data-gray;
+//   gray: $gray;
+//   darkSelectedBlue: $dark-selected-blue;
+// }
 
 // MIXINS
 @mixin spaceItemsVert($size) {
