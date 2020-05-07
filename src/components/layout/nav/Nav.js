@@ -11,7 +11,9 @@ const Nav = ({ ...props }) => {
   return (
     <div className={styles.nav}>
       <div>
-        <img src={logo} />
+        <Link to={"/"}>
+          <img src={logo} />
+        </Link>
       </div>
     </div>
   );
