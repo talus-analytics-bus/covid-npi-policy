@@ -46,6 +46,24 @@
       &:not(:last-child) {
         border-right: 1px solid $gray-2 !important;
       }
+
+      // TODO media query for mobile friendliness should hide some cols
+      $phone: "screen and (max-width : 670px)";
+      @media #{$phone} {
+        font-size: 0.8em;
+        word-wrap: break-word;
+        i {
+          display: none;
+        }
+        &:nth-child(1),
+        // &:nth-child(2),
+        // &:nth-child(3),
+        // &:nth-child(4),
+        &:nth-child(5),
+        &:nth-child(6) {
+          display: none;
+        }
+      }
     }
     tr {
       &:not(:last-child) {

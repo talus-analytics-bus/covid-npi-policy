@@ -13,7 +13,6 @@ const Nav = ({ ...props }) => {
       <div>
         <img src={logo} />
       </div>
-      <div>Placeholder for menu items</div>
     </div>
   );
 };
