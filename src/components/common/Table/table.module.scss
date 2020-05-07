@@ -48,7 +48,6 @@
       }
 
       // TODO media query for mobile friendliness should hide some cols
-      $phone: "screen and (max-width : 670px)";
       @media #{$phone} {
         font-size: 0.8em;
         word-wrap: break-word;

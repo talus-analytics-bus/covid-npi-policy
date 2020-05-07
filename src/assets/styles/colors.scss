@@ -78,3 +78,6 @@ $border-radius: 5px;
   background: -o-linear-gradient(top, #425379 0%, #213561 100%);
   background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
 }
+
+$phone: "screen and (max-width : 812px)";
+$phone-narrow: "screen and (max-width : 500px)";

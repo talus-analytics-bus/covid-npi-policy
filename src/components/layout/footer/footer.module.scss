@@ -41,6 +41,15 @@ $spacing: 10px;
     a:first-child:not(:last-child) img {
       border-right: 1px solid $gray;
     }
+    @media #{$phone-narrow} {
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      a:first-child:not(:last-child) img {
+        border-right: none;
+        margin-bottom: 10px;
+      }
+    }
     a:last-child img {
       padding-right: 0;
     }
