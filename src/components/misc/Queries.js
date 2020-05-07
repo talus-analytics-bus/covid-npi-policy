@@ -1,4 +1,6 @@
 import axios from "axios";
+import moment from "moment";
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
@@ -23,6 +25,48 @@ export const Policy = async function({ method, filters = null }) {
     );
   } else {
     console.log("Error: Method not implemented for `Policy`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) return res.data;
+  else return false;
+};
+
+/**
+ * Get export data from API.
+ */
+export const Export = async function({ method, filters = null }) {
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/export`, {
+      params: {}
+    });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+
+    req = axios({
+      url: `${API_URL}/post/export`,
+      method: "POST",
+      responseType: "blob",
+      data: { filters },
+      params: { params: {} }
+    });
+
+    // TODO comments below
+    const res = await req;
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    const dateString = moment().format("YYYY-MM-DD");
+    const fn = `COVID Policy Tracker dataset - ${dateString}.xlsx`;
+    link.setAttribute("download", fn);
+    document.body.appendChild(link);
+    link.click();
+    return;
+  } else {
+    console.log("Error: Method not implemented for `Export`: " + method);
     return false;
   }
   const res = await req;

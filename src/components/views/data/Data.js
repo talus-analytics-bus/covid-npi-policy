@@ -7,7 +7,8 @@ import axios from "axios";
 // common compoments
 import { FilterSet, Table } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import { Policy, OptionSet, execute } from "../../misc/Queries.js";
+import { Policy, OptionSet, Export, execute } from "../../misc/Queries.js";
+import { isEmpty } from "../../misc/Util.js";
 
 // constants
 const API_URL = process.env.REACT_APP_API_URL;
@@ -215,28 +216,8 @@ const Data = () => {
             label: (
               <React.Fragment>
                 <h2>Policy library</h2>
-                <button
-                  onClick={() => {
-                    // TODO move into Queries.js
-                    axios({
-                      url: API_URL + "/export", //your url
-                      method: "GET",
-                      responseType: "blob" // important
-                    }).then(response => {
-                      const url = window.URL.createObjectURL(
-                        new Blob([response.data])
-                      );
-                      const link = document.createElement("a");
-                      link.href = url;
-                      const dateString = moment().format("YYYY-MM-DD");
-                      const fn = `COVID Policy Tracker dataset - ${dateString}.xlsx`;
-                      link.setAttribute("download", fn); //or any other extension
-                      document.body.appendChild(link);
-                      link.click();
-                    });
-                  }}
-                >
-                  Download all data
+                <button onClick={() => Export({ method: "post", filters })}>
+                  Download {isEmpty(filters) ? "all" : "filtered"} data
                 </button>
               </React.Fragment>
             ),
