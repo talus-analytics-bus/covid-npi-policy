@@ -26,12 +26,16 @@ jobs:
       - aws-cli/configure
 
       - run:
-          name: yarn build
+          name: Build
           command: rm yarn.lock; yarn install --network-timeout 1000000
 
       - run:
-          name: deploy
+          name: Deploy
           command: yarn run deploy
+
+      - run:
+          name: Invalidate cache
+          command: aws cloudfront create-invalidation --distribution-id E2APV01FSNEH6H --paths "/*"
 
 workflows:
   version: 2
