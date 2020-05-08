@@ -2,7 +2,7 @@
 .nav {
   border-bottom: 8px solid $light-blue;
   @include sticky();
-  z-index: 0;
+  z-index: 1;
   width: 100%;
   background: white;
 
@@ -11,7 +11,7 @@
     margin: 0 auto;
     padding: 40px 20px;
     @media #{$phone} {
-      padding: 20px 10px;
+      padding: 10px 20px;
     }
     display: flex;
     align-items: center;

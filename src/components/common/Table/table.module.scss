@@ -89,7 +89,7 @@
       @include sticky();
       top: 137px;
       @media #{$phone} {
-        position: unset;
+        position: relative;
         top: unset;
       }
     }
