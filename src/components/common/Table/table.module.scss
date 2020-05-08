@@ -127,6 +127,9 @@
   }
 
   // Bootstrap tables
+  .paginationTotal {
+    margin-left: 1rem;
+  }
   [class="row react-bootstrap-table-pagination"] {
     display: flex;
     align-items: center;

@@ -6,6 +6,9 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
+// utilities
+import { comma } from "../../misc/Util";
+
 // assets
 import asc from "../../../assets/icons/table/sorted-asc.svg";
 import desc from "../../../assets/icons/table/sorted-desc.svg";
@@ -81,6 +84,11 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
   const paginationThresh = 0;
 
   // define pagination options for Bootstrap table
+  const customTotal = (from, to, size) => (
+    <span className={styles.paginationTotal}>
+      Showing {comma(from)} to {comma(to)} of {comma(size)} records
+    </span>
+  );
   const paginationOptions = {
     paginationSize: 5,
     pageStartIndex: 1,
@@ -97,7 +105,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
     firstPageTitle: "Next page",
     lastPageTitle: "Last page",
     showTotal: true,
-    // paginationTotalRenderer: customTotal,
+    paginationTotalRenderer: customTotal,
     disablePageTitle: true,
     sizePerPageList: [
       {
