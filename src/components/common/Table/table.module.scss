@@ -43,6 +43,7 @@
     td > a {
       display: flex;
       align-items: center;
+      color: $selected-blue;
       &,
       * {
         text-decoration: none !important;
