@@ -84,6 +84,15 @@
         border-bottom: 1px solid $gray-2 !important;
       }
     }
+    th {
+      position: sticky;
+      top: 0;
+      @media #{$phone} {
+        position: unset;
+        top: unset;
+      }
+    }
+
     &,
     tbody tr td,
     thead tr th {
