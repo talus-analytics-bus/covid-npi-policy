@@ -137,6 +137,9 @@ const Filter = ({
     }
   }, [dateRangeState]);
 
+  const responsiveHeight =
+    items && items.length < 5 ? (2 + items.length) * 42 : (2 + 5) * 42;
+
   return (
     <div className={styles.filter}>
       <div className={styles.label}>{label}</div>
@@ -199,6 +202,7 @@ const Filter = ({
               items={items}
               selectedItems={filterState.selectedItems}
               showSelectedItems={false}
+              responsiveHeight={responsiveHeight}
               onChange={v => {
                 setFilterState({
                   ...filterState,
