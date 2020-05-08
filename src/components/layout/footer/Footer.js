@@ -2,10 +2,17 @@ import React from "react";
 import styles from "./footer.module.scss";
 import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
+import nti from "../../../assets/images/logo-nti.svg";
 import Util from "../../misc/Util.js";
 
 const Footer = () => {
   const images = [
+    {
+      imgSrc: nti,
+      url: "https://www.nti.org/about/biosecurity/",
+      alt: "Nuclear Threat Initiative",
+      txt: null
+    },
     {
       imgSrc: gu,
       url: "https://ghss.georgetown.edu/",
@@ -16,13 +23,12 @@ const Footer = () => {
     {
       imgSrc: talus,
       url: "http://talusanalytics.com/",
-      alt: "Talus Analytics, LLC",
-      txt: "Built by",
-      style: {
-        height: "60px",
-        position: "relative"
-        // top: "5px"
-      }
+      alt: "Talus Analytics, LLC"
+      // txt: "Built by",
+      // style: {
+      //   height: "60px",
+      //   position: "relative"
+      // }
     }
   ];
 

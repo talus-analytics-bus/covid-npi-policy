@@ -38,14 +38,14 @@ $spacing: 10px;
       padding: 0 $item-spacing;
     }
 
-    a:first-child:not(:last-child) img {
+    a:not(:last-child) img {
       border-right: 1px solid $gray;
     }
-    @media #{$phone-narrow} {
+    @media #{$phone} {
       flex-flow: column;
-      justify-content: center;
-      align-items: center;
-      a:first-child:not(:last-child) img {
+      justify-content: flex-start;
+      align-items: flex-start;
+      a:not(:last-child) img {
         border-right: none;
         margin-bottom: 10px;
       }
