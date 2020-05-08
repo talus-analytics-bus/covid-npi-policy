@@ -97,7 +97,7 @@ const Data = ({ setLoading }) => {
           return cell.policy_docs.map(d => {
             if (d.pdf && d.pdf !== "")
               return (
-                <a target="_blank" href={`${API_URL}${d.pdf}`}>
+                <a target="_blank" href={`${API_URL}${d.pdf.replace("#", "")}`}>
                   <i className={"material-icons"}>insert_drive_file</i>
                   <span>Download policy</span>
                 </a>
