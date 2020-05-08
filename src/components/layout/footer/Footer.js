@@ -8,12 +8,6 @@ import Util from "../../misc/Util.js";
 const Footer = () => {
   const images = [
     {
-      imgSrc: nti,
-      url: "https://www.nti.org/about/biosecurity/",
-      alt: "Nuclear Threat Initiative",
-      txt: null
-    },
-    {
       imgSrc: gu,
       url: "https://ghss.georgetown.edu/",
       alt:
@@ -29,6 +23,12 @@ const Footer = () => {
       //   height: "60px",
       //   position: "relative"
       // }
+    },
+    {
+      imgSrc: nti,
+      url: "https://www.nti.org/about/biosecurity/",
+      alt: "Nuclear Threat Initiative",
+      txt: null
     }
   ];
 

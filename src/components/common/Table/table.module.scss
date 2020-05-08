@@ -86,8 +86,8 @@
       }
     }
     th {
-      position: sticky;
-      top: 0;
+      @include sticky();
+      top: 137px;
       @media #{$phone} {
         position: unset;
         top: unset;

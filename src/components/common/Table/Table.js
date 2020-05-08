@@ -90,7 +90,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
     </span>
   );
   const paginationOptions = {
-    paginationSize: 5,
+    paginationSize: 10,
     pageStartIndex: 1,
     // alwaysShowAllBtns: true, // Always show next and previous button
     // withFirstAndLast: false, // Hide the going to First and Last page button
@@ -109,12 +109,12 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
     disablePageTitle: true,
     sizePerPageList: [
       {
-        text: "5",
-        value: 5
-      },
-      {
         text: "10",
         value: 10
+      },
+      {
+        text: "50",
+        value: 50
       },
       {
         text: "All",

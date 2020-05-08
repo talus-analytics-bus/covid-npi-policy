@@ -1,7 +1,11 @@
 @import "./assets/styles/colors.scss";
 .page {
   padding: 20px;
+  max-width: $max-width;
+  margin: 0 auto;
 }
+
+// loading spinner styling
 .loading {
   display: flex;
   align-items: center;

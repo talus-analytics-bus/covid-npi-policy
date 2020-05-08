@@ -1,11 +1,23 @@
 @import "../../../assets/styles/colors.scss";
 .nav {
-  padding: 40px 20px;
   border-bottom: 8px solid $light-blue;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  img {
-    height: 50px;
+  @include sticky();
+  z-index: 0;
+  width: 100%;
+  background: white;
+
+  div {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 40px 20px;
+    @media #{$phone} {
+      padding: 20px 10px;
+    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    img {
+      height: 50px;
+    }
   }
 }

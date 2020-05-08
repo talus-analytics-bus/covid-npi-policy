@@ -24,18 +24,21 @@ const App = () => {
       <Nav />
       <Switch>
         <div className={styles.page}>
-          <Route exact path="/">
-            <Data {...{ setLoading }} />
-          </Route>
+          {
+            // Data page
+            <Route exact path="/">
+              <Data {...{ setLoading }} />
+            </Route>
+          }
         </div>
       </Switch>
       <Footer />
-      <div
-        id={"loadingSpinner"}
-        className={classNames(styles.loading, { [styles.on]: loading })}
-      >
-        <img src={loadingSvg} />
-      </div>
+      {
+        // Loading spinner
+        <div className={classNames(styles.loading, { [styles.on]: loading })}>
+          <img src={loadingSvg} />
+        </div>
+      }
     </BrowserRouter>
   );
 };
