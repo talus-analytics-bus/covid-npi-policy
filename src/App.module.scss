@@ -2,3 +2,20 @@
 .page {
   padding: 20px;
 }
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.5s;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  &.on {
+    opacity: 1;
+    pointer-events: all;
+  }
+}

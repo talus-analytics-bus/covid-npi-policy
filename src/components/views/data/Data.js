@@ -23,7 +23,7 @@ import downloadSvg from "../../../assets/icons/download.svg";
 // constants
 const API_URL = process.env.REACT_APP_API_URL;
 
-const Data = () => {
+const Data = ({ setLoading }) => {
   const [initializing, setInitializing] = useState(true);
 
   // define data for table
@@ -219,6 +219,10 @@ const Data = () => {
       setColumns(newColumns);
     }
   }, [metadata]);
+
+  useEffect(() => {
+    if (data !== null) setLoading(false);
+  }, [data]);
 
   if (initializing) return <div />;
   else
