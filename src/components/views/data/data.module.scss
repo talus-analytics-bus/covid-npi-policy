@@ -36,6 +36,7 @@
     border-radius: 4px;
 
     @media #{$phone} {
+      visibility: hidden;
       div {
         font-size: 1rem;
         span:last-child {
