@@ -5,7 +5,7 @@ import styles from "./nav.module.scss";
 import ReactTooltip from "react-tooltip";
 
 // assets
-import logo from "../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.svg";
 
 const Nav = ({ ...props }) => {
   return (
