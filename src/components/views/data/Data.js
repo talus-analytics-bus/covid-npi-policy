@@ -102,11 +102,11 @@ const Data = () => {
                   <span>Download policy</span>
                 </a>
               );
-            else if (d.url && d.url !== "")
+            else if (d.data_source && d.data_source !== "")
               return (
-                <a target="_blank" href={d.url}>
-                  <span>External site</span>
+                <a target="_blank" href={d.data_source}>
                   <i className={"material-icons"}>link</i>
+                  <span>External site</span>
                 </a>
               );
             else
