@@ -25,11 +25,18 @@ export const Metadata = async function({ method, fields }) {
 /**
  * Get policy data from API.
  */
-export const Policy = async function({ method, filters = null }) {
+export const Policy = async function({ method, fields = [], filters = null }) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+
+  // prepare request
   let req;
   if (method === "get") {
     req = await axios(`${API_URL}/get/policy`, {
-      params: {}
+      params
     });
   } else if (method === "post") {
     if (filters === null) {
@@ -39,7 +46,7 @@ export const Policy = async function({ method, filters = null }) {
       `${API_URL}/post/policy`,
       { filters },
       {
-        params: {}
+        params
       }
     );
   } else {

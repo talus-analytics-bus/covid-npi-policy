@@ -152,7 +152,18 @@ const Data = ({ setLoading }) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
     const results = await execute({
       queries: {
-        policies: Policy({ method, filters }),
+        policies: Policy({
+          method,
+          filters,
+          fields: [
+            "id",
+            "place",
+            "primary_ph_measure",
+            "ph_measure_details",
+            "desc",
+            "date_start_effective"
+          ]
+        }),
         metadata: Metadata({
           method: "get",
           fields: columns.map(d => {
