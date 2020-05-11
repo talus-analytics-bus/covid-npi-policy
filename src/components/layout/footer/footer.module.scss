@@ -5,66 +5,63 @@ $button-font-size: 16px;
 $spacing: 10px;
 
 .footer {
-  width: 100%;
   border-top: 1px $gray solid;
-  background-color: white;
-  padding: 10px 20px;
+  .wrapper {
+    width: 100%;
+    max-width: $max-width;
+    margin: 0 auto;
+    background-color: white;
+    padding: 10px 20px;
 
-  // &.wide .content {
-  //   max-width: 1366px;
-  // }
-  // .content {
-  //   max-width: 1170px;
-  // }
+    $item-spacing: 30px;
+    .content {
+      display: flex;
+      flex-flow: row;
+      justify-content: flex-end;
+      align-items: flex-end;
 
-  $item-spacing: 30px;
-  .content {
-    display: flex;
-    flex-flow: row;
-    justify-content: flex-end;
-    align-items: flex-end;
+      min-height: 70px;
+      // margin: 0 auto;
+      div:first-child {
+        font-style: italic;
+        font-family: "Open Sans", sans-serif;
+        color: #999999;
+        font-size: 16px;
+      }
 
-    min-height: 70px;
-    // margin: 0 auto;
-    div:first-child {
-      font-style: italic;
-      font-family: "Open Sans", sans-serif;
-      color: #999999;
-      font-size: 16px;
-    }
+      img {
+        height: 70px;
+        padding: 0 $item-spacing;
+      }
 
-    img {
-      height: 70px;
-      padding: 0 $item-spacing;
-    }
-
-    a:not(:last-child) img {
-      border-right: 1px solid $gray;
-    }
-    @media #{$phone} {
-      flex-flow: column;
-      justify-content: flex-start;
-      align-items: flex-start;
       a:not(:last-child) img {
-        border-right: none;
-        margin-bottom: 10px;
+        border-right: 1px solid $gray;
       }
-      a img {
-        padding: 0;
+      @media #{$phone} {
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        a:not(:last-child) img {
+          border-right: none;
+          margin-bottom: 10px;
+        }
+        a img {
+          padding: 0;
+        }
       }
-    }
-    a:last-child img {
-      padding-right: 0;
-    }
-    a {
-      position: relative;
-      > div {
-        position: absolute;
-        top: -10px;
-        left: $item-spacing;
-        font-size: 0.9em;
-        pointer-events: none;
-        color: #333;
+      a:last-child img {
+        padding-right: 0;
+      }
+      a {
+        position: relative;
+        > div {
+          position: absolute;
+          top: -10px;
+          left: $item-spacing;
+          font-size: 0.9em;
+          pointer-events: none;
+          color: #333;
+        }
       }
     }
   }

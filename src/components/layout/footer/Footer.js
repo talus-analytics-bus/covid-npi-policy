@@ -34,13 +34,15 @@ const Footer = () => {
 
   return (
     <div className={styles.footer}>
-      <div className={styles.content}>
-        {images.map(d => (
-          <a target="_blank" href={d.url} alt={d.alt}>
-            <img style={d.style} src={d.imgSrc} />
-            {d.txt && <div>{d.txt}</div>}
-          </a>
-        ))}
+      <div className={styles.wrapper}>
+        <div className={styles.content}>
+          {images.map(d => (
+            <a target="_blank" href={d.url} alt={d.alt}>
+              <img style={d.style} src={d.imgSrc} />
+              {d.txt && <div>{d.txt}</div>}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
