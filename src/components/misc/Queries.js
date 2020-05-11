@@ -64,9 +64,7 @@ export const Policy = async function({ method, fields = [], filters = null }) {
 export const Export = async function({ method, filters = null }) {
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/export`, {
-      params: {}
-    });
+    req = await axios(`${API_URL}/export`);
   } else if (method === "post") {
     if (filters === null) {
       console.log("Error: `filters` is required for method POST.");
@@ -76,8 +74,7 @@ export const Export = async function({ method, filters = null }) {
       url: `${API_URL}/post/export`,
       method: "POST",
       responseType: "blob",
-      data: { filters },
-      params: { params: {} }
+      data: { filters }
     });
 
     // TODO comments below
