@@ -37,8 +37,8 @@ jobs:
           name: Invalidate cache
           command: |
             aws cloudfront create-invalidation \
-          --distribution-id E2APV01FSNEH6H \
-          --paths "/*"
+            --distribution-id E2APV01FSNEH6H \
+            --paths "/*"
 
 workflows:
   version: 2
