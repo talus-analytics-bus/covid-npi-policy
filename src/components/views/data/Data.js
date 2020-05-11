@@ -93,8 +93,8 @@ const Data = ({ setLoading }) => {
       dataField: "doc",
       header: "Link to policy",
       formatter: (row, cell) => {
-        if (cell.policy_docs && cell.policy_docs.length > 0) {
-          return cell.policy_docs.map(d => {
+        if (cell.doc && cell.doc.length > 0) {
+          return cell.doc.map(d => {
             if (d.pdf && d.pdf !== "")
               return (
                 <a target="_blank" href={`${API_URL}${d.pdf.replace("#", "")}`}>
