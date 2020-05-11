@@ -161,7 +161,8 @@ const Data = ({ setLoading }) => {
             "primary_ph_measure",
             "ph_measure_details",
             "desc",
-            "date_start_effective"
+            "date_start_effective",
+            "doc"
           ]
         }),
         metadata: Metadata({
