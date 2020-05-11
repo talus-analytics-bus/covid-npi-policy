@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import styles from "./radiotoggle.module.scss";
-import { darkSelectedBlue } from "../../../assets/styles/colors.scss";
+import { darkSelectedBlue } from "../../../assets/styles/vars.scss";
 
 /**
  * Generic radio toggle
