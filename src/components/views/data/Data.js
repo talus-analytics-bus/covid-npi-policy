@@ -90,14 +90,18 @@ const Data = ({ setLoading }) => {
       sort: true
     },
     {
-      dataField: "doc",
+      dataField: "file",
       header: "Link to policy",
+      sort: true,
       formatter: (row, cell) => {
-        if (cell.doc && cell.doc.length > 0) {
-          return cell.doc.map(d => {
-            if (d.pdf && d.pdf !== "")
+        if (cell.file && cell.file.length > 0) {
+          return cell.file.map(d => {
+            if (d.filename && d.filename !== "")
               return (
-                <a target="_blank" href={`${API_URL}${d.pdf.replace("#", "")}`}>
+                <a
+                  target="_blank"
+                  href={`${API_URL}${d.filename.replace("#", "")}`}
+                >
                   <i className={"material-icons"}>insert_drive_file</i>
                   <span>Download policy</span>
                 </a>
@@ -162,7 +166,7 @@ const Data = ({ setLoading }) => {
             "ph_measure_details",
             "desc",
             "date_start_effective",
-            "doc"
+            "file"
           ]
         }),
         metadata: Metadata({
