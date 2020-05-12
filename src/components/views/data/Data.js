@@ -64,19 +64,25 @@ const Data = ({ setLoading }) => {
       field: "ph_measure_details",
       label: "Policy type"
     },
-    policy_type: {
-      entity_name: "Policy",
-      field: "policy_type",
-      label: "Legal type"
-    },
     date_start_effective: {
       entity_name: "Policy",
       field: "date_start_effective",
       label: "Policy effective start date",
       dateRange: true,
       minMaxDate: { min: undefined, max: undefined }
+    },
+    date_end_actual: {
+      entity_name: "Policy",
+      field: "date_end_actual",
+      label: "Policy end date",
+      dateRange: true,
+      minMaxDate: { min: undefined, max: undefined }
     }
   });
+
+  const unspecified = (
+    <span className={styles.unspecified}>{"None available"}</span>
+  );
 
   const [columns, setColumns] = useState([
     {
@@ -142,14 +148,16 @@ const Data = ({ setLoading }) => {
       dataField: "date_start_effective",
       header: "Policy effective start date",
       sort: true,
-      formatter: v => moment(v).format("MMM D, YYYY")
+      formatter: v =>
+        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    },
+    {
+      dataField: "date_end_actual",
+      header: "Policy end date",
+      sort: true,
+      formatter: v =>
+        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
     }
-    // {
-    //   dataField: "date_issued",
-    //   header: "Policy issued date",
-    //   sort: true,
-    //   formatter: v => moment(v).format("MMM D, YYYY")
-    // }
   ]);
 
   const getData = async (filters = {}) => {
@@ -166,6 +174,7 @@ const Data = ({ setLoading }) => {
             "ph_measure_details",
             "desc",
             "date_start_effective",
+            "date_end_actual",
             "file"
           ]
         }),
