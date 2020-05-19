@@ -83,7 +83,7 @@ export const Export = async function({ method, filters = null }) {
     const link = document.createElement("a");
     link.href = url;
     const dateString = moment().format("YYYY-MM-DD");
-    const fn = `COVID Policy Tracker dataset - ${dateString}.xlsx`;
+    const fn = `COVID AMP - Data Export ${dateString}.xlsx`;
     link.setAttribute("download", fn);
     document.body.appendChild(link);
     link.click();
