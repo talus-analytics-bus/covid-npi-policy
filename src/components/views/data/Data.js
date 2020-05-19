@@ -69,7 +69,10 @@ const Data = ({ setLoading }) => {
     ph_measure_details: {
       entity_name: "Policy",
       field: "ph_measure_details",
-      label: "Policy sub-category"
+      label: "Policy sub-category",
+      withGrouping: true,
+      primary: "primary_ph_measure",
+      disabledText: "Choose a policy category"
     },
     date_start_effective: {
       entity_name: "Policy",

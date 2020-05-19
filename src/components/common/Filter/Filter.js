@@ -7,7 +7,7 @@ import { DateRange } from "react-date-range";
 import moment from "moment";
 
 // misc
-import { isEmpty } from "../../misc/Util";
+import { isEmpty, arraysMatch } from "../../misc/Util";
 
 // assets and styles
 import calendarSvg from "../../../assets/icons/calendar.svg";
@@ -26,14 +26,21 @@ const Filter = ({
   label,
   items,
   filters,
+  disabledText,
+  primary,
   setFilters,
   activeFilter,
   setActiveFilter,
   dateRange,
   minMaxDate,
+  withGrouping = false,
   ...props
 }) => {
   const [show, setShow] = useState(false);
+  const primaryFiltersOff =
+    primary !== undefined &&
+    (filters[primary] === undefined || filters[primary].length === 0);
+  const disabled = primaryFiltersOff;
   const [filterState, setFilterState] = useState({
     items,
     selectedItems: []
@@ -43,8 +50,6 @@ const Filter = ({
     {
       startDate: undefined,
       endDate: undefined,
-      // startDate: new Date(moment("2020-01-01").utc()),
-      // endDate: new Date(moment().utc()),
       key: "selection"
     }
   ];
@@ -54,9 +59,6 @@ const Filter = ({
   // a badge, then update this filter's selected values to match
   useEffect(() => {
     if (isEmpty(filters)) {
-      // const newFilterState = { ...filterState };
-      // delete newFilterState[field];
-      // setFilterState(newFilterState);
       setFilterState({ ...filterState, selectedItems: [] });
       if (dateRange) {
         setDateRangeState(initDateRangeState);
@@ -109,6 +111,33 @@ const Filter = ({
         setDateRangeState(initDateRangeState);
         setShowRangeSelection(false);
       }
+    } else {
+      // if this filter has a primary, update based on its values
+      if (primary !== undefined) {
+        const primaryFiltersOff =
+          filters[primary] === undefined || filters[primary].length === 0;
+        const thisFiltersOn =
+          filters[field] !== undefined && filters[field].length > 0;
+        if (primaryFiltersOff && thisFiltersOn) {
+          const newFilters = { ...filters };
+          delete newFilters[field];
+          setFilters(newFilters);
+        } else if (thisFiltersOn) {
+          const newSelectedItems = filterState.selectedItems.filter(d => {
+            return filters[primary].includes(d.group);
+          });
+          const newFilterState = { ...filterState };
+          const newFilters = { ...filters };
+          newFilters[field] = newSelectedItems.map(d => d.value);
+          newFilterState.selectedItems = newSelectedItems;
+          const mustUpdateFilters = !arraysMatch(
+            filters[field],
+            newFilters[field]
+          );
+          setFilterState(newFilterState);
+          if (mustUpdateFilters) setFilters(newFilters);
+        }
+      }
     }
   }, [filters]);
 
@@ -137,18 +166,27 @@ const Filter = ({
     }
   }, [dateRangeState]);
 
-  const responsiveHeight =
-    items && items.length < 5 ? (2 + items.length) * 42 : (2 + 5) * 42;
+  let responsiveHeight = 0;
+  if (items !== undefined) {
+    const hasGroup = items.length > 0 && items[0].group !== undefined;
+    let nEntries = items.length;
+    if (hasGroup) {
+      const nGroups = [...new Set(items.map(d => d.group))].length;
+      nEntries += nGroups;
+    }
+    responsiveHeight = items && nEntries < 5 ? (2 + nEntries) * 42 : 7 * 42;
+  }
 
   return (
-    <div className={styles.filter}>
+    <div className={classNames(styles.filter, { [styles.disabled]: disabled })}>
       <div className={styles.label}>{label}</div>
       <div className={styles.input}>
         <div
           role="filterButton"
           className={classNames(styles.filterButton, {
             [styles.shown]: show,
-            [styles.selected]: nCur > 0
+            [styles.selected]: nCur > 0,
+            [styles.disabled]: disabled
           })}
           onClick={e => {
             if (activeFilter !== field) {
@@ -164,12 +202,14 @@ const Filter = ({
                 dateRange,
                 nMax,
                 dateRangeState,
-                selectedItems: filterState.selectedItems
+                selectedItems: filterState.selectedItems,
+                disabledText,
+                disabled
               })}
             </span>
             <span className={styles.selections}>
               {" "}
-              {!dateRange && (
+              {!dateRange && !primaryFiltersOff && (
                 <span>
                   ({nCur} of {nMax})
                 </span>
@@ -200,6 +240,7 @@ const Filter = ({
             <MultiSelect
               wrapperClassName={styles.filterMenuWrapper}
               items={items}
+              withGrouping={withGrouping}
               selectedItems={filterState.selectedItems}
               showSelectedItems={false}
               responsiveHeight={responsiveHeight}
@@ -258,16 +299,22 @@ export const getInputLabel = ({
   dateRange,
   nMax,
   dateRangeState,
-  selectedItems
+  selectedItems,
+  disabledText,
+  disabled
 }) => {
-  if (!dateRange)
+  if (!dateRange) {
+    // if this filter has a primary and it isn't active, disable it
+    if (disabled) {
+      return disabledText;
+    }
     if (selectedItems.length === 1) {
       if (selectedItems[0].label.length < 15) return selectedItems[0].label;
       else return "1 selected";
     } else if (selectedItems.length === nMax) return "All selected";
     else if (selectedItems.length > 0) return "Multiple selected";
     else return "None selected";
-  else {
+  } else {
     const startRaw = dateRangeState[0].startDate;
     const endRaw = dateRangeState[0].endDate;
     if (startRaw === undefined && endRaw === undefined) {

@@ -85,6 +85,11 @@ $border-radius: 5px;
   top: 0;
 }
 
+@mixin disabled() {
+  color: gray;
+  pointer-events: none;
+}
+
 // globals
 $phone: "screen and (max-width : 812px)";
 $phone-narrow: "screen and (max-width : 500px)";

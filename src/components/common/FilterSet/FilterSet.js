@@ -20,19 +20,31 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
   const [activeFilter, setActiveFilter] = useState(null);
   const filterComponents = [];
   for (const [k, v] of Object.entries(filterDefs)) {
-    const items = [];
+    let items = v.items;
+    // if filter has a primary filter that drives its items, parse them
+    if (v.items !== undefined && v.primary !== undefined) {
+      const primaryFilters = filters[v.primary] || [];
+      // if primary filters are undefined or zero length, disable this filter
+      // otherwise set its items based on the selections
+      items = v.items.filter(d => {
+        return primaryFilters.includes(d.group);
+      });
+    }
     filterComponents.push(
       <Filter
         {...{
           field: v.field,
           label: v.label,
-          items: v.items,
+          items: items,
           dateRange: v.dateRange,
           minMaxDate: v.minMaxDate,
+          primary: v.primary,
+          disabledText: v.disabledText,
           filters,
           setFilters,
           activeFilter,
-          setActiveFilter
+          setActiveFilter,
+          withGrouping: v.withGrouping
         }}
       />
     );

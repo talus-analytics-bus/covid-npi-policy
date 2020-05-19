@@ -10,6 +10,11 @@
     font-weight: bold;
     margin-bottom: 5px;
   }
+  &.disabled {
+    .label {
+      @include disabled();
+    }
+  }
   .input {
     .filterButton {
       $background-color: white;
@@ -46,6 +51,9 @@
         background-color: darken($background-color, 20%);
         @include boxShadow();
       }
+      &.disabled {
+        @include disabled();
+      }
     }
     .filterMenu {
       position: absolute;
@@ -72,9 +80,9 @@
       // height: min-content !important;
 
       .filterMenuWrapper {
-        // max-height: max-content !important;
-        // height: unset !important;
-        // min-height: 500px !important  ;
+        &.disabled * {
+          background-color: red !important;
+        }
       }
 
       &,
