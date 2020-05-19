@@ -54,18 +54,13 @@ const Data = ({ setLoading }) => {
     level: {
       entity_name: "Place",
       field: "level",
-      label: "Organizational level"
+      label: "Affected level of government"
     },
     area1: {
       entity_name: "Place",
       field: "area1",
       label: "State"
     },
-    // loc: {
-    //   entity_name: "Place",
-    //   field: "loc",
-    //   label: "Specific location"
-    // },
     primary_ph_measure: {
       entity_name: "Policy",
       field: "primary_ph_measure",
@@ -74,7 +69,7 @@ const Data = ({ setLoading }) => {
     ph_measure_details: {
       entity_name: "Policy",
       field: "ph_measure_details",
-      label: "Policy type"
+      label: "Policy sub-category"
     },
     date_start_effective: {
       entity_name: "Policy",
@@ -99,47 +94,13 @@ const Data = ({ setLoading }) => {
   const [columns, setColumns] = useState([
     {
       dataField: "place.level",
-      header: "Level of government / Organization level",
+      header: "Affected level of government",
       sort: true
     },
     {
       dataField: "place.loc",
-      header: "Country / Specific location",
+      header: "Affected location",
       sort: true
-    },
-    {
-      dataField: "file",
-      header: "Link to policy",
-      sort: true,
-      formatter: (row, cell) => {
-        if (cell.file && cell.file.length > 0) {
-          return cell.file.map(d => {
-            if (d.filename && d.filename !== "")
-              return (
-                <a
-                  target="_blank"
-                  href={`${API_URL}${d.filename.replace("#", "")}`}
-                >
-                  <i className={"material-icons"}>insert_drive_file</i>
-                  <span>Download policy</span>
-                </a>
-              );
-            else if (d.data_source && d.data_source !== "")
-              return (
-                <a target="_blank" href={d.data_source}>
-                  <i className={"material-icons"}>link</i>
-                  <span>External site</span>
-                </a>
-              );
-            else
-              return (
-                <span className={styles.unspecified}>{"None available"}</span>
-              );
-          });
-        } else {
-          return "None";
-        }
-      }
     },
     {
       dataField: "primary_ph_measure",
@@ -148,7 +109,7 @@ const Data = ({ setLoading }) => {
     },
     {
       dataField: "ph_measure_details",
-      header: "Policy type",
+      header: "Policy sub-category",
       sort: true
     },
     {
@@ -169,6 +130,40 @@ const Data = ({ setLoading }) => {
       sort: true,
       formatter: v =>
         v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    },
+    {
+      dataField: "file",
+      header: "View / Download PDF",
+      sort: true,
+      formatter: (row, cell) => {
+        if (cell.file && cell.file.length > 0) {
+          return cell.file.map(d => {
+            if (d.filename && d.filename !== "")
+              return (
+                <a
+                  target="_blank"
+                  href={`${API_URL}${d.filename.replace("#", "")}`}
+                >
+                  <i className={"material-icons"}>insert_drive_file</i>
+                  <span>Download</span>
+                </a>
+              );
+            else if (d.data_source && d.data_source !== "")
+              return (
+                <a target="_blank" href={d.data_source}>
+                  <i className={"material-icons"}>link</i>
+                  <span>External site</span>
+                </a>
+              );
+            else
+              return (
+                <span className={styles.unspecified}>{"None available"}</span>
+              );
+          });
+        } else {
+          return "None";
+        }
+      }
     }
   ]);
 
