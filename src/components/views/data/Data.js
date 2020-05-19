@@ -240,6 +240,9 @@ const Data = ({ setLoading }) => {
           ? d.dataField
           : "policy." + d.dataField;
         d.definition = metadata[key].definition || "";
+
+        // use only the first sentence of the definition
+        d.definition = d.definition.split(".")[0];
       });
       setColumns(newColumns);
     }
@@ -254,22 +257,19 @@ const Data = ({ setLoading }) => {
     return (
       <div className={styles.data}>
         <div className={styles.header}>
-          <h1>
-            Welcome to COVID
-            <br />
-            Policy Tracker
-          </h1>
+          <h1>Welcome to COVID AMP policy and plan database</h1>
           <div className={styles.columnText}>
             <p>
-              The COVID Policy Tracker provides access to a comprehensive list
-              of policies implemented at all levels of government globally to
-              address the COVID-19 pandemic. In many cases, subnational
-              governments have led the COVID-19 response. For simple search,
-              each policy has been categorized into the type of measure taken,
-              in addition to implementation date and authorizing agency. In
-              addition, policies can be identified by legal authority, when
-              available, for implementing each policy listed. Where available,
-              PDFs or links to the policies are included.
+              The COVID Analysis and Mapping of Policies (AMP) site provides
+              access to a comprehensive list of policies and plans implemented
+              at all levels of government globally to address the COVID-19
+              pandemic. In many cases, subnational governments have led the
+              COVID-19 response. For simple search, each policy/plan has been
+              categorized into the type of measure taken, in addition to
+              implementation date and authorizing agency. In addition,
+              policies/plans can be identified by legal authority, when
+              available, for implementing each policy/plan listed. Where
+              available, PDFs or links to the policies/plans are included.
             </p>
           </div>
         </div>
@@ -277,7 +277,7 @@ const Data = ({ setLoading }) => {
           {...{
             label: (
               <React.Fragment>
-                <h2>Policy library</h2>
+                <h2>Policy and plan database</h2>
                 <button
                   className={classNames(styles.downloadBtn, {
                     [styles.loading]: buttonLoading
