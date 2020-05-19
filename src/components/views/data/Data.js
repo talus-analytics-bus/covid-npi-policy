@@ -23,15 +23,27 @@ import downloadSvg from "../../../assets/icons/download.svg";
 // constants
 const API_URL = process.env.REACT_APP_API_URL;
 
+// primary data viewing and download page
 const Data = ({ setLoading }) => {
   const [initializing, setInitializing] = useState(true);
 
-  // define data for table
+  // define data and metadata for table
   const [data, setData] = useState(null);
   const [metadata, setMetadata] = useState(null);
+
+  // define filters
+  // TODO parse by policy/plan
   const [filters, setFilters] = useState({});
+
+  // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [minMaxDate, setMinMaxDate] = useState({
+
+  // min and max dates for date range pickers dynamically determined by data
+  const [minMaxStartDate, setMinMaxStartDate] = useState({
+    min: undefined,
+    max: undefined
+  });
+  const [minMaxEndDate, setMinMaxEndDate] = useState({
     min: undefined,
     max: undefined
   });
@@ -189,16 +201,29 @@ const Data = ({ setLoading }) => {
     });
     setData(results.policies.data);
     setMetadata(results.metadata.data);
-    const policyDates = results.policies.data
+
+    // define min/max range of daterange pickers
+    // TODO modularize and reuse repeated code
+    const policyDatesStart = results.policies.data
       .map(d => d.date_start_effective)
       .filter(d => d)
       .sort();
-    const newMinMaxDate = {
-      min: new Date(moment(policyDates[0]).utc()),
-      max: new Date(moment(policyDates[policyDates.length - 1]).utc())
+    const policyDatesEnd = results.policies.data
+      .map(d => d.date_end_actual)
+      .filter(d => d)
+      .sort();
+    const newMinMaxStartDate = {
+      min: new Date(moment(policyDatesStart[0]).utc()),
+      max: new Date(moment(policyDatesStart[policyDatesStart.length - 1]).utc())
+    };
+    const newMinMaxEndDate = {
+      min: new Date(moment(policyDatesEnd[0]).utc()),
+      max: new Date(moment(policyDatesEnd[policyDatesEnd.length - 1]).utc())
     };
 
-    setMinMaxDate(newMinMaxDate);
+    setMinMaxStartDate(newMinMaxStartDate);
+    setMinMaxEndDate(newMinMaxEndDate);
+
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
     // TODO move this out of main code if possible
@@ -213,13 +238,17 @@ const Data = ({ setLoading }) => {
           }),
         entity_name: "Policy"
       });
-      const newFilterDefs = { ...filterDefs };
 
+      // set options for filters
+      const newFilterDefs = { ...filterDefs };
       for (const [k, v] of Object.entries(filterDefs)) {
         if (!k.startsWith("date")) filterDefs[k].items = results[k];
         else continue;
       }
-      newFilterDefs.date_start_effective.minMaxDate = newMinMaxDate;
+
+      // set min/max date range for daterange filters
+      newFilterDefs.date_start_effective.minMaxDate = newMinMaxStartDate;
+      newFilterDefs.date_end_actual.minMaxDate = newMinMaxEndDate;
       setFilterDefs(newFilterDefs);
     }
   };
@@ -262,14 +291,14 @@ const Data = ({ setLoading }) => {
             <p>
               The COVID Analysis and Mapping of Policies (AMP) site provides
               access to a comprehensive list of policies and plans implemented
-              at all levels of government globally to address the COVID-19
-              pandemic. In many cases, subnational governments have led the
-              COVID-19 response. For simple search, each policy/plan has been
-              categorized into the type of measure taken, in addition to
-              implementation date and authorizing agency. In addition,
-              policies/plans can be identified by legal authority, when
-              available, for implementing each policy/plan listed. Where
-              available, PDFs or links to the policies/plans are included.
+              globally to address the COVID-19 pandemic. In many cases, response
+              efforts have been led by subnational governments or private and
+              non-profit organizations. For simple search, each policy or plan
+              has been categorized by the type of measure, in addition to
+              implementation date and authorizing agency. In addition, policies
+              can be identified by legal authority and plans by type of
+              organization. Where available, PDFs or links to the original
+              document or notice are included.
             </p>
           </div>
         </div>
