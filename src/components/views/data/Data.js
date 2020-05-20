@@ -101,17 +101,10 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       primary: "primary_ph_measure",
       disabledText: "Choose a policy category"
     },
-    date_start_effective: {
+    dates_in_effect: {
       entity_name: "Policy",
-      field: "date_start_effective",
-      label: "Policy effective start date",
-      dateRange: true,
-      minMaxDate: { min: undefined, max: undefined }
-    },
-    date_end_actual: {
-      entity_name: "Policy",
-      field: "date_end_actual",
-      label: "Policy end date",
+      field: "dates_in_effect",
+      label: "Dates policy in effect",
       dateRange: true,
       minMaxDate: { min: undefined, max: undefined }
     }
@@ -155,12 +148,44 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         v !== null ? moment(v).format("MMM D, YYYY") : unspecified
     },
     {
-      dataField: "date_end_actual",
+      dataField: "date_end_actual_or_anticipated",
       header: "Policy end date",
       sort: true,
-      formatter: v =>
-        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+      sortFunc: (axx, bxx, order, dataField, a, b) => {
+        const getDateValue = d => {
+          if (d.date_end_actual !== null) return moment(d.date_end_actual);
+          else if (d.date_end_anticipated !== null)
+            return moment(d.date_end_anticipated);
+          else return -99999;
+        };
+        const aDate = getDateValue(a);
+        const bDate = getDateValue(b);
+        if (order === "asc") {
+          return aDate - bDate;
+        }
+        return bDate - aDate; // desc
+      },
+      formatter: (v, row) => {
+        const hasActual = row.date_end_actual !== null;
+        if (hasActual) return moment(row.date_end_actual).format("MMM D, YYYY");
+        else {
+          const hasAnticipated = row.date_end_anticipated !== null;
+          if (hasAnticipated) {
+            return (
+              moment(row.date_end_anticipated).format("MMM D, YYYY") +
+              " (anticipated)"
+            );
+          } else return unspecified;
+        }
+      }
     },
+    // {
+    //   dataField: "date_end_anticipated",
+    //   header: "Policy anticipated end date",
+    //   sort: true,
+    //   formatter: v =>
+    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    // },
     {
       dataField: "file",
       header: "View / Download PDF",
@@ -212,6 +237,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
             "desc",
             "date_start_effective",
             "date_end_actual",
+            "date_end_anticipated",
             "file"
           ]
         }),
@@ -272,8 +298,12 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       }
 
       // set min/max date range for daterange filters
-      newFilterDefs.date_start_effective.minMaxDate = newMinMaxStartDate;
-      newFilterDefs.date_end_actual.minMaxDate = newMinMaxEndDate;
+      newFilterDefs.dates_in_effect.minMaxDate = {
+        min: newMinMaxStartDate.min,
+        max: undefined
+      };
+      // newFilterDefs.date_start_effective.minMaxDate = newMinMaxStartDate;
+      // newFilterDefs.date_end_actual.minMaxDate = newMinMaxEndDate;
       setFilterDefs(newFilterDefs);
     }
   };
@@ -293,7 +323,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         const key = d.dataField.includes(".")
           ? d.dataField
           : "policy." + d.dataField;
-        d.definition = metadata[key].definition || "";
+        d.definition = metadata[key] ? metadata[key].definition || "" : "";
 
         // use only the first sentence of the definition
         d.definition = d.definition.split(".")[0];
