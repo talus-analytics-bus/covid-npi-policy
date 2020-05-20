@@ -56,10 +56,26 @@ const Data = ({ setLoading }) => {
       field: "level",
       label: "Affected level of government"
     },
+    iso3: {
+      entity_name: "Place",
+      field: "iso3",
+      label: "Country"
+    },
     area1: {
       entity_name: "Place",
       field: "area1",
-      label: "State"
+      label: "State / Province",
+      withGrouping: true,
+      primary: "iso3",
+      disabledText: "Choose a country"
+    },
+    area2: {
+      entity_name: "Place",
+      field: "area2",
+      label: "Locality (county, city, ...)",
+      withGrouping: true,
+      primary: "area1",
+      disabledText: "Choose a state / province"
     },
     primary_ph_measure: {
       entity_name: "Policy",
