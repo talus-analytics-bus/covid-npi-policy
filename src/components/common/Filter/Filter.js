@@ -40,6 +40,7 @@ const Filter = ({
   const primaryFiltersOff =
     primary !== undefined &&
     (filters[primary] === undefined || filters[primary].length === 0);
+  const noItems = items && items.length === 0;
   const disabled = primaryFiltersOff;
   const [filterState, setFilterState] = useState({
     items,
@@ -178,7 +179,11 @@ const Filter = ({
   }
 
   return (
-    <div className={classNames(styles.filter, { [styles.disabled]: disabled })}>
+    <div
+      className={classNames(styles.filter, {
+        [styles.disabled]: disabled || noItems
+      })}
+    >
       <div className={styles.label}>{label}</div>
       <div className={styles.input}>
         <div
@@ -186,7 +191,7 @@ const Filter = ({
           className={classNames(styles.filterButton, {
             [styles.shown]: show,
             [styles.selected]: nCur > 0,
-            [styles.disabled]: disabled
+            [styles.disabled]: disabled || noItems
           })}
           onClick={e => {
             if (activeFilter !== field) {
@@ -200,6 +205,7 @@ const Filter = ({
             <span className={styles.field}>
               {getInputLabel({
                 dateRange,
+                items,
                 nMax,
                 dateRangeState,
                 selectedItems: filterState.selectedItems,
@@ -209,7 +215,7 @@ const Filter = ({
             </span>
             <span className={styles.selections}>
               {" "}
-              {!dateRange && !primaryFiltersOff && (
+              {!dateRange && !disabled && !noItems && (
                 <span>
                   ({nCur} of {nMax})
                 </span>
@@ -299,13 +305,16 @@ export const getInputLabel = ({
   dateRange,
   nMax,
   dateRangeState,
+  items,
   selectedItems,
   disabledText,
   disabled
 }) => {
   if (!dateRange) {
     // if this filter has a primary and it isn't active, disable it
-    if (disabled) {
+    if (!disabled && items && items.length === 0) {
+      return "No options";
+    } else if (disabled) {
       return disabledText;
     }
     if (selectedItems.length === 1) {
