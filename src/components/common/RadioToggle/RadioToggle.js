@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
 import styles from "./radiotoggle.module.scss";
 import { darkSelectedBlue } from "../../../assets/styles/vars.scss";
+import InfoTooltip from "../../misc/InfoTooltip.js";
 
 /**
  * Generic radio toggle
@@ -15,6 +16,7 @@ const RadioToggle = ({
   onClick,
   label,
   className,
+  setInfoTooltipContent,
   ...props
 }) => {
   /**
@@ -97,7 +99,11 @@ const RadioToggle = ({
                     value={c.value}
                     checked={curVal.toString() === c.value.toString()}
                   />
-                  {c.name}
+                  <div>{c.name}</div>
+                  <InfoTooltip
+                    text={c.tooltip}
+                    setInfoTooltipContent={setInfoTooltipContent}
+                  />
                 </label>
               )}
             </span>

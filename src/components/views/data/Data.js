@@ -4,7 +4,7 @@ import moment from "moment";
 import axios from "axios";
 
 // common compoments
-import { FilterSet, Table } from "../../common";
+import { FilterSet, Table, RadioToggle } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
   Metadata,
@@ -24,8 +24,19 @@ import downloadSvg from "../../../assets/icons/download.svg";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // primary data viewing and download page
-const Data = ({ setLoading }) => {
+const Data = ({ setLoading, setInfoTooltipContent }) => {
   const [initializing, setInitializing] = useState(true);
+  const [docType, setDocType] = useState("policy");
+
+  // get nouns to use from doc type
+  const getNouns = docType => {
+    if (docType === "policy") {
+      return { s: "Policy", p: "Policies" };
+    } else {
+      return { s: "Plan", p: "Plans" };
+    }
+  };
+  const nouns = getNouns(docType);
 
   // define data and metadata for table
   const [data, setData] = useState(null);
@@ -337,7 +348,8 @@ const Data = ({ setLoading }) => {
                     {!buttonLoading && (
                       <React.Fragment>
                         <span>
-                          Download {isEmpty(filters) ? "all" : "filtered"} data
+                          Download {isEmpty(filters) ? "all" : "filtered"}{" "}
+                          {nouns.p.toLowerCase()}
                         </span>
                         <br />
                         <span>
@@ -360,14 +372,26 @@ const Data = ({ setLoading }) => {
             noCollapse: true,
             content: (
               <React.Fragment>
-                <span>
-                  Select filters to apply to data.{" "}
+                <RadioToggle
+                  label={"View"}
+                  choices={[
+                    { name: "Policies", value: "policy", tooltip: "TBD" },
+                    { name: "Plans", value: "plan", tooltip: "TBD" }
+                  ]}
+                  curVal={docType}
+                  callback={setDocType}
+                  horizontal={true}
+                  selectpicker={false}
+                  setInfoTooltipContent={setInfoTooltipContent}
+                />
+                <div>
+                  Select filters to apply to {nouns.p.toLowerCase()}.{" "}
                   {Object.keys(filters).length > 0 && (
                     <button onClick={() => setFilters({})}>
                       Clear filters
                     </button>
                   )}
-                </span>
+                </div>
                 <FilterSet {...{ filterDefs, filters, setFilters }} />
               </React.Fragment>
             )

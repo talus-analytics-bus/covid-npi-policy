@@ -21,25 +21,22 @@
         > div {
           margin: 0 auto;
         }
-        // justify-content: center;
-        // align-items: center;
-        // display: flex;
-        // flex-flow: row;
-        // margin: 30px auto 0 auto;
       }
     }
   }
 }
 .infoTooltip {
   display: inline-flex;
-  margin: 5px;
+  margin: 0 5px;
   top: 2px;
-  // position: relative;
+  position: relative;
 
   img {
-    position: absolute;
-    top: 0;
-    height: 20px;
-    width: 20px;
+    $size: 15px;
+    height: $size;
+    width: $size;
+    top: -2px;
+    position: relative;
+    cursor: default;
   }
 }
