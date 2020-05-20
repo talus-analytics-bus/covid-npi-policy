@@ -18,37 +18,47 @@ import funnelSvg from "../../../assets/icons/funnel.svg";
  */
 const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
   const [activeFilter, setActiveFilter] = useState(null);
-  const filterComponents = [];
-  for (const [k, v] of Object.entries(filterDefs)) {
-    let items = v.items;
-    // if filter has a primary filter that drives its items, parse them
-    if (v.items !== undefined && v.primary !== undefined) {
-      const primaryFilters = filters[v.primary] || [];
-      // if primary filters are undefined or zero length, disable this filter
-      // otherwise set its items based on the selections
-      items = v.items.filter(d => {
-        return primaryFilters.includes(d.group);
-      });
+  const filterGroups = [];
+  const filterDefsObj = {};
+  filterDefs.forEach(filterGroup => {
+    const filterGroupComponents = [];
+
+    for (const [k, v] of Object.entries(filterGroup)) {
+      filterDefsObj[k] = v;
+      let items = v.items;
+      // if filter has a primary filter that drives its items, parse them
+      if (v.items !== undefined && v.primary !== undefined) {
+        const primaryFilters = filters[v.primary] || [];
+        // if primary filters are undefined or zero length, disable this filter
+        // otherwise set its items based on the selections
+        items = v.items.filter(d => {
+          return primaryFilters.includes(d.group);
+        });
+      }
+      filterGroupComponents.push(
+        <Filter
+          {...{
+            field: v.field,
+            label: v.label,
+            items: items,
+            dateRange: v.dateRange,
+            minMaxDate: v.minMaxDate,
+            primary: v.primary,
+            disabledText: v.disabledText,
+            filters,
+            setFilters,
+            activeFilter,
+            setActiveFilter,
+            withGrouping: v.withGrouping
+          }}
+        />
+      );
     }
-    filterComponents.push(
-      <Filter
-        {...{
-          field: v.field,
-          label: v.label,
-          items: items,
-          dateRange: v.dateRange,
-          minMaxDate: v.minMaxDate,
-          primary: v.primary,
-          disabledText: v.disabledText,
-          filters,
-          setFilters,
-          activeFilter,
-          setActiveFilter,
-          withGrouping: v.withGrouping
-        }}
-      />
-    );
-  }
+    filterGroups.push(filterGroupComponents);
+  });
+  console.log("filterGroups");
+  console.log(filterGroups);
+
   /**
    * Return a badge representing the filter value that can be clicked off
    * @method getBadge
@@ -70,7 +80,10 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
             const newFilters = { ...filters };
             newFilters[field] = newFilters[field].filter(v => v !== value);
 
-            if (filterDefs[field].dateRange || newFilters[field].length === 0) {
+            if (
+              filterDefsObj[field].dateRange ||
+              newFilters[field].length === 0
+            ) {
               delete newFilters[field];
               setFilters(newFilters);
             } else {
@@ -98,13 +111,13 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
         {!isEmpty(filters) &&
           Object.entries(filters).map(([field, values]) => (
             <React.Fragment>
-              {!filterDefs[field].dateRange &&
+              {!filterDefsObj[field].dateRange &&
                 values.map(value =>
-                  getBadge({ label: filterDefs[field].label, field, value })
+                  getBadge({ label: filterDefsObj[field].label, field, value })
                 )}
-              {filterDefs[field].dateRange &&
+              {filterDefsObj[field].dateRange &&
                 getBadge({
-                  label: filterDefs[field].label,
+                  label: filterDefsObj[field].label,
                   field,
                   value: getInputLabel({
                     dateRange: true,
@@ -120,7 +133,11 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
   );
   return (
     <React.Fragment>
-      <div className={styles.filterSet}>{filterComponents}</div>
+      <div className={styles.filterSet}>
+        {filterGroups.map(d => (
+          <div className={styles.filterGroup}>{d}</div>
+        ))}
+      </div>
       {!isEmpty(filters) && selectedFilters}
     </React.Fragment>
   );

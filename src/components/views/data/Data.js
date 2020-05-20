@@ -61,54 +61,64 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
 
   // define non-date filters
   // TODO make simpler, probably removing the `field` key
-  const [filterDefs, setFilterDefs] = useState({
-    level: {
-      entity_name: "Place",
-      field: "level",
-      label: "Affected level of government"
+  const [filterDefs, setFilterDefs] = useState([
+    {
+      level: {
+        entity_name: "Place",
+        field: "level",
+        label: "Affected level of government"
+      }
     },
-    iso3: {
-      entity_name: "Place",
-      field: "iso3",
-      label: "Country"
+    {
+      iso3: {
+        entity_name: "Place",
+        field: "iso3",
+        label: "Country"
+      },
+      area1: {
+        entity_name: "Place",
+        field: "area1",
+        label: "State / Province",
+        withGrouping: true,
+        primary: "iso3",
+        disabledText: "Choose a country"
+      },
+      area2: {
+        entity_name: "Place",
+        field: "area2",
+        label: "Locality (county, city, ...)",
+        withGrouping: true,
+        primary: "area1",
+        disabledText: "Choose a state / province"
+      }
     },
-    area1: {
-      entity_name: "Place",
-      field: "area1",
-      label: "State / Province",
-      withGrouping: true,
-      primary: "iso3",
-      disabledText: "Choose a country"
+    {
+      primary_ph_measure: {
+        entity_name: "Policy",
+        field: "primary_ph_measure",
+        label: "Policy category"
+      },
+      ph_measure_details: {
+        entity_name: "Policy",
+        field: "ph_measure_details",
+        label: "Policy sub-category",
+        withGrouping: true,
+        primary: "primary_ph_measure",
+        disabledText: "Choose a policy category"
+      }
     },
-    area2: {
-      entity_name: "Place",
-      field: "area2",
-      label: "Locality (county, city, ...)",
-      withGrouping: true,
-      primary: "area1",
-      disabledText: "Choose a state / province"
-    },
-    primary_ph_measure: {
-      entity_name: "Policy",
-      field: "primary_ph_measure",
-      label: "Policy category"
-    },
-    ph_measure_details: {
-      entity_name: "Policy",
-      field: "ph_measure_details",
-      label: "Policy sub-category",
-      withGrouping: true,
-      primary: "primary_ph_measure",
-      disabledText: "Choose a policy category"
-    },
-    dates_in_effect: {
-      entity_name: "Policy",
-      field: "dates_in_effect",
-      label: "Dates policy in effect",
-      dateRange: true,
-      minMaxDate: { min: undefined, max: undefined }
+    {
+      dates_in_effect: {
+        entity_name: "Policy",
+        field: "dates_in_effect",
+        label: "Dates policy in effect",
+        dateRange: true,
+        minMaxDate: { min: undefined, max: undefined }
+      }
     }
-  });
+  ]);
+  // console.log("filterDefs");
+  // console.log(filterDefs);
 
   const unspecified = (
     <span className={styles.unspecified}>{"None available"}</span>
@@ -282,7 +292,9 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       setInitializing(false);
       const results = await OptionSet({
         method: "get",
-        fields: Object.values(filterDefs)
+        fields: filterDefs
+          .map(d => Object.values(d).map(dd => dd))
+          .flat()
           .filter(d => !d.field.startsWith("date"))
           .map(d => {
             return d.entity_name + "." + d.field;
@@ -291,19 +303,19 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       });
 
       // set options for filters
-      const newFilterDefs = { ...filterDefs };
-      for (const [k, v] of Object.entries(filterDefs)) {
-        if (!k.startsWith("date")) filterDefs[k].items = results[k];
-        else continue;
-      }
-
-      // set min/max date range for daterange filters
-      newFilterDefs.dates_in_effect.minMaxDate = {
-        min: newMinMaxStartDate.min,
-        max: undefined
-      };
-      // newFilterDefs.date_start_effective.minMaxDate = newMinMaxStartDate;
-      // newFilterDefs.date_end_actual.minMaxDate = newMinMaxEndDate;
+      const newFilterDefs = [...filterDefs];
+      newFilterDefs.forEach(d => {
+        for (const [k, v] of Object.entries(d)) {
+          if (!k.startsWith("date")) d[k].items = results[k];
+          if (k === "dates_in_effect") {
+            // set min/max date range for daterange filters
+            d[k].minMaxDate = {
+              min: newMinMaxStartDate.min,
+              max: undefined
+            };
+          }
+        }
+      });
       setFilterDefs(newFilterDefs);
     }
   };
