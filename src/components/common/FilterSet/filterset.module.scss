@@ -2,10 +2,17 @@
 
 // Credit: https://stackoverflow.com/questions/43662552/getting-columns-to-wrap-in-css-grid
 .filterSet {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 1em 0;
-  max-width: 1400px;
+  display: flex;
+  flex-flow: wrap;
+  @include spaceItemsHoriz(5rem);
+  margin-top: 0 !important;
+  .filterGroup {
+    display: flex;
+    margin-top: 20px;
+    > div {
+      min-width: 250px;
+    }
+  }
 }
 .selectedFilters {
   padding: 10px;
@@ -77,6 +84,24 @@
             @include boxShadow();
           }
         }
+      }
+    }
+  }
+}
+
+@media #{$phone} {
+  .filterSet {
+    margin: 0;
+
+    @include borderItemsVert(20px);
+
+    .filterGroup {
+      width: 100%;
+      flex-flow: column;
+      margin: 0;
+      > div {
+        width: 100%;
+        margin-top: 20px;
       }
     }
   }
