@@ -26,7 +26,13 @@ export const ShowMore = ({ text = "", charLimit = 30, wordLimit = null }) => {
   return (
     <span className={styles}>
       {textToShow}{" "}
-      <span onClick={() => setExpanded(!expanded)} className={toggle}>
+      <span
+        onClick={e => {
+          e.stopPropagation();
+          setExpanded(!expanded);
+        }}
+        className={toggle}
+      >
         {!textShortEnough && label}
       </span>
     </span>
