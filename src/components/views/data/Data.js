@@ -389,7 +389,8 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
                   className={classNames(styles.downloadBtn, {
                     [styles.loading]: buttonLoading
                   })}
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
                     setButtonLoading(true);
                     Export({ method: "post", filters }).then(d =>
                       setButtonLoading(false)
@@ -422,7 +423,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
                 </button>
               </React.Fragment>
             ),
-            noCollapse: true,
+            noCollapse: false,
             content: (
               <React.Fragment>
                 <RadioToggle

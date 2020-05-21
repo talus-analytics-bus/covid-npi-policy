@@ -167,15 +167,17 @@ const Filter = ({
     }
   }, [dateRangeState]);
 
+  const showSelectAll = items && items.length > 4;
   let responsiveHeight = 0;
   if (items !== undefined) {
     const hasGroup = items.length > 0 && items[0].group !== undefined;
     let nEntries = items.length;
+    if (showSelectAll) nEntries++;
     if (hasGroup) {
       const nGroups = [...new Set(items.map(d => d.group))].length;
       nEntries += nGroups;
     }
-    responsiveHeight = items && nEntries < 5 ? (2 + nEntries) * 42 : 7 * 42;
+    responsiveHeight = items && nEntries < 5 ? nEntries * 42 : 7 * 42;
   }
 
   return (
@@ -249,6 +251,8 @@ const Filter = ({
               withGrouping={withGrouping}
               selectedItems={filterState.selectedItems}
               showSelectedItems={false}
+              showSelectAll={showSelectAll}
+              showSearch={showSelectAll}
               responsiveHeight={responsiveHeight}
               onChange={v => {
                 setFilterState({

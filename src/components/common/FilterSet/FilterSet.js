@@ -56,8 +56,6 @@ const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
     }
     filterGroups.push(filterGroupComponents);
   });
-  console.log("filterGroups");
-  console.log(filterGroups);
 
   /**
    * Return a badge representing the filter value that can be clicked off
