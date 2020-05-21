@@ -4,7 +4,7 @@ import moment from "moment";
 import axios from "axios";
 
 // common compoments
-import { FilterSet, Table, RadioToggle } from "../../common";
+import { FilterSet, Table, RadioToggle, ShowMore } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
   Metadata,
@@ -146,7 +146,10 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     {
       dataField: "desc",
       header: "Policy description",
-      sort: true
+      sort: true,
+      formatter: v => {
+        return <ShowMore text={v} />;
+      }
     },
     {
       dataField: "date_start_effective",

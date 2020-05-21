@@ -6,8 +6,9 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
-// utilities
+// utilities and common components
 import { comma } from "../../misc/Util";
+import { ShowMore } from "../../common/";
 
 // assets
 import asc from "../../../assets/icons/table/sorted-asc.svg";
@@ -36,7 +37,9 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
       d.text = (
         <div>
           <p>{d.header}</p>
-          <p className={styles.definition}>{d.definition}</p>
+          <p className={styles.definition}>
+            {<ShowMore text={d.definition} />}
+          </p>
         </div>
       );
     } else {
