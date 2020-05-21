@@ -51,7 +51,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
     }
     if (d.formatter === undefined)
       d.formatter = cell =>
-        !cell ? (
+        !cell || cell === "Unspecified" ? (
           <span className={styles.unspecified}>{"Unspecified"}</span>
         ) : (
           cell
