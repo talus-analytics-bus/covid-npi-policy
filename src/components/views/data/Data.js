@@ -214,13 +214,10 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
                   <span>External site</span>
                 </a>
               );
-            else
-              return (
-                <span className={styles.unspecified}>{"None available"}</span>
-              );
+            else return unspecified;
           });
         } else {
-          return "None";
+          return unspecified;
         }
       }
     }
