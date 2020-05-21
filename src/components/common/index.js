@@ -5,6 +5,7 @@ import Checkbox from "./CheckboxSet/content/Checkbox.js";
 import Table from "./Table/Table.js";
 import Filter from "./Filter/Filter.js";
 import FilterSet from "./FilterSet/FilterSet.js";
+import ShowMore from "./ShowMore/ShowMore.js";
 export {
   Selectpicker,
   CheckboxSet,
@@ -12,5 +13,6 @@ export {
   RadioToggle,
   Table,
   Filter,
-  FilterSet
+  FilterSet,
+  ShowMore
 };
