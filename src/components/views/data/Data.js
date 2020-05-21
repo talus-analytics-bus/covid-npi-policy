@@ -59,7 +59,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     max: undefined
   });
 
-  // define non-date filters
+  // define filters in groups
   // TODO make simpler, probably removing the `field` key
   const [filterDefs, setFilterDefs] = useState([
     {
@@ -117,8 +117,6 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       }
     }
   ]);
-  // console.log("filterDefs");
-  // console.log(filterDefs);
 
   const unspecified = (
     <span className={styles.unspecified}>{"None available"}</span>
@@ -189,13 +187,6 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         }
       }
     },
-    // {
-    //   dataField: "date_end_anticipated",
-    //   header: "Policy anticipated end date",
-    //   sort: true,
-    //   formatter: v =>
-    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    // },
     {
       dataField: "file",
       header: "View / Download PDF",
@@ -232,6 +223,12 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     }
   ]);
 
+  /**
+   * Get data for page
+   * @method getData
+   * @param  {Object}  [filters={}] [description]
+   * @return {Promise}              [description]
+   */
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
     const results = await execute({
@@ -328,6 +325,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     if (!initializing) getData(filters);
   }, [filters]);
 
+  // when metadata are retrieved, update columns with definitions
   useEffect(() => {
     if (metadata !== null) {
       const newColumns = [...columns];
@@ -344,9 +342,22 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     }
   }, [metadata]);
 
+  // when data are loaded, set loading flag to false (controlled in App.js)
   useEffect(() => {
     if (data !== null) setLoading(false);
   }, [data]);
+
+  // define which table component to show based on selected doc type
+  const getTable = ({ docType }) => {
+    switch (docType) {
+      case "policy":
+        return <Table {...{ columns, data }} />;
+      case "plan":
+      default:
+        return <div />;
+    }
+  };
+  const table = getTable({ docType });
 
   if (initializing) return <div />;
   else
@@ -439,7 +450,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
             )
           }}
         />
-        <Table {...{ columns, data }} />
+        {table}
       </div>
     );
 };
