@@ -429,7 +429,13 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
                   label={"View"}
                   choices={[
                     { name: "Policies", value: "policy", tooltip: "TBD" },
-                    { name: "Plans", value: "plan", tooltip: "TBD" }
+                    {
+                      name: "Plans",
+                      value: "plan",
+                      tooltip:
+                        "Plans are currently being added to the database and are not yet available.",
+                      disabled: true
+                    }
                   ]}
                   curVal={docType}
                   callback={setDocType}

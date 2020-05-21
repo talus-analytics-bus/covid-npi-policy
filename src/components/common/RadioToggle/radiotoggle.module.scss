@@ -13,7 +13,7 @@
     flex-flow: column;
     margin-left: 10px;
   }
-  span:last-child label {
+  div:last-child label {
     margin-bottom: 0;
   }
   label {
@@ -58,9 +58,16 @@
     form {
       display: flex;
       flex-flow: row;
-      label {
-        padding: 0 10px;
-        width: max-content;
+      align-items: flex-start;
+      @include spaceItemsHoriz(20px);
+
+      div {
+        display: flex;
+        flex-flow: row;
+        label {
+          padding: 0;
+          width: max-content;
+        }
       }
     }
   }

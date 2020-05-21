@@ -70,7 +70,7 @@ const RadioToggle = ({
         </div>
         <form>
           {choices.map(c => (
-            <span>
+            <div>
               {onClick(
                 c.value,
                 <label
@@ -100,13 +100,15 @@ const RadioToggle = ({
                     checked={curVal.toString() === c.value.toString()}
                   />
                   <div>{c.name}</div>
-                  <InfoTooltip
-                    text={c.tooltip}
-                    setInfoTooltipContent={setInfoTooltipContent}
-                  />
                 </label>
               )}
-            </span>
+              {
+                <InfoTooltip
+                  text={c.tooltip}
+                  setInfoTooltipContent={setInfoTooltipContent}
+                />
+              }
+            </div>
           ))}
         </form>
       </div>
