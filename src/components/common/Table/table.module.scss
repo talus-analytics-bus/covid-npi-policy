@@ -26,6 +26,7 @@
     font-family: "Open Sans", serif;
     background-color: $light-gray;
     vertical-align: bottom;
+    font-size: 1.06rem;
     > div > p:first-child {
       margin-right: 20px;
       margin-bottom: 5px;
@@ -87,7 +88,7 @@
     }
     th {
       @include sticky();
-      top: 137px;
+      top: 117px;
       @media #{$phone} {
         position: relative;
         top: unset;
@@ -150,7 +151,7 @@
   }
   .definition {
     font-style: italic;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: normal;
   }
 }

@@ -60,7 +60,7 @@
   }
   .content {
     padding: $padding;
-    font-size: 0.9rem;
+    font-size: 1rem;
     background-color: $light-gray-2;
     @include spaceItemsVert(20px);
     &.hidden {
