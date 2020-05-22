@@ -66,7 +66,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       level: {
         entity_name: "Place",
         field: "level",
-        label: "Affected level of government"
+        label: "Level of government"
       }
     },
     {
@@ -125,7 +125,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
   const [columns, setColumns] = useState([
     {
       dataField: "place.level",
-      header: "Affected level of government",
+      header: "Level of government",
       sort: true
     },
     {
@@ -236,32 +236,48 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
    */
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
-    const results = await execute({
-      queries: {
-        policies: Policy({
-          method,
-          filters,
-          fields: [
-            "id",
-            "place",
-            "primary_ph_measure",
-            "ph_measure_details",
-            "desc",
-            "date_start_effective",
-            "date_end_actual",
-            "date_end_anticipated",
-            "file"
-          ]
-        }),
-        metadata: Metadata({
-          method: "get",
-          fields: columns.map(d => {
-            if (!d.dataField.includes(".")) return "policy." + d.dataField;
-            else return d.dataField;
-          })
+    const queries = {
+      policies: Policy({
+        method,
+        filters,
+        fields: [
+          "id",
+          "place",
+          "primary_ph_measure",
+          "ph_measure_details",
+          "desc",
+          "date_start_effective",
+          "date_end_actual",
+          "date_end_anticipated",
+          "file"
+        ]
+      }),
+      metadata: Metadata({
+        method: "get",
+        fields: columns.map(d => {
+          if (!d.dataField.includes(".")) return "policy." + d.dataField;
+          else return d.dataField;
         })
-      }
+      })
+    };
+    if (initializing) {
+      queries.optionsets = OptionSet({
+        method: "get",
+        fields: filterDefs
+          .map(d => Object.values(d).map(dd => dd))
+          .flat()
+          .filter(d => !d.field.startsWith("date"))
+          .map(d => {
+            return d.entity_name + "." + d.field;
+          }),
+        entity_name: "Policy"
+      });
+    }
+
+    const results = await execute({
+      queries
     });
+
     setData(results.policies.data);
     setMetadata(results.metadata.data);
 
@@ -292,23 +308,13 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     // TODO move this out of main code if possible
     if (initializing) {
       setInitializing(false);
-      const results = await OptionSet({
-        method: "get",
-        fields: filterDefs
-          .map(d => Object.values(d).map(dd => dd))
-          .flat()
-          .filter(d => !d.field.startsWith("date"))
-          .map(d => {
-            return d.entity_name + "." + d.field;
-          }),
-        entity_name: "Policy"
-      });
+      const optionsets = results["optionsets"];
 
       // set options for filters
       const newFilterDefs = [...filterDefs];
       newFilterDefs.forEach(d => {
         for (const [k, v] of Object.entries(d)) {
-          if (!k.startsWith("date")) d[k].items = results[k];
+          if (!k.startsWith("date")) d[k].items = optionsets[k];
           if (k === "dates_in_effect") {
             // set min/max date range for daterange filters
             d[k].minMaxDate = {
