@@ -62,26 +62,26 @@ const Filter = ({
   ];
   const [dateRangeState, setDateRangeState] = useState(initDateRangeState);
 
-  // when master filter list is updated by the "clear" button or by closing
-  // a badge, then update this filter's selected values to match
-  useEffect(() => {
-    if (isEmpty(filters)) {
-      setFilterState({ ...filterState, selectedItems: [] });
-      if (dateRange) {
-        setDateRangeState(initDateRangeState);
-      }
-    } else {
-      if (filters[field] !== undefined) {
-        const curFilters = filterState.selectedItems;
-        const newFilters = curFilters.filter(
-          d => filters[field].includes(d.value) || filters[field].includes(d)
-        );
-        setFilterState({ ...filterState, selectedItems: newFilters });
-      } else {
-        setFilterState({ ...filterState, selectedItems: [] });
-      }
-    }
-  }, [filters]);
+  // // when master filter list is updated by the "clear" button or by closing
+  // // a badge, then update this filter's selected values to match
+  // useEffect(() => {
+  //   if (isEmpty(filters)) {
+  //     setFilterState({ ...filterState, selectedItems: [] });
+  //     if (dateRange) {
+  //       setDateRangeState(initDateRangeState);
+  //     }
+  //   } else {
+  //     if (filters[field] !== undefined) {
+  //       const curFilters = filterState.selectedItems;
+  //       const newFilters = curFilters.filter(
+  //         d => filters[field].includes(d.value) || filters[field].includes(d)
+  //       );
+  //       setFilterState({ ...filterState, selectedItems: newFilters });
+  //     } else {
+  //       setFilterState({ ...filterState, selectedItems: [] });
+  //     }
+  //   }
+  // }, [filters]);
 
   const nMax = items !== undefined ? items.length : 0;
   const nCur = filterState.selectedItems.length;
@@ -119,6 +119,34 @@ const Filter = ({
         setShowRangeSelection(false);
       }
     } else {
+      // update filter state
+      let updatedSelectedItems = null;
+      if (isEmpty(filters)) {
+        updatedSelectedItems = [];
+        setFilterState({ ...filterState, selectedItems: updatedSelectedItems });
+        if (dateRange) {
+          setDateRangeState(initDateRangeState);
+        }
+      } else {
+        if (filters[field] !== undefined) {
+          const curFilters = filterState.selectedItems;
+          const newFilters = curFilters.filter(
+            d => filters[field].includes(d.value) || filters[field].includes(d)
+          );
+          updatedSelectedItems = newFilters;
+          setFilterState({
+            ...filterState,
+            selectedItems: updatedSelectedItems
+          });
+        } else {
+          updatedSelectedItems = [];
+          setFilterState({
+            ...filterState,
+            selectedItems: updatedSelectedItems
+          });
+        }
+      }
+
       // if this filter has a primary, update based on its values
       if (primary !== undefined) {
         const primaryFiltersOff =
@@ -130,12 +158,13 @@ const Filter = ({
           delete newFilters[field];
           setFilters(newFilters);
         } else if (thisFiltersOn) {
-          const newSelectedItems = filterState.selectedItems.filter(d => {
+          const newSelectedItems = updatedSelectedItems.filter(d => {
             return filters[primary].includes(d.group);
           });
           const newFilterState = { ...filterState };
           const newFilters = { ...filters };
           newFilters[field] = newSelectedItems.map(d => d.value);
+
           newFilterState.selectedItems = newSelectedItems;
           const mustUpdateFilters = !arraysMatch(
             filters[field],
