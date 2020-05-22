@@ -138,11 +138,11 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       header: "Policy category",
       sort: true
     },
-    {
-      dataField: "ph_measure_details",
-      header: "Policy sub-category",
-      sort: true
-    },
+    // {
+    //   dataField: "ph_measure_details",
+    //   header: "Policy sub-category",
+    //   sort: true
+    // },
     {
       dataField: "desc",
       header: "Policy description",
@@ -158,64 +158,67 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       formatter: v =>
         v !== null ? moment(v).format("MMM D, YYYY") : unspecified
     },
-    {
-      dataField: "date_end_actual_or_anticipated",
-      header: "Policy end date",
-      sort: true,
-      sortFunc: (axx, bxx, order, dataField, a, b) => {
-        const getDateValue = d => {
-          if (d.date_end_actual !== null) return moment(d.date_end_actual);
-          else if (d.date_end_anticipated !== null)
-            return moment(d.date_end_anticipated);
-          else return -99999;
-        };
-        const aDate = getDateValue(a);
-        const bDate = getDateValue(b);
-        if (order === "asc") {
-          return aDate - bDate;
-        }
-        return bDate - aDate; // desc
-      },
-      formatter: (v, row) => {
-        const hasActual = row.date_end_actual !== null;
-        if (hasActual) return moment(row.date_end_actual).format("MMM D, YYYY");
-        else {
-          const hasAnticipated = row.date_end_anticipated !== null;
-          if (hasAnticipated) {
-            return (
-              moment(row.date_end_anticipated).format("MMM D, YYYY") +
-              " (anticipated)"
-            );
-          } else return unspecified;
-        }
-      }
-    },
+    // {
+    //   dataField: "date_end_actual_or_anticipated",
+    //   header: "Policy end date",
+    //   sort: true,
+    //   sortFunc: (axx, bxx, order, dataField, a, b) => {
+    //     const getDateValue = d => {
+    //       if (d.date_end_actual !== null) return moment(d.date_end_actual);
+    //       else if (d.date_end_anticipated !== null)
+    //         return moment(d.date_end_anticipated);
+    //       else return -99999;
+    //     };
+    //     const aDate = getDateValue(a);
+    //     const bDate = getDateValue(b);
+    //     if (order === "asc") {
+    //       return aDate - bDate;
+    //     }
+    //     return bDate - aDate; // desc
+    //   },
+    //   formatter: (v, row) => {
+    //     const hasActual = row.date_end_actual !== null;
+    //     if (hasActual) return moment(row.date_end_actual).format("MMM D, YYYY");
+    //     else {
+    //       const hasAnticipated = row.date_end_anticipated !== null;
+    //       if (hasAnticipated) {
+    //         return (
+    //           moment(row.date_end_anticipated).format("MMM D, YYYY") +
+    //           " (anticipated)"
+    //         );
+    //       } else return unspecified;
+    //     }
+    //   }
+    // },
     {
       dataField: "file",
-      header: "View / Download PDF",
+      header: "Link",
       sort: true,
       formatter: (row, cell) => {
-        if (cell.file && cell.file.length > 0) {
-          return cell.file.map(d => {
-            if (d.filename && d.filename !== "")
-              return (
+        const icons = cell.file.map(d => {
+          if (d.filename && d.filename !== "") {
+            return (
+              <div className={styles.linkIcon}>
                 <a
                   target="_blank"
                   href={`${API_URL}${d.filename.replace("#", "")}`}
                 >
                   <i className={"material-icons"}>insert_drive_file</i>
-                  <span>Download</span>
                 </a>
-              );
-            else if (d.data_source && d.data_source !== "")
-              return (
+              </div>
+            );
+          } else if (d.data_source && d.data_source !== "") {
+            return (
+              <div className={styles.linkIcon}>
                 <a target="_blank" href={d.data_source}>
                   <i className={"material-icons"}>link</i>
-                  <span>External site</span>
                 </a>
-              );
-            else return unspecified;
-          });
+              </div>
+            );
+          } else return unspecified;
+        });
+        if (cell.file && cell.file.length > 0) {
+          return <div className={styles.linkIcons}>{icons}</div>;
         } else {
           return unspecified;
         }
@@ -330,6 +333,10 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     if (metadata !== null) {
       const newColumns = [...columns];
       newColumns.forEach(d => {
+        if (d.dataField === "file") {
+          d.definition = "PDF download of or external link to policy";
+          return;
+        }
         const key = d.dataField.includes(".")
           ? d.dataField
           : "policy." + d.dataField;
@@ -429,7 +436,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
                   <RadioToggle
                     label={"View"}
                     choices={[
-                      { name: "Policies", value: "policy", tooltip: "TBD" },
+                      { name: "Policies", value: "policy" },
                       {
                         name: "Plans",
                         value: "plan",

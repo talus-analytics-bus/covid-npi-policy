@@ -77,4 +77,14 @@
       }
     }
   }
+  // table styles
+  .linkIcons {
+    display: flex;
+    flex-flow: row;
+    .linkIcon {
+      position: relative;
+      top: 5px;
+      z-index: 0;
+    }
+  }
 }
