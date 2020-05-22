@@ -20,4 +20,15 @@
       height: 70px;
     }
   }
+  @media #{$phone} {
+    div {
+      display: flex;
+      flex-flow: column;
+      align-items: flex-start;
+      a:last-of-type {
+        margin-left: auto;
+        margin-top: 10px;
+      }
+    }
+  }
 }

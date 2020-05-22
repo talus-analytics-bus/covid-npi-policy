@@ -95,4 +95,14 @@
       }
     }
   }
+  @media #{$phone} {
+    table {
+      th,
+      td {
+        &:nth-child(4) {
+          width: unset;
+        }
+      }
+    }
+  }
 }
