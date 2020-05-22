@@ -80,6 +80,14 @@
           .definition {
             display: none;
           }
+          &:nth-child(3),
+          &:nth-child(3) {
+            display: none;
+          }
+          &:nth-child(6) {
+            width: 60px;
+            white-space: nowrap;
+          }
         }
       }
     }

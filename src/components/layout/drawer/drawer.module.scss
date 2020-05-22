@@ -18,6 +18,9 @@
     font-weight: 700;
     padding: 5px;
     padding-left: 15px;
+    @media #{$phone} {
+      padding: 15px;
+    }
     text-transform: uppercase;
     background-color: $cyan;
     color: $dark-blue;

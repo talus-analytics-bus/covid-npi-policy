@@ -20,7 +20,7 @@
       height: 70px;
     }
   }
-  @media #{$phone} {
+  @media #{$phone-narrow} {
     div {
       display: flex;
       flex-flow: column;
@@ -28,6 +28,10 @@
       a:last-of-type {
         margin-left: auto;
         margin-top: 10px;
+      }
+      img {
+        max-width: 100%;
+        height: unset;
       }
     }
   }
