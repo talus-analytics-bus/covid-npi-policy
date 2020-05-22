@@ -36,6 +36,7 @@ const Filter = ({
   withGrouping = false,
   ...props
 }) => {
+  if (items) items.forEach(d => (d.disabled = true));
   const [show, setShow] = useState(false);
   const primaryFiltersOff =
     primary !== undefined &&

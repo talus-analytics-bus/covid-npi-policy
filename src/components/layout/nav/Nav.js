@@ -14,6 +14,9 @@ const Nav = ({ ...props }) => {
         <Link to={"/"}>
           <img src={logo} />
         </Link>
+        <a target="_blank" href="https://gida.ghscosting.org/">
+          Return to gida.ghscosting.org
+        </a>
       </div>
     </div>
   );

@@ -146,9 +146,11 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     {
       dataField: "desc",
       header: "Policy description",
+      // width: "300",
+      defCharLimit: 70,
       sort: true,
       formatter: v => {
-        return <ShowMore text={v} />;
+        return <ShowMore text={v} charLimit={90} />;
       }
     },
     {
@@ -193,7 +195,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     {
       dataField: "file",
       header: "Link",
-      sort: true,
+      // sort: true,
       formatter: (row, cell) => {
         const icons = cell.file.map(d => {
           if (d.filename && d.filename !== "") {

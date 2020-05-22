@@ -16,7 +16,13 @@ import funnelSvg from "../../../assets/icons/funnel.svg";
  * @method FilterSet
  * Create a bay of filters based on filter definitions
  */
-const FilterSet = ({ filterDefs, filters, setFilters, ...props }) => {
+const FilterSet = ({
+  filterDefs,
+  filters,
+  setFilters,
+  disabledValues = ["Country"],
+  ...props
+}) => {
   const [activeFilter, setActiveFilter] = useState(null);
   const filterGroups = [];
   const filterDefsObj = {};

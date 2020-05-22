@@ -102,12 +102,12 @@ const RadioToggle = ({
                   <div>{c.name}</div>
                 </label>
               )}
-              {
+              {c.tooltip && (
                 <InfoTooltip
                   text={c.tooltip}
                   setInfoTooltipContent={setInfoTooltipContent}
                 />
-              }
+              )}
             </div>
           ))}
         </form>

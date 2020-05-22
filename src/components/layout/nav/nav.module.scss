@@ -2,7 +2,7 @@
 .nav {
   border-bottom: 8px solid $light-blue;
   @include sticky();
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   background: white;
 

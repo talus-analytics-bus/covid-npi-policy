@@ -87,4 +87,12 @@
       z-index: 0;
     }
   }
+  table {
+    th,
+    td {
+      &:nth-child(4) {
+        width: 30%;
+      }
+    }
+  }
 }

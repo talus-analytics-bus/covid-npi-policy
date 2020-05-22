@@ -18,7 +18,7 @@
   height: 100%;
   opacity: 0;
   pointer-events: none;
-  z-index: 2;
+  z-index: 4;
   &.on {
     opacity: 1;
     pointer-events: all;
