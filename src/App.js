@@ -4,6 +4,8 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
+import BrowserDetection from "react-browser-detection";
+import Modal from "reactjs-popup";
 
 // layout
 import { Nav } from "./components/layout";
@@ -22,6 +24,52 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const toggleLoading = v => setLoading(v);
+
+  // define which browsers should trigger a "please use a different browser"
+  // modal, using a function that returns the modal content based on the
+  // detected browser
+  const modalToShow = {
+    chrome: () => null,
+    firefox: () => null,
+    safari: () => null,
+    edge: browser => browserModal("Edge"),
+    ie: browser => browserModal("Internet Explorer"),
+    opera: browser => browserModal("Opera"),
+    default: () => null
+  };
+
+  // function to return modal content for unsupported browser modal
+  const browserModal = browser => (
+    <Modal
+      position="top center"
+      on="click"
+      closeOnDocumentClick
+      defaultOpen={true}
+      className={"browser-modal"}
+      modal
+    >
+      {close => (
+        <React.Fragment>
+          <h3 className={styles.header}>Please try a different browser</h3>
+          <div className={styles.content}>
+            <div className={styles.text}>
+              <p>
+                COVID AMP was designed for Chrome and Firefox browsers, but you
+                seem to be using {browser}.
+              </p>
+              <p>
+                If this is correct, please open COVID AMP in Chrome or Firefox
+                instead.
+              </p>
+            </div>
+            <button className={classNames("button", "modal")} onClick={close}>
+              Continue
+            </button>
+          </div>
+        </React.Fragment>
+      )}
+    </Modal>
+  );
 
   return (
     <React.Fragment>
@@ -44,6 +92,7 @@ const App = () => {
             <img src={loadingSvg} />
           </div>
         }
+        {<BrowserDetection>{modalToShow}</BrowserDetection>}
       </BrowserRouter>
       {
         // Info tooltip that is displayed whenever an info tooltip icon (i)

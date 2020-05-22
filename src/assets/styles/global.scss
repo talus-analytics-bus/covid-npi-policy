@@ -16,8 +16,10 @@ p {
 }
 
 h1,
-h2 {
-  font-family: "Gotham Bold", serif;
+h2,
+h3 {
+  font-family: "Raleway", serif;
+  font-weight: bold;
   text-transform: uppercase;
   margin: 0;
 }
@@ -36,6 +38,11 @@ h2 {
   @media #{$phone} {
     font-size: 1.5rem;
   }
+}
+h3 {
+  color: $dark-blue;
+  text-transform: none;
+  font-size: 1.25rem;
 }
 input[type="radio"] {
   margin: 0;

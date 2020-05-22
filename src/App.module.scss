@@ -24,3 +24,22 @@
     pointer-events: all;
   }
 }
+
+// popup modal
+[class*="browser-modal-content"] {
+  max-width: 40vw !important;
+  width: auto !important;
+  height: min-content;
+  padding: 20px !important;
+  &,
+  .text {
+    @include spaceItemsVert(10px);
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+  @media #{$phone-narrow} {
+    width: 100% !important;
+    max-width: unset !important;
+  }
+}
