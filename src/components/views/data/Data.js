@@ -359,107 +359,109 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
   };
   const table = getTable({ docType });
 
-  if (initializing) return <div />;
-  else
-    return (
-      <div className={styles.data}>
-        <div className={styles.header}>
-          <h1>Welcome to COVID AMP policy and plan database</h1>
-          <div className={styles.columnText}>
-            <p>
-              The COVID Analysis and Mapping of Policies (AMP) site provides
-              access to a comprehensive list of policies and plans implemented
-              globally to address the COVID-19 pandemic. In many cases, response
-              efforts have been led by subnational governments or private and
-              non-profit organizations. For simple search, each policy or plan
-              has been categorized by the type of measure, in addition to
-              implementation date and authorizing agency. In addition, policies
-              can be identified by legal authority and plans by type of
-              organization. Where available, PDFs or links to the original
-              document or notice are included.
-            </p>
-          </div>
+  return (
+    <div className={styles.data}>
+      <div className={styles.header}>
+        <h1>Welcome to COVID AMP policy and plan database</h1>
+        <div className={styles.columnText}>
+          <p>
+            The COVID Analysis and Mapping of Policies (AMP) site provides
+            access to a comprehensive list of policies and plans implemented
+            globally to address the COVID-19 pandemic. In many cases, response
+            efforts have been led by subnational governments or private and
+            non-profit organizations. For simple search, each policy or plan has
+            been categorized by the type of measure, in addition to
+            implementation date and authorizing agency. In addition, policies
+            can be identified by legal authority and plans by type of
+            organization. Where available, PDFs or links to the original
+            document or notice are included.
+          </p>
         </div>
-        <Drawer
-          {...{
-            label: (
-              <React.Fragment>
-                <h2>Policy and plan database</h2>
-                <button
-                  className={classNames(styles.downloadBtn, {
-                    [styles.loading]: buttonLoading
-                  })}
-                  onClick={e => {
-                    e.stopPropagation();
-                    setButtonLoading(true);
-                    Export({ method: "post", filters }).then(d =>
-                      setButtonLoading(false)
-                    );
-                  }}
-                >
-                  <img src={downloadSvg} />
+      </div>
+      {!initializing && (
+        <React.Fragment>
+          <Drawer
+            {...{
+              label: (
+                <React.Fragment>
+                  <h2>Policy and plan database</h2>
+                  <button
+                    className={classNames(styles.downloadBtn, {
+                      [styles.loading]: buttonLoading
+                    })}
+                    onClick={e => {
+                      e.stopPropagation();
+                      setButtonLoading(true);
+                      Export({ method: "post", filters }).then(d =>
+                        setButtonLoading(false)
+                      );
+                    }}
+                  >
+                    <img src={downloadSvg} />
+                    <div>
+                      {!buttonLoading && (
+                        <React.Fragment>
+                          <span>
+                            Download {isEmpty(filters) ? "all" : "filtered"}{" "}
+                            {nouns.p.toLowerCase()}
+                          </span>
+                          <br />
+                          <span>
+                            {comma(data.length)} record
+                            {data.length === 1 ? "" : "s"}
+                          </span>
+                        </React.Fragment>
+                      )}
+                      {buttonLoading && (
+                        <React.Fragment>
+                          <span>Downloading data</span>
+                          <br />
+                          <span>Please wait...</span>
+                        </React.Fragment>
+                      )}
+                    </div>
+                  </button>
+                </React.Fragment>
+              ),
+              noCollapse: false,
+              content: (
+                <React.Fragment>
+                  <RadioToggle
+                    label={"View"}
+                    choices={[
+                      { name: "Policies", value: "policy", tooltip: "TBD" },
+                      {
+                        name: "Plans",
+                        value: "plan",
+                        tooltip:
+                          "Plans are currently being added to the database and are not yet available.",
+                        disabled: true
+                      }
+                    ]}
+                    curVal={docType}
+                    callback={setDocType}
+                    horizontal={true}
+                    selectpicker={false}
+                    setInfoTooltipContent={setInfoTooltipContent}
+                  />
                   <div>
-                    {!buttonLoading && (
-                      <React.Fragment>
-                        <span>
-                          Download {isEmpty(filters) ? "all" : "filtered"}{" "}
-                          {nouns.p.toLowerCase()}
-                        </span>
-                        <br />
-                        <span>
-                          {comma(data.length)} record
-                          {data.length === 1 ? "" : "s"}
-                        </span>
-                      </React.Fragment>
-                    )}
-                    {buttonLoading && (
-                      <React.Fragment>
-                        <span>Downloading data</span>
-                        <br />
-                        <span>Please wait...</span>
-                      </React.Fragment>
+                    Select filters to apply to {nouns.p.toLowerCase()}.{" "}
+                    {Object.keys(filters).length > 0 && (
+                      <button onClick={() => setFilters({})}>
+                        Clear filters
+                      </button>
                     )}
                   </div>
-                </button>
-              </React.Fragment>
-            ),
-            noCollapse: false,
-            content: (
-              <React.Fragment>
-                <RadioToggle
-                  label={"View"}
-                  choices={[
-                    { name: "Policies", value: "policy", tooltip: "TBD" },
-                    {
-                      name: "Plans",
-                      value: "plan",
-                      tooltip:
-                        "Plans are currently being added to the database and are not yet available.",
-                      disabled: true
-                    }
-                  ]}
-                  curVal={docType}
-                  callback={setDocType}
-                  horizontal={true}
-                  selectpicker={false}
-                  setInfoTooltipContent={setInfoTooltipContent}
-                />
-                <div>
-                  Select filters to apply to {nouns.p.toLowerCase()}.{" "}
-                  {Object.keys(filters).length > 0 && (
-                    <button onClick={() => setFilters({})}>
-                      Clear filters
-                    </button>
-                  )}
-                </div>
-                <FilterSet {...{ filterDefs, filters, setFilters }} />
-              </React.Fragment>
-            )
-          }}
-        />
-        {table}
-      </div>
-    );
+                  <FilterSet {...{ filterDefs, filters, setFilters }} />
+                </React.Fragment>
+              )
+            }}
+          />
+          {table}
+        </React.Fragment>
+      )}
+    </div>
+  );
 };
 
 export default Data;
