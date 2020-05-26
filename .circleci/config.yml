@@ -66,7 +66,7 @@ jobs:
 
       - run:
           name: Deploy
-          command: yarn run deploy
+          command: yarn run deploy-test
 
       - run:
           name: Invalidate cache
