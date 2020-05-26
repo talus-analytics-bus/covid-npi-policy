@@ -39,6 +39,41 @@ jobs:
             aws cloudfront create-invalidation \
             --distribution-id E2APV01FSNEH6H \
             --paths "/*"
+  deploy-test:
+    working_directory: ~/repo
+
+    docker:
+      - image: circleci/node:10.14.2-stretch
+
+    steps:
+      - checkout
+
+      - run:
+          name: Installing Deployment Dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev g++ build-essential
+            sudo pip3 install --upgrade setuptools pytz
+            sudo pip3 install awsebcli --upgrade
+
+      - aws-cli/install
+      - aws-cli/configure
+
+      - run:
+          name: Build
+          command: rm yarn.lock; yarn install --network-timeout 1000000
+
+      - run:
+          name: Deploy
+          command: yarn run deploy
+
+      - run:
+          name: Invalidate cache
+          command: |
+            aws cloudfront create-invalidation \
+            --distribution-id EZNCMFWHVEZLU \
+            --paths "/*"
 
 workflows:
   version: 2
@@ -49,3 +84,8 @@ workflows:
             branches:
               only:
                 - master
+      - deploy-test:
+          filters:
+            branches:
+              only:
+                - dev

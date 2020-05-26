@@ -42,6 +42,7 @@
     "eject": "react-scripts eject",
     "tslint": "./node_modules/.bin/tslint",
     "deploy": "CI=false yarn build && aws s3 sync build/ s3://covid-npi-policy --delete"
+    "deploy-test": "CI=false yarn build && aws s3 sync build/ s3://covid-npi-policy-test --delete"
   },
   "eslintConfig": {
     "extends": "react-app"
