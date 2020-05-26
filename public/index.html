@@ -4,16 +4,17 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-151750411-1"
+      src="https://www.googletagmanager.com/gtag/js?id=UA-167624435-1"
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
+      window["ga-disable-UA-167624435-1"] = true;
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
 
-      gtag("config", "UA-151750411-1");
+      gtag("config", "UA-167624435-1");
     </script>
 
     <meta charset="utf-8" />
@@ -37,7 +38,8 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/carlosrocha/react-data-components@master/css/table-twbs.css"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"
     />
     <link
       rel="stylesheet"
@@ -78,21 +80,81 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="js/cookieconsent.min.js"></script>
+    <script src="js/cookieconsent.min.js" data-cfasync="false"></script>
     <script>
-      window.addEventListener("load", function() {
-        window.cookieconsent.initialise({
-          palette: {
-            popup: {
-              background: "#CCCCCC",
-              text: "#000000"
-            },
-            button: {
-              background: "#5781ab"
-            }
+      /**
+       * If consent is given for cookies, add gtag cookies
+       * @method setupGA
+       * @return {[type]} [description]
+       */
+      function setupGA(allowed) {
+        if (!allowed) {
+          window["ga-disable-UA-167624435-1"] = true;
+        } else {
+          window["ga-disable-UA-167624435-1"] = false;
+          /**
+           * Helper function for defining gtag cookies
+           * @method gtag
+           * @return {[type]} [description]
+           */
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag("js", new Date());
+          gtag("config", "UA-167624435-1");
+        }
+      }
+      window.cookieconsent.initialise({
+        palette: {
+          popup: {
+            background: "#d4d4d4"
           },
-          position: "bottom-right"
-        });
+          button: {
+            background: "#0f234b"
+          }
+        },
+        position: "bottom-right",
+        type: "opt-in",
+        content: {
+          message:
+            "COVID AMP uses cookies to ensure you get the best experience possible."
+        },
+        // https://developers.google.com/analytics/devguides/collection/analyticsjs/user-opt-out
+        onInitialise: function(status) {
+          var type = this.options.type;
+          var didConsent = this.hasConsented();
+          if (type == "opt-in" && didConsent) {
+            // enable cookies
+            setupGA(true);
+          }
+          if (type == "opt-out" && !didConsent) {
+            // disable cookies
+            setupGA(false);
+          }
+        },
+        onStatusChange: function(status, chosenBefore) {
+          var type = this.options.type;
+          var didConsent = this.hasConsented();
+          if (type == "opt-in" && didConsent) {
+            // enable cookies
+            setupGA(true);
+          }
+          if (type == "opt-out" && !didConsent) {
+            // disable cookies
+            setupGA(false);
+          }
+        },
+        onRevokeChoice: function() {
+          var type = this.options.type;
+          if (type == "opt-in") {
+            // disable cookies
+            setupGA(false);
+          }
+          if (type == "opt-out") {
+            // enable cookies
+            setupGA(true);
+          }
+        }
       });
     </script>
   </body>
