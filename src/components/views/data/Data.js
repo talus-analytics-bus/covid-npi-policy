@@ -198,21 +198,26 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       // sort: true,
       formatter: (row, cell) => {
         const icons = cell.file.map(d => {
-          if (d.filename && d.filename !== "") {
+          const isLocalDownload = true;
+          // const isLocalDownload = d.filename && d.filename !== "";
+          const link = undefined;
+          const hasLink = link && link !== "";
+          if (isLocalDownload) {
+            const localDownloadLink =
+              d !== undefined
+                ? "/get/file/redirect?id=" + d.toString()
+                : undefined;
             return (
               <div className={styles.linkIcon}>
-                <a
-                  target="_blank"
-                  href={`${API_URL}${d.filename.replace("#", "")}`}
-                >
+                <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
                   <i className={"material-icons"}>insert_drive_file</i>
                 </a>
               </div>
             );
-          } else if (d.data_source && d.data_source !== "") {
+          } else if (hasLink) {
             return (
               <div className={styles.linkIcon}>
-                <a target="_blank" href={d.data_source}>
+                <a target="_blank" href={link}>
                   <i className={"material-icons"}>link</i>
                 </a>
               </div>
@@ -244,11 +249,11 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
           "id",
           "place",
           "primary_ph_measure",
-          "ph_measure_details",
+          // "ph_measure_details",
           "desc",
           "date_start_effective",
-          "date_end_actual",
-          "date_end_anticipated",
+          // "date_end_actual",
+          // "date_end_anticipated",
           "file"
         ]
       }),
