@@ -47,3 +47,9 @@ h3 {
 input[type="radio"] {
   margin: 0;
 }
+
+// cookie policy
+// hide revoke menu
+[class="cc-revoke"] {
+  display: none;
+}
