@@ -17,8 +17,8 @@ $spacing: 10px;
     .content {
       display: flex;
       flex-flow: row;
-      justify-content: flex-end;
-      align-items: flex-end;
+      justify-content: space-between;
+      align-items: center;
 
       min-height: 70px;
       // margin: 0 auto;
@@ -37,18 +37,6 @@ $spacing: 10px;
       a:not(:last-child) img {
         border-right: 1px solid $gray;
       }
-      @media #{$phone} {
-        flex-flow: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        a:not(:last-child) img {
-          border-right: none;
-          margin-bottom: 10px;
-        }
-        a img {
-          padding: 0;
-        }
-      }
       a:last-child img {
         padding-right: 0;
       }
@@ -62,6 +50,42 @@ $spacing: 10px;
           pointer-events: none;
           color: #333;
         }
+      }
+    }
+  }
+
+  @media #{$phone} {
+    .wrapper {
+      .content,
+      .links {
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+      .content {
+        .dataAsOf {
+          margin-bottom: 20px;
+        }
+        .links {
+          a:not(:last-child) img {
+            border-right: none;
+            margin-bottom: 10px;
+          }
+          a img {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+
+  @media #{screen and (max-width: 975px)} {
+    .wrapper .content {
+      flex-flow: column;
+      align-items: flex-start;
+      .dataAsOf {
+        margin-bottom: 20px;
       }
     }
   }

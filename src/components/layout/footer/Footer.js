@@ -5,6 +5,9 @@ import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";
 import Util from "../../misc/Util.js";
 
+// 3rd party packages
+import moment from "moment";
+
 const Footer = () => {
   const images = [
     {
@@ -36,12 +39,20 @@ const Footer = () => {
     <div className={styles.footer}>
       <div className={styles.wrapper}>
         <div className={styles.content}>
-          {images.map(d => (
-            <a target="_blank" href={d.url} alt={d.alt}>
-              <img style={d.style} src={d.imgSrc} />
-              {d.txt && <div>{d.txt}</div>}
-            </a>
-          ))}
+          <div className={styles.dataAsOf}>
+            {
+              // TODO set date dynamically from API
+            }
+            Data last updated {new moment("2020-05-29").format("MMM D, YYYY")}
+          </div>
+          <div className={styles.links}>
+            {images.map(d => (
+              <a target="_blank" href={d.url} alt={d.alt}>
+                <img style={d.style} src={d.imgSrc} />
+                {d.txt && <div>{d.txt}</div>}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
