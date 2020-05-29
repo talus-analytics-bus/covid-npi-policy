@@ -93,6 +93,13 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       }
     },
     {
+      relaxing_or_restricting: {
+        entity_name: "Policy",
+        field: "relaxing_or_restricting",
+        label: "Relaxing or restricting"
+      }
+    },
+    {
       primary_ph_measure: {
         entity_name: "Policy",
         field: "primary_ph_measure",
