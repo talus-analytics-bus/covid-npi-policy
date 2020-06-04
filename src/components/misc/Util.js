@@ -7,7 +7,7 @@ import * as d3 from "d3/dist/d3.min";
  * @return {Boolean}   [description]
  */
 export const isEmpty = d => {
-  if (Object.keys(d).length === 0) return true;
+  if (d === undefined || Object.keys(d).length === 0) return true;
   else return false;
 };
 
