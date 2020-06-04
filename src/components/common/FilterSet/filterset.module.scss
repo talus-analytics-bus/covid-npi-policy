@@ -9,9 +9,14 @@
   .filterGroup {
     display: flex;
     @include spaceItemsHoriz(50px);
-    &.dropdowns > div {
-      min-width: 250px;
-      margin: 0 !important;
+
+    &.dropdowns {
+      margin-top: 20px;
+
+      > div {
+        min-width: 250px;
+        margin: 0 !important;
+      }
     }
   }
 }
