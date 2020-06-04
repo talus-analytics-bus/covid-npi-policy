@@ -8,10 +8,7 @@
   margin-top: 0 !important;
   .filterGroup {
     display: flex;
-    margin-top: 20px;
-    > div {
-      min-width: 250px;
-    }
+    @include spaceItemsHoriz(50px);
   }
 }
 .selectedFilters {
