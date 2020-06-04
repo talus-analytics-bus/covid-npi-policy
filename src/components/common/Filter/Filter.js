@@ -6,7 +6,8 @@ import MultiSelect from "@kenshooui/react-multi-select";
 import { DateRange } from "react-date-range";
 import moment from "moment";
 
-// misc
+// misc and common components
+import { RadioToggle } from "../../common";
 import { isEmpty, arraysMatch } from "../../misc/Util";
 
 // assets and styles
@@ -214,120 +215,145 @@ const Filter = ({
     }
     responsiveHeight = items && nEntries < 5 ? nEntries * 42 : 7 * 42;
   }
-
-  return (
-    <div
-      className={classNames(styles.filter, {
-        [styles.disabled]: disabled || noItems
-      })}
-    >
-      <div className={styles.label}>{label}</div>
-      <div className={styles.input}>
-        <div
-          role="filterButton"
-          className={classNames(styles.filterButton, {
-            [styles.shown]: show,
-            [styles.selected]: nCur > 0,
-            [styles.disabled]: disabled || noItems
-          })}
-          onClick={e => {
-            if (activeFilter !== field) {
-              e.stopPropagation();
-              e.nativeEvent.stopImmediatePropagation();
-            }
-            setShow(!show);
-          }}
-        >
-          <span>
-            <span className={styles.field}>
-              {getInputLabel({
-                dateRange,
-                items,
-                nMax,
-                dateRangeState,
-                selectedItems: filterState.selectedItems,
-                disabledText,
-                disabled
-              })}
+  if (props.radio !== true) {
+    return (
+      <div
+        className={classNames(styles.filter, {
+          [styles.disabled]: disabled || noItems
+        })}
+      >
+        <div className={styles.label}>{label}</div>
+        <div className={styles.input}>
+          <div
+            role="filterButton"
+            className={classNames(styles.filterButton, {
+              [styles.shown]: show,
+              [styles.selected]: nCur > 0,
+              [styles.disabled]: disabled || noItems
+            })}
+            onClick={e => {
+              if (activeFilter !== field) {
+                e.stopPropagation();
+                e.nativeEvent.stopImmediatePropagation();
+              }
+              setShow(!show);
+            }}
+          >
+            <span>
+              <span className={styles.field}>
+                {getInputLabel({
+                  dateRange,
+                  items,
+                  nMax,
+                  dateRangeState,
+                  selectedItems: filterState.selectedItems,
+                  disabledText,
+                  disabled
+                })}
+              </span>
+              <span className={styles.selections}>
+                {" "}
+                {!dateRange && !disabled && !noItems && (
+                  <span>
+                    ({nCur} of {nMax})
+                  </span>
+                )}
+              </span>
             </span>
-            <span className={styles.selections}>
-              {" "}
-              {!dateRange && !disabled && !noItems && (
-                <span>
-                  ({nCur} of {nMax})
-                </span>
-              )}
-            </span>
-          </span>
-          {dateRange && <img src={calendarSvg} />}
-          {!dateRange && <i className={"material-icons"}>arrow_drop_down</i>}
-        </div>
-        <div
-          id={elId}
-          className={classNames(styles.filterMenu, {
-            [styles.shown]: show,
-            [styles.dateRange]: dateRange
-          })}
-          onMouseDown={e => {
-            // reveal blue selected range only when calendar has been
-            // interacted with
-            const el = e.target;
-            const clickedCalDay =
-              el.parentElement.classList.contains("rdrDayNumber") ||
-              el.parentElement.classList.contains("rdrDay");
-            if (!showRangeSelection && clickedCalDay)
-              setShowRangeSelection(true);
-          }}
-        >
-          {!dateRange && (
-            <MultiSelect
-              wrapperClassName={styles.filterMenuWrapper}
-              items={items}
-              withGrouping={withGrouping}
-              selectedItems={filterState.selectedItems}
-              showSelectedItems={false}
-              showSelectAll={showSelectAll}
-              showSearch={showSelectAll}
-              responsiveHeight={responsiveHeight}
-              onChange={v => {
-                setFilterState({
-                  ...filterState,
-                  selectedItems: v
-                });
+            {dateRange && <img src={calendarSvg} />}
+            {!dateRange && <i className={"material-icons"}>arrow_drop_down</i>}
+          </div>
+          <div
+            id={elId}
+            className={classNames(styles.filterMenu, {
+              [styles.shown]: show,
+              [styles.dateRange]: dateRange
+            })}
+            onMouseDown={e => {
+              // reveal blue selected range only when calendar has been
+              // interacted with
+              const el = e.target;
+              const clickedCalDay =
+                el.parentElement.classList.contains("rdrDayNumber") ||
+                el.parentElement.classList.contains("rdrDay");
+              if (!showRangeSelection && clickedCalDay)
+                setShowRangeSelection(true);
+            }}
+          >
+            {!dateRange && (
+              <MultiSelect
+                wrapperClassName={styles.filterMenuWrapper}
+                items={items}
+                withGrouping={withGrouping}
+                selectedItems={filterState.selectedItems}
+                showSelectedItems={false}
+                showSelectAll={showSelectAll}
+                showSearch={showSelectAll}
+                responsiveHeight={responsiveHeight}
+                onChange={v => {
+                  setFilterState({
+                    ...filterState,
+                    selectedItems: v
+                  });
 
-                // update filters
-                if (v.length > 0) {
-                  setFilters({ ...filters, [field]: v.map(d => d.value) });
-                } else {
-                  const newFilters = { ...filters };
-                  delete newFilters[field];
-                  setFilters(newFilters);
-                }
-              }}
-            />
-          )}
-          {dateRange && (
-            <DateRange
-              className={showRangeSelection ? "" : styles.hideRangeSelection}
-              editableDateInputs={true}
-              onChange={item => setDateRangeState([item.selection])}
-              moveRangeOnFirstSelection={false}
-              ranges={dateRangeState}
-              minDate={minMaxDate.min}
-              maxDate={minMaxDate.max}
-              startDatePlaceholder={"Start date"}
-              endDatePlaceholder={"End date"}
-              onPreviewChange={() => {
-                // override default behavior when mousing over the calendar
-                // in order to support custom styling
-                return null;
-              }}
-            />
-          )}
+                  // update filters
+                  if (v.length > 0) {
+                    setFilters({ ...filters, [field]: v.map(d => d.value) });
+                  } else {
+                    const newFilters = { ...filters };
+                    delete newFilters[field];
+                    setFilters(newFilters);
+                  }
+                }}
+              />
+            )}
+            {dateRange && (
+              <DateRange
+                className={showRangeSelection ? "" : styles.hideRangeSelection}
+                editableDateInputs={true}
+                onChange={item => setDateRangeState([item.selection])}
+                moveRangeOnFirstSelection={false}
+                ranges={dateRangeState}
+                minDate={minMaxDate.min}
+                maxDate={minMaxDate.max}
+                startDatePlaceholder={"Start date"}
+                endDatePlaceholder={"End date"}
+                onPreviewChange={() => {
+                  // override default behavior when mousing over the calendar
+                  // in order to support custom styling
+                  return null;
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    const defaultRadioValue = props.defaultRadioValue;
+    return (
+      <RadioToggle
+        {...{
+          choices: items,
+          curVal:
+            isEmpty(filters) || isEmpty(filters[field])
+              ? defaultRadioValue
+              : filters[field],
+          callback: v => {
+            const vItem = items.find(d => d.value === v);
+            setFilterState({
+              ...filterState,
+              selectedItems: [vItem]
+            });
+
+            // update filters
+            setFilters({ ...filters, [field]: [vItem.value] });
+          },
+          label
+        }}
+      />
+    );
+  }
 };
 
 /**

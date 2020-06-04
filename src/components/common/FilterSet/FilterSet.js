@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Filter } from "../";
 
+// 3rd party packages
+import classNames from "classnames";
+
 // local functions
 import { getInputLabel } from "../Filter/Filter.js";
 
@@ -47,6 +50,8 @@ const FilterSet = ({
             field: v.field,
             label: v.label,
             items: items,
+            radio: v.radio,
+            defaultRadioValue: v.defaultRadioValue,
             dateRange: v.dateRange,
             minMaxDate: v.minMaxDate,
             primary: v.primary,
@@ -60,6 +65,9 @@ const FilterSet = ({
         />
       );
     }
+    filterGroupComponents.dropdowns = !filterGroupComponents.some(
+      d => d.props.radio
+    );
     filterGroups.push(filterGroupComponents);
   });
 
@@ -102,44 +110,55 @@ const FilterSet = ({
   };
 
   // display selected filters as list of badges that can be clicked off
-  const selectedFilters = (
-    <div className={styles.selectedFilters}>
-      <div className={styles.header}>
-        <div className={styles.filterIcon}>
-          <div style={{ backgroundImage: `url(${funnelSvg})` }} />
+  const selectedFilters =
+    props.showSelectedFilters === false ? null : (
+      <div className={styles.selectedFilters}>
+        <div className={styles.header}>
+          <div className={styles.filterIcon}>
+            <div style={{ backgroundImage: `url(${funnelSvg})` }} />
+          </div>
+          <span>Selected filters</span>
         </div>
-        <span>Selected filters</span>
-      </div>
 
-      <div className={styles.badges}>
-        {!isEmpty(filters) &&
-          Object.entries(filters).map(([field, values]) => (
-            <React.Fragment>
-              {!filterDefsObj[field].dateRange &&
-                values.map(value =>
-                  getBadge({ label: filterDefsObj[field].label, field, value })
-                )}
-              {filterDefsObj[field].dateRange &&
-                getBadge({
-                  label: filterDefsObj[field].label,
-                  field,
-                  value: getInputLabel({
-                    dateRange: true,
-                    dateRangeState: [
-                      { startDate: values[0], endDate: values[1] }
-                    ]
-                  })
-                })}
-            </React.Fragment>
-          ))}
+        <div className={styles.badges}>
+          {!isEmpty(filters) &&
+            Object.entries(filters).map(([field, values]) => (
+              <React.Fragment>
+                {!filterDefsObj[field].dateRange &&
+                  values.map(value =>
+                    getBadge({
+                      label: filterDefsObj[field].label,
+                      field,
+                      value
+                    })
+                  )}
+                {filterDefsObj[field].dateRange &&
+                  getBadge({
+                    label: filterDefsObj[field].label,
+                    field,
+                    value: getInputLabel({
+                      dateRange: true,
+                      dateRangeState: [
+                        { startDate: values[0], endDate: values[1] }
+                      ]
+                    })
+                  })}
+              </React.Fragment>
+            ))}
+        </div>
       </div>
-    </div>
-  );
+    );
   return (
     <React.Fragment>
       <div className={styles.filterSet}>
         {filterGroups.map(d => (
-          <div className={styles.filterGroup}>{d}</div>
+          <div
+            className={classNames(styles.filterGroup, {
+              [styles.dropdowns]: d.dropdowns
+            })}
+          >
+            {d}
+          </div>
         ))}
       </div>
       {!isEmpty(filters) && selectedFilters}
