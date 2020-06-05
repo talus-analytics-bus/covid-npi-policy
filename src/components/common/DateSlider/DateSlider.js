@@ -217,8 +217,24 @@ const DateSlider = ({ label, date, setDate, minDate, maxDate, ...props }) => {
       const markMax = moment(sliderMax).endOf("month");
       while (curDate < markMax) {
         const valNumeric = curDate.diff(sliderMin, "days");
-        marks[valNumeric] = curDate.format("MMM, 'YY");
+        marks[valNumeric] = curDate.format("MMM 'YY");
         curDate.add(1, "months").startOf("month");
+      }
+      // if more than 5 marks, only keep half
+      const nMarks = Object.values(marks).length;
+      if (nMarks > 5) {
+        let thresh;
+        if (nMarks > 10) {
+          thresh = 3;
+        } else if (nMarks > 5) {
+          thresh = 2;
+        }
+        let i = 0;
+
+        for (const [k] of Object.entries(marks)) {
+          if (i % thresh > 0) delete marks[k];
+          i++;
+        }
       }
       return marks;
     }
