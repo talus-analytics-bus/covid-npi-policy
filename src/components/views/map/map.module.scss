@@ -6,6 +6,7 @@
   > div:last-child {
     min-height: 85vh;
   }
+
   .drawer > div:first-child {
     * {
       text-transform: none;
@@ -37,5 +38,8 @@
       flex-flow: row;
       @include spaceItemsHoriz(50px);
     }
+  }
+  .wide {
+    max-width: 300px;
   }
 }

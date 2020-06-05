@@ -57,19 +57,18 @@ const RadioToggle = ({
   } else {
     return (
       <div
-        className={classNames(styles.radioToggle, {
-          [styles.disabled]: props.disabled === true,
-          [styles.horizontal]: props.horizontal === true,
-          [styles.right]: props.right === true,
-          [styles.left]: props.left === true
-        })}
+        className={classNames(
+          classNames(className !== undefined ? className : ""),
+          styles.radioToggle,
+          {
+            [styles.disabled]: props.disabled === true,
+            [styles.horizontal]: props.horizontal === true,
+            [styles.right]: props.right === true,
+            [styles.left]: props.left === true
+          }
+        )}
       >
-        <div
-          role="label"
-          className={classNames(className !== undefined ? className : "")}
-        >
-          {label}
-        </div>
+        <div role="label">{label}</div>
         <form>
           {choices.map(c => (
             <span key={c.value}>

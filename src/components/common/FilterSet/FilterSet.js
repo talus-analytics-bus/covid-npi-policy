@@ -44,6 +44,8 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
+      console.log("v.className");
+      console.log(v.className);
       filterGroupComponents.push(
         <Filter
           {...{
@@ -51,6 +53,7 @@ const FilterSet = ({
             label: v.label,
             items: items,
             radio: v.radio,
+            className: v.className,
             defaultRadioValue: v.defaultRadioValue,
             dateRange: v.dateRange,
             minMaxDate: v.minMaxDate,

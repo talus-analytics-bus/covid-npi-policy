@@ -35,6 +35,7 @@ const Filter = ({
   dateRange,
   minMaxDate,
   withGrouping = false,
+  className,
   ...props
 }) => {
   // // set disabled items
@@ -334,6 +335,7 @@ const Filter = ({
     return (
       <RadioToggle
         {...{
+          className,
           choices: items,
           curVal:
             isEmpty(filters) || isEmpty(filters[field])
