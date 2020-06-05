@@ -1,6 +1,7 @@
 @import "../../../assets/styles/vars.scss";
 
 .radioToggle {
+  max-width: 200px;
   select {
     max-width: 90%;
   }
@@ -13,7 +14,7 @@
     flex-flow: column;
     margin-left: 10px;
   }
-  div:last-child label {
+  span:last-child label {
     margin-bottom: 0;
   }
   label {
@@ -21,7 +22,6 @@
     color: black;
     display: flex;
     flex-flow: row;
-    align-items: center;
     cursor: pointer;
     font-family: "Open Sans", sans-serif;
 
@@ -50,6 +50,7 @@
   &.horizontal {
     display: flex;
     flex-flow: row;
+    max-width: unset;
     > div {
       display: flex;
       flex-flow: row;
@@ -58,17 +59,16 @@
     form {
       display: flex;
       flex-flow: row;
-      align-items: flex-start;
-      @include spaceItemsHoriz(20px);
-
-      div {
-        display: flex;
-        flex-flow: row;
-        label {
-          padding: 0;
-          width: max-content;
-        }
+      label {
+        padding: 0 10px;
+        width: max-content;
       }
+    }
+    &.right {
+      margin-left: auto !important;
+    }
+    &.left {
+      margin-right: auto !important;
     }
   }
 }

@@ -1,0 +1,16 @@
+@import "../../../assets/styles/vars.scss";
+.style {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  .drawer * {
+    text-transform: none;
+  }
+  .drawer > div:last-child {
+    > div {
+      display: flex;
+      flex-flow: row;
+      @include spaceItemsHoriz(50px);
+    }
+  }
+}

@@ -1,0 +1,108 @@
+@import "../../../../assets/styles/vars.scss";
+
+.mapTooltip {
+  $padding: 10px;
+  border: 1px solid #999999;
+  border-radius: 4px;
+  @include boxShadowStrong();
+  .header {
+    background-color: $light-gray-2;
+    padding: $padding;
+    font-family: "Rawline", serif;
+    border-radius: 4px 4px 0 0;
+
+    .title {
+      font-size: 2.15rem;
+      font-family: "Gotham Medium", sans;
+    }
+    .subtitle {
+      font-style: italic;
+      color: $light-gray;
+    }
+    .metric {
+      font-size: 1rem;
+    }
+  }
+  .content {
+    padding: $padding;
+    display: flex;
+    flex-flow: column;
+    @include borderItemsVert(20px);
+    border-radius: 0 0 4px 4px;
+
+    .metric {
+      display: flex;
+      flex-flow: column;
+      .metricHeader {
+        display: flex;
+        font-family: "Rawline Medium", serif;
+        .label {
+          font-size: 0.92rem;
+          margin-bottom: 20px;
+        }
+      }
+      .metricContent {
+        display: flex;
+        @include spaceItemsHoriz(60px);
+        .value {
+          color: $dark-blue;
+          font-weight: 600;
+          font-size: 2.4rem;
+          .unit {
+            font-weight: normal;
+            font-size: 1rem;
+          }
+        }
+        .trend {
+          text-transform: none;
+          .sentiment {
+            font-weight: 600;
+            white-space: nowrap;
+            width: min-content;
+            font-family: "Rawline", serif;
+            font-size: 1.12rem;
+            i {
+              font-size: 1.15em;
+              vertical-align: middle;
+              transform: rotate(90deg);
+              position: relative;
+              top: -1px;
+              left: -3px;
+              margin-right: -3px;
+            }
+            padding: 2.5px 5px;
+            line-height: 1.2;
+            background-color: $green;
+            color: white;
+            border-radius: 8px;
+
+            & + div {
+              max-width: 125px;
+              font-size: 0.9rem;
+              line-height: 1.1;
+              margin-top: 3px;
+            }
+
+            &.increase {
+              background-color: $red;
+              i {
+                transform: rotate(-90deg);
+              }
+            }
+            &.decrease {
+              background-color: $green;
+            }
+            &.no-change {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  .actions {
+    border-top: none !important;
+    margin-top: 0 !important;
+    margin-left: auto;
+  }
+}

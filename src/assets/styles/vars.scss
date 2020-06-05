@@ -60,6 +60,14 @@ $border-radius: 5px;
   }
 }
 
+@mixin borderItemsHoriz($size) {
+  > :not(:last-child) {
+    margin-right: $size;
+    padding-right: $size;
+    border-right: $border;
+  }
+}
+
 @mixin horiz() {
   display: flex;
   flex-flow: row;
@@ -68,6 +76,11 @@ $border-radius: 5px;
 @mixin boxShadow() {
   box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
   -webkit-box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
+}
+
+@mixin boxShadowStrong() {
+  box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
 }
 
 @mixin btn-primary() {

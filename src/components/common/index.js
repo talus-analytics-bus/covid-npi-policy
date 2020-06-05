@@ -6,6 +6,12 @@ import Table from "./Table/Table.js";
 import Filter from "./Filter/Filter.js";
 import FilterSet from "./FilterSet/FilterSet.js";
 import ShowMore from "./ShowMore/ShowMore.js";
+import MapboxMap from "./MapboxMap/MapboxMap.js";
+import Legend from "./Legend/Legend.js";
+import InfoTooltip from "./InfoTooltip/InfoTooltip.js";
+import DateSlider from "./DateSlider/DateSlider.js";
+import FloatMenu from "./FloatMenu/FloatMenu.js";
+import Drawer from "./Drawer/Drawer.js";
 export {
   Selectpicker,
   CheckboxSet,
@@ -14,5 +20,11 @@ export {
   Table,
   Filter,
   FilterSet,
-  ShowMore
+  ShowMore,
+  MapboxMap,
+  Legend,
+  InfoTooltip,
+  DateSlider,
+  FloatMenu,
+  Drawer
 };

@@ -13,6 +13,7 @@ import { Footer } from "./components/layout";
 
 // views
 import Data from "./components/views/data/Data.js";
+import Map from "./components/views/map/Map.js";
 
 // styles and assets
 import styles from "./App.module.scss";
@@ -21,7 +22,7 @@ import loadingSvg from "./assets/images/loading.svg";
 
 //: React.FC
 const App = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const toggleLoading = v => setLoading(v);
 
@@ -81,6 +82,12 @@ const App = () => {
               // Data page
               <Route exact path="/">
                 <Data {...{ setLoading, setInfoTooltipContent }} />
+              </Route>
+            }
+            {
+              // Map page
+              <Route exact path="/map">
+                <Map {...{ setLoading }} />
               </Route>
             }
           </div>
