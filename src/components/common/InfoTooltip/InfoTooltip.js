@@ -10,19 +10,31 @@ import ReactTooltip from "react-tooltip";
  */
 const InfoTooltip = ({ id, text, ...props }) => {
   const dataHtml = renderToString(text);
+  const bindWithFunction = props.setInfoTooltipContent !== undefined;
   useEffect(ReactTooltip.rebuild, []);
+  ReactTooltip.rebuild();
   return (
     <div
       className={styles.infoTooltip}
-      data-for={id}
+      data-for={bindWithFunction ? "infoTooltip" : id}
       data-tip={dataHtml}
       data-html={true}
     >
-      <img src={imgSrc} />
-      {
-        // Info tooltip that is displayed whenever an info tooltip icon (i)
-        // is hovered on in the site. The content for this tooltip is set by
-        // `setInfoTooltipContent`.
+      <img
+        src={imgSrc}
+        onMouseOver={() => {
+          console.log("hover");
+          if (bindWithFunction) {
+            console.log("dataHtml");
+            console.log(dataHtml);
+            props.setInfoTooltipContent(dataHtml);
+          }
+        }}
+      />
+      {// Info tooltip that is displayed whenever an info tooltip icon (i)
+      // is hovered on in the site. The content for this tooltip is set by
+      // `setInfoTooltipContent`.
+      !bindWithFunction && (
         <ReactTooltip
           id={id}
           key={id}
@@ -34,7 +46,7 @@ const InfoTooltip = ({ id, text, ...props }) => {
           clickable={true}
           getContent={() => dataHtml}
         />
-      }
+      )}
     </div>
   );
 };

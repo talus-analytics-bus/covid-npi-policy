@@ -286,7 +286,11 @@ const Legend = ({ ...props }) => {
       <div>
         {entryName}
         {props.metric_definition && (
-          <InfoTooltip id={typeAndElement} text={props.metric_definition} />
+          <InfoTooltip
+            id={typeAndElement}
+            text={props.metric_definition}
+            setInfoTooltipContent={props.setInfoTooltipContent}
+          />
         )}
       </div>
     );

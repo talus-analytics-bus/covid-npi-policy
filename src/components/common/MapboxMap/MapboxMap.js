@@ -536,6 +536,7 @@ const MapboxMap = ({
             }
             <Legend
               {...{
+                setInfoTooltipContent: props.setInfoTooltipContent,
                 className: "mapboxLegend",
                 key: "basemap - quantized",
                 metric_definition: metricMeta[circle].metric_definition,
@@ -548,6 +549,7 @@ const MapboxMap = ({
             }
             <Legend
               {...{
+                setInfoTooltipContent: props.setInfoTooltipContent,
                 className: "mapboxLegend",
                 key: "bubble - linear",
                 metric_definition: metricMeta[fill].metric_definition,

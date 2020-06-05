@@ -136,6 +136,7 @@ const Map = ({ setLoading, ...props }) => {
       k === mapId && (
         <MapboxMap
           {...{
+            setInfoTooltipContent: props.setInfoTooltipContent,
             mapId: k,
             key: k,
             mapStyle: mapStyles[k],
@@ -187,6 +188,7 @@ const Map = ({ setLoading, ...props }) => {
                 {...{
                   left: true,
                   horizontal: true,
+                  setInfoTooltipContent: props.setInfoTooltipContent,
                   choices: Object.values(mapStyles).map(
                     ({ value, name, tooltip }) => {
                       return { value, name, tooltip };
@@ -235,6 +237,7 @@ const Map = ({ setLoading, ...props }) => {
                 <RadioToggle
                   {...{
                     // TODO define choices based on current mapType
+                    setInfoTooltipContent: props.setInfoTooltipContent,
                     choices: mapMetrics[mapId]
                       .filter(d => d.for.includes("circle"))
                       .map(d => {
@@ -254,6 +257,7 @@ const Map = ({ setLoading, ...props }) => {
                 // fill metric radio toggle
                 <RadioToggle
                   {...{
+                    setInfoTooltipContent: props.setInfoTooltipContent,
                     choices: mapMetrics[mapId]
                       .filter(d => d.for.includes("fill"))
                       .map(d => {

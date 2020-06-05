@@ -4,6 +4,7 @@
   $padding: 10px;
   border: 1px solid #999999;
   border-radius: 4px;
+  z-index: 50;
   @include boxShadowStrong();
   .header {
     background-color: $light-gray-2;

@@ -24,6 +24,8 @@ import loadingSvg from "./assets/images/loading.svg";
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
+  console.log("infoTooltipContent");
+  console.log(infoTooltipContent);
   const toggleLoading = v => setLoading(v);
 
   // define which browsers should trigger a "please use a different browser"
@@ -87,7 +89,7 @@ const App = () => {
             {
               // Map page
               <Route exact path="/map">
-                <Map {...{ setLoading }} />
+                <Map {...{ setLoading, setInfoTooltipContent }} />
               </Route>
             }
           </div>

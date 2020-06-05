@@ -2,12 +2,21 @@
 .style {
   height: 100%;
   width: 100%;
+  margin-top: -20px;
   position: relative;
   > div:last-child {
     min-height: 85vh;
   }
   .drawer * {
     text-transform: none;
+    color: black;
+    h1 {
+      font-size: 1.7rem;
+      font-family: "Raleway SemiBold", serif;
+    }
+    div {
+      font-family: "Open Sans SemiBold", sans-serif;
+    }
   }
   .drawer > div:last-child {
     > div {

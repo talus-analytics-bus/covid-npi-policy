@@ -103,7 +103,13 @@ const RadioToggle = ({
                   />
                   <span>
                     {c.name || c.label}
-                    {c.tooltip && <InfoTooltip id={c.value} text={c.tooltip} />}
+                    {c.tooltip && (
+                      <InfoTooltip
+                        id={c.value}
+                        text={c.tooltip}
+                        setInfoTooltipContent={props.setInfoTooltipContent}
+                      />
+                    )}
                   </span>
                 </label>
               )}
