@@ -13,6 +13,7 @@ import React from "react";
 // 3rd party packages
 import * as d3 from "d3/dist/d3.min";
 import classNames from "classnames";
+import moment from "moment";
 
 // utilities
 import { comma } from "../../../misc/Util";
@@ -29,18 +30,19 @@ import dots from "./assets/images/dots.svg";
 import { isEmpty, percentize } from "../../../misc/Util";
 
 // define default parameters for MapboxMap
+const today = moment();
 export const defaults = {
   // default map ID
-  mapId: "global",
+  mapId: "us",
 
   // default date for map to start on
-  date: "2020-03-01",
+  date: today.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
   minMaxDate: {
-    minDate: "2020-02-01",
-    maxDate: "2020-06-01"
+    minDate: "2020-01-01",
+    maxDate: "2021-06-01"
   },
 
   // defaults for map with ID `us`

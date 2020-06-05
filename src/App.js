@@ -76,7 +76,7 @@ const App = () => {
   return (
     <React.Fragment>
       <BrowserRouter>
-        <Nav />
+        <Nav wide={page === "map"} />
         <Switch>
           <div className={classNames(styles.page, styles[page])}>
             {
