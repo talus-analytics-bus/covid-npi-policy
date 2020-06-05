@@ -21,7 +21,7 @@ import { comma } from "../../../misc/Util";
 // queries
 import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
-import { execute } from "../../../misc/Queries";
+import { Policy, execute } from "../../../misc/Queries";
 
 // assets
 import dots from "./assets/images/dots.svg";

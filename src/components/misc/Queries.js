@@ -59,6 +59,46 @@ export const Policy = async function({ method, fields = [], filters = null }) {
 };
 
 /**
+ * Get policy status data from API.
+ */
+export const PolicyStatus = async function({
+  method,
+  fields = [],
+  filters = null
+}) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/get/policy_status/state`, {
+      params
+    });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+    req = await axios.post(
+      `${API_URL}/post/policy_status/state`,
+      { filters },
+      {
+        params
+      }
+    );
+  } else {
+    console.log("Error: Method not implemented for `PolicyStatus`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) return res.data;
+  else return false;
+};
+
+/**
  * Get export data from API.
  */
 export const Export = async function({ method, filters = null }) {
