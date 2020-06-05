@@ -57,9 +57,6 @@ const Map = ({ setLoading, ...props }) => {
   // name of metric to use as circle by default
   const [circle, setCircle] = useState(defaults[mapId].circle);
 
-  // currently selected filters
-  const [filters, setFilters] = useState({});
-
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
     {
@@ -106,34 +103,19 @@ const Map = ({ setLoading, ...props }) => {
       },
 
       // additional filters
-      place_iso: {
-        field: "place_iso",
-        label: "Sub-place name (test)",
+      ph_measure_details: {
+        field: "ph_measure_details",
+        label: "Policy subcategory",
         radio: false,
-        primary: "place_name",
-        items: [
-          {
-            id: 0,
-            label: "Kentucky sub-place 1",
-            value: "sp1",
-            group: "Kentucky"
-          },
-          {
-            id: 1,
-            label: "Kentucky sub-place 2",
-            value: "sp2",
-            group: "Kentucky"
-          },
-          {
-            id: 2,
-            label: "Kentucky sub-place 3",
-            value: "sp3",
-            group: "Kentucky"
-          }
-        ]
+        primary: "primary_ph_measure"
       }
     }
   ]);
+
+  // currently selected filters
+  const [filters, setFilters] = useState({
+    primary_ph_measure: ["Social distancing"]
+  });
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   /**
@@ -144,30 +126,7 @@ const Map = ({ setLoading, ...props }) => {
    */
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
-    const queries = {
-      // policies: Policy({
-      //   method,
-      //   filters,
-      //   fields: [
-      //     "id",
-      //     "place",
-      //     "primary_ph_measure",
-      //     // "ph_measure_details",
-      //     "desc",
-      //     "date_start_effective",
-      //     // "date_end_actual",
-      //     // "date_end_anticipated",
-      //     "file"
-      //   ]
-      // }),
-      // metadata: Metadata({
-      //   method: "get",
-      //   fields: columns.map(d => {
-      //     if (!d.dataField.includes(".")) return "policy." + d.dataField;
-      //     else return d.dataField;
-      //   })
-      // })
-    };
+    const queries = {};
     if (true) {
       queries.optionsets = OptionSet({
         method: "get",

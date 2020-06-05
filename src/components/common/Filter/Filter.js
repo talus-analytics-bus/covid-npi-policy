@@ -38,12 +38,6 @@ const Filter = ({
   className,
   ...props
 }) => {
-  // // set disabled items
-  // // TODO dynamically
-  // if (items && field === "level") {
-  //   const match = items.find(d => d.value === "Country");
-  //   if (match) match.disabled = true;
-  // }
   const [show, setShow] = useState(false);
   const primaryFiltersOff =
     primary !== undefined &&
