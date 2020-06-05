@@ -42,7 +42,7 @@ export const defaults = {
   // `undefined` as value for each
   minMaxDate: {
     minDate: "2020-01-01",
-    maxDate: "2021-06-01"
+    maxDate: "2021-03-01"
   },
 
   // defaults for map with ID `us`
