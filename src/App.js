@@ -23,6 +23,7 @@ import loadingSvg from "./assets/images/loading.svg";
 //: React.FC
 const App = () => {
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const toggleLoading = v => setLoading(v);
 
@@ -77,7 +78,7 @@ const App = () => {
       <BrowserRouter>
         <Nav />
         <Switch>
-          <div className={styles.page}>
+          <div className={classNames(styles.page, styles[page])}>
             {
               // Data page
               <Route exact path="/">
@@ -86,9 +87,14 @@ const App = () => {
             }
             {
               // Map page
-              <Route exact path="/map">
-                <Map {...{ setLoading, setInfoTooltipContent }} />
-              </Route>
+              <Route
+                exact
+                path="/map"
+                render={() => {
+                  setPage("map");
+                  return <Map {...{ setLoading, setInfoTooltipContent }} />;
+                }}
+              />
             }
           </div>
         </Switch>

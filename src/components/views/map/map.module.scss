@@ -1,20 +1,33 @@
 @import "../../../assets/styles/vars.scss";
 .style {
   height: 100%;
-  width: 100%;
-  margin-top: -20px;
+  width: 100vw;
   position: relative;
   > div:last-child {
     min-height: 85vh;
   }
-  .drawer * {
-    text-transform: none;
-    color: black;
+  .drawer > div:first-child {
+    * {
+      text-transform: none;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    input + span {
+      font-size: 0.9rem;
+    }
+    // Date
+    > div:last-of-type {
+      font-family: "Rawline SemiBold", serif;
+      font-size: 1.2rem;
+      margin-right: 20px;
+    }
     h1 {
+      color: black;
       font-size: 1.7rem;
       font-family: "Raleway SemiBold", serif;
     }
-    div {
+    div:first-child {
       font-family: "Open Sans SemiBold", sans-serif;
     }
   }

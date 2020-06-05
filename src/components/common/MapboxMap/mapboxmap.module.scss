@@ -3,9 +3,7 @@
 .mapboxMap {
   // override mapbox popup defaults
   width: auto;
-  > div {
-    min-height: 50vh;
-  }
+  min-height: 50vh;
 }
 // MAPBOX LEGEND
 .legend {
@@ -60,6 +58,7 @@
   padding: 0 !important;
   margin: 0;
   min-width: 20rem;
+  // height: min-content;
 }
 
 [class*="mapboxgl-popup-anchor-bottom"],

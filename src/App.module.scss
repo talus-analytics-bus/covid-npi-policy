@@ -3,6 +3,10 @@
   padding: 20px;
   max-width: $max-width;
   margin: 0 auto;
+  &.map {
+    max-width: unset;
+    padding: unset;
+  }
 }
 
 // loading spinner styling
