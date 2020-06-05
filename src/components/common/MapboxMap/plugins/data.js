@@ -21,7 +21,7 @@ import { comma } from "../../../misc/Util";
 // queries
 import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
-import { Policy, execute } from "../../../misc/Queries";
+import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 
 // assets
 import dots from "./assets/images/dots.svg";
@@ -108,6 +108,52 @@ export const mapMetrics = {
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         pattern: true
+      }
+    },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        return { method: "post", filters, geo_res: "state" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status" },
+
+      // filter to control what features are returned for layers that are
+      // displaying this metric
+      filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
       }
     },
     {
@@ -266,6 +312,42 @@ export const metricMeta = {
         }
       }
     }
+  },
+  policy_status: {
+    metric_definition:
+      "Status of the policy with the given category / subcategories on the specified date in the location.",
+    metric_displayname: "Policy status",
+    value: v => v,
+    unit: v => "",
+    // trendTimeframe: "over prior 24 hours",
+    legendInfo: {
+      fill: {
+        for: "basemap", // TODO dynamically
+        type: "quantized",
+        labelsInside: true,
+        colorscale: d3
+          .scaleOrdinal()
+          .domain(["no policy", "policy in place"])
+          .range(["#eaeaea", "#14988C"])
+        // labels: {
+        //   bubble: { min: "Low", max: "High" },
+        //   basemap: { min: "Minimal", max: "High" }
+        // }
+      }
+      // circle: {
+      //   for: "bubble",
+      //   type: "continuous",
+      //   outline: "#e65d36",
+      //   colorscale: d3
+      //     .scaleLinear()
+      //     .domain([0, 100])
+      //     .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
+      //   labels: {
+      //     bubble: { min: "Low", max: "High" },
+      //     basemap: { min: "Minimal", max: "High" }
+      //   }
+      // }
+    }
   }
 };
 
@@ -295,11 +377,18 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   const queryDefs = {};
   metrics.forEach(d => {
     // if the query for this metric hasn't been defined yet, define it
-    if (queryDefs[d.params.metric_id] === undefined) {
+    if (queryDefs[d.id] === undefined) {
+      // parse query params
+      const params =
+        typeof d.params === "function"
+          ? d.params({ date, mapId, filters, map })
+          : d.params;
+      console.log("params");
+      console.log(params);
       // add base data query
-      queryDefs[d.params.metric_id] = {
+      queryDefs[d.id] = {
         queryFunc: d.queryFunc,
-        ...d.params,
+        ...params,
         ...dates
       };
 
@@ -326,29 +415,31 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   // execute queries in parallel
   const results = await execute({ queries });
 
-  // optional: filter results, if this is not being done on the back-end.
-  // if it is being done on the back end, comment out or delete the code below
-  if (!isEmpty(filters)) {
-    // for each filter
-    for (const [field, fieldFilters] of Object.entries(filters)) {
-      // for each API request result
-      for (const [k, v] of Object.entries(results)) {
-        // if no filter values, continue
-        if (fieldFilters === undefined || fieldFilters.length === 0) continue;
-        // if only value is "all", continue
-        else if (fieldFilters.length === 1 && fieldFilters[0] === "all")
-          continue;
-        // otherwise, only return values that contain a filter value (simple)
-        else {
-          results[k] = v.filter(d => {
-            return fieldFilters.includes(d[field]);
-          });
-        }
-      }
-    }
-  }
+  // // optional: filter results, if this is not being done on the back-end.
+  // // if it is being done on the back end, comment out or delete the code below
+  // if (!isEmpty(filters)) {
+  //   // for each filter
+  //   for (const [field, fieldFilters] of Object.entries(filters)) {
+  //     // for each API request result
+  //     for (const [k, v] of Object.entries(results)) {
+  //       // if no filter values, continue
+  //       if (fieldFilters === undefined || fieldFilters.length === 0) continue;
+  //       // if only value is "all", continue
+  //       else if (fieldFilters.length === 1 && fieldFilters[0] === "all")
+  //         continue;
+  //       // otherwise, only return values that contain a filter value (simple)
+  //       else {
+  //         results[k] = v.filter(d => {
+  //           return fieldFilters.includes(d[field]);
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
   // return results
+  console.log("results");
+  console.log(results);
   return results;
 };
 

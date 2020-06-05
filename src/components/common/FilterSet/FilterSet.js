@@ -44,8 +44,6 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
-      console.log("v.className");
-      console.log(v.className);
       filterGroupComponents.push(
         <Filter
           {...{

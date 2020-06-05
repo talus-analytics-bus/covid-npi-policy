@@ -39,8 +39,6 @@ import {
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map = ({ setLoading, ...props }) => {
-  console.log("wide");
-  console.log(wide);
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -64,6 +62,9 @@ const Map = ({ setLoading, ...props }) => {
       primary_ph_measure: {
         // data field
         field: "primary_ph_measure",
+
+        // entity
+        entity_name: "Policy",
 
         // display label
         label: "Policy category",
@@ -107,7 +108,8 @@ const Map = ({ setLoading, ...props }) => {
         field: "ph_measure_details",
         label: "Policy subcategory",
         radio: false,
-        primary: "primary_ph_measure"
+        primary: "primary_ph_measure",
+        entity_name: "Policy"
       }
     }
   ]);
@@ -197,6 +199,17 @@ const Map = ({ setLoading, ...props }) => {
   useEffect(function initializeOptionSets() {
     if (!initialized) getData();
   }, []);
+
+  // when date is changed, update `dates_in_effect` filter
+  useEffect(
+    function updateFilters() {
+      const newFilters = { ...filters };
+      const dateStr = date.format("YYYY-MM-DD");
+      newFilters.dates_in_effect = [dateStr, dateStr];
+      setFilters(newFilters);
+    },
+    [date]
+  );
 
   // when map style changes, update default metrics selected
   useEffect(

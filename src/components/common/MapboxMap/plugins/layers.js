@@ -155,6 +155,21 @@ const fillStyles = {
         "#549FE2"
       ]
     };
+  },
+  policy_status: key => {
+    return {
+      "fill-color": [
+        "case",
+        ["==", ["feature-state", key], null],
+        "#eaeaea",
+        ["==", ["feature-state", key], "policy in place"],
+        "#14988C",
+        "#eaeaea"
+      ]
+    };
+  },
+  get "policy_status-outline"() {
+    return this["metric-test-outline"];
   }
 };
 

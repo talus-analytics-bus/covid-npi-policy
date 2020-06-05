@@ -94,7 +94,7 @@ export const PolicyStatus = async function({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data;
+  if (res.data !== undefined) return res.data.data;
   else return false;
 };
 
