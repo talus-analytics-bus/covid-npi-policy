@@ -101,7 +101,7 @@ const RadioToggle = ({
                     readOnly
                   />
                   <span>
-                    {c.name || c.label}
+                    {getLabelJsx(c.name || c.label)}
                     {c.tooltip && (
                       <InfoTooltip
                         id={c.value}
@@ -118,6 +118,39 @@ const RadioToggle = ({
       </div>
     );
   }
+};
+
+/**
+ * Given plain text, convert to series of DOM lines separated by line breaks
+ * with the defined character limit.
+ * @method getLabelJsx
+ * @param  {[type]}    text [description]
+ * @return {[type]}         [description]
+ */
+const getLabelJsx = text => {
+  const maxChars = 30;
+  const words = text.split(" ");
+  let line = "";
+  const lines = [];
+
+  words.forEach(word => {
+    const possibleLine = line + " " + word;
+    if (possibleLine.length < maxChars) {
+      line += " " + word;
+    } else if (line !== "") {
+      const newLine = line;
+      lines.push(newLine.trim());
+      line = word;
+    }
+  });
+  lines.push(line.trim());
+
+  return lines.map((d, i) => (
+    <React.Fragment>
+      {d}
+      {i !== lines.length - 1 && <br />}
+    </React.Fragment>
+  ));
 };
 
 export default RadioToggle;
