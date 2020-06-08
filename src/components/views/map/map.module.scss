@@ -7,6 +7,14 @@
     min-height: 85vh;
   }
 
+  .dark {
+    &[role="filterButton"] {
+      background-color: $light-gray-2;
+      @include btn-secondary();
+      border-radius: 4px;
+      border: 2px solid lightgray;
+    }
+  }
   .drawer > div:first-child {
     * {
       text-transform: none;

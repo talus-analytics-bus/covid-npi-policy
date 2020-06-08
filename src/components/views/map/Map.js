@@ -26,7 +26,7 @@ import { mapStyles } from "../../common/MapboxMap/plugins/sources";
 import { OptionSet, execute } from "../../misc/Queries";
 
 // assets and styles
-import { style, drawer, wide } from "./map.module.scss";
+import { style, drawer, dark } from "./map.module.scss";
 
 // common components
 import {
@@ -74,10 +74,7 @@ const Map = ({ setLoading, ...props }) => {
         radio: true,
 
         // default value of radio selections
-        defaultRadioValue: "Social distancing",
-
-        // classname to apply to filter
-        className: wide
+        defaultRadioValue: "Social distancing"
 
         // if applicable: the primary filter on which this one depends; if
         // there is no value selected in the primary filter which is a group
@@ -109,7 +106,8 @@ const Map = ({ setLoading, ...props }) => {
         label: "Policy subcategory",
         radio: false,
         primary: "primary_ph_measure",
-        entity_name: "Policy"
+        entity_name: "Policy",
+        className: dark
       }
     }
   ]);

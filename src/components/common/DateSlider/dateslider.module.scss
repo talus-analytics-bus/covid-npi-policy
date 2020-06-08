@@ -73,6 +73,7 @@
     align-items: center;
     font-size: 0.9rem;
     button {
+      @include btn-secondary();
       border-radius: 4px;
       border: 1px solid #b9b9b8;
 
@@ -93,7 +94,8 @@
     &.open {
       button {
         color: white;
-        background-color: #327afe;
+        background-color: #327afe !important;
+        background: unset;
       }
     }
   }

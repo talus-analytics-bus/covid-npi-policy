@@ -197,7 +197,8 @@ const Filter = ({
       }
     }
   }, [dateRangeState]);
-
+  console.log("className");
+  console.log(className);
   const showSelectAll = items && items.length > 4;
   let responsiveHeight = 0;
   if (items !== undefined) {
@@ -221,7 +222,7 @@ const Filter = ({
         <div className={styles.input}>
           <div
             role="filterButton"
-            className={classNames(styles.filterButton, {
+            className={classNames(styles.filterButton, className, {
               [styles.shown]: show,
               [styles.selected]: nCur > 0,
               [styles.disabled]: disabled || noItems

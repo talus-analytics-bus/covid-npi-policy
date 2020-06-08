@@ -92,6 +92,37 @@ $border-radius: 5px;
   background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
 }
 
+@mixin btn-secondary() {
+  background: -moz-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  &:hover {
+    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -webkit-linear-gradient(
+      top,
+      #ffffff 0%,
+      darken(#e4e4e4, 5%) 100%
+    );
+  }
+  &:active {
+    background: -moz-linear-gradient(
+      top,
+      #ffffff 0%,
+      darken(#e4e4e4, 10%) 100%
+    );
+    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -webkit-linear-gradient(
+      top,
+      #ffffff 0%,
+      darken(#e4e4e4, 10%) 100%
+    );
+  }
+}
+
 @mixin sticky() {
   position: -webkit-sticky; /* Safari */
   position: sticky;
