@@ -25,12 +25,18 @@ export const Metadata = async function({ method, fields }) {
 /**
  * Get policy data from API.
  */
-export const Policy = async function({ method, fields = [], filters = null }) {
+export const Policy = async function({
+  method,
+  fields = [],
+  filters = null,
+  by_category = false
+}) {
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
   });
+  params.append("by_category", by_category);
 
   // prepare request
   let req;

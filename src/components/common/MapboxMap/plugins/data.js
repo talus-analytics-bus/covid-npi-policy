@@ -29,6 +29,7 @@ import styles from "./plugins.module.scss";
 
 // utilities and local components
 import { isEmpty, percentize } from "../../../misc/Util";
+import { Table, ShowMore } from "../../../common";
 
 // define default parameters for MapboxMap
 const today = moment();
@@ -526,28 +527,80 @@ export const tooltipGetter = async ({
             primary_ph_measure: filters.primary_ph_measure,
             ph_measure_details: filters.ph_measure_details
           },
+          by_category: true,
           fields: [
             "id",
             "primary_ph_measure",
             "ph_measure_details",
-            "date_start_effective"
+            "date_start_effective",
+            "desc"
           ]
         });
 
+        // const policiesByCategory = {};
+        // policies.data.forEach(d => {
+        //
+        // });
+
         item.className = "policyStatus";
+        const rows = [];
+        for (const [primary_ph_measure, policiesOfCategory] of Object.entries(
+          policies.data
+        )) {
+          const children = [];
+          policiesOfCategory.forEach(d => {
+            children.push(d);
+          });
+          rows.push({ primary_ph_measure, children });
+        }
         item.customContent = (
-          <table>
-            <thead>
-              <th>Category</th>
-              <th>Effective start date</th>
-            </thead>
-            <tbody>
-              {policies.data.map((d, i) => (
-                <tr>Policy {i}</tr>
-              ))}
-            </tbody>
-          </table>
+          <div className={styles.table}>
+            {
+              <table>
+                <thead>
+                  <th>{filters.primary_ph_measure[0]} policy subcategory</th>
+                  <th>Description</th>
+                  <th>Effective start date</th>
+                </thead>
+                <tbody>
+                  {rows.map(d => (
+                    <React.Fragment>
+                      {d.children.map(dd => (
+                        <tr className={styles.child}>
+                          <td>{dd.ph_measure_details}</td>
+                          <td>
+                            <ShowMore {...{ text: dd.desc }} />
+                          </td>
+                          <td>{dd.date_start_effective}</td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            }
+            {
+              // <Table
+              //   {...{
+              //     data: policies.data,
+              //     columns: [{ dataField: "id", header: "ID" }]
+              //   }}
+              // />
+            }
+          </div>
         );
+        // <table>
+        //   <thead>
+        //     <th>Category</th>
+        //     <th>Effective start date</th>
+        //   </thead>
+        //   <tbody>
+        //     {policies.data.map((d, i) => (
+        //       <tr>Policy {i}</tr>
+        //     ))}
+        //   </tbody>
+        // </table>
+        // );
         item.value = (
           <div
             className={styles.badge}
@@ -595,5 +648,7 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
     }
   }
+  console.log("tooltip");
+  console.log(tooltip);
   return tooltip;
 };
