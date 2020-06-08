@@ -53,10 +53,10 @@ $border-radius: 5px;
 }
 
 @mixin borderItemsVert($size) {
-  > :not(:last-child) {
-    margin-bottom: $size;
-    padding-bottom: $size;
-    border-bottom: $border;
+  > :not(:first-child) {
+    margin-top: $size;
+    padding-top: $size;
+    border-top: $border;
   }
 }
 

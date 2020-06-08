@@ -23,8 +23,9 @@ import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
 import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 
-// assets
+// assets and styles
 import dots from "./assets/images/dots.svg";
+import styles from "./plugins.module.scss";
 
 // utilities and local components
 import { isEmpty, percentize } from "../../../misc/Util";
@@ -506,6 +507,51 @@ export const tooltipGetter = async ({ mapId, d, include, date, map }) => {
         unit: thisMetricMeta.unit(v)
       };
 
+      // SPECIAL METRICS // -------------------------------------------------//
+      if (k === "policy_status") {
+        const apiDate = date.format("YYYY-MM-DD");
+        // get relevant policy data
+        const policies = await Policy({
+          method: "post",
+          filters: {
+            area1: [d.properties.state_name],
+            dates_in_effect: [apiDate, apiDate]
+          },
+          fields: [
+            "id",
+            "primary_ph_measure",
+            "ph_measure_details",
+            "date_start_effective"
+          ]
+        });
+
+        item.className = "policyStatus";
+        item.customContent = (
+          <table>
+            <thead>
+              <th>Category</th>
+              <th>Effective start date</th>
+            </thead>
+            <tbody>
+              {policies.data.map((d, i) => (
+                <tr>Policy {i}</tr>
+              ))}
+            </tbody>
+          </table>
+        );
+        item.value = (
+          <div
+            className={styles.badge}
+            style={{
+              backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
+            }}
+          >
+            {thisMetricMeta.value(v)}
+          </div>
+        );
+      }
+
+      // TRENDS // ----------------------------------------------------------//
       // define standard trend key, e.g., "metric_name-trend"
       const trendKey = k + "-trend";
 
@@ -535,6 +581,7 @@ export const tooltipGetter = async ({ mapId, d, include, date, map }) => {
           classes: []
         };
       }
+
       // add item to tooltip content
       tooltip.tooltipMainContent.push(item);
     }

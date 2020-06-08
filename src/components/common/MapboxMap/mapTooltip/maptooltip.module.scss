@@ -34,6 +34,19 @@
     .metric {
       display: flex;
       flex-flow: column;
+      &.policyStatus {
+        flex-flow: row;
+        @include spaceItemsHoriz(40px);
+
+        .metricHeader {
+          align-items: center;
+          height: min-content;
+          line-height: 2;
+          .label {
+            margin-bottom: 0;
+          }
+        }
+      }
       .metricHeader {
         display: flex;
         font-family: "Rawline Medium", serif;
