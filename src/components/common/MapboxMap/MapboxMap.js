@@ -220,7 +220,8 @@ const MapboxMap = ({
               d: selectedFeature,
               include: [circle, fill],
               date,
-              map
+              map,
+              filters
             }))
           }}
         />

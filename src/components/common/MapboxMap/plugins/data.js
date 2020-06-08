@@ -457,7 +457,14 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
  * @param  {[type]}      map     [description]
  * @return {Promise}             [description]
  */
-export const tooltipGetter = async ({ mapId, d, include, date, map }) => {
+export const tooltipGetter = async ({
+  mapId,
+  d,
+  include,
+  date,
+  map,
+  filters
+}) => {
   // define base tooltip data
   const tooltip = {
     tooltipHeader: null,
@@ -515,7 +522,9 @@ export const tooltipGetter = async ({ mapId, d, include, date, map }) => {
           method: "post",
           filters: {
             area1: [d.properties.state_name],
-            dates_in_effect: [apiDate, apiDate]
+            dates_in_effect: [apiDate, apiDate],
+            primary_ph_measure: filters.primary_ph_measure,
+            ph_measure_details: filters.ph_measure_details
           },
           fields: [
             "id",
