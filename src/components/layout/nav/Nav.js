@@ -7,15 +7,26 @@ import ReactTooltip from "react-tooltip";
 // assets
 import logo from "../../../assets/images/logo.svg";
 
-const Nav = ({ wide, ...props }) => {
+const Nav = ({ page, ...props }) => {
   return (
-    <div className={classNames(styles.nav, { [styles.wide]: wide })}>
-      <div>
+    <div
+      className={classNames(styles.navWrapper, {
+        [styles.wide]: page === "map"
+      })}
+    >
+      <div className={styles.nav}>
         <Link to={"/"}>
           <img src={logo} />
         </Link>
+        <Link className={page === "data" ? styles.active : ""} to={"/"}>
+          Data
+        </Link>
+        <Link className={page === "map" ? styles.active : ""} to={"/map"}>
+          Policy maps
+        </Link>
+
         <a target="_blank" href="https://gida.ghscosting.org/">
-          Return to gida.ghscosting.org
+          gida.ghscosting.org
         </a>
       </div>
     </div>

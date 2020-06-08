@@ -1,12 +1,13 @@
 @import "../../../assets/styles/vars.scss";
-.nav {
+.navWrapper {
+  font-family: "Gotham", serif;
   border-bottom: 8px solid $light-blue;
   @include sticky();
   z-index: 3;
   width: 100%;
   background: white;
 
-  div {
+  .nav {
     max-width: $max-width;
     margin: 0 auto;
     padding: 20px 20px;
@@ -16,7 +17,18 @@
     }
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+
+    @include spaceItemsHoriz(2rem);
+    a {
+      color: #173244;
+    }
+    .active {
+      font-weight: bold;
+    }
+    a:first-child {
+      margin-right: auto;
+    }
     img {
       height: 70px;
     }

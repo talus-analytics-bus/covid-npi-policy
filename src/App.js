@@ -76,14 +76,19 @@ const App = () => {
   return (
     <React.Fragment>
       <BrowserRouter>
-        <Nav wide={page === "map"} />
+        <Nav {...{ page }} />
         <Switch>
           <div className={classNames(styles.page, styles[page])}>
             {
               // Data page
-              <Route exact path="/">
-                <Data {...{ setLoading, setInfoTooltipContent }} />
-              </Route>
+              <Route
+                exact
+                path="/"
+                render={() => {
+                  setPage("data");
+                  return <Data {...{ setLoading, setInfoTooltipContent }} />;
+                }}
+              />
             }
             {
               // Map page
