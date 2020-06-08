@@ -341,7 +341,9 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
   };
 
   // on initial page load, get all data and filter optionset values
-  useEffect(getData, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   // when filters are changed, retrieve filtered data
   useEffect(() => {
