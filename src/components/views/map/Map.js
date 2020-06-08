@@ -312,28 +312,8 @@ const Map = ({ setLoading, ...props }) => {
                         }),
                       curVal: circle,
                       callback: setCircle,
-                      label: "Circle metric",
+                      label: "View COVID count by",
                       key: "RadioToggle1"
-                    }}
-                  />,
-
-                  // fill metric radio toggle
-                  <RadioToggle
-                    {...{
-                      setInfoTooltipContent: props.setInfoTooltipContent,
-                      choices: mapMetrics[mapId]
-                        .filter(d => d.for.includes("fill"))
-                        .map(d => {
-                          return {
-                            value: d.id,
-                            name: metricMeta[d.id].metric_displayname,
-                            tooltip: metricMeta[d.id].metric_definition
-                          };
-                        }),
-                      curVal: fill,
-                      callback: setFill,
-                      label: "Fill metric",
-                      key: "RadioToggle2"
                     }}
                   />
                 ].map(d => d)}
