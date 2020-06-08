@@ -105,5 +105,9 @@
     border-top: none !important;
     margin-top: 0 !important;
     margin-left: auto;
+    button {
+      color: white;
+      @include btn-primary();
+    }
   }
 }
