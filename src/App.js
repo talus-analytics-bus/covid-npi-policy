@@ -22,7 +22,7 @@ import loadingSvg from "./assets/images/loading.svg";
 
 //: React.FC
 const App = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const toggleLoading = v => setLoading(v);

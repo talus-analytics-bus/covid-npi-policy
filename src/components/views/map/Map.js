@@ -167,6 +167,7 @@ const Map = ({ setLoading, ...props }) => {
     });
     setFilterDefs(newFilterDefs);
     setInitialized(true);
+    setLoading(false);
   };
 
   // CONSTANTS // -----------------------------------------------------------//
@@ -194,7 +195,7 @@ const Map = ({ setLoading, ...props }) => {
     );
   }
 
-  // EFFECTS // -------------------------------------------------------------//
+  // EFFECT HOOKS // -------------------------------------------------------------//
   // init
   useEffect(function initializeOptionSets() {
     if (!initialized) getData();
@@ -221,7 +222,7 @@ const Map = ({ setLoading, ...props }) => {
   );
 
   // JSX // -----------------------------------------------------------------//
-  if (!initialized) return <div>Loading</div>;
+  if (!initialized) return <div />;
   else
     return (
       <div className={style}>
