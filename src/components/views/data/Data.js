@@ -167,6 +167,20 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       formatter: v =>
         v !== null ? moment(v).format("MMM D, YYYY") : unspecified
     },
+    {
+      dataField: "date_end_actual",
+      header: "Policy end date actual",
+      sort: true,
+      formatter: v =>
+        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    },
+    {
+      dataField: "date_end_anticipated",
+      header: "Policy end date anticipated",
+      sort: true,
+      formatter: v =>
+        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    },
     // {
     //   dataField: "date_end_actual_or_anticipated",
     //   header: "Policy end date",
@@ -259,8 +273,8 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
           // "ph_measure_details",
           "desc",
           "date_start_effective",
-          // "date_end_actual",
-          // "date_end_anticipated",
+          "date_end_actual",
+          "date_end_anticipated",
           "file"
         ]
       }),

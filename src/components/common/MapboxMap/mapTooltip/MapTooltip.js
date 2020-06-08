@@ -25,8 +25,17 @@ const MapTooltip = ({
       }
       {tooltipHeader && (
         <div className={styles.header}>
-          <div className={styles.title}>{tooltipHeader.title}</div>
-          <div className={styles.subtitle}>{tooltipHeader.subtitle}</div>
+          <div className={styles.titles}>
+            <div className={styles.title}>{tooltipHeader.title}</div>
+            <div className={styles.subtitle}>{tooltipHeader.subtitle}</div>
+          </div>
+          <div className={styles.infographic}>
+            <span>
+              Placeholder: COVID caseload
+              <br />
+              and trend
+            </span>
+          </div>
         </div>
       )}
       {
