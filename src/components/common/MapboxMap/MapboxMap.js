@@ -514,7 +514,7 @@ const MapboxMap = ({
             latitude={cursorLngLat[1]}
             closeButton={false}
             closeOnClick={false}
-            className={"fadingEffect fadeIn"}
+            captureScroll={true}
             interactive={true}
           >
             {mapTooltip}

@@ -8,7 +8,7 @@
  */
 
 // standard packages
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // 3rd party packages
 import * as d3 from "d3/dist/d3.min";
@@ -482,7 +482,9 @@ export const tooltipGetter = async ({
       subtitle: formattedDate
     };
     // add actions for bottom of tooltip
-    tooltip.actions = [<button key={"view"}>View state</button>];
+    tooltip.actions = [
+      <button key={"view"}>View details for these policies</button>
+    ];
   } else {
     // get tooltip header
     tooltip.tooltipHeader = {
@@ -527,7 +529,7 @@ export const tooltipGetter = async ({
             primary_ph_measure: filters.primary_ph_measure,
             ph_measure_details: filters.ph_measure_details
           },
-          by_category: true,
+          by_category: "ph_measure_details",
           fields: [
             "id",
             "primary_ph_measure",
@@ -537,70 +539,40 @@ export const tooltipGetter = async ({
           ]
         });
 
-        // const policiesByCategory = {};
-        // policies.data.forEach(d => {
-        //
-        // });
-
+        let nPolicies = 0;
         item.className = "policyStatus";
-        const rows = [];
-        for (const [primary_ph_measure, policiesOfCategory] of Object.entries(
+        const tables = [];
+        for (const [ph_measure_details, policiesOfCategory] of Object.entries(
           policies.data
         )) {
-          const children = [];
+          const rows = [];
           policiesOfCategory.forEach(d => {
-            children.push(d);
+            rows.push(d);
           });
-          rows.push({ primary_ph_measure, children });
+          tables.push({ ph_measure_details, rows });
+          nPolicies += policiesOfCategory.length;
         }
-        item.customContent = (
-          <div className={styles.table}>
-            {
-              <table>
-                <thead>
-                  <th>{filters.primary_ph_measure[0]} policy subcategory</th>
-                  <th>Description</th>
-                  <th>Effective start date</th>
-                </thead>
-                <tbody>
-                  {rows.map(d => (
-                    <React.Fragment>
-                      {d.children.map(dd => (
-                        <tr className={styles.child}>
-                          <td>{dd.ph_measure_details}</td>
-                          <td>
-                            <ShowMore {...{ text: dd.desc }} />
-                          </td>
-                          <td>{dd.date_start_effective}</td>
-                        </tr>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
-            }
-            {
-              // <Table
-              //   {...{
-              //     data: policies.data,
-              //     columns: [{ dataField: "id", header: "ID" }]
-              //   }}
-              // />
-            }
-          </div>
+        // add actions for bottom of tooltip
+        tooltip.actions = [
+          <button key={"view"}>
+            View details for{" "}
+            {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
+            {nPolicies === 1 ? "policy" : "policies"}
+          </button>
+        ];
+        tooltip.tooltipHeader.subtitle = (
+          <span>
+            {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
+            place for <b>{filters.primary_ph_measure[0].toLowerCase()}</b> on{" "}
+            {formattedDate}
+          </span>
         );
-        // <table>
-        //   <thead>
-        //     <th>Category</th>
-        //     <th>Effective start date</th>
-        //   </thead>
-        //   <tbody>
-        //     {policies.data.map((d, i) => (
-        //       <tr>Policy {i}</tr>
-        //     ))}
-        //   </tbody>
-        // </table>
-        // );
+        item.customContent = (
+          <TableDrawers
+            {...{ tables, geometryName: d.properties.state_name }}
+          />
+        );
+
         item.value = (
           <div
             className={styles.badge}
@@ -648,7 +620,93 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
     }
   }
-  console.log("tooltip");
-  console.log(tooltip);
   return tooltip;
+};
+const TableDrawer = ({
+  header,
+  id,
+  open,
+  openTableDrawer,
+  setOpenTableDrawer,
+  children
+}) => {
+  return (
+    <div className={styles.tableDrawer}>
+      <div
+        onClick={() => {
+          if (open) setOpenTableDrawer(null);
+          else setOpenTableDrawer(id);
+        }}
+        className={styles.header}
+      >
+        {header}
+        <button>
+          {
+            <i
+              className={classNames("material-icons", {
+                [styles.flipped]: open
+              })}
+            >
+              play_arrow
+            </i>
+          }
+        </button>
+      </div>
+      <div className={styles.content}>{open && children}</div>
+    </div>
+  );
+};
+const TableDrawers = ({ tables, geometryName, ...props }) => {
+  const [openTableDrawer, setOpenTableDrawer] = useState(null);
+  useEffect(() => {
+    console.log("tables changed!");
+    setOpenTableDrawer(tables[0].ph_measure_details);
+  }, [tables]);
+
+  return (
+    <div className={styles.table}>
+      {tables.map((d, i) => (
+        <React.Fragment>
+          <TableDrawer
+            key={d.ph_measure_details}
+            id={d.ph_measure_details}
+            open={d.ph_measure_details === openTableDrawer}
+            openTableDrawer={openTableDrawer}
+            setOpenTableDrawer={setOpenTableDrawer}
+            header={
+              <div className={styles.tableName}>
+                {d.ph_measure_details}{" "}
+                <span className={styles.num}>
+                  ({comma(d.rows.length)}
+                  {d.rows.length === 1 ? " policy" : " policies"})
+                </span>
+              </div>
+            }
+          >
+            <span className={styles.instructions}>Scroll to view more</span>
+            <table>
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Effective start date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.rows.map(dd => (
+                  <tr>
+                    <td>
+                      <ShowMore {...{ text: dd.desc, charLimit: 100 }} />
+                    </td>
+                    <td>
+                      {moment(dd.date_start_effective).format(`MMM D, 'YY`)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </TableDrawer>
+        </React.Fragment>
+      ))}
+    </div>
+  );
 };
