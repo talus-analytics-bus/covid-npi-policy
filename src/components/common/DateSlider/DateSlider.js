@@ -148,7 +148,7 @@ const DateSlider = ({ label, date, setDate, minDate, maxDate, ...props }) => {
           // update dates, etc.
           handleSliderChange(timeoutPrev);
           setCurSliderVal(timeoutPrev);
-        }, 1320 * i)
+        }, 200 * i)
       );
       i = i + 1;
     }
