@@ -91,6 +91,16 @@ $border-radius: 5px;
   background: -ms-linear-gradient(top, #425379 0%, #213561 100%);
   background: -o-linear-gradient(top, #425379 0%, #213561 100%);
   background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
+
+  &:hover,
+  &:active {
+    background: white;
+    color: #213561;
+    border-color: #213561;
+  }
+  &:active {
+    @include boxShadow();
+  }
 }
 
 @mixin btn-secondary() {
