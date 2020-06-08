@@ -12,16 +12,21 @@ import classNames from "classnames";
  */
 export const ShowMore = ({ text = "", charLimit = 30, wordLimit = null }) => {
   // if text is less than the limit don't implement
-  const textShortEnough = text.length <= charLimit;
+  const textShortEnough = text.length < charLimit;
+
+  console.log("textShortEnough");
+  console.log(textShortEnough);
 
   // true if "read more" is fully opened, false otherwise
-  const [expanded, setExpanded] = useState(textShortEnough);
+  const [expanded, setExpanded] = useState(false);
 
   // message of read more button
   const label = expanded ? "show less" : "show more";
 
   // text to show
-  const textToShow = getText({ text, expanded, charLimit });
+  const textToShow = textShortEnough
+    ? text
+    : getText({ text, expanded, charLimit });
 
   return (
     <span className={styles}>

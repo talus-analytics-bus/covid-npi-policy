@@ -21,11 +21,12 @@ import { metricMeta, dataGetter, tooltipGetter } from "./plugins/data";
 import { mapSources } from "./plugins/sources";
 import { layerImages } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
+import { isEmpty, getAndListString } from "../../misc/Util";
 import ResetZoom from "./resetZoom/ResetZoom";
 import MapTooltip from "./mapTooltip/MapTooltip";
 
 // common components
-import { Legend } from "..";
+import { Legend, ShowMore } from "..";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -85,6 +86,19 @@ const MapboxMap = ({
   const [showReset, setShowReset] = useState(false);
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
+
+  const getFillLegendName = ({ filters }) => {
+    const category = filters["primary_ph_measure"][0].toLowerCase();
+    const subcategory = !isEmpty(filters["ph_measure_details"])
+      ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
+      : undefined;
+    const prefix = "Policy status for ";
+    const suffix = ` on ${date.format("MMM D, YYYY")}`;
+    if (subcategory !== undefined) {
+      return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
+    } else return prefix + category + suffix;
+  };
+
   /**
    * Revert to default viewport
    * @method resetViewport
@@ -540,7 +554,9 @@ const MapboxMap = ({
                 className: "mapboxLegend",
                 key: "basemap - quantized",
                 metric_definition: metricMeta[circle].metric_definition,
-                metric_displayname: metricMeta[circle].metric_displayname,
+                metric_displayname: (
+                  <span>{metricMeta[circle].metric_displayname}</span>
+                ),
                 ...metricMeta[circle].legendInfo.circle
               }}
             />
@@ -553,7 +569,9 @@ const MapboxMap = ({
                 className: "mapboxLegend",
                 key: "bubble - linear",
                 metric_definition: metricMeta[fill].metric_definition,
-                metric_displayname: metricMeta[fill].metric_displayname,
+                metric_displayname: (
+                  <span>{getFillLegendName({ filters })}</span>
+                ),
                 ...metricMeta[fill].legendInfo.fill
               }}
             />

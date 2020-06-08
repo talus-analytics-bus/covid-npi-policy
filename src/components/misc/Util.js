@@ -95,4 +95,14 @@ export const comma = num => {
   return resultTmp;
 };
 
+export const getAndListString = (arr, conjunction = "and") => {
+  if (arr === undefined || arr == null || arr.length === 0) return "";
+  else if (arr.length === 1) return arr[0];
+  else if (arr.length === 2) return `${arr[0]} ${conjunction} ${arr[1]}`;
+  else {
+    const first = arr.slice(0, arr.length - 1).join(", ");
+    return first + ", " + conjunction + arr[arr.length - 1];
+  }
+};
+
 export default Util;
