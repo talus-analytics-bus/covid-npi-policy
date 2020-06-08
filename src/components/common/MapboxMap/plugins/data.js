@@ -482,9 +482,8 @@ export const tooltipGetter = async ({
       subtitle: formattedDate
     };
     // add actions for bottom of tooltip
-    tooltip.actions = [
-      <button key={"view"}>View details for these policies</button>
-    ];
+    // tooltip.actions = [<button key={"view"}>View details</button>];
+    tooltip.actions = [];
   } else {
     // get tooltip header
     tooltip.tooltipHeader = {
@@ -553,13 +552,16 @@ export const tooltipGetter = async ({
           nPolicies += policiesOfCategory.length;
         }
         // add actions for bottom of tooltip
-        tooltip.actions = [
-          <button key={"view"}>
-            View details for{" "}
-            {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
-            {nPolicies === 1 ? "policy" : "policies"}
-          </button>
-        ];
+        tooltip.actions =
+          nPolicies > 0
+            ? [
+                <button key={"view"}>
+                  View details for{" "}
+                  {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
+                  {nPolicies === 1 ? "policy" : "policies"}
+                </button>
+              ]
+            : [];
         tooltip.tooltipHeader.subtitle = (
           <span>
             {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
@@ -659,8 +661,8 @@ const TableDrawer = ({
 const TableDrawers = ({ tables, geometryName, ...props }) => {
   const [openTableDrawer, setOpenTableDrawer] = useState(null);
   useEffect(() => {
-    console.log("tables changed!");
-    setOpenTableDrawer(tables[0].ph_measure_details);
+    if (tables[0] !== undefined)
+      setOpenTableDrawer(tables[0].ph_measure_details);
   }, [tables]);
 
   return (

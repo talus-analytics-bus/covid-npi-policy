@@ -78,6 +78,10 @@
       max-height: 200px;
       width: 100%;
       flex-flow: column;
+      tr {
+        justify-content: space-between;
+        display: flex;
+      }
     }
     thead tr {
       display: flex;
@@ -88,6 +92,9 @@
   td {
     padding: 10px;
     vertical-align: baseline;
+    &:nth-child(1) {
+      width: 70%;
+    }
     &:nth-child(2) {
       width: 30%;
     }
