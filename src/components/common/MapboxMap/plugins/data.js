@@ -39,7 +39,8 @@ export const defaults = {
   mapId: "us",
 
   // default date for map to start on
-  date: today.format("YYYY-MM-DD"),
+  date: "2020-03-16",
+  // date: today.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
@@ -158,23 +159,23 @@ export const mapMetrics = {
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
       }
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle", "fill"],
+      display_name: "Test metric -9999",
+      params: {
+        metric_id: -9999,
+        temporal_resolution: "daily",
+        spatial_resolution: "state"
+      },
+      id: "-9999",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: true,
+      styleOptions: { outline: true, pattern: true }
     }
-    // {
-    //   queryFunc: ObservationQuery,
-    //   for: ["circle", "fill"],
-    //   display_name: "Test metric -9999",
-    //   params: {
-    //     metric_id: -9999,
-    //     temporal_resolution: "daily",
-    //     spatial_resolution: "state"
-    //   },
-    //   id: "-9999",
-    //   featureLinkField: "place_name",
-    //   styleId: { fill: "metric-test", circle: "metric-test-solid" },
-    //   filter: ["==", ["get", "type"], "state"],
-    //   trend: true,
-    //   styleOptions: { outline: true, pattern: true }
-    // }
   ],
   global: [
     {

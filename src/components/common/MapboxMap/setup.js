@@ -350,12 +350,14 @@ export const addSources = (map, mapId) => {
  */
 export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
   const sources = mapSources[mapId];
+  const curMapMetrics = mapMetrics[mapId];
   for (const [sourceTypeKey, source] of Object.entries(mapSources[mapId])) {
     bindFeatureStatesForSource({
       map,
       sourceTypeKey,
       source,
       data,
+      curMapMetrics,
       selectedFeature
     });
   }
@@ -378,6 +380,7 @@ const bindFeatureStatesForSource = ({
   sourceTypeKey,
   source,
   data,
+  curMapMetrics,
   selectedFeature
 }) => {
   // define standard layer list key, e.g., 'circleLayers', 'fillLayers', ...
@@ -412,7 +415,8 @@ const bindFeatureStatesForSource = ({
 
     // for each layer defined for the source, get the data for that layer and
     // bind it to any matching features in the source
-    source[sourceTypeKey + "Layers"].forEach(layer => {
+    curMapMetrics.forEach(layer => {
+      // source[sourceTypeKey + "Layers"].forEach(layer => {
       // get data for layer features
       const layerData = data[layer.id];
       layerData.forEach(dd => {
