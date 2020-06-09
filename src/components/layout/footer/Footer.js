@@ -50,7 +50,7 @@ const Footer = ({ page }) => {
           </div>
           <div className={styles.links}>
             {images.map(d => (
-              <a target="_blank" href={d.url} alt={d.alt}>
+              <a key={d.imgSrc} target="_blank" href={d.url} alt={d.alt}>
                 <img style={d.style} src={d.imgSrc} />
                 {d.txt && <div>{d.txt}</div>}
               </a>

@@ -24,7 +24,7 @@ import downloadSvg from "../../../assets/icons/download.svg";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // primary data viewing and download page
-const Data = ({ setLoading, setInfoTooltipContent }) => {
+const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
   const [initializing, setInitializing] = useState(true);
   const [docType, setDocType] = useState("policy");
 
@@ -356,6 +356,10 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
 
   // on initial page load, get all data and filter optionset values
   useEffect(() => {
+    // set current page
+    setPage("data");
+
+    // get page data
     getData();
   }, []);
 

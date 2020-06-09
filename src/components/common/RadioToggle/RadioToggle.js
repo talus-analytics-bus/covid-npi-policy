@@ -146,7 +146,7 @@ const getLabelJsx = text => {
   lines.push(line.trim());
 
   return lines.map((d, i) => (
-    <React.Fragment>
+    <React.Fragment key={d + "-" + i}>
       {d}
       {i !== lines.length - 1 && <br />}
     </React.Fragment>

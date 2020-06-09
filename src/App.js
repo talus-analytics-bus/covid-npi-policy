@@ -78,30 +78,38 @@ const App = () => {
       <BrowserRouter>
         <Nav {...{ page }} />
         <Switch>
-          <div className={classNames(styles.page, styles[page])}>
-            {
-              // Data page
-              <Route
-                exact
-                path="/"
-                render={() => {
-                  setPage("data");
-                  return <Data {...{ setLoading, setInfoTooltipContent }} />;
-                }}
-              />
-            }
-            {
-              // Map page
-              <Route
-                exact
-                path="/map"
-                render={() => {
-                  setPage("map");
-                  return <Map {...{ setLoading, setInfoTooltipContent }} />;
-                }}
-              />
-            }
-          </div>
+          <React.Fragment>
+            <div className={classNames(styles.page, styles[page])}>
+              {
+                // Data page
+                <Route
+                  exact
+                  path="/"
+                  render={() => {
+                    return (
+                      <Data
+                        {...{ setLoading, setPage, setInfoTooltipContent }}
+                      />
+                    );
+                  }}
+                />
+              }
+              {
+                // Map page
+                <Route
+                  exact
+                  path="/map"
+                  render={() => {
+                    return (
+                      <Map
+                        {...{ setPage, setLoading, setInfoTooltipContent }}
+                      />
+                    );
+                  }}
+                />
+              }
+            </div>
+          </React.Fragment>
         </Switch>
         <Footer {...{ page }} />
         {

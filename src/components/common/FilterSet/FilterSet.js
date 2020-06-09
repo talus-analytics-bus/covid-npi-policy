@@ -47,6 +47,7 @@ const FilterSet = ({
       filterGroupComponents.push(
         <Filter
           {...{
+            key: v.field,
             field: v.field,
             label: v.label,
             items: items,
@@ -154,6 +155,7 @@ const FilterSet = ({
       <div className={styles.filterSet}>
         {filterGroups.map(d => (
           <div
+            key={d.map(dd => dd.field).join("-")}
             className={classNames(styles.filterGroup, {
               [styles.dropdowns]: d.dropdowns
             })}

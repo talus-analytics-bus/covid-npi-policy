@@ -38,7 +38,7 @@ import {
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-const Map = ({ setLoading, ...props }) => {
+const Map = ({ setLoading, setPage, ...props }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -196,6 +196,9 @@ const Map = ({ setLoading, ...props }) => {
   // EFFECT HOOKS // -------------------------------------------------------------//
   // init
   useEffect(function initializeOptionSets() {
+    // set current page
+    setPage("map");
+
     if (!initialized) getData();
   }, []);
 
