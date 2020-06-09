@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./drawer.module.scss";
 
 const Drawer = ({ label, content, ...props }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(props.defaultClosed !== true);
   return (
     <div
       className={classNames(styles.style, props.className, {

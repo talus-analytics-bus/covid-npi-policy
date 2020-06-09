@@ -134,10 +134,10 @@ $border-radius: 5px;
   }
 }
 
-@mixin sticky() {
+@mixin sticky($top: 0) {
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 0;
+  top: $top;
 }
 
 @mixin disabled() {

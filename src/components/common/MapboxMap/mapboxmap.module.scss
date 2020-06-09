@@ -11,6 +11,7 @@
   flex-flow: column;
   align-items: center;
   justify-content: flex-end;
+  border-bottom: none;
 
   button {
     border-radius: 4px 4px 0 0;
@@ -40,6 +41,8 @@
     background-color: white;
     padding: 5px 10px;
     border: 1px solid #b3b3b3;
+    border-bottom: none;
+
     @include borderItemsHoriz(20px);
     > div:not(:first-child) {
       padding-left: 0;

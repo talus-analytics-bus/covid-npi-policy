@@ -103,7 +103,7 @@ const App = () => {
             }
           </div>
         </Switch>
-        <Footer />
+        <Footer {...{ page }} />
         {
           // Loading spinner
           <div className={classNames(styles.loading, { [styles.on]: loading })}>

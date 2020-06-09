@@ -4,11 +4,12 @@ import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";
 import Util from "../../misc/Util.js";
+import classNames from "classnames";
 
 // 3rd party packages
 import moment from "moment";
 
-const Footer = () => {
+const Footer = ({ page }) => {
   const images = [
     {
       imgSrc: gu,
@@ -36,7 +37,9 @@ const Footer = () => {
   ];
 
   return (
-    <div className={styles.footer}>
+    <div
+      className={classNames(styles.footer, { [styles.wide]: page === "map" })}
+    >
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <div className={styles.dataAsOf}>

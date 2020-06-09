@@ -234,6 +234,9 @@ const Map = ({ setLoading, ...props }) => {
             // content has translucent background
             float: true,
 
+            // closed by default
+            defaultClosed: true,
+
             // header of drawer (JSX)
             label: (
               <React.Fragment>
