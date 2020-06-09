@@ -86,7 +86,7 @@
         .value {
           color: $dark-blue;
           font-weight: 600;
-          font-size: 2rem;
+          font-size: 2.4rem;
           display: flex;
           align-items: center;
           justify-content: flex-end;
@@ -95,10 +95,10 @@
           .unit {
             font-weight: 600;
             font-size: 1.1rem;
-            line-height: 1.1;
+            line-height: 1;
             text-align: left;
             position: relative;
-            top: -2px;
+            // top: -2px;
           }
         }
         .trend {
