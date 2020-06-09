@@ -101,7 +101,7 @@ export const getAndListString = (arr, conjunction = "and") => {
   else if (arr.length === 2) return `${arr[0]} ${conjunction} ${arr[1]}`;
   else {
     const first = arr.slice(0, arr.length - 1).join(", ");
-    return first + ", " + conjunction + arr[arr.length - 1];
+    return first + ", " + conjunction + " " + arr[arr.length - 1];
   }
 };
 
