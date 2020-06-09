@@ -150,12 +150,13 @@ const FilterSet = ({
         </div>
       </div>
     );
+
   return (
     <React.Fragment>
       <div className={styles.filterSet}>
         {filterGroups.map(d => (
           <div
-            key={d.map(dd => dd.field).join("-")}
+            key={d.map(dd => dd.key).join("-")}
             className={classNames(styles.filterGroup, {
               [styles.dropdowns]: d.dropdowns
             })}

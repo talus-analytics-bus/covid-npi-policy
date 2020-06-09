@@ -218,7 +218,7 @@ const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
       header: "Link",
       // sort: true,
       formatter: (row, cell) => {
-        const icons = cell.file.map(d => {
+        const icons = cell.file.map((d, i) => {
           const isLocalDownload = true;
           // const isLocalDownload = d.filename && d.filename !== "";
           const link = undefined;
@@ -229,7 +229,10 @@ const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
                 ? "/get/file/redirect?id=" + d.toString()
                 : undefined;
             return (
-              <div className={styles.linkIcon}>
+              <div
+                key={localDownloadLink + "-" + i}
+                className={styles.linkIcon}
+              >
                 <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
                   <i className={"material-icons"}>insert_drive_file</i>
                 </a>
