@@ -49,6 +49,7 @@ const MapboxMap = ({
   circle,
   fill,
   filters,
+  plugins,
   ...props
 }) => {
   // CONSTANTS // -----------------------------------------------------------//
@@ -223,6 +224,7 @@ const MapboxMap = ({
               date,
               map,
               filters,
+              plugins,
               callback: () => {
                 setShowTooltip(true);
               }

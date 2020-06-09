@@ -463,6 +463,7 @@ export const tooltipGetter = async ({
   date,
   map,
   filters,
+  plugins,
   callback
 }) => {
   // define base tooltip data
@@ -556,11 +557,17 @@ export const tooltipGetter = async ({
             ? [
                 <Link
                   key={"view"}
+                  onClick={() => {
+                    plugins.setInitDataFilters({
+                      primary_ph_measure: filters.primary_ph_measure,
+                      dates_in_effect: filters.dates_in_effect,
+                      iso3: ["United States"],
+                      area1: [d.properties.state_name],
+                      level: ["State / Province"]
+                    });
+                  }}
                   to={{
-                    pathname: "/",
-                    // search: "?sort=name",
-                    // hash: "#the-hash",
-                    state: { fromMap: true }
+                    pathname: "/"
                   }}
                 >
                   <button>

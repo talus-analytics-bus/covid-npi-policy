@@ -39,10 +39,15 @@ const Filter = ({
   ...props
 }) => {
   const [show, setShow] = useState(false);
-  const initSelectedItems =
-    filters[field] !== undefined
-      ? items.filter(d => filters[field].includes(d.value))
-      : [];
+  let initSelectedItems;
+  if (!dateRange) {
+    initSelectedItems =
+      filters[field] !== undefined
+        ? items.filter(d => filters[field].includes(d.value))
+        : [];
+  } else {
+    initSelectedItems = filters[field] !== undefined ? filters[field] : [];
+  }
   const primaryFiltersOff =
     primary !== undefined &&
     (filters[primary] === undefined || filters[primary].length === 0);
@@ -55,8 +60,14 @@ const Filter = ({
   const [showRangeSelection, setShowRangeSelection] = useState(false);
   const initDateRangeState = [
     {
-      startDate: undefined,
-      endDate: undefined,
+      startDate:
+        initSelectedItems.length > 0
+          ? new Date(moment(initSelectedItems[0]))
+          : undefined,
+      endDate:
+        initSelectedItems.length > 0
+          ? new Date(moment(initSelectedItems[1]))
+          : undefined,
       key: "selection"
     }
   ];
@@ -114,7 +125,7 @@ const Filter = ({
 
   useEffect(() => {
     if (dateRange) {
-      if (filters[field] === undefined) {
+      if (filters[field] === undefined || filters[field].length === 0) {
         setDateRangeState(initDateRangeState);
         setShowRangeSelection(false);
       }
@@ -137,13 +148,6 @@ const Filter = ({
           );
 
           updatedSelectedItems = newFilters;
-          console.log("filterState");
-          console.log(filterState);
-          console.log("newFilters");
-          console.log(newFilters);
-          console.log("filters[field]");
-          console.log(filters[field]);
-
           setFilterState({
             ...filterState,
             selectedItems: updatedSelectedItems
@@ -192,6 +196,10 @@ const Filter = ({
       const startRaw = dateRangeState[0].startDate;
       const endRaw = dateRangeState[0].endDate;
       if (startRaw === undefined || endRaw === undefined) {
+        setFilterState({
+          ...filterState,
+          selectedItems: []
+        });
         return;
       } else {
         const v = [

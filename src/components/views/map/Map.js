@@ -38,7 +38,7 @@ import {
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-const Map = ({ setLoading, setPage, ...props }) => {
+const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -186,7 +186,10 @@ const Map = ({ setLoading, setPage, ...props }) => {
             date,
             circle,
             fill,
-            filters
+            filters,
+            plugins: {
+              setInitDataFilters
+            }
           }}
         />
       )
@@ -200,6 +203,11 @@ const Map = ({ setLoading, setPage, ...props }) => {
     setPage("map");
 
     if (!initialized) getData();
+
+    // unset initial filters on page unmount
+    return function unsetInitDataFilters() {
+      setInitDataFilters(null);
+    };
   }, []);
 
   // when date is changed, update `dates_in_effect` filter
