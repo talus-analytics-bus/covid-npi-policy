@@ -6,6 +6,8 @@
   border-radius: 4px;
   z-index: 50;
   @include boxShadowStrong();
+  min-width: 400px;
+
   .header {
     background-color: $light-gray-2;
     padding: $padding;
@@ -15,6 +17,7 @@
     align-items: center;
     justify-content: space-between;
     @include spaceItemsHoriz(10px);
+
     .titles {
       max-width: 18rem;
       .title {
@@ -102,7 +105,6 @@
           text-transform: none;
           display: flex;
           align-items: center;
-          justify-content: flex-end;
           @include spaceItemsHoriz(10px);
           .sentiment {
             font-weight: 600;
