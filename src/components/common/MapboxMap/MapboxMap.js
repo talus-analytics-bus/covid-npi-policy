@@ -212,6 +212,7 @@ const MapboxMap = ({
    */
   const updateMapTooltip = async ({ map }) => {
     if (selectedFeature !== null) {
+      setShowTooltip(false);
       const newMapTooltip = (
         <MapTooltip
           {...{
@@ -221,7 +222,10 @@ const MapboxMap = ({
               include: [circle, fill],
               date,
               map,
-              filters
+              filters,
+              callback: () => {
+                setShowTooltip(true);
+              }
             }))
           }}
         />
@@ -393,7 +397,6 @@ const MapboxMap = ({
         // if a feature was discovered, mark is as selected and show the tooltip
         if (feature) {
           setCursorLngLat(e.lngLat);
-          setShowTooltip(true);
           setSelectedFeature(feature);
           map.setFeatureState(feature, { clicked: true });
 

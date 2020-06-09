@@ -461,7 +461,8 @@ export const tooltipGetter = async ({
   include,
   date,
   map,
-  filters
+  filters,
+  callback
 }) => {
   // define base tooltip data
   const tooltip = {
@@ -619,6 +620,7 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
     }
   }
+  if (callback) callback();
   return tooltip;
 };
 const TableDrawer = ({
