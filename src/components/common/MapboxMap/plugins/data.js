@@ -52,7 +52,7 @@ export const defaults = {
   // defaults for map with ID `us`
   us: {
     // id of default circle metric
-    circle: null,
+    circle: "74",
     // id of default fill metric
     fill: "policy_status",
     // base layer immediately behind which layers should be appended to map
@@ -111,37 +111,37 @@ export const mapMetrics = {
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
       }
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle", "fill"],
+      params: {
+        metric_id: 74,
+        temporal_resolution: "daily",
+        spatial_resolution: "state"
+      },
+      id: "74",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-transp" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: true,
+      styleOptions: { outline: true, pattern: true }
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle", "fill"],
+      params: {
+        metric_id: 72,
+        temporal_resolution: "daily",
+        spatial_resolution: "state"
+      },
+      id: "72",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: true,
+      styleOptions: { outline: true, pattern: true }
     }
-    // {
-    //   queryFunc: ObservationQuery,
-    //   for: ["circle", "fill"],
-    //   params: {
-    //     metric_id: -9999,
-    //     temporal_resolution: "daily",
-    //     spatial_resolution: "state"
-    //   },
-    //   id: "-9999",
-    //   featureLinkField: "place_name",
-    //   styleId: { fill: "metric-test", circle: "metric-test-transp" },
-    //   filter: ["==", ["get", "type"], "state"],
-    //   trend: true,
-    //   styleOptions: { outline: true, pattern: true }
-    // },
-    // {
-    //   queryFunc: ObservationQuery,
-    //   for: ["circle", "fill"],
-    //   params: {
-    //     metric_id: -9997,
-    //     temporal_resolution: "daily",
-    //     spatial_resolution: "state"
-    //   },
-    //   id: "-9997",
-    //   featureLinkField: "place_name",
-    //   styleId: { fill: "metric-test", circle: "metric-test-solid" },
-    //   filter: ["==", ["get", "type"], "state"],
-    //   trend: true,
-    //   styleOptions: { outline: true, pattern: true }
-    // }
   ],
   global: [
     {
@@ -164,12 +164,13 @@ export const mapMetrics = {
 // metric metadata used for display, tooltips, etc.
 export const metricMeta = {
   // unique ID of metric
-  "-9999": {
+  "74": {
     // metric definition
-    metric_definition: "Test definition",
+    metric_definition:
+      "The number of new COVID-19 cases in the state in the past 7 days",
 
     // metric name displayed on front-end
-    metric_displayname: "New COVID-19 cases in past 7 days (notional)",
+    metric_displayname: "New COVID-19 cases in past 7 days",
 
     // value formatter for metric
     value: v => comma(v),
@@ -222,7 +223,7 @@ export const metricMeta = {
         colorscale: d3
           .scaleLinear()
           .domain([0, 100])
-          .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
+          .range(["transparent", "transparent"]), // TODO dynamically
         labels: {
           bubble: { min: "Low", max: "High" },
           basemap: { min: "Minimal", max: "High" }
@@ -231,9 +232,9 @@ export const metricMeta = {
     }
   },
   // additional metric legend information...
-  get "-9997"() {
+  get "72"() {
     return {
-      ...this["-9999"],
+      ...this["74"],
       metric_displayname: "Cumulative caseload (up to date selected)",
       unit: v => (v === 1 ? "total case" : "total cases"),
       trendTimeframe: (
@@ -244,7 +245,7 @@ export const metricMeta = {
         </React.Fragment>
       ),
       legendInfo: {
-        ...this["-9999"].legendInfo,
+        ...this["74"].legendInfo,
         circle: {
           for: "bubble",
           type: "continuous",
@@ -252,7 +253,7 @@ export const metricMeta = {
           colorscale: d3
             .scaleLinear()
             .domain([0, 100])
-            .range(["transparent", "transparent"]), // TODO dynamically
+            .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
           labels: {
             bubble: { min: "Low", max: "High" },
             basemap: { min: "Minimal", max: "High" }
@@ -617,7 +618,7 @@ export const tooltipGetter = async ({
         };
       }
 
-      if (k === "-9999") {
+      if (k === "74") {
         item.unit = (
           <span>
             {item.unit}
@@ -627,7 +628,7 @@ export const tooltipGetter = async ({
         );
         tooltip.tooltipHeaderMetric = item;
         continue;
-      } else if (k === "-9997") {
+      } else if (k === "72") {
         item.unit = <span>{item.unit}</span>;
         tooltip.tooltipHeaderMetric = item;
         continue;

@@ -9,10 +9,6 @@ import ReactTooltip from "react-tooltip";
  * @method InfoTooltip
  */
 const InfoTooltip = ({ id, text, ...props }) => {
-  console.log("text");
-  console.log(text);
-  console.log("props.setInfoTooltipContent");
-  console.log(props.setInfoTooltipContent);
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer}>{text}</div>
   );
