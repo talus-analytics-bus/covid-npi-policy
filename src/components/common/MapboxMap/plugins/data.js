@@ -642,6 +642,13 @@ export const tooltipGetter = async ({
       }
 
       if (k === "-9999") {
+        item.unit = (
+          <span>
+            {item.unit}
+            <br />
+            in past 7 days
+          </span>
+        );
         tooltip.tooltipHeaderMetric = item;
         continue;
       } else {

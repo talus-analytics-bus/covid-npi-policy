@@ -69,9 +69,10 @@
       .metricHeader {
         display: flex;
         font-family: "Rawline Medium", serif;
+        justify-content: flex-end;
         .label {
-          font-size: 0.92rem;
-          margin-bottom: 20px;
+          font-size: 0.9rem;
+          max-width: 200px;
         }
       }
       .metricContent {
@@ -82,22 +83,26 @@
         .value {
           color: $dark-blue;
           font-weight: 600;
-          font-size: 1.5rem;
+          font-size: 2rem;
           display: flex;
-          align-items: baseline;
+          align-items: center;
           justify-content: flex-end;
+          margin-bottom: 0.5rem;
+
           .unit {
-            font-weight: bold;
-            max-width: 125px;
+            font-weight: 600;
             font-size: 1.1rem;
             line-height: 1.1;
-            // font-family: "Open Sans", sans-serif;
+            text-align: left;
+            position: relative;
+            top: -2px;
           }
         }
         .trend {
           text-transform: none;
           display: flex;
           align-items: center;
+          justify-content: flex-end;
           @include spaceItemsHoriz(10px);
           .sentiment {
             font-weight: 600;
@@ -123,8 +128,8 @@
             & + div {
               max-width: 125px;
               font-size: 0.8rem;
-              line-height: 1.1;
-              margin-top: 3px;
+              line-height: 1;
+              margin-top: -5px;
               font-family: "Open Sans", sans-serif;
             }
 

@@ -33,17 +33,16 @@ const MapTooltip = ({
           {dHeader && (
             <div className={styles.metric}>
               <React.Fragment>
-                {
-                  //   <div className={styles.metricHeader}>
-                  //   <div className={styles.label}>{dHeader.label}</div>
-                  // </div>
-                }
-
                 <div className={styles.metricContent}>
                   <div className={styles.value}>
                     {dHeader.value}&nbsp;
                     <div className={styles.unit}>{dHeader.unit}</div>
                   </div>
+                  {
+                    // <div className={styles.metricHeader}>
+                    //   <div className={styles.label}>{dHeader.label}</div>
+                    // </div>
+                  }
                   {
                     // if trend information available, visualize it
                   }
