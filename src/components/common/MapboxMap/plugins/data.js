@@ -39,7 +39,7 @@ export const defaults = {
   mapId: "us",
 
   // default date for map to start on
-  date: "2020-03-16",
+  date: "2020-03-17",
   // date: today.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
@@ -170,6 +170,21 @@ export const mapMetrics = {
       },
       id: "-9999",
       featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-transp" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: true,
+      styleOptions: { outline: true, pattern: true }
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle", "fill"],
+      params: {
+        metric_id: -9997,
+        temporal_resolution: "daily",
+        spatial_resolution: "state"
+      },
+      id: "-9997",
+      featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
@@ -267,7 +282,15 @@ export const metricMeta = {
   get "-9997"() {
     return {
       ...this["-9999"],
-      metric_displayname: "Test metric -9997",
+      metric_displayname: "Cumulative caseload (up to date selected)",
+      unit: v => (v === 1 ? "total case" : "total cases"),
+      trendTimeframe: (
+        <React.Fragment>
+          in last
+          <br />
+          24 hours
+        </React.Fragment>
+      ),
       legendInfo: {
         ...this["-9999"].legendInfo,
         circle: {
@@ -530,6 +553,7 @@ export const tooltipGetter = async ({
           method: "post",
           filters: {
             area1: [d.properties.state_name],
+            level: ["State / Province"],
             dates_in_effect: [apiDate, apiDate],
             primary_ph_measure: filters.primary_ph_measure,
             ph_measure_details: filters.ph_measure_details
@@ -649,6 +673,10 @@ export const tooltipGetter = async ({
             in past 7 days
           </span>
         );
+        tooltip.tooltipHeaderMetric = item;
+        continue;
+      } else if (k === "-9997") {
+        item.unit = <span>{item.unit}</span>;
         tooltip.tooltipHeaderMetric = item;
         continue;
       } else {

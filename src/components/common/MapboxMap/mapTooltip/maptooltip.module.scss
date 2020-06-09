@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    @include spaceItemsHoriz(10px);
+    @include spaceItemsHoriz(50px);
 
     .titles {
       max-width: 18rem;
@@ -81,7 +81,7 @@
       .metricContent {
         display: flex;
         flex-flow: column;
-        text-align: right;
+        // text-align: right;
         // @include spaceItemsHoriz(30px);
         .value {
           color: $dark-blue;
