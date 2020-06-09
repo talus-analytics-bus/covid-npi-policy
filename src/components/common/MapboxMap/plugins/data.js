@@ -236,6 +236,8 @@ export const metricMeta = {
     return {
       ...this["74"],
       metric_displayname: "Cumulative caseload (up to date selected)",
+      metric_definition:
+        "The total cumulative number of COVID-19 cases in the state as of the indicated date",
       unit: v => (v === 1 ? "total case" : "total cases"),
       trendTimeframe: (
         <React.Fragment>
