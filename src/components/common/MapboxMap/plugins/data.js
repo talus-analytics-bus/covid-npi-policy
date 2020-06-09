@@ -560,6 +560,7 @@ export const tooltipGetter = async ({
                   onClick={() => {
                     plugins.setInitDataFilters({
                       primary_ph_measure: filters.primary_ph_measure,
+                      ph_measure_details: filters.ph_measure_details || [],
                       dates_in_effect: filters.dates_in_effect,
                       iso3: ["United States"],
                       area1: [d.properties.state_name],
