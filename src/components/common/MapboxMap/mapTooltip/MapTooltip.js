@@ -18,6 +18,7 @@ const MapTooltip = ({
   actions = [],
   ...props
 }) => {
+  const dHeader = props.tooltipHeaderMetric;
   return (
     <div className={styles.mapTooltip}>
       {
@@ -29,13 +30,49 @@ const MapTooltip = ({
             <div className={styles.title}>{tooltipHeader.title}</div>
             <div className={styles.subtitle}>{tooltipHeader.subtitle}</div>
           </div>
-          <div className={styles.infographic}>
-            <span>
-              Placeholder: COVID caseload
-              <br />
-              and trend
-            </span>
-          </div>
+          {dHeader && (
+            <div className={styles.metric}>
+              <React.Fragment>
+                {
+                  //   <div className={styles.metricHeader}>
+                  //   <div className={styles.label}>{dHeader.label}</div>
+                  // </div>
+                }
+
+                <div className={styles.metricContent}>
+                  <div className={styles.value}>
+                    {dHeader.value}&nbsp;
+                    <div className={styles.unit}>{dHeader.unit}</div>
+                  </div>
+                  {
+                    // if trend information available, visualize it
+                  }
+                  {dHeader.trend && (
+                    <div
+                      className={classNames(
+                        styles.trend,
+                        ...dHeader.trend.classes.map(d => styles[d])
+                      )}
+                    >
+                      <div
+                        className={classNames(
+                          styles.sentiment,
+                          styles[dHeader.trend.noun.replace(" ", "-")]
+                        )}
+                      >
+                        {dHeader.trend.pct !== 0 && (
+                          <span>{dHeader.trend.pct_fmt}&nbsp;</span>
+                        )}
+                      </div>{" "}
+                      <div>
+                        {dHeader.trend.noun} {dHeader.trend.timeframe}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </React.Fragment>
+            </div>
+          )}
         </div>
       )}
       {

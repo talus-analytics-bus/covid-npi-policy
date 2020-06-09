@@ -163,7 +163,6 @@ export const mapMetrics = {
     {
       queryFunc: ObservationQuery,
       for: ["circle", "fill"],
-      display_name: "Test metric -9999",
       params: {
         metric_id: -9999,
         temporal_resolution: "daily",
@@ -203,16 +202,22 @@ export const metricMeta = {
     metric_definition: "Test definition",
 
     // metric name displayed on front-end
-    metric_displayname: "Test metric -9999",
+    metric_displayname: "New COVID-19 cases in past 7 days (notional)",
 
     // value formatter for metric
     value: v => comma(v),
 
     // unit label formatter for metric
-    unit: v => (v === 1 ? "unit" : "units"),
+    unit: v => (v === 1 ? "new case" : "new cases"),
 
     // if metric has trends, the label describing timeframe of those trends
-    trendTimeframe: "over prior 24 hours",
+    trendTimeframe: (
+      <React.Fragment>
+        over
+        <br />
+        prior 7 days
+      </React.Fragment>
+    ),
 
     // legend styling information
     legendInfo: {
@@ -636,8 +641,13 @@ export const tooltipGetter = async ({
         };
       }
 
-      // add item to tooltip content
-      tooltip.tooltipMainContent.push(item);
+      if (k === "-9999") {
+        tooltip.tooltipHeaderMetric = item;
+        continue;
+      } else {
+        // add item to tooltip content
+        tooltip.tooltipMainContent.push(item);
+      }
     }
   }
   if (callback) callback();

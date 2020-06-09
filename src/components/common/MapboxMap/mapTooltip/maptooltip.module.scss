@@ -30,9 +30,6 @@
       font-style: italic;
       color: gray;
     }
-    .metric {
-      font-size: 1rem;
-    }
   }
   .content {
     padding: $padding;
@@ -40,10 +37,22 @@
     flex-flow: column;
     @include borderItemsVert(20px);
     border-radius: 0 0 4px 4px;
-
+  }
+  .actions {
+    border-top: none !important;
+    margin-top: 0 !important;
+    margin-left: auto;
+    button {
+      color: white;
+      @include btn-primary();
+    }
+  }
+  .header,
+  .content {
     .metric {
       display: flex;
       flex-flow: column;
+      font-size: 1rem;
       &.policyStatus {
         flex-flow: row;
         @include spaceItemsHoriz(40px);
@@ -67,24 +76,35 @@
       }
       .metricContent {
         display: flex;
-        @include spaceItemsHoriz(60px);
+        flex-flow: column;
+        text-align: right;
+        // @include spaceItemsHoriz(30px);
         .value {
           color: $dark-blue;
           font-weight: 600;
-          font-size: 2.4rem;
+          font-size: 1.5rem;
+          display: flex;
+          align-items: baseline;
+          justify-content: flex-end;
           .unit {
-            font-weight: normal;
-            font-size: 1rem;
+            font-weight: bold;
+            max-width: 125px;
+            font-size: 1.1rem;
+            line-height: 1.1;
+            // font-family: "Open Sans", sans-serif;
           }
         }
         .trend {
           text-transform: none;
+          display: flex;
+          align-items: center;
+          @include spaceItemsHoriz(10px);
           .sentiment {
             font-weight: 600;
             white-space: nowrap;
             width: min-content;
             font-family: "Rawline", serif;
-            font-size: 1.12rem;
+            font-size: 1rem;
             i {
               font-size: 1.15em;
               vertical-align: middle;
@@ -102,9 +122,10 @@
 
             & + div {
               max-width: 125px;
-              font-size: 0.9rem;
+              font-size: 0.8rem;
               line-height: 1.1;
               margin-top: 3px;
+              font-family: "Open Sans", sans-serif;
             }
 
             &.increase {
@@ -122,15 +143,6 @@
           }
         }
       }
-    }
-  }
-  .actions {
-    border-top: none !important;
-    margin-top: 0 !important;
-    margin-left: auto;
-    button {
-      color: white;
-      @include btn-primary();
     }
   }
 }
