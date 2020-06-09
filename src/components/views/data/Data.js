@@ -24,7 +24,12 @@ import downloadSvg from "../../../assets/icons/download.svg";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // primary data viewing and download page
-const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
+const Data = ({
+  setLoading,
+  setInfoTooltipContent,
+  setPage,
+  initDataFilters
+}) => {
   const [initializing, setInitializing] = useState(true);
   const [docType, setDocType] = useState("policy");
 
@@ -44,7 +49,10 @@ const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
 
   // define filters
   // TODO parse by policy/plan
-  const [filters, setFilters] = useState({});
+  // const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState(
+    initDataFilters !== null ? initDataFilters : {}
+  );
 
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -336,7 +344,6 @@ const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
     // non-date filters
     // TODO move this out of main code if possible
     if (initializing) {
-      setInitializing(false);
       const optionsets = results["optionsets"];
 
       // set options for filters
@@ -354,6 +361,7 @@ const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
         }
       });
       setFilterDefs(newFilterDefs);
+      setInitializing(false);
     }
   };
 
@@ -363,7 +371,7 @@ const Data = ({ setLoading, setInfoTooltipContent, setPage }) => {
     setPage("data");
 
     // get page data
-    getData();
+    getData(filters);
   }, []);
 
   // when filters are changed, retrieve filtered data

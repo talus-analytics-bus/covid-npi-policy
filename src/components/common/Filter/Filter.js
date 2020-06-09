@@ -39,6 +39,10 @@ const Filter = ({
   ...props
 }) => {
   const [show, setShow] = useState(false);
+  const initSelectedItems =
+    filters[field] !== undefined
+      ? items.filter(d => filters[field].includes(d.value))
+      : [];
   const primaryFiltersOff =
     primary !== undefined &&
     (filters[primary] === undefined || filters[primary].length === 0);
@@ -46,7 +50,7 @@ const Filter = ({
   const disabled = primaryFiltersOff;
   const [filterState, setFilterState] = useState({
     items,
-    selectedItems: []
+    selectedItems: initSelectedItems
   });
   const [showRangeSelection, setShowRangeSelection] = useState(false);
   const initDateRangeState = [
@@ -125,11 +129,21 @@ const Filter = ({
         }
       } else {
         if (filters[field] !== undefined) {
+          // if (filters[field] !== undefined && items !== undefined) {
+
           const curFilters = filterState.selectedItems;
           const newFilters = curFilters.filter(
             d => filters[field].includes(d.value) || filters[field].includes(d)
           );
+
           updatedSelectedItems = newFilters;
+          console.log("filterState");
+          console.log(filterState);
+          console.log("newFilters");
+          console.log(newFilters);
+          console.log("filters[field]");
+          console.log(filters[field]);
+
           setFilterState({
             ...filterState,
             selectedItems: updatedSelectedItems

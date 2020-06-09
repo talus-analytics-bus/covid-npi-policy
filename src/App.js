@@ -24,6 +24,9 @@ import loadingSvg from "./assets/images/loading.svg";
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(null);
+  const [initDataFilters, setInitDataFilters] = useState({
+    primary_ph_measure: ["Social distancing"]
+  });
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const toggleLoading = v => setLoading(v);
 
@@ -88,7 +91,12 @@ const App = () => {
                   render={() => {
                     return (
                       <Data
-                        {...{ setLoading, setPage, setInfoTooltipContent }}
+                        {...{
+                          setLoading,
+                          setPage,
+                          setInfoTooltipContent,
+                          initDataFilters
+                        }}
                       />
                     );
                   }}

@@ -26,6 +26,8 @@ const FilterSet = ({
   disabledValues = ["Country"],
   ...props
 }) => {
+  console.log("filters");
+  console.log(filters);
   const [activeFilter, setActiveFilter] = useState(null);
   const filterGroups = [];
   const filterDefsObj = {};

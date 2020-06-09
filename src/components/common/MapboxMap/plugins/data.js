@@ -9,6 +9,7 @@
 
 // standard packages
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 // 3rd party packages
 import * as d3 from "d3/dist/d3.min";
@@ -553,11 +554,21 @@ export const tooltipGetter = async ({
         tooltip.actions =
           nPolicies > 0
             ? [
-                <button key={"view"}>
-                  View details for{" "}
-                  {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
-                  {nPolicies === 1 ? "policy" : "policies"}
-                </button>
+                <Link
+                  key={"view"}
+                  to={{
+                    pathname: "/",
+                    // search: "?sort=name",
+                    // hash: "#the-hash",
+                    state: { fromMap: true }
+                  }}
+                >
+                  <button>
+                    View details for{" "}
+                    {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
+                    {nPolicies === 1 ? "policy" : "policies"}
+                  </button>
+                </Link>
               ]
             : [];
         tooltip.tooltipHeader.subtitle = (
