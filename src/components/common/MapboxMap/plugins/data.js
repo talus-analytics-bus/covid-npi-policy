@@ -691,8 +691,8 @@ const TableDrawers = ({ tables, geometryName, ...props }) => {
                 </tr>
               </thead>
               <tbody>
-                {d.rows.map(dd => (
-                  <tr>
+                {d.rows.map((dd, ii) => (
+                  <tr key={dd.desc + " - " + ii}>
                     <td>
                       <ShowMore {...{ text: dd.desc, charLimit: 100 }} />
                     </td>
