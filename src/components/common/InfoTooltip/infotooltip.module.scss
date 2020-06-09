@@ -18,6 +18,7 @@
   display: inline-flex;
   margin: 0 5px;
   position: relative;
+  pointer-events: all;
 
   img {
     $size: 15px;

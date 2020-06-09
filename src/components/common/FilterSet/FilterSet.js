@@ -83,7 +83,7 @@ const FilterSet = ({
    */
   const getBadge = ({ label, field, value }) => {
     return (
-      <div className={styles.badge}>
+      <div className={styles.badge} key={field + "-" + value}>
         <span>
           <span className={styles.label}>{label}:</span>
           <span className={styles.value}> {value}</span>
@@ -125,7 +125,7 @@ const FilterSet = ({
         <div className={styles.badges}>
           {!isEmpty(filters) &&
             Object.entries(filters).map(([field, values]) => (
-              <React.Fragment>
+              <React.Fragment key={field + "-" + values.join("-")}>
                 {!filterDefsObj[field].dateRange &&
                   values.map(value =>
                     getBadge({

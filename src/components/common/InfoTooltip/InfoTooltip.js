@@ -9,6 +9,10 @@ import ReactTooltip from "react-tooltip";
  * @method InfoTooltip
  */
 const InfoTooltip = ({ id, text, ...props }) => {
+  console.log("text");
+  console.log(text);
+  console.log("props.setInfoTooltipContent");
+  console.log(props.setInfoTooltipContent);
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer}>{text}</div>
   );
@@ -26,6 +30,8 @@ const InfoTooltip = ({ id, text, ...props }) => {
         src={imgSrc}
         onMouseOver={() => {
           if (bindWithFunction) {
+            console.log("dataHtml");
+            console.log(dataHtml);
             props.setInfoTooltipContent(dataHtml);
           }
         }}

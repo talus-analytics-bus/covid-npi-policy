@@ -684,9 +684,10 @@ const TableDrawers = ({ tables, geometryName, ...props }) => {
   return (
     <div className={styles.table}>
       {tables.map((d, i) => (
-        <React.Fragment>
+        <React.Fragment
+          key={d.ph_measure_details + "-" + geometryName + "-" + i}
+        >
           <TableDrawer
-            key={d.ph_measure_details}
             id={d.ph_measure_details}
             open={d.ph_measure_details === openTableDrawer}
             openTableDrawer={openTableDrawer}

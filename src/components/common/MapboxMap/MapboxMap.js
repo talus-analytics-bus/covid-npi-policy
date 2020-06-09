@@ -439,7 +439,9 @@ const MapboxMap = ({
           // if there was a lnglat point returned to check, proceed
           if (e.point !== null) {
             // get all features in the list of layers to check
-            const layers = [circle + "-circle", fill + "-fill"];
+            const layers = [];
+            if (circle) layers.push(circle + "-circle");
+            if (fill) layers.push(fill + "-fill");
             const features = map.queryRenderedFeatures(e.point, {
               layers: layers
             });
