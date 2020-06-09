@@ -14,9 +14,6 @@ export const ShowMore = ({ text = "", charLimit = 30, wordLimit = null }) => {
   // if text is less than the limit don't implement
   const textShortEnough = text.length < charLimit;
 
-  console.log("textShortEnough");
-  console.log(textShortEnough);
-
   // true if "read more" is fully opened, false otherwise
   const [expanded, setExpanded] = useState(false);
 

@@ -197,8 +197,6 @@ const Filter = ({
       }
     }
   }, [dateRangeState]);
-  console.log("className");
-  console.log(className);
   const showSelectAll = items && items.length > 4;
   let responsiveHeight = 0;
   if (items !== undefined) {
