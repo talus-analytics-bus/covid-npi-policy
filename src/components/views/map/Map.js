@@ -309,25 +309,27 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
                   />,
 
                   // circle metric radio toggle
-                  <RadioToggle
-                    {...{
-                      // TODO define choices based on current mapType
-                      setInfoTooltipContent: props.setInfoTooltipContent,
-                      choices: mapMetrics[mapId]
-                        .filter(d => d.for.includes("circle"))
-                        .map(d => {
-                          return {
-                            value: d.id,
-                            name: metricMeta[d.id].metric_displayname,
-                            tooltip: metricMeta[d.id].metric_definition
-                          };
-                        }),
-                      curVal: circle,
-                      callback: setCircle,
-                      label: "View COVID count by",
-                      key: "RadioToggle1"
-                    }}
-                  />
+                  circle !== null && (
+                    <RadioToggle
+                      {...{
+                        // TODO define choices based on current mapType
+                        setInfoTooltipContent: props.setInfoTooltipContent,
+                        choices: mapMetrics[mapId]
+                          .filter(d => d.for.includes("circle"))
+                          .map(d => {
+                            return {
+                              value: d.id,
+                              name: metricMeta[d.id].metric_displayname,
+                              tooltip: metricMeta[d.id].metric_definition
+                            };
+                          }),
+                        curVal: circle,
+                        callback: setCircle,
+                        label: "View COVID count by",
+                        key: "RadioToggle1"
+                      }}
+                    />
+                  )
                 ].map(d => d)}
               </div>
             )

@@ -554,33 +554,37 @@ const MapboxMap = ({
               // fill legend entry
               // note: legend entries are listed in reverse order
             }
-            <Legend
-              {...{
-                setInfoTooltipContent: props.setInfoTooltipContent,
-                className: "mapboxLegend",
-                key: "basemap - quantized",
-                metric_definition: metricMeta[circle].metric_definition,
-                metric_displayname: (
-                  <span>{metricMeta[circle].metric_displayname}</span>
-                ),
-                ...metricMeta[circle].legendInfo.circle
-              }}
-            />
+            {circle !== null && (
+              <Legend
+                {...{
+                  setInfoTooltipContent: props.setInfoTooltipContent,
+                  className: "mapboxLegend",
+                  key: "basemap - quantized",
+                  metric_definition: metricMeta[circle].metric_definition,
+                  metric_displayname: (
+                    <span>{metricMeta[circle].metric_displayname}</span>
+                  ),
+                  ...metricMeta[circle].legendInfo.circle
+                }}
+              />
+            )}
             {
               // circle legend entry
             }
-            <Legend
-              {...{
-                setInfoTooltipContent: props.setInfoTooltipContent,
-                className: "mapboxLegend",
-                key: "bubble - linear",
-                metric_definition: metricMeta[fill].metric_definition,
-                metric_displayname: (
-                  <span>{getFillLegendName({ filters })}</span>
-                ),
-                ...metricMeta[fill].legendInfo.fill
-              }}
-            />
+            {fill !== null && (
+              <Legend
+                {...{
+                  setInfoTooltipContent: props.setInfoTooltipContent,
+                  className: "mapboxLegend",
+                  key: "bubble - linear",
+                  metric_definition: metricMeta[fill].metric_definition,
+                  metric_displayname: (
+                    <span>{getFillLegendName({ filters })}</span>
+                  ),
+                  ...metricMeta[fill].legendInfo.fill
+                }}
+              />
+            )}
           </div>
         )}
       </div>

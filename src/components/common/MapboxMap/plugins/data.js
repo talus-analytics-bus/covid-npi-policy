@@ -39,8 +39,8 @@ export const defaults = {
   mapId: "us",
 
   // default date for map to start on
-  date: "2020-03-17",
-  // date: today.format("YYYY-MM-DD"),
+  // date: "2020-03-17",
+  date: today.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
@@ -52,7 +52,7 @@ export const defaults = {
   // defaults for map with ID `us`
   us: {
     // id of default circle metric
-    circle: "-9999",
+    circle: null,
     // id of default fill metric
     fill: "policy_status",
     // base layer immediately behind which layers should be appended to map
@@ -66,54 +66,6 @@ export const defaults = {
 export const mapMetrics = {
   // map ID of map in which metrics are used
   us: [
-    // {
-    //   // functions that, when passed `params`, returns the data for the map
-    //   // for this metric
-    //   queryFunc: ObservationQuery,
-    //
-    //   // params that must be passed to `queryFunc` as object
-    //   params: {
-    //     metric_id: -9997,
-    //     temporal_resolution: "daily",
-    //     spatial_resolution: "state"
-    //   },
-    //
-    //   // array of layer types for which this metric is used
-    //   for: ["circle", "fill"],
-    //
-    //   // unique ID of this metric
-    //   id: "-9997",
-    //
-    //   // data field with which to link metric to features;
-    //   // features potentially linking to this metric must have an ID that
-    //   // matches the value for this key for the datum
-    //   featureLinkField: "place_name",
-    //
-    //   // OPTIONAL:
-    //   // style IDs to use for the metric for each layer type -- if none are
-    //   // defined, then the metric's ID will be used to look up the appropriate
-    //   // style.
-    //   styleId: { fill: "metric-test", circle: "metric-test-transp" },
-    //
-    //   // filter to control what features are returned for layers that are
-    //   // displaying this metric
-    //   filter: ["==", ["get", "type"], "state"],
-    //
-    //   // whether trend data should be retrieved for this metric
-    //   // NOTE: only applies to generalized metrics
-    //   trend: true,
-    //
-    //   // info about layers that use this metric
-    //   styleOptions: {
-    //     // whether layers that display this metric should be outlined
-    //     // NOTE: if true, an outline style must be defined in `./layers.js`
-    //     outline: true,
-    //
-    //     // whether layers that display this metric should have a pattern layers
-    //     // NOTE: if true, a pattern style must be defined in `./layers.js`
-    //     pattern: true
-    //   }
-    // },
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
@@ -159,37 +111,37 @@ export const mapMetrics = {
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
       }
-    },
-    {
-      queryFunc: ObservationQuery,
-      for: ["circle", "fill"],
-      params: {
-        metric_id: -9999,
-        temporal_resolution: "daily",
-        spatial_resolution: "state"
-      },
-      id: "-9999",
-      featureLinkField: "place_name",
-      styleId: { fill: "metric-test", circle: "metric-test-transp" },
-      filter: ["==", ["get", "type"], "state"],
-      trend: true,
-      styleOptions: { outline: true, pattern: true }
-    },
-    {
-      queryFunc: ObservationQuery,
-      for: ["circle", "fill"],
-      params: {
-        metric_id: -9997,
-        temporal_resolution: "daily",
-        spatial_resolution: "state"
-      },
-      id: "-9997",
-      featureLinkField: "place_name",
-      styleId: { fill: "metric-test", circle: "metric-test-solid" },
-      filter: ["==", ["get", "type"], "state"],
-      trend: true,
-      styleOptions: { outline: true, pattern: true }
     }
+    // {
+    //   queryFunc: ObservationQuery,
+    //   for: ["circle", "fill"],
+    //   params: {
+    //     metric_id: -9999,
+    //     temporal_resolution: "daily",
+    //     spatial_resolution: "state"
+    //   },
+    //   id: "-9999",
+    //   featureLinkField: "place_name",
+    //   styleId: { fill: "metric-test", circle: "metric-test-transp" },
+    //   filter: ["==", ["get", "type"], "state"],
+    //   trend: true,
+    //   styleOptions: { outline: true, pattern: true }
+    // },
+    // {
+    //   queryFunc: ObservationQuery,
+    //   for: ["circle", "fill"],
+    //   params: {
+    //     metric_id: -9997,
+    //     temporal_resolution: "daily",
+    //     spatial_resolution: "state"
+    //   },
+    //   id: "-9997",
+    //   featureLinkField: "place_name",
+    //   styleId: { fill: "metric-test", circle: "metric-test-solid" },
+    //   filter: ["==", ["get", "type"], "state"],
+    //   trend: true,
+    //   styleOptions: { outline: true, pattern: true }
+    // }
   ],
   global: [
     {
