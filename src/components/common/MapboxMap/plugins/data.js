@@ -385,8 +385,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
         typeof d.params === "function"
           ? d.params({ date, mapId, filters, map })
           : d.params;
-      console.log("params");
-      console.log(params);
+
       // add base data query
       queryDefs[d.id] = {
         queryFunc: d.queryFunc,
@@ -440,8 +439,6 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   // }
 
   // return results
-  console.log("results");
-  console.log(results);
   return results;
 };
 
