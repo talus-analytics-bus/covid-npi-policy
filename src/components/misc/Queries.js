@@ -149,7 +149,7 @@ export const Export = async function({ method, filters = null }) {
 export const OptionSet = async function({
   method,
   fields = null,
-  entity_name = null,
+  // entity_name = null,
   ...params
 }) {
   let req;
@@ -157,17 +157,18 @@ export const OptionSet = async function({
     if (fields === null) {
       console.log("Error: `fields` is required for method GET.");
       return false;
-    } else if (entity_name === null) {
-      console.log("Error: `entity_name` is required for method GET.");
-      return false;
     }
+    // else if (entity_name === null) {
+    //   console.log("Error: `entity_name` is required for method GET.");
+    //   return false;
+    // }
 
     // collate fields
     const params = new URLSearchParams();
     fields.forEach(d => {
       params.append("fields", d);
     });
-    params.set("entity_name", entity_name);
+    // params.set("entity_name", entity_name);
 
     req = await axios.get(`${API_URL}/get/optionset`, {
       params
