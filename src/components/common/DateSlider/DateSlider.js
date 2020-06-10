@@ -136,7 +136,7 @@ const DateSlider = ({ label, date, setDate, minDate, maxDate, ...props }) => {
     let cur;
     const newPlayTimeouts = [];
     while (prev < sliderMaxValue) {
-      cur = prev + 1;
+      cur = Math.min(prev + 7, sliderMaxValue);
       prev = cur;
       const timeoutPrev = prev;
 
@@ -148,7 +148,7 @@ const DateSlider = ({ label, date, setDate, minDate, maxDate, ...props }) => {
           // update dates, etc.
           handleSliderChange(timeoutPrev);
           setCurSliderVal(timeoutPrev);
-        }, 200 * i)
+        }, 1000 * i)
       );
       i = i + 1;
     }
