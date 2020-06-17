@@ -6,7 +6,7 @@
 }
 
 .table {
-  font-family: "Rawline Medium", serif;
+  font-family: "rawline", serif;
   display: flex;
   flex-flow: column;
   @include borderItemsVert(20px);

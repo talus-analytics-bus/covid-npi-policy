@@ -11,7 +11,7 @@
   .header {
     background-color: $light-gray-2;
     padding: $padding;
-    font-family: "Rawline", serif;
+    font-family: "rawline", serif;
     border-radius: 4px 4px 0 0;
     display: flex;
     align-items: center;
@@ -71,7 +71,7 @@
       }
       .metricHeader {
         display: flex;
-        font-family: "Rawline Medium", serif;
+        font-family: "rawline", serif;
         justify-content: flex-end;
         .label {
           font-size: 0.9rem;
@@ -110,7 +110,7 @@
             font-weight: 600;
             white-space: nowrap;
             width: min-content;
-            font-family: "Rawline", serif;
+            font-family: "rawline", serif;
             font-size: 1rem;
             i {
               font-size: 1.15em;
