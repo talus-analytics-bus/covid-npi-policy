@@ -39,8 +39,8 @@ export const defaults = {
   mapId: "us",
 
   // default date for map to start on
-  // date: "2020-03-17",
-  date: today.format("YYYY-MM-DD"),
+  date: "2020-04-29",
+  // date: today.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
@@ -54,7 +54,7 @@ export const defaults = {
     // id of default circle metric
     circle: "74",
     // id of default fill metric
-    fill: "policy_status",
+    fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points"
   },
@@ -113,8 +113,58 @@ export const mapMetrics = {
       }
     },
     {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        const lockdownFilters = {
+          ...filters,
+          lockdown_level: ["lockdown_level"]
+        };
+        return { method: "post", filters: lockdownFilters, geo_res: "state" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "lockdown_level",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "lockdown_level" },
+
+      // filter to control what features are returned for layers that are
+      // displaying this metric
+      filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        pattern: true
+      }
+    },
+    {
       queryFunc: ObservationQuery,
-      for: ["circle", "fill"],
+      for: ["circle"],
       params: {
         metric_id: 74,
         temporal_resolution: "daily",
@@ -129,7 +179,7 @@ export const mapMetrics = {
     },
     {
       queryFunc: ObservationQuery,
-      for: ["circle", "fill"],
+      for: ["circle"],
       params: {
         metric_id: 72,
         temporal_resolution: "daily",
@@ -320,6 +370,44 @@ export const metricMeta = {
         //   bubble: { min: "Low", max: "High" },
         //   basemap: { min: "Minimal", max: "High" }
         // }
+      }
+      // circle: {
+      //   for: "bubble",
+      //   type: "continuous",
+      //   outline: "#e65d36",
+      //   colorscale: d3
+      //     .scaleLinear()
+      //     .domain([0, 100])
+      //     .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
+      //   labels: {
+      //     bubble: { min: "Low", max: "High" },
+      //     basemap: { min: "Minimal", max: "High" }
+      //   }
+      // }
+    }
+  },
+  lockdown_level: {
+    metric_definition:
+      "The level of lockdown in the location on the specified date.",
+    metric_displayname: "Lockdown level",
+    value: v => v,
+    unit: v => "",
+    // trendTimeframe: "over prior 24 hours",
+    legendInfo: {
+      fill: {
+        for: "basemap", // TODO dynamically
+        type: "quantized",
+        labelsInside: true,
+        colorscale: d3
+          .scaleOrdinal()
+          .domain([
+            "no policy",
+            "unclear",
+            "new open",
+            "safer at home",
+            "stay at home"
+          ])
+          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
       }
       // circle: {
       //   for: "bubble",

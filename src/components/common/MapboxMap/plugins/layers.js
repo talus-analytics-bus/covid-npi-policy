@@ -175,6 +175,39 @@ const fillStyles = {
   },
   get "policy_status-outline"() {
     return this["metric-test-outline"];
+  },
+  // LOCKDOWN LEVEL STYLING
+  lockdown_level: key => {
+    return {
+      "fill-color": [
+        "case",
+        ["==", ["feature-state", key], null],
+        "#eaeaea",
+        ["==", ["feature-state", key], "Pre-covid"],
+        "transparent",
+        ["==", ["feature-state", key], "New open"],
+        "#BBDAF5",
+        ["==", ["feature-state", key], "Safer at home"],
+        "#86BFEB",
+        ["==", ["feature-state", key], "Stay at home"],
+        "#549FE2",
+        "#eaeaea"
+      ]
+    };
+  },
+  "lockdown_level-pattern": key => {
+    return {
+      "fill-pattern": "dots",
+      "fill-opacity": [
+        "case",
+        ["==", ["feature-state", key], "Pre-covid"],
+        1,
+        0
+      ]
+    };
+  },
+  get "lockdown_level-outline"() {
+    return this["policy_status-outline"];
   }
 };
 

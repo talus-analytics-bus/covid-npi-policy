@@ -58,18 +58,18 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
     {
-      lockdown_level: {
-        field: "lockdown_level",
-        label: "Data type",
-        radio: true,
-        defaultRadioValue: "primary_ph_measure",
-        entity_name: "Policy",
-        className: dark,
-        items: [
-          { id: 0, value: "primary_ph_measure", label: "Policy category" },
-          { id: 1, value: "lockdown_level", label: "Lockdown level" }
-        ]
-      },
+      // lockdown_level: {
+      //   field: "lockdown_level",
+      //   label: "Data type",
+      //   radio: true,
+      //   defaultRadioValue: "primary_ph_measure",
+      //   entity_name: "Policy",
+      //   className: dark,
+      //   items: [
+      //     { id: 0, value: "primary_ph_measure", label: "Policy category" },
+      //     { id: 1, value: "lockdown_level", label: "Lockdown level" }
+      //   ]
+      // },
       // name of filter (should match `field` below)
       primary_ph_measure: {
         // data field
@@ -273,9 +273,32 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
             content: (
               <div>
                 {[
+                  // fill metric radio toggle
+                  fill !== null && (
+                    <RadioToggle
+                      {...{
+                        // TODO define choices based on current mapType
+                        setInfoTooltipContent: props.setInfoTooltipContent,
+                        choices: mapMetrics[mapId]
+                          .filter(d => d.for.includes("fill"))
+                          .map(d => {
+                            return {
+                              value: d.id,
+                              name: metricMeta[d.id].metric_displayname,
+                              tooltip: metricMeta[d.id].metric_definition
+                            };
+                          }),
+                        curVal: fill,
+                        callback: setFill,
+                        label: "State fill data",
+                        key: "DataType"
+                      }}
+                    />
+                  ),
                   // Filter set containing the filters specified in `filterDefs`
                   <FilterSet
                     {...{
+                      disabled: fill !== "policy_status",
                       filterDefs,
                       filters,
                       setFilters,

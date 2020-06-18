@@ -9,7 +9,7 @@ import moment from "moment";
 import { InfoTooltip } from "../../common";
 
 // utilities
-import Util, { percentize } from "../../misc/Util.js";
+import Util, { percentize, isLightColor } from "../../misc/Util.js";
 
 // assets and styles
 import styles from "./legend.module.scss";
@@ -230,7 +230,8 @@ const Legend = ({ ...props }) => {
       const styleEntries = range.map(d => {
         if (d.startsWith("#"))
           return {
-            backgroundColor: d
+            backgroundColor: d,
+            color: isLightColor(d) ? "#333" : "white"
           };
         else {
           return {

@@ -23,6 +23,7 @@ const FilterSet = ({
   filterDefs,
   filters,
   setFilters,
+  disabled = false,
   disabledValues = ["Country"],
   ...props
 }) => {
@@ -153,7 +154,11 @@ const FilterSet = ({
 
   return (
     <React.Fragment>
-      <div className={styles.filterSet}>
+      <div
+        className={classNames(styles.filterSet, {
+          [styles.disabled]: disabled
+        })}
+      >
         {filterGroups.map(d => (
           <div
             key={d.map(dd => dd.key).join("-")}
