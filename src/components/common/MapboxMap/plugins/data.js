@@ -644,6 +644,12 @@ export const tooltipGetter = async ({
           tables.push({ ph_measure_details, rows });
           nPolicies += policiesOfCategory.length;
         }
+
+        // if no policies returned, then continue
+        if (nPolicies === 0) {
+          continue;
+        }
+
         // add actions for bottom of tooltip
         tooltip.actions =
           nPolicies > 0
@@ -680,13 +686,23 @@ export const tooltipGetter = async ({
                 </Link>
               ]
             : [];
-        tooltip.tooltipHeader.subtitle = (
+
+        const subtitleCategory =
+          plugins.fill !== "lockdown_level"
+            ? filters.primary_ph_measure[0].toLowerCase()
+            : "social distancing";
+        const subtitle = (
           <span>
+            {plugins.fill === "lockdown_level" && (
+              <span>
+                <b style={{ color: "#86bfeb" }}>{v}</b> with{" "}
+              </span>
+            )}
             {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
-            place for <b>{filters.primary_ph_measure[0].toLowerCase()}</b> on{" "}
-            {formattedDate}
+            place for <b>{subtitleCategory}</b> on {formattedDate}
           </span>
         );
+        tooltip.tooltipHeader.subtitle = subtitle;
         item.customContent = (
           <TableDrawers
             {...{ tables, geometryName: d.properties.state_name }}
