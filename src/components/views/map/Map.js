@@ -58,6 +58,18 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
     {
+      lockdown_level: {
+        field: "lockdown_level",
+        label: "Data type",
+        radio: true,
+        defaultRadioValue: "primary_ph_measure",
+        entity_name: "Policy",
+        className: dark,
+        items: [
+          { id: 0, value: "primary_ph_measure", label: "Policy category" },
+          { id: 1, value: "lockdown_level", label: "Lockdown level" }
+        ]
+      },
       // name of filter (should match `field` below)
       primary_ph_measure: {
         // data field
@@ -75,29 +87,6 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
 
         // default value of radio selections
         defaultRadioValue: "Social distancing"
-
-        // if applicable: the primary filter on which this one depends; if
-        // there is no value selected in the primary filter which is a group
-        // for values in the secondary (dependent) filter, the latter will
-        // show "no options" and not be usable
-
-        // // list of items for selection from filter
-        // items: [
-        //   {
-        //     // unique ID integer
-        //     id: 0,
-        //
-        //     // display value
-        //     label: "All",
-        //
-        //     // data value
-        //     value: "all"
-        //   },
-        //
-        //   // additional items
-        //   { id: 1, label: "Kentucky", value: "Kentucky" },
-        //   { id: 2, label: "Texas", value: "Texas" }
-        // ]
       },
 
       // additional filters
@@ -133,7 +122,7 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
         fields: filterDefs
           .map(d => Object.values(d).map(dd => dd))
           .flat()
-          .filter(d => !d.field.startsWith("date"))
+          .filter(d => !d.field.startsWith("date") && d.items === undefined)
           .map(d => {
             return d.entity_name + "." + d.field;
           }),
@@ -153,7 +142,8 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
     const newFilterDefs = [...filterDefs];
     newFilterDefs.forEach(d => {
       for (const [k, v] of Object.entries(d)) {
-        if (!k.startsWith("date")) d[k].items = optionsets[k];
+        if (!k.startsWith("date") && d[k].items === undefined)
+          d[k].items = optionsets[k];
         // if (k === "dates_in_effect") {
         //   // set min/max date range for daterange filters
         //   d[k].minMaxDate = {
