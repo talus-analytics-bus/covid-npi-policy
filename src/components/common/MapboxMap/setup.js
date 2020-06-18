@@ -353,16 +353,13 @@ export const addSources = (map, mapId) => {
 export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
   const sources = mapSources[mapId];
   const curMapMetrics = mapMetrics[mapId];
-  for (const [sourceTypeKey, source] of Object.entries(mapSources[mapId])) {
-    bindFeatureStatesForSource({
-      map,
-      sourceTypeKey,
-      source,
-      data,
-      curMapMetrics,
-      selectedFeature
-    });
-  }
+  bindFeatureStatesForSource({
+    map,
+    mvmNew: mapSources[mapId],
+    data,
+    curMapMetrics,
+    selectedFeature
+  });
 };
 
 /**
@@ -379,20 +376,19 @@ export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
  */
 const bindFeatureStatesForSource = ({
   map,
-  sourceTypeKey,
-  source,
+  // sourceTypeKey,
+  // source,
+  mvmNew,
   data,
   curMapMetrics,
   selectedFeature
 }) => {
-  // define standard layer list key, e.g., 'circleLayers', 'fillLayers', ...
-  const layerListKey = sourceTypeKey + "Layers";
+  for (const [sourceTypeKey, source] of Object.entries(mvmNew)) {
+    // define standard layer list key, e.g., 'circleLayers', 'fillLayers', ...
+    const layerListKey = sourceTypeKey + "Layers";
 
-  // if there are layers in this source, bind their feature states based on the
-  // current `data`
-  if (source[layerListKey] !== undefined) {
     // first erase original feature state for all features
-    source[layerListKey].forEach(layer => {
+    curMapMetrics.forEach(layer => {
       // get all features from source, using filter if defined
       const feats = map.querySourceFeatures(source.name, {
         sourceLayer: source.sourceLayer,
@@ -401,7 +397,6 @@ const bindFeatureStatesForSource = ({
 
       // get trend key (only applicable if trend is being tracked)
       const trendKey = layer.id.toString() + "-trend";
-
       // iterate over features and erase feature state relevant to this layer
       feats.forEach(f => {
         map.setFeatureState(
@@ -414,62 +409,63 @@ const bindFeatureStatesForSource = ({
         );
       });
     });
+  }
 
-    // for each layer defined for the source, get the data for that layer and
-    // bind it to any matching features in the source
-    curMapMetrics.forEach(layer => {
-      // source[sourceTypeKey + "Layers"].forEach(layer => {
-      // get data for layer features
-      const layerData = data[layer.id];
-      layerData.forEach(dd => {
-        // bind null value to feature if no data
-        const state = { circle: true };
-        if (dd.value === undefined || dd.value === null) {
-          state.nodata = true;
-          state[layer.id] = null;
-        } else {
-          // otherwise, bind data
-          state.nodata = false;
-          state[layer.id] = dd.value;
-        }
+  // for each layer defined for the source, get the data for that layer and
+  // bind it to any matching features in the source
+  curMapMetrics.forEach(layer => {
+    // get data for layer features
+    const layerData = data[layer.id];
+    layerData.forEach(dd => {
+      // bind null value to feature if no data
+      const state = {};
+      if (dd.value === undefined || dd.value === null) {
+        state.nodata = true;
+        state[layer.id] = null;
+      } else {
+        // otherwise, bind data
+        state.nodata = false;
+        state[layer.id] = dd.value;
+      }
 
-        // if layer incorporates trends, then look for and bind any trend data
-        // to the layer
-        const lookForTrendData = layer.trend === true;
-        if (lookForTrendData) {
-          // define standard trend key, e.g., "metric_name-trend"
-          const trendKey = layer.id + "-trend";
+      // if layer incorporates trends, then look for and bind any trend data
+      // to the layer
+      const lookForTrendData = layer.trend === true;
+      if (lookForTrendData) {
+        // define standard trend key, e.g., "metric_name-trend"
+        const trendKey = layer.id + "-trend";
 
-          // get trend datum associated with this main datum, if any
-          const trend = data[trendKey].find(
-            ddd => ddd.place_id === dd.place_id && ddd.end_date === dd.date_time
-          );
+        // get trend datum associated with this main datum, if any
+        const trend = data[trendKey].find(
+          ddd => ddd.place_id === dd.place_id && ddd.end_date === dd.date_time
+        );
 
-          // if one was found, calculate the percent change from 0..100 and add
-          // that value to the state
-          if (trend !== undefined) {
-            if (trend.start_obs === 0 && trend.end_obs !== 0) {
-              state[trendKey] = +Infinity;
-            } else if (trend.start_obs === 0 && trend.end_obs === 0) {
-              state[trendKey] = 0;
-            } else {
-              state[trendKey] =
-                (100 * (trend.end_obs - trend.start_obs)) / trend.start_obs;
-            }
+        // if one was found, calculate the percent change from 0..100 and add
+        // that value to the state
+        if (trend !== undefined) {
+          if (trend.start_obs === 0 && trend.end_obs !== 0) {
+            state[trendKey] = +Infinity;
+          } else if (trend.start_obs === 0 && trend.end_obs === 0) {
+            state[trendKey] = 0;
+          } else {
+            state[trendKey] =
+              (100 * (trend.end_obs - trend.start_obs)) / trend.start_obs;
           }
         }
+      }
 
-        // bind updated feature state to any feature that matches the
-        // feature props
+      // bind updated feature state to any feature that matches the
+      // feature props
+      for (const [sourceTypeKey, source] of Object.entries(mvmNew)) {
         const featureProps = {
           source: source.name,
           sourceLayer: source.sourceLayer,
           id: dd[layer.featureLinkField || "place_id"]
         };
         map.setFeatureState(featureProps, state);
-      });
+      }
     });
-  }
+  });
 };
 
 // /**

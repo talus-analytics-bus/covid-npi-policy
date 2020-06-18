@@ -123,6 +123,8 @@ export const mapMetrics = {
           ...filters,
           lockdown_level: ["lockdown_level"]
         };
+        // delete lockdownFilters.primary_ph_measure;
+        delete lockdownFilters.ph_measure_details;
         return { method: "post", filters: lockdownFilters, geo_res: "state" };
       },
 
@@ -556,12 +558,14 @@ export const tooltipGetter = async ({
     // add actions for bottom of tooltip
     // tooltip.actions = [<button key={"view"}>View details</button>];
     tooltip.actions = [];
+    tooltip.tooltipHeaderMetric = null;
   } else {
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.NAME,
       subtitle: formattedDate
     };
+
     // add actions for bottom of tooltip
     tooltip.actions = [<button key={"view"}>View country</button>];
   }
@@ -576,7 +580,14 @@ export const tooltipGetter = async ({
   // tooltip, otherwise skip
   for (const [k, v] of Object.entries(state)) {
     // skip metric unless it is to be included
-    if (!include.includes(k) || k.includes("-trend") || v === null) continue;
+    if (
+      !include.includes(k) ||
+      k.includes("-trend") ||
+      v === "null" ||
+      v === null ||
+      v < 0
+    )
+      continue;
     else {
       // get metric metadata
       const thisMetricMeta = metricMeta[k];
@@ -589,7 +600,7 @@ export const tooltipGetter = async ({
       };
 
       // SPECIAL METRICS // -------------------------------------------------//
-      if (k === "policy_status") {
+      if (k === "policy_status" || k === "lockdown_level") {
         const apiDate = date.format("YYYY-MM-DD");
         // get relevant policy data
         const policies = await Policy({
@@ -598,8 +609,17 @@ export const tooltipGetter = async ({
             area1: [d.properties.state_name],
             level: ["State / Province"],
             dates_in_effect: [apiDate, apiDate],
-            primary_ph_measure: filters.primary_ph_measure,
-            ph_measure_details: filters.ph_measure_details
+
+            // if doing lockdown level, only allow all social distancing
+            // policies to be returned
+            primary_ph_measure:
+              plugins.fill !== "lockdown_level"
+                ? filters.primary_ph_measure
+                : ["Social distancing"],
+            ph_measure_details:
+              plugins.fill !== "lockdown_level"
+                ? filters.ph_measure_details
+                : []
           },
           by_category: "ph_measure_details",
           fields: [
@@ -632,10 +652,18 @@ export const tooltipGetter = async ({
                   key={"view"}
                   onClick={() => {
                     plugins.setInitDataFilters({
-                      primary_ph_measure: filters.primary_ph_measure,
-                      ph_measure_details: filters.ph_measure_details || [],
+                      // if doing lockdown level, only allow all social distancing
+                      // policies to be returned
+                      primary_ph_measure:
+                        plugins.fill !== "lockdown_level"
+                          ? filters.primary_ph_measure
+                          : ["Social distancing"],
+                      ph_measure_details:
+                        plugins.fill !== "lockdown_level"
+                          ? filters.ph_measure_details || []
+                          : [],
                       dates_in_effect: filters.dates_in_effect,
-                      iso3: ["United States"],
+                      iso3: ["USA"],
                       area1: [d.properties.state_name],
                       level: ["State / Province"]
                     });

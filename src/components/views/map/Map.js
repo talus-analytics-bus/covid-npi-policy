@@ -178,7 +178,8 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
             fill,
             filters,
             plugins: {
-              setInitDataFilters
+              setInitDataFilters,
+              fill
             }
           }}
         />
