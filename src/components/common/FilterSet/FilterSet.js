@@ -7,6 +7,9 @@ import classNames from "classnames";
 // local functions
 import { getInputLabel } from "../Filter/Filter.js";
 
+// local components
+import { ShowMore } from "../";
+
 // misc
 import { isEmpty } from "../../misc/Util";
 
@@ -87,7 +90,10 @@ const FilterSet = ({
       <div className={styles.badge} key={field + "-" + value}>
         <span>
           <span className={styles.label}>{label}:</span>
-          <span className={styles.value}> {value}</span>
+          <span className={styles.value}>
+            {" "}
+            {<ShowMore text={value} charLimit={60} />}
+          </span>
         </span>
         <div
           className={styles.close}

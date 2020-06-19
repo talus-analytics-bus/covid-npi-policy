@@ -146,7 +146,10 @@ const Data = ({
     {
       dataField: "place.loc",
       header: "Affected location",
-      sort: true
+      sort: true,
+      formatter: v => {
+        return <ShowMore text={v} charLimit={60} />;
+      }
     },
     {
       dataField: "primary_ph_measure",
