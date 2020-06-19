@@ -54,6 +54,10 @@ const Data = ({
     initDataFilters !== null ? initDataFilters : {}
   );
 
+  // if (initDataFilters !== null) {
+  //   setLoading(true);
+  // }
+
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -370,6 +374,9 @@ const Data = ({
 
   // on initial page load, get all data and filter optionset values
   useEffect(() => {
+    // set loading spinner to visible
+    setLoading(true);
+
     // set current page
     setPage("data");
 

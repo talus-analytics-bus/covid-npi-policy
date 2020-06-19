@@ -116,19 +116,17 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
     const queries = {};
-    if (true) {
-      queries.optionsets = OptionSet({
-        method: "get",
-        fields: filterDefs
-          .map(d => Object.values(d).map(dd => dd))
-          .flat()
-          .filter(d => !d.field.startsWith("date") && d.items === undefined)
-          .map(d => {
-            return d.entity_name + "." + d.field;
-          }),
-        entity_name: "Policy"
-      });
-    }
+    queries.optionsets = OptionSet({
+      method: "get",
+      fields: filterDefs
+        .map(d => Object.values(d).map(dd => dd))
+        .flat()
+        .filter(d => !d.field.startsWith("date") && d.items === undefined)
+        .map(d => {
+          return d.entity_name + "." + d.field;
+        }),
+      entity_name: "Policy"
+    });
 
     const results = await execute({
       queries
@@ -144,13 +142,6 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
       for (const [k, v] of Object.entries(d)) {
         if (!k.startsWith("date") && d[k].items === undefined)
           d[k].items = optionsets[k];
-        // if (k === "dates_in_effect") {
-        //   // set min/max date range for daterange filters
-        //   d[k].minMaxDate = {
-        //     min: newMinMaxStartDate.min,
-        //     max: undefined
-        //   };
-        // }
       }
     });
     setFilterDefs(newFilterDefs);
@@ -190,6 +181,9 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
   // EFFECT HOOKS // -------------------------------------------------------------//
   // init
   useEffect(function initializeOptionSets() {
+    // set loading spinner to visible
+    setLoading(true);
+
     // set current page
     setPage("map");
 
