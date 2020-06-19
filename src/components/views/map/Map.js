@@ -168,6 +168,135 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
             circle,
             fill,
             filters,
+            overlays: (
+              <Drawer
+                {...{
+                  className: drawer,
+                  // if true, drawer floats at top of parent container and
+                  // content has translucent background
+                  float: true,
+
+                  // closed by default
+                  defaultClosed: true,
+
+                  // header of drawer (JSX)
+                  label: (
+                    <React.Fragment>
+                      {
+                        // Header
+                      }
+                      <h1>Map options</h1>
+
+                      {
+                        // Toggle between the possible maps
+                      }
+                      <RadioToggle
+                        {...{
+                          left: true,
+                          horizontal: true,
+                          setInfoTooltipContent: props.setInfoTooltipContent,
+                          choices: Object.values(mapStyles).map(
+                            ({ value, name, tooltip }) => {
+                              return {
+                                value,
+                                name,
+                                tooltip,
+                                disabled: value === "global"
+                              };
+                            }
+                          ),
+                          curVal: mapId,
+                          callback: setMapId,
+                          label: "Geographic resolution"
+                        }}
+                      />
+                      {
+                        // Display active date
+                      }
+                      <div>{date.format("MMM D, YYYY").toUpperCase()}</div>
+                    </React.Fragment>
+                  ),
+                  content: (
+                    <div>
+                      {[
+                        // fill metric radio toggle
+                        fill !== null && (
+                          <RadioToggle
+                            {...{
+                              // TODO define choices based on current mapType
+                              setInfoTooltipContent:
+                                props.setInfoTooltipContent,
+                              choices: mapMetrics[mapId]
+                                .filter(d => d.for.includes("fill"))
+                                .map(d => {
+                                  return {
+                                    value: d.id,
+                                    name: metricMeta[d.id].metric_displayname,
+                                    tooltip: metricMeta[d.id].metric_definition
+                                  };
+                                }),
+                              curVal: fill,
+                              callback: setFill,
+                              label: "State fill data",
+                              key: "DataType"
+                            }}
+                          />
+                        ),
+                        // Filter set containing the filters specified in `filterDefs`
+                        <FilterSet
+                          {...{
+                            disabled: fill !== "policy_status",
+                            filterDefs,
+                            filters,
+                            setFilters,
+                            // if true, the selected filters bay will show
+                            // TODO style selected filters bay
+                            showSelectedFilters: false,
+                            key: "FilterSet"
+                          }}
+                        />,
+
+                        // slider to modify the current date, including a calendar picker
+                        <DateSlider
+                          {...{
+                            label: "Date",
+                            date,
+                            setDate,
+                            // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
+                            ...defaults.minMaxDate,
+                            key: "DateSlider"
+                          }}
+                        />,
+
+                        // circle metric radio toggle
+                        circle !== null && (
+                          <RadioToggle
+                            {...{
+                              // TODO define choices based on current mapType
+                              setInfoTooltipContent:
+                                props.setInfoTooltipContent,
+                              choices: mapMetrics[mapId]
+                                .filter(d => d.for.includes("circle"))
+                                .map(d => {
+                                  return {
+                                    value: d.id,
+                                    name: metricMeta[d.id].metric_displayname,
+                                    tooltip: metricMeta[d.id].metric_definition
+                                  };
+                                }),
+                              curVal: circle,
+                              callback: setCircle,
+                              label: "View COVID count by",
+                              key: "RadioToggle1"
+                            }}
+                          />
+                        )
+                      ].map(d => d)}
+                    </div>
+                  )
+                }}
+              />
+            ),
             plugins: {
               setInitDataFilters,
               fill
@@ -223,131 +352,6 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
         {
           // Drawer: holds map options
         }
-        <Drawer
-          {...{
-            className: drawer,
-            // if true, drawer floats at top of parent container and
-            // content has translucent background
-            float: true,
-
-            // closed by default
-            defaultClosed: true,
-
-            // header of drawer (JSX)
-            label: (
-              <React.Fragment>
-                {
-                  // Header
-                }
-                <h1>Map options</h1>
-
-                {
-                  // Toggle between the possible maps
-                }
-                <RadioToggle
-                  {...{
-                    left: true,
-                    horizontal: true,
-                    setInfoTooltipContent: props.setInfoTooltipContent,
-                    choices: Object.values(mapStyles).map(
-                      ({ value, name, tooltip }) => {
-                        return {
-                          value,
-                          name,
-                          tooltip,
-                          disabled: value === "global"
-                        };
-                      }
-                    ),
-                    curVal: mapId,
-                    callback: setMapId,
-                    label: "Geographic resolution"
-                  }}
-                />
-                {
-                  // Display active date
-                }
-                <div>{date.format("MMM D, YYYY").toUpperCase()}</div>
-              </React.Fragment>
-            ),
-            content: (
-              <div>
-                {[
-                  // fill metric radio toggle
-                  fill !== null && (
-                    <RadioToggle
-                      {...{
-                        // TODO define choices based on current mapType
-                        setInfoTooltipContent: props.setInfoTooltipContent,
-                        choices: mapMetrics[mapId]
-                          .filter(d => d.for.includes("fill"))
-                          .map(d => {
-                            return {
-                              value: d.id,
-                              name: metricMeta[d.id].metric_displayname,
-                              tooltip: metricMeta[d.id].metric_definition
-                            };
-                          }),
-                        curVal: fill,
-                        callback: setFill,
-                        label: "State fill data",
-                        key: "DataType"
-                      }}
-                    />
-                  ),
-                  // Filter set containing the filters specified in `filterDefs`
-                  <FilterSet
-                    {...{
-                      disabled: fill !== "policy_status",
-                      filterDefs,
-                      filters,
-                      setFilters,
-                      // if true, the selected filters bay will show
-                      // TODO style selected filters bay
-                      showSelectedFilters: false,
-                      key: "FilterSet"
-                    }}
-                  />,
-
-                  // slider to modify the current date, including a calendar picker
-                  <DateSlider
-                    {...{
-                      label: "Date",
-                      date,
-                      setDate,
-                      // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
-                      ...defaults.minMaxDate,
-                      key: "DateSlider"
-                    }}
-                  />,
-
-                  // circle metric radio toggle
-                  circle !== null && (
-                    <RadioToggle
-                      {...{
-                        // TODO define choices based on current mapType
-                        setInfoTooltipContent: props.setInfoTooltipContent,
-                        choices: mapMetrics[mapId]
-                          .filter(d => d.for.includes("circle"))
-                          .map(d => {
-                            return {
-                              value: d.id,
-                              name: metricMeta[d.id].metric_displayname,
-                              tooltip: metricMeta[d.id].metric_definition
-                            };
-                          }),
-                        curVal: circle,
-                        callback: setCircle,
-                        label: "View COVID count by",
-                        key: "RadioToggle1"
-                      }}
-                    />
-                  )
-                ].map(d => d)}
-              </div>
-            )
-          }}
-        />
         {
           // display map component(s)
         }

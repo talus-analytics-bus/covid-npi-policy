@@ -49,6 +49,9 @@ const MapboxMap = ({
   circle,
   fill,
   filters,
+  // array of JSX components that should go on top of the map field, e.g.,
+  // map options and legend components
+  overlays,
   plugins,
   ...props
 }) => {
@@ -534,7 +537,7 @@ const MapboxMap = ({
           </Popup>
         </div>
       )}
-
+      {overlays}
       {
         // map legend
       }

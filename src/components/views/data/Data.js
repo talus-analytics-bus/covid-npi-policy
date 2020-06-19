@@ -374,6 +374,9 @@ const Data = ({
 
   // on initial page load, get all data and filter optionset values
   useEffect(() => {
+    // scroll to top of page
+    window.scrollTo(0, 0);
+
     // set loading spinner to visible
     setLoading(true);
 
