@@ -82,9 +82,9 @@ const Data = ({
       }
     },
     {
-      iso3: {
+      country_name: {
         entity_name: "Place",
-        field: "iso3",
+        field: "country_name",
         label: "Country"
       },
       area1: {
@@ -92,7 +92,7 @@ const Data = ({
         field: "area1",
         label: "State / Province",
         withGrouping: true,
-        primary: "iso3",
+        primary: "country_name",
         disabledText: "Choose a country"
       },
       area2: {
