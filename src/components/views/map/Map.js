@@ -251,7 +251,12 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
                     setInfoTooltipContent: props.setInfoTooltipContent,
                     choices: Object.values(mapStyles).map(
                       ({ value, name, tooltip }) => {
-                        return { value, name, tooltip };
+                        return {
+                          value,
+                          name,
+                          tooltip,
+                          disabled: value === "global"
+                        };
                       }
                     ),
                     curVal: mapId,

@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * Define Mapbox sources for geometries, centroids, etc. and styles.
  * All data elements are defined in `plugins` directory on a per-project basis.
@@ -109,7 +111,11 @@ export const mapStyles = {
     url: "mapbox://styles/nicoletalus/ckaofpis006y41ik5mr49kjnd",
     value: "global",
     name: "Global",
-    tooltip: "View country-level data for the world",
+    tooltip: (
+      <span>
+        <b>Currently in development</b>: View country-level data for the world.
+      </span>
+    ),
     minZoom: 1.5,
     maxZoom: 6,
     defaultViewport: {
