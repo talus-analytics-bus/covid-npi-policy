@@ -97,8 +97,8 @@ export const mapStyles = {
     defaultViewport: {
       height: "100%",
       width: "100%",
-      latitude: -0.47298805598651983,
-      longitude: 0.726817197345825,
+      latitude: -1.6307385457635326,
+      longitude: -1.2946671776549727,
       zoom: 4
     },
 
