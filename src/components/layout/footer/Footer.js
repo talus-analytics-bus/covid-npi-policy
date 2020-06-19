@@ -43,7 +43,7 @@ const Footer = () => {
             {
               // TODO set date dynamically from API
             }
-            Data last updated {new moment("2020-05-29").format("MMM D, YYYY")}
+            Data last updated {new moment("2020-06-19").format("MMM D, YYYY")}
           </div>
           <div className={styles.links}>
             {images.map(d => (
