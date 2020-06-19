@@ -46,7 +46,7 @@ export const defaults = {
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
   minMaxDate: {
-    minDate: "2020-01-01",
+    minDate: "2020-01-21",
     maxDate: yesterday.format("YYYY-MM-DD")
     // maxDate: "2021-03-01"
   },
@@ -220,8 +220,19 @@ export const metricMeta = {
   // unique ID of metric
   "74": {
     // metric definition
-    metric_definition:
-      "The number of new COVID-19 cases in the state in the past 7 days",
+    metric_definition: (
+      <span>
+        The number of new COVID-19 cases in the state in the past 7 days.
+        <br />
+        <i style={{ fontSize: ".8rem" }}>
+          Source: Calculated from{" "}
+          <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+            New York Times compilation of data from state and local governments
+            and health departments
+          </a>
+        </i>
+      </span>
+    ),
 
     // metric name displayed on front-end
     metric_displayname: "New COVID-19 cases in past 7 days",
@@ -290,8 +301,20 @@ export const metricMeta = {
     return {
       ...this["74"],
       metric_displayname: "Cumulative caseload (up to date selected)",
-      metric_definition:
-        "The total cumulative number of COVID-19 cases in the state as of the indicated date",
+      metric_definition: (
+        <span>
+          The total cumulative number of COVID-19 cases in the state as of the
+          indicated date
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source:{" "}
+            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+              New York Times compilation of data from state and local
+              governments and health departments
+            </a>
+          </i>
+        </span>
+      ),
       unit: v => (v === 1 ? "total case" : "total cases"),
       trendTimeframe: (
         <React.Fragment>
