@@ -183,7 +183,7 @@ const fillStyles = {
         "case",
         ["==", ["feature-state", key], null],
         "#eaeaea",
-        ["==", ["feature-state", key], "Pre-covid"],
+        ["==", ["feature-state", key], "Unclear lockdown level"],
         "transparent",
         ["==", ["feature-state", key], "New open"],
         "#BBDAF5",
@@ -200,7 +200,7 @@ const fillStyles = {
       "fill-pattern": "dots",
       "fill-opacity": [
         "case",
-        ["==", ["feature-state", key], "Pre-covid"],
+        ["==", ["feature-state", key], "Unclear lockdown level"],
         1,
         0
       ]

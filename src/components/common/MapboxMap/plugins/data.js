@@ -34,19 +34,21 @@ import { Table, ShowMore } from "../../../common";
 
 // define default parameters for MapboxMap
 const today = moment();
+const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
   mapId: "us",
 
   // default date for map to start on
-  date: "2020-04-29",
-  // date: today.format("YYYY-MM-DD"),
+  // date: "2020-06-18",
+  date: yesterday.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
   minMaxDate: {
     minDate: "2020-01-01",
-    maxDate: "2021-03-01"
+    maxDate: yesterday.format("YYYY-MM-DD")
+    // maxDate: "2021-03-01"
   },
 
   // defaults for map with ID `us`
