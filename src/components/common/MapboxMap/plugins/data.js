@@ -493,28 +493,6 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   // execute queries in parallel
   const results = await execute({ queries });
 
-  // // optional: filter results, if this is not being done on the back-end.
-  // // if it is being done on the back end, comment out or delete the code below
-  // if (!isEmpty(filters)) {
-  //   // for each filter
-  //   for (const [field, fieldFilters] of Object.entries(filters)) {
-  //     // for each API request result
-  //     for (const [k, v] of Object.entries(results)) {
-  //       // if no filter values, continue
-  //       if (fieldFilters === undefined || fieldFilters.length === 0) continue;
-  //       // if only value is "all", continue
-  //       else if (fieldFilters.length === 1 && fieldFilters[0] === "all")
-  //         continue;
-  //       // otherwise, only return values that contain a filter value (simple)
-  //       else {
-  //         results[k] = v.filter(d => {
-  //           return fieldFilters.includes(d[field]);
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
-
   // return results
   return results;
 };
@@ -601,6 +579,56 @@ export const tooltipGetter = async ({
         unit: thisMetricMeta.unit(v)
       };
 
+      // TRENDS // ----------------------------------------------------------//
+      // define standard trend key, e.g., "metric_name-trend"
+      const trendKey = k + "-trend";
+
+      // if there are trend data, get them, and define the visual
+      // representation of the trend for the tooltip
+      if (state[trendKey] !== undefined && state[trendKey] !== null) {
+        // get pct 0..100 of the trend value
+        const pct = state[trendKey];
+
+        // get appropriate noun for trend direction
+        let noun;
+        if (pct < 0) noun = "decrease";
+        else if (pct > 0) noun = "increase";
+        else noun = "no change";
+
+        // define the datum for visual representation of the trend
+        item.trend = {
+          pct,
+          pct_fmt: (
+            <span>
+              <i className={classNames("material-icons")}>play_arrow</i>
+              {percentize(state[trendKey]).replace("-", "")}
+            </span>
+          ),
+          noun,
+          timeframe: thisMetricMeta.trendTimeframe,
+          classes: []
+        };
+      }
+
+      if (k === "74") {
+        item.unit = (
+          <span>
+            {item.unit}
+            <br />
+            in past 7 days
+          </span>
+        );
+        tooltip.tooltipHeaderMetric = item;
+        continue;
+      } else if (k === "72") {
+        item.unit = <span>{item.unit}</span>;
+        tooltip.tooltipHeaderMetric = item;
+        continue;
+      } else {
+        // add item to tooltip content
+        tooltip.tooltipMainContent.push(item);
+      }
+
       // SPECIAL METRICS // -------------------------------------------------//
       if (k === "policy_status" || k === "lockdown_level") {
         const apiDate = date.format("YYYY-MM-DD");
@@ -645,11 +673,6 @@ export const tooltipGetter = async ({
           });
           tables.push({ ph_measure_details, rows });
           nPolicies += policiesOfCategory.length;
-        }
-
-        // if no policies returned, then continue
-        if (nPolicies === 0) {
-          continue;
         }
 
         // add actions for bottom of tooltip
@@ -721,56 +744,11 @@ export const tooltipGetter = async ({
             {thisMetricMeta.value(v)}
           </div>
         );
-      }
 
-      // TRENDS // ----------------------------------------------------------//
-      // define standard trend key, e.g., "metric_name-trend"
-      const trendKey = k + "-trend";
-
-      // if there are trend data, get them, and define the visual
-      // representation of the trend for the tooltip
-      if (state[trendKey] !== undefined && state[trendKey] !== null) {
-        // get pct 0..100 of the trend value
-        const pct = state[trendKey];
-
-        // get appropriate noun for trend direction
-        let noun;
-        if (pct < 0) noun = "decrease";
-        else if (pct > 0) noun = "increase";
-        else noun = "no change";
-
-        // define the datum for visual representation of the trend
-        item.trend = {
-          pct,
-          pct_fmt: (
-            <span>
-              <i className={classNames("material-icons")}>play_arrow</i>
-              {percentize(state[trendKey]).replace("-", "")}
-            </span>
-          ),
-          noun,
-          timeframe: thisMetricMeta.trendTimeframe,
-          classes: []
-        };
-      }
-
-      if (k === "74") {
-        item.unit = (
-          <span>
-            {item.unit}
-            <br />
-            in past 7 days
-          </span>
-        );
-        tooltip.tooltipHeaderMetric = item;
-        continue;
-      } else if (k === "72") {
-        item.unit = <span>{item.unit}</span>;
-        tooltip.tooltipHeaderMetric = item;
-        continue;
-      } else {
-        // add item to tooltip content
-        tooltip.tooltipMainContent.push(item);
+        // if no policies returned, then make main content empty
+        if (nPolicies === 0) {
+          tooltip.tooltipMainContent = [];
+        }
       }
     }
   }

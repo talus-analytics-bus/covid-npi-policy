@@ -122,7 +122,7 @@ const App = () => {
             </div>
           </React.Fragment>
         </Switch>
-        <Footer {...{ page }} />
+        {page !== "map" && <Footer {...{ page }} />}
         {
           // Loading spinner
           <div className={classNames(styles.loading, { [styles.on]: loading })}>
