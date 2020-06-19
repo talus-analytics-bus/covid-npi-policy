@@ -1,45 +1,36 @@
 @import "../../../assets/styles/vars.scss";
 .navWrapper {
-  font-family: "Rawline", serif;
-  border-bottom: 8px solid green;
-  z-index: 10;
+  font-family: "Gotham", serif;
+  border-bottom: 8px solid $light-blue;
+  @include sticky();
+  z-index: 3;
   width: 100%;
   background: white;
-  position: relative;
-  height: 100px;
-  margin-bottom: -100px;
 
   .nav {
-    max-width: 1440px;
+    max-width: $max-width;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px 20px;
 
+    @media #{$phone} {
+      padding: 10px 20px;
+    }
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    .menu {
-      .links {
-        display: flex;
-        font-size: 0.94rem;
-        @include spaceItemsHoriz(2rem);
-      }
-      .hamburger {
-        display: none;
-      }
-    }
+
+    @include spaceItemsHoriz(2rem);
     a {
-      color: green;
+      color: #173244;
     }
     .active {
       font-weight: bold;
     }
     a:first-child {
       margin-right: auto;
-      display: flex;
-      align-items: center;
     }
     img {
-      height: 40px;
+      height: 70px;
     }
   }
   &.wide {
@@ -47,8 +38,19 @@
       max-width: unset;
     }
   }
-  &:not(.wide) {
-    @include sticky();
+  @media #{$phone-narrow} {
+    div {
+      display: flex;
+      flex-flow: column;
+      align-items: flex-start;
+      a:last-of-type {
+        margin-left: auto;
+        margin-top: 10px;
+      }
+      img {
+        width: 90%;
+        height: unset;
+      }
+    }
   }
 }
-// @import './responsive.module.scss';
