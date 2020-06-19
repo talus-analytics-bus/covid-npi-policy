@@ -26,8 +26,6 @@ const InfoTooltip = ({ id, text, ...props }) => {
         src={imgSrc}
         onMouseOver={() => {
           if (bindWithFunction) {
-            console.log("dataHtml");
-            console.log(dataHtml);
             props.setInfoTooltipContent(dataHtml);
           }
         }}
@@ -41,7 +39,6 @@ const InfoTooltip = ({ id, text, ...props }) => {
           key={id}
           className={styles.infoTooltipContainer}
           type="light"
-          place="top"
           effect="float"
           delayHide={250}
           clickable={true}

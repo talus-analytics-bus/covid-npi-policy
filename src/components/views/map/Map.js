@@ -26,7 +26,7 @@ import { mapStyles } from "../../common/MapboxMap/plugins/sources";
 import { OptionSet, execute } from "../../misc/Queries";
 
 // assets and styles
-import { style, drawer, dark } from "./map.module.scss";
+import styles, { style, drawer, dark } from "./map.module.scss";
 
 // common components
 import {
@@ -34,11 +34,18 @@ import {
   RadioToggle,
   Drawer,
   DateSlider,
-  FilterSet
+  FilterSet,
+  InfoTooltip
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
+const Map = ({
+  setLoading,
+  setPage,
+  setInitDataFilters,
+  versions,
+  ...props
+}) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -150,6 +157,9 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
   };
 
   // CONSTANTS // -----------------------------------------------------------//
+  // last updated date of overall data
+  const lastUpdatedDateOverall = versions[0].date;
+
   // collate mapbox component for the currently enabled maps
   // for each map defined in `mapStyles` (see ./plugins/sources.js):
   const maps = [];
@@ -213,7 +223,28 @@ const Map = ({ setLoading, setPage, setInitDataFilters, ...props }) => {
                       {
                         // Display active date
                       }
-                      <div>{date.format("MMM D, YYYY").toUpperCase()}</div>
+                      <div className={styles.dates}>
+                        <div className={styles.primary}>
+                          Data for {date.format("MMM D, YYYY")}
+                        </div>
+                        <div className={styles.secondary}>
+                          Data last updated on{" "}
+                          {moment(lastUpdatedDateOverall).format("MMM D, YYYY")}
+                          <InfoTooltip
+                            text={
+                              <div>
+                                {versions.map(d => (
+                                  <p key={d.type}>
+                                    <b>{d.type}</b> last updated on{" "}
+                                    {moment(d.date).format("MMM D, YYYY")}
+                                  </p>
+                                ))}
+                              </div>
+                            }
+                            setInfoTooltipContent={props.setInfoTooltipContent}
+                          />
+                        </div>
+                      </div>
                     </React.Fragment>
                   ),
                   content: (

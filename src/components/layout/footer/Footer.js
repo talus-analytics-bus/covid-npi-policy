@@ -9,7 +9,12 @@ import classNames from "classnames";
 // 3rd party packages
 import moment from "moment";
 
-const Footer = ({ page }) => {
+const Footer = ({ page, versions }) => {
+  // get last updated date
+  const lastUpdated = versions.find(d => d.type === "Policy data");
+  const lastUpdatedDate = lastUpdated !== undefined ? lastUpdated.date : null;
+
+  // define footer images and links
   const images = [
     {
       imgSrc: gu,
@@ -46,7 +51,12 @@ const Footer = ({ page }) => {
             {
               // TODO set date dynamically from API
             }
-            Data last updated {new moment("2020-05-29").format("MMM D, YYYY")}
+            {lastUpdated && (
+              <span>
+                Data last updated{" "}
+                {new moment(lastUpdatedDate).format("MMM D, YYYY")}
+              </span>
+            )}
           </div>
           <div className={styles.links}>
             {images.map(d => (

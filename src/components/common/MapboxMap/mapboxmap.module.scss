@@ -13,6 +13,10 @@
   justify-content: flex-end;
   border-bottom: none;
   z-index: 0;
+  pointer-events: none;
+  > * {
+    pointer-events: all;
+  }
 
   button {
     border-radius: 4px 4px 0 0;

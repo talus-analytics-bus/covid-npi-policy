@@ -717,7 +717,7 @@ export const tooltipGetter = async ({
                           ? filters.ph_measure_details || []
                           : [],
                       dates_in_effect: filters.dates_in_effect,
-                      iso3: ["USA"],
+                      country_name: ["United States of America (USA)"],
                       area1: [d.properties.state_name],
                       level: ["State / Province"]
                     });

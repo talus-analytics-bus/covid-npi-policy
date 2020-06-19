@@ -54,9 +54,8 @@ const Data = ({
     initDataFilters !== null ? initDataFilters : {}
   );
 
-  // if (initDataFilters !== null) {
-  //   setLoading(true);
-  // }
+  console.log("initDataFilters");
+  console.log(initDataFilters);
 
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);

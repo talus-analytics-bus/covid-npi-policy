@@ -1,5 +1,5 @@
 // standard modules
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 
 // 3rd party modules
@@ -15,6 +15,9 @@ import { Footer } from "./components/layout";
 import Data from "./components/views/data/Data.js";
 import Map from "./components/views/map/Map.js";
 
+// queries
+import { Version } from "./components/misc/Queries";
+
 // styles and assets
 import styles from "./App.module.scss";
 import classNames from "classnames";
@@ -26,6 +29,7 @@ const App = () => {
   const [page, setPage] = useState(null);
   const [initDataFilters, setInitDataFilters] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
+  const [versions, setVersions] = useState(null);
   const toggleLoading = v => setLoading(v);
 
   // define which browsers should trigger a "please use a different browser"
@@ -74,79 +78,92 @@ const App = () => {
     </Modal>
   );
 
-  return (
-    <React.Fragment>
-      <BrowserRouter>
-        <Nav {...{ page }} />
-        <Switch>
-          <React.Fragment>
-            <div className={classNames(styles.page, styles[page])}>
-              {
-                // Data page
-                <Route
-                  exact
-                  path="/"
-                  render={() => {
-                    return (
-                      <Data
-                        {...{
-                          setLoading,
-                          setPage,
-                          setInfoTooltipContent,
-                          initDataFilters
-                        }}
-                      />
-                    );
-                  }}
-                />
-              }
-              {
-                // Map page
-                <Route
-                  exact
-                  path="/map"
-                  render={() => {
-                    return (
-                      <Map
-                        {...{
-                          setPage,
-                          setLoading,
-                          setInfoTooltipContent,
-                          setInitDataFilters
-                        }}
-                      />
-                    );
-                  }}
-                />
-              }
+  // render page only after versions data have been loaded
+  const getData = async () => {
+    const data = await Version();
+    return data;
+  };
+  useEffect(() => {
+    getData().then(newVersions => setVersions(newVersions));
+  }, []);
+
+  if (versions === null) return <div />;
+  else
+    return (
+      <React.Fragment>
+        <BrowserRouter>
+          <Nav {...{ page }} />
+          <Switch>
+            <React.Fragment>
+              <div className={classNames(styles.page, styles[page])}>
+                {
+                  // Data page
+                  <Route
+                    exact
+                    path="/"
+                    render={() => {
+                      return (
+                        <Data
+                          {...{
+                            setLoading,
+                            setPage,
+                            setInfoTooltipContent,
+                            initDataFilters
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // Map page
+                  <Route
+                    exact
+                    path="/map"
+                    render={() => {
+                      return (
+                        <Map
+                          {...{
+                            versions,
+                            setPage,
+                            setLoading,
+                            setInfoTooltipContent,
+                            setInitDataFilters
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+              </div>
+            </React.Fragment>
+          </Switch>
+          {page !== "map" && <Footer {...{ page, versions }} />}
+          {
+            // Loading spinner
+            <div
+              className={classNames(styles.loading, { [styles.on]: loading })}
+            >
+              <img src={loadingSvg} />
             </div>
-          </React.Fragment>
-        </Switch>
-        {page !== "map" && <Footer {...{ page }} />}
+          }
+          {<BrowserDetection>{modalToShow}</BrowserDetection>}
+        </BrowserRouter>
         {
-          // Loading spinner
-          <div className={classNames(styles.loading, { [styles.on]: loading })}>
-            <img src={loadingSvg} />
-          </div>
+          // Info tooltip that is displayed whenever an info tooltip icon (i)
+          // is hovered on in the site. The content for this tooltip is set by
+          // `setInfoTooltipContent`.
+          <ReactTooltip
+            id={"infoTooltip"}
+            type="light"
+            effect="float"
+            delayHide={250}
+            clickable={true}
+            getContent={() => infoTooltipContent}
+          />
         }
-        {<BrowserDetection>{modalToShow}</BrowserDetection>}
-      </BrowserRouter>
-      {
-        // Info tooltip that is displayed whenever an info tooltip icon (i)
-        // is hovered on in the site. The content for this tooltip is set by
-        // `setInfoTooltipContent`.
-        <ReactTooltip
-          id={"infoTooltip"}
-          type="light"
-          place="top"
-          effect="float"
-          delayHide={250}
-          clickable={true}
-          getContent={() => infoTooltipContent}
-        />
-      }
-    </React.Fragment>
-  );
+      </React.Fragment>
+    );
 };
 
 export default App;

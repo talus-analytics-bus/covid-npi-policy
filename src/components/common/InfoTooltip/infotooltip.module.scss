@@ -4,7 +4,7 @@
 }
 [class*="type-light"] {
   background-color: none;
-  max-width: 200px;
+  max-width: 280px;
   font-size: 0.9rem;
   opacity: 1 !important;
   display: flex;
@@ -13,6 +13,9 @@
   -webkit-box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
   padding: 10px !important;
   z-index: 10000;
+  p:not(:last-child) {
+    margin-bottom: 20px;
+  }
 }
 .infoTooltip {
   display: inline-flex;

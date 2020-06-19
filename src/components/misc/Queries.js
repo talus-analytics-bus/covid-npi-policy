@@ -4,6 +4,17 @@ import moment from "moment";
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
+ * Get versions of data used
+ */
+export const Version = async function() {
+  let req;
+  req = await axios(`${API_URL}/get/version`);
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
  * Get metadata for specified fields
  */
 export const Metadata = async function({ method, fields }) {
