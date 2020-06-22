@@ -268,7 +268,7 @@ const Map = ({
                                 }),
                               curVal: fill,
                               callback: setFill,
-                              label: "State fill data",
+                              label: "View states by",
                               key: "DataType"
                             }}
                           />
