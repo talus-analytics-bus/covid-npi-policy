@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import classNames from "classnames";
 import styles from "./about.module.scss";
 
 // assets
 import logo from "../../../assets/images/logo.svg";
 
-const About = ({ setLoading, setPage, ...props }) => {
+const About = ({ setLoading, setPage, initTab, ...props }) => {
   const tabs = [
     {
       name: "What is COVID AMP?",
+      slug: "amp",
       content: (
         <>
           <img src={logo} />
@@ -39,6 +41,7 @@ const About = ({ setLoading, setPage, ...props }) => {
     },
     {
       name: "Documentation",
+      slug: "doc",
       content: (
         <p>
           <h3>Documentation</h3>
@@ -58,7 +61,7 @@ const About = ({ setLoading, setPage, ...props }) => {
       )
     }
   ];
-  const [tab, setTab] = useState(tabs[0].name);
+  const [tab, setTab] = useState(initTab);
   useEffect(() => {
     setLoading(false);
     setPage("about");
@@ -69,18 +72,20 @@ const About = ({ setLoading, setPage, ...props }) => {
       <h2 className={styles.title}>About</h2>
       <div className={styles.tabs}>
         {tabs.map(d => (
-          <button
-            key={d.name}
-            onClick={() => setTab(d.name)}
-            className={classNames({ [styles.active]: d.name === tab })}
-          >
-            {d.name}
-          </button>
+          <Link to={"/about/" + d.slug}>
+            <button
+              key={d.name}
+              onClick={() => setTab(d.slug)}
+              className={classNames({ [styles.active]: d.slug === tab })}
+            >
+              {d.name}
+            </button>
+          </Link>
         ))}
       </div>
       {tabs.map(
         d =>
-          d.name === tab && (
+          d.slug === tab && (
             <div key={d.name} className={styles.content}>
               {d.content}
             </div>

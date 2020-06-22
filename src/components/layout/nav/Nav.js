@@ -57,7 +57,7 @@ const Nav = ({ page, ...props }) => {
                 setShowMobileMenu(false);
               }}
               className={page === "about" ? styles.active : ""}
-              to={"/about"}
+              to={"/about/amp"}
             >
               About
             </Link>

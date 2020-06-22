@@ -86,7 +86,6 @@ const App = () => {
     return data;
   };
   useEffect(() => {
-    console.log("Getting versions data");
     getData().then(newVersions => setVersions(newVersions));
   }, []);
 
@@ -141,14 +140,14 @@ const App = () => {
                 {
                   // About page
                   <Route
-                    exact
-                    path="/about"
-                    render={() => {
+                    path="/about/:subpage"
+                    render={routeProps => {
                       return (
                         <About
                           {...{
                             setPage,
-                            setLoading
+                            setLoading,
+                            initTab: routeProps.match.params.subpage
                           }}
                         />
                       );
