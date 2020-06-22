@@ -1,5 +1,8 @@
 @import "../../../assets/styles/vars.scss";
 @media #{$phone} {
+  .title {
+    margin-top: 0;
+  }
   .tabs {
     button {
       width: 100%;

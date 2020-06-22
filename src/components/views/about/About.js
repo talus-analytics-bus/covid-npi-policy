@@ -82,25 +82,20 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           <img src={logo} />
           <section>
             <p>
-              The COVID Analysis and Mapping of Policies (AMP) site provides
-              access to a comprehensive list of policies and plans implemented
-              globally to address the COVID-19 pandemic. In many cases, response
-              efforts have been led by subnational governments or private and
-              non-profit organizations. For simple search, each policy or plan
-              has been categorized by the type of measure, in addition to
-              implementation date and authorizing agency. In addition, policies
-              can be identified by legal authority and plans by type of
-              organization. Where available, PDFs or links to the original
-              document or notice are included.
+              The COVID Analysis and Mapping of Policies (AMP) visualization
+              tool is a comprehensive database of policies and plans to address
+              the COVID-19 pandemic. Decision-makers can use COVID AMP’s
+              user-friendly interface to easily identify effective policies and
+              plans to reduce the impacts of the COVID-19 pandemic.
             </p>
             <p>
               <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                finibus ipsum et magna condimentum, eu congue eros mattis. Morbi
-                efficitur nibh a sem sagittis, in interdum metus lacinia.
-                Curabitur tristique dui ut urna rutrum, ac condimentum lacus
-                consectetur. Ut dignissim sit amet ex a pellentesque. Fusce sit
-                amet suscipit massa, vitae luctus risus.
+                COVID AMP is part of the COVID-Local suite of free resources
+                developed for local decision-makers who are working to keep
+                their communities safe during the COVID-19 pandemic. The COVID
+                AMP library includes policies and plans published by subnational
+                governments or private and non-profit organizations, in addition
+                to those released by national governments.
               </i>
             </p>
           </section>

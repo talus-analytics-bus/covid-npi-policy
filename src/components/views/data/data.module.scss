@@ -106,4 +106,9 @@
       }
     }
   }
+  @media #{$phone} {
+    h1 {
+      margin-top: 0 !important;
+    }
+  }
 }
