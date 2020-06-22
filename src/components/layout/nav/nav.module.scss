@@ -45,10 +45,9 @@
     div {
       max-width: unset;
     }
-    $navHeight: 108px;
     + div {
-      height: calc(100% - $navHeight);
-      top: $navHeight;
+      height: calc(100% - 108px);
+      top: 108px;
     }
   }
   &:not(.wide) {
