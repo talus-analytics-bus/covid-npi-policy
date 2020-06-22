@@ -1,7 +1,7 @@
 @import "../../../assets/styles/vars.scss";
 .navWrapper {
   font-family: "Rawline", serif;
-  border-bottom: 8px solid $light-blue;
+  border-bottom: 1px solid $amp-green;
   z-index: 1;
   width: 100%;
   background: white;
@@ -36,7 +36,7 @@
       align-items: center;
     }
     img {
-      height: 60px;
+      height: 50px;
     }
   }
   &.wide {
@@ -46,9 +46,10 @@
       max-width: unset;
     }
     + div {
-      height: calc(100% - 108px);
-      top: 108px;
+      height: calc(100% - 90px);
+      top: 90px;
     }
+    border-bottom: none;
   }
   &:not(.wide) {
     @include sticky();

@@ -4,6 +4,19 @@ import moment from "moment";
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
+ * Get glossary terms
+ */
+export const Glossary = async function({ field }) {
+  let req;
+  req = await axios(`${API_URL}/get/glossary`);
+  const params = new URLSearchParams();
+  params.append("field", field);
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
  * Get versions of data used
  */
 export const Version = async function() {

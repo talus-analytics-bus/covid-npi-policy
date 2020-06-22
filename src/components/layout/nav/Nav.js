@@ -79,9 +79,23 @@ const Nav = ({ page, ...props }) => {
             >
               Data
             </Link>
-            <a target="_blank" href="https://gida.ghscosting.org/">
-              gida.ghscosting.org
-            </a>
+            {
+              // <Link
+              //   onClick={() => {
+              //     setShowMobileMenu(false);
+              //   }}
+              //   className={page === "documentation" ? styles.active : ""}
+              //   to={"/data/documentation"}
+              // >
+              //   Documentation
+              // </Link>
+            }
+
+            {
+              // <a target="_blank" href="https://gida.ghscosting.org/">
+              //   gida.ghscosting.org
+              // </a>
+            }
           </div>
         </div>
       </div>

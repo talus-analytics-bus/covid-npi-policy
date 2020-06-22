@@ -15,6 +15,7 @@ import { Footer } from "./components/layout";
 import Data from "./components/views/data/Data.js";
 import Map from "./components/views/map/Map.js";
 import About from "./components/views/about/About.js";
+import Documentation from "./components/views/documentation/Documentation.js";
 
 // queries
 import { Version } from "./components/misc/Queries";
@@ -145,6 +146,23 @@ const App = () => {
                     render={() => {
                       return (
                         <About
+                          {...{
+                            setPage,
+                            setLoading
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // Documentation page
+                  <Route
+                    exact
+                    path="/data/documentation"
+                    render={() => {
+                      return (
+                        <Documentation
                           {...{
                             setPage,
                             setLoading
