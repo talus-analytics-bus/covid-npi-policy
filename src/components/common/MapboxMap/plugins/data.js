@@ -392,7 +392,7 @@ export const metricMeta = {
         colorscale: d3
           .scaleOrdinal()
           .domain(["no policy", "policy in place"])
-          .range(["#eaeaea", "#14988C"])
+          .range(["#eaeaea", "#66CAC4"])
         // labels: {
         //   bubble: { min: "Low", max: "High" },
         //   basemap: { min: "Minimal", max: "High" }

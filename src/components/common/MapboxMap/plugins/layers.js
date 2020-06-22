@@ -168,7 +168,7 @@ const fillStyles = {
         ["==", ["feature-state", key], null],
         "#eaeaea",
         ["==", ["feature-state", key], "policy in place"],
-        "#14988C",
+        "#66CAC4",
         "#eaeaea"
       ]
     };
