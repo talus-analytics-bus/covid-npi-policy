@@ -5,8 +5,76 @@ import styles from "./about.module.scss";
 
 // assets
 import logo from "../../../assets/images/logo.svg";
+import talus from "../../../assets/images/logo-talus.png";
+import georgetown from "../../../assets/images/logo-georgetown.png";
+import nti from "../../../assets/images/logo-nti.svg";
+import can from "../../../assets/images/logo-can.png";
 
 const About = ({ setLoading, setPage, initTab, ...props }) => {
+  console.log("initTab");
+  console.log(initTab);
+  const contributors = [
+    {
+      imgSrc: nti,
+      text: (
+        <>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
+          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
+          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
+          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
+          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
+          risus.
+        </>
+      ),
+      url: "",
+      key: "nti"
+    },
+    {
+      imgSrc: georgetown,
+      text: (
+        <>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
+          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
+          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
+          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
+          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
+          risus.
+        </>
+      ),
+      url: "",
+      key: "georgetown"
+    },
+    {
+      imgSrc: can,
+      text: (
+        <>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
+          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
+          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
+          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
+          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
+          risus.
+        </>
+      ),
+      url: "",
+      key: "can"
+    },
+    {
+      imgSrc: talus,
+      text: (
+        <>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
+          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
+          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
+          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
+          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
+          risus.
+        </>
+      ),
+      url: "",
+      key: "talus"
+    }
+  ];
   const tabs = [
     {
       name: "What is COVID AMP?",
@@ -14,28 +82,43 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       content: (
         <>
           <img src={logo} />
-          <p>
-            The COVID Analysis and Mapping of Policies (AMP) site provides
-            access to a comprehensive list of policies and plans implemented
-            globally to address the COVID-19 pandemic. In many cases, response
-            efforts have been led by subnational governments or private and
-            non-profit organizations. For simple search, each policy or plan has
-            been categorized by the type of measure, in addition to
-            implementation date and authorizing agency. In addition, policies
-            can be identified by legal authority and plans by type of
-            organization. Where available, PDFs or links to the original
-            document or notice are included.
-          </p>
-          <p>
-            <i>TODO: Second paragraph.</i>
-          </p>
-          <p>
-            <i>TODO: Third paragraph.</i>
-          </p>
-          <h3>Contributors</h3>
-          <p>
-            <i>TODO: Describe the four contributors to COVID AMP.</i>
-          </p>
+          <section>
+            <p>
+              The COVID Analysis and Mapping of Policies (AMP) site provides
+              access to a comprehensive list of policies and plans implemented
+              globally to address the COVID-19 pandemic. In many cases, response
+              efforts have been led by subnational governments or private and
+              non-profit organizations. For simple search, each policy or plan
+              has been categorized by the type of measure, in addition to
+              implementation date and authorizing agency. In addition, policies
+              can be identified by legal authority and plans by type of
+              organization. Where available, PDFs or links to the original
+              document or notice are included.
+            </p>
+            <p>
+              <i>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                finibus ipsum et magna condimentum, eu congue eros mattis. Morbi
+                efficitur nibh a sem sagittis, in interdum metus lacinia.
+                Curabitur tristique dui ut urna rutrum, ac condimentum lacus
+                consectetur. Ut dignissim sit amet ex a pellentesque. Fusce sit
+                amet suscipit massa, vitae luctus risus.
+              </i>
+            </p>
+          </section>
+          <section>
+            <h3 className={styles.subtitle}>Contributors</h3>
+            <div className={styles.articles}>
+              {contributors.map(d => (
+                <article>
+                  <a href={d.url}>
+                    <img src={d.imgSrc} />
+                  </a>
+                  <p>{d.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
         </>
       )
     },
@@ -67,6 +150,10 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
     setPage("about");
   }, []);
 
+  useEffect(() => {
+    setTab(initTab);
+  }, [initTab]);
+
   return (
     <>
       <h2 className={styles.title}>About</h2>
@@ -74,7 +161,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
         {tabs.map(d => (
           <Link to={"/about/" + d.slug}>
             <button
-              key={d.name}
+              key={d.slug}
               onClick={() => setTab(d.slug)}
               className={classNames({ [styles.active]: d.slug === tab })}
             >
@@ -86,7 +173,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       {tabs.map(
         d =>
           d.slug === tab && (
-            <div key={d.name} className={styles.content}>
+            <div key={d.slug} className={styles.content}>
               {d.content}
             </div>
           )
