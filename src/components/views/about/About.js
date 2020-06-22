@@ -28,6 +28,14 @@ const About = ({ setLoading, setPage, ...props }) => {
       )
     },
     {
+      name: "Documentation",
+      content: (
+        <p>
+          <i>Documentation coming soon.</i>
+        </p>
+      )
+    },
+    {
       name: "Acknowledgements",
       content: (
         <p>
