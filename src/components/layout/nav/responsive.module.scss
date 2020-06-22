@@ -53,8 +53,9 @@
     }
     &.wide {
       + div {
-        height: calc(100% - 21px);
-        top: 21px;
+        $navHeight: 21px;
+        height: calc(100% - $navHeight);
+        top: $navHeight;
       }
     }
     // .hamburger2 {
