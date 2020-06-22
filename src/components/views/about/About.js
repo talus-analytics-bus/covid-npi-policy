@@ -24,6 +24,16 @@ const About = ({ setLoading, setPage, ...props }) => {
             organization. Where available, PDFs or links to the original
             document or notice are included.
           </p>
+          <p>
+            <i>TODO: Second paragraph.</i>
+          </p>
+          <p>
+            <i>TODO: Third paragraph.</i>
+          </p>
+          <h3>Contributors</h3>
+          <p>
+            <i>TODO: Describe the four contributors to COVID AMP.</i>
+          </p>
         </>
       )
     },
@@ -31,15 +41,19 @@ const About = ({ setLoading, setPage, ...props }) => {
       name: "Documentation",
       content: (
         <p>
-          <i>Documentation coming soon.</i>
-        </p>
-      )
-    },
-    {
-      name: "Acknowledgements",
-      content: (
-        <p>
-          <i>Acknowledgements coming soon.</i>
+          <h3>Documentation</h3>
+          <p>
+            <i>Documentation coming soon.</i>
+          </p>
+          <p>
+            <i>
+              TODO: Add data documentation PDF download and embedded text
+              document.
+            </i>
+          </p>
+          <p>
+            <i>TODO: Add data dictionary XLSX download.</i>
+          </p>
         </p>
       )
     }

@@ -33,8 +33,14 @@
   img {
     margin-bottom: 28px;
   }
+  i {
+    color: gray;
+  }
   p {
     max-width: 600px;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
   }
 }
 @import "./responsive.module.scss";
