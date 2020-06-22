@@ -146,6 +146,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
   useEffect(() => {
     setLoading(false);
     setPage("about");
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
