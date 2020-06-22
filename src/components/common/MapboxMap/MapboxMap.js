@@ -95,7 +95,7 @@ const MapboxMap = ({
     const isLockdownLevel = fill === "lockdown_level";
 
     if (isLockdownLevel) {
-      return "Distancing level on " + date.format("MMM D, YYYY");
+      return "Distancing level in state on " + date.format("MMM D, YYYY");
     } else {
       const category = filters["primary_ph_measure"][0].toLowerCase();
       const subcategory = !isEmpty(filters["ph_measure_details"])

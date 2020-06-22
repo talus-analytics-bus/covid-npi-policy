@@ -57,6 +57,7 @@
       flex-flow: row;
       @include spaceItemsHoriz(50px);
     }
+    border-bottom: 1px solid #b3b3b3;
   }
 }
 @import "./plugins.module.scss";
