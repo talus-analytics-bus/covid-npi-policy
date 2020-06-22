@@ -52,7 +52,11 @@
     border-bottom: none;
   }
   &:not(.wide) {
-    @include sticky();
+    position: fixed;
+    top: 0;
+    + div {
+      margin-top: 90px;
+    }
   }
 }
 @import "./responsive.module.scss";

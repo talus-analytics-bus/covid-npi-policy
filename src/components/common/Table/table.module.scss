@@ -98,7 +98,8 @@
     }
     th {
       @include sticky();
-      top: 117px;
+      // top: 0;
+      top: 90px;
       z-index: 1;
       @media #{$phone} {
         position: relative;
