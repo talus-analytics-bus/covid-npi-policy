@@ -415,8 +415,8 @@ export const metricMeta = {
   },
   lockdown_level: {
     metric_definition:
-      "The level of lockdown in the location on the specified date.",
-    metric_displayname: "Lockdown level",
+      "The level of distancing in the location on the specified date.",
+    metric_displayname: "Distancing level",
     value: v => v,
     unit: v => "",
     // trendTimeframe: "over prior 24 hours",
@@ -663,7 +663,7 @@ export const tooltipGetter = async ({
             level: ["State / Province"],
             dates_in_effect: [apiDate, apiDate],
 
-            // if doing lockdown level, only allow all social distancing
+            // if doing distancing level, only allow all social distancing
             // policies to be returned
             primary_ph_measure:
               plugins.fill !== "lockdown_level"
@@ -706,7 +706,7 @@ export const tooltipGetter = async ({
                   key={"view"}
                   onClick={() => {
                     plugins.setInitDataFilters({
-                      // if doing lockdown level, only allow all social distancing
+                      // if doing distancing level, only allow all social distancing
                       // policies to be returned
                       primary_ph_measure:
                         plugins.fill !== "lockdown_level"

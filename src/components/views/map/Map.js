@@ -74,7 +74,7 @@ const Map = ({
       //   className: dark,
       //   items: [
       //     { id: 0, value: "primary_ph_measure", label: "Policy category" },
-      //     { id: 1, value: "lockdown_level", label: "Lockdown level" }
+      //     { id: 1, value: "lockdown_level", label: "Distancing level" }
       //   ]
       // },
       // name of filter (should match `field` below)
