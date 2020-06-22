@@ -37,6 +37,7 @@ const App = () => {
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
   // detected browser
+  // TODO fix mobile detection
   const modalToShow = {
     chrome: () => null,
     firefox: () => null,
@@ -63,12 +64,13 @@ const App = () => {
           <div className={styles.content}>
             <div className={styles.text}>
               <p>
-                COVID AMP was designed for Chrome and Firefox browsers, but you
-                seem to be using {browser}.
+                COVID AMP was designed for Chrome and Firefox desktop browsers,
+                but you seem to be using an unsupported browser.
               </p>
               <p>
                 If this is correct, please open COVID AMP in Chrome or Firefox
-                instead.
+                for desktop instead. Note that most COVID AMP features are not
+                optimized for mobile devices.
               </p>
             </div>
             <button className={classNames("button", "modal")} onClick={close}>
