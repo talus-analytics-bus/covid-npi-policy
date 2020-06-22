@@ -50,6 +50,6 @@ input[type="radio"] {
 
 // cookie policy
 // hide revoke menu
-[class="cc-revoke"] {
-  display: none;
+[class*="cc-revoke"] {
+  display: none !important;
 }
