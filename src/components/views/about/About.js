@@ -11,8 +11,6 @@ import nti from "../../../assets/images/logo-nti.svg";
 import can from "../../../assets/images/logo-can.png";
 
 const About = ({ setLoading, setPage, initTab, ...props }) => {
-  console.log("initTab");
-  console.log(initTab);
   const contributors = [
     {
       imgSrc: nti,
