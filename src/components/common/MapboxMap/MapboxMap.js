@@ -101,7 +101,7 @@ const MapboxMap = ({
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
         : undefined;
-      const prefix = "Policy status for ";
+      const prefix = "States with a policy in effect for ";
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
         return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;

@@ -286,11 +286,12 @@ const Map = ({
                             key: "FilterSet"
                           }}
                         />,
+                        <div className={styles.divider} />,
 
                         // slider to modify the current date, including a calendar picker
                         <DateSlider
                           {...{
-                            label: "Date",
+                            label: "Date (what policies are in place, where)",
                             date,
                             setDate,
                             // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }

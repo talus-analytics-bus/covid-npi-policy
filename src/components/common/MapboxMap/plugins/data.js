@@ -56,7 +56,7 @@ export const defaults = {
     // id of default circle metric
     circle: "74",
     // id of default fill metric
-    fill: "lockdown_level",
+    fill: "policy_status",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points"
   },
