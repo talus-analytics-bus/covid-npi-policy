@@ -40,7 +40,7 @@ const App = () => {
   const modalToShow = {
     chrome: () => null,
     firefox: () => null,
-    safari: () => null,
+    safari: browser => browserModal("Safari"),
     edge: browser => browserModal("Edge"),
     ie: browser => browserModal("Internet Explorer"),
     opera: browser => browserModal("Opera"),
