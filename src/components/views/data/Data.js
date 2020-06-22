@@ -54,9 +54,6 @@ const Data = ({
     initDataFilters !== null ? initDataFilters : {}
   );
 
-  console.log("initDataFilters");
-  console.log(initDataFilters);
-
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -386,9 +383,16 @@ const Data = ({
     getData(filters);
   }, []);
 
-  // when filters are changed, retrieve filtered data
+  // when filters are changed, retrieve filtered data, and set loading spinner
+  // to visible
   useEffect(() => {
-    if (!initializing) getData(filters);
+    if (!initializing) {
+      // set loading spinner to visible
+      setLoading(true);
+
+      // get data (loading spinner turned off after API call)
+      getData(filters);
+    }
   }, [filters]);
 
   // when metadata are retrieved, update columns with definitions
