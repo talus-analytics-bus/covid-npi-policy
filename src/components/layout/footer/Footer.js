@@ -53,7 +53,7 @@ const Footer = ({ page, versions }) => {
             }
             {lastUpdated && (
               <span>
-                Data last updated{" "}
+                Policy data last updated{" "}
                 {new moment(lastUpdatedDate).format("MMM D, YYYY")}
               </span>
             )}
