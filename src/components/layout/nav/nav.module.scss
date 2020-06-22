@@ -1,64 +1,57 @@
 @import "../../../assets/styles/vars.scss";
 .navWrapper {
-  font-family: "Gotham", serif;
+  font-family: "Rawline", serif;
   border-bottom: 8px solid $light-blue;
-  z-index: 3;
+  z-index: 1;
   width: 100%;
   background: white;
-  height: 110px;
-  position: fixed;
 
   .nav {
-    max-width: $max-width;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 20px 20px;
+    padding: 20px;
 
-    @media #{$phone} {
-      padding: 10px 20px;
-    }
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
-    @include spaceItemsHoriz(2rem);
+    .menu {
+      .links {
+        display: flex;
+        font-size: 0.94rem;
+        @include spaceItemsHoriz(2rem);
+      }
+      .hamburger {
+        display: none;
+      }
+    }
     a {
-      color: #173244;
+      color: $dark-navy-blue;
     }
     .active {
       font-weight: bold;
     }
     a:first-child {
       margin-right: auto;
+      display: flex;
+      align-items: center;
     }
     img {
-      height: 70px;
+      height: 60px;
     }
   }
   &.wide {
+    position: fixed;
+
     div {
       max-width: unset;
     }
     + div {
-      height: calc(100% - 110px);
-      top: 110px;
-    }
-  }
-  @media #{$phone-narrow} {
-    div {
-      display: flex;
-      flex-flow: column;
-      align-items: flex-start;
-      a:last-of-type {
-        margin-left: auto;
-        margin-top: 10px;
-      }
-      img {
-        width: 90%;
-        height: unset;
-      }
+      height: calc(100% - 108px);
+      top: 108px;
     }
   }
   &:not(.wide) {
     @include sticky();
   }
 }
+@import "./responsive.module.scss";
