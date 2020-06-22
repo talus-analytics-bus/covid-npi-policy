@@ -436,7 +436,7 @@ const Data = ({
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>Welcome to COVID AMP policy and plan database</h1>
+        <h1>COVID AMP policy and plan database</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
