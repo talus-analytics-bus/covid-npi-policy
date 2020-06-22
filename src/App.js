@@ -14,6 +14,7 @@ import { Footer } from "./components/layout";
 // views
 import Data from "./components/views/data/Data.js";
 import Map from "./components/views/map/Map.js";
+import About from "./components/views/about/About.js";
 
 // queries
 import { Version } from "./components/misc/Queries";
@@ -84,6 +85,7 @@ const App = () => {
     return data;
   };
   useEffect(() => {
+    console.log("Getting versions data");
     getData().then(newVersions => setVersions(newVersions));
   }, []);
 
@@ -129,6 +131,23 @@ const App = () => {
                             setLoading,
                             setInfoTooltipContent,
                             setInitDataFilters
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // About page
+                  <Route
+                    exact
+                    path="/about"
+                    render={() => {
+                      return (
+                        <About
+                          {...{
+                            setPage,
+                            setLoading
                           }}
                         />
                       );

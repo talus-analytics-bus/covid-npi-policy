@@ -57,7 +57,7 @@ const Nav = ({ page, ...props }) => {
                 setShowMobileMenu(false);
               }}
               className={page === "about" ? styles.active : ""}
-              to={"/"}
+              to={"/about"}
             >
               About
             </Link>
@@ -68,7 +68,7 @@ const Nav = ({ page, ...props }) => {
               className={page === "map" ? styles.active : ""}
               to={"/map"}
             >
-              Policy map
+              Policy maps
             </Link>
             <Link
               onClick={() => {
