@@ -289,6 +289,7 @@ const Legend = ({ ...props }) => {
         {entryName}
         {props.metric_definition && (
           <InfoTooltip
+            place={"top"}
             id={typeAndElement}
             text={props.metric_definition}
             setInfoTooltipContent={props.setInfoTooltipContent}

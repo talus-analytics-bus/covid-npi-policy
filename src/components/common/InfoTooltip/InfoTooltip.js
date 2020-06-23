@@ -8,7 +8,7 @@ import ReactTooltip from "react-tooltip";
  * Generic info tooltip
  * @method InfoTooltip
  */
-const InfoTooltip = ({ id, text, ...props }) => {
+const InfoTooltip = ({ id, text, place, ...props }) => {
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer}>{text}</div>
   );
@@ -20,6 +20,7 @@ const InfoTooltip = ({ id, text, ...props }) => {
       className={styles.infoTooltip}
       data-for={bindWithFunction ? "infoTooltip" : id}
       data-tip={dataHtml}
+      data-place={place ? place : undefined}
       data-html={true}
     >
       <img
@@ -40,6 +41,7 @@ const InfoTooltip = ({ id, text, ...props }) => {
           className={styles.infoTooltipContainer}
           type="light"
           effect="float"
+          place="bottom"
           delayHide={250}
           clickable={true}
           getContent={() => dataHtml}

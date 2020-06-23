@@ -1,5 +1,6 @@
 import axios from "axios";
 import moment from "moment";
+import { isEmpty } from "./Util";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -46,6 +47,8 @@ export const Metadata = async function({ method, fields }) {
   else return false;
 };
 
+let allPolicies = null;
+
 /**
  * Get policy data from API.
  */
@@ -55,6 +58,11 @@ export const Policy = async function({
   filters = null,
   by_category = null
 }) {
+  // return cached result if available
+  if (isEmpty(filters) && allPolicies !== null) {
+    return allPolicies;
+  }
+
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
@@ -84,8 +92,12 @@ export const Policy = async function({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data;
-  else return false;
+  if (res.data !== undefined) {
+    if (isEmpty(filters)) {
+      allPolicies = res.data;
+    }
+    return res.data;
+  } else return false;
 };
 
 /**

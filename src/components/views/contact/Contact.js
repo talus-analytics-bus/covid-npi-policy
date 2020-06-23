@@ -59,6 +59,7 @@ const Contact = ({ setPage, setLoading }) => {
   useEffect(() => {
     setLoading(false);
     setPage("contact");
+    window.scrollTo(0, 0);
   }, []);
 
   const fields = [

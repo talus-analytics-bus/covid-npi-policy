@@ -222,6 +222,7 @@ const App = () => {
             id={"infoTooltip"}
             type="light"
             effect="float"
+            place="right"
             delayHide={250}
             clickable={true}
             getContent={() => infoTooltipContent}
