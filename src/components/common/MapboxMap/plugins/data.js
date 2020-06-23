@@ -25,7 +25,7 @@ import TrendQuery from "../../../misc/TrendQuery.js";
 import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 
 // assets and styles
-import dots from "./assets/images/dots.svg";
+import dots from "./assets/images/dots.png";
 import styles from "./plugins.module.scss";
 
 // utilities and local components
@@ -429,12 +429,14 @@ export const metricMeta = {
           .scaleOrdinal()
           .domain([
             "no policy",
-            "unclear",
-            "new open",
-            "safer at home",
-            "stay at home"
+            "mixed",
+            "new normal",
+            "safer-at-home",
+            "stay-at-home",
+            "lockdown"
           ])
-          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
+          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2", "#2165a1"]) // TODO dynamically
+        // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
       }
       // circle: {
       //   for: "bubble",

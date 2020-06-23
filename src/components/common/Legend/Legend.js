@@ -235,7 +235,8 @@ const Legend = ({ ...props }) => {
           };
         else {
           return {
-            backgroundImage: `url("${d}")`
+            backgroundImage: `url("${d}")`,
+            backgroundPosition: "center"
           };
         }
       });
