@@ -7,6 +7,9 @@ import ReactTooltip from "react-tooltip";
 // assets
 import logo from "../../../assets/images/logo.svg";
 
+// constants
+const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
+
 const Nav = ({ page, ...props }) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const linksRef = useRef(null);
@@ -35,9 +38,9 @@ const Nav = ({ page, ...props }) => {
       })}
     >
       <div className={styles.nav}>
-        <Link to={"/"}>
+        <a target="_blank" href={COVID_LOCAL_URL + "amp"}>
           <img src={logo} />
-        </Link>
+        </a>
         <div className={styles.menu}>
           <button ref={hamburgerRef} className={styles.hamburger}>
             <i

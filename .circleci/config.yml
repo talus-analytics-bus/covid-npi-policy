@@ -65,6 +65,10 @@ jobs:
           command: rm yarn.lock; yarn install --network-timeout 1000000
 
       - run:
+          name: Add env vars
+          command: export REACT_APP_API_URL="https://test.covidamp.org/"; REACT_APP_COVID_LOCAL_URL="https://test.covid-local.org/"
+
+      - run:
           name: Deploy
           command: yarn run deploy-test
 
@@ -74,10 +78,6 @@ jobs:
             aws cloudfront create-invalidation \
             --distribution-id EZNCMFWHVEZLU \
             --paths "/*"
-
-      - run:
-          name: Add env vars
-          command: export REACT_APP_API_URL="https://test.covidamp.org/"
 
 workflows:
   version: 2
