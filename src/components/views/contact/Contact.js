@@ -26,9 +26,9 @@ const Contact = ({ setPage, setLoading }) => {
 
       // perform field validation as necessary, provide user feedback if invalid
       // set the email subject if the form does not ask the user for it
-      data["subject"] = "New message from COVID AMP test contact form";
+      data["subject"] = "New message from COVID AMP contact form";
       // set the site, this needs to match the sites listed in the 'sites' variable
-      data["site"] = "test";
+      data["site"] = "covid-amp";
       // submit to api
       axios
         .post(
