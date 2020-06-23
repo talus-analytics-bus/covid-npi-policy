@@ -49,6 +49,7 @@
         height: 2rem;
         color: #333;
         font-weight: normal;
+        max-width: 40vw;
       }
       input,
       textarea,
@@ -89,3 +90,4 @@
     }
   }
 }
+@import "./responsive.module.scss";
