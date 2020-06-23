@@ -1,12 +1,22 @@
 @import "../../../assets/styles/vars.scss";
 .navWrapper {
-  font-family: "Rawline", serif;
-  border-bottom: 1px solid $amp-green;
-  z-index: 1;
-  width: 100%;
-  background: white;
-
   .nav {
+    position: relative;
+
+    .logos {
+      margin-right: auto;
+      a.localBanner {
+        position: absolute;
+        top: 0;
+        img {
+          height: 40px;
+        }
+      }
+      a.logo img {
+        margin-top: 40px;
+        height: 46px;
+      }
+    }
     max-width: 1300px;
     margin: 0 auto;
     padding: 20px;
@@ -59,5 +69,3 @@
     }
   }
 }
-@import "./responsive.module.scss";
-@import "./plugins.module.scss";

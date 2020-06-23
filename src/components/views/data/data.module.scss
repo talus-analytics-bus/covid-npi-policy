@@ -10,14 +10,15 @@
     }
   }
   .columnText {
+    max-width: 60rem;
     display: flex;
     flex-flow: row;
     font-family: "Rawline", serif;
     * {
-      line-height: 1.6;
+      line-height: 1.5;
     }
     p {
-      font-size: 1.45rem;
+      font-size: 1.25rem;
       color: #333;
     }
     @include spaceItemsHoriz(40px);

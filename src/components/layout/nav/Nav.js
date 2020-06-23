@@ -6,6 +6,7 @@ import ReactTooltip from "react-tooltip";
 
 // assets
 import logo from "../../../assets/images/logo.svg";
+import localBanner from "../../../assets/images/local-banner.svg";
 
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
@@ -38,9 +39,22 @@ const Nav = ({ page, ...props }) => {
       })}
     >
       <div className={styles.nav}>
-        <a target="_blank" href={COVID_LOCAL_URL + "amp"}>
-          <img src={logo} />
-        </a>
+        <div className={styles.logos}>
+          <a
+            target="_blank"
+            href={COVID_LOCAL_URL}
+            className={styles.localBanner}
+          >
+            <img src={localBanner} />
+          </a>
+          <a
+            target="_blank"
+            href={COVID_LOCAL_URL + "amp"}
+            className={styles.logo}
+          >
+            <img src={logo} />
+          </a>
+        </div>
         <div className={styles.menu}>
           <button ref={hamburgerRef} className={styles.hamburger}>
             <i
