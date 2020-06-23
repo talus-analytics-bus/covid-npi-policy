@@ -723,7 +723,7 @@ export const tooltipGetter = async ({
                     });
                   }}
                   to={{
-                    pathname: "/"
+                    pathname: "/data"
                   }}
                 >
                   <button>

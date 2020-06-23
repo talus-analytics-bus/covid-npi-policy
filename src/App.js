@@ -1,6 +1,6 @@
 // standard modules
 import React, { useState, useEffect } from "react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Redirect, Switch, BrowserRouter } from "react-router-dom";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
@@ -104,7 +104,7 @@ const App = () => {
                   // Data page
                   <Route
                     exact
-                    path="/"
+                    path="/data"
                     render={() => {
                       return (
                         <Data
@@ -120,10 +120,20 @@ const App = () => {
                   />
                 }
                 {
+                  // Root: redirect to data page
+                  <Route
+                    exact
+                    path="/"
+                    render={() => {
+                      return <Redirect to={"/data"} />;
+                    }}
+                  />
+                }
+                {
                   // Map page
                   <Route
                     exact
-                    path="/map"
+                    path="/policymaps"
                     render={() => {
                       return (
                         <Map
@@ -176,7 +186,7 @@ const App = () => {
               </div>
             </React.Fragment>
           </Switch>
-          {page !== "map" && <Footer {...{ page, versions }} />}
+          {page !== "policymaps" && <Footer {...{ page, versions }} />}
           {
             // Loading spinner
             <div

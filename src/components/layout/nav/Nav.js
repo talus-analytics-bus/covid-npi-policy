@@ -33,7 +33,7 @@ const Nav = ({ page, ...props }) => {
   return (
     <div
       className={classNames(styles.navWrapper, {
-        [styles.wide]: page === "map",
+        [styles.wide]: page === "policymaps",
         [styles.showMobileMenu]: showMobileMenu
       })}
     >
@@ -68,8 +68,8 @@ const Nav = ({ page, ...props }) => {
               onClick={() => {
                 setShowMobileMenu(false);
               }}
-              className={page === "map" ? styles.active : ""}
-              to={"/map"}
+              className={page === "policymaps" ? styles.active : ""}
+              to={"/policymaps"}
             >
               Policy maps
             </Link>

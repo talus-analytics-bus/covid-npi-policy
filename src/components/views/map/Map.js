@@ -346,7 +346,7 @@ const Map = ({
     setLoading(true);
 
     // set current page
-    setPage("map");
+    setPage("policymaps");
 
     if (!initialized) getData();
 
