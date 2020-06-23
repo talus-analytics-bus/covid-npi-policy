@@ -55,6 +55,7 @@
       select {
         margin-top: 5px;
         font-weight: normal;
+        border: 1px solid #b4b4b4;
       }
     }
     .footer {
@@ -83,6 +84,7 @@
       select {
         width: max-content;
         min-width: 200px;
+        padding: 5px;
       }
     }
   }
