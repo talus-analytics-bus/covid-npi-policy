@@ -78,9 +78,18 @@ const Nav = ({ page, ...props }) => {
                 setShowMobileMenu(false);
               }}
               className={page === "data" ? styles.active : ""}
-              to={"/"}
+              to={"/data"}
             >
               Data
+            </Link>
+            <Link
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
+              className={page === "contact" ? styles.active : ""}
+              to={"/contact"}
+            >
+              Contact us
             </Link>
             {
               // <Link

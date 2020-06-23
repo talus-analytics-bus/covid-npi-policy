@@ -24,7 +24,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           risus.
         </>
       ),
-      url: "",
+      url: "https://www.nti.org/about/biosecurity/",
       key: "nti"
     },
     {
@@ -39,7 +39,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           risus.
         </>
       ),
-      url: "",
+      url: "https://ghss.georgetown.edu/",
       key: "georgetown"
     },
     {
@@ -54,7 +54,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           risus.
         </>
       ),
-      url: "",
+      url: "https://covidactnow.org/",
       key: "can"
     },
     {
@@ -69,7 +69,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           risus.
         </>
       ),
-      url: "",
+      url: "http://talusanalytics.com/",
       key: "talus"
     }
   ];
@@ -104,7 +104,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             <div className={styles.articles}>
               {contributors.map(d => (
                 <article>
-                  <a href={d.url}>
+                  <a href={d.url} target="_blank">
                     <img src={d.imgSrc} />
                   </a>
                   <p>{d.text}</p>

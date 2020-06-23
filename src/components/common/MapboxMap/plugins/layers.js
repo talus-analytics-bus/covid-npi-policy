@@ -18,7 +18,7 @@ import { getLog10Scale, comma } from "../../../misc/Util";
 import dots from "./assets/images/dots.png";
 // No policy
 // Unclear
-// New open
+// New normal
 // Safer at home
 // Stay at home
 
@@ -183,9 +183,9 @@ const fillStyles = {
         "case",
         ["==", ["feature-state", key], null],
         "#eaeaea",
-        ["==", ["feature-state", key], "Unclear lockdown level"],
+        ["==", ["feature-state", key], "Mixed distancing levels"],
         "transparent",
-        ["==", ["feature-state", key], "New open"],
+        ["==", ["feature-state", key], "New normal"],
         "#BBDAF5",
         ["==", ["feature-state", key], "Safer at home"],
         "#86BFEB",
@@ -200,7 +200,7 @@ const fillStyles = {
       "fill-pattern": "dots",
       "fill-opacity": [
         "case",
-        ["==", ["feature-state", key], "Unclear lockdown level"],
+        ["==", ["feature-state", key], "Mixed distancing levels"],
         1,
         0
       ]

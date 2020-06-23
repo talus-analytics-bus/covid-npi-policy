@@ -1,0 +1,89 @@
+@import "../../../assets/styles/vars.scss";
+.contact {
+  .title {
+    margin: 28px 0;
+    text-transform: none;
+    font-size: 1.66rem;
+  }
+  form {
+    max-width: 700px;
+    .error,
+    .success {
+      // margin: 1rem;
+      margin-top: 0rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+
+    .error {
+      color: #862526;
+      background-color: #fff2f2;
+      border: 1px solid #ffd2d2;
+    }
+
+    .success {
+      color: #328625;
+      background-color: #f2fff3;
+      border: 1px solid #d6ffd2;
+      margin-top: 1rem;
+    }
+
+    .fields {
+      @include borderItemsVert(20px);
+    }
+    .group,
+    .message {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-columns: repeat(2, 1fr);
+      @include spaceItemsHoriz(20px);
+      label {
+        display: flex;
+        flex-flow: column;
+        color: #474b4d;
+        font-family: "Lato", serif;
+      }
+      input {
+        height: 2rem;
+        color: #333;
+        font-weight: normal;
+      }
+      input,
+      textarea,
+      select {
+        margin-top: 5px;
+        font-weight: normal;
+      }
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      p {
+        font-weight: normal;
+        font-style: italic;
+        line-height: 0;
+      }
+      button {
+        @include btn-primary();
+        color: white;
+        outline: none;
+        padding-top: 10px !important;
+        padding: 10px 20px;
+      }
+    }
+    .message {
+      display: flex;
+      flex-flow: column;
+      @include spaceItemsVert(20px);
+      border-color: #4d4d4d;
+
+      select {
+        width: max-content;
+        min-width: 200px;
+      }
+    }
+  }
+}
