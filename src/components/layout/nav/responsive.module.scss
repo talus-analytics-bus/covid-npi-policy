@@ -30,6 +30,13 @@
             top: 5px;
             // margin-right: 0 !important;
           }
+          a:last-child {
+            position: relative !important;
+            background-color: transparent !important;
+            padding: unset;
+            right: unset;
+            top: 5px;
+          }
         }
         .hamburger {
           color: #333;
