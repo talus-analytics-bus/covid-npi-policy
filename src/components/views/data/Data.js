@@ -28,7 +28,8 @@ const Data = ({
   setLoading,
   setInfoTooltipContent,
   setPage,
-  initDataFilters
+  initDataFilters,
+  urlFilterParams
 }) => {
   const [initializing, setInitializing] = useState(true);
   const [docType, setDocType] = useState("policy");
@@ -132,7 +133,8 @@ const Data = ({
       }
     }
   ]);
-
+  console.log("filters");
+  console.log(filters);
   const unspecified = (
     <span className={styles.unspecified}>{"None available"}</span>
   );
@@ -379,19 +381,65 @@ const Data = ({
     // set current page
     setPage("data");
 
-    // get page data
-    getData(filters);
+    // parse URL params for init filters and then clear them
+    const hasParams = window.location.search !== "";
+    if (false) {
+      // get URL search params
+      const paramsString = window.location.search;
+      const newUrlParams = new URLSearchParams(paramsString);
+
+      // add filters from URL search params
+      const newFilters = {};
+      for (const [k, v] of newUrlParams.entries()) {
+        if (newFilters[k] === undefined) newFilters[k] = [v];
+        else {
+          if (!newFilters[k].includes(v)) newFilters[k].push(v);
+        }
+      }
+
+      // update filters
+      setFilters(newFilters);
+    }
   }, []);
+
+  // DEBUG url params change
+  useEffect(() => {
+    if (urlFilterParams !== null && isEmpty(filters)) {
+      // add filters from URL search params
+      const newFilters = {};
+      for (const [k, vs] of Object.entries(urlFilterParams)) {
+        vs.forEach(v => {
+          if (newFilters[k] === undefined) newFilters[k] = [v];
+          else {
+            if (k === "dates_in_effect" || !newFilters[k].includes(v))
+              newFilters[k].push(v);
+          }
+        });
+      }
+      // update filters
+      setFilters(newFilters);
+    }
+  }, [urlFilterParams]);
 
   // when filters are changed, retrieve filtered data, and set loading spinner
   // to visible
   useEffect(() => {
-    if (!initializing) {
-      // set loading spinner to visible
-      setLoading(true);
+    // set loading spinner to visible
+    setLoading(true);
 
-      // get data (loading spinner turned off after API call)
-      getData(filters);
+    // get data (loading spinner turned off after API call)
+    getData(filters);
+
+    // if filters are empty, clear all URL search params
+    if (isEmpty(filters)) {
+      window.history.replaceState({ filtersStr: "" }, "", "/data");
+    } else {
+      const filtersStr = JSON.stringify(filters);
+      window.history.replaceState(
+        { filtersStr },
+        "",
+        "/data?filters=" + filtersStr
+      );
     }
   }, [filters]);
 

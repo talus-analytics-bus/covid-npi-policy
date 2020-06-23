@@ -699,39 +699,61 @@ export const tooltipGetter = async ({
         }
 
         // add actions for bottom of tooltip
+        console.log(filters.dates_in_effect);
+        const filtersStr = JSON.stringify({
+          primary_ph_measure:
+            plugins.fill !== "lockdown_level"
+              ? filters.primary_ph_measure
+              : ["Social distancing"],
+          ph_measure_details:
+            plugins.fill !== "lockdown_level"
+              ? filters.ph_measure_details || []
+              : [],
+          dates_in_effect: filters.dates_in_effect,
+          country_name: ["United States of America (USA)"],
+          area1: [d.properties.state_name],
+          level: ["State / Province"]
+        });
         tooltip.actions =
           nPolicies > 0
             ? [
-                <Link
-                  key={"view"}
-                  onClick={() => {
-                    plugins.setInitDataFilters({
-                      // if doing distancing level, only allow all social distancing
-                      // policies to be returned
-                      primary_ph_measure:
-                        plugins.fill !== "lockdown_level"
-                          ? filters.primary_ph_measure
-                          : ["Social distancing"],
-                      ph_measure_details:
-                        plugins.fill !== "lockdown_level"
-                          ? filters.ph_measure_details || []
-                          : [],
-                      dates_in_effect: filters.dates_in_effect,
-                      country_name: ["United States of America (USA)"],
-                      area1: [d.properties.state_name],
-                      level: ["State / Province"]
-                    });
-                  }}
-                  to={{
-                    pathname: "/data"
-                  }}
-                >
+                <a target="_blank" href={"/data?filters=" + filtersStr}>
                   <button>
                     View details for{" "}
                     {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
                     {nPolicies === 1 ? "policy" : "policies"}
                   </button>
-                </Link>
+                </a>
+                // <Link
+                //   key={"view"}
+                //   onClick={() => {
+                //     plugins.setInitDataFilters({
+                //       // if doing distancing level, only allow all social distancing
+                //       // policies to be returned
+                //       primary_ph_measure:
+                //         plugins.fill !== "lockdown_level"
+                //           ? filters.primary_ph_measure
+                //           : ["Social distancing"],
+                //       ph_measure_details:
+                //         plugins.fill !== "lockdown_level"
+                //           ? filters.ph_measure_details || []
+                //           : [],
+                //       dates_in_effect: filters.dates_in_effect,
+                //       country_name: ["United States of America (USA)"],
+                //       area1: [d.properties.state_name],
+                //       level: ["State / Province"]
+                //     });
+                //   }}
+                //   to={{
+                //     pathname: "/data"
+                //   }}
+                // >
+                //   <button>
+                //     View details for{" "}
+                //     {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
+                //     {nPolicies === 1 ? "policy" : "policies"}
+                //   </button>
+                // </Link>
               ]
             : [];
 

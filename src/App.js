@@ -106,13 +106,19 @@ const App = () => {
                     exact
                     path="/data"
                     render={() => {
+                      const urlParams = new URLSearchParams(
+                        window.location.search
+                      );
+                      const filtersStr = urlParams.get("filters");
+                      const urlFilterParams = JSON.parse(filtersStr);
                       return (
                         <Data
                           {...{
                             setLoading,
                             setPage,
                             setInfoTooltipContent,
-                            initDataFilters
+                            initDataFilters,
+                            urlFilterParams
                           }}
                         />
                       );
