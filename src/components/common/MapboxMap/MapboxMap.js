@@ -497,6 +497,8 @@ const MapboxMap = ({
       maxZoom={mapStyle.maxZoom}
       minZoom={mapStyle.minZoom}
       onViewportChange={newViewport => {
+        console.log("newViewport");
+        console.log(newViewport);
         // set current viewport state variable to the new viewport
         setViewport(newViewport);
         const lngLatNotDefault =

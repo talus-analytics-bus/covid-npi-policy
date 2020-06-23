@@ -46,8 +46,9 @@
       max-width: unset;
     }
     + div {
-      height: calc(100% - 90px);
-      top: 90px;
+      height: calc(100% - 127px);
+      // height: calc(100% - 90px);
+      top: 127px;
     }
     border-bottom: none;
   }
@@ -55,7 +56,7 @@
     position: fixed;
     top: 0;
     + div {
-      margin-top: 90px;
+      margin-top: 127px;
     }
   }
 }

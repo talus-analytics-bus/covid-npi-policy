@@ -24,7 +24,7 @@
     border: 1px solid #b3b3b3;
     border-bottom: none;
     position: relative;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.85);
     padding: 5px;
     i {
       font-size: 0.9rem;
@@ -43,7 +43,10 @@
   }
   .entries {
     display: flex;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.85);
+    > div {
+      background-color: transparent;
+    }
     padding: 5px 10px;
     border: 1px solid #b3b3b3;
     border-bottom: none;
