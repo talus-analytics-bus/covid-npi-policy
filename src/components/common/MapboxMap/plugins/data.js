@@ -423,8 +423,8 @@ export const metricMeta = {
         color: "#2165a1",
         def: (
           <span>
-            A state of isolation that does not allow residents to leave their
-            place of residence unless explicitly permitted to do so.
+            Policies do not allow residents to leave their place of residence
+            unless explicitly permitted to do so.
           </span>
         )
       },
@@ -433,8 +433,7 @@ export const metricMeta = {
         color: "#549FE2",
         def: (
           <span>
-            A set of policy restrictions limiting most in-person activities and
-            social events.
+            Policies limit most in-person activities and social events.
           </span>
         )
       },
@@ -443,8 +442,9 @@ export const metricMeta = {
         color: "#86BFEB",
         def: (
           <span>
-            A limited list of permitted activities that encourages extra
-            precautions, while retaining some limits on mass gatherings.
+            Policies limit activities to those specifically permitted,
+            encouraging extra precautions and retaining limits on mass
+            gatherings.
           </span>
         )
       },
