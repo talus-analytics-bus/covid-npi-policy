@@ -33,60 +33,6 @@ import { isEmpty, percentize } from "../../../misc/Util";
 import { Table, ShowMore } from "../../../common";
 
 // define default parameters for MapboxMap
-// get distancing level display name from data name
-const distancingLevelDisplayInfo = {
-  Lockdown: {
-    label: "Lockdown (Phase I)",
-    color: "#2165a1",
-    def: (
-      <span>
-        The strictest set of policy restrictions, with exceptions only for
-        essential businesses. Most in-person activities and social events are
-        prevented.
-      </span>
-    )
-  },
-  "Stay at home": {
-    label: "Stay-at-home (Phase II)",
-    color: "#549FE2",
-    def: (
-      <span>
-        An initial cautious relaxation of lockdown restrictions. Policy changes
-        may include distanced outdoor seating at restaurants and reopened
-        barbershops with significant hygiene precautions.
-      </span>
-    )
-  },
-  "Safer at home": {
-    label: "Safer-at-home (Phase III)",
-    color: "#86BFEB",
-    def: (
-      <span>
-        A continued expansion of permitted activities. Retail businesses and
-        indoor restaurants might open with limited capacity, though most
-        teleworkers will continue to work from home.
-      </span>
-    )
-  },
-  "New normal": {
-    label: "New normal (Phase IV)",
-    color: "#a8c4dc",
-    def: (
-      <span>
-        A reopening of most public activities that follows suppressed community
-        transmission, with potential adjustments such as reduced in-office
-        shifts and public masking.
-      </span>
-    )
-  },
-  "Mixed distancing levels": {
-    label: "Mixed distancing levels",
-    color: "#a8c4dc",
-    def: (
-      <span>Any combination of the above levels simultaneously in effect.</span>
-    )
-  }
-};
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
@@ -469,19 +415,76 @@ export const metricMeta = {
     }
   },
   lockdown_level: {
-    metric_definition: (
-      <div>
-        The level of distancing in the location on the specified date.
-        {Object.values(distancingLevelDisplayInfo).map(d => (
-          <div style={{ marginTop: "10px" }}>
-            <span style={{ fontWeight: "bold", color: d.color }}>
-              {d.label}
-            </span>{" "}
-            - {d.def}
-          </div>
-        ))}
-      </div>
-    ),
+    valueStyling: {
+      Lockdown: {
+        label: "Lockdown (Phase I)",
+        color: "#2165a1",
+        def: (
+          <span>
+            The strictest set of policy restrictions, with exceptions only for
+            essential businesses. Most in-person activities and social events
+            are prevented.
+          </span>
+        )
+      },
+      "Stay at home": {
+        label: "Stay-at-home (Phase II)",
+        color: "#549FE2",
+        def: (
+          <span>
+            An initial cautious relaxation of lockdown restrictions. Policy
+            changes may include distanced outdoor seating at restaurants and
+            reopened barbershops with significant hygiene precautions.
+          </span>
+        )
+      },
+      "Safer at home": {
+        label: "Safer-at-home (Phase III)",
+        color: "#86BFEB",
+        def: (
+          <span>
+            A continued expansion of permitted activities. Retail businesses and
+            indoor restaurants might open with limited capacity, though most
+            teleworkers will continue to work from home.
+          </span>
+        )
+      },
+      "New normal": {
+        label: "New normal (Phase IV)",
+        color: "#a8c4dc",
+        def: (
+          <span>
+            A reopening of most public activities that follows suppressed
+            community transmission, with potential adjustments such as reduced
+            in-office shifts and public masking.
+          </span>
+        )
+      },
+      "Mixed distancing levels": {
+        label: "Mixed distancing levels",
+        color: "#a8c4dc",
+        def: (
+          <span>
+            Any combination of the above levels simultaneously in effect.
+          </span>
+        )
+      }
+    },
+    get metric_definition() {
+      return (
+        <div>
+          The level of distancing in the location on the specified date.
+          {Object.values(this.valueStyling).map(d => (
+            <div style={{ marginTop: "10px" }}>
+              <span style={{ fontWeight: "bold", color: d.color }}>
+                {d.label}
+              </span>{" "}
+              - {d.def}
+            </div>
+          ))}
+        </div>
+      );
+    },
     metric_displayname: "Distancing level",
     value: v => v,
     unit: v => "",
@@ -616,12 +619,6 @@ export const tooltipGetter = async ({
     tooltipHeader: null,
     tooltipMainContent: null,
     actions: null
-  };
-
-  const getDistancingLevelDisplayInfo = v => {
-    const result = distancingLevelDisplayInfo[v];
-    if (result === undefined) return { label: v, color: "#2165a1" };
-    else return result;
   };
 
   // for each map type, return the appropriate tooltip formation
@@ -834,7 +831,7 @@ export const tooltipGetter = async ({
           plugins.fill !== "lockdown_level"
             ? filters.primary_ph_measure[0].toLowerCase()
             : "social distancing";
-        const displayInfo = getDistancingLevelDisplayInfo(v);
+        const displayInfo = metricMeta.lockdown_level.valueStyling[v];
         const subtitle = (
           <span>
             {plugins.fill === "lockdown_level" && (
