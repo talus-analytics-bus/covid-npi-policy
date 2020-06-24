@@ -29,7 +29,8 @@ const RadioToggle = ({
       callback(e.target.value);
     } else {
       const input = e.target.closest("label").querySelector("input");
-      callback(input.value);
+      if (callback !== undefined && input.disabled !== true)
+        callback(input.value);
     }
   };
 
