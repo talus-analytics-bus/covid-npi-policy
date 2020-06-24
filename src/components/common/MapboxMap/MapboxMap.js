@@ -55,10 +55,6 @@ const MapboxMap = ({
   plugins,
   ...props
 }) => {
-  // CONSTANTS // -----------------------------------------------------------//
-  // store default viewport lnglat and zoom so it can be initialized and reset
-  const defaultViewport = mapStyle.defaultViewport;
-
   // STATE // ---------------------------------------------------------------//
   // store map reference which is frequently invoked to get the current
   // Mapbox map object in effect hooks
@@ -71,7 +67,8 @@ const MapboxMap = ({
   const [data, setData] = useState(null);
 
   // current viewport of map
-  const [viewport, setViewport] = useState(defaultViewport);
+  const [viewport, setViewport] = useState({});
+  const [defaultViewport, setDefaultViewport] = useState({});
 
   // show or hide the legend
   const [showLegend, setShowLegend] = useState(true);
@@ -508,7 +505,8 @@ const MapboxMap = ({
 
         // If viewport deviates from the default zoom or lnglat, show the
         // "Reset" button, otherwise, hide it
-        if (zoomNotDefault || lngLatNotDefault) setShowReset(true);
+        if ((zoomNotDefault || lngLatNotDefault) && !isEmpty(defaultViewport))
+          setShowReset(true);
         else setShowReset(false);
       }}
       onClick={handleClick}
@@ -521,10 +519,25 @@ const MapboxMap = ({
         // if default fit bounds are specified, center the viewport on them
         // (fly animation relative to default viewport)
         if (mapStyle.defaultFitBounds !== undefined) {
-          map.fitBounds([
-            [-22.192534318700574, 14.40815303144171],
-            [21.599205236226354, -13.4306486189259]
-          ]);
+          const test = () => {
+            const center = map.getCenter();
+            setViewport({
+              ...viewport,
+              zoom: map.getZoom(),
+              longitude: center.lng,
+              latitude: center.lat
+            });
+            setDefaultViewport({
+              ...viewport,
+              zoom: map.getZoom(),
+              longitude: center.lng,
+              latitude: center.lat
+            });
+            setShowReset(false);
+            map.off("moveend", test);
+          };
+          map.on("moveend", test);
+          map.fitBounds(mapStyle.defaultFitBounds);
         }
 
         map.on("styledataloading", function() {

@@ -93,18 +93,8 @@ export const mapStyles = {
     // max zoom
     maxZoom: 6,
 
-    // default viewport of map to show when toggled to or initialized
-    defaultViewport: {
-      height: "100%",
-      width: "100%",
-      // latitude: 0.5237767555274446,
-      // longitude: -0.7804759636200538,
-      zoom: 4.220136939244611
-    },
-
     // default fit bounds -- the rectangle that should be optimally displayed
-    // in the viewport; the viewport will fly to this position from the
-    // `defaultViewport` after style is loaded
+    // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
       [-22.192534318700574, 14.40815303144171],
       [21.599205236226354, -13.4306486189259]
@@ -125,13 +115,6 @@ export const mapStyles = {
       </span>
     ),
     minZoom: 1.5,
-    maxZoom: 6,
-    defaultViewport: {
-      height: "100%",
-      width: "100%",
-      latitude: 19.72983258604616,
-      longitude: 9.514188701842533,
-      zoom: 2
-    }
+    maxZoom: 6
   }
 };
