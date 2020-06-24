@@ -102,6 +102,14 @@ export const mapStyles = {
       zoom: 4.220136939244611
     },
 
+    // default fit bounds -- the rectangle that should be optimally displayed
+    // in the viewport; the viewport will fly to this position from the
+    // `defaultViewport` after style is loaded
+    defaultFitBounds: [
+      [-22.192534318700574, 14.40815303144171],
+      [21.599205236226354, -13.4306486189259]
+    ],
+
     // optional: info tooltip to display for map in radio selections
     tooltip: "View state-level data for the United States only"
   },

@@ -499,8 +499,6 @@ const MapboxMap = ({
       maxZoom={mapStyle.maxZoom}
       minZoom={mapStyle.minZoom}
       onViewportChange={newViewport => {
-        console.log("newViewport");
-        console.log(newViewport);
         // set current viewport state variable to the new viewport
         setViewport(newViewport);
         const lngLatNotDefault =
@@ -519,24 +517,18 @@ const MapboxMap = ({
         // when map has loaded, add event listener to update the map data
         // whenever the map style, i.e., the type of map, is changed
         const map = mapRef.getMap();
-        // map.fitBounds([
-        //   [-22.397671813125605, 5.77679692897136],
-        //   [-13.041538181926153, -7.73355886057011]
-        // ]);
-        map.fitBounds([
-          [-18.65933110640155, 12.837182121257037],
-          [21.599205236226354, -13.4306486189259]
-        ]);
+
+        // if default fit bounds are specified, center the viewport on them
+        // (fly animation relative to default viewport)
+        if (mapStyle.defaultFitBounds !== undefined) {
+          map.fitBounds([
+            [-22.192534318700574, 14.40815303144171],
+            [21.599205236226354, -13.4306486189259]
+          ]);
+        }
+
         map.on("styledataloading", function() {
           getMapData();
-          // map.fitBounds([
-          //   [-22.397671813125605, 5.77679692897136],
-          //   [-13.041538181926153, -7.73355886057011]
-          // ]);
-          // map.fitBounds([
-          //   [-18.65933110640155, 12.837182121257037],
-          //   [21.599205236226354, -13.4306486189259]
-          // ]);
         });
       }}
       doubleClickZoom={false} //remove 300ms delay on clicking
