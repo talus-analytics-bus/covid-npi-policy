@@ -379,8 +379,12 @@ export const metricMeta = {
     }
   },
   policy_status: {
-    metric_definition:
-      "Status of the policy with the given category / subcategories on the specified date in the location.",
+    metric_definition: (
+      <span>
+        <b style={{ color: "#66CAC4" }}>Cyan</b> states had at least one policy
+        in effect with the given category / subcategories on the specified date.
+      </span>
+    ),
     metric_displayname: "Policy status",
     value: v => v,
     unit: v => "",
