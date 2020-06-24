@@ -53,6 +53,7 @@
     position: relative;
     top: 1px;
     font-size: 1.2rem;
+    z-index: 1;
     button {
       font-family: "rawline", serif;
 
@@ -88,7 +89,7 @@
 
     img {
       margin-bottom: 28px;
-      max-height: 80px;
+      // max-height: 80px;
     }
     a {
       + p {
@@ -99,7 +100,9 @@
       margin-left: 10px;
       article {
         display: flex;
-        flex-flow: column;
+        flex-flow: row;
+        // justify-content: space-between;
+        align-items: flex-start;
 
         &:not(:last-child) {
           border-bottom: 2px solid #d5d5d5;
@@ -112,14 +115,21 @@
           text-align: left;
           justify-content: flex-start;
           margin: 0;
-          float: left;
+          width: 50%;
         }
         img {
           margin: 0;
+          // max-width: 500px;
+          // height: auto !important;
+          // height: 100%;
+          // max-width: 50%;
+          height: 80px;
         }
         p {
           line-height: 2;
           max-width: 600px;
+          margin-top: 0;
+          margin-left: 1rem;
         }
       }
     }

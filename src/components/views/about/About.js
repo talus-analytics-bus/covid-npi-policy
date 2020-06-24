@@ -16,12 +16,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       imgSrc: nti,
       text: (
         <>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
-          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
-          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
-          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
-          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
-          risus.
+          The Nuclear Threat Initiative (NTI) provided funding for AMP, as well
+          as contributing subject matter expertise and project leadership to the
+          overall COVID-Local program.
         </>
       ),
       url: "https://www.nti.org/about/biosecurity/",
@@ -31,12 +28,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       imgSrc: georgetown,
       text: (
         <>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
-          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
-          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
-          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
-          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
-          risus.
+          The Georgetown University Center for Global Health Science and
+          Security (GHSS) led the policy research effort and produced the policy
+          and plan datasets.
         </>
       ),
       url: "https://ghss.georgetown.edu/",
@@ -48,12 +42,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       key: "talus",
       text: (
         <>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
-          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
-          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
-          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
-          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
-          risus.
+          Talus Analytics developed the policy and plan data structures, in
+          close collaboration with GHSS and NTI, and designed and built the
+          interactive AMP site.
         </>
       )
     },
@@ -61,12 +52,10 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       imgSrc: can,
       text: (
         <>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
-          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
-          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
-          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
-          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
-          risus.
+          Covid Act Now supported a collaborative process to develop a COVID-19
+          disease transmission model and provides access to technical
+          infrastructure for modeling (to be used in the AMP Policy model –
+          <i>coming soon</i>).
         </>
       ),
       url: "https://covidactnow.org/",
