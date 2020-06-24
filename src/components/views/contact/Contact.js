@@ -107,6 +107,21 @@ const Contact = ({ setPage, setLoading }) => {
   return (
     <div className={styles.contact}>
       <h2 className={styles.title}>Contact us</h2>
+      <p className={classNames(styles.accessibilityNote, styles.warning)}>
+        <div className={styles.warningIcon} />
+        <div>
+          If you have any accessibility issues using this site, please contact
+          us directly at{" "}
+          <a href="mailto:covidlocal@nti.org" target="_blank">
+            covidlocal@nti.org
+          </a>{" "}
+          or{" "}
+          <a href="mailto:ihrcosting@georgetown.edu" target="_blank">
+            ihrcosting@georgetown.edu
+          </a>
+          .
+        </div>
+      </p>
       <form onSubmit={handleSubmit}>
         <div className={styles.formRow}>{errorMessage}</div>
         <div className={styles.fields}>
