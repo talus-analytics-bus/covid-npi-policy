@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import styles from "./about.module.scss";
@@ -121,6 +121,18 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       content: (
         <div>
           <div>
+            <a
+              className={classNames(styles.download, styles.pdf)}
+              target="_blank"
+              href={
+                process.env.PUBLIC_URL +
+                "/export/COVID AMP documentation 062420.pdf"
+              }
+            >
+              <button>
+                <i className={"material-icons"}>get_app</i>Download as PDF
+              </button>
+            </a>
             <h2>Overview&nbsp;</h2>
             <p>
               The COVID Analysis and Mapping of Policies (AMP) is part of the
@@ -213,8 +225,8 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
               >
                 here
               </a>
-              . The complete dataset can be downloaded from the Policy data page
-              from covidamp.org/data.
+              . The complete dataset can be downloaded from the policy data page
+              from <Link to={"/data"}>covidamp.org/data</Link>.
             </p>
             <p>
               For the purpose of this effort, policies are defined as

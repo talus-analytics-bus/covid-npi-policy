@@ -74,6 +74,7 @@
   .content {
     border: 1px solid #bde7ff;
     padding: 30px;
+    position: relative;
 
     section:not(:last-child) {
       border-bottom: 3px solid #bde7ff;
@@ -149,6 +150,19 @@
       &:active {
         i {
           color: black;
+        }
+      }
+    }
+    &.pdf {
+      position: absolute;
+      right: 30px;
+      top: 0;
+      font-size: 0.8rem;
+      button {
+        padding: 5px 10px;
+        i {
+          margin-right: 5px;
+          margin-left: -5px;
         }
       }
     }
