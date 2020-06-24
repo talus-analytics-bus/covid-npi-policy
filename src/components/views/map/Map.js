@@ -65,18 +65,6 @@ const Map = ({
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
     {
-      // lockdown_level: {
-      //   field: "lockdown_level",
-      //   label: "Data type",
-      //   radio: true,
-      //   defaultRadioValue: "primary_ph_measure",
-      //   entity_name: "Policy",
-      //   className: dark,
-      //   items: [
-      //     { id: 0, value: "primary_ph_measure", label: "Policy category" },
-      //     { id: 1, value: "lockdown_level", label: "Distancing level" }
-      //   ]
-      // },
       // name of filter (should match `field` below)
       primary_ph_measure: {
         // data field
@@ -292,7 +280,7 @@ const Map = ({
                         // slider to modify the current date, including a calendar picker
                         <DateSlider
                           {...{
-                            label: "Date (what policies are in place, where)",
+                            label: "Date (what policies are in effect, where)",
                             date,
                             setDate,
                             // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }

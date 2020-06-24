@@ -167,7 +167,7 @@ const fillStyles = {
         "case",
         ["==", ["feature-state", key], null],
         "#eaeaea",
-        ["==", ["feature-state", key], "policy in place"],
+        ["==", ["feature-state", key], "t"],
         "#66CAC4",
         "#eaeaea"
       ]
