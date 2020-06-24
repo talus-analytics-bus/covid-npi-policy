@@ -17,8 +17,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       text: (
         <>
           The Georgetown University Center for Global Health Science and
-          Security (GHSS) led the policy research effort and produced the policy
-          and plan datasets.
+          Security (GHSS) led the policy research effort, providing health
+          policy and legal expertise, including policy and plan data collection,
+          policy review, and legal review.
         </>
       ),
       url: "https://ghss.georgetown.edu/",
@@ -30,9 +31,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       key: "talus",
       text: (
         <>
-          Talus Analytics developed the policy and plan data structures, in
-          close collaboration with GHSS and NTI, and designed and built the
-          interactive AMP site.
+          Talus Analytics developed the taxonomy and ontologies for policies and
+          plans, integration with the epidemiological data and analysis, and
+          designed, built, and maintain the interactive AMP site.
         </>
       )
     },
@@ -42,7 +43,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
         <>
           The Nuclear Threat Initiative (NTI) provided funding for AMP, as well
           as contributing subject matter expertise and project leadership to the
-          overall COVID-Local program.
+          overall COVID Local program.
         </>
       ),
       url: "https://www.nti.org/about/biosecurity/",
@@ -52,10 +53,10 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       imgSrc: can,
       text: (
         <>
-          Covid Act Now supported a collaborative process to develop a COVID-19
-          disease transmission model and provides access to technical
-          infrastructure for modeling (to be used in the AMP Policy model –
-          <i> coming soon</i>).
+          COVID Act Now provides access to technical infrastructure for the
+          COVID-19 disease transmission model used in the AMP Policy Model
+          <i> (COMING SOON)</i>. This model was developed in a collaborative
+          effort between GHSS, Talus Analytics, and COVID Act Now.
         </>
       ),
       url: "https://covidactnow.org/",
