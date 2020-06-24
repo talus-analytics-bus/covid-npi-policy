@@ -34,8 +34,15 @@
             position: relative !important;
             background-color: transparent !important;
             padding: unset;
+            // padding-top: 10px;
+            line-height: 2;
             right: unset;
-            top: 5px;
+            top: 5px !important;
+            font-size: unset !important;
+            font-weight: unset !important;
+            &.active {
+              font-weight: bold !important;
+            }
           }
         }
         .hamburger {
