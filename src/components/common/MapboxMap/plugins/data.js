@@ -415,15 +415,16 @@ export const metricMeta = {
     }
   },
   lockdown_level: {
+    // last updated: 2020-06-24
+    // MV via JK and GU
     valueStyling: {
       Lockdown: {
         label: "Lockdown (Phase I)",
         color: "#2165a1",
         def: (
           <span>
-            The strictest set of policy restrictions, with exceptions only for
-            essential businesses. Most in-person activities and social events
-            are prevented.
+            A state of isolation that does not allow residents to leave their
+            place of residence unless explicitly permitted to do so.
           </span>
         )
       },
@@ -432,9 +433,8 @@ export const metricMeta = {
         color: "#549FE2",
         def: (
           <span>
-            An initial cautious relaxation of lockdown restrictions. Policy
-            changes may include distanced outdoor seating at restaurants and
-            reopened barbershops with significant hygiene precautions.
+            A set of policy restrictions limiting most in-person activities and
+            social events.
           </span>
         )
       },
@@ -443,9 +443,8 @@ export const metricMeta = {
         color: "#86BFEB",
         def: (
           <span>
-            A continued expansion of permitted activities. Retail businesses and
-            indoor restaurants might open with limited capacity, though most
-            teleworkers will continue to work from home.
+            A limited list of permitted activities that encourages extra
+            precautions, while retaining some limits on mass gatherings.
           </span>
         )
       },
@@ -454,9 +453,9 @@ export const metricMeta = {
         color: "#a8c4dc",
         def: (
           <span>
-            A reopening of most public activities that follows suppressed
-            community transmission, with potential adjustments such as reduced
-            in-office shifts and public masking.
+            A majority of public restrictions on mass gatherings and
+            non-essential businesses are lifted or expired, with some
+            encouraging of safeguards such as face coverings.
           </span>
         )
       },
@@ -478,8 +477,8 @@ export const metricMeta = {
             <div style={{ marginTop: "10px" }}>
               <span style={{ fontWeight: "bold", color: d.color }}>
                 {d.label}
-              </span>{" "}
-              - {d.def}
+              </span>
+              : {d.def}
             </div>
           ))}
         </div>
