@@ -89,7 +89,8 @@ const App = () => {
     return data;
   };
   useEffect(() => {
-    getData().then(newVersions => setVersions(newVersions));
+    setVersions([]);
+    // getData().then(newVersions => setVersions(newVersions));
   }, []);
 
   if (versions === null) return <div />;

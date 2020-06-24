@@ -94,5 +94,26 @@
       }
     }
   }
+  a.download {
+    text-decoration: none;
+    button {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      @include btn-primary();
+      color: white;
+      i {
+        color: white;
+        margin-right: 10px;
+        margin-left: -10px;
+      }
+      &:hover,
+      &:active {
+        i {
+          color: black;
+        }
+      }
+    }
+  }
 }
 @import "./responsive.module.scss";

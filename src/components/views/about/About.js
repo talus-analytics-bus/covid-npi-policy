@@ -132,6 +132,15 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           </p>
           <p>
             <i>TODO: Add data dictionary XLSX download.</i>
+            <a
+              className={styles.download}
+              href={process.env.PUBLIC_URL + "/export/test2.xlsx"}
+            >
+              <button>
+                <i className={"material-icons"}>get_app</i>Download data
+                dictionary
+              </button>
+            </a>
           </p>
         </p>
       )
