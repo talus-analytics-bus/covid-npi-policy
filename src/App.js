@@ -88,9 +88,11 @@ const App = () => {
     const data = await Version();
     return data;
   };
+
+  // set versions data from API call
   useEffect(() => {
-    setVersions([]);
-    // getData().then(newVersions => setVersions(newVersions));
+    // setVersions([]);
+    getData().then(newVersions => setVersions(newVersions));
   }, []);
 
   if (versions === null) return <div />;
