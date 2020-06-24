@@ -379,6 +379,8 @@ const MapboxMap = ({
         const sources = mapSources[mapId];
 
         // Get list of features under the mouse cursor.
+        console.log("e");
+        console.log(e);
         const features = map.queryRenderedFeatures(e.point);
 
         // Get fill and/or circle features that were under the cursor
@@ -517,8 +519,24 @@ const MapboxMap = ({
         // when map has loaded, add event listener to update the map data
         // whenever the map style, i.e., the type of map, is changed
         const map = mapRef.getMap();
+        // map.fitBounds([
+        //   [-22.397671813125605, 5.77679692897136],
+        //   [-13.041538181926153, -7.73355886057011]
+        // ]);
+        map.fitBounds([
+          [-18.65933110640155, 12.837182121257037],
+          [21.599205236226354, -13.4306486189259]
+        ]);
         map.on("styledataloading", function() {
           getMapData();
+          // map.fitBounds([
+          //   [-22.397671813125605, 5.77679692897136],
+          //   [-13.041538181926153, -7.73355886057011]
+          // ]);
+          // map.fitBounds([
+          //   [-18.65933110640155, 12.837182121257037],
+          //   [21.599205236226354, -13.4306486189259]
+          // ]);
         });
       }}
       doubleClickZoom={false} //remove 300ms delay on clicking
