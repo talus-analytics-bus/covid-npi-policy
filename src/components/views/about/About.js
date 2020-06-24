@@ -43,21 +43,6 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       key: "georgetown"
     },
     {
-      imgSrc: can,
-      text: (
-        <>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
-          ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
-          nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
-          dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
-          amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
-          risus.
-        </>
-      ),
-      url: "https://covidactnow.org/",
-      key: "can"
-    },
-    {
       imgSrc: talus,
       text: (
         <>
@@ -69,6 +54,21 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           risus.
         </>
       ),
+      {
+        imgSrc: can,
+        text: (
+          <>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus
+            ipsum et magna condimentum, eu congue eros mattis. Morbi efficitur
+            nibh a sem sagittis, in interdum metus lacinia. Curabitur tristique
+            dui ut urna rutrum, ac condimentum lacus consectetur. Ut dignissim sit
+            amet ex a pellentesque. Fusce sit amet suscipit massa, vitae luctus
+            risus.
+          </>
+        ),
+        url: "https://covidactnow.org/",
+        key: "can"
+      },
       url: "http://talusanalytics.com/",
       key: "talus"
     }
