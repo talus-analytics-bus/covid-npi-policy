@@ -7,23 +7,11 @@ import styles from "./about.module.scss";
 import logo from "../../../assets/images/logo.svg";
 import talus from "../../../assets/images/logo-talus.png";
 import georgetown from "../../../assets/images/logo-georgetown.png";
-import nti from "../../../assets/images/logo-nti.svg";
+import nti from "../../../assets/images/logo-nti.png";
 import can from "../../../assets/images/logo-can.png";
 
 const About = ({ setLoading, setPage, initTab, ...props }) => {
   const contributors = [
-    {
-      imgSrc: nti,
-      text: (
-        <>
-          The Nuclear Threat Initiative (NTI) provided funding for AMP, as well
-          as contributing subject matter expertise and project leadership to the
-          overall COVID-Local program.
-        </>
-      ),
-      url: "https://www.nti.org/about/biosecurity/",
-      key: "nti"
-    },
     {
       imgSrc: georgetown,
       text: (
@@ -49,13 +37,25 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       )
     },
     {
+      imgSrc: nti,
+      text: (
+        <>
+          The Nuclear Threat Initiative (NTI) provided funding for AMP, as well
+          as contributing subject matter expertise and project leadership to the
+          overall COVID-Local program.
+        </>
+      ),
+      url: "https://www.nti.org/about/biosecurity/",
+      key: "nti"
+    },
+    {
       imgSrc: can,
       text: (
         <>
           Covid Act Now supported a collaborative process to develop a COVID-19
           disease transmission model and provides access to technical
           infrastructure for modeling (to be used in the AMP Policy model –
-          <i>coming soon</i>).
+          <i> coming soon</i>).
         </>
       ),
       url: "https://covidactnow.org/",
@@ -68,7 +68,6 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       slug: "amp",
       content: (
         <>
-          <img src={logo} />
           <section>
             <p>
               The COVID Analysis and Mapping of Policies (AMP) visualization
@@ -94,7 +93,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
               {contributors.map(d => (
                 <article>
                   <a href={d.url} target="_blank">
-                    <img src={d.imgSrc} />
+                    <div>
+                      <img src={d.imgSrc} />
+                    </div>
                   </a>
                   <p>{d.text}</p>
                 </article>
@@ -110,18 +111,33 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       content: (
         <div>
           <div>
-            <a
-              className={classNames(styles.download, styles.pdf)}
-              target="_blank"
-              href={
-                process.env.PUBLIC_URL +
-                "/export/COVID AMP documentation 062420.pdf"
-              }
-            >
-              <button>
-                <i className={"material-icons"}>get_app</i>Download as PDF
-              </button>
-            </a>
+            <div className={styles.downloads}>
+              <a
+                className={classNames(styles.download, styles.mini)}
+                href={
+                  process.env.PUBLIC_URL +
+                  "/export/COVID AMP data dictionary.xlsx"
+                }
+              >
+                <button>
+                  <i className={"material-icons"}>get_app</i>Download data
+                  dictionary
+                </button>
+              </a>
+              <a
+                className={classNames(styles.download, styles.mini)}
+                target="_blank"
+                href={
+                  process.env.PUBLIC_URL +
+                  "/export/COVID AMP documentation 062420.pdf"
+                }
+              >
+                <button>
+                  <i className={"material-icons"}>get_app</i>Download as PDF
+                </button>
+              </a>
+            </div>
+
             <h2>Overview&nbsp;</h2>
             <p>
               The COVID Analysis and Mapping of Policies (AMP) is part of the
@@ -167,7 +183,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
                 <em>COMING SOON:&nbsp;</em>An interactive tool to explore the
                 intersection between policies and caseload for each US state.
                 The tool also provides the ability to:
-                <ol>
+                <ol type="a">
                   <li>
                     Compare the effect of not having implemented any policies
                   </li>
@@ -181,19 +197,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             <p>
               A comprehensive data dictionary defining the structure and
               metadata for the policy dataset can be downloaded by clicking the
-              button below.
-              <a
-                className={styles.download}
-                href={
-                  process.env.PUBLIC_URL +
-                  "/export/COVID AMP data dictionary.xlsx"
-                }
-              >
-                <button>
-                  <i className={"material-icons"}>get_app</i>Download data
-                  dictionary
-                </button>
-              </a>
+              button above.
             </p>
             <h2>Annotated Policy Library</h2>
             <h3>Data coding process</h3>
