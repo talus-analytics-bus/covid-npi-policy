@@ -149,7 +149,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
   }, [initTab]);
 
   return (
-    <>
+    <div className={styles.about}>
       <h2 className={styles.title}>About</h2>
       <div className={styles.tabs}>
         {tabs.map(d => (
@@ -172,7 +172,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             </div>
           )
       )}
-    </>
+    </div>
   );
 };
 
