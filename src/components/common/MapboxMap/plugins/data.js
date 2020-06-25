@@ -404,8 +404,9 @@ export const metricMeta = {
   policy_status: {
     metric_definition: (
       <span>
-        <b style={{ color: "#66CAC4" }}>Cyan</b> states had at least one policy
-        in effect with the given category / subcategories on the specified date.
+        <b style={{ color: "#66CAC4" }}>Cyan</b> states had at least one
+        state-level policy in effect with the given category / subcategories on
+        the specified date.
       </span>
     ),
     metric_displayname: "Policy status",
@@ -914,7 +915,11 @@ export const tooltipGetter = async ({
             </div>
 
             <TableDrawers
-              {...{ tables, geometryName: d.properties.state_name }}
+              {...{
+                tables,
+                geometryName: d.properties.state_name,
+                fill: plugins.fill
+              }}
             />
           </div>
         );
@@ -932,7 +937,7 @@ export const tooltipGetter = async ({
 
         // if no policies returned, then make main content empty
         if (nPolicies === 0) {
-          tooltip.tooltipMainContent = [];
+          // tooltip.tooltipMainContent = [];
         }
       }
     }
@@ -974,7 +979,7 @@ const TableDrawer = ({
     </div>
   );
 };
-const TableDrawers = ({ tables, geometryName, ...props }) => {
+const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
   const [openTableDrawer, setOpenTableDrawer] = useState(null);
   useEffect(() => {
     if (tables[0] !== undefined)
@@ -1005,7 +1010,10 @@ const TableDrawers = ({ tables, geometryName, ...props }) => {
             <span className={styles.instructions}>
               {d.rows.some(dd => dd.place.level === "Local") && (
                 <span>
-                  *Local policy which does not influence state distancing level
+                  *Local policy which does not influence{" "}
+                  {fill === "lockdown_level"
+                    ? "state distancing level"
+                    : "state-level policy status"}
                   <br />
                 </span>
               )}
