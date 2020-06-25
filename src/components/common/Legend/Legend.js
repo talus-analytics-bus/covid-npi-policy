@@ -227,6 +227,7 @@ const Legend = ({ ...props }) => {
         else return percentize(d * 100);
       });
 
+      const subLabels = props.subLabels || null;
       // prep style entries
       const styleEntries = range.map(d => {
         if (d.startsWith("#"))
@@ -235,14 +236,15 @@ const Legend = ({ ...props }) => {
             color: isLightColor(d) ? "#333" : "white"
           };
         else {
+          // TODO generalize the custom styles in this
           return {
             backgroundImage: `url("${d}")`,
-            backgroundPosition: "center"
+            backgroundPosition: "center",
+            padding: "3px 10px",
+            border: "2px solid #BBDAF5"
           };
         }
       });
-      console.log("labels");
-      console.log(labels);
 
       return (
         <div className={styles.content}>
@@ -268,6 +270,9 @@ const Legend = ({ ...props }) => {
                   {!labelsInside && (
                     <div className={styles.label}>{labels[i]}</div>
                   )}
+                  {subLabels && (
+                    <div className={styles.label}>{subLabels[i]}</div>
+                  )}
                 </div>
               ))}
             </div>
@@ -286,7 +291,8 @@ const Legend = ({ ...props }) => {
     sectionHeader = props.trend
       ? `Change in ${Util.getInitLower(entryName)} from ${then} to ${now}`
       : entryName;
-  } else
+  } else {
+    console.log(props);
     sectionHeader = (
       <div>
         {entryName}
@@ -296,10 +302,12 @@ const Legend = ({ ...props }) => {
             id={typeAndElement}
             text={props.metric_definition}
             setInfoTooltipContent={props.setInfoTooltipContent}
+            wide={props.wideDefinition === true}
           />
         )}
       </div>
     );
+  }
   return (
     <div
       className={classNames(styles.style, {

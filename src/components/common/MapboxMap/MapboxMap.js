@@ -623,6 +623,7 @@ const MapboxMap = ({
                     className: "mapboxLegend",
                     key: "bubble - linear",
                     metric_definition: metricMeta[fill].metric_definition,
+                    wideDefinition: metricMeta[fill].wideDefinition,
                     metric_displayname: (
                       <span>{getFillLegendName({ filters, fill })}</span>
                     ),

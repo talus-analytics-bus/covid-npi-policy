@@ -108,6 +108,7 @@ const RadioToggle = ({
                         id={c.value}
                         text={c.tooltip}
                         setInfoTooltipContent={props.setInfoTooltipContent}
+                        wide={c.wideTooltip === true}
                       />
                     )}
                   </span>

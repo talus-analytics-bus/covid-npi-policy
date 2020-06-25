@@ -3,6 +3,7 @@ import { renderToString } from "react-dom/server";
 import imgSrc from "./info.svg";
 import styles from "./infotooltip.module.scss";
 import ReactTooltip from "react-tooltip";
+import classNames from "classnames";
 
 /**
  * Generic info tooltip
@@ -17,9 +18,10 @@ const InfoTooltip = ({ id, text, place, ...props }) => {
   ReactTooltip.rebuild();
   return (
     <div
-      className={styles.infoTooltip}
+      className={classNames(styles.infoTooltip, { [styles.wide]: props.wide })}
       data-for={bindWithFunction ? "infoTooltip" : id}
       data-tip={dataHtml}
+      data-class={props.wide ? styles.wide : ""}
       data-place={place ? place : undefined}
       data-html={true}
     >

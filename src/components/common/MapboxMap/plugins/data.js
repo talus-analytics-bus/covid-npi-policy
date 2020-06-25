@@ -17,7 +17,7 @@ import classNames from "classnames";
 import moment from "moment";
 
 // utilities
-import { comma } from "../../../misc/Util";
+import { comma, isLightColor } from "../../../misc/Util";
 
 // queries
 import ObservationQuery from "../../../misc/ObservationQuery.js";
@@ -507,26 +507,71 @@ export const metricMeta = {
         )
       }
     },
+    wideDefinition: true,
     get metric_definition() {
+      const colorRange = this.legendInfo.fill.range.slice(
+        1,
+        this.legendInfo.fill.range.length
+      );
       return (
         <div>
           <p className={styles.definitionHeader}>
             <span>
               The level of distancing in the location on the specified date.{" "}
             </span>
+            <br />
             <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
               <img src={localLogo} />
               view metrics at COVID-Local
             </a>
           </p>
-          {Object.values(this.valueStyling).map(d => (
-            <div style={{ marginTop: "10px" }}>
-              <span style={{ fontWeight: "bold", color: d.color }}>
-                {d.label} {d.phase && <>({d.phase})</>}
-              </span>
-              : {d.def}
-            </div>
-          ))}
+          {
+            <table className={styles.distancingLevelTable}>
+              <tbody>
+                {Object.values(this.valueStyling).map((d, i) => (
+                  <tr>
+                    <td>
+                      <div
+                        style={
+                          i !== colorRange.length - 1
+                            ? {
+                                backgroundColor: colorRange[i],
+                                color: isLightColor(colorRange[i])
+                                  ? "#333"
+                                  : "white"
+                              }
+                            : {
+                                backgroundImage: `url("${colorRange[i]}")`,
+                                backgroundPosition: "center",
+                                padding: "3px 10px",
+                                border: "2px solid #BBDAF5",
+                                color: "black"
+                              }
+                        }
+                        className={styles.rect}
+                      >
+                        {d.label}
+                      </div>
+                    </td>
+                    <td>
+                      <div>{d.phase && d.phase}</div>
+                    </td>
+                    <td>{d.def}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          }
+          {
+            //   Object.values(this.valueStyling).map(d => (
+            //   <div style={{ marginTop: "10px" }}>
+            //     <span style={{ fontWeight: "bold", color: d.color }}>
+            //       {d.label} {d.phase && <>({d.phase})</>}
+            //     </span>
+            //     : {d.def}
+            //   </div>
+            // ))
+          }
         </div>
       );
     },
@@ -539,14 +584,16 @@ export const metricMeta = {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
+        range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
         domain: [
           "no policy",
-          getCovidLocalMetricLink("lockdown (phase I)"),
-          getCovidLocalMetricLink("stay-at-home (phase II)"),
-          getCovidLocalMetricLink("safer-at-home (phase III)"),
-          getCovidLocalMetricLink("new normal (phase IV)"),
+          getCovidLocalMetricLink("lockdown"),
+          getCovidLocalMetricLink("stay-at-home"),
+          getCovidLocalMetricLink("safer-at-home"),
+          getCovidLocalMetricLink("new normal"),
           "mixed"
         ],
+        subLabels: ["", "phase I", "phase II", "phase III", "phase IV", ""],
         colorscale: d3
           .scaleOrdinal()
           .domain([

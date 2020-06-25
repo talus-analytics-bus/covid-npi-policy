@@ -277,6 +277,7 @@ const Map = ({
                                   return {
                                     value: d.id,
                                     name: metricMeta[d.id].metric_displayname,
+                                    wideTooltip: d.id === "lockdown_level",
                                     tooltip: metricMeta[d.id].metric_definition
                                   };
                                 }),

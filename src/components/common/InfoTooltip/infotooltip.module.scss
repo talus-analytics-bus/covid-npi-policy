@@ -17,6 +17,12 @@
     margin-bottom: 20px;
   }
 }
+.wide {
+  max-width: 600px !important;
+  p:not(:last-child) {
+    margin: 0;
+  }
+}
 .infoTooltip {
   display: inline-flex;
   margin: 0 5px;
