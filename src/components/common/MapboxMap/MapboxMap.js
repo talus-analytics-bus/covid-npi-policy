@@ -436,6 +436,13 @@ const MapboxMap = ({
         // if the cursor is not hovering on the map itself, unhover
         // all features
         const cursorOnMap = e.target.classList.contains("overlays");
+        //    &&
+        //   !e.target.classList.contains("mapboxgl-popup-content");
+        // console.log(`e.target.classList.contains("mapboxgl-popup-content")`);
+        // console.log(e.target.classList.contains("mapboxgl-popup-content"));
+        // console.log("e.target");
+        // console.log(e.target);
+
         if (!cursorOnMap) {
           if (hoveredFeature !== null) {
             map.setFeatureState(hoveredFeature, { hovered: false });

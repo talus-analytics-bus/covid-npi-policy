@@ -4,12 +4,82 @@
   padding: 5px;
   font-size: 1rem;
 }
+.definitionHeader {
+  display: block;
+  a {
+    font-style: italic;
+    font-size: 0.8rem;
+    @include spaceItemsHoriz(0.5rem);
+    font-weight: normal;
+    color: #519688;
+  }
+  img {
+    $size: 15px;
+    height: $size;
+    margin-bottom: 2px;
+    margin-right: 0.25rem;
+  }
+}
+.distancingLevel {
+  display: flex;
+  flex-flow: column;
+
+  font-family: "rawline", serif;
+  color: $dark-blue;
+  margin-bottom: 1rem;
+  max-width: 600px;
+
+  > div {
+    display: flex;
+  }
+  .iconSection {
+    display: flex;
+    align-items: center;
+    > img {
+      $size: 50px;
+      height: $size;
+      width: $size;
+      margin-right: 0.5rem;
+    }
+    .label {
+      display: flex;
+    }
+    .phaseName + .link {
+      margin-left: 0.5rem;
+    }
+    .category {
+      display: inline-flex;
+      align-items: flex-end;
+      font-weight: bold;
+      font-size: 1.5rem;
+      line-height: 1;
+      .link {
+        font-style: italic;
+        font-size: 0.8rem;
+        @include spaceItemsHoriz(0.5rem);
+        font-weight: normal;
+        a {
+          color: #519688;
+        }
+        img {
+          $size: 15px;
+          height: $size;
+          margin-right: 0.25rem;
+          margin-bottom: 2px;
+        }
+      }
+    }
+  }
+  .subtitle {
+    margin: 0.5rem 0 0.5rem 0;
+  }
+}
 
 .table {
   font-family: "rawline", serif;
   display: flex;
   flex-flow: column;
-  @include borderItemsVert(20px);
+  @include spaceItemsVert(10px);
   width: 100%;
 
   .tableDrawer {
@@ -30,7 +100,7 @@
       }
     }
     .header {
-      background-color: $light-gray-3;
+      background-color: #ededed;
       padding: 10px;
       display: flex;
       flex-flow: row;
@@ -48,7 +118,7 @@
     }
     .content {
       display: flex;
-      background-color: $light-gray-3;
+      background-color: #ededed;
       flex-flow: column;
     }
   }

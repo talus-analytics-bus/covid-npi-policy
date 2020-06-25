@@ -7,9 +7,13 @@
   z-index: 50;
   @include boxShadowStrong();
   min-width: 400px;
+  cursor: default;
+  // * {
+  //   cursor: unset;
+  // }
 
   .header {
-    background-color: $light-gray-2;
+    background-color: #ededed;
     padding: $padding;
     font-family: "rawline", serif;
     border-radius: 4px 4px 0 0;
@@ -58,19 +62,19 @@
       display: flex;
       flex-flow: column;
       font-size: 1rem;
-      &.policyStatus {
-        flex-flow: row;
-        @include spaceItemsHoriz(40px);
-
-        .metricHeader {
-          align-items: center;
-          height: min-content;
-          line-height: 2;
-          .label {
-            margin-bottom: 0;
-          }
-        }
-      }
+      // &.policyStatus {
+      //   flex-flow: row;
+      //   @include spaceItemsHoriz(40px);
+      //
+      //   .metricHeader {
+      //     align-items: center;
+      //     height: min-content;
+      //     line-height: 2;
+      //     .label {
+      //       margin-bottom: 0;
+      //     }
+      //   }
+      // }
       .metricHeader {
         display: flex;
         font-family: "rawline", serif;
@@ -83,8 +87,8 @@
       .metricContent {
         display: flex;
         flex-flow: column;
-        // text-align: right;
-        // @include spaceItemsHoriz(30px);
+        position: relative;
+        top: -0.5rem;
         .value {
           color: $dark-blue;
           font-weight: 600;
@@ -155,3 +159,5 @@
     }
   }
 }
+
+@import "./plugins.module.scss";

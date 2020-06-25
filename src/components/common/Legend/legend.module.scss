@@ -9,6 +9,7 @@
   margin: 5px;
   @include spaceItemsVert(10px);
   z-index: 1000;
+  cursor: default;
   .name {
     max-width: 420px;
   }
@@ -50,10 +51,14 @@
         }
       }
       .quantized {
-        display: grid;
+        display: flex;
         @include spaceItemsHoriz(2px);
+        flex-flow: row wrap;
+
+        margin-bottom: -2px;
         .rect {
           width: 3 * $height;
+          margin-bottom: 2px;
           &.labelsInside {
             width: auto;
             height: auto;
@@ -97,5 +102,12 @@
     // display: flex;
     // justify-content: center;
     // width: 100%;
+  }
+}
+
+// responsiveness
+@media #{$phone} {
+  .quantized {
+    flex-flow: column !important;
   }
 }

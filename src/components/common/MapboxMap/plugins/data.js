@@ -27,6 +27,8 @@ import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 // assets and styles
 import dots from "./assets/images/dots.png";
 import styles from "./plugins.module.scss";
+import phase3 from "./assets/icons/phase-3.png";
+import localLogo from "./assets/icons/logo-local-pill.png";
 
 // utilities and local components
 import { isEmpty, percentize } from "../../../misc/Util";
@@ -63,6 +65,9 @@ export const defaults = {
   // defaults for additional maps...
   global: { circle: "25", fill: "25", priorLayer: "country-label" }
 };
+
+// constants
+const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
 // define metrics to retrieve for each map
 export const mapMetrics = {
@@ -214,6 +219,21 @@ export const mapMetrics = {
       styleOptions: { outline: true, pattern: true }
     }
   ]
+};
+
+// get JSX for link to COVID-Local metrics page
+const getCovidLocalMetricLink = v => {
+  return (
+    <a
+      style={{ color: "unset" }}
+      href={COVID_LOCAL_URL + "metrics/"}
+      target="_blank"
+      key={v}
+      id={v}
+    >
+      {v}
+    </a>
+  );
 };
 
 // metric metadata used for display, tooltips, etc.
@@ -423,7 +443,8 @@ export const metricMeta = {
     // MV via JK and GU
     valueStyling: {
       Lockdown: {
-        label: "Lockdown (Phase I)",
+        label: "Lockdown",
+        phase: "Phase I",
         color: "#2165a1",
         def: (
           <span>
@@ -433,7 +454,8 @@ export const metricMeta = {
         )
       },
       "Stay at home": {
-        label: "Stay-at-home (Phase II)",
+        label: "Stay-at-home",
+        phase: "Phase II",
         color: "#549FE2",
         def: (
           <span>
@@ -442,8 +464,10 @@ export const metricMeta = {
         )
       },
       "Safer at home": {
-        label: "Safer-at-home (Phase III)",
+        label: "Safer-at-home",
+        phase: "Phase III",
         color: "#86BFEB",
+        icon: phase3,
         def: (
           <span>
             Policies limit activities to those specifically permitted,
@@ -453,7 +477,8 @@ export const metricMeta = {
         )
       },
       "New normal": {
-        label: "New normal (Phase IV)",
+        label: "New normal",
+        phase: "Phase IV",
         color: "#a8c4dc",
         def: (
           <span>
@@ -476,11 +501,19 @@ export const metricMeta = {
     get metric_definition() {
       return (
         <div>
-          The level of distancing in the location on the specified date.
+          <p className={styles.definitionHeader}>
+            <span>
+              The level of distancing in the location on the specified date.{" "}
+            </span>
+            <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
+              <img src={localLogo} />
+              view metrics at COVID-Local
+            </a>
+          </p>
           {Object.values(this.valueStyling).map(d => (
             <div style={{ marginTop: "10px" }}>
               <span style={{ fontWeight: "bold", color: d.color }}>
-                {d.label}
+                {d.label} {d.phase && <>({d.phase})</>}
               </span>
               : {d.def}
             </div>
@@ -497,17 +530,25 @@ export const metricMeta = {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
+        domain: [
+          "no policy",
+          getCovidLocalMetricLink("lockdown (phase I)"),
+          getCovidLocalMetricLink("stay-at-home (phase II)"),
+          getCovidLocalMetricLink("safer-at-home (phase III)"),
+          getCovidLocalMetricLink("new normal (phase IV)"),
+          "mixed"
+        ],
         colorscale: d3
           .scaleOrdinal()
           .domain([
             "no policy",
-            "mixed",
-            "new normal",
-            "safer-at-home",
-            "stay-at-home",
-            "lockdown"
+            getCovidLocalMetricLink("lockdown (phase I)"),
+            getCovidLocalMetricLink("stay-at-home (phase II)"),
+            getCovidLocalMetricLink("safer-at-home (phase III)"),
+            getCovidLocalMetricLink("new normal (phase IV)"),
+            "mixed"
           ])
-          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2", "#2165a1"]) // TODO dynamically
+          .range(["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots]) // TODO dynamically
         // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
       }
       // circle: {
@@ -792,8 +833,7 @@ export const tooltipGetter = async ({
             ? [
                 <a target="_blank" href={"/data?filters=" + filtersStr}>
                   <button>
-                    View details for{" "}
-                    {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
+                    View {nPolicies === 1 ? "this" : `these`}{" "}
                     {nPolicies === 1 ? "policy" : "policies"}
                   </button>
                 </a>
@@ -835,23 +875,41 @@ export const tooltipGetter = async ({
             ? filters.primary_ph_measure[0].toLowerCase()
             : "social distancing";
         const displayInfo = metricMeta.lockdown_level.valueStyling[v];
-        const subtitle = (
-          <span>
-            {plugins.fill === "lockdown_level" && (
-              <span>
-                <b style={{ color: displayInfo.color }}>{displayInfo.label}</b>{" "}
-                with{" "}
-              </span>
-            )}
-            {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
-            effect for <b>{subtitleCategory}</b> on {formattedDate}
-          </span>
-        );
+        const subtitle = null;
         tooltip.tooltipHeader.subtitle = subtitle;
         item.customContent = (
-          <TableDrawers
-            {...{ tables, geometryName: d.properties.state_name }}
-          />
+          <div className={styles.distancingLevel}>
+            {plugins.fill === "lockdown_level" && (
+              <div className={styles.iconSection}>
+                <img src={displayInfo.icon} />
+
+                <div className={styles.iconLabel}>
+                  <div className={styles.label}>{displayInfo.label}</div>
+                  <div className={styles.category}>
+                    {displayInfo.phase && (
+                      <div className={styles.phaseName}>
+                        {displayInfo.phase}
+                      </div>
+                    )}
+                    <div className={styles.link}>
+                      <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
+                        <img src={localLogo} />
+                        view metrics at COVID-Local
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className={styles.subtitle}>
+              {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
+              effect for {subtitleCategory} on&nbsp;<i>{formattedDate}</i>
+            </div>
+
+            <TableDrawers
+              {...{ tables, geometryName: d.properties.state_name }}
+            />
+          </div>
         );
 
         item.value = (

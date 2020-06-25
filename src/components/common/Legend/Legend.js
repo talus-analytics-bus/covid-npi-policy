@@ -217,7 +217,8 @@ const Legend = ({ ...props }) => {
       );
     } else if (typeAndElement.startsWith("quantized")) {
       const range = colorscale.range();
-      const domain = colorscale.domain();
+      const domain =
+        props.domain !== undefined ? props.domain : colorscale.domain();
       // TODO allow non-pct labels
       const labelsInside = props.labelsInside === true; // TODO dynamically as prop
       const labels = domain.map(d => {
@@ -240,6 +241,8 @@ const Legend = ({ ...props }) => {
           };
         }
       });
+      console.log("labels");
+      console.log(labels);
 
       return (
         <div className={styles.content}>
