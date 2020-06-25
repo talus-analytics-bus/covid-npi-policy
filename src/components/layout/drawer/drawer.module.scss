@@ -24,6 +24,9 @@
     text-transform: uppercase;
     background-color: $light-blue-3;
     color: $dark-blue;
+    h1 {
+      color: red !important;
+    }
     &:not(.noCollapse) {
       &,
       * {
@@ -39,8 +42,9 @@
       border: none;
       padding: 0;
       // position: absolute;
-      right: 5px;
+      // right: 5px;
       z-index: 0;
+      margin-left: 20px;
       i {
         font-size: 3rem;
         position: relative;

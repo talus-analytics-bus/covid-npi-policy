@@ -38,6 +38,37 @@
     }
   }
   .drawer {
+    .labelContainer {
+      background-color: #84a8c9;
+      position: absolute;
+      margin: auto 0;
+      height: 100%;
+      left: 0;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      h1 {
+        position: relative;
+      }
+      button.toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        z-index: 0;
+        position: relative;
+        right: -10px;
+
+        i {
+          font-size: 3rem;
+          position: relative;
+          vertical-align: middle;
+          line-height: 0;
+        }
+        &.flip {
+          transform: rotate(180deg);
+        }
+      }
+    }
     .dates {
       font-family: "rawline", serif;
       margin-right: 20px;

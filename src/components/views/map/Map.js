@@ -177,13 +177,21 @@ const Map = ({
                   // closed by default
                   defaultClosed: true,
 
+                  // if true, hides default toggle button
+                  customToggle: true,
+
                   // header of drawer (JSX)
                   label: (
                     <React.Fragment>
                       {
                         // Header
                       }
-                      <h1>Map options</h1>
+                      <div className={styles.labelContainer}>
+                        <h1>Map options</h1>
+                        <button className={styles.toggle}>
+                          <i className={"material-icons"}>expand_less</i>
+                        </button>
+                      </div>
 
                       {
                         // Toggle between the possible maps

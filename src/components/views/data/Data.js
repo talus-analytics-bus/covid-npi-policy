@@ -504,9 +504,9 @@ const Data = ({
         <React.Fragment>
           <Drawer
             {...{
+              title: <h2>Policy and plan database</h2>,
               label: (
                 <React.Fragment>
-                  <h2>Policy and plan database</h2>
                   <button
                     className={classNames(styles.downloadBtn, {
                       [styles.loading]: buttonLoading

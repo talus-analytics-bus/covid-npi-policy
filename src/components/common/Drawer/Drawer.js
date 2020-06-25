@@ -8,7 +8,8 @@ const Drawer = ({ label, content, ...props }) => {
   return (
     <div
       className={classNames(styles.style, props.className, {
-        [styles.float]: props.float === true
+        [styles.float]: props.float === true,
+        [styles.open]: open
       })}
       style={props.style}
     >
@@ -21,6 +22,7 @@ const Drawer = ({ label, content, ...props }) => {
         {label}
         {props.noCollapse !== true && (
           <button
+            style={props.customToggle && { display: "none" }}
             className={classNames(styles.toggle, { [styles.flip]: !open })}
           >
             <i className={"material-icons"}>expand_less</i>
