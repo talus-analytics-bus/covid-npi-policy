@@ -54,7 +54,14 @@ const Map = ({
   const [mapId, setMapId] = useState(defaults.mapId);
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
-  const [date, setDate] = useState(new moment(defaults.date));
+  const caseloadLastUpdated = versions.find(
+    d => d.type === "COVID-19 caseload data"
+  );
+  const caseloadLastUpdatedDate = caseloadLastUpdated
+    ? moment(caseloadLastUpdated.last_datum_date)
+    : moment();
+  const [date, setDate] = useState(caseloadLastUpdatedDate);
+  // const [date, setDate] = useState(new moment(defaults.date));
 
   // name of metric to use as fill by default
   const [fill, setFill] = useState(defaults[mapId].fill);
@@ -234,6 +241,15 @@ const Map = ({
                                   <p key={d.type}>
                                     <b>{d.type}</b> last updated on{" "}
                                     {moment(d.date).format("MMM D, YYYY")}
+                                    {d.last_datum_date !== null && (
+                                      <span>
+                                        {" "}
+                                        with data available through{" "}
+                                        {moment(d.last_datum_date).format(
+                                          "MMM D, YYYY"
+                                        )}
+                                      </span>
+                                    )}
                                   </p>
                                 ))}
                               </div>
