@@ -911,7 +911,11 @@ export const tooltipGetter = async ({
             )}
             <div className={styles.subtitle}>
               {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
-              effect for {subtitleCategory} on&nbsp;<i>{formattedDate}</i>
+              effect for {subtitleCategory}{" "}
+              {!isEmpty(filters["ph_measure_details"])
+                ? "in selected subcategories"
+                : ""}{" "}
+              on&nbsp;<i>{formattedDate}</i>
             </div>
 
             <TableDrawers
