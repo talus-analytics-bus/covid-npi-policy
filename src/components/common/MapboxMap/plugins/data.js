@@ -27,7 +27,10 @@ import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 // assets and styles
 import dots from "./assets/images/dots.png";
 import styles from "./plugins.module.scss";
+import phase1 from "./assets/icons/phase-1.png";
+import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
+import phase4 from "./assets/icons/phase-4.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 
 // utilities and local components
@@ -446,6 +449,7 @@ export const metricMeta = {
         label: "Lockdown",
         phase: "Phase I",
         color: "#2165a1",
+        icon: phase1,
         def: (
           <span>
             Policies do not allow residents to leave their place of residence
@@ -457,6 +461,7 @@ export const metricMeta = {
         label: "Stay-at-home",
         phase: "Phase II",
         color: "#549FE2",
+        icon: phase2,
         def: (
           <span>
             Policies limit most in-person activities and social events.
@@ -480,6 +485,7 @@ export const metricMeta = {
         label: "New normal",
         phase: "Phase IV",
         color: "#a8c4dc",
+        icon: phase4,
         def: (
           <span>
             A majority of public restrictions on mass gatherings and
@@ -491,6 +497,7 @@ export const metricMeta = {
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
         color: "#a8c4dc",
+        icon: phase1, // TODO
         def: (
           <span>
             Any combination of the above levels simultaneously in effect.
@@ -997,13 +1004,13 @@ const TableDrawers = ({ tables, geometryName, ...props }) => {
             }
           >
             <span className={styles.instructions}>
-              {d.rows.length > 1 && <span>Scroll to view more</span>}
               {d.rows.some(dd => dd.place.level === "Local") && (
                 <span>
-                  <br />* = Local policy which does not influence state
-                  distancing level
+                  *Local policy which does not influence state distancing level
+                  <br />
                 </span>
               )}
+              {d.rows.length > 1 && <span>Scroll to view more</span>}
             </span>
             <table>
               <thead>
