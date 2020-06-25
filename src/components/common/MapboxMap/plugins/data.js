@@ -775,7 +775,7 @@ export const tooltipGetter = async ({
           method: "post",
           filters: {
             area1: [d.properties.state_name],
-            level: ["State / Province"],
+            // level: ["State / Province"],
             dates_in_effect: [apiDate, apiDate],
 
             // if doing distancing level, only allow all social distancing
@@ -795,7 +795,8 @@ export const tooltipGetter = async ({
             "primary_ph_measure",
             "ph_measure_details",
             "date_start_effective",
-            "desc"
+            "desc",
+            "place"
           ]
         });
 
@@ -825,8 +826,8 @@ export const tooltipGetter = async ({
               : [],
           dates_in_effect: filters.dates_in_effect,
           country_name: ["United States of America (USA)"],
-          area1: [d.properties.state_name],
-          level: ["State / Province"]
+          area1: [d.properties.state_name]
+          // level: ["State / Province"]
         });
         tooltip.actions =
           nPolicies > 0
@@ -995,7 +996,15 @@ const TableDrawers = ({ tables, geometryName, ...props }) => {
               </div>
             }
           >
-            <span className={styles.instructions}>Scroll to view more</span>
+            <span className={styles.instructions}>
+              {d.rows.length > 1 && <span>Scroll to view more</span>}
+              {d.rows.some(dd => dd.place.level === "Local") && (
+                <span>
+                  <br />* = Local policy which does not influence state
+                  distancing level
+                </span>
+              )}
+            </span>
             <table>
               <thead>
                 <tr>
@@ -1007,6 +1016,7 @@ const TableDrawers = ({ tables, geometryName, ...props }) => {
                 {d.rows.map((dd, ii) => (
                   <tr key={dd.desc + " - " + ii}>
                     <td>
+                      {dd.place.level === "Local" && <span>*</span>}
                       <ShowMore {...{ text: dd.desc, charLimit: 100 }} />
                     </td>
                     <td>
