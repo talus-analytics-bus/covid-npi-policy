@@ -43,7 +43,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
         <>
           The Nuclear Threat Initiative (NTI) provided funding for AMP, as well
           as contributing subject matter expertise and project leadership to the
-          overall COVID Local program.
+          overall COVID Local project.
         </>
       ),
       url: "https://www.nti.org/about/biosecurity/",
