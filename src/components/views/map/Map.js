@@ -60,6 +60,7 @@ const Map = ({
   const caseloadLastUpdatedDate = caseloadLastUpdated
     ? moment(caseloadLastUpdated.last_datum_date)
     : moment();
+  defaults.minMaxDate.maxDate = caseloadLastUpdatedDate;
   const [date, setDate] = useState(caseloadLastUpdatedDate);
   // const [date, setDate] = useState(new moment(defaults.date));
 
