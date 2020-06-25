@@ -227,7 +227,7 @@ const Map = ({
                           Data last updated on{" "}
                           {moment(lastUpdatedDateOverall).format("MMM D, YYYY")}
                           <InfoTooltip
-                            place={"bottom"}
+                            place={"left"}
                             text={
                               <div>
                                 {versions.map(d => (

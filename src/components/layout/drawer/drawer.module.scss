@@ -20,6 +20,10 @@
     padding-left: 15px;
     @media #{$phone} {
       padding: 15px;
+      button {
+        position: absolute !important;
+        right: 3px;
+      }
     }
     text-transform: uppercase;
     background-color: $light-blue-3;
