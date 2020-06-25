@@ -497,7 +497,6 @@ export const metricMeta = {
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
         color: "#a8c4dc",
-        icon: phase1, // TODO
         def: (
           <span>
             Any combination of the above levels simultaneously in effect.
@@ -889,7 +888,7 @@ export const tooltipGetter = async ({
           <div className={styles.distancingLevel}>
             {plugins.fill === "lockdown_level" && (
               <div className={styles.iconSection}>
-                <img src={displayInfo.icon} />
+                {displayInfo.icon && <img src={displayInfo.icon} />}
 
                 <div className={styles.iconLabel}>
                   <div className={styles.label}>{displayInfo.label}</div>
