@@ -31,6 +31,7 @@ import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
 import phase4 from "./assets/icons/phase-4.png";
+import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 
 // utilities and local components
@@ -498,6 +499,7 @@ export const metricMeta = {
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
         color: "#a8c4dc",
+        icon: mixed,
         def: (
           <span>
             Any combination of the above levels simultaneously in effect.
@@ -894,11 +896,11 @@ export const tooltipGetter = async ({
                 <div className={styles.iconLabel}>
                   <div className={styles.label}>{displayInfo.label}</div>
                   <div className={styles.category}>
-                    {displayInfo.phase && (
-                      <div className={styles.phaseName}>
-                        {displayInfo.phase}
-                      </div>
-                    )}
+                    <div className={styles.phaseName}>
+                      {displayInfo.phase && displayInfo.phase}
+                      {!displayInfo.phase && "Mixed"}
+                    </div>
+
                     <div className={styles.link}>
                       <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
                         <img src={localLogo} />
