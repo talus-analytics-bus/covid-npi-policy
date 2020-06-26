@@ -146,29 +146,35 @@ const Data = ({
     {
       dataField: "place.loc",
       header: "Affected location",
+      defCharLimit: 1000,
       sort: true,
       formatter: v => {
         return <ShowMore text={v} charLimit={60} />;
       }
     },
-    {
-      dataField: "policy_name",
-      header: "Policy name",
-      sort: true,
-      formatter: v => {
-        // TODO REPLACE ALL
-        return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
-      }
-    },
+    // {
+    //   dataField: "policy_name",
+    //   header: "Policy name",
+    //   sort: true,
+    //   formatter: v => {
+    //     // TODO REPLACE ALL
+    //     return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+    //   }
+    // },
     {
       dataField: "desc",
-      header: "Policy description",
+      header: "Policy name and description",
       // width: "300",
-      defCharLimit: 70,
+      defCharLimit: 1000,
       sort: true,
-      formatter: v => {
-        return <ShowMore text={v} charLimit={90} />;
+      formatter: (cell, row) => {
+        return (
+          <ShowMore text={row.policy_name + ": " + cell} charLimit={200} />
+        );
       }
+      // formatter: v => {
+      //   return <ShowMore text={v} charLimit={90} />;
+      // }
     },
 
     {
@@ -477,8 +483,15 @@ const Data = ({
           : "policy." + d.dataField;
         d.definition = metadata[key] ? metadata[key].definition || "" : "";
 
-        // // use only the first sentence of the definition
-        // d.definition = d.definition.split(".")[0];
+        // use only the first sentence of the definition
+        if (d.dataField !== "authority_name")
+          d.definition = d.definition.split(".")[0] + ".";
+
+        // special cases
+        if (d.dataField === "desc") {
+          d.definition =
+            "The name and a written description of the policy or law and who it impacts.";
+        }
       });
       setColumns(newColumns);
     }
