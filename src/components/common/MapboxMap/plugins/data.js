@@ -27,6 +27,7 @@ import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 // assets and styles
 import dots from "./assets/images/dots.png";
 import styles from "./plugins.module.scss";
+import tooltipStyles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
@@ -930,20 +931,20 @@ export const tooltipGetter = async ({
         const subtitle = null;
         tooltip.tooltipHeader.subtitle = subtitle;
         item.customContent = (
-          <div className={styles.distancingLevel}>
+          <div className={tooltipStyles.distancingLevel}>
             {plugins.fill === "lockdown_level" && (
-              <div className={styles.iconSection}>
+              <div className={tooltipStyles.iconSection}>
                 {displayInfo.icon && <img src={displayInfo.icon} />}
 
-                <div className={styles.iconLabel}>
-                  <div className={styles.label}>{displayInfo.label}</div>
-                  <div className={styles.category}>
-                    <div className={styles.phaseName}>
+                <div className={tooltipStyles.iconLabel}>
+                  <div className={tooltipStyles.label}>{displayInfo.label}</div>
+                  <div className={tooltipStyles.category}>
+                    <div className={tooltipStyles.phaseName}>
                       {displayInfo.phase && displayInfo.phase}
                       {!displayInfo.phase && "Mixed"}
                     </div>
 
-                    <div className={styles.link}>
+                    <div className={tooltipStyles.link}>
                       <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
                         <img src={localLogo} />
                         view metrics at COVID-Local
@@ -953,7 +954,7 @@ export const tooltipGetter = async ({
                 </div>
               </div>
             )}
-            <div className={styles.subtitle}>
+            <div className={tooltipStyles.subtitle}>
               {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
               effect for {subtitleCategory}{" "}
               {!isEmpty(filters["ph_measure_details"])
@@ -1002,20 +1003,20 @@ const TableDrawer = ({
   children
 }) => {
   return (
-    <div className={styles.tableDrawer}>
+    <div className={tooltipStyles.tableDrawer}>
       <div
         onClick={() => {
           if (open) setOpenTableDrawer(null);
           else setOpenTableDrawer(id);
         }}
-        className={styles.header}
+        className={tooltipStyles.header}
       >
         {header}
         <button>
           {
             <i
               className={classNames("material-icons", {
-                [styles.flipped]: open
+                [tooltipStyles.flipped]: open
               })}
             >
               play_arrow
@@ -1023,7 +1024,7 @@ const TableDrawer = ({
           }
         </button>
       </div>
-      <div className={styles.content}>{open && children}</div>
+      <div className={tooltipStyles.content}>{open && children}</div>
     </div>
   );
 };
@@ -1035,7 +1036,7 @@ const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
   }, [tables]);
 
   return (
-    <div className={styles.table}>
+    <div className={tooltipStyles.table}>
       {tables.map((d, i) => (
         <React.Fragment
           key={d.ph_measure_details + "-" + geometryName + "-" + i}
@@ -1046,16 +1047,16 @@ const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
             openTableDrawer={openTableDrawer}
             setOpenTableDrawer={setOpenTableDrawer}
             header={
-              <div className={styles.tableName}>
+              <div className={tooltipStyles.tableName}>
                 {d.ph_measure_details}{" "}
-                <span className={styles.num}>
+                <span className={tooltipStyles.num}>
                   ({comma(d.rows.length)}
                   {d.rows.length === 1 ? " policy" : " policies"})
                 </span>
               </div>
             }
           >
-            <span className={styles.instructions}>
+            <span className={tooltipStyles.instructions}>
               {d.rows.some(dd => dd.place.level === "Local") && (
                 <span>
                   *Local policy which does not influence{" "}
