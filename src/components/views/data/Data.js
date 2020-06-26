@@ -454,6 +454,7 @@ const Data = ({
     setLoading(true);
 
     // get data (loading spinner turned off after API call)
+    console.log(filters);
     getData(filters);
 
     // if filters are empty, clear all URL search params

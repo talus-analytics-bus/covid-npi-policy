@@ -33,7 +33,6 @@ const App = () => {
   const [initDataFilters, setInitDataFilters] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const [versions, setVersions] = useState(null);
-  const toggleLoading = v => setLoading(v);
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -95,6 +94,8 @@ const App = () => {
     getData().then(newVersions => setVersions(newVersions));
   }, []);
 
+  console.log("versions");
+  console.log(versions);
   if (versions === null) return <div />;
   else
     return (
