@@ -60,6 +60,7 @@ export const Policy = async function({
 }) {
   // return cached result if available
   if (isEmpty(filters) && allPolicies !== null) {
+    // console.log("\n\ndoing it");
     return allPolicies;
   }
 

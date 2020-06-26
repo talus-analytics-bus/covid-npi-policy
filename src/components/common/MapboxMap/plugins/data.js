@@ -405,9 +405,30 @@ export const metricMeta = {
   policy_status: {
     metric_definition: (
       <span>
-        <b style={{ color: "#66CAC4" }}>Cyan</b> states had at least one
-        state-level policy in effect with the given category / subcategories on
-        the specified date.
+        {
+          <table className={styles.distancingLevelTable}>
+            <tbody>
+              <tr>
+                <td>
+                  <div
+                    style={{
+                      backgroundColor: "#66CAC4",
+                      marginRight: "20px"
+                    }}
+                    className={styles.rect}
+                  >
+                    policy in effect
+                  </div>
+                </td>
+                <td style={{ display: "none" }} />
+                <td>
+                  At least one state-level policy in effect with the given
+                  category / subcategories on the specified date.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        }
       </span>
     ),
     metric_displayname: "Policy status",
@@ -888,42 +909,16 @@ export const tooltipGetter = async ({
         tooltip.actions =
           nPolicies > 0
             ? [
-                <a target="_blank" href={"/data?filters=" + filtersStr}>
+                <a
+                  key={"view"}
+                  target="_blank"
+                  href={"/data?filters=" + filtersStr}
+                >
                   <button>
                     View {nPolicies === 1 ? "this" : `these`}{" "}
                     {nPolicies === 1 ? "policy" : "policies"}
                   </button>
                 </a>
-                // <Link
-                //   key={"view"}
-                //   onClick={() => {
-                //     plugins.setInitDataFilters({
-                //       // if doing distancing level, only allow all social distancing
-                //       // policies to be returned
-                //       primary_ph_measure:
-                //         plugins.fill !== "lockdown_level"
-                //           ? filters.primary_ph_measure
-                //           : ["Social distancing"],
-                //       ph_measure_details:
-                //         plugins.fill !== "lockdown_level"
-                //           ? filters.ph_measure_details || []
-                //           : [],
-                //       dates_in_effect: filters.dates_in_effect,
-                //       country_name: ["United States of America (USA)"],
-                //       area1: [d.properties.state_name],
-                //       level: ["State / Province"]
-                //     });
-                //   }}
-                //   to={{
-                //     pathname: "/data"
-                //   }}
-                // >
-                //   <button>
-                //     View details for{" "}
-                //     {nPolicies === 1 ? "this" : `these ${comma(nPolicies)}`}{" "}
-                //     {nPolicies === 1 ? "policy" : "policies"}
-                //   </button>
-                // </Link>
               ]
             : [];
 

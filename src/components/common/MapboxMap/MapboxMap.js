@@ -376,8 +376,6 @@ const MapboxMap = ({
         const sources = mapSources[mapId];
 
         // Get list of features under the mouse cursor.
-        console.log("e");
-        console.log(e);
         const features = map.queryRenderedFeatures(e.point);
 
         // Get fill and/or circle features that were under the cursor

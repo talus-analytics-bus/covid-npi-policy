@@ -30,7 +30,6 @@ import loadingSvg from "./assets/images/loading.svg";
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(null);
-  const [initDataFilters, setInitDataFilters] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const [versions, setVersions] = useState(null);
 
@@ -122,7 +121,6 @@ const App = () => {
                             setLoading,
                             setPage,
                             setInfoTooltipContent,
-                            initDataFilters,
                             urlFilterParams
                           }}
                         />
@@ -152,8 +150,7 @@ const App = () => {
                             versions,
                             setPage,
                             setLoading,
-                            setInfoTooltipContent,
-                            setInitDataFilters
+                            setInfoTooltipContent
                           }}
                         />
                       );

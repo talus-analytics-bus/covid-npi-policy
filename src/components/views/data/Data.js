@@ -28,7 +28,6 @@ const Data = ({
   setLoading,
   setInfoTooltipContent,
   setPage,
-  initDataFilters,
   urlFilterParams
 }) => {
   const [initializing, setInitializing] = useState(true);
@@ -51,9 +50,7 @@ const Data = ({
   // define filters
   // TODO parse by policy/plan
   // const [filters, setFilters] = useState({});
-  const [filters, setFilters] = useState(
-    initDataFilters !== null ? initDataFilters : {}
-  );
+  const [filters, setFilters] = useState(null);
 
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -394,6 +391,7 @@ const Data = ({
       setFilterDefs(newFilterDefs);
       setInitializing(false);
     }
+    setLoading(false);
   };
 
   // on initial page load, get all data and filter optionset values
@@ -406,26 +404,6 @@ const Data = ({
 
     // set current page
     setPage("data");
-
-    // parse URL params for init filters and then clear them
-    const hasParams = window.location.search !== "";
-    if (false) {
-      // get URL search params
-      const paramsString = window.location.search;
-      const newUrlParams = new URLSearchParams(paramsString);
-
-      // add filters from URL search params
-      const newFilters = {};
-      for (const [k, v] of newUrlParams.entries()) {
-        if (newFilters[k] === undefined) newFilters[k] = [v];
-        else {
-          if (!newFilters[k].includes(v)) newFilters[k].push(v);
-        }
-      }
-
-      // update filters
-      setFilters(newFilters);
-    }
   }, []);
 
   // DEBUG url params change
@@ -444,29 +422,33 @@ const Data = ({
       }
       // update filters
       setFilters(newFilters);
+    } else if (filters === null) {
+      setFilters({});
     }
   }, [urlFilterParams]);
 
   // when filters are changed, retrieve filtered data, and set loading spinner
   // to visible
   useEffect(() => {
-    // set loading spinner to visible
-    setLoading(true);
+    if (filters !== null) {
+      // set loading spinner to visible
+      setLoading(true);
 
-    // get data (loading spinner turned off after API call)
-    console.log(filters);
-    getData(filters);
+      // get data (loading spinner turned off after API call)
+      console.log(filters);
+      getData(filters);
 
-    // if filters are empty, clear all URL search params
-    if (isEmpty(filters)) {
-      window.history.replaceState({ filtersStr: "" }, "", "/data");
-    } else {
-      const filtersStr = JSON.stringify(filters);
-      window.history.replaceState(
-        { filtersStr },
-        "",
-        "/data?filters=" + filtersStr
-      );
+      // if filters are empty, clear all URL search params
+      if (isEmpty(filters)) {
+        window.history.replaceState({ filtersStr: "" }, "", "/data");
+      } else {
+        const filtersStr = JSON.stringify(filters);
+        window.history.replaceState(
+          { filtersStr },
+          "",
+          "/data?filters=" + filtersStr
+        );
+      }
     }
   }, [filters]);
 
@@ -497,11 +479,6 @@ const Data = ({
       setColumns(newColumns);
     }
   }, [metadata]);
-
-  // when data are loaded, set loading flag to false (controlled in App.js)
-  useEffect(() => {
-    if (data !== null) setLoading(false);
-  }, [data]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {

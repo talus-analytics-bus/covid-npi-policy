@@ -9,7 +9,7 @@ const Util = {};
  * @return {Boolean}   [description]
  */
 export const isEmpty = d => {
-  if (d === undefined || Object.keys(d).length === 0) return true;
+  if (d === undefined || d === null || Object.keys(d).length === 0) return true;
   else return false;
 };
 
