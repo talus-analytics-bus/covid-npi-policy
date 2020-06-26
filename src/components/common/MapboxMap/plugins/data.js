@@ -26,7 +26,7 @@ import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 
 // assets and styles
 import dots from "./assets/images/dots.png";
-import styles from "./plugins.module.scss";
+import infoTooltipStyles from "../../../common/InfoTooltip/plugins.module.scss";
 import tooltipStyles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
@@ -407,7 +407,7 @@ export const metricMeta = {
     metric_definition: (
       <span>
         {
-          <table className={styles.distancingLevelTable}>
+          <table className={infoTooltipStyles.distancingLevelTable}>
             <tbody>
               <tr>
                 <td>
@@ -416,7 +416,7 @@ export const metricMeta = {
                       backgroundColor: "#66CAC4",
                       marginRight: "20px"
                     }}
-                    className={styles.rect}
+                    className={infoTooltipStyles.rect}
                   >
                     policy in effect
                   </div>
@@ -537,7 +537,7 @@ export const metricMeta = {
       );
       return (
         <div>
-          <p className={styles.definitionHeader}>
+          <p className={infoTooltipStyles.definitionHeader}>
             <span>
               The level of distancing in the location on the specified date.{" "}
             </span>
@@ -548,7 +548,7 @@ export const metricMeta = {
             </a>
           </p>
           {
-            <table className={styles.distancingLevelTable}>
+            <table className={infoTooltipStyles.distancingLevelTable}>
               <tbody>
                 {Object.values(this.valueStyling).map((d, i) => (
                   <tr key={d.label}>
@@ -570,7 +570,7 @@ export const metricMeta = {
                                 color: "black"
                               }
                         }
-                        className={styles.rect}
+                        className={infoTooltipStyles.rect}
                       >
                         {d.label}
                       </div>
@@ -975,7 +975,7 @@ export const tooltipGetter = async ({
 
         item.value = (
           <div
-            className={styles.badge}
+            className={infoTooltipStyles.badge}
             style={{
               backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
             }}
