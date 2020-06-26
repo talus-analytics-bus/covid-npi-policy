@@ -347,7 +347,6 @@ const Map = ({
             plugins: {
               setInitDataFilters,
               fill
-              // setInfoTooltipContent
             }
           }}
         />

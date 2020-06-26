@@ -245,8 +245,9 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
+    console.log("Getting map data");
     getMapData({ date, filters, mapId });
-  }, [date, filters, mapId]);
+  }, [filters, mapId]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
