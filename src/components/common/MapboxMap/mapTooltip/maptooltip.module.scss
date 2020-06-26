@@ -8,9 +8,6 @@
   @include boxShadowStrong();
   min-width: 400px;
   cursor: default;
-  // * {
-  //   cursor: unset;
-  // }
 
   .header {
     background-color: #ededed;
@@ -62,19 +59,6 @@
       display: flex;
       flex-flow: column;
       font-size: 1rem;
-      // &.policyStatus {
-      //   flex-flow: row;
-      //   @include spaceItemsHoriz(40px);
-      //
-      //   .metricHeader {
-      //     align-items: center;
-      //     height: min-content;
-      //     line-height: 2;
-      //     .label {
-      //       margin-bottom: 0;
-      //     }
-      //   }
-      // }
       .metricHeader {
         display: flex;
         font-family: "rawline", serif;
@@ -104,7 +88,6 @@
             line-height: 1;
             text-align: left;
             position: relative;
-            // top: -2px;
           }
         }
         .trend {
@@ -161,3 +144,46 @@
 }
 
 @import "./plugins.module.scss";
+
+// // Uncomment this to make popup stick to upper-right corner of map viewport
+// [class*="mapboxgl-popup"] {
+//   position: absolute !important;
+//   top: 35px !important;
+//   transform: none !important;
+//   right: 0 !important;
+//   [class*="mapboxgl-popup-tip"] {
+//     display: none;
+//   }
+// }
+
+// override Mapbox default popup styling
+[class*="mapboxgl-popup-content"] {
+  padding: 0 !important;
+  margin: 0;
+}
+
+[class*="mapboxgl-popup-anchor-bottom"],
+[class*="mapboxgl-popup-anchor-bottom-left"],
+[class*="mapboxgl-popup-anchor-bottom-right"] {
+  [class*="mapboxgl-popup-tip"] {
+    position: relative;
+    top: -3px;
+  }
+}
+[class*="mapboxgl-popup-anchor-left"] [class*="mapboxgl-popup-tip"] {
+  position: relative;
+  left: 3px;
+}
+[class*="mapboxgl-popup-anchor-right"] [class*="mapboxgl-popup-tip"] {
+  position: relative;
+  right: 3px;
+}
+[class*="mapboxgl-popup-anchor-top"],
+[class*="mapboxgl-popup-anchor-top-right"],
+[class*="mapboxgl-popup-anchor-top-left"] {
+  [class*="mapboxgl-popup-tip"] {
+    position: relative;
+    top: 3px;
+    border-bottom-color: $light-gray-2 !important;
+  }
+}
