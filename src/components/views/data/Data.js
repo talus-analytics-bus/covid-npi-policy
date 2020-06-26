@@ -133,8 +133,6 @@ const Data = ({
       }
     }
   ]);
-  console.log("filters");
-  console.log(filters);
   const unspecified = (
     <span className={styles.unspecified}>{"None available"}</span>
   );
@@ -154,15 +152,14 @@ const Data = ({
       }
     },
     {
-      dataField: "primary_ph_measure",
-      header: "Policy category",
-      sort: true
+      dataField: "policy_name",
+      header: "Policy name",
+      sort: true,
+      formatter: v => {
+        // TODO REPLACE ALL
+        return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+      }
     },
-    // {
-    //   dataField: "ph_measure_details",
-    //   header: "Policy sub-category",
-    //   sort: true
-    // },
     {
       dataField: "desc",
       header: "Policy description",
@@ -173,9 +170,21 @@ const Data = ({
         return <ShowMore text={v} charLimit={90} />;
       }
     },
+
+    {
+      dataField: "primary_ph_measure",
+      header: "Policy category",
+      sort: true
+    },
+    // {
+    //   dataField: "ph_measure_details",
+    //   header: "Policy sub-category",
+    //   sort: true
+    // },
+
     {
       dataField: "date_start_effective",
-      header: "Policy effective start date",
+      header: "Effective start date",
       sort: true,
       formatter: v =>
         v !== null ? moment(v).format("MMM D, YYYY") : unspecified
@@ -226,6 +235,15 @@ const Data = ({
     //     }
     //   }
     // },
+    {
+      dataField: "authority_name",
+      header: "Relevant authority",
+      sort: true,
+      formatter: v => {
+        // TODO REPLACE ALL
+        return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+      }
+    },
     {
       dataField: "file",
       header: "Link",
@@ -286,6 +304,8 @@ const Data = ({
           "id",
           "place",
           "primary_ph_measure",
+          "policy_name",
+          "authority_name",
           // "ph_measure_details",
           "desc",
           "date_start_effective",
@@ -457,8 +477,8 @@ const Data = ({
           : "policy." + d.dataField;
         d.definition = metadata[key] ? metadata[key].definition || "" : "";
 
-        // use only the first sentence of the definition
-        d.definition = d.definition.split(".")[0];
+        // // use only the first sentence of the definition
+        // d.definition = d.definition.split(".")[0];
       });
       setColumns(newColumns);
     }

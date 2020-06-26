@@ -301,7 +301,7 @@ const Map = ({
                             key: "FilterSet"
                           }}
                         />,
-                        <div className={styles.divider} />,
+                        <div key={"divider"} className={styles.divider} />,
 
                         // slider to modify the current date, including a calendar picker
                         <DateSlider

@@ -292,7 +292,6 @@ const Legend = ({ ...props }) => {
       ? `Change in ${Util.getInitLower(entryName)} from ${then} to ${now}`
       : entryName;
   } else {
-    console.log(props);
     sectionHeader = (
       <div>
         {entryName}

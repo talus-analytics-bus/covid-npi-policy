@@ -529,7 +529,7 @@ export const metricMeta = {
             <table className={styles.distancingLevelTable}>
               <tbody>
                 {Object.values(this.valueStyling).map((d, i) => (
-                  <tr>
+                  <tr key={d.label}>
                     <td>
                       <div
                         style={

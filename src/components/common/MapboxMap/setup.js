@@ -109,8 +109,6 @@ export const initMap = ({ map, mapId, data, callback }) => {
               // insert this layer just behind the `priorLayer`
               defaults[mapId].priorLayer
             );
-            console.log("layerStyle");
-            console.log(layerStyle);
 
             // add auxiliary pattern layer so fill colors can be mixed with
             // fill patterns (not necessarily used)
