@@ -64,20 +64,12 @@ const circleStyles = {
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
-        if (key === "-9997" || key === "-9999")
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e4,
-            featurePropertyKey: key
-          });
-        else
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e9,
-            featurePropertyKey: key
-          });
+        return getLog10Scale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 1e9,
+          featurePropertyKey: key
+        });
       }
     };
   },
@@ -103,20 +95,12 @@ const circleStyles = {
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
-        if (key === "-9997" || key === "-9999")
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e4,
-            featurePropertyKey: key
-          });
-        else
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e9,
-            featurePropertyKey: key
-          });
+        return getLog10Scale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 1e9,
+          featurePropertyKey: key
+        });
       }
     };
   }
