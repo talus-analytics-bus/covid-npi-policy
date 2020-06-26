@@ -112,6 +112,10 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
     disablePageTitle: true,
     sizePerPageList: [
       {
+        text: "5",
+        value: 5
+      },
+      {
         text: "10",
         value: 10
       },
@@ -152,7 +156,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
             <BootstrapTable
               pagination={pagination}
               expandRow={expandable ? expandRow : undefined}
-              classes={{ [styles.expandable]: expandable }}
+              classes={expandable ? styles.expandable : ""}
               {...props.baseProps}
               defaultSorted={defaultSorted}
             />

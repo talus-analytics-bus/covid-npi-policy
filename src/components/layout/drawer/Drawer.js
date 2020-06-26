@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useState } from "react";
 import styles from "./drawer.module.scss";
 
-const Drawer = ({ label, content, ...props }) => {
+const Drawer = ({ title, label, content, ...props }) => {
   const [open, setOpen] = useState(true);
   return (
     <div className={styles.style} style={props.style}>
@@ -13,7 +13,8 @@ const Drawer = ({ label, content, ...props }) => {
         })}
         onClick={() => props.noCollapse !== true && setOpen(!open)}
       >
-        {label}
+        {title}
+
         {props.noCollapse !== true && (
           <button
             className={classNames(styles.toggle, { [styles.flip]: !open })}
@@ -21,6 +22,7 @@ const Drawer = ({ label, content, ...props }) => {
             <i className={"material-icons"}>expand_less</i>
           </button>
         )}
+        {label}
       </div>
       {
         <div className={classNames(styles.content, { [styles.hidden]: !open })}>

@@ -1,0 +1,40 @@
+@import "../../../assets/styles/vars.scss";
+.title {
+  margin: 28px 0;
+  text-transform: none;
+  font-size: 1.66rem;
+}
+.tabs {
+  @include spaceItemsHoriz(10px);
+  position: relative;
+  top: 1px;
+  font-size: 1.2rem;
+  button {
+    font-family: "rawline", serif;
+
+    background: none;
+    background-color: #bde7ff;
+    padding: 10px 30px;
+    border: 1px solid #bde7ff;
+
+    color: #808080;
+
+    &.active {
+      background-color: white;
+      border-bottom-color: white;
+      color: #333;
+      font-weight: bold;
+    }
+  }
+}
+.content {
+  border: 1px solid #bde7ff;
+  padding: 30px;
+  img {
+    margin-bottom: 28px;
+  }
+  p {
+    max-width: 600px;
+  }
+}
+@import "./responsive.module.scss";

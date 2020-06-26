@@ -1,7 +1,32 @@
 import axios from "axios";
 import moment from "moment";
+import { isEmpty } from "./Util";
 
 const API_URL = process.env.REACT_APP_API_URL;
+
+/**
+ * Get glossary terms
+ */
+export const Glossary = async function({ field }) {
+  let req;
+  req = await axios(`${API_URL}/get/glossary`);
+  const params = new URLSearchParams();
+  params.append("field", field);
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
+ * Get versions of data used
+ */
+export const Version = async function() {
+  let req;
+  req = await axios(`${API_URL}/get/version`);
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
 
 /**
  * Get metadata for specified fields
@@ -22,15 +47,29 @@ export const Metadata = async function({ method, fields }) {
   else return false;
 };
 
+let allPolicies = null;
+
 /**
  * Get policy data from API.
  */
-export const Policy = async function({ method, fields = [], filters = null }) {
+export const Policy = async function({
+  method,
+  fields = [],
+  filters = null,
+  by_category = null
+}) {
+  // return cached result if available
+  if (isEmpty(filters) && allPolicies !== null) {
+    // console.log("\n\ndoing it");
+    return allPolicies;
+  }
+
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
   });
+  if (by_category !== null) params.append("by_category", by_category);
 
   // prepare request
   let req;
@@ -54,7 +93,51 @@ export const Policy = async function({ method, fields = [], filters = null }) {
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data;
+  if (res.data !== undefined) {
+    if (isEmpty(filters)) {
+      allPolicies = res.data;
+    }
+    return res.data;
+  } else return false;
+};
+
+/**
+ * Get policy status data from API.
+ */
+export const PolicyStatus = async function({
+  method,
+  fields = [],
+  filters = null
+}) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/get/policy_status/state`, {
+      params
+    });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+    req = await axios.post(
+      `${API_URL}/post/policy_status/state`,
+      { filters },
+      {
+        params
+      }
+    );
+  } else {
+    console.log("Error: Method not implemented for `PolicyStatus`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
   else return false;
 };
 
@@ -103,7 +186,7 @@ export const Export = async function({ method, filters = null }) {
 export const OptionSet = async function({
   method,
   fields = null,
-  entity_name = null,
+  // entity_name = null,
   ...params
 }) {
   let req;
@@ -111,17 +194,18 @@ export const OptionSet = async function({
     if (fields === null) {
       console.log("Error: `fields` is required for method GET.");
       return false;
-    } else if (entity_name === null) {
-      console.log("Error: `entity_name` is required for method GET.");
-      return false;
     }
+    // else if (entity_name === null) {
+    //   console.log("Error: `entity_name` is required for method GET.");
+    //   return false;
+    // }
 
     // collate fields
     const params = new URLSearchParams();
     fields.forEach(d => {
       params.append("fields", d);
     });
-    params.set("entity_name", entity_name);
+    // params.set("entity_name", entity_name);
 
     req = await axios.get(`${API_URL}/get/optionset`, {
       params

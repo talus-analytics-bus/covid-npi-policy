@@ -35,15 +35,19 @@ const Filter = ({
   dateRange,
   minMaxDate,
   withGrouping = false,
+  className,
   ...props
 }) => {
-  // // set disabled items
-  // // TODO dynamically
-  // if (items && field === "level") {
-  //   const match = items.find(d => d.value === "Country");
-  //   if (match) match.disabled = true;
-  // }
   const [show, setShow] = useState(false);
+  let initSelectedItems;
+  if (!dateRange) {
+    initSelectedItems =
+      filters[field] !== undefined
+        ? items.filter(d => filters[field].includes(d.value))
+        : [];
+  } else {
+    initSelectedItems = filters[field] !== undefined ? filters[field] : [];
+  }
   const primaryFiltersOff =
     primary !== undefined &&
     (filters[primary] === undefined || filters[primary].length === 0);
@@ -51,13 +55,19 @@ const Filter = ({
   const disabled = primaryFiltersOff;
   const [filterState, setFilterState] = useState({
     items,
-    selectedItems: []
+    selectedItems: initSelectedItems
   });
   const [showRangeSelection, setShowRangeSelection] = useState(false);
   const initDateRangeState = [
     {
-      startDate: undefined,
-      endDate: undefined,
+      startDate:
+        initSelectedItems.length > 0
+          ? new Date(moment(initSelectedItems[0]))
+          : undefined,
+      endDate:
+        initSelectedItems.length > 0
+          ? new Date(moment(initSelectedItems[1]))
+          : undefined,
       key: "selection"
     }
   ];
@@ -115,7 +125,7 @@ const Filter = ({
 
   useEffect(() => {
     if (dateRange) {
-      if (filters[field] === undefined) {
+      if (filters[field] === undefined || filters[field].length === 0) {
         setDateRangeState(initDateRangeState);
         setShowRangeSelection(false);
       }
@@ -130,10 +140,13 @@ const Filter = ({
         }
       } else {
         if (filters[field] !== undefined) {
+          // if (filters[field] !== undefined && items !== undefined) {
+
           const curFilters = filterState.selectedItems;
           const newFilters = curFilters.filter(
             d => filters[field].includes(d.value) || filters[field].includes(d)
           );
+
           updatedSelectedItems = newFilters;
           setFilterState({
             ...filterState,
@@ -183,6 +196,10 @@ const Filter = ({
       const startRaw = dateRangeState[0].startDate;
       const endRaw = dateRangeState[0].endDate;
       if (startRaw === undefined || endRaw === undefined) {
+        setFilterState({
+          ...filterState,
+          selectedItems: []
+        });
         return;
       } else {
         const v = [
@@ -202,7 +219,6 @@ const Filter = ({
       }
     }
   }, [dateRangeState]);
-
   const showSelectAll = items && items.length > 4;
   let responsiveHeight = 0;
   if (items !== undefined) {
@@ -226,7 +242,7 @@ const Filter = ({
         <div className={styles.input}>
           <div
             role="filterButton"
-            className={classNames(styles.filterButton, {
+            className={classNames(styles.filterButton, className, {
               [styles.shown]: show,
               [styles.selected]: nCur > 0,
               [styles.disabled]: disabled || noItems
@@ -334,6 +350,7 @@ const Filter = ({
     return (
       <RadioToggle
         {...{
+          className,
           choices: items,
           curVal:
             isEmpty(filters) || isEmpty(filters[field])

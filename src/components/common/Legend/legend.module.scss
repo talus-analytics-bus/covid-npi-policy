@@ -1,0 +1,113 @@
+@import "../../../assets/styles/vars.scss";
+
+.style {
+  display: flex;
+  flex-flow: column;
+  background-color: white;
+  width: max-content;
+  padding: 5px;
+  margin: 5px;
+  @include spaceItemsVert(10px);
+  z-index: 1000;
+  cursor: default;
+  .name {
+    max-width: 420px;
+  }
+  .content {
+    display: flex;
+    @include spaceItemsHoriz(30px);
+    justify-content: center;
+    .entry {
+      $height: 20px;
+      .symbols {
+        display: flex;
+        border: 1px solid #ccc;
+        & + .labels {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+
+      .circle {
+        height: $height;
+        width: $height;
+        border-radius: 9999px;
+      }
+      .gradientBar {
+        height: $height;
+        min-width: 200px;
+        max-width: 100%;
+      }
+      .shapeSeries {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &,
+        & + .labels {
+          display: flex;
+          justify-content: space-between;
+          margin: 0 auto;
+          width: 150px;
+        }
+      }
+      .quantized {
+        display: flex;
+        @include spaceItemsHoriz(2px);
+        flex-flow: row wrap;
+
+        margin-bottom: -2px;
+        .rect {
+          width: 3 * $height;
+          margin-bottom: 2px;
+          &.labelsInside {
+            width: auto;
+            height: auto;
+            padding: 5px 10px;
+            .label {
+              margin: unset;
+            }
+          }
+        }
+        .label {
+          text-align: center;
+          margin-left: -100%;
+          margin-right: -100%;
+        }
+      }
+      .rect {
+        height: $height;
+        width: $height * 2;
+        &.skinny {
+          width: $height;
+        }
+        &.hatched {
+          background: repeating-linear-gradient(
+            -45deg,
+            #bfbfbf,
+            #bfbfbf,
+            1px,
+            #fff 1px,
+            #fff 6px
+          );
+          border: 1px solid #bfbfbf;
+        }
+      }
+    }
+  }
+  &.mapboxLegend {
+    background-color: white;
+    border: none;
+
+    // position: relative;
+    // display: flex;
+    // justify-content: center;
+    // width: 100%;
+  }
+}
+
+// responsiveness
+@media #{$phone} {
+  .quantized {
+    flex-flow: column !important;
+  }
+}

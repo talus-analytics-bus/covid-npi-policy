@@ -4,11 +4,17 @@ import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";
 import Util from "../../misc/Util.js";
+import classNames from "classnames";
 
 // 3rd party packages
 import moment from "moment";
 
-const Footer = () => {
+const Footer = ({ page, versions }) => {
+  // get last updated date
+  const lastUpdated = versions.find(d => d.type === "Policy data");
+  const lastUpdatedDate = lastUpdated !== undefined ? lastUpdated.date : null;
+
+  // define footer images and links
   const images = [
     {
       imgSrc: gu,
@@ -36,18 +42,27 @@ const Footer = () => {
   ];
 
   return (
-    <div className={styles.footer}>
+    <div
+      className={classNames(styles.footer, {
+        [styles.wide]: page === "policymaps"
+      })}
+    >
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <div className={styles.dataAsOf}>
             {
               // TODO set date dynamically from API
             }
-            Data last updated {new moment("2020-06-19").format("MMM D, YYYY")}
+            {lastUpdated && (
+              <span>
+                Policy data last updated{" "}
+                {new moment(lastUpdatedDate).format("MMM D, YYYY")}
+              </span>
+            )}
           </div>
           <div className={styles.links}>
             {images.map(d => (
-              <a target="_blank" href={d.url} alt={d.alt}>
+              <a key={d.imgSrc} target="_blank" href={d.url} alt={d.alt}>
                 <img style={d.style} src={d.imgSrc} />
                 {d.txt && <div>{d.txt}</div>}
               </a>

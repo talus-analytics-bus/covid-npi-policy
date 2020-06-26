@@ -1,6 +1,9 @@
 body {
   font-size: 16px;
 }
+#root {
+  height: 100%;
+}
 body,
 button {
   font-family: "Open Sans";
@@ -25,8 +28,9 @@ h3 {
 }
 
 h1 {
-  font-size: 3.5rem;
-  color: $cyan;
+  font-size: 2.4rem;
+  // font-size: 3.5rem;
+  color: #409385;
   @media #{$phone} {
     font-size: 2.5em;
   }
@@ -50,6 +54,6 @@ input[type="radio"] {
 
 // cookie policy
 // hide revoke menu
-[class="cc-revoke"] {
-  display: none;
+[class*="cc-revoke"] {
+  display: none !important;
 }

@@ -35,7 +35,7 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"
     />
-    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.min.css" />
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
@@ -71,7 +71,10 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="js/cookieconsent.min.js" data-cfasync="false"></script>
+    <script
+      src="%PUBLIC_URL%/js/cookieconsent.min.js"
+      data-cfasync="false"
+    ></script>
     <script>
       /**
        * If consent is given for cookies, add gtag cookies
@@ -108,7 +111,7 @@
         type: "opt-in",
         content: {
           message:
-            "COVID AMP uses cookies to ensure you get the best experience possible."
+            "COVID AMP uses cookies to ensure you get the best experience possible. COVID AMP is optimized for desktop browsers."
         },
         // https://developers.google.com/analytics/devguides/collection/analyticsjs/user-opt-out
         onInitialise: function(status) {

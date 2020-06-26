@@ -7,6 +7,9 @@ import classNames from "classnames";
 // local functions
 import { getInputLabel } from "../Filter/Filter.js";
 
+// local components
+import { ShowMore } from "../";
+
 // misc
 import { isEmpty } from "../../misc/Util";
 
@@ -23,6 +26,7 @@ const FilterSet = ({
   filterDefs,
   filters,
   setFilters,
+  disabled = false,
   disabledValues = ["Country"],
   ...props
 }) => {
@@ -47,10 +51,12 @@ const FilterSet = ({
       filterGroupComponents.push(
         <Filter
           {...{
+            key: v.field,
             field: v.field,
             label: v.label,
             items: items,
             radio: v.radio,
+            className: v.className,
             defaultRadioValue: v.defaultRadioValue,
             dateRange: v.dateRange,
             minMaxDate: v.minMaxDate,
@@ -81,10 +87,13 @@ const FilterSet = ({
    */
   const getBadge = ({ label, field, value }) => {
     return (
-      <div className={styles.badge}>
+      <div className={styles.badge} key={field + "-" + value}>
         <span>
           <span className={styles.label}>{label}:</span>
-          <span className={styles.value}> {value}</span>
+          <span className={styles.value}>
+            {" "}
+            {<ShowMore text={value} charLimit={60} />}
+          </span>
         </span>
         <div
           className={styles.close}
@@ -123,7 +132,7 @@ const FilterSet = ({
         <div className={styles.badges}>
           {!isEmpty(filters) &&
             Object.entries(filters).map(([field, values]) => (
-              <React.Fragment>
+              <React.Fragment key={field + "-" + values.join("-")}>
                 {!filterDefsObj[field].dateRange &&
                   values.map(value =>
                     getBadge({
@@ -148,11 +157,17 @@ const FilterSet = ({
         </div>
       </div>
     );
+
   return (
     <React.Fragment>
-      <div className={styles.filterSet}>
+      <div
+        className={classNames(styles.filterSet, {
+          [styles.disabled]: disabled
+        })}
+      >
         {filterGroups.map(d => (
           <div
+            key={d.map(dd => dd.key).join("-")}
             className={classNames(styles.filterGroup, {
               [styles.dropdowns]: d.dropdowns
             })}

@@ -1,0 +1,40 @@
+@import "../../../assets/styles/vars.scss";
+
+.infoTooltipContainer {
+}
+[class*="type-light"] {
+  background-color: none;
+  max-width: 400px;
+  font-size: 0.9rem;
+  opacity: 1 !important;
+  display: flex;
+  flex-flow: column;
+  box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+  -webkit-box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
+  padding: 10px !important;
+  z-index: 10000;
+  p:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
+.wide {
+  max-width: 600px !important;
+  p:not(:last-child) {
+    margin: 0;
+  }
+}
+.infoTooltip {
+  display: inline-flex;
+  margin: 0 5px;
+  position: relative;
+  pointer-events: all;
+
+  img {
+    $size: 15px;
+    height: $size;
+    width: $size;
+    top: 2px;
+    position: relative;
+    cursor: default;
+  }
+}

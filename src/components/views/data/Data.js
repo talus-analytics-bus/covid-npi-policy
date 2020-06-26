@@ -24,7 +24,12 @@ import downloadSvg from "../../../assets/icons/download.svg";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // primary data viewing and download page
-const Data = ({ setLoading, setInfoTooltipContent }) => {
+const Data = ({
+  setLoading,
+  setInfoTooltipContent,
+  setPage,
+  urlFilterParams
+}) => {
   const [initializing, setInitializing] = useState(true);
   const [docType, setDocType] = useState("policy");
 
@@ -44,7 +49,8 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
 
   // define filters
   // TODO parse by policy/plan
-  const [filters, setFilters] = useState({});
+  // const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState(null);
 
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -70,9 +76,9 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       }
     },
     {
-      iso3: {
+      country_name: {
         entity_name: "Place",
-        field: "iso3",
+        field: "country_name",
         label: "Country"
       },
       area1: {
@@ -80,7 +86,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         field: "area1",
         label: "State / Province",
         withGrouping: true,
-        primary: "iso3",
+        primary: "country_name",
         disabledText: "Choose a country"
       },
       area2: {
@@ -124,7 +130,6 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
       }
     }
   ]);
-
   const unspecified = (
     <span className={styles.unspecified}>{"None available"}</span>
   );
@@ -138,8 +143,37 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     {
       dataField: "place.loc",
       header: "Affected location",
-      sort: true
+      defCharLimit: 1000,
+      sort: true,
+      formatter: v => {
+        return <ShowMore text={v} charLimit={60} />;
+      }
     },
+    // {
+    //   dataField: "policy_name",
+    //   header: "Policy name",
+    //   sort: true,
+    //   formatter: v => {
+    //     // TODO REPLACE ALL
+    //     return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+    //   }
+    // },
+    {
+      dataField: "desc",
+      header: "Policy name and description",
+      // width: "300",
+      defCharLimit: 1000,
+      sort: true,
+      formatter: (cell, row) => {
+        return (
+          <ShowMore text={row.policy_name + ": " + cell} charLimit={200} />
+        );
+      }
+      // formatter: v => {
+      //   return <ShowMore text={v} charLimit={90} />;
+      // }
+    },
+
     {
       dataField: "primary_ph_measure",
       header: "Policy category",
@@ -150,23 +184,28 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     //   header: "Policy sub-category",
     //   sort: true
     // },
-    {
-      dataField: "desc",
-      header: "Policy description",
-      // width: "300",
-      defCharLimit: 70,
-      sort: true,
-      formatter: v => {
-        return <ShowMore text={v} charLimit={90} />;
-      }
-    },
+
     {
       dataField: "date_start_effective",
-      header: "Policy effective start date",
+      header: "Effective start date",
       sort: true,
       formatter: v =>
         v !== null ? moment(v).format("MMM D, YYYY") : unspecified
     },
+    // {
+    //   dataField: "date_end_actual",
+    //   header: "Policy end date actual",
+    //   sort: true,
+    //   formatter: v =>
+    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    // },
+    // {
+    //   dataField: "date_end_anticipated",
+    //   header: "Policy end date anticipated",
+    //   sort: true,
+    //   formatter: v =>
+    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+    // },
     // {
     //   dataField: "date_end_actual_or_anticipated",
     //   header: "Policy end date",
@@ -200,11 +239,20 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     //   }
     // },
     {
+      dataField: "authority_name",
+      header: "Relevant authority",
+      sort: true,
+      formatter: v => {
+        // TODO REPLACE ALL
+        return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+      }
+    },
+    {
       dataField: "file",
       header: "Link",
       // sort: true,
       formatter: (row, cell) => {
-        const icons = cell.file.map(d => {
+        const icons = cell.file.map((d, i) => {
           const isLocalDownload = true;
           // const isLocalDownload = d.filename && d.filename !== "";
           const link = undefined;
@@ -215,7 +263,10 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
                 ? "/get/file/redirect?id=" + d.toString()
                 : undefined;
             return (
-              <div className={styles.linkIcon}>
+              <div
+                key={localDownloadLink + "-" + i}
+                className={styles.linkIcon}
+              >
                 <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
                   <i className={"material-icons"}>insert_drive_file</i>
                 </a>
@@ -256,6 +307,8 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
           "id",
           "place",
           "primary_ph_measure",
+          "policy_name",
+          "authority_name",
           // "ph_measure_details",
           "desc",
           "date_start_effective",
@@ -319,7 +372,6 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
     // non-date filters
     // TODO move this out of main code if possible
     if (initializing) {
-      setInitializing(false);
       const optionsets = results["optionsets"];
 
       // set options for filters
@@ -337,15 +389,67 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         }
       });
       setFilterDefs(newFilterDefs);
+      setInitializing(false);
     }
+    setLoading(false);
   };
 
   // on initial page load, get all data and filter optionset values
-  useEffect(getData, []);
-
-  // when filters are changed, retrieve filtered data
   useEffect(() => {
-    if (!initializing) getData(filters);
+    // scroll to top of page
+    window.scrollTo(0, 0);
+
+    // set loading spinner to visible
+    setLoading(true);
+
+    // set current page
+    setPage("data");
+  }, []);
+
+  // DEBUG url params change
+  useEffect(() => {
+    if (urlFilterParams !== null && isEmpty(filters)) {
+      // add filters from URL search params
+      const newFilters = {};
+      for (const [k, vs] of Object.entries(urlFilterParams)) {
+        vs.forEach(v => {
+          if (newFilters[k] === undefined) newFilters[k] = [v];
+          else {
+            if (k === "dates_in_effect" || !newFilters[k].includes(v))
+              newFilters[k].push(v);
+          }
+        });
+      }
+      // update filters
+      setFilters(newFilters);
+    } else if (filters === null) {
+      setFilters({});
+    }
+  }, [urlFilterParams]);
+
+  // when filters are changed, retrieve filtered data, and set loading spinner
+  // to visible
+  useEffect(() => {
+    if (filters !== null) {
+      // set loading spinner to visible
+      setLoading(true);
+
+      // get data (loading spinner turned off after API call)
+      console.log(filters);
+      getData(filters);
+
+      // if filters are empty, clear all URL search params
+      if (isEmpty(filters)) {
+        window.history.replaceState({ filtersStr: "" }, "", "/data");
+      } else {
+        const filtersStr = JSON.stringify(filters);
+        window.history.replaceState(
+          { filtersStr },
+          "",
+          "/data?filters=" + filtersStr
+        );
+      }
+    }
   }, [filters]);
 
   // when metadata are retrieved, update columns with definitions
@@ -363,16 +467,18 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         d.definition = metadata[key] ? metadata[key].definition || "" : "";
 
         // use only the first sentence of the definition
-        d.definition = d.definition.split(".")[0];
+        if (d.dataField !== "authority_name")
+          d.definition = d.definition.split(".")[0] + ".";
+
+        // special cases
+        if (d.dataField === "desc") {
+          d.definition =
+            "The name and a written description of the policy or law and who it impacts.";
+        }
       });
       setColumns(newColumns);
     }
   }, [metadata]);
-
-  // when data are loaded, set loading flag to false (controlled in App.js)
-  useEffect(() => {
-    if (data !== null) setLoading(false);
-  }, [data]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
@@ -389,7 +495,7 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>Welcome to COVID AMP policy and plan database</h1>
+        <h1>COVID AMP policy and plan database</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
@@ -409,9 +515,9 @@ const Data = ({ setLoading, setInfoTooltipContent }) => {
         <React.Fragment>
           <Drawer
             {...{
+              title: <h2>Policy and plan database</h2>,
               label: (
                 <React.Fragment>
-                  <h2>Policy and plan database</h2>
                   <button
                     className={classNames(styles.downloadBtn, {
                       [styles.loading]: buttonLoading

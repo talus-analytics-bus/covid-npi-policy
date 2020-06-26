@@ -2,11 +2,15 @@
 // colors currently used
 $light-blue: #95cbee;
 $light-blue-2: #abdaf4;
-$cyan: #66c8ff;
+$light-blue-3: #d4eef9;
+$cyan: #d4eef9;
 $blue: #4682b4;
 $dark-blue: #11315d;
 $light-gray-2: #f2f2f2;
+$light-gray-3: #f7f7f7;
 $selected-blue: #0096c2;
+$dark-navy-blue: #233343;
+$amp-green: #409385;
 
 // general colors
 $gray: #999999;
@@ -53,10 +57,18 @@ $border-radius: 5px;
 }
 
 @mixin borderItemsVert($size) {
+  > :not(:first-child) {
+    margin-top: $size;
+    padding-top: $size;
+    border-top: $border;
+  }
+}
+
+@mixin borderItemsHoriz($size) {
   > :not(:last-child) {
-    margin-bottom: $size;
-    padding-bottom: $size;
-    border-bottom: $border;
+    margin-right: $size;
+    padding-right: $size;
+    border-right: $border;
   }
 }
 
@@ -70,6 +82,11 @@ $border-radius: 5px;
   -webkit-box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
 }
 
+@mixin boxShadowStrong() {
+  box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
+}
+
 @mixin btn-primary() {
   border: 2px solid transparent;
   border-radius: 4px;
@@ -77,12 +94,56 @@ $border-radius: 5px;
   background: -ms-linear-gradient(top, #425379 0%, #213561 100%);
   background: -o-linear-gradient(top, #425379 0%, #213561 100%);
   background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
+
+  &:hover,
+  &:active {
+    background: white;
+    color: #213561;
+    border-color: #213561;
+  }
+  &:active {
+    @include boxShadow();
+  }
 }
 
-@mixin sticky() {
+@mixin btn-secondary() {
+  background: -moz-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  &:hover {
+    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -webkit-linear-gradient(
+      top,
+      #ffffff 0%,
+      darken(#e4e4e4, 5%) 100%
+    );
+  }
+  &:active {
+    background: -moz-linear-gradient(
+      top,
+      #ffffff 0%,
+      darken(#e4e4e4, 10%) 100%
+    );
+    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -webkit-linear-gradient(
+      top,
+      #ffffff 0%,
+      darken(#e4e4e4, 10%) 100%
+    );
+  }
+}
+
+@mixin sticky($top: 0) {
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 0;
+  top: $top;
+  // position: -webkit-sticky; /* Safari */
+  // position: sticky;
+  // top: $top;
 }
 
 @mixin disabled() {

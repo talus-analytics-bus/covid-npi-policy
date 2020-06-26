@@ -20,10 +20,17 @@
     padding-left: 15px;
     @media #{$phone} {
       padding: 15px;
+      button {
+        position: absolute !important;
+        right: 3px;
+      }
     }
     text-transform: uppercase;
-    background-color: $cyan;
+    background-color: $light-blue-3;
     color: $dark-blue;
+    h1 {
+      color: red !important;
+    }
     &:not(.noCollapse) {
       &,
       * {
@@ -38,9 +45,10 @@
       background: none;
       border: none;
       padding: 0;
-      position: absolute;
-      right: 5px;
+      // position: absolute;
+      // right: 5px;
       z-index: 0;
+      margin-left: 20px;
       i {
         font-size: 3rem;
         position: relative;
@@ -55,7 +63,7 @@
     // e.g., "Download all/filtered data"
     .action {
       .primary {
-        font-family: "Rawline", serif;
+        font-family: "rawline", serif;
         background-color: $blue;
         color: white;
       }

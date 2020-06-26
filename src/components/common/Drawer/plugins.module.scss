@@ -1,0 +1,9 @@
+@import "../../../assets/styles/vars.scss";
+.style {
+  .header {
+    padding-left: 270px;
+    [role="label"] {
+      color: #1e3e6e;
+    }
+  }
+}

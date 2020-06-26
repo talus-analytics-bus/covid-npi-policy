@@ -6,18 +6,19 @@
     h1 {
       margin-top: 0.5em;
       margin-bottom: 0.5em;
-      max-width: 60rem; // break lines after "AMP"
+      // max-width: 30rem; // break lines after "policy"
     }
   }
   .columnText {
+    max-width: 60rem;
     display: flex;
     flex-flow: row;
     font-family: "Rawline", serif;
     * {
-      line-height: 1.6;
+      line-height: 1.5;
     }
     p {
-      font-size: 1.45rem;
+      font-size: 1.25rem;
       color: #333;
     }
     @include spaceItemsHoriz(40px);
@@ -39,7 +40,8 @@
     border: none;
     border-radius: 4px;
     z-index: 1;
-
+    position: relative;
+    margin-left: auto;
     @media #{$phone} {
       visibility: hidden;
       div {
@@ -90,8 +92,17 @@
   table {
     th,
     td {
-      &:nth-child(4) {
-        width: 30%;
+      // set width of link column
+      &:last-child {
+        width: 88px;
+      }
+      // set width of Description column
+      &:nth-child(3) {
+        // width: 10%;
+      }
+      // set width of Description column
+      &:nth-child(3) {
+        width: 35%;
       }
     }
   }
@@ -103,6 +114,11 @@
           width: unset;
         }
       }
+    }
+  }
+  @media #{$phone} {
+    h1 {
+      margin-top: 0 !important;
     }
   }
 }

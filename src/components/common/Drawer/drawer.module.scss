@@ -1,0 +1,102 @@
+@import "../../../assets/styles/vars.scss";
+.style {
+  // border: $border;
+  $padding: 20px;
+  // width: max-content;
+  width: 100%;
+
+  > div {
+    background-color: white;
+  }
+
+  &.float {
+    // @include sticky(118px);
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    .content {
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+    .content {
+      position: absolute;
+      width: 100%;
+    }
+  }
+  &:not(.open) {
+    button {
+      i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .header {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 15px;
+    @media #{$phone} {
+      padding: 15px;
+    }
+    text-transform: uppercase;
+    background-color: #c4cacf;
+    color: $dark-blue;
+
+    @include spaceItemsHoriz(50px);
+    &:not(.noCollapse) {
+      &,
+      * {
+        cursor: pointer;
+      }
+    }
+
+    & + .content {
+      // border-top: $border;
+    }
+    button.toggle {
+      &.absolute {
+        position: absolute;
+        right: 5px;
+      }
+      background: none;
+      border: none;
+      padding: 0;
+      z-index: 0;
+      i {
+        font-size: 3rem;
+        position: relative;
+        vertical-align: middle;
+        line-height: 0;
+      }
+      &.flip {
+        transform: rotate(180deg);
+      }
+    }
+
+    // e.g., "Download all/filtered data"
+    .action {
+      .primary {
+        font-family: "rawline", serif;
+        background-color: $blue;
+        color: white;
+      }
+    }
+  }
+  .content {
+    padding: $padding;
+    font-size: 1rem;
+    background-color: $light-gray-2;
+    @include spaceItemsVert(20px);
+    &.hidden {
+      // visibility: hidden;
+      display: none;
+      height: 0;
+      padding: 0 $padding;
+    }
+  }
+}
+
+@import "./plugins.module.scss";

@@ -1,0 +1,39 @@
+@import "../../../assets/styles/vars.scss";
+.navWrapper {
+  .nav {
+    position: relative;
+    .menu {
+      .links {
+        :nth-last-child(2) {
+          margin-right: 0;
+        }
+        a:last-child {
+          background-color: #90c0b8;
+          padding: 10px 15px;
+          border-radius: 0 0 12px 12px;
+          position: absolute;
+          top: 0;
+          line-height: 1;
+          right: 20px;
+          height: 40px;
+          font-weight: 600;
+          font-size: 0.9rem;
+        }
+      }
+    }
+    .logos {
+      margin-right: auto;
+      a.localBanner {
+        position: absolute;
+        top: 0;
+        img {
+          height: 40px;
+        }
+      }
+      a.logo img {
+        margin-top: 40px;
+        height: 46px;
+      }
+    }
+  }
+}

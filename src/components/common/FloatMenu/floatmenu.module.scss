@@ -1,0 +1,15 @@
+@import "../../../assets/styles/vars.scss";
+.wrapper {
+  position: relative;
+  .control {
+    position: relative;
+    cursor: pointer;
+  }
+  .content {
+    display: none;
+    position: absolute;
+    &.show {
+      display: flex;
+    }
+  }
+}

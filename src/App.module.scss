@@ -1,8 +1,22 @@
 @import "./assets/styles/vars.scss";
 .page {
   padding: 20px;
+  position: relative;
+  top: 0;
+  left: 0;
   max-width: $max-width;
+  width: 100%;
   margin: 0 auto;
+  z-index: 0;
+
+  // TODO elegantly -- make page at least tall enough so that footer hits
+  // bottom of window
+  min-height: calc(100% - 108px - 127px);
+
+  &.policymaps {
+    max-width: unset;
+    padding: unset;
+  }
 }
 
 // loading spinner styling

@@ -27,6 +27,7 @@
     "react-browser-detection": "^1.2.1",
     "react-date-range": "^1.0.3",
     "react-dom": "^16.8.6",
+    "react-map-gl": "^5.2.6",
     "react-popper": "^1.3.4",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
@@ -42,7 +43,7 @@
     "eject": "react-scripts eject",
     "tslint": "./node_modules/.bin/tslint",
     "deploy": "CI=false yarn build && aws s3 sync build/ s3://covid-npi-policy --delete",
-    "deploy-test": "CI=false REACT_APP_API_URL=https://api-test.covidamp.org yarn build && aws s3 sync build/ s3://covid-npi-policy-test --delete"
+    "deploy-test": "CI=false REACT_APP_API_URL=https://api-test.covidamp.org REACT_APP_COVID_LOCAL_URL=https://test.covid-local.org/ yarn build && aws s3 sync build/ s3://covid-npi-policy-test --acl public-read --delete"
   },
   "eslintConfig": {
     "extends": "react-app"

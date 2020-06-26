@@ -1,0 +1,31 @@
+@import "../../../assets/styles/vars.scss";
+@media #{$phone} {
+  .title {
+    margin-top: 0;
+  }
+  .about {
+    .downloads {
+      position: relative;
+      right: unset;
+      top: unset;
+      button {
+        margin: 0 !important;
+        margin-bottom: 20px !important;
+      }
+    }
+  }
+  .tabs {
+    button {
+      width: 100%;
+      &,
+      &.active {
+        border-color: #bde7ff;
+      }
+    }
+  }
+  .content {
+    img {
+      max-width: 100%;
+    }
+  }
+}
