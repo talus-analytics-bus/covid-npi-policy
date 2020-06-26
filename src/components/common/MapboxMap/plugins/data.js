@@ -615,7 +615,14 @@ export const metricMeta = {
           getCovidLocalMetricLink("new normal"),
           "mixed"
         ],
-        subLabels: ["", "phase I", "phase II", "phase III", "phase IV", ""],
+        subLabels: [
+          "",
+          getCovidLocalMetricLink("(phase I)"),
+          getCovidLocalMetricLink("(phase II)"),
+          getCovidLocalMetricLink("(phase III)"),
+          getCovidLocalMetricLink("(phase IV)"),
+          ""
+        ],
         colorscale: d3
           .scaleOrdinal()
           .domain([
@@ -983,11 +990,6 @@ export const tooltipGetter = async ({
             {thisMetricMeta.value(v)}
           </div>
         );
-
-        // if no policies returned, then make main content empty
-        if (nPolicies === 0) {
-          // tooltip.tooltipMainContent = [];
-        }
       }
     }
   }

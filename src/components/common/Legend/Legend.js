@@ -256,7 +256,7 @@ const Legend = ({ ...props }) => {
               }}
             >
               {styleEntries.map((d, i) => (
-                <div key={i}>
+                <div className={styles.rectGroup} key={i}>
                   <div
                     className={classNames(styles.rect, {
                       [styles.labelsInside]: labelsInside
@@ -271,7 +271,9 @@ const Legend = ({ ...props }) => {
                     <div className={styles.label}>{labels[i]}</div>
                   )}
                   {subLabels && (
-                    <div className={styles.label}>{subLabels[i]}</div>
+                    <a onClick={() => {}} className={styles.label}>
+                      {subLabels[i]}
+                    </a>
                   )}
                 </div>
               ))}
