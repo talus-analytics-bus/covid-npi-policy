@@ -16,11 +16,6 @@ import { getLog10Scale, comma } from "../../../misc/Util";
 
 // assets
 import dots from "./assets/images/dots.png";
-// No policy
-// Unclear
-// New normal
-// Safer at home
-// Stay at home
 
 // constants
 // define default pattern style used below
