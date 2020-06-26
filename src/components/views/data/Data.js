@@ -165,9 +165,14 @@ const Data = ({
       defCharLimit: 1000,
       sort: true,
       formatter: (cell, row) => {
-        return (
-          <ShowMore text={row.policy_name + ": " + cell} charLimit={200} />
-        );
+        const title =
+          row.policy_name !== "Unspecified" &&
+          row.policy_name !== "" &&
+          row.policy_name !== null &&
+          row.policy_name !== undefined
+            ? row.policy_name + ": "
+            : "";
+        return <ShowMore text={title + cell} charLimit={200} />;
       }
       // formatter: v => {
       //   return <ShowMore text={v} charLimit={90} />;
