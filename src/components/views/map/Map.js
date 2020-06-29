@@ -39,13 +39,7 @@ import {
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-const Map = ({
-  setLoading,
-  setPage,
-  setInitDataFilters,
-  versions,
-  ...props
-}) => {
+const Map = ({ setLoading, setPage, versions, ...props }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -345,7 +339,6 @@ const Map = ({
               />
             ),
             plugins: {
-              setInitDataFilters,
               fill
             }
           }}
@@ -364,11 +357,6 @@ const Map = ({
     setPage("policymaps");
 
     if (!initialized) getData();
-
-    // unset initial filters on page unmount
-    return function unsetInitDataFilters() {
-      setInitDataFilters(null);
-    };
   }, []);
 
   // when date is changed, update `dates_in_effect` filter
