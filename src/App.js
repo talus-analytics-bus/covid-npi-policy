@@ -1,30 +1,30 @@
 // standard modules
-import React, { useState, useEffect } from "react";
-import { Route, Redirect, Switch, BrowserRouter } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Route, Redirect, Switch, BrowserRouter } from 'react-router-dom';
 
 // 3rd party modules
-import ReactTooltip from "react-tooltip";
-import BrowserDetection from "react-browser-detection";
-import Modal from "reactjs-popup";
+import ReactTooltip from 'react-tooltip';
+import BrowserDetection from 'react-browser-detection';
+import Modal from 'reactjs-popup';
 
 // layout
-import { Nav } from "./components/layout";
-import { Footer } from "./components/layout";
+import { Nav } from './components/layout';
+import { Footer } from './components/layout';
 
 // views
-import Data from "./components/views/data/Data.js";
-import Map from "./components/views/map/Map.js";
-import About from "./components/views/about/About.js";
-import Contact from "./components/views/contact/Contact.js";
+import Data from './components/views/data/Data.js';
+import Map from './components/views/map/Map.js';
+import About from './components/views/about/About.js';
+import Contact from './components/views/contact/Contact.js';
 // import Documentation from "./components/views/documentation/Documentation.js";
 
 // queries
-import { Version } from "./components/misc/Queries";
+import { Version } from './components/misc/Queries';
 
 // styles and assets
-import styles from "./App.module.scss";
-import classNames from "classnames";
-import loadingSvg from "./assets/images/loading.svg";
+import styles from './App.module.scss';
+import classNames from 'classnames';
+import loadingSvg from './assets/images/loading.svg';
 
 //: React.FC
 const App = () => {
@@ -40,24 +40,24 @@ const App = () => {
   const modalToShow = {
     chrome: () => null,
     firefox: () => null,
-    safari: browser => browserModal("Safari"),
-    edge: browser => browserModal("Edge"),
-    ie: browser => browserModal("Internet Explorer"),
-    opera: browser => browserModal("Opera"),
-    default: () => null
+    safari: (browser) => browserModal('Safari'),
+    edge: (browser) => browserModal('Edge'),
+    ie: (browser) => browserModal('Internet Explorer'),
+    opera: (browser) => browserModal('Opera'),
+    default: () => null,
   };
 
   // function to return modal content for unsupported browser modal
-  const browserModal = browser => (
+  const browserModal = (browser) => (
     <Modal
       position="top center"
       on="click"
       closeOnDocumentClick
       defaultOpen={true}
-      className={"browser-modal"}
+      className={'browser-modal'}
       modal
     >
-      {close => (
+      {(close) => (
         <React.Fragment>
           <h3 className={styles.header}>Please try a different browser</h3>
           <div className={styles.content}>
@@ -72,7 +72,7 @@ const App = () => {
                 optimized for mobile devices.
               </p>
             </div>
-            <button className={classNames("button", "modal")} onClick={close}>
+            <button className={classNames('button', 'modal')} onClick={close}>
               Continue
             </button>
           </div>
@@ -90,10 +90,10 @@ const App = () => {
   // set versions data from API call
   useEffect(() => {
     // setVersions([]);
-    getData().then(newVersions => setVersions(newVersions));
+    getData().then((newVersions) => setVersions(newVersions));
   }, []);
 
-  console.log("versions");
+  console.log('versions');
   console.log(versions);
   if (versions === null) return <div />;
   else
@@ -113,7 +113,7 @@ const App = () => {
                       const urlParams = new URLSearchParams(
                         window.location.search
                       );
-                      const filtersStr = urlParams.get("filters");
+                      const filtersStr = urlParams.get('filters');
                       const urlFilterParams = JSON.parse(filtersStr);
                       return (
                         <Data
@@ -121,7 +121,7 @@ const App = () => {
                             setLoading,
                             setPage,
                             setInfoTooltipContent,
-                            urlFilterParams
+                            urlFilterParams,
                           }}
                         />
                       );
@@ -133,8 +133,9 @@ const App = () => {
                   <Route
                     exact
                     path="/"
-                    render={() => {
-                      return <Redirect to={"/data"} />;
+                    component={() => {
+                      window.location.href = 'https://www.covid-local.org/amp/';
+                      return null;
                     }}
                   />
                 }
@@ -150,7 +151,7 @@ const App = () => {
                             versions,
                             setPage,
                             setLoading,
-                            setInfoTooltipContent
+                            setInfoTooltipContent,
                           }}
                         />
                       );
@@ -161,13 +162,13 @@ const App = () => {
                   // About page
                   <Route
                     path="/about/:subpage"
-                    render={routeProps => {
+                    render={(routeProps) => {
                       return (
                         <About
                           {...{
                             setPage,
                             setLoading,
-                            initTab: routeProps.match.params.subpage
+                            initTab: routeProps.match.params.subpage,
                           }}
                         />
                       );
@@ -204,7 +205,7 @@ const App = () => {
               </div>
             </React.Fragment>
           </Switch>
-          {page !== "policymaps" && <Footer {...{ page, versions }} />}
+          {page !== 'policymaps' && <Footer {...{ page, versions }} />}
           {
             // Loading spinner
             <div
@@ -220,7 +221,7 @@ const App = () => {
           // is hovered on in the site. The content for this tooltip is set by
           // `setInfoTooltipContent`.
           <ReactTooltip
-            id={"infoTooltip"}
+            id={'infoTooltip'}
             type="light"
             effect="float"
             place="right"
