@@ -234,7 +234,8 @@ const MapboxMap = ({
             ...(await tooltipGetter({
               mapId: mapId,
               d: selectedFeature,
-              include: [circle, fill],
+              include: [circle, mapId === "us" ? "lockdown_level" : fill],
+              // include: [circle, fill],
               date,
               map,
               filters,

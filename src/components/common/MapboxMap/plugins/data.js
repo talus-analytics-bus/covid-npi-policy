@@ -44,7 +44,8 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "global",
+  // mapId: "global",
+  mapId: "us",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -308,6 +309,9 @@ export const metricMeta = {
 
     // metric name displayed on front-end
     metric_displayname: "New COVID-19 cases in past 7 days",
+
+    // Optional: Short name for metric where needed
+    shortName: "Caseload",
 
     // value formatter for metric
     value: v => comma(v),
@@ -802,7 +806,7 @@ export const tooltipGetter = async ({
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.state_name,
-      subtitle: formattedDate
+      subtitle: null
     };
     // add actions for bottom of tooltip
     // tooltip.actions = [<button key={"view"}>View details</button>];
@@ -812,7 +816,7 @@ export const tooltipGetter = async ({
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.NAME,
-      subtitle: formattedDate
+      subtitle: null
     };
 
     // add actions for bottom of tooltip
@@ -823,6 +827,7 @@ export const tooltipGetter = async ({
 
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
+  console.log();
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -843,7 +848,7 @@ export const tooltipGetter = async ({
 
       // define basic tooltip item
       const item = {
-        label: thisMetricMeta.metric_displayname,
+        label: thisMetricMeta.shortName || thisMetricMeta.metric_displayname,
         value: thisMetricMeta.value(v),
         unit: thisMetricMeta.unit(v)
       };
@@ -879,24 +884,32 @@ export const tooltipGetter = async ({
         };
       }
 
-      if (k === "74") {
-        item.unit = (
-          <span>
-            {item.unit}
-            <br />
-            in past 7 days
-          </span>
-        );
-        tooltip.tooltipHeaderMetric = item;
-        continue;
-      } else if (k === "72") {
-        item.unit = <span>{item.unit}</span>;
-        tooltip.tooltipHeaderMetric = item;
-        continue;
-      } else {
-        // add item to tooltip content
-        tooltip.tooltipMainContent.push(item);
-      }
+      // if (k === "74") {
+      //   item.unit = (
+      //     <span>
+      //       {item.unit}
+      //       <br />
+      //       in past 7 days
+      //     </span>
+      //   );
+      //   tooltip.tooltipHeaderMetric = item;
+      //   continue;
+      // } else if (k === "72") {
+      //   item.unit = <span>{item.unit}</span>;
+      //   tooltip.tooltipHeaderMetric = item;
+      //   continue;
+      // } else {
+      //   // add item to tooltip content
+      //   tooltip.tooltipMainContent.push(item);
+      // }
+      // custom content for tooltip body
+      item.customContent = (
+        <>
+          <div className={tooltipStyles.label}>{item.label}</div>
+          <div className={tooltipStyles.value}>{item.value}</div>
+        </>
+      );
+      tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
       if (k === "policy_status" || k === "lockdown_level") {
@@ -924,7 +937,6 @@ export const tooltipGetter = async ({
           // by_category: "ph_measure_details",
           fields: ["id", "place"]
         });
-        item.customContent = <div />;
 
         const nPolicies = {
           total: 0,
@@ -948,141 +960,50 @@ export const tooltipGetter = async ({
         });
 
         // define right content of header metric based on metric type
-        if (k === "lockdown_level") {
-          // add actions for bottom of tooltip
-          const filtersStr = JSON.stringify({
-            primary_ph_measure:
-              plugins.fill !== "lockdown_level"
-                ? filters.primary_ph_measure
-                : ["Social distancing"],
-            ph_measure_details:
-              plugins.fill !== "lockdown_level"
-                ? filters.ph_measure_details || []
-                : [],
-            dates_in_effect: filters.dates_in_effect,
-            // TODO generalize
-            country_name: ["United States of America (USA)"],
-            area1: [d.properties.state_name]
-            // level: ["State / Province"]
-          });
+        // add actions for bottom of tooltip
+        const filtersStr = JSON.stringify({
+          primary_ph_measure:
+            plugins.fill !== "lockdown_level"
+              ? filters.primary_ph_measure
+              : ["Social distancing"],
+          ph_measure_details:
+            plugins.fill !== "lockdown_level"
+              ? filters.ph_measure_details || []
+              : [],
+          dates_in_effect: filters.dates_in_effect,
+          // TODO generalize
+          country_name: ["United States of America (USA)"],
+          area1: [d.properties.state_name]
+          // level: ["State / Province"]
+        });
 
-          tooltip.tooltipHeaderRight = (
-            <>
-              <a
-                key={"view"}
-                target="_blank"
-                href={"/data?filters=" + filtersStr}
-              >
-                {<button>View all policy data</button>}
-                {
-                  // Uncomment below to specify number of policies
-                  // <button>
-                  //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
-                  //   {nPolicies.total === 1 ? "policy" : "policies"}
-                  // </button>
-                }
-              </a>
-              <span>
-                Policies in effect on <i>{formattedDate}</i>
-              </span>
-            </>
-          );
-        }
-
-        // // get relevant policy data
-        // const policies = await Policy({
-        //   method: "post",
-        //   filters: {
-        //     area1: [d.properties.state_name],
-        //     // level: ["State / Province"],
-        //     dates_in_effect: [apiDate, apiDate],
-        //
-        //     // if doing distancing level, only allow all social distancing
-        //     // policies to be returned
-        //     primary_ph_measure:
-        //       plugins.fill !== "lockdown_level"
-        //         ? filters.primary_ph_measure
-        //         : ["Social distancing"],
-        //     ph_measure_details:
-        //       plugins.fill !== "lockdown_level"
-        //         ? filters.ph_measure_details
-        //         : []
-        //   },
-        //   by_category: "ph_measure_details",
-        //   fields: [
-        //     "id",
-        //     "primary_ph_measure",
-        //     "ph_measure_details",
-        //     "date_start_effective",
-        //     "desc",
-        //     "place"
-        //   ]
-        // });
-
-        // let nPolicies = 0;
-        // item.className = "policyStatus";
-        // const tables = [];
-        // for (const [ph_measure_details, policiesOfCategory] of Object.entries(
-        //   policies.data
-        // )) {
-        //   const rows = [];
-        //   policiesOfCategory.forEach(d => {
-        //     rows.push(d);
-        //   });
-        //   tables.push({ ph_measure_details, rows });
-        //   nPolicies += policiesOfCategory.length;
-        // }
-        //
-        // const subtitleCategory =
-        //   plugins.fill !== "lockdown_level"
-        //     ? filters.primary_ph_measure[0].toLowerCase()
-        //     : "social distancing";
-        // const displayInfo = metricMeta.lockdown_level.valueStyling[v];
-        // const subtitle = null;
-        // tooltip.tooltipHeader.subtitle = subtitle;
-        // item.customContent = (
-        //   <div className={tooltipStyles.distancingLevel}>
-        //     {plugins.fill === "lockdown_level" && (
-        //       <div className={tooltipStyles.iconSection}>
-        //         {displayInfo.icon && <img src={displayInfo.icon} />}
-        //
-        //         <div className={tooltipStyles.iconLabel}>
-        //           <div className={tooltipStyles.label}>{displayInfo.label}</div>
-        //           <div className={tooltipStyles.category}>
-        //             <div className={tooltipStyles.phaseName}>
-        //               {displayInfo.phase && displayInfo.phase}
-        //               {!displayInfo.phase && "Mixed"}
-        //             </div>
-        //
-        //             <div className={tooltipStyles.link}>
-        //               <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-        //                 <img src={localLogo} />
-        //                 view metrics at COVID-Local
-        //               </a>
-        //             </div>
-        //           </div>
-        //         </div>
-        //       </div>
-        //     )}
-        //     <div className={tooltipStyles.subtitle}>
-        //       {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
-        //       effect for {subtitleCategory}{" "}
-        //       {!isEmpty(filters["ph_measure_details"])
-        //         ? "in selected subcategories"
-        //         : ""}{" "}
-        //       on&nbsp;<i>{formattedDate}</i>
-        //     </div>
-        //
-        //     <TableDrawers
-        //       {...{
-        //         tables,
-        //         geometryName: d.properties.state_name,
-        //         fill: plugins.fill
-        //       }}
-        //     />
-        //   </div>
-        // );
-
+        // content for right side of header
+        tooltip.tooltipHeaderRight = (
+          <>
+            <a
+              key={"view"}
+              target="_blank"
+              href={"/data?filters=" + filtersStr}
+            >
+              {
+                <button>
+                  View all policies
+                  <br /> ({nPolicies.total}) in effect
+                </button>
+              }
+              {
+                // Uncomment below to specify number of policies
+                // <button>
+                //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
+                //   {nPolicies.total === 1 ? "policy" : "policies"}
+                // </button>
+              }
+            </a>
+            <span>
+              as of <i>{formattedDate}</i>
+            </span>
+          </>
+        );
         item.value = (
           <div
             className={infoTooltipStyles.badge}
@@ -1094,6 +1015,8 @@ export const tooltipGetter = async ({
           </div>
         );
       }
+      tooltip.tooltipMainContent.reverse();
+      // tooltip.tooltipMainContent.push(item);
     }
   }
   if (callback) callback();

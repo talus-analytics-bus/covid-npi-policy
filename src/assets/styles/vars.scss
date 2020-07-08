@@ -64,11 +64,11 @@ $border-radius: 5px;
   }
 }
 
-@mixin borderItemsHoriz($size) {
+@mixin borderItemsHoriz($size, $border-to-use: $border) {
   > :not(:last-child) {
     margin-right: $size;
     padding-right: $size;
-    border-right: $border;
+    border-right: $border-to-use;
   }
 }
 
