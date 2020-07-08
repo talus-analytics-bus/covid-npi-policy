@@ -1,5 +1,39 @@
 @import "../../../../assets/styles/vars.scss";
 
+.lockdown_level {
+  .icon {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    @include spaceItemsHoriz(10px);
+
+    img {
+      height: 40px;
+      + div {
+        font-size: 1.33rem;
+        font-weight: bold;
+        font-family: "rawline", serif;
+        max-width: 100px;
+        line-height: 1;
+        position: relative;
+        top: -2px;
+      }
+    }
+  }
+  .footer {
+    margin-top: 1rem;
+    img {
+      height: 20px;
+      margin-right: 5px;
+    }
+    a {
+      font-size: 0.75rem;
+      font-style: italic;
+      color: #409385;
+    }
+  }
+}
+
 // OLD styles
 // .distancingLevel {
 //   display: flex;

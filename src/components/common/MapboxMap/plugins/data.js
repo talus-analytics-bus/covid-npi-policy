@@ -570,6 +570,7 @@ export const metricMeta = {
       },
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
+        labelShort: "Mixed",
         color: "#a8c4dc",
         icon: mixed,
         def: (
@@ -852,6 +853,26 @@ export const tooltipGetter = async ({
         value: thisMetricMeta.value(v),
         unit: thisMetricMeta.unit(v)
       };
+
+      // define special tooltip items
+      if (k === "lockdown_level") {
+        const valueStyling = thisMetricMeta.valueStyling[v];
+        const label = valueStyling.labelShort || valueStyling.label;
+        item.value = (
+          <div className={tooltipStyles[k]}>
+            <div className={tooltipStyles.icon}>
+              <img src={valueStyling.icon} />
+              <div>{label}</div>
+            </div>
+            <div className={tooltipStyles.footer}>
+              <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
+                <img src={localLogo} />
+                {"Phase III"} (view in COVID-Local)
+              </a>
+            </div>
+          </div>
+        );
+      }
 
       // TRENDS // ----------------------------------------------------------//
       // define standard trend key, e.g., "metric_name-trend"
