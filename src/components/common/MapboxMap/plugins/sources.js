@@ -96,8 +96,8 @@ export const mapStyles = {
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
-      [-22.192534318700574, 14.40815303144171],
-      [21.599205236226354, -13.4306486189259]
+      [-20.695386255024797, 12.883963661378047],
+      [21.232614420916473, -13.352458619484214]
     ],
 
     // optional: info tooltip to display for map in radio selections
