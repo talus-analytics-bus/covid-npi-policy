@@ -58,7 +58,8 @@ export const mapSources = {
       pattern: true,
       def: {
         type: "vector",
-        url: "mapbox://traethethird.4kh7sxxt"
+        url: "mapbox://traethethird.4kh7sxxt",
+        promoteId: "ISO_A3"
       }
     },
     circle: {
@@ -66,8 +67,7 @@ export const mapSources = {
       sourceLayer: "mvmupdatescentroidsv2-62u4it",
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.c4ujj0o1",
-        promoteId: "id"
+        url: "mapbox://nicoletalus.c4ujj0o1"
       }
     }
   }
@@ -114,7 +114,14 @@ export const mapStyles = {
         <b>Currently in development</b>: View country-level data for the world
       </span>
     ),
-    minZoom: 1.5,
-    maxZoom: 6
+    minZoom: 0,
+    maxZoom: 6,
+
+    // default fit bounds -- the rectangle that should be optimally displayed
+    // in the viewport; the viewport will fly to this position
+    defaultFitBounds: [
+      [-177.44289170791797, 64.05440369592642],
+      [179.97107965372615, -54.77460938717267]
+    ]
   }
 };

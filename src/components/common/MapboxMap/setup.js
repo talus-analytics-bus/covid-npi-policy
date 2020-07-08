@@ -460,6 +460,12 @@ const bindFeatureStatesForSource = ({
           sourceLayer: source.sourceLayer,
           id: dd[layer.featureLinkField || "place_id"]
         };
+        console.log("\nlayer");
+        console.log(layer);
+        console.log("dd");
+        console.log(dd);
+        console.log("featureProps");
+        console.log(featureProps);
         map.setFeatureState(featureProps, state);
       }
     });
