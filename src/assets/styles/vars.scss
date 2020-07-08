@@ -151,6 +151,14 @@ $border-radius: 5px;
   pointer-events: none;
 }
 
+// ensure rawline looks lined up with other UI elements
+// TODO elegantly
+@mixin rawlineFix() {
+  line-height: 1;
+  position: relative;
+  top: -2px;
+}
+
 // globals
 $phone: "screen and (max-width : 812px)";
 $phone-narrow: "screen and (max-width : 500px)";

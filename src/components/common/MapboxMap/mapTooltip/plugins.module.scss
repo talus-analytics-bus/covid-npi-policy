@@ -22,14 +22,71 @@
   }
   .footer {
     margin-top: 1rem;
-    img {
-      height: 20px;
-      margin-right: 5px;
-    }
+
     a {
+      img {
+        height: 17px;
+        margin-right: 5px;
+      }
+
+      font-family: "rawline", serif;
       font-size: 0.75rem;
       font-style: italic;
       color: #409385;
+
+      &:hover,
+      &:active,
+      &:focus {
+        text-decoration: none;
+      }
+      span {
+        border-bottom: 1px solid #409385;
+      }
+      &:hover {
+        $hover-color: lighten(#409385, 10%);
+        color: $hover-color;
+        span {
+          border-bottom: 1px solid $hover-color;
+        }
+      }
+    }
+  }
+}
+
+// COVID-19 caseloads
+.74,
+.72 {
+  display: flex;
+  @include spaceItemsHoriz(10px);
+
+  .value {
+    font-family: "rawline", serif;
+    @include rawlineFix();
+    @include spaceItemsVert(5px);
+    .number {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .unit {
+      font-size: 0.9rem;
+      font-family: "Raleway", serif;
+      max-width: 100px;
+    }
+  }
+  .trend {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    @include spaceItemsVert(5px);
+    .sentiment {
+      margin-right: 0;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      font-size: 0.79rem;
+      + div {
+        margin-top: 0;
+        font-size: 0.7rem;
+      }
     }
   }
 }

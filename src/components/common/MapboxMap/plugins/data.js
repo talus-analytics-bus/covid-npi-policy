@@ -26,8 +26,8 @@ import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 
 // assets and styles
 import dots from "./assets/images/dots.png";
-import infoTooltipStyles from "../../../common/InfoTooltip/plugins.module.scss";
-import tooltipStyles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
+import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
+import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
@@ -317,7 +317,8 @@ export const metricMeta = {
     value: v => comma(v),
 
     // unit label formatter for metric
-    unit: v => (v === 1 ? "new case" : "new cases"),
+    unit: v =>
+      v === 1 ? "new case in past 7 days" : "new cases in past 7 days",
 
     // if metric has trends, the label describing timeframe of those trends
     trendTimeframe: (
@@ -457,7 +458,7 @@ export const metricMeta = {
     metric_definition: (
       <span>
         {
-          <table className={infoTooltipStyles.distancingLevelTable}>
+          <table className={infostyles.distancingLevelTable}>
             <tbody>
               <tr>
                 <td>
@@ -466,7 +467,7 @@ export const metricMeta = {
                       backgroundColor: "#66CAC4",
                       marginRight: "20px"
                     }}
-                    className={infoTooltipStyles.rect}
+                    className={infostyles.rect}
                   >
                     policy in effect
                   </div>
@@ -588,18 +589,18 @@ export const metricMeta = {
       );
       return (
         <div>
-          <p className={infoTooltipStyles.definitionHeader}>
+          <p className={infostyles.definitionHeader}>
             <span>
               The level of distancing in the location on the specified date.{" "}
             </span>
             <br />
             <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
               <img src={localLogo} />
-              view metrics at COVID-Local
+              <span>view metrics at COVID-Local</span>
             </a>
           </p>
           {
-            <table className={infoTooltipStyles.distancingLevelTable}>
+            <table className={infostyles.distancingLevelTable}>
               <tbody>
                 {Object.values(this.valueStyling).map((d, i) => (
                   <tr key={d.label}>
@@ -621,7 +622,7 @@ export const metricMeta = {
                                 color: "black"
                               }
                         }
-                        className={infoTooltipStyles.rect}
+                        className={infostyles.rect}
                       >
                         {d.label}
                       </div>
@@ -854,26 +855,6 @@ export const tooltipGetter = async ({
         unit: thisMetricMeta.unit(v)
       };
 
-      // define special tooltip items
-      if (k === "lockdown_level") {
-        const valueStyling = thisMetricMeta.valueStyling[v];
-        const label = valueStyling.labelShort || valueStyling.label;
-        item.value = (
-          <div className={tooltipStyles[k]}>
-            <div className={tooltipStyles.icon}>
-              <img src={valueStyling.icon} />
-              <div>{label}</div>
-            </div>
-            <div className={tooltipStyles.footer}>
-              <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-                <img src={localLogo} />
-                {"Phase III"} (view in COVID-Local)
-              </a>
-            </div>
-          </div>
-        );
-      }
-
       // TRENDS // ----------------------------------------------------------//
       // define standard trend key, e.g., "metric_name-trend"
       const trendKey = k + "-trend";
@@ -891,7 +872,7 @@ export const tooltipGetter = async ({
         else noun = "no change";
 
         // define the datum for visual representation of the trend
-        item.trend = {
+        item.trendData = {
           pct,
           pct_fmt: (
             <span>
@@ -905,29 +886,61 @@ export const tooltipGetter = async ({
         };
       }
 
-      // if (k === "74") {
-      //   item.unit = (
-      //     <span>
-      //       {item.unit}
-      //       <br />
-      //       in past 7 days
-      //     </span>
-      //   );
-      //   tooltip.tooltipHeaderMetric = item;
-      //   continue;
-      // } else if (k === "72") {
-      //   item.unit = <span>{item.unit}</span>;
-      //   tooltip.tooltipHeaderMetric = item;
-      //   continue;
-      // } else {
-      //   // add item to tooltip content
-      //   tooltip.tooltipMainContent.push(item);
-      // }
-      // custom content for tooltip body
+      // define special tooltip items
+      if (k === "lockdown_level") {
+        const valueStyling = thisMetricMeta.valueStyling[v];
+        const label = valueStyling.labelShort || valueStyling.label;
+        item.value = (
+          <div className={styles[k]}>
+            <div className={styles.icon}>
+              <img src={valueStyling.icon} />
+              <div>{label}</div>
+            </div>
+            <div className={styles.footer}>
+              <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
+                <img src={localLogo} />
+                <span>{"Phase III"} (view in COVID-Local)</span>
+              </a>
+            </div>
+          </div>
+        );
+      } else if (k === "74" || k === "72") {
+        item.value = (
+          <div className={styles[k]}>
+            <div className={styles.value}>
+              <div className={styles.number}>{item.value}</div>
+              <div className={styles.unit}>{thisMetricMeta.unit(v)}</div>
+            </div>
+            {item.trendData && (
+              <div
+                className={classNames(
+                  styles.trend,
+                  ...item.trendData.classes.map(d => styles[d])
+                )}
+              >
+                <div
+                  className={classNames(
+                    styles.sentiment,
+                    styles[item.trendData.noun.replace(" ", "-")]
+                  )}
+                >
+                  {item.trendData.pct !== 0 && (
+                    <span>{item.trendData.pct_fmt}&nbsp;</span>
+                  )}
+                </div>{" "}
+                <div>
+                  {item.trendData.noun} {item.trendData.timeframe}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
       item.customContent = (
         <>
-          <div className={tooltipStyles.label}>{item.label}</div>
-          <div className={tooltipStyles.value}>{item.value}</div>
+          <div className={styles.label}>{item.label}</div>
+          <div className={styles.value}>{item.value}</div>
         </>
       );
       tooltip.tooltipMainContent.push(item);
@@ -1027,7 +1040,7 @@ export const tooltipGetter = async ({
         );
         item.value = (
           <div
-            className={infoTooltipStyles.badge}
+            className={infostyles.badge}
             style={{
               backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
             }}
@@ -1052,20 +1065,20 @@ const TableDrawer = ({
   children
 }) => {
   return (
-    <div className={tooltipStyles.tableDrawer}>
+    <div className={styles.tableDrawer}>
       <div
         onClick={() => {
           if (open) setOpenTableDrawer(null);
           else setOpenTableDrawer(id);
         }}
-        className={tooltipStyles.header}
+        className={styles.header}
       >
         {header}
         <button>
           {
             <i
               className={classNames("material-icons", {
-                [tooltipStyles.flipped]: open
+                [styles.flipped]: open
               })}
             >
               play_arrow
@@ -1073,7 +1086,7 @@ const TableDrawer = ({
           }
         </button>
       </div>
-      <div className={tooltipStyles.content}>{open && children}</div>
+      <div className={styles.content}>{open && children}</div>
     </div>
   );
 };
@@ -1085,7 +1098,7 @@ const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
   }, [tables]);
 
   return (
-    <div className={tooltipStyles.table}>
+    <div className={styles.table}>
       {tables.map((d, i) => (
         <React.Fragment
           key={d.ph_measure_details + "-" + geometryName + "-" + i}
@@ -1096,16 +1109,16 @@ const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
             openTableDrawer={openTableDrawer}
             setOpenTableDrawer={setOpenTableDrawer}
             header={
-              <div className={tooltipStyles.tableName}>
+              <div className={styles.tableName}>
                 {d.ph_measure_details}{" "}
-                <span className={tooltipStyles.num}>
+                <span className={styles.num}>
                   ({comma(d.rows.length)}
                   {d.rows.length === 1 ? " policy" : " policies"})
                 </span>
               </div>
             }
           >
-            <span className={tooltipStyles.instructions}>
+            <span className={styles.instructions}>
               {d.rows.some(dd => dd.place.level === "Local") && (
                 <span>
                   *Local policy which does not influence{" "}
