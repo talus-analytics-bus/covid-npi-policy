@@ -854,19 +854,8 @@ export const tooltipGetter = async ({
 
       // SPECIAL METRICS // -------------------------------------------------//
       if (k === "policy_status" || k === "lockdown_level") {
-        // define right content of header metric based on metric type
-        if (k === "lockdown_level") {
-          tooltip.tooltipHeaderRight = (
-            <>
-              <button>View all policy data</button>
-              <span>
-                Policies in effect on <i>{formattedDate}</i>
-              </span>
-            </>
-          );
-        }
-
         const apiDate = date.format("YYYY-MM-DD");
+
         // get relevant policy data
         const policies = await Policy({
           method: "post",
@@ -886,111 +875,166 @@ export const tooltipGetter = async ({
                 ? filters.ph_measure_details
                 : []
           },
-          by_category: "ph_measure_details",
-          fields: [
-            "id",
-            "primary_ph_measure",
-            "ph_measure_details",
-            "date_start_effective",
-            "desc",
-            "place"
-          ]
+          // by_category: "ph_measure_details",
+          fields: ["id", "place"]
+        });
+        item.customContent = <div />;
+
+        const nPolicies = {
+          total: 0,
+          local: 0,
+          state: 0,
+          country: 0
+        };
+        policies.data.forEach(d => {
+          nPolicies.total += 1;
+          switch (d.place.level) {
+            case "Local":
+              nPolicies.local += 1;
+              break;
+            case "State / Province":
+              nPolicies.state += 1;
+              break;
+            case "Country":
+              nPolicies.country += 1;
+              break;
+          }
         });
 
-        let nPolicies = 0;
-        item.className = "policyStatus";
-        const tables = [];
-        for (const [ph_measure_details, policiesOfCategory] of Object.entries(
-          policies.data
-        )) {
-          const rows = [];
-          policiesOfCategory.forEach(d => {
-            rows.push(d);
+        // define right content of header metric based on metric type
+        if (k === "lockdown_level") {
+          // add actions for bottom of tooltip
+          const filtersStr = JSON.stringify({
+            primary_ph_measure:
+              plugins.fill !== "lockdown_level"
+                ? filters.primary_ph_measure
+                : ["Social distancing"],
+            ph_measure_details:
+              plugins.fill !== "lockdown_level"
+                ? filters.ph_measure_details || []
+                : [],
+            dates_in_effect: filters.dates_in_effect,
+            country_name: ["United States of America (USA)"],
+            area1: [d.properties.state_name]
+            // level: ["State / Province"]
           });
-          tables.push({ ph_measure_details, rows });
-          nPolicies += policiesOfCategory.length;
+
+          tooltip.tooltipHeaderRight = (
+            <>
+              <a
+                key={"view"}
+                target="_blank"
+                href={"/data?filters=" + filtersStr}
+              >
+                {<button>View all policy data</button>}
+                {
+                  // Uncomment below to specify number of policies
+                  // <button>
+                  //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
+                  //   {nPolicies.total === 1 ? "policy" : "policies"}
+                  // </button>
+                }
+              </a>
+              <span>
+                Policies in effect on <i>{formattedDate}</i>
+              </span>
+            </>
+          );
         }
 
-        // add actions for bottom of tooltip
-        const filtersStr = JSON.stringify({
-          primary_ph_measure:
-            plugins.fill !== "lockdown_level"
-              ? filters.primary_ph_measure
-              : ["Social distancing"],
-          ph_measure_details:
-            plugins.fill !== "lockdown_level"
-              ? filters.ph_measure_details || []
-              : [],
-          dates_in_effect: filters.dates_in_effect,
-          country_name: ["United States of America (USA)"],
-          area1: [d.properties.state_name]
-          // level: ["State / Province"]
-        });
-        tooltip.actions =
-          nPolicies > 0
-            ? [
-                <a
-                  key={"view"}
-                  target="_blank"
-                  href={"/data?filters=" + filtersStr}
-                >
-                  <button>
-                    View {nPolicies === 1 ? "this" : `these`}{" "}
-                    {nPolicies === 1 ? "policy" : "policies"}
-                  </button>
-                </a>
-              ]
-            : [];
+        // // get relevant policy data
+        // const policies = await Policy({
+        //   method: "post",
+        //   filters: {
+        //     area1: [d.properties.state_name],
+        //     // level: ["State / Province"],
+        //     dates_in_effect: [apiDate, apiDate],
+        //
+        //     // if doing distancing level, only allow all social distancing
+        //     // policies to be returned
+        //     primary_ph_measure:
+        //       plugins.fill !== "lockdown_level"
+        //         ? filters.primary_ph_measure
+        //         : ["Social distancing"],
+        //     ph_measure_details:
+        //       plugins.fill !== "lockdown_level"
+        //         ? filters.ph_measure_details
+        //         : []
+        //   },
+        //   by_category: "ph_measure_details",
+        //   fields: [
+        //     "id",
+        //     "primary_ph_measure",
+        //     "ph_measure_details",
+        //     "date_start_effective",
+        //     "desc",
+        //     "place"
+        //   ]
+        // });
 
-        const subtitleCategory =
-          plugins.fill !== "lockdown_level"
-            ? filters.primary_ph_measure[0].toLowerCase()
-            : "social distancing";
-        const displayInfo = metricMeta.lockdown_level.valueStyling[v];
-        const subtitle = null;
-        tooltip.tooltipHeader.subtitle = subtitle;
-        item.customContent = (
-          <div className={tooltipStyles.distancingLevel}>
-            {plugins.fill === "lockdown_level" && (
-              <div className={tooltipStyles.iconSection}>
-                {displayInfo.icon && <img src={displayInfo.icon} />}
-
-                <div className={tooltipStyles.iconLabel}>
-                  <div className={tooltipStyles.label}>{displayInfo.label}</div>
-                  <div className={tooltipStyles.category}>
-                    <div className={tooltipStyles.phaseName}>
-                      {displayInfo.phase && displayInfo.phase}
-                      {!displayInfo.phase && "Mixed"}
-                    </div>
-
-                    <div className={tooltipStyles.link}>
-                      <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-                        <img src={localLogo} />
-                        view metrics at COVID-Local
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div className={tooltipStyles.subtitle}>
-              {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
-              effect for {subtitleCategory}{" "}
-              {!isEmpty(filters["ph_measure_details"])
-                ? "in selected subcategories"
-                : ""}{" "}
-              on&nbsp;<i>{formattedDate}</i>
-            </div>
-
-            <TableDrawers
-              {...{
-                tables,
-                geometryName: d.properties.state_name,
-                fill: plugins.fill
-              }}
-            />
-          </div>
-        );
+        // let nPolicies = 0;
+        // item.className = "policyStatus";
+        // const tables = [];
+        // for (const [ph_measure_details, policiesOfCategory] of Object.entries(
+        //   policies.data
+        // )) {
+        //   const rows = [];
+        //   policiesOfCategory.forEach(d => {
+        //     rows.push(d);
+        //   });
+        //   tables.push({ ph_measure_details, rows });
+        //   nPolicies += policiesOfCategory.length;
+        // }
+        //
+        // const subtitleCategory =
+        //   plugins.fill !== "lockdown_level"
+        //     ? filters.primary_ph_measure[0].toLowerCase()
+        //     : "social distancing";
+        // const displayInfo = metricMeta.lockdown_level.valueStyling[v];
+        // const subtitle = null;
+        // tooltip.tooltipHeader.subtitle = subtitle;
+        // item.customContent = (
+        //   <div className={tooltipStyles.distancingLevel}>
+        //     {plugins.fill === "lockdown_level" && (
+        //       <div className={tooltipStyles.iconSection}>
+        //         {displayInfo.icon && <img src={displayInfo.icon} />}
+        //
+        //         <div className={tooltipStyles.iconLabel}>
+        //           <div className={tooltipStyles.label}>{displayInfo.label}</div>
+        //           <div className={tooltipStyles.category}>
+        //             <div className={tooltipStyles.phaseName}>
+        //               {displayInfo.phase && displayInfo.phase}
+        //               {!displayInfo.phase && "Mixed"}
+        //             </div>
+        //
+        //             <div className={tooltipStyles.link}>
+        //               <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
+        //                 <img src={localLogo} />
+        //                 view metrics at COVID-Local
+        //               </a>
+        //             </div>
+        //           </div>
+        //         </div>
+        //       </div>
+        //     )}
+        //     <div className={tooltipStyles.subtitle}>
+        //       {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
+        //       effect for {subtitleCategory}{" "}
+        //       {!isEmpty(filters["ph_measure_details"])
+        //         ? "in selected subcategories"
+        //         : ""}{" "}
+        //       on&nbsp;<i>{formattedDate}</i>
+        //     </div>
+        //
+        //     <TableDrawers
+        //       {...{
+        //         tables,
+        //         geometryName: d.properties.state_name,
+        //         fill: plugins.fill
+        //       }}
+        //     />
+        //   </div>
+        // );
 
         item.value = (
           <div
