@@ -30,48 +30,55 @@ const MapTooltip = ({
             <div className={styles.title}>{tooltipHeader.title}</div>
             <div className={styles.subtitle}>{tooltipHeader.subtitle}</div>
           </div>
-          {dHeader && (
-            <div className={styles.metric}>
-              <React.Fragment>
-                <div className={styles.metricContent}>
-                  <div className={styles.value}>
-                    {dHeader.value}&nbsp;
-                    <div className={styles.unit}>{dHeader.unit}</div>
-                  </div>
-                  {
-                    // <div className={styles.metricHeader}>
-                    //   <div className={styles.label}>{dHeader.label}</div>
-                    // </div>
-                  }
-                  {
-                    // if trend information available, visualize it
-                  }
-                  {dHeader.trend && (
-                    <div
-                      className={classNames(
-                        styles.trend,
-                        ...dHeader.trend.classes.map(d => styles[d])
-                      )}
-                    >
-                      <div
-                        className={classNames(
-                          styles.sentiment,
-                          styles[dHeader.trend.noun.replace(" ", "-")]
-                        )}
-                      >
-                        {dHeader.trend.pct !== 0 && (
-                          <span>{dHeader.trend.pct_fmt}&nbsp;</span>
-                        )}
-                      </div>{" "}
-                      <div>
-                        {dHeader.trend.noun} {dHeader.trend.timeframe}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </React.Fragment>
+          {props.tooltipHeaderRight && (
+            <div className={styles.tooltipHeaderRight}>
+              {props.tooltipHeaderRight}
             </div>
           )}
+          {
+            // dHeader && (
+            //   <div className={styles.metric}>
+            //     <React.Fragment>
+            //       <div className={styles.metricContent}>
+            //         <div className={styles.value}>
+            //           {dHeader.value}&nbsp;
+            //           <div className={styles.unit}>{dHeader.unit}</div>
+            //         </div>
+            //         {
+            //           // <div className={styles.metricHeader}>
+            //           //   <div className={styles.label}>{dHeader.label}</div>
+            //           // </div>
+            //         }
+            //         {
+            //           // if trend information available, visualize it
+            //         }
+            //         {dHeader.trend && (
+            //           <div
+            //             className={classNames(
+            //               styles.trend,
+            //               ...dHeader.trend.classes.map(d => styles[d])
+            //             )}
+            //           >
+            //             <div
+            //               className={classNames(
+            //                 styles.sentiment,
+            //                 styles[dHeader.trend.noun.replace(" ", "-")]
+            //               )}
+            //             >
+            //               {dHeader.trend.pct !== 0 && (
+            //                 <span>{dHeader.trend.pct_fmt}&nbsp;</span>
+            //               )}
+            //             </div>{" "}
+            //             <div>
+            //               {dHeader.trend.noun} {dHeader.trend.timeframe}
+            //             </div>
+            //           </div>
+            //         )}
+            //       </div>
+            //     </React.Fragment>
+            //   </div>
+            // )
+          }
         </div>
       )}
       {

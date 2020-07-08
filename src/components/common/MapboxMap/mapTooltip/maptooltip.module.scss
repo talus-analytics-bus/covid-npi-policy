@@ -36,6 +36,23 @@
       font-style: italic;
       color: gray;
     }
+
+    // content on right side of header (optional)
+    .tooltipHeaderRight {
+      display: flex;
+      flex-flow: column;
+      align-items: flex-end;
+      text-align: right;
+      button {
+        @include btn-primary();
+        color: white;
+        width: max-content;
+        white-space: nowrap;
+        + span {
+          color: $dark-blue;
+        }
+      }
+    }
   }
   .content {
     padding: $padding;

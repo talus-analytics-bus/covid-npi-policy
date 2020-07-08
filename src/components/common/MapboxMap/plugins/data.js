@@ -854,6 +854,18 @@ export const tooltipGetter = async ({
 
       // SPECIAL METRICS // -------------------------------------------------//
       if (k === "policy_status" || k === "lockdown_level") {
+        // define right content of header metric based on metric type
+        if (k === "lockdown_level") {
+          tooltip.tooltipHeaderRight = (
+            <>
+              <button>View all policy data</button>
+              <span>
+                Policies in effect on <i>{formattedDate}</i>
+              </span>
+            </>
+          );
+        }
+
         const apiDate = date.format("YYYY-MM-DD");
         // get relevant policy data
         const policies = await Policy({
