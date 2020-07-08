@@ -899,7 +899,7 @@ export const tooltipGetter = async ({
             <div className={styles.footer}>
               <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
                 <img src={localLogo} />
-                <span>{"Phase III"} (view in COVID-Local)</span>
+                <span>{valueStyling.phase} (view in COVID-Local)</span>
               </a>
             </div>
           </div>

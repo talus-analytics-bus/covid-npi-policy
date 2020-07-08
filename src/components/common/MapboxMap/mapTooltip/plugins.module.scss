@@ -1,5 +1,11 @@
 @import "../../../../assets/styles/vars.scss";
 
+.mapTooltip {
+  .header {
+    padding-left: 20px;
+  }
+}
+
 .lockdown_level {
   .icon {
     display: flex;
