@@ -12,7 +12,7 @@ import styles from "./PolicyModel.module.scss";
 
 import states from "./states";
 
-const PolicyModel = () => {
+const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
@@ -107,6 +107,12 @@ const PolicyModel = () => {
 
     clearState(state).then(() => setup());
   };
+
+  // on init render, set loading to false and page to `model`
+  React.useEffect(() => {
+    setLoading(false);
+    setPage("model");
+  }, []);
 
   React.useEffect(() => {
     setup();

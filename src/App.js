@@ -209,9 +209,7 @@ const App = () => {
                     exact
                     path="/model"
                     render={() => {
-                      setLoading(false);
-                      setPage("model");
-                      return <PolicyModel />;
+                      return <PolicyModel {...{ setPage, setLoading }} />;
                     }}
                   />
                 }

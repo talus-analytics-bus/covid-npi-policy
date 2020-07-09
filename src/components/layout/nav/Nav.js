@@ -34,7 +34,7 @@ const Nav = ({ page, ...props }) => {
   return (
     <div
       className={classNames(styles.navWrapper, {
-        [styles.wide]: page === "policymaps",
+        [styles.wide]: page === "policymaps" || page === "model",
         [styles.showMobileMenu]: showMobileMenu
       })}
     >
