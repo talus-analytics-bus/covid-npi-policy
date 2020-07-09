@@ -33,6 +33,7 @@ const Nav = ({ page, ...props }) => {
 
   return (
     <div
+      data-page={page}
       className={classNames(styles.navWrapper, {
         [styles.wide]: page === "policymaps" || page === "model",
         [styles.showMobileMenu]: showMobileMenu
