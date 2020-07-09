@@ -13,6 +13,7 @@ import moment from "moment";
 
 // utilities
 import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
+import { geoHaveData } from "../MapboxMap";
 
 // assets
 import dots from "./assets/images/dots.png";
@@ -175,7 +176,14 @@ const fillStyles = {
   },
   "metric-test-outline": key => {
     return {
-      "line-color": "#ffffff",
+      "line-color": [
+        "case",
+        ["==", ["has", "state_name"], true],
+        "#ffffff",
+        ["==", ["in", ["get", "BRK_A3"], ["literal", geoHaveData]], false],
+        "#808080",
+        "#ffffff"
+      ],
       "line-width": [
         "case",
         ["==", ["feature-state", "clicked"], true],
@@ -206,6 +214,8 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
+        ["==", ["in", ["get", "BRK_A3"], ["literal", geoHaveData]], false],
+        "#fff",
         ["==", ["feature-state", key], null],
         "#eaeaea",
         ["==", ["feature-state", key], "t"],

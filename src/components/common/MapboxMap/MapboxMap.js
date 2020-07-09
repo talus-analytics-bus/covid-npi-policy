@@ -88,6 +88,17 @@ const MapboxMap = ({
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
 
+  const updateFillOrder = ({ map, f = null }) => {
+    // initialize the vertical order of shapes for certain metrics
+    if (mapId === "global")
+      map.setLayoutProperty("policy_status-fill-outline", "line-sort-key", [
+        "case",
+        ["==", ["in", ["get", "BRK_A3"], ["literal", geoHaveData]], false],
+        0,
+        1
+      ]);
+  };
+
   const getFillLegendName = ({ filters, fill }) => {
     const isLockdownLevel = fill === "lockdown_level";
 
@@ -529,6 +540,8 @@ const MapboxMap = ({
           // whenever the map style, i.e., the type of map, is changed
           const map = mapRef.getMap();
 
+          updateFillOrder({ map, f: null });
+
           // if default fit bounds are specified, center the viewport on them
           // (fly animation relative to default viewport)
           if (mapStyle.defaultFitBounds !== undefined) {
@@ -658,5 +671,18 @@ const MapboxMap = ({
     </>
   );
 };
+
+export const geoHaveData = [
+  "BRA",
+  "DJI",
+  "EST",
+  "IND",
+  "KOR",
+  "MEX",
+  "MHL",
+  "NGA",
+  "PHL",
+  "USA"
+];
 
 export default MapboxMap;
