@@ -44,8 +44,8 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  // mapId: "global",
-  mapId: "us",
+  mapId: "global",
+  // mapId: "us",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -69,7 +69,7 @@ export const defaults = {
     priorLayer: "state-points"
   },
   // defaults for additional maps...
-  global: { circle: "77", fill: "policy_status", priorLayer: "country-label" }
+  global: { circle: "77", fill: "lockdown_level", priorLayer: "country-label" }
 };
 
 // constants
@@ -254,6 +254,63 @@ export const mapMetrics = {
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
+      }
+    },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        const lockdownFilters = {
+          ...filters,
+          lockdown_level: ["lockdown_level"]
+        };
+        // delete lockdownFilters.primary_ph_measure;
+        delete lockdownFilters.ph_measure_details;
+        return {
+          method: "post",
+          filters: lockdownFilters,
+          iso3: "all",
+          geo_res: "country"
+        };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "lockdown_level",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "lockdown_level" },
+
+      // // filter to control what features are returned for layers that are
+      // // displaying this metric
+      // filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        pattern: true
       }
     },
     {

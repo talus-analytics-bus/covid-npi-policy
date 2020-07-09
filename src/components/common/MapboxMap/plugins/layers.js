@@ -234,6 +234,8 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        "#ffffff",
         ["==", ["feature-state", key], null],
         "#eaeaea",
         ["==", ["feature-state", key], "Mixed distancing levels"],
