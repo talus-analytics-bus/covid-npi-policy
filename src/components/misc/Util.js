@@ -55,6 +55,38 @@ export const getLog10Scale = ({
   ];
 };
 
+export const getLinearScale = ({
+  minSize,
+  maxValue,
+  featurePropertyKey,
+  zeroSize = 0
+}) => {
+  // divide into 5 decades ending with the maxValue
+  const x = Math.log10(maxValue);
+
+  // store interpolator breakpoints as pairs of elements:
+  // 1: value
+  // 2: scale value at that value
+  const decades = [0, zeroSize, 1, minSize];
+
+  // total decades to define, including for zero and 1
+  const totalDecades = 7;
+
+  // create decades
+  for (let i = 1; i < totalDecades - 1; i++) {
+    decades.push(Math.pow(10, x * (i / (totalDecades - 2))));
+    decades.push(minSize * Math.pow(2, i));
+  }
+
+  // return scale with decades
+  return [
+    "interpolate",
+    ["linear"],
+    ["feature-state", featurePropertyKey],
+    ...decades
+  ];
+};
+
 /**
  * Check to see if two arrays match
  * https://gomakethings.com/how-to-check-if-two-arrays-are-equal-with-vanilla-js/

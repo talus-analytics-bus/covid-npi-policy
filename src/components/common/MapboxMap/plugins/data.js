@@ -44,8 +44,8 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  // mapId: "global",
-  mapId: "us",
+  mapId: "global",
+  // mapId: "us",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -69,7 +69,7 @@ export const defaults = {
     priorLayer: "state-points"
   },
   // defaults for additional maps...
-  global: { circle: "25", fill: "policy_status", priorLayer: "country-label" }
+  global: { circle: "77", fill: "policy_status", priorLayer: "country-label" }
 };
 
 // constants
@@ -258,17 +258,17 @@ export const mapMetrics = {
     },
     {
       queryFunc: ObservationQuery,
-      for: ["circle", "fill"],
+      for: ["circle"],
       params: {
-        metric_id: "25",
+        metric_id: "77",
         temporal_resolution: "daily",
         spatial_resolution: "country"
       },
-      id: "25",
-      featureLinkField: "place_id",
-      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      id: "77",
+      featureLinkField: "place_iso",
+      styleId: { fill: "metric-test", circle: "metric-test-transp" },
       trend: true,
-      styleOptions: { outline: true, pattern: true }
+      styleOptions: { outline: true, pattern: false }
     }
   ]
 };
@@ -417,6 +417,9 @@ export const metricMeta = {
         }
       }
     };
+  },
+  get "77"() {
+    return this["74"];
   },
   "25": {
     metric_definition:

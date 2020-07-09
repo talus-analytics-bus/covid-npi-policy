@@ -67,7 +67,8 @@ export const mapSources = {
       sourceLayer: "mvmupdatescentroidsv2-62u4it",
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.c4ujj0o1"
+        url: "mapbox://nicoletalus.c4ujj0o1",
+        promoteId: "ISO_A2"
       }
     }
   }
