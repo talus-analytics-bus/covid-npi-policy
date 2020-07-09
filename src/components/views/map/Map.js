@@ -208,8 +208,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                               return {
                                 value,
                                 name,
-                                tooltip
-                                // disabled: value === "global"
+                                tooltip,
+                                disabled: value === "global"
                               };
                             }
                           ),
