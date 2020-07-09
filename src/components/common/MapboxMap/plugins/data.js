@@ -949,29 +949,30 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
+      console.log("k");
+      console.log(k);
       if (k === "policy_status" || k === "lockdown_level") {
         const apiDate = date.format("YYYY-MM-DD");
 
         // get relevant policy data
+        const policyFilters = {
+          dates_in_effect: [apiDate, apiDate],
+
+          // if doing distancing level, only allow all social distancing
+          // policies to be returned
+          primary_ph_measure:
+            plugins.fill !== "lockdown_level"
+              ? filters.primary_ph_measure
+              : ["Social distancing"],
+          ph_measure_details:
+            plugins.fill !== "lockdown_level" ? filters.ph_measure_details : []
+        };
+        if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
+        else policyFilters.iso3 = [d.properties.ISO_A3];
+
         const policies = await Policy({
           method: "post",
-          filters: {
-            area1: [d.properties.state_name],
-            // level: ["State / Province"],
-            dates_in_effect: [apiDate, apiDate],
-
-            // if doing distancing level, only allow all social distancing
-            // policies to be returned
-            primary_ph_measure:
-              plugins.fill !== "lockdown_level"
-                ? filters.primary_ph_measure
-                : ["Social distancing"],
-            ph_measure_details:
-              plugins.fill !== "lockdown_level"
-                ? filters.ph_measure_details
-                : []
-          },
-          // by_category: "ph_measure_details",
+          filters: policyFilters,
           fields: ["id", "place"]
         });
 
@@ -998,7 +999,7 @@ export const tooltipGetter = async ({
 
         // define right content of header metric based on metric type
         // add actions for bottom of tooltip
-        const filtersStr = JSON.stringify({
+        const filtersForStr = {
           primary_ph_measure:
             plugins.fill !== "lockdown_level"
               ? filters.primary_ph_measure
@@ -1007,12 +1008,15 @@ export const tooltipGetter = async ({
             plugins.fill !== "lockdown_level"
               ? filters.ph_measure_details || []
               : [],
-          dates_in_effect: filters.dates_in_effect,
-          // TODO generalize
-          country_name: ["United States of America (USA)"],
-          area1: [d.properties.state_name]
-          // level: ["State / Province"]
-        });
+          dates_in_effect: filters.dates_in_effect
+        };
+
+        if (mapId === "us") filtersForStr.area1 = [d.properties.state_name];
+        else
+          filtersForStr.country_name = [
+            `${d.properties.NAME} (${d.properties.ISO_A3})`
+          ];
+        const filtersStr = JSON.stringify(filtersForStr);
 
         // content for right side of header
         tooltip.tooltipHeaderRight = (

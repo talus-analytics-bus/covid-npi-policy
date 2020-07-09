@@ -254,7 +254,6 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    console.log("Getting map data");
     getMapData({ date, filters, mapId });
   }, [filters, mapId]);
 
@@ -408,8 +407,6 @@ const MapboxMap = ({
         const feature = circleFeature || fillFeature;
         console.log("feature");
         console.log(feature);
-        // console.log("e.lngLat");
-        // console.log(e.lngLat);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {
@@ -448,12 +445,6 @@ const MapboxMap = ({
         // if the cursor is not hovering on the map itself, unhover
         // all features
         const cursorOnMap = e.target.classList.contains("overlays");
-        //    &&
-        //   !e.target.classList.contains("mapboxgl-popup-content");
-        // console.log(`e.target.classList.contains("mapboxgl-popup-content")`);
-        // console.log(e.target.classList.contains("mapboxgl-popup-content"));
-        // console.log("e.target");
-        // console.log(e.target);
 
         if (!cursorOnMap) {
           if (hoveredFeature !== null) {

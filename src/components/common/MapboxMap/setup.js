@@ -414,10 +414,7 @@ const bindFeatureStatesForSource = ({
   curMapMetrics.forEach(layer => {
     // get data for layer features
     const layerData = data[layer.id];
-    console.log(layerData[0]);
     layerData.forEach(dd => {
-      // console.log("dd");
-      // console.log(dd);
       // bind null value to feature if no data
       const state = {};
       if (dd.value === undefined || dd.value === null) {
