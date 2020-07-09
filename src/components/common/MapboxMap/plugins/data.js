@@ -476,10 +476,20 @@ export const metricMeta = {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
+        domain: [
+          "no policy",
+          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            policy data
+            <br />
+            not available
+          </div>,
+          "policy in effect"
+        ],
+        // range: ["#eaeaea", "white", "#66CAC4"],
         colorscale: d3
           .scaleOrdinal()
           .domain(["no policy", "policy in effect"])
-          .range(["#eaeaea", "#66CAC4"])
+          .range(["#eaeaea", "white", "#66CAC4"])
         // labels: {
         //   bubble: { min: "Low", max: "High" },
         //   basemap: { min: "Minimal", max: "High" }
@@ -652,12 +662,12 @@ export const metricMeta = {
           "mixed"
         ],
         subLabels: [
-          "",
+          <span style={{ visibility: "hidden" }}>x</span>,
           getCovidLocalMetricLink("(phase I)"),
           getCovidLocalMetricLink("(phase II)"),
           getCovidLocalMetricLink("(phase III)"),
           getCovidLocalMetricLink("(phase IV)"),
-          ""
+          <span style={{ visibility: "hidden" }}>x</span>
         ],
         colorscale: d3
           .scaleOrdinal()
