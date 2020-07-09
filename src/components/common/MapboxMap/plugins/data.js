@@ -1009,14 +1009,14 @@ export const tooltipGetter = async ({
         if (mapId === "us") {
           filtersForStr.country_name = ["United States of America (USA)"];
           filtersForStr.area1 = [d.properties.state_name];
-        } else
+        } else {
           filtersForStr.country_name = [
             `${d.properties.NAME} (${d.properties.ISO_A3})`
           ];
+        }
         const filtersStr = JSON.stringify(filtersForStr);
 
         // content for right side of header
-        console.log("doing it");
         tooltip.tooltipHeaderRight = (
           <>
             <a
