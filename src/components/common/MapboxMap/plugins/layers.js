@@ -214,14 +214,14 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
-        ["==", ["feature-state", key], null],
-        "#eaeaea",
         ["==", ["feature-state", key], "t"],
         "#66CAC4",
         ["==", ["has", "state_name"], true],
-        "#ffffff",
+        "#eaeaea",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         "#fff",
+        ["==", ["feature-state", key], null],
+        "#eaeaea",
         "#eaeaea"
       ]
     };

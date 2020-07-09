@@ -844,7 +844,8 @@ export const tooltipGetter = async ({
   map,
   filters,
   plugins,
-  callback
+  callback,
+  ...props
 }) => {
   // define base tooltip data
   const tooltip = {
@@ -891,6 +892,8 @@ export const tooltipGetter = async ({
     )
       continue;
     else {
+      console.log("k");
+      console.log(k);
       // get metric metadata
       const thisMetricMeta = metricMeta[k];
 
@@ -992,7 +995,7 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-      if (k === "policy_status" || k === "lockdown_level") {
+      if (true) {
         const apiDate = date.format("YYYY-MM-DD");
 
         // get relevant policy data
@@ -1065,25 +1068,27 @@ export const tooltipGetter = async ({
         // content for right side of header
         tooltip.tooltipHeaderRight = (
           <>
-            <a
-              key={"view"}
-              target="_blank"
-              href={"/data?filters=" + filtersStr}
-            >
-              {
-                <button>
-                  View all policies
-                  <br /> ({nPolicies.total}) in effect
-                </button>
-              }
-              {
-                // Uncomment below to specify number of policies
-                // <button>
-                //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
-                //   {nPolicies.total === 1 ? "policy" : "policies"}
-                // </button>
-              }
-            </a>
+            {nPolicies.total > 0 && (
+              <a
+                key={"view"}
+                target="_blank"
+                href={"/data?filters=" + filtersStr}
+              >
+                {
+                  <button>
+                    View all policies
+                    <br /> ({nPolicies.total}) in effect
+                  </button>
+                }
+                {
+                  // Uncomment below to specify number of policies
+                  // <button>
+                  //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
+                  //   {nPolicies.total === 1 ? "policy" : "policies"}
+                  // </button>
+                }
+              </a>
+            )}
             <span>
               as of <i>{formattedDate}</i>
             </span>
@@ -1099,6 +1104,40 @@ export const tooltipGetter = async ({
             {thisMetricMeta.value(v)}
           </div>
         );
+      }
+
+      // special -- add note if policy data not yet collected
+      if (props.geoHaveData === false || state.lockdown_level === null) {
+        let message;
+        if (props.geoHaveData === false) {
+          message = (
+            <i>
+              No policies yet available,
+              <br />
+              data collection in progress
+            </i>
+          );
+        } else if (state.lockdown_level === null) {
+          message = (
+            <i>
+              No country-level distancing
+              <br />
+              level could be determined
+              <br />
+              from available policies
+            </i>
+          );
+        }
+        tooltip.tooltipMainContent.push({
+          customContent: (
+            <>
+              <div className={styles.label}>Distancing level</div>
+              <div style={{ color: "gray" }} className={styles.value}>
+                {message}
+              </div>
+            </>
+          )
+        });
       }
       tooltip.tooltipMainContent.reverse();
       // tooltip.tooltipMainContent.push(item);

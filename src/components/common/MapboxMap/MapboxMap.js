@@ -245,7 +245,10 @@ const MapboxMap = ({
             ...(await tooltipGetter({
               mapId: mapId,
               d: selectedFeature,
-              include: [circle, "lockdown_level"],
+              include: [circle, fill],
+              geoHaveData: geoHaveData.includes(
+                selectedFeature.properties.BRK_A3
+              ),
               // include: [circle, fill],
               date,
               map,
