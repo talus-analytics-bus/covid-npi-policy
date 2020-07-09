@@ -1,44 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import loadModels, { requestIntervention, clearState } from './LoadModels'
-import parseModels from './parseModels'
+import loadModels, { requestIntervention, clearState } from "./LoadModels";
+import parseModels from "./parseModels";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
-import State from '../State/State'
-import LoadingState from '../LoadingState/LoadingState'
-import NavigatorPlot from '../PolicyPlot/NavigatorPlot/NavigatorPlot'
+import State from "../State/State";
+import LoadingState from "../LoadingState/LoadingState";
+import NavigatorPlot from "../PolicyPlot/NavigatorPlot/NavigatorPlot";
 
-import styles from './PolicyModel.module.scss'
+import styles from "./PolicyModel.module.scss";
 
-import states from './states'
+import states from "./states";
 
 const PolicyModel = () => {
-  const [activeTab] = useState('interventions')
+  const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
-  const [selectedStates, setSelectedStates] = useState(['CO'])
+  const [selectedStates, setSelectedStates] = useState(["CO"]);
 
-  const [counterfactualSelected, setCounterfactualSelected] = useState(false)
+  const [counterfactualSelected, setCounterfactualSelected] = useState(false);
 
   // curves selected by the user
   const [selectedCurves, setSelectedCurves] = useState([
-    'infected_a',
+    "infected_a",
     // 'infected_b',
     // 'infected_c',
     // 'dead',
-    'R effective',
-  ])
+    "R effective"
+  ]);
 
-  const [curves, setCurves] = useState()
+  const [curves, setCurves] = useState();
   const [zoomDateRange, setZoomDateRange] = useState([
-    new Date('2020-01-01'),
-    new Date('2021-01-01'),
-  ])
+    new Date("2020-01-01"),
+    new Date("2021-01-01")
+  ]);
   const [domain, setDomain] = useState([
-    new Date('2020-01-01'),
-    new Date('2021-01-01'),
-  ])
-  const [caseLoadAxis, setCaseLoadAxis] = useState([0, 10000])
+    new Date("2020-01-01"),
+    new Date("2021-01-01")
+  ]);
+  const [caseLoadAxis, setCaseLoadAxis] = useState([0, 10000]);
 
   // memoization helps here but it would also
   // need to track the latest intervention as a
@@ -49,39 +49,39 @@ const PolicyModel = () => {
   // )
 
   const setup = React.useCallback(async () => {
-    const loadedModels = await loadModels(selectedStates)
+    const loadedModels = await loadModels(selectedStates);
 
     // get curves, max, min from models
     const modelCurves = parseModels(
       loadedModels,
       selectedCurves,
       counterfactualSelected
-    )
+    );
 
     // console.log(modelCurves)
-    setCurves(modelCurves)
+    setCurves(modelCurves);
 
     // set up axes
     const dates = Object.values(modelCurves)
       .map(state => state.dateRange)
-      .flat()
+      .flat();
 
     // Initialize the zoom range as all dates
     setZoomDateRange([
       dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
-    ])
+      dates.reduce((prev, curr) => (prev < curr ? curr : prev))
+    ]);
 
     // set overall domain; this will be used for the navigator plot.
     setDomain([
       dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
-    ])
+      dates.reduce((prev, curr) => (prev < curr ? curr : prev))
+    ]);
 
     setCaseLoadAxis([
       0,
-      Math.max(...Object.values(modelCurves).map(state => state.yMax)),
-    ])
+      Math.max(...Object.values(modelCurves).map(state => state.yMax))
+    ]);
   }, [
     // callbackModels,
     selectedStates,
@@ -90,27 +90,27 @@ const PolicyModel = () => {
     setCurves,
     setZoomDateRange,
     setDomain,
-    setCaseLoadAxis,
-  ])
+    setCaseLoadAxis
+  ]);
 
   const addIntervention = (state, intervention) => {
-    const newCurves = Object.assign({}, curves)
-    delete newCurves[state]
-    setCurves(newCurves)
-    requestIntervention(state, intervention).then(() => setup())
-  }
+    const newCurves = Object.assign({}, curves);
+    delete newCurves[state];
+    setCurves(newCurves);
+    requestIntervention(state, intervention).then(() => setup());
+  };
 
   const resetState = state => {
-    const newCurves = Object.assign({}, curves)
-    delete newCurves[state]
-    setCurves(newCurves)
+    const newCurves = Object.assign({}, curves);
+    delete newCurves[state];
+    setCurves(newCurves);
 
-    clearState(state).then(() => setup())
-  }
+    clearState(state).then(() => setup());
+  };
 
   React.useEffect(() => {
-    setup()
-  }, [selectedStates, selectedCurves, counterfactualSelected, setup])
+    setup();
+  }, [selectedStates, selectedCurves, counterfactualSelected, setup]);
 
   return (
     <div className={styles.background}>
@@ -169,7 +169,7 @@ const PolicyModel = () => {
               <select
                 value={selectedCurves[0]}
                 onChange={e => {
-                  setSelectedCurves([e.target.value, 'R effective'])
+                  setSelectedCurves([e.target.value, "R effective"]);
                 }}
               >
                 <option value="infected_a">Infected</option>
@@ -213,7 +213,7 @@ const PolicyModel = () => {
                   setCounterfactualSelected={setCounterfactualSelected}
                   resetState={resetState}
                 />
-              )
+              );
             } else {
               // This is where a loading component should go
               return (
@@ -233,7 +233,7 @@ const PolicyModel = () => {
                   counterfactualSelected={counterfactualSelected}
                   setCounterfactualSelected={setCounterfactualSelected}
                 />
-              )
+              );
             }
           })}
           {curves && curves[selectedStates[0]] && (
@@ -248,7 +248,7 @@ const PolicyModel = () => {
         </section>
       </article>
     </div>
-  )
-}
+  );
+};
 
-export default PolicyModel
+export default PolicyModel;
