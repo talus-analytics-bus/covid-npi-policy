@@ -244,6 +244,8 @@ const fillStyles = {
         "#549FE2",
         ["==", ["feature-state", key], "Lockdown"],
         "#2165a1",
+        ["==", ["has", "state_name"], true],
+        "#eaeaea",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         "#ffffff",
         ["==", ["feature-state", key], null],

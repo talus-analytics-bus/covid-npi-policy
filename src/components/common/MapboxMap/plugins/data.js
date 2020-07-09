@@ -995,139 +995,134 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-      if (true) {
-        const apiDate = date.format("YYYY-MM-DD");
+      const apiDate = date.format("YYYY-MM-DD");
 
-        // get relevant policy data
-        const policyFilters = {
-          dates_in_effect: [apiDate, apiDate],
+      // get relevant policy data
+      const policyFilters = {
+        dates_in_effect: [apiDate, apiDate],
 
-          // if doing distancing level, only allow all social distancing
-          // policies to be returned
-          primary_ph_measure:
-            plugins.fill !== "lockdown_level"
-              ? filters.primary_ph_measure
-              : ["Social distancing"],
-          ph_measure_details:
-            plugins.fill !== "lockdown_level" ? filters.ph_measure_details : []
-        };
-        if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
-        else policyFilters.iso3 = [d.properties.ISO_A3];
+        // if doing distancing level, only allow all social distancing
+        // policies to be returned
+        primary_ph_measure:
+          plugins.fill !== "lockdown_level"
+            ? filters.primary_ph_measure
+            : ["Social distancing"],
+        ph_measure_details:
+          plugins.fill !== "lockdown_level" ? filters.ph_measure_details : []
+      };
+      if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
+      else policyFilters.iso3 = [d.properties.ISO_A3];
 
-        const policies = await Policy({
-          method: "post",
-          filters: policyFilters,
-          fields: ["id", "place"]
-        });
+      const policies = await Policy({
+        method: "post",
+        filters: policyFilters,
+        fields: ["id", "place"]
+      });
 
-        const nPolicies = {
-          total: 0,
-          local: 0,
-          state: 0,
-          country: 0
-        };
-        policies.data.forEach(d => {
-          nPolicies.total += 1;
-          switch (d.place.level) {
-            case "Local":
-              nPolicies.local += 1;
-              break;
-            case "State / Province":
-              nPolicies.state += 1;
-              break;
-            case "Country":
-              nPolicies.country += 1;
-              break;
-          }
-        });
-
-        // define right content of header metric based on metric type
-        // add actions for bottom of tooltip
-        const filtersForStr = {
-          primary_ph_measure:
-            plugins.fill !== "lockdown_level"
-              ? filters.primary_ph_measure
-              : ["Social distancing"],
-          ph_measure_details:
-            plugins.fill !== "lockdown_level"
-              ? filters.ph_measure_details || []
-              : [],
-          dates_in_effect: filters.dates_in_effect
-        };
-
-        if (mapId === "us") {
-          filtersForStr.country_name = ["United States of America (USA)"];
-          filtersForStr.area1 = [d.properties.state_name];
-        } else {
-          filtersForStr.country_name = [
-            `${d.properties.NAME} (${d.properties.ISO_A3})`
-          ];
+      const nPolicies = {
+        total: 0,
+        local: 0,
+        state: 0,
+        country: 0
+      };
+      policies.data.forEach(d => {
+        nPolicies.total += 1;
+        switch (d.place.level) {
+          case "Local":
+            nPolicies.local += 1;
+            break;
+          case "State / Province":
+            nPolicies.state += 1;
+            break;
+          case "Country":
+            nPolicies.country += 1;
+            break;
         }
-        const filtersStr = JSON.stringify(filtersForStr);
+      });
 
-        // content for right side of header
-        tooltip.tooltipHeaderRight = (
-          <>
-            {nPolicies.total > 0 && (
-              <a
-                key={"view"}
-                target="_blank"
-                href={"/data?filters=" + filtersStr}
-              >
-                {
-                  <button>
-                    View all policies
-                    <br /> ({nPolicies.total}) in effect
-                  </button>
-                }
-                {
-                  // Uncomment below to specify number of policies
-                  // <button>
-                  //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
-                  //   {nPolicies.total === 1 ? "policy" : "policies"}
-                  // </button>
-                }
-              </a>
-            )}
-            <span>
-              as of <i>{formattedDate}</i>
-            </span>
-          </>
-        );
-        item.value = (
-          <div
-            className={infostyles.badge}
-            style={{
-              backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
-            }}
-          >
-            {thisMetricMeta.value(v)}
-          </div>
-        );
+      // define right content of header metric based on metric type
+      // add actions for bottom of tooltip
+      const filtersForStr = {
+        primary_ph_measure:
+          plugins.fill !== "lockdown_level"
+            ? filters.primary_ph_measure
+            : ["Social distancing"],
+        ph_measure_details:
+          plugins.fill !== "lockdown_level"
+            ? filters.ph_measure_details || []
+            : [],
+        dates_in_effect: filters.dates_in_effect
+      };
+
+      if (mapId === "us") {
+        filtersForStr.country_name = ["United States of America (USA)"];
+        filtersForStr.area1 = [d.properties.state_name];
+      } else {
+        filtersForStr.country_name = [
+          `${d.properties.NAME} (${d.properties.ISO_A3})`
+        ];
       }
+      const filtersStr = JSON.stringify(filtersForStr);
+
+      // content for right side of header
+      const catFilters =
+        filters.ph_measure_details && filters.ph_measure_details.length > 0;
+      tooltip.tooltipHeaderRight = (
+        <>
+          {props.geoHaveData && (
+            <a
+              key={"view"}
+              target="_blank"
+              href={"/data?filters=" + filtersStr}
+            >
+              {
+                <button>
+                  View {catFilters ? "filtered" : "all"} policies
+                  <br /> ({nPolicies.total}) in effect
+                </button>
+              }
+              {
+                // Uncomment below to specify number of policies
+                // <button>
+                //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
+                //   {nPolicies.total === 1 ? "policy" : "policies"}
+                // </button>
+              }
+            </a>
+          )}
+          <span>
+            as of <i>{formattedDate}</i>
+          </span>
+        </>
+      );
+      item.value = (
+        <div
+          className={infostyles.badge}
+          style={{
+            backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
+          }}
+        >
+          {thisMetricMeta.value(v)}
+        </div>
+      );
 
       // special -- add note if policy data not yet collected
-      if (props.geoHaveData === false || state.lockdown_level === null) {
-        let message;
-        if (props.geoHaveData === false) {
+      let message;
+      if (state.lockdown_level === null && mapId === "us") {
+        if (nPolicies.total > 0) {
           message = (
             <i>
-              No policies yet available,
-              <br />
-              data collection in progress
-            </i>
-          );
-        } else if (state.lockdown_level === null) {
-          message = (
-            <i>
-              No country-level distancing
+              No {mapId === "us" ? "state" : "country"}-level distancing
               <br />
               level could be determined
               <br />
-              from available policies
+              from policies in effect
             </i>
           );
+        } else {
+          message = <i>No policies in effect</i>;
         }
+
         tooltip.tooltipMainContent.push({
           customContent: (
             <>
@@ -1138,7 +1133,45 @@ export const tooltipGetter = async ({
             </>
           )
         });
+      } else if (
+        (state.lockdown_level === null || props.geoHaveData === false) &&
+        mapId === "global"
+      ) {
+        let message;
+        if (props.geoHaveData === false) {
+          message = (
+            <i>
+              No policies yet available,
+              <br />
+              data collection in progress
+            </i>
+          );
+        } else if (state.lockdown_level === null && nPolicies.total > 0) {
+          message = (
+            <i>
+              No country-level distancing
+              <br />
+              level could be determined
+              <br />
+              from available policies
+            </i>
+          );
+        } else {
+          message = <i>No policies in effect</i>;
+        }
+        if (state.lockdown_level === null)
+          tooltip.tooltipMainContent.push({
+            customContent: (
+              <>
+                <div className={styles.label}>Distancing level</div>
+                <div style={{ color: "gray" }} className={styles.value}>
+                  {message}
+                </div>
+              </>
+            )
+          });
       }
+
       tooltip.tooltipMainContent.reverse();
       // tooltip.tooltipMainContent.push(item);
     }
