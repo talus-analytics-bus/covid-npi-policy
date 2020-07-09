@@ -12,7 +12,7 @@ import styles from "./PolicyModel.module.scss";
 
 import states from "./states";
 
-const PolicyModel = ({ setLoading, setPage }) => {
+const PolicyModel = props => {
   const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
@@ -26,17 +26,17 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // 'infected_b',
     // 'infected_c',
     // 'dead',
-    "R effective"
+    "R effective",
   ]);
 
   const [curves, setCurves] = useState();
   const [zoomDateRange, setZoomDateRange] = useState([
     new Date("2020-01-01"),
-    new Date("2021-01-01")
+    new Date("2021-01-01"),
   ]);
   const [domain, setDomain] = useState([
     new Date("2020-01-01"),
-    new Date("2021-01-01")
+    new Date("2021-01-01"),
   ]);
   const [caseLoadAxis, setCaseLoadAxis] = useState([0, 10000]);
 
@@ -69,18 +69,18 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // Initialize the zoom range as all dates
     setZoomDateRange([
       dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev))
+      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
     ]);
 
     // set overall domain; this will be used for the navigator plot.
     setDomain([
       dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev))
+      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
     ]);
 
     setCaseLoadAxis([
       0,
-      Math.max(...Object.values(modelCurves).map(state => state.yMax))
+      Math.max(...Object.values(modelCurves).map(state => state.yMax)),
     ]);
   }, [
     // callbackModels,
@@ -90,7 +90,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     setCurves,
     setZoomDateRange,
     setDomain,
-    setCaseLoadAxis
+    setCaseLoadAxis,
   ]);
 
   const addIntervention = (state, intervention) => {
@@ -110,8 +110,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   // on init render, set loading to false and page to `model`
   React.useEffect(() => {
-    setLoading(false);
-    setPage("model");
+    props.setLoading(false);
+    props.setPage("model");
   }, []);
 
   React.useEffect(() => {
