@@ -214,14 +214,14 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
-        ["==", ["has", "state_name"], true],
-        "#ffffff",
-        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        "#fff",
         ["==", ["feature-state", key], null],
         "#eaeaea",
         ["==", ["feature-state", key], "t"],
         "#66CAC4",
+        ["==", ["has", "state_name"], true],
+        "#ffffff",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        "#fff",
         "#eaeaea"
       ]
     };
@@ -234,10 +234,6 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
-        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        "#ffffff",
-        ["==", ["feature-state", key], null],
-        "#eaeaea",
         ["==", ["feature-state", key], "Mixed distancing levels"],
         "transparent",
         ["==", ["feature-state", key], "New normal"],
@@ -246,6 +242,12 @@ const fillStyles = {
         "#86BFEB",
         ["==", ["feature-state", key], "Stay at home"],
         "#549FE2",
+        ["==", ["feature-state", key], "Lockdown"],
+        "#2165a1",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        "#ffffff",
+        ["==", ["feature-state", key], null],
+        "#eaeaea",
         "#eaeaea"
       ]
     };
