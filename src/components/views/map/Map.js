@@ -55,8 +55,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     ? moment(caseloadLastUpdated.last_datum_date)
     : moment();
   defaults.minMaxDate.maxDate = caseloadLastUpdatedDate;
-  // const [date, setDate] = useState(caseloadLastUpdatedDate);
-  const [date, setDate] = useState(new moment(defaults.date));
+  const [date, setDate] = useState(caseloadLastUpdatedDate);
+  // const [date, setDate] = useState(new moment(defaults.date));
 
   // name of metric to use as fill by default
   const [fill, setFill] = useState(defaults[mapId].fill);
