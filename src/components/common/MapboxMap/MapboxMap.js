@@ -610,7 +610,10 @@ const MapboxMap = ({
                     key: "basemap - quantized",
                     metric_definition: metricMeta[circle].metric_definition,
                     metric_displayname: (
-                      <span>{metricMeta[circle].metric_displayname}</span>
+                      <span>
+                        {metricMeta[circle].metric_displayname}
+                        {mapId === "us" ? " (log scale)" : ""}
+                      </span>
                     ),
                     ...metricMeta[circle].legendInfo.circle
                   }}
