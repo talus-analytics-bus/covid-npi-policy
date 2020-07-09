@@ -91,14 +91,22 @@ const MapboxMap = ({
   const getFillLegendName = ({ filters, fill }) => {
     const isLockdownLevel = fill === "lockdown_level";
 
+    const nouns = { plural: "States", singular: "State" };
+    if (mapId === "global") {
+      nouns.plural = "Countries";
+      nouns.singular = "Country";
+    }
+
     if (isLockdownLevel) {
-      return "Distancing level in state on " + date.format("MMM D, YYYY");
+      return `Distancing level in ${nouns.singular.toLowerCase()} on ${date.format(
+        "MMM D, YYYY"
+      )}`;
     } else {
       const category = filters["primary_ph_measure"][0].toLowerCase();
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
         : undefined;
-      const prefix = "States with at least one policy in effect for ";
+      const prefix = nouns.plural + " with at least one policy in effect for ";
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
         return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
@@ -226,7 +234,8 @@ const MapboxMap = ({
             ...(await tooltipGetter({
               mapId: mapId,
               d: selectedFeature,
-              include: [circle, fill],
+              include: [circle, mapId === "us" ? "lockdown_level" : fill],
+              // include: [circle, fill],
               date,
               map,
               filters,
@@ -397,6 +406,10 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
+        // console.log("feature");
+        // console.log(feature);
+        console.log("e.lngLat");
+        console.log(e.lngLat);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {

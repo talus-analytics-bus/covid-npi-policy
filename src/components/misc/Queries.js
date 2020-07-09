@@ -106,6 +106,7 @@ export const Policy = async function({
  */
 export const PolicyStatus = async function({
   method,
+  geo_res = "state",
   fields = [],
   filters = null
 }) {
@@ -118,7 +119,7 @@ export const PolicyStatus = async function({
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/policy_status/state`, {
+    req = await axios(`${API_URL}/get/policy_status/${geo_res}`, {
       params
     });
   } else if (method === "post") {
@@ -126,7 +127,7 @@ export const PolicyStatus = async function({
       console.log("Error: `filters` is required for method POST.");
     }
     req = await axios.post(
-      `${API_URL}/post/policy_status/state`,
+      `${API_URL}/post/policy_status/${geo_res}`,
       { filters },
       {
         params

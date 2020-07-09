@@ -5,7 +5,8 @@
   position: relative;
   > :last-child {
     width: 100% !important;
-    height: 100% !important;
+    $drawer-header-height: 70px;
+    height: calc(100% - #{$drawer-header-height}) !important;
   }
 
   .dark {
@@ -38,6 +39,7 @@
     }
   }
   .drawer {
+    position: relative;
     .labelContainer {
       background-color: #7e99b6;
       position: absolute;

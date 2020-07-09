@@ -64,11 +64,11 @@ $border-radius: 5px;
   }
 }
 
-@mixin borderItemsHoriz($size) {
+@mixin borderItemsHoriz($size, $border-to-use: $border) {
   > :not(:last-child) {
     margin-right: $size;
     padding-right: $size;
-    border-right: $border;
+    border-right: $border-to-use;
   }
 }
 
@@ -149,6 +149,14 @@ $border-radius: 5px;
 @mixin disabled() {
   color: gray;
   pointer-events: none;
+}
+
+// ensure rawline looks lined up with other UI elements
+// TODO elegantly
+@mixin rawlineFix() {
+  line-height: 1;
+  position: relative;
+  top: -2px;
 }
 
 // globals

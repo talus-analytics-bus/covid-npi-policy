@@ -26,8 +26,8 @@ import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
 
 // assets and styles
 import dots from "./assets/images/dots.png";
-import infoTooltipStyles from "../../../common/InfoTooltip/plugins.module.scss";
-import tooltipStyles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
+import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
+import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
@@ -44,6 +44,7 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
+  // mapId: "global",
   mapId: "us",
 
   // default date for map to start on
@@ -68,7 +69,7 @@ export const defaults = {
     priorLayer: "state-points"
   },
   // defaults for additional maps...
-  global: { circle: "25", fill: "25", priorLayer: "country-label" }
+  global: { circle: "25", fill: "policy_status", priorLayer: "country-label" }
 };
 
 // constants
@@ -210,6 +211,52 @@ export const mapMetrics = {
   ],
   global: [
     {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        return { method: "post", filters, geo_res: "country" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status" },
+
+      // // filter to control what features are returned for layers that are
+      // // displaying this metric
+      // filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      }
+    },
+    {
       queryFunc: ObservationQuery,
       for: ["circle", "fill"],
       params: {
@@ -263,11 +310,15 @@ export const metricMeta = {
     // metric name displayed on front-end
     metric_displayname: "New COVID-19 cases in past 7 days",
 
+    // Optional: Short name for metric where needed
+    shortName: "Caseload",
+
     // value formatter for metric
     value: v => comma(v),
 
     // unit label formatter for metric
-    unit: v => (v === 1 ? "new case" : "new cases"),
+    unit: v =>
+      v === 1 ? "new case in past 7 days" : "new cases in past 7 days",
 
     // if metric has trends, the label describing timeframe of those trends
     trendTimeframe: (
@@ -407,7 +458,7 @@ export const metricMeta = {
     metric_definition: (
       <span>
         {
-          <table className={infoTooltipStyles.distancingLevelTable}>
+          <table className={infostyles.distancingLevelTable}>
             <tbody>
               <tr>
                 <td>
@@ -416,15 +467,15 @@ export const metricMeta = {
                       backgroundColor: "#66CAC4",
                       marginRight: "20px"
                     }}
-                    className={infoTooltipStyles.rect}
+                    className={infostyles.rect}
                   >
                     policy in effect
                   </div>
                 </td>
                 <td style={{ display: "none" }} />
                 <td>
-                  At least one state-level policy in effect with the given
-                  category / subcategories on the specified date.
+                  At least one policy in effect with the given category /
+                  subcategories on the specified date.
                 </td>
               </tr>
             </tbody>
@@ -520,6 +571,7 @@ export const metricMeta = {
       },
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
+        labelShort: "Mixed",
         color: "#a8c4dc",
         icon: mixed,
         def: (
@@ -537,18 +589,18 @@ export const metricMeta = {
       );
       return (
         <div>
-          <p className={infoTooltipStyles.definitionHeader}>
+          <p className={infostyles.definitionHeader}>
             <span>
               The level of distancing in the location on the specified date.{" "}
             </span>
             <br />
             <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
               <img src={localLogo} />
-              view metrics at COVID-Local
+              <span>view metrics at COVID-Local</span>
             </a>
           </p>
           {
-            <table className={infoTooltipStyles.distancingLevelTable}>
+            <table className={infostyles.distancingLevelTable}>
               <tbody>
                 {Object.values(this.valueStyling).map((d, i) => (
                   <tr key={d.label}>
@@ -570,7 +622,7 @@ export const metricMeta = {
                                 color: "black"
                               }
                         }
-                        className={infoTooltipStyles.rect}
+                        className={infostyles.rect}
                       >
                         {d.label}
                       </div>
@@ -756,7 +808,7 @@ export const tooltipGetter = async ({
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.state_name,
-      subtitle: formattedDate
+      subtitle: null
     };
     // add actions for bottom of tooltip
     // tooltip.actions = [<button key={"view"}>View details</button>];
@@ -766,7 +818,7 @@ export const tooltipGetter = async ({
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.NAME,
-      subtitle: formattedDate
+      subtitle: null
     };
 
     // add actions for bottom of tooltip
@@ -777,6 +829,7 @@ export const tooltipGetter = async ({
 
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
+  console.log();
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -797,7 +850,7 @@ export const tooltipGetter = async ({
 
       // define basic tooltip item
       const item = {
-        label: thisMetricMeta.metric_displayname,
+        label: thisMetricMeta.shortName || thisMetricMeta.metric_displayname,
         value: thisMetricMeta.value(v),
         unit: thisMetricMeta.unit(v)
       };
@@ -819,7 +872,7 @@ export const tooltipGetter = async ({
         else noun = "no change";
 
         // define the datum for visual representation of the trend
-        item.trend = {
+        item.trendData = {
           pct,
           pct_fmt: (
             <span>
@@ -833,28 +886,69 @@ export const tooltipGetter = async ({
         };
       }
 
-      if (k === "74") {
-        item.unit = (
-          <span>
-            {item.unit}
-            <br />
-            in past 7 days
-          </span>
+      // define special tooltip items
+      if (k === "lockdown_level") {
+        const valueStyling = thisMetricMeta.valueStyling[v];
+        const label = valueStyling.labelShort || valueStyling.label;
+        item.value = (
+          <div className={styles[k]}>
+            <div className={styles.icon}>
+              <img src={valueStyling.icon} />
+              <div>{label}</div>
+            </div>
+            <div className={styles.footer}>
+              <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
+                <img src={localLogo} />
+                <span>{valueStyling.phase} (view in COVID-Local)</span>
+              </a>
+            </div>
+          </div>
         );
-        tooltip.tooltipHeaderMetric = item;
-        continue;
-      } else if (k === "72") {
-        item.unit = <span>{item.unit}</span>;
-        tooltip.tooltipHeaderMetric = item;
-        continue;
-      } else {
-        // add item to tooltip content
-        tooltip.tooltipMainContent.push(item);
+      } else if (k === "74" || k === "72") {
+        item.value = (
+          <div className={styles[k]}>
+            <div className={styles.value}>
+              <div className={styles.number}>{item.value}</div>
+              <div className={styles.unit}>{thisMetricMeta.unit(v)}</div>
+            </div>
+            {item.trendData && (
+              <div
+                className={classNames(
+                  styles.trend,
+                  ...item.trendData.classes.map(d => styles[d])
+                )}
+              >
+                <div
+                  className={classNames(
+                    styles.sentiment,
+                    styles[item.trendData.noun.replace(" ", "-")]
+                  )}
+                >
+                  {item.trendData.pct !== 0 && (
+                    <span>{item.trendData.pct_fmt}&nbsp;</span>
+                  )}
+                </div>{" "}
+                <div>
+                  {item.trendData.noun} {item.trendData.timeframe}
+                </div>
+              </div>
+            )}
+          </div>
+        );
       }
+
+      item.customContent = (
+        <>
+          <div className={styles.label}>{item.label}</div>
+          <div className={styles.value}>{item.value}</div>
+        </>
+      );
+      tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
       if (k === "policy_status" || k === "lockdown_level") {
         const apiDate = date.format("YYYY-MM-DD");
+
         // get relevant policy data
         const policies = await Policy({
           method: "post",
@@ -874,31 +968,32 @@ export const tooltipGetter = async ({
                 ? filters.ph_measure_details
                 : []
           },
-          by_category: "ph_measure_details",
-          fields: [
-            "id",
-            "primary_ph_measure",
-            "ph_measure_details",
-            "date_start_effective",
-            "desc",
-            "place"
-          ]
+          // by_category: "ph_measure_details",
+          fields: ["id", "place"]
         });
 
-        let nPolicies = 0;
-        item.className = "policyStatus";
-        const tables = [];
-        for (const [ph_measure_details, policiesOfCategory] of Object.entries(
-          policies.data
-        )) {
-          const rows = [];
-          policiesOfCategory.forEach(d => {
-            rows.push(d);
-          });
-          tables.push({ ph_measure_details, rows });
-          nPolicies += policiesOfCategory.length;
-        }
+        const nPolicies = {
+          total: 0,
+          local: 0,
+          state: 0,
+          country: 0
+        };
+        policies.data.forEach(d => {
+          nPolicies.total += 1;
+          switch (d.place.level) {
+            case "Local":
+              nPolicies.local += 1;
+              break;
+            case "State / Province":
+              nPolicies.state += 1;
+              break;
+            case "Country":
+              nPolicies.country += 1;
+              break;
+          }
+        });
 
+        // define right content of header metric based on metric type
         // add actions for bottom of tooltip
         const filtersStr = JSON.stringify({
           primary_ph_measure:
@@ -910,79 +1005,42 @@ export const tooltipGetter = async ({
               ? filters.ph_measure_details || []
               : [],
           dates_in_effect: filters.dates_in_effect,
+          // TODO generalize
           country_name: ["United States of America (USA)"],
           area1: [d.properties.state_name]
           // level: ["State / Province"]
         });
-        tooltip.actions =
-          nPolicies > 0
-            ? [
-                <a
-                  key={"view"}
-                  target="_blank"
-                  href={"/data?filters=" + filtersStr}
-                >
-                  <button>
-                    View {nPolicies === 1 ? "this" : `these`}{" "}
-                    {nPolicies === 1 ? "policy" : "policies"}
-                  </button>
-                </a>
-              ]
-            : [];
 
-        const subtitleCategory =
-          plugins.fill !== "lockdown_level"
-            ? filters.primary_ph_measure[0].toLowerCase()
-            : "social distancing";
-        const displayInfo = metricMeta.lockdown_level.valueStyling[v];
-        const subtitle = null;
-        tooltip.tooltipHeader.subtitle = subtitle;
-        item.customContent = (
-          <div className={tooltipStyles.distancingLevel}>
-            {plugins.fill === "lockdown_level" && (
-              <div className={tooltipStyles.iconSection}>
-                {displayInfo.icon && <img src={displayInfo.icon} />}
-
-                <div className={tooltipStyles.iconLabel}>
-                  <div className={tooltipStyles.label}>{displayInfo.label}</div>
-                  <div className={tooltipStyles.category}>
-                    <div className={tooltipStyles.phaseName}>
-                      {displayInfo.phase && displayInfo.phase}
-                      {!displayInfo.phase && "Mixed"}
-                    </div>
-
-                    <div className={tooltipStyles.link}>
-                      <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-                        <img src={localLogo} />
-                        view metrics at COVID-Local
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div className={tooltipStyles.subtitle}>
-              {comma(nPolicies)} {nPolicies === 1 ? "policy" : "policies"} in
-              effect for {subtitleCategory}{" "}
-              {!isEmpty(filters["ph_measure_details"])
-                ? "in selected subcategories"
-                : ""}{" "}
-              on&nbsp;<i>{formattedDate}</i>
-            </div>
-
-            <TableDrawers
-              {...{
-                tables,
-                geometryName: d.properties.state_name,
-                fill: plugins.fill
-              }}
-            />
-          </div>
+        // content for right side of header
+        tooltip.tooltipHeaderRight = (
+          <>
+            <a
+              key={"view"}
+              target="_blank"
+              href={"/data?filters=" + filtersStr}
+            >
+              {
+                <button>
+                  View all policies
+                  <br /> ({nPolicies.total}) in effect
+                </button>
+              }
+              {
+                // Uncomment below to specify number of policies
+                // <button>
+                //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
+                //   {nPolicies.total === 1 ? "policy" : "policies"}
+                // </button>
+              }
+            </a>
+            <span>
+              as of <i>{formattedDate}</i>
+            </span>
+          </>
         );
-
         item.value = (
           <div
-            className={infoTooltipStyles.badge}
+            className={infostyles.badge}
             style={{
               backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
             }}
@@ -991,6 +1049,8 @@ export const tooltipGetter = async ({
           </div>
         );
       }
+      tooltip.tooltipMainContent.reverse();
+      // tooltip.tooltipMainContent.push(item);
     }
   }
   if (callback) callback();
@@ -1005,20 +1065,20 @@ const TableDrawer = ({
   children
 }) => {
   return (
-    <div className={tooltipStyles.tableDrawer}>
+    <div className={styles.tableDrawer}>
       <div
         onClick={() => {
           if (open) setOpenTableDrawer(null);
           else setOpenTableDrawer(id);
         }}
-        className={tooltipStyles.header}
+        className={styles.header}
       >
         {header}
         <button>
           {
             <i
               className={classNames("material-icons", {
-                [tooltipStyles.flipped]: open
+                [styles.flipped]: open
               })}
             >
               play_arrow
@@ -1026,7 +1086,7 @@ const TableDrawer = ({
           }
         </button>
       </div>
-      <div className={tooltipStyles.content}>{open && children}</div>
+      <div className={styles.content}>{open && children}</div>
     </div>
   );
 };
@@ -1038,7 +1098,7 @@ const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
   }, [tables]);
 
   return (
-    <div className={tooltipStyles.table}>
+    <div className={styles.table}>
       {tables.map((d, i) => (
         <React.Fragment
           key={d.ph_measure_details + "-" + geometryName + "-" + i}
@@ -1049,16 +1109,16 @@ const TableDrawers = ({ tables, geometryName, fill, ...props }) => {
             openTableDrawer={openTableDrawer}
             setOpenTableDrawer={setOpenTableDrawer}
             header={
-              <div className={tooltipStyles.tableName}>
+              <div className={styles.tableName}>
                 {d.ph_measure_details}{" "}
-                <span className={tooltipStyles.num}>
+                <span className={styles.num}>
                   ({comma(d.rows.length)}
                   {d.rows.length === 1 ? " policy" : " policies"})
                 </span>
               </div>
             }
           >
-            <span className={tooltipStyles.instructions}>
+            <span className={styles.instructions}>
               {d.rows.some(dd => dd.place.level === "Local") && (
                 <span>
                   *Local policy which does not influence{" "}

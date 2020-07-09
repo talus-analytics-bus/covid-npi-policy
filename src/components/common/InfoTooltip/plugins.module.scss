@@ -35,16 +35,29 @@
 .definitionHeader {
   display: block;
   a {
+    img {
+      height: 17px;
+      margin-right: 5px;
+    }
+    font-family: "rawline", serif;
+    font-size: 0.75rem;
     font-style: italic;
-    font-size: 0.8rem;
-    @include spaceItemsHoriz(0.5rem);
-    font-weight: normal;
-    color: #519688;
-  }
-  img {
-    $size: 15px;
-    height: $size;
-    margin-bottom: 2px;
-    margin-right: 0.25rem;
+    color: #409385;
+
+    &:hover,
+    &:active,
+    &:focus {
+      text-decoration: none;
+    }
+    span {
+      border-bottom: 1px solid #409385;
+    }
+    &:hover {
+      $hover-color: lighten(#409385, 10%);
+      color: $hover-color;
+      span {
+        border-bottom: 1px solid $hover-color;
+      }
+    }
   }
 }
