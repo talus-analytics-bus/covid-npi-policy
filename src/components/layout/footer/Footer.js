@@ -44,7 +44,7 @@ const Footer = ({ page, versions }) => {
   return (
     <div
       className={classNames(styles.footer, {
-        [styles.wide]: page === "policymaps"
+        [styles.wide]: page === "policymaps" || page === "model"
       })}
     >
       <div className={styles.wrapper}>
