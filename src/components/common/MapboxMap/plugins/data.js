@@ -712,6 +712,11 @@ export const metricMeta = {
         range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
         domain: [
           "no policy",
+          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            policy data
+            <br />
+            not available
+          </div>,
           getCovidLocalMetricLink("lockdown"),
           getCovidLocalMetricLink("stay-at-home"),
           getCovidLocalMetricLink("safer-at-home"),
@@ -719,6 +724,7 @@ export const metricMeta = {
           "mixed"
         ],
         subLabels: [
+          <span style={{ visibility: "hidden" }}>x</span>,
           <span style={{ visibility: "hidden" }}>x</span>,
           getCovidLocalMetricLink("(phase I)"),
           getCovidLocalMetricLink("(phase II)"),
@@ -730,13 +736,22 @@ export const metricMeta = {
           .scaleOrdinal()
           .domain([
             "no policy",
+            "no policy data available",
             getCovidLocalMetricLink("lockdown (phase I)"),
             getCovidLocalMetricLink("stay-at-home (phase II)"),
             getCovidLocalMetricLink("safer-at-home (phase III)"),
             getCovidLocalMetricLink("new normal (phase IV)"),
             "mixed"
           ])
-          .range(["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots]) // TODO dynamically
+          .range([
+            "#eaeaea",
+            "white",
+            "#2165a1",
+            "#549FE2",
+            "#86BFEB",
+            "#BBDAF5",
+            dots
+          ]) // TODO dynamically
         // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
       }
       // circle: {
@@ -1069,7 +1084,7 @@ export const tooltipGetter = async ({
         filters.ph_measure_details && filters.ph_measure_details.length > 0;
       tooltip.tooltipHeaderRight = (
         <>
-          {props.geoHaveData && (
+          {(props.geoHaveData || mapId === "us") && (
             <a
               key={"view"}
               target="_blank"

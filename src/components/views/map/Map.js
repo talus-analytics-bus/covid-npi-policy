@@ -89,7 +89,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       // additional filters
       ph_measure_details: {
         field: "ph_measure_details",
-        label: "Policy subcategory",
+        label: "Policy subcategory filter",
         radio: false,
         primary: "primary_ph_measure",
         entity_name: "Policy",
