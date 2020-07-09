@@ -1,0 +1,88 @@
+$border-width: 1px;
+$border-color: #bbb;
+$arrow-size: 20px;
+$grey-highlight: #eee;
+
+.leftPopup,
+.rightPopup {
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.125);
+  // victory portal uses 99
+  z-index: 100;
+  border: $border-width solid $border-color;
+  border-radius: 0.5rem;
+  // opacity: 0;
+  transition: opacity 150ms ease;
+  min-height: 8rem;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    width: $arrow-size;
+    height: $arrow-size;
+    transform: rotate(45deg);
+    background-color: $grey-highlight;
+    z-index: -2;
+  }
+
+  // This pseudoelement expands the
+  // mouse event area to make it feel
+  // a little more reliable and easier
+  // to use without it accidentally disappearing
+  &:after {
+    position: absolute;
+    content: '';
+    top: -10px;
+    right: -40px;
+    bottom: -10px;
+    left: -40px;
+    z-index: -3;
+  }
+
+  .greySection,
+  .content {
+    padding: 1rem;
+    h1,
+    p,
+    a {
+      margin: 0;
+      padding: 0;
+    }
+
+    .title {
+      font-size: 1.4rem;
+      color: #1a4278;
+      text-transform: uppercase;
+    }
+
+    p {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #333333;
+    }
+  }
+
+  .greySection {
+    background-color: $grey-highlight;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+}
+
+.leftPopup {
+  &:before {
+    left: -$arrow-size / 2px - $border-width;
+    border-left: $border-width solid $border-color;
+    border-bottom: $border-width solid $border-color;
+  }
+}
+
+.rightPopup {
+  &:before {
+    right: -$arrow-size / 2px - $border-width;
+    border-right: $border-width solid $border-color;
+    border-top: $border-width solid $border-color;
+  }
+}

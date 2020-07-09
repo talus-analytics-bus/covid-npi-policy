@@ -45,10 +45,12 @@
     div {
       max-width: unset;
     }
-    + div {
-      height: calc(100% - 127px);
-      // height: calc(100% - 90px);
-      top: 127px;
+    &[data-page="policymaps"] {
+      + div {
+        height: calc(100% - 127px);
+        top: 127px;
+        // height: calc(100% - 90px);
+      }
     }
     border-bottom: none;
   }

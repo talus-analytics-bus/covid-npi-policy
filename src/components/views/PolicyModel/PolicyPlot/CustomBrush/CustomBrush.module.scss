@@ -1,0 +1,16 @@
+.arrows {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(45deg);
+}
+
+.arrows,
+.outer {
+  fill: #66c8ff;
+  stroke: #00447c;
+}
+
+.inner {
+  fill: #00447c;
+  stroke: 'none';
+}
