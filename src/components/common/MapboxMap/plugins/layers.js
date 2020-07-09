@@ -12,7 +12,7 @@ import * as d3 from "d3/dist/d3.min";
 import moment from "moment";
 
 // utilities
-import { getLog10Scale, comma } from "../../../misc/Util";
+import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
 
 // assets
 import dots from "./assets/images/dots.png";
@@ -65,6 +65,68 @@ const circleStyles = {
       circleStrokeWidth: 3,
       get circleRadius() {
         return getLog10Scale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 1e9,
+          featurePropertyKey: key
+        });
+      }
+    };
+  },
+  "metric-test-transp-linear": key => {
+    return {
+      circleColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#333",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "white"
+      ],
+      circleOpacity: 0.5,
+      circleStrokeColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#b3b3b3",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "#e65d36"
+      ],
+      circleStrokeOpacity: 1,
+      circleStrokeWidth: 3,
+      get circleRadius() {
+        return getLinearScale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 1e9,
+          featurePropertyKey: key
+        });
+      }
+    };
+  },
+  "metric-test-solid-linear": key => {
+    return {
+      circleColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#333",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "#e65d36"
+      ],
+      circleOpacity: 0.5,
+      circleStrokeColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#b3b3b3",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "#e65d36"
+      ],
+      circleStrokeOpacity: 1,
+      circleStrokeWidth: 3,
+      get circleRadius() {
+        return getLinearScale({
           minSize: 5,
           zeroSize: 5,
           maxValue: 1e9,

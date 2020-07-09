@@ -266,7 +266,7 @@ export const mapMetrics = {
       },
       id: "77",
       featureLinkField: "place_iso3",
-      styleId: { fill: "metric-test", circle: "metric-test-transp" },
+      styleId: { fill: "metric-test", circle: "metric-test-transp-linear" },
       trend: true,
       styleOptions: { outline: true, pattern: false }
     },
@@ -280,7 +280,7 @@ export const mapMetrics = {
       },
       id: "75",
       featureLinkField: "place_iso3",
-      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      styleId: { fill: "metric-test", circle: "metric-test-solid-linear" },
       trend: true,
       styleOptions: { outline: true, pattern: false }
     }
