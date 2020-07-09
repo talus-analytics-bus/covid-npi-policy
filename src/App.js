@@ -17,6 +17,7 @@ import Map from './components/views/map/Map.js';
 import About from './components/views/about/About.js';
 import Contact from './components/views/contact/Contact.js';
 // import Documentation from "./components/views/documentation/Documentation.js";
+import PolicyModel from './components/views/PolicyModel/PolicyModel/PolicyModel';
 
 // queries
 import { Version } from './components/misc/Queries';
@@ -201,6 +202,18 @@ const App = () => {
                   //     );
                   //   }}
                   // />
+                }
+                {
+                  // Model page
+                  <Route
+                    exact
+                    path="/model"
+                    render={() => {
+                      setLoading(false);
+                      setPage('model');
+                      return <PolicyModel />;
+                    }}
+                  />
                 }
               </div>
             </React.Fragment>

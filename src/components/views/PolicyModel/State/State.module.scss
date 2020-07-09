@@ -1,0 +1,206 @@
+.state:first-of-type {
+  header {
+    border-top-left-radius: 3rem;
+    border-top-right-radius: 3rem;
+  }
+}
+
+.state {
+  color: #00447c;
+  padding: 1rem;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  header {
+    position: relative;
+    background-color: white;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    &:after {
+      content: '';
+      position: absolute;
+      height: 3px;
+      left: 1rem;
+      right: 1rem;
+      bottom: 0;
+      background-color: #bde7ff;
+    }
+
+    .stateName {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 2rem;
+
+      select {
+        font-family: 'Rawline';
+        color: #00447c;
+        font-size: 1.8rem;
+        // padding: 0.4em 0.5em 0.25em 0.5em;
+        padding: 0.25em 0.5em;
+        border: 1px solid rgb(118, 118, 118);
+        border-radius: 0.25em;
+        font-weight: 700;
+      }
+
+      .removeState,
+      .resetState {
+        background: none;
+        border: none;
+        color: white;
+        background-color: #697681;
+        border: 1px solid #3b4d5c;
+        border-radius: 0.25em;
+        padding: 0.25em 0.5em;
+        margin-top: 0.5em;
+
+        &:disabled {
+          opacity: 0.5;
+        }
+      }
+
+      // .removeState {
+      //   background-color: #815252;
+      //   border: 1px solid #6a4344;
+      // }
+
+      // .resetState {
+      //   background-color: #816952;
+      //   border: 1px solid #6a5743;
+      // }
+
+      // h1,
+      // h2 {
+      //   margin: 0;
+      //   text-transform: uppercase;
+      // }
+
+      // h1 {
+      //   color: inherit;
+      //   // letter-spacing: -0.0125em;
+      // }
+
+      // h2 {
+      //   font-size: 1.2rem;
+      //   color: #4682b4;
+      //   font-weight: 600;
+      //   line-height: 0.9em;
+      // }
+    }
+
+    .overviewStats {
+      display: flex;
+      flex-direction: column;
+
+      .noAction,
+      .existing {
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #bde7ff;
+
+        h3 {
+          margin-right: auto;
+          width: 10em;
+          line-height: 1.1em;
+          font-size: 1.6rem;
+          margin-top: 1rem;
+          margin-bottom: 0.25rem;
+        }
+
+        > div {
+          position: relative;
+          margin: 1rem;
+          width: 10rem;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        > div:first-of-type:after {
+          content: '';
+          position: absolute;
+          top: 1em;
+          bottom: 0rem;
+          right: -1.25rem;
+          width: 1px;
+          background-color: #aaa;
+        }
+
+        label {
+          display: flex;
+          align-items: baseline;
+          font-weight: 600;
+        }
+
+        h4,
+        h5 {
+          margin: 0;
+        }
+
+        h4 {
+          font-size: 2rem;
+          font-weight: 600;
+          line-height: 1em;
+          margin-top: 1rem;
+        }
+
+        h5 {
+          font-weight: 500;
+        }
+      }
+
+      .noAction {
+        color: #999999;
+        border-bottom: none;
+
+        > div {
+          flex-direction: row;
+          align-items: center;
+
+          h4 {
+            margin: 0;
+            font-size: 1.6rem;
+          }
+
+          h5 {
+            font-size: 0.8rem;
+            width: 5em;
+            line-height: 1em;
+            margin-left: 0.25em;
+          }
+        }
+        > div:first-of-type:after {
+          top: 0.33em;
+        }
+      }
+    }
+  }
+
+  .policyPlot {
+    // position: relative;
+    margin: 0.5rem 0;
+    margin-top: 0;
+    background-color: white;
+    // height: 90vh;
+
+    .inputRow {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 1rem;
+      padding-right: 0.5rem;
+
+      button,
+      select {
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        padding: 0.25em 0.5em;
+      }
+    }
+
+    // h1 {
+    //   color: #00447c;
+    // }
+  }
+}

@@ -1,0 +1,25 @@
+.main {
+  width: 100%;
+  // height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  .pct {
+    // Height set in JS
+    width: 100%;
+  }
+
+  .chart {
+    // Height set in JS
+    width: 100%;
+    padding-bottom: 1rem;
+  }
+
+  h1 {
+    margin: 0;
+    margin-left: 1rem;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #6d6d6d;
+  }
+}
