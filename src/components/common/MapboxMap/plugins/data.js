@@ -269,6 +269,20 @@ export const mapMetrics = {
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       trend: true,
       styleOptions: { outline: true, pattern: false }
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle"],
+      params: {
+        metric_id: "75",
+        temporal_resolution: "daily",
+        spatial_resolution: "country"
+      },
+      id: "75",
+      featureLinkField: "place_iso3",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      trend: true,
+      styleOptions: { outline: true, pattern: false }
     }
   ]
 };
@@ -421,41 +435,8 @@ export const metricMeta = {
   get "77"() {
     return this["74"];
   },
-  "25": {
-    metric_definition:
-      "Number of new COVID-19 cases reported in the country on the specified date.",
-    metric_displayname: "New COVID-19 cases on date",
-    value: v => comma(v),
-    unit: v => (v === 1 ? "new case" : "new cases"),
-    trendTimeframe: "over prior 24 hours",
-    legendInfo: {
-      fill: {
-        for: "basemap", // TODO dynamically
-        type: "quantized",
-        labelsInside: true,
-        colorscale: d3
-          .scaleOrdinal()
-          .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
-        labels: {
-          bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
-      },
-      circle: {
-        for: "bubble",
-        type: "continuous",
-        outline: "#e65d36",
-        colorscale: d3
-          .scaleLinear()
-          .domain([0, 100])
-          .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
-        labels: {
-          bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
-      }
-    }
+  get "75"() {
+    return this["72"];
   },
   policy_status: {
     metric_definition: (
@@ -833,15 +814,13 @@ export const tooltipGetter = async ({
   // on the list of metrics to `include` in the tooltip then add it to the
   // tooltip, otherwise skip
   for (const [k, v] of Object.entries(state)) {
-    console.log("k");
-    console.log(k);
     // skip metric unless it is to be included
     if (
       !include.includes(k) ||
-      k.includes("-trend")
-      // v === "null" ||
-      // v === null ||
-      // v < 0
+      k.includes("-trend") ||
+      v === "null" ||
+      v === null ||
+      v < 0
     )
       continue;
     else {
