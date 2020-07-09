@@ -68,7 +68,7 @@ const circleStyles = {
         return getLog10Scale({
           minSize: 5,
           zeroSize: 5,
-          maxValue: 1e9,
+          maxValue: 1e7,
           featurePropertyKey: key
         });
       }
@@ -99,7 +99,7 @@ const circleStyles = {
         return getLinearScale({
           minSize: 5,
           zeroSize: 5,
-          maxValue: 1e9,
+          maxValue: 5e5,
           featurePropertyKey: key
         });
       }
@@ -130,7 +130,7 @@ const circleStyles = {
         return getLinearScale({
           minSize: 5,
           zeroSize: 5,
-          maxValue: 1e9,
+          maxValue: 3e6,
           featurePropertyKey: key
         });
       }
@@ -180,17 +180,17 @@ const fillStyles = {
         "case",
         ["==", ["has", "state_name"], true],
         "#ffffff",
-        ["==", ["in", ["get", "BRK_A3"], ["literal", geoHaveData]], false],
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         "#808080",
         "#ffffff"
       ],
       "line-width": [
         "case",
         ["==", ["feature-state", "clicked"], true],
-        6,
+        2,
         ["==", ["feature-state", "hovered"], true],
-        6,
-        2
+        2,
+        1
       ]
     };
   },
@@ -214,7 +214,9 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
-        ["==", ["in", ["get", "BRK_A3"], ["literal", geoHaveData]], false],
+        ["==", ["has", "state_name"], true],
+        "#ffffff",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         "#fff",
         ["==", ["feature-state", key], null],
         "#eaeaea",

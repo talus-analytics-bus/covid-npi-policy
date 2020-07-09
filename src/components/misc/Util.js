@@ -27,7 +27,8 @@ export const getLog10Scale = ({
   minSize,
   maxValue,
   featurePropertyKey,
-  zeroSize = 0
+  zeroSize = 0,
+  totalDecadesOverride = null
 }) => {
   // divide into 5 decades ending with the maxValue
   const x = Math.log10(maxValue);
@@ -38,7 +39,7 @@ export const getLog10Scale = ({
   const decades = [0, zeroSize, 1, minSize];
 
   // total decades to define, including for zero and 1
-  const totalDecades = 7;
+  const totalDecades = totalDecadesOverride || 7;
 
   // create decades
   for (let i = 1; i < totalDecades - 1; i++) {
@@ -87,7 +88,7 @@ export const getLinearScale = ({
     zeroSize,
     1,
     5,
-    5e5,
+    maxValue,
     75
   ];
 };

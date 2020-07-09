@@ -93,7 +93,7 @@ const MapboxMap = ({
     if (mapId === "global")
       map.setLayoutProperty("policy_status-fill-outline", "line-sort-key", [
         "case",
-        ["==", ["in", ["get", "BRK_A3"], ["literal", geoHaveData]], false],
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         0,
         1
       ]);

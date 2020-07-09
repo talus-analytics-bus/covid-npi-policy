@@ -44,8 +44,8 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "global",
-  // mapId: "us",
+  // mapId: "global",
+  mapId: "us",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -893,7 +893,7 @@ export const tooltipGetter = async ({
             </div>
           </div>
         );
-      } else if (["72", "74", "76", "77"].includes(k)) {
+      } else if (["72", "74", "75", "77"].includes(k)) {
         item.value = (
           <div className={styles[k]}>
             <div className={styles.value}>

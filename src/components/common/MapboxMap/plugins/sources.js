@@ -59,7 +59,7 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://traethethird.4kh7sxxt",
-        promoteId: "BRK_A3"
+        promoteId: "ADM0_A3"
       }
     },
     circle: {
@@ -68,7 +68,7 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://nicoletalus.c4ujj0o1",
-        promoteId: "BRK_A3"
+        promoteId: "ADM0_A3"
       }
     }
   }
