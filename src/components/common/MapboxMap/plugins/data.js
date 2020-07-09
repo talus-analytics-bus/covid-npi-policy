@@ -366,7 +366,8 @@ export const metricMeta = {
     // metric definition
     metric_definition: (
       <span>
-        The number of new COVID-19 cases in the state in the past 7 days.
+        The number of new COVID-19 cases (confirmed and probable) in the state
+        in the past 7 days.
         <br />
         <i style={{ fontSize: ".8rem" }}>
           Source: Calculated from{" "}
@@ -382,7 +383,22 @@ export const metricMeta = {
     metric_displayname: "New COVID-19 cases in past 7 days",
 
     // Optional: Short name for metric where needed
-    shortName: "Caseload",
+    shortName: (
+      <>
+        <div>Caseload</div>
+        <div
+          style={{
+            fontFamily: "'rawline', serif",
+            fontSize: ".9rem",
+            fontWeight: "normal",
+            fontStyle: "italic",
+            lineHeight: "1.1"
+          }}
+        >
+          confirmed & probable cases
+        </div>
+      </>
+    ),
 
     // value formatter for metric
     value: v => comma(v),
@@ -451,8 +467,8 @@ export const metricMeta = {
       metric_displayname: "Cumulative caseload (up to date selected)",
       metric_definition: (
         <span>
-          The total cumulative number of COVID-19 cases in the state as of the
-          indicated date
+          The total cumulative number of COVID-19 cases (confirmed and probable)
+          in the state as of the indicated date
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source:{" "}
@@ -470,6 +486,23 @@ export const metricMeta = {
           <br />
           24 hours
         </React.Fragment>
+      ),
+      // Optional: Short name for metric where needed
+      shortName: (
+        <>
+          <div>Caseload</div>
+          <div
+            style={{
+              fontFamily: "'rawline', serif",
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              fontStyle: "italic",
+              lineHeight: "1.1"
+            }}
+          >
+            confirmed & probable cases
+          </div>
+        </>
       ),
       legendInfo: {
         ...this["74"].legendInfo,
@@ -490,10 +523,65 @@ export const metricMeta = {
     };
   },
   get "77"() {
-    return this["74"];
+    return {
+      ...this["74"],
+      metric_definition: (
+        <span>
+          The number of new COVID-19 cases (confirmed) in the country in the
+          past 7 days.
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source: Calculated from{" "}
+            <a
+              target="_blank"
+              href="https://github.com/CSSEGISandData/COVID-19"
+            >
+              COVID-19 Data Repository by the Center for Systems Science and
+              Engineering (CSSE) at Johns Hopkins University
+            </a>
+          </i>
+        </span>
+      )
+    };
   },
   get "75"() {
-    return this["72"];
+    return {
+      ...this["72"],
+      // Optional: Short name for metric where needed
+      shortName: (
+        <>
+          <div>Caseload</div>
+          <div
+            style={{
+              fontFamily: "'rawline', serif",
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              fontStyle: "italic",
+              lineHeight: "1.1"
+            }}
+          >
+            confirmed cases
+          </div>
+        </>
+      ),
+      metric_definition: (
+        <span>
+          The total cumulative number of COVID-19 cases (confirmed) in the
+          country as of the indicated date
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source:{" "}
+            <a
+              target="_blank"
+              href="https://github.com/CSSEGISandData/COVID-19"
+            >
+              COVID-19 Data Repository by the Center for Systems Science and
+              Engineering (CSSE) at Johns Hopkins University
+            </a>
+          </i>
+        </span>
+      )
+    };
   },
   policy_status: {
     metric_definition: (
