@@ -265,7 +265,7 @@ export const mapMetrics = {
         spatial_resolution: "country"
       },
       id: "77",
-      featureLinkField: "place_iso",
+      featureLinkField: "place_iso3",
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       trend: true,
       styleOptions: { outline: true, pattern: false }
@@ -833,13 +833,15 @@ export const tooltipGetter = async ({
   // on the list of metrics to `include` in the tooltip then add it to the
   // tooltip, otherwise skip
   for (const [k, v] of Object.entries(state)) {
+    console.log("k");
+    console.log(k);
     // skip metric unless it is to be included
     if (
       !include.includes(k) ||
-      k.includes("-trend") ||
-      v === "null" ||
-      v === null ||
-      v < 0
+      k.includes("-trend")
+      // v === "null" ||
+      // v === null ||
+      // v < 0
     )
       continue;
     else {
@@ -944,8 +946,6 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-      console.log("k");
-      console.log(k);
       if (k === "policy_status" || k === "lockdown_level") {
         const apiDate = date.format("YYYY-MM-DD");
 
@@ -1006,14 +1006,17 @@ export const tooltipGetter = async ({
           dates_in_effect: filters.dates_in_effect
         };
 
-        if (mapId === "us") filtersForStr.area1 = [d.properties.state_name];
-        else
+        if (mapId === "us") {
+          filtersForStr.country_name = ["United States of America (USA)"];
+          filtersForStr.area1 = [d.properties.state_name];
+        } else
           filtersForStr.country_name = [
             `${d.properties.NAME} (${d.properties.ISO_A3})`
           ];
         const filtersStr = JSON.stringify(filtersForStr);
 
         // content for right side of header
+        console.log("doing it");
         tooltip.tooltipHeaderRight = (
           <>
             <a

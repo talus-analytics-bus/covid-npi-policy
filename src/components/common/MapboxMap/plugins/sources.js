@@ -68,7 +68,7 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://nicoletalus.c4ujj0o1",
-        promoteId: "ISO_A2"
+        promoteId: "ISO_A3"
       }
     }
   }
