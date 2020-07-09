@@ -813,26 +813,21 @@ export const tooltipGetter = async ({
       title: d.properties.state_name,
       subtitle: null
     };
-    // add actions for bottom of tooltip
-    // tooltip.actions = [<button key={"view"}>View details</button>];
-    tooltip.actions = [];
-    tooltip.tooltipHeaderMetric = null;
   } else {
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.NAME,
       subtitle: null
     };
-
-    // add actions for bottom of tooltip
-    tooltip.actions = [<button key={"view"}>View country</button>];
   }
+  tooltip.actions = [];
+  tooltip.tooltipHeaderMetric = null;
+
   // get content from metric IDs / values in `state`
   tooltip.tooltipMainContent = [];
 
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
-  console.log();
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -907,7 +902,7 @@ export const tooltipGetter = async ({
             </div>
           </div>
         );
-      } else if (k === "74" || k === "72") {
+      } else if (["72", "74", "76", "77"].includes(k)) {
         item.value = (
           <div className={styles[k]}>
             <div className={styles.value}>
