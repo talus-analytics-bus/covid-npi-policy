@@ -1,12 +1,16 @@
-import React from 'react'
+import React from "react";
 
-import PolicyPlot from '../PolicyPlot/PolicyPlot'
-import states from '../PolicyModel/states.js'
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
 
-import styles from './State.module.scss'
+import PolicyPlot from "../PolicyPlot/PolicyPlot";
+import states from "../PolicyModel/states.js";
+
+import styles from "./State.module.scss";
 
 const formatNumber = number =>
-  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 const State = props => {
   // console.log(cumulativeCases);
@@ -20,26 +24,29 @@ const State = props => {
     <section className={styles.state}>
       <header>
         <div className={styles.stateName}>
-          <select
-            value={props.selectedState}
-            onChange={e => {
-              const newSelectedStates = [...props.selectedStates]
-              newSelectedStates[props.index] = e.target.value
-              props.setSelectedStates(newSelectedStates)
-            }}
-            aria-label={'Select a state to display'}
-          >
-            {states.map(state => (
-              <option key={state.abbr} value={state.abbr}>
-                {state.name}
-              </option>
-            ))}
-          </select>
+          <label>
+            Change state
+            <select
+              value={props.selectedState}
+              onChange={e => {
+                const newSelectedStates = [...props.selectedStates];
+                newSelectedStates[props.index] = e.target.value;
+                props.setSelectedStates(newSelectedStates);
+              }}
+              aria-label={"Select a state to display"}
+            >
+              {states.map(state => (
+                <option key={state.abbr} value={state.abbr}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             className={styles.resetState}
             onClick={e => {
-              e.preventDefault()
-              props.resetState(props.selectedState)
+              e.preventDefault();
+              props.resetState(props.selectedState);
             }}
           >
             Reset Interventions
@@ -48,13 +55,13 @@ const State = props => {
             className={styles.removeState}
             disabled={props.selectedStates.length < 2}
             onClick={e => {
-              e.preventDefault()
-              const newSelectedStates = [...props.selectedStates]
-              newSelectedStates.splice(props.index, 1)
-              props.setSelectedStates(newSelectedStates)
+              e.preventDefault();
+              const newSelectedStates = [...props.selectedStates];
+              newSelectedStates.splice(props.index, 1);
+              props.setSelectedStates(newSelectedStates);
             }}
           >
-            Remove{' '}
+            Remove{" "}
             {states.find(state => state.abbr === props.selectedState).name}
           </button>
           {/* <h1> */}
@@ -67,7 +74,18 @@ const State = props => {
             <h3>Case count with existing policies</h3>
             <div>
               <h4>{formatNumber(props.curves.cases)}</h4>
-              <h5>cumulative cases</h5>
+              <Tippy
+                content={
+                  "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                }
+                allowHTML={true}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h5>cumulative cases (i)</h5>
+              </Tippy>
             </div>
             <div>
               <h4>{formatNumber(props.curves.deaths)}</h4>
@@ -83,14 +101,26 @@ const State = props => {
                   props.setCounterfactualSelected(!props.counterfactualSelected)
                 }
               />
-              COVID count with NO actions taken
+              What if we had done nothing?
             </label>
             <div>
-              <h4>[API]</h4>
-              <h5>cumulative cases</h5>
+              <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
+
+              <Tippy
+                content={
+                  "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                }
+                allowHTML={true}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h5>cumulative cases (i)</h5>
+              </Tippy>
             </div>
             <div>
-              <h4>[API]</h4>
+              <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
               <h5>cumulative deaths</h5>
             </div>
           </div>
@@ -116,7 +146,7 @@ const State = props => {
         />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default State
+export default State;
