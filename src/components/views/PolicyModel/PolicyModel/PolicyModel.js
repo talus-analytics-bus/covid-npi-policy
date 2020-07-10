@@ -303,6 +303,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   counterfactualSelected={counterfactualSelected}
                   setCounterfactualSelected={setCounterfactualSelected}
                   resetState={resetState}
+                  dataDates={dataDates}
                 />
               );
             } else {
