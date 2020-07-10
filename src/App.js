@@ -45,7 +45,7 @@ const App = () => {
     edge: browser => browserModal("Edge"),
     ie: browser => browserModal("Internet Explorer"),
     opera: browser => browserModal("Opera"),
-    default: () => null
+    default: () => null,
   };
 
   // function to return modal content for unsupported browser modal
@@ -122,7 +122,7 @@ const App = () => {
                             setLoading,
                             setPage,
                             setInfoTooltipContent,
-                            urlFilterParams
+                            urlFilterParams,
                           }}
                         />
                       );
@@ -152,7 +152,7 @@ const App = () => {
                             versions,
                             setPage,
                             setLoading,
-                            setInfoTooltipContent
+                            setInfoTooltipContent,
                           }}
                         />
                       );
@@ -169,7 +169,7 @@ const App = () => {
                           {...{
                             setPage,
                             setLoading,
-                            initTab: routeProps.match.params.subpage
+                            initTab: routeProps.match.params.subpage,
                           }}
                         />
                       );
