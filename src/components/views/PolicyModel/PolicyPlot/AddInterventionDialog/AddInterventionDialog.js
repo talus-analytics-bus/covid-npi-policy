@@ -1,43 +1,43 @@
-import React from 'react'
+import React from "react";
 
-import styles from './AddInterventionDialog.module.scss'
+import styles from "./AddInterventionDialog.module.scss";
 
 const PastInterventionInfo = props => {
-  const width = 300
-  const arrowOffset = { x: 25, y: 41 }
+  const width = 300;
+  const arrowOffset = { x: 25, y: 41 };
 
   const xPos =
     props.position.x < window.innerWidth / 2
       ? props.position.x + arrowOffset.x
-      : props.position.x - width - 6
+      : props.position.x - width - 6;
 
-  const yPos = props.position.y - arrowOffset.y
+  const yPos = props.position.y - arrowOffset.y;
 
   const popupStyleName =
     props.position.x < window.innerWidth / 2
       ? styles.leftPopup
-      : styles.rightPopup
+      : styles.rightPopup;
 
-  const [rVal, setRVal] = React.useState(0.15)
-  const [interDate, setInterDate] = React.useState(props.position.date)
+  const [rVal, setRVal] = React.useState(0.15);
+  const [interDate, setInterDate] = React.useState(props.position.date);
 
   const policyNames = {
-    0.1: 'Lockdown',
-    0.15: 'Stay at home',
-    0.25: 'Safer at home',
-    0.35: 'New normal',
-  }
+    0.12: "Lockdown",
+    0.1375: "Stay at home",
+    0.19: "Safer at home",
+    0.285: "New normal",
+  };
 
   return (
     <section
-      display={props.position.show ? 'block' : 'none'}
+      display={props.position.show ? "block" : "none"}
       className={popupStyleName}
       style={{
         top: yPos,
         left: xPos,
         width: width,
         opacity: props.position.show ? 1 : 0,
-        pointerEvents: props.position.show ? 'all' : 'none',
+        pointerEvents: props.position.show ? "all" : "none",
       }}
     >
       <form>
@@ -55,13 +55,13 @@ const PastInterventionInfo = props => {
               <input
                 type="date"
                 defaultValue={
-                  props.position.date === ''
+                  props.position.date === ""
                     ? null
                     : new Date(props.position.date).toISOString().substr(0, 10)
                 }
                 selected={interDate}
                 onChange={e => {
-                  setInterDate(new Date(e.target.value))
+                  setInterDate(new Date(e.target.value));
                 }}
               />
             </label>
@@ -72,8 +72,8 @@ const PastInterventionInfo = props => {
                 <input
                   type="radio"
                   name="phase"
-                  value="0.1"
-                  checked={rVal === 0.1}
+                  value="0.12"
+                  checked={rVal === 0.12}
                   onChange={e => setRVal(Number(e.target.value))}
                 />
                 Lockdown
@@ -82,8 +82,8 @@ const PastInterventionInfo = props => {
                 <input
                   type="radio"
                   name="phase"
-                  value="0.15"
-                  checked={rVal === 0.15}
+                  value="0.1375"
+                  checked={rVal === 0.1375}
                   onChange={e => setRVal(Number(e.target.value))}
                 />
                 Stay at home
@@ -92,8 +92,8 @@ const PastInterventionInfo = props => {
                 <input
                   type="radio"
                   name="phase"
-                  value="0.25"
-                  checked={rVal === 0.25}
+                  value="0.19"
+                  checked={rVal === 0.19}
                   onChange={e => setRVal(Number(e.target.value))}
                 />
                 Safer at home
@@ -102,8 +102,8 @@ const PastInterventionInfo = props => {
                 <input
                   type="radio"
                   name="phase"
-                  value="0.35"
-                  checked={rVal === 0.35}
+                  value="0.285"
+                  checked={rVal === 0.285}
                   onChange={e => setRVal(Number(e.target.value))}
                 />
                 New normal
@@ -113,32 +113,32 @@ const PastInterventionInfo = props => {
             <div className={styles.buttonRow}>
               <button
                 onClick={e => {
-                  e.preventDefault()
-                  props.setPosition({ ...props.position, show: false })
+                  e.preventDefault();
+                  props.setPosition({ ...props.position, show: false });
                 }}
               >
                 cancel
               </button>
               <button
                 onClick={e => {
-                  e.preventDefault()
+                  e.preventDefault();
                   const startDate =
-                    interDate === ''
+                    interDate === ""
                       ? new Date(props.position.date)
                           .toISOString()
                           .substr(0, 10)
-                      : interDate.toISOString()
+                      : interDate.toISOString();
 
                   const intervention = {
-                    name: policyNames[rVal] + '_' + startDate,
-                    system_name: 'string',
-                    description: 'string',
+                    name: policyNames[rVal] + "_" + startDate,
+                    system_name: "string",
+                    description: "string",
                     startdate: startDate,
 
                     params: { beta_mild: rVal, beta_asymp: rVal },
-                    intervention_type: 'intervention',
-                  }
-                  props.addIntervention(props.selectedState, intervention)
+                    intervention_type: "intervention",
+                  };
+                  props.addIntervention(props.selectedState, intervention);
                 }}
               >
                 Appy &amp; run
@@ -163,7 +163,7 @@ const PastInterventionInfo = props => {
         </div>
       </form>
     </section>
-  )
-}
+  );
+};
 
-export default PastInterventionInfo
+export default PastInterventionInfo;
