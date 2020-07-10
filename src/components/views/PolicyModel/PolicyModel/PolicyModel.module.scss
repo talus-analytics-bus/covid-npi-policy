@@ -96,3 +96,60 @@
     }
   }
 }
+
+.legendLabel {
+  margin-left: auto;
+
+  h4 {
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 0.25rem;
+  }
+}
+
+.legend {
+  padding: 0.25rem;
+  .lockdown,
+  .safer,
+  .stay,
+  .normal,
+  .proposed {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.25rem 0;
+
+    span {
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 1em;
+      margin-right: 0.5em;
+    }
+  }
+  .lockdown {
+    span {
+      background-color: #661b3c;
+    }
+  }
+  .safer {
+    span {
+      background-color: #c1272d;
+    }
+  }
+  .stay {
+    span {
+      background-color: #d66b3e;
+    }
+  }
+  .normal {
+    span {
+      background-color: #ecbd62;
+    }
+  }
+  .proposed {
+    span {
+      border: 1px solid #661b3c;
+    }
+  }
+}

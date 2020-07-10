@@ -5,6 +5,12 @@
   }
 }
 
+.infoIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: auto;
+}
+
 .state {
   color: #00447c;
   padding: 1rem;
@@ -124,7 +130,7 @@
         > div {
           position: relative;
           margin: 1rem;
-          width: 13rem;
+          width: 14rem;
           display: flex;
           justify-content: center;
           flex-direction: column;
@@ -154,6 +160,8 @@
         h4,
         h5 {
           margin: 0;
+          display: flex;
+          justify-content: space-between;
         }
 
         h4 {
@@ -184,9 +192,11 @@
 
           h5 {
             font-size: 0.8rem;
-            width: 5em;
+            width: 10em;
             line-height: 1em;
             margin-left: 0.25em;
+            display: flex;
+            justify-content: space-between;
           }
         }
         > div:first-of-type:after {

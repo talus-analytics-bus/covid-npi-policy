@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 import loadModels, { requestIntervention, clearState } from "./LoadModels";
 import parseModels from "./parseModels";
 
@@ -12,7 +16,7 @@ import styles from "./PolicyModel.module.scss";
 
 import states from "./states";
 
-const PolicyModel = props => {
+const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
@@ -110,9 +114,9 @@ const PolicyModel = props => {
 
   // on init render, set loading to false and page to `model`
   React.useEffect(() => {
-    props.setLoading(false);
-    props.setPage("model");
-  }, []);
+    setLoading(false);
+    setPage("model");
+  }, [setLoading, setPage]);
 
   React.useEffect(() => {
     setup();
@@ -184,6 +188,7 @@ const PolicyModel = props => {
                 <option value="dead">Deaths</option>
               </select>
             </label>
+
             {/* <label> */}
             {/*   <input */}
             {/*     type="checkbox" */}
@@ -194,6 +199,43 @@ const PolicyModel = props => {
             {/*   /> */}
             {/*   COVID COUNT WITH NO ACTIONS TAKEN */}
             {/* </label> */}
+            <label className={styles.legendLabel}>
+              <Tippy
+                content={
+                  <div className={styles.legend}>
+                    <div className={styles.lockdown}>
+                      <span />
+                      <p>Lockdown policies</p>
+                    </div>
+                    <div className={styles.safer}>
+                      <span />
+                      <p>Safer at home policies</p>
+                    </div>
+                    <div className={styles.stay}>
+                      <span />
+                      <p>Stay at home policies</p>
+                    </div>
+                    <div className={styles.normal}>
+                      <span />
+                      <p>New normal policies</p>
+                    </div>
+                    <div className={styles.proposed}>
+                      <span />
+                      <p>Proposed</p>
+                    </div>
+                  </div>
+                }
+                allowHTML={true}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h4>
+                  Legend <span style={{ fontSize: ".75rem" }}>▼</span>
+                </h4>
+              </Tippy>
+            </label>
           </div>
           {selectedStates.map((state, index) => {
             if (curves && curves[state]) {
