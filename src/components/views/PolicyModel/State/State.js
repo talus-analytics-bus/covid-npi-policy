@@ -9,6 +9,8 @@ import states from "../PolicyModel/states.js";
 
 import styles from "./State.module.scss";
 
+import infoIcon from "../../../../assets/icons/info-blue.svg";
+
 const formatNumber = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
@@ -73,19 +75,26 @@ const State = props => {
           <div className={styles.existing}>
             <h3>Case count with existing policies</h3>
             <div>
-              <h4>{formatNumber(props.curves.cases)}</h4>
-              <Tippy
-                content={
-                  "Source: Calculated from New York Times compilation of data from state and local governments and health departments."
-                }
-                allowHTML={true}
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <h5>cumulative cases (i)</h5>
-              </Tippy>
+              <h4>
+                {formatNumber(props.curves.cases)}{" "}
+                <Tippy
+                  content={
+                    "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                  }
+                  allowHTML={true}
+                  maxWidth={"30rem"}
+                  theme={"light"}
+                  placement={"bottom"}
+                  offset={[-30, 10]}
+                >
+                  <img
+                    className={styles.infoIcon}
+                    src={infoIcon}
+                    alt="More information"
+                  />
+                </Tippy>
+              </h4>
+              <h5>cumulative cases</h5>
             </div>
             <div>
               <h4>{formatNumber(props.curves.deaths)}</h4>
@@ -105,21 +114,29 @@ const State = props => {
             </label>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
-
-              <Tippy
-                content={"Modeled potential case count with no actions taken."}
-                allowHTML={true}
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <h5>cumulative cases (i)</h5>
-              </Tippy>
+              <h5>
+                cumulative
+                <br /> cases{" "}
+                <Tippy
+                  content={
+                    "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                  }
+                  allowHTML={true}
+                  maxWidth={"30rem"}
+                  theme={"light"}
+                  placement={"bottom"}
+                  offset={[-30, 10]}
+                >
+                  <img
+                    className={styles.infoIcon}
+                    src={infoIcon}
+                    alt="More information"
+                  />
+                </Tippy>
+              </h5>
             </div>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
-              <h5>cumulative deaths</h5>
             </div>
           </div>
         </div>

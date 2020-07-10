@@ -1,6 +1,15 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-import loadModels, { requestIntervention, clearState } from "./LoadModels";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
+import loadModels, {
+  requestIntervention,
+  clearState,
+  API_URL,
+} from "./LoadModels";
 import parseModels from "./parseModels";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
@@ -12,7 +21,7 @@ import styles from "./PolicyModel.module.scss";
 
 import states from "./states";
 
-const PolicyModel = props => {
+const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
@@ -93,6 +102,26 @@ const PolicyModel = props => {
     setCaseLoadAxis,
   ]);
 
+  const [dataDates, setDataDates] = React.useState();
+
+  React.useEffect(() => {
+    const getDataDates = async () => {
+      const dates = await axios.get(API_URL + "update_date/");
+      const formattedDates = {};
+      formattedDates.last_policy_update = new Date(
+        dates.data.last_policy_update
+      ).toLocaleDateString();
+      formattedDates.last_data_update = new Date(
+        dates.data.last_data_update
+      ).toLocaleDateString();
+
+      setDataDates(formattedDates);
+      console.log(formattedDates);
+    };
+
+    getDataDates();
+  }, []);
+
   const addIntervention = (state, intervention) => {
     const newCurves = Object.assign({}, curves);
     delete newCurves[state];
@@ -110,9 +139,9 @@ const PolicyModel = props => {
 
   // on init render, set loading to false and page to `model`
   React.useEffect(() => {
-    props.setLoading(false);
-    props.setPage("model");
-  }, []);
+    setLoading(false);
+    setPage("model");
+  }, [setLoading, setPage]);
 
   React.useEffect(() => {
     setup();
@@ -121,6 +150,24 @@ const PolicyModel = props => {
   return (
     <div className={styles.background}>
       <article className={styles.main}>
+        <div className={styles.dataDates}>
+          <p>
+            {dataDates && (
+              <>
+                Policy data as of{" "}
+                <strong>{dataDates.last_policy_update}</strong>
+              </>
+            )}
+          </p>
+          <p>
+            {dataDates && (
+              <>
+                Caseload data as of{" "}
+                <strong>{dataDates.last_data_update}</strong>
+              </>
+            )}
+          </p>
+        </div>
         <h1 className={styles.title}>Social distancing policy model</h1>
         <div className={styles.tabrow}>
           {/* <button */}
@@ -184,6 +231,7 @@ const PolicyModel = props => {
                 <option value="dead">Deaths</option>
               </select>
             </label>
+
             {/* <label> */}
             {/*   <input */}
             {/*     type="checkbox" */}
@@ -194,6 +242,43 @@ const PolicyModel = props => {
             {/*   /> */}
             {/*   COVID COUNT WITH NO ACTIONS TAKEN */}
             {/* </label> */}
+            <label className={styles.legendLabel}>
+              <Tippy
+                content={
+                  <div className={styles.legend}>
+                    <div className={styles.lockdown}>
+                      <span />
+                      <p>Lockdown policies</p>
+                    </div>
+                    <div className={styles.safer}>
+                      <span />
+                      <p>Safer at home policies</p>
+                    </div>
+                    <div className={styles.stay}>
+                      <span />
+                      <p>Stay at home policies</p>
+                    </div>
+                    <div className={styles.normal}>
+                      <span />
+                      <p>New normal policies</p>
+                    </div>
+                    <div className={styles.proposed}>
+                      <span />
+                      <p>Proposed</p>
+                    </div>
+                  </div>
+                }
+                allowHTML={true}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h4>
+                  Legend <span style={{ fontSize: ".75rem" }}>▼</span>
+                </h4>
+              </Tippy>
+            </label>
           </div>
           {selectedStates.map((state, index) => {
             if (curves && curves[state]) {
@@ -225,6 +310,7 @@ const PolicyModel = props => {
               return (
                 <LoadingState
                   key={state}
+                  index={index}
                   state={state}
                   zoomDateRange={zoomDateRange}
                   setZoomDateRange={setZoomDateRange}
