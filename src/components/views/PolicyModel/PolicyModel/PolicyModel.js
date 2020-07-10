@@ -266,6 +266,14 @@ const PolicyModel = ({ setLoading, setPage }) => {
                       <span />
                       <p>Proposed</p>
                     </div>
+                    <div className={styles.actuals}>
+                      <span />
+                      <p>Actuals</p>
+                    </div>
+                    <div className={styles.modeled}>
+                      <span />
+                      <p>Modeled</p>
+                    </div>
                   </div>
                 }
                 allowHTML={true}
