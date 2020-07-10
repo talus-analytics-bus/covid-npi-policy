@@ -8,6 +8,7 @@
   margin-right: auto;
   padding: 2rem;
   position: relative;
+  padding-top: 150px;
 
   label {
     font-weight: 500;
@@ -33,12 +34,20 @@
     font-weight: 500;
   }
 
+  .dataDates {
+    width: 100%;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+  }
+
   .title {
     box-sizing: border-box;
     color: white;
     font-weight: 800;
     font-size: 2.5rem;
-    padding-top: 150px;
     text-transform: unset;
     margin-bottom: 1rem;
   }
@@ -119,6 +128,7 @@
     align-items: center;
     font-size: 1rem;
     padding: 0.25rem 0;
+    box-sizing: border-box;
 
     span {
       width: 1.5em;
@@ -149,7 +159,7 @@
   }
   .proposed {
     span {
-      border: 1px solid #661b3c;
+      border: 3px solid #661b3c;
     }
   }
 }

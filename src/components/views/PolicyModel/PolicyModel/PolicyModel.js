@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
-import loadModels, { requestIntervention, clearState } from "./LoadModels";
+import loadModels, {
+  requestIntervention,
+  clearState,
+  API_URL,
+} from "./LoadModels";
 import parseModels from "./parseModels";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
@@ -97,6 +102,17 @@ const PolicyModel = ({ setLoading, setPage }) => {
     setCaseLoadAxis,
   ]);
 
+  const [dataDates, setDataDates] = React.useState();
+
+  React.useEffect(() => {
+    const getDataDates = async () => {
+      const dates = await axios.get(API_URL + "update_date/");
+      setDataDates(dates.data);
+    };
+
+    getDataDates();
+  }, []);
+
   const addIntervention = (state, intervention) => {
     const newCurves = Object.assign({}, curves);
     delete newCurves[state];
@@ -125,6 +141,24 @@ const PolicyModel = ({ setLoading, setPage }) => {
   return (
     <div className={styles.background}>
       <article className={styles.main}>
+        <div className={styles.dataDates}>
+          <p>
+            {dataDates && (
+              <>
+                Policy data as of{" "}
+                <strong>{dataDates.last_policy_update}</strong>
+              </>
+            )}
+          </p>
+          <p>
+            {dataDates && (
+              <>
+                Caseload data as of{" "}
+                <strong>{dataDates.last_data_update}</strong>
+              </>
+            )}
+          </p>
+        </div>
         <h1 className={styles.title}>Social distancing policy model</h1>
         <div className={styles.tabrow}>
           {/* <button */}
