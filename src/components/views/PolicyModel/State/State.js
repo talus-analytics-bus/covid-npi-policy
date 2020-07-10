@@ -1,5 +1,9 @@
 import React from "react";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 import PolicyPlot from "../PolicyPlot/PolicyPlot";
 import states from "../PolicyModel/states.js";
 
@@ -70,7 +74,18 @@ const State = props => {
             <h3>Case count with existing policies</h3>
             <div>
               <h4>{formatNumber(props.curves.cases)}</h4>
-              <h5>cumulative cases</h5>
+              <Tippy
+                content={
+                  "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                }
+                allowHTML={true}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h5>cumulative cases (i)</h5>
+              </Tippy>
             </div>
             <div>
               <h4>{formatNumber(props.curves.deaths)}</h4>
@@ -90,7 +105,19 @@ const State = props => {
             </label>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
-              <h5>cumulative cases</h5>
+
+              <Tippy
+                content={
+                  "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                }
+                allowHTML={true}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h5>cumulative cases (i)</h5>
+              </Tippy>
             </div>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
