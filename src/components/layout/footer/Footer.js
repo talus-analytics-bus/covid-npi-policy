@@ -11,7 +11,7 @@ import moment from "moment";
 
 const Footer = ({ page, versions }) => {
   // get last updated date
-  const lastUpdated = versions.find(d => d.type === "Policy and plan data");
+  const lastUpdated = versions.find(d => d.type === "Policy data");
   const lastUpdatedDate = lastUpdated !== undefined ? lastUpdated.date : null;
 
   // define footer images and links
@@ -21,12 +21,12 @@ const Footer = ({ page, versions }) => {
       url: "https://ghss.georgetown.edu/",
       alt:
         "Georgetown University Center for Global Health Science and Security",
-      txt: null,
+      txt: null
     },
     {
       imgSrc: talus,
       url: "http://talusanalytics.com/",
-      alt: "Talus Analytics, LLC",
+      alt: "Talus Analytics, LLC"
       // txt: "Built by",
       // style: {
       //   height: "60px",
@@ -37,14 +37,14 @@ const Footer = ({ page, versions }) => {
       imgSrc: nti,
       url: "https://www.nti.org/about/biosecurity/",
       alt: "Nuclear Threat Initiative",
-      txt: null,
-    },
+      txt: null
+    }
   ];
 
   return (
     <div
       className={classNames(styles.footer, {
-        [styles.wide]: page === "policymaps" || page === "model",
+        [styles.wide]: page === "policymaps" || page === "model"
       })}
     >
       <div className={styles.wrapper}>
@@ -55,7 +55,7 @@ const Footer = ({ page, versions }) => {
             }
             {lastUpdated && (
               <span>
-                Policy and plan data last updated{" "}
+                Policy data last updated{" "}
                 {new moment(lastUpdatedDate).format("MMM D, YYYY")}
               </span>
             )}
