@@ -225,6 +225,7 @@ const PolicyModel = props => {
               return (
                 <LoadingState
                   key={state}
+                  index={index}
                   state={state}
                   zoomDateRange={zoomDateRange}
                   setZoomDateRange={setZoomDateRange}
