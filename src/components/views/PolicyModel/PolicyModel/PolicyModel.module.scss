@@ -8,15 +8,11 @@
   margin-right: auto;
   padding: 2rem;
   position: relative;
-
-  label {
-    font-weight: 500;
-  }
+  padding-top: 150px;
 
   select {
     font-family: "Open Sans";
     position: relative;
-    margin: 5px 0;
     font-size: 16px;
     font-family: "Open Sans", sans-serif;
     appearance: none;
@@ -33,14 +29,59 @@
     font-weight: 500;
   }
 
-  .title {
-    box-sizing: border-box;
-    color: white;
-    font-weight: 800;
-    font-size: 2.5rem;
-    padding-top: 150px;
-    text-transform: unset;
-    margin-bottom: 1rem;
+  // Bootstrap override
+  label {
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  // bootstrap override
+  legend {
+    display: block;
+    width: 100%;
+    padding: initial;
+    margin-bottom: unset;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    border: 0;
+    border-bottom: none;
+  }
+
+  // bootstrap override
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"] {
+    line-height: initial;
+  }
+
+  // bootstrap override
+  input[type="radio"] {
+    margin-right: 0.25em;
+  }
+
+  .titleContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 3rem;
+
+    .title {
+      box-sizing: border-box;
+      color: white;
+      font-weight: 800;
+      font-size: 2.5rem;
+      text-transform: unset;
+      margin-bottom: 1rem;
+    }
+
+    .dataDates {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      color: white;
+    }
   }
 
   .tabrow {
@@ -85,7 +126,9 @@
       label {
         display: flex;
         flex-direction: column;
-        padding: 1rem;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
 
         select {
           margin-top: 0.5em;
@@ -93,6 +136,80 @@
           border-radius: 0.5em;
         }
       }
+    }
+  }
+}
+
+.legendLabel {
+  margin-left: auto;
+
+  h4 {
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 0.25rem;
+  }
+}
+
+.legend {
+  padding: 0.25rem;
+
+  .lockdown,
+  .safer,
+  .stay,
+  .normal,
+  .proposed,
+  .actuals,
+  .modeled {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.25rem 0;
+    box-sizing: border-box;
+
+    span {
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 1em;
+      margin-right: 0.5em;
+    }
+  }
+  .lockdown {
+    span {
+      background-color: #661b3c;
+    }
+  }
+  .safer {
+    span {
+      background-color: #c1272d;
+    }
+  }
+  .stay {
+    span {
+      background-color: #d66b3e;
+    }
+  }
+  .normal {
+    span {
+      background-color: #ecbd62;
+    }
+  }
+  .proposed {
+    span {
+      border: 3px solid #661b3c;
+    }
+  }
+  .actuals {
+    span {
+      height: 0;
+      border: 2px solid #183344;
+    }
+  }
+  .modeled {
+    span {
+      height: 0;
+      border: 2px solid #183344;
+      border-style: dashed;
     }
   }
 }

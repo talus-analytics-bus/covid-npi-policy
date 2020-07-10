@@ -1,15 +1,22 @@
 .state:first-of-type {
   header {
-    border-top-left-radius: 3rem;
-    border-top-right-radius: 3rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
   }
+}
+
+.infoIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: auto;
 }
 
 .state {
   color: #00447c;
-  padding: 1rem;
+  // padding: 1rem;
   padding-top: 0;
-  padding-bottom: 0;
+  padding-bottom: 1;
+  margin-top: 1rem;
 
   header {
     position: relative;
@@ -19,27 +26,38 @@
     justify-content: space-between;
 
     &:after {
-      content: '';
+      content: "";
       position: absolute;
       height: 3px;
-      left: 1rem;
-      right: 1rem;
+      left: 2rem;
+      right: 2rem;
       bottom: 0;
       background-color: #bde7ff;
     }
 
     .stateName {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      // flex-direction: column;
+      align-items: flex-end;
+
       padding: 2rem;
+      // padding-top: 1rem;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        color: #60605d;
+        font-weight: 600;
+      }
 
       select {
-        font-family: 'Rawline';
+        margin-top: 0.25em;
+        font-family: "Rawline";
         color: #00447c;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         // padding: 0.4em 0.5em 0.25em 0.5em;
-        padding: 0.25em 0.5em;
+        padding: 0.125em 0.25em;
         border: 1px solid rgb(118, 118, 118);
         border-radius: 0.25em;
         font-weight: 700;
@@ -49,12 +67,13 @@
       .resetState {
         background: none;
         border: none;
-        color: white;
-        background-color: #697681;
+        color: #60605d;
+        // background-color: #697681;
         border: 1px solid #3b4d5c;
         border-radius: 0.25em;
-        padding: 0.25em 0.5em;
+        padding: 0.58em 1em;
         margin-top: 0.5em;
+        margin-left: 1rem;
 
         &:disabled {
           opacity: 0.5;
@@ -102,7 +121,7 @@
 
         h3 {
           margin-right: auto;
-          width: 10em;
+          width: 13rem;
           line-height: 1.1em;
           font-size: 1.6rem;
           margin-top: 1rem;
@@ -112,14 +131,14 @@
         > div {
           position: relative;
           margin: 1rem;
-          width: 10rem;
+          width: 14rem;
           display: flex;
           justify-content: center;
           flex-direction: column;
         }
 
         > div:first-of-type:after {
-          content: '';
+          content: "";
           position: absolute;
           top: 1em;
           bottom: 0rem;
@@ -129,14 +148,21 @@
         }
 
         label {
+          width: 13rem;
           display: flex;
           align-items: baseline;
           font-weight: 600;
+
+          input {
+            margin-right: 0.5rem;
+          }
         }
 
         h4,
         h5 {
           margin: 0;
+          display: flex;
+          justify-content: space-between;
         }
 
         h4 {
@@ -152,12 +178,13 @@
       }
 
       .noAction {
-        color: #999999;
+        // color: #999999;
         border-bottom: none;
 
         > div {
           flex-direction: row;
           align-items: center;
+          justify-content: flex-start;
 
           h4 {
             margin: 0;
@@ -166,9 +193,11 @@
 
           h5 {
             font-size: 0.8rem;
-            width: 5em;
+            width: 10em;
             line-height: 1em;
             margin-left: 0.25em;
+            display: flex;
+            justify-content: space-between;
           }
         }
         > div:first-of-type:after {
