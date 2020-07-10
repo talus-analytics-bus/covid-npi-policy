@@ -76,7 +76,7 @@ const State = props => {
               <h4>{formatNumber(props.curves.cases)}</h4>
               <Tippy
                 content={
-                  "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
+                  "Source: Calculated from New York Times compilation of data from state and local governments and health departments."
                 }
                 allowHTML={true}
                 maxWidth={"30rem"}
@@ -107,9 +107,7 @@ const State = props => {
               <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
 
               <Tippy
-                content={
-                  "The number of new COVID-19 cases in the state in the past 7 days. Source: Calculated from New York Times compilation of data from state and local governments and health departments"
-                }
+                content={"Modeled potential case count with no actions taken."}
                 allowHTML={true}
                 maxWidth={"30rem"}
                 theme={"light"}
