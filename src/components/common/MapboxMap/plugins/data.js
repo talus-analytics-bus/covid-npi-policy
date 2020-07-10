@@ -55,7 +55,7 @@ export const defaults = {
   // `undefined` as value for each
   minMaxDate: {
     minDate: "2020-01-21",
-    maxDate: yesterday.format("YYYY-MM-DD")
+    maxDate: yesterday.format("YYYY-MM-DD"),
     // maxDate: "2021-03-01"
   },
 
@@ -66,10 +66,10 @@ export const defaults = {
     // id of default fill metric
     fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
-    priorLayer: "state-points"
+    priorLayer: "state-points",
   },
   // defaults for additional maps...
-  global: { circle: "77", fill: "lockdown_level", priorLayer: "country-label" }
+  global: { circle: "77", fill: "lockdown_level", priorLayer: "country-label" },
 };
 
 // constants
@@ -88,7 +88,7 @@ export const mapMetrics = {
       params: ({ filters }) => {
         const lockdownFilters = {
           ...filters,
-          lockdown_level: ["lockdown_level"]
+          lockdown_level: ["lockdown_level"],
         };
         // delete lockdownFilters.primary_ph_measure;
         delete lockdownFilters.ph_measure_details;
@@ -128,8 +128,8 @@ export const mapMetrics = {
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
-        pattern: true
-      }
+        pattern: true,
+      },
     },
     {
       // functions that, when passed `params`, returns the data for the map
@@ -170,12 +170,12 @@ export const mapMetrics = {
       styleOptions: {
         // whether layers that display this metric should be outlined
         // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true
+        outline: true,
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
-      }
+      },
     },
 
     {
@@ -184,14 +184,14 @@ export const mapMetrics = {
       params: {
         metric_id: 74,
         temporal_resolution: "daily",
-        spatial_resolution: "state"
+        spatial_resolution: "state",
       },
       id: "74",
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
-      styleOptions: { outline: true, pattern: true }
+      styleOptions: { outline: true, pattern: true },
     },
     {
       queryFunc: ObservationQuery,
@@ -199,15 +199,15 @@ export const mapMetrics = {
       params: {
         metric_id: 72,
         temporal_resolution: "daily",
-        spatial_resolution: "state"
+        spatial_resolution: "state",
       },
       id: "72",
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
-      styleOptions: { outline: true, pattern: true }
-    }
+      styleOptions: { outline: true, pattern: true },
+    },
   ],
   global: [
     {
@@ -249,12 +249,12 @@ export const mapMetrics = {
       styleOptions: {
         // whether layers that display this metric should be outlined
         // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true
+        outline: true,
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
-      }
+      },
     },
     {
       // functions that, when passed `params`, returns the data for the map
@@ -265,7 +265,7 @@ export const mapMetrics = {
       params: ({ filters }) => {
         const lockdownFilters = {
           ...filters,
-          lockdown_level: ["lockdown_level"]
+          lockdown_level: ["lockdown_level"],
         };
         // delete lockdownFilters.primary_ph_measure;
         delete lockdownFilters.ph_measure_details;
@@ -273,7 +273,7 @@ export const mapMetrics = {
           method: "post",
           filters: lockdownFilters,
           iso3: "all",
-          geo_res: "country"
+          geo_res: "country",
         };
       },
 
@@ -310,8 +310,8 @@ export const mapMetrics = {
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
-        pattern: true
-      }
+        pattern: true,
+      },
     },
     {
       queryFunc: ObservationQuery,
@@ -319,13 +319,13 @@ export const mapMetrics = {
       params: {
         metric_id: "77",
         temporal_resolution: "daily",
-        spatial_resolution: "country"
+        spatial_resolution: "country",
       },
       id: "77",
       featureLinkField: "place_iso3",
       styleId: { fill: "metric-test", circle: "metric-test-transp-linear" },
       trend: true,
-      styleOptions: { outline: true, pattern: false }
+      styleOptions: { outline: true, pattern: false },
     },
     {
       queryFunc: ObservationQuery,
@@ -333,15 +333,15 @@ export const mapMetrics = {
       params: {
         metric_id: "75",
         temporal_resolution: "daily",
-        spatial_resolution: "country"
+        spatial_resolution: "country",
       },
       id: "75",
       featureLinkField: "place_iso3",
       styleId: { fill: "metric-test", circle: "metric-test-solid-linear" },
       trend: true,
-      styleOptions: { outline: true, pattern: false }
-    }
-  ]
+      styleOptions: { outline: true, pattern: false },
+    },
+  ],
 };
 
 // get JSX for link to COVID-Local metrics page
@@ -392,7 +392,7 @@ export const metricMeta = {
             fontSize: ".9rem",
             fontWeight: "normal",
             fontStyle: "italic",
-            lineHeight: "1.1"
+            lineHeight: "1.1",
           }}
         >
           confirmed & probable cases
@@ -441,8 +441,8 @@ export const metricMeta = {
         // each `for` category
         labels: {
           bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
+          basemap: { min: "Minimal", max: "High" },
+        },
       },
       // additional layer legend information...
       circle: {
@@ -455,10 +455,10 @@ export const metricMeta = {
           .range(["transparent", "transparent"]), // TODO dynamically
         labels: {
           bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
-      }
-    }
+          basemap: { min: "Minimal", max: "High" },
+        },
+      },
+    },
   },
   // additional metric legend information...
   get "72"() {
@@ -497,7 +497,7 @@ export const metricMeta = {
               fontSize: ".9rem",
               fontWeight: "normal",
               fontStyle: "italic",
-              lineHeight: "1.1"
+              lineHeight: "1.1",
             }}
           >
             confirmed & probable cases
@@ -516,10 +516,10 @@ export const metricMeta = {
             .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
           labels: {
             bubble: { min: "Low", max: "High" },
-            basemap: { min: "Minimal", max: "High" }
-          }
-        }
-      }
+            basemap: { min: "Minimal", max: "High" },
+          },
+        },
+      },
     };
   },
   get "77"() {
@@ -541,7 +541,24 @@ export const metricMeta = {
             </a>
           </i>
         </span>
-      )
+      ),
+      // Optional: Short name for metric where needed
+      shortName: (
+        <>
+          <div>Caseload</div>
+          <div
+            style={{
+              fontFamily: "'rawline', serif",
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              fontStyle: "italic",
+              lineHeight: "1.1",
+            }}
+          >
+            confirmed cases
+          </div>
+        </>
+      ),
     };
   },
   get "75"() {
@@ -557,7 +574,7 @@ export const metricMeta = {
               fontSize: ".9rem",
               fontWeight: "normal",
               fontStyle: "italic",
-              lineHeight: "1.1"
+              lineHeight: "1.1",
             }}
           >
             confirmed cases
@@ -580,7 +597,7 @@ export const metricMeta = {
             </a>
           </i>
         </span>
-      )
+      ),
     };
   },
   policy_status: {
@@ -594,7 +611,7 @@ export const metricMeta = {
                   <div
                     style={{
                       backgroundColor: "#66CAC4",
-                      marginRight: "20px"
+                      marginRight: "20px",
                     }}
                     className={infostyles.rect}
                   >
@@ -628,18 +645,18 @@ export const metricMeta = {
             <br />
             not available
           </div>,
-          "policy in effect"
+          "policy in effect",
         ],
         // range: ["#eaeaea", "white", "#66CAC4"],
         colorscale: d3
           .scaleOrdinal()
           .domain(["no policy", "policy in effect"])
-          .range(["#eaeaea", "white", "#66CAC4"])
+          .range(["#eaeaea", "white", "#66CAC4"]),
         // labels: {
         //   bubble: { min: "Low", max: "High" },
         //   basemap: { min: "Minimal", max: "High" }
         // }
-      }
+      },
       // circle: {
       //   for: "bubble",
       //   type: "continuous",
@@ -653,7 +670,7 @@ export const metricMeta = {
       //     basemap: { min: "Minimal", max: "High" }
       //   }
       // }
-    }
+    },
   },
   lockdown_level: {
     // last updated: 2020-06-24
@@ -669,7 +686,7 @@ export const metricMeta = {
             Policies do not allow residents to leave their place of residence
             unless explicitly permitted to do so.
           </span>
-        )
+        ),
       },
       "Stay at home": {
         label: "Stay-at-home",
@@ -680,7 +697,7 @@ export const metricMeta = {
           <span>
             Policies limit most in-person activities and social events.
           </span>
-        )
+        ),
       },
       "Safer at home": {
         label: "Safer-at-home",
@@ -693,7 +710,7 @@ export const metricMeta = {
             encouraging extra precautions and retaining limits on mass
             gatherings.
           </span>
-        )
+        ),
       },
       "New normal": {
         label: "New normal",
@@ -706,7 +723,7 @@ export const metricMeta = {
             non-essential businesses are lifted or expired, with some
             encouraging of safeguards such as face coverings.
           </span>
-        )
+        ),
       },
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
@@ -717,8 +734,8 @@ export const metricMeta = {
           <span>
             Any combination of the above levels simultaneously in effect.
           </span>
-        )
-      }
+        ),
+      },
     },
     wideDefinition: true,
     get metric_definition() {
@@ -751,14 +768,14 @@ export const metricMeta = {
                                 backgroundColor: colorRange[i],
                                 color: isLightColor(colorRange[i])
                                   ? "#333"
-                                  : "white"
+                                  : "white",
                               }
                             : {
                                 backgroundImage: `url("${colorRange[i]}")`,
                                 backgroundPosition: "center",
                                 padding: "3px 10px",
                                 border: "2px solid #BBDAF5",
-                                color: "black"
+                                color: "black",
                               }
                         }
                         className={infostyles.rect}
@@ -809,7 +826,7 @@ export const metricMeta = {
           getCovidLocalMetricLink("stay-at-home"),
           getCovidLocalMetricLink("safer-at-home"),
           getCovidLocalMetricLink("new normal"),
-          "mixed"
+          "mixed",
         ],
         subLabels: [
           <span style={{ visibility: "hidden" }}>x</span>,
@@ -818,7 +835,7 @@ export const metricMeta = {
           getCovidLocalMetricLink("(phase II)"),
           getCovidLocalMetricLink("(phase III)"),
           getCovidLocalMetricLink("(phase IV)"),
-          <span style={{ visibility: "hidden" }}>x</span>
+          <span style={{ visibility: "hidden" }}>x</span>,
         ],
         colorscale: d3
           .scaleOrdinal()
@@ -829,7 +846,7 @@ export const metricMeta = {
             getCovidLocalMetricLink("stay-at-home (phase II)"),
             getCovidLocalMetricLink("safer-at-home (phase III)"),
             getCovidLocalMetricLink("new normal (phase IV)"),
-            "mixed"
+            "mixed",
           ])
           .range([
             "#eaeaea",
@@ -838,10 +855,10 @@ export const metricMeta = {
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
-            dots
-          ]) // TODO dynamically
+            dots,
+          ]), // TODO dynamically
         // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
-      }
+      },
       // circle: {
       //   for: "bubble",
       //   type: "continuous",
@@ -855,8 +872,8 @@ export const metricMeta = {
       //     basemap: { min: "Minimal", max: "High" }
       //   }
       // }
-    }
-  }
+    },
+  },
 };
 
 /**
@@ -877,7 +894,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   // define date parameters for API calls
   const dates = {
     start_date: date.format("YYYY-MM-DD"),
-    end_date: date.format("YYYY-MM-DD")
+    end_date: date.format("YYYY-MM-DD"),
   };
 
   // collate query definitions based on the metrics that are to be displayed
@@ -896,7 +913,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
       queryDefs[d.id] = {
         queryFunc: d.queryFunc,
         ...params,
-        ...dates
+        ...dates,
       };
 
       // add trend query if applicable
@@ -905,7 +922,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
         queryDefs[trendKey] = {
           queryFunc: TrendQuery,
           ...d.params,
-          end: dates.end_date
+          end: dates.end_date,
         };
       }
     }
@@ -915,7 +932,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   const queries = {};
   for (const [k, v] of Object.entries(queryDefs)) {
     queries[k] = v.queryFunc({
-      ...v
+      ...v,
     });
   }
 
@@ -954,7 +971,7 @@ export const tooltipGetter = async ({
   const tooltip = {
     tooltipHeader: null,
     tooltipMainContent: null,
-    actions: null
+    actions: null,
   };
 
   // for each map type, return the appropriate tooltip formation
@@ -963,13 +980,13 @@ export const tooltipGetter = async ({
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.state_name,
-      subtitle: null
+      subtitle: null,
     };
   } else {
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.NAME,
-      subtitle: null
+      subtitle: null,
     };
   }
   tooltip.actions = [];
@@ -1004,7 +1021,7 @@ export const tooltipGetter = async ({
       const item = {
         label: thisMetricMeta.shortName || thisMetricMeta.metric_displayname,
         value: thisMetricMeta.value(v),
-        unit: thisMetricMeta.unit(v)
+        unit: thisMetricMeta.unit(v),
       };
 
       // TRENDS // ----------------------------------------------------------//
@@ -1034,7 +1051,7 @@ export const tooltipGetter = async ({
           ),
           noun,
           timeframe: thisMetricMeta.trendTimeframe,
-          classes: []
+          classes: [],
         };
       }
 
@@ -1111,7 +1128,7 @@ export const tooltipGetter = async ({
             ? filters.primary_ph_measure
             : ["Social distancing"],
         ph_measure_details:
-          plugins.fill !== "lockdown_level" ? filters.ph_measure_details : []
+          plugins.fill !== "lockdown_level" ? filters.ph_measure_details : [],
       };
       if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
       else policyFilters.iso3 = [d.properties.ISO_A3];
@@ -1119,14 +1136,14 @@ export const tooltipGetter = async ({
       const policies = await Policy({
         method: "post",
         filters: policyFilters,
-        fields: ["id", "place"]
+        fields: ["id", "place"],
       });
 
       const nPolicies = {
         total: 0,
         local: 0,
         state: 0,
-        country: 0
+        country: 0,
       };
       policies.data.forEach(d => {
         nPolicies.total += 1;
@@ -1154,7 +1171,7 @@ export const tooltipGetter = async ({
           plugins.fill !== "lockdown_level"
             ? filters.ph_measure_details || []
             : [],
-        dates_in_effect: filters.dates_in_effect
+        dates_in_effect: filters.dates_in_effect,
       };
 
       if (mapId === "us") {
@@ -1162,7 +1179,7 @@ export const tooltipGetter = async ({
         filtersForStr.area1 = [d.properties.state_name];
       } else {
         filtersForStr.country_name = [
-          `${d.properties.NAME} (${d.properties.ISO_A3})`
+          `${d.properties.NAME} (${d.properties.ISO_A3})`,
         ];
       }
       const filtersStr = JSON.stringify(filtersForStr);
@@ -1202,7 +1219,7 @@ export const tooltipGetter = async ({
         <div
           className={infostyles.badge}
           style={{
-            backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
+            backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v),
           }}
         >
           {thisMetricMeta.value(v)}
@@ -1234,7 +1251,7 @@ export const tooltipGetter = async ({
                 {message}
               </div>
             </>
-          )
+          ),
         });
       } else if (
         (state.lockdown_level === null || props.geoHaveData === false) &&
@@ -1271,7 +1288,7 @@ export const tooltipGetter = async ({
                   {message}
                 </div>
               </>
-            )
+            ),
           });
       }
 
@@ -1288,7 +1305,7 @@ const TableDrawer = ({
   open,
   openTableDrawer,
   setOpenTableDrawer,
-  children
+  children,
 }) => {
   return (
     <div className={styles.tableDrawer}>
@@ -1304,7 +1321,7 @@ const TableDrawer = ({
           {
             <i
               className={classNames("material-icons", {
-                [styles.flipped]: open
+                [styles.flipped]: open,
               })}
             >
               play_arrow
