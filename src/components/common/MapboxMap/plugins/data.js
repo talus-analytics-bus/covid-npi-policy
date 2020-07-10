@@ -1256,7 +1256,7 @@ export const tooltipGetter = async ({
               <br />
               level could be determined
               <br />
-              from available policies
+              from policies in effect
             </i>
           );
         } else {
