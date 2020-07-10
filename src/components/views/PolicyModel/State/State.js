@@ -1,12 +1,12 @@
-import React from 'react'
+import React from "react";
 
-import PolicyPlot from '../PolicyPlot/PolicyPlot'
-import states from '../PolicyModel/states.js'
+import PolicyPlot from "../PolicyPlot/PolicyPlot";
+import states from "../PolicyModel/states.js";
 
-import styles from './State.module.scss'
+import styles from "./State.module.scss";
 
 const formatNumber = number =>
-  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 const State = props => {
   // console.log(cumulativeCases);
@@ -23,11 +23,11 @@ const State = props => {
           <select
             value={props.selectedState}
             onChange={e => {
-              const newSelectedStates = [...props.selectedStates]
-              newSelectedStates[props.index] = e.target.value
-              props.setSelectedStates(newSelectedStates)
+              const newSelectedStates = [...props.selectedStates];
+              newSelectedStates[props.index] = e.target.value;
+              props.setSelectedStates(newSelectedStates);
             }}
-            aria-label={'Select a state to display'}
+            aria-label={"Select a state to display"}
           >
             {states.map(state => (
               <option key={state.abbr} value={state.abbr}>
@@ -38,8 +38,8 @@ const State = props => {
           <button
             className={styles.resetState}
             onClick={e => {
-              e.preventDefault()
-              props.resetState(props.selectedState)
+              e.preventDefault();
+              props.resetState(props.selectedState);
             }}
           >
             Reset Interventions
@@ -48,13 +48,13 @@ const State = props => {
             className={styles.removeState}
             disabled={props.selectedStates.length < 2}
             onClick={e => {
-              e.preventDefault()
-              const newSelectedStates = [...props.selectedStates]
-              newSelectedStates.splice(props.index, 1)
-              props.setSelectedStates(newSelectedStates)
+              e.preventDefault();
+              const newSelectedStates = [...props.selectedStates];
+              newSelectedStates.splice(props.index, 1);
+              props.setSelectedStates(newSelectedStates);
             }}
           >
-            Remove{' '}
+            Remove{" "}
             {states.find(state => state.abbr === props.selectedState).name}
           </button>
           {/* <h1> */}
@@ -86,11 +86,11 @@ const State = props => {
               COVID count with NO actions taken
             </label>
             <div>
-              <h4>[API]</h4>
+              <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
               <h5>cumulative cases</h5>
             </div>
             <div>
-              <h4>[API]</h4>
+              <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
               <h5>cumulative deaths</h5>
             </div>
           </div>
@@ -116,7 +116,7 @@ const State = props => {
         />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default State
+export default State;

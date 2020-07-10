@@ -39,7 +39,9 @@ const reconstructInterventions = (model, runData) => {
   const newIntervention = runData.interventions.slice(-1)[0];
   runData["dateRequested"] = new Date(model.dateRequested);
   runData["cases"] = model.cases;
+  runData["counterfactual_cases"] = model.counterfactual_cases;
   runData["deaths"] = model.deaths;
+  runData["counterfactual_deaths"] = model.counterfactual_deaths;
 
   // check if model interventions include the latest,
   // if not, copy the array from the old cached model
@@ -204,7 +206,7 @@ export const loadModels = async states => {
     })
   );
 
-  // console.log(models)
+  console.log(models);
   return models;
 };
 // setTimeout(() => {
