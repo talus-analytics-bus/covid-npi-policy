@@ -95,7 +95,7 @@ const MapboxMap = ({
         "case",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         0,
-        1
+        1,
       ]);
   };
 
@@ -196,7 +196,7 @@ const MapboxMap = ({
           height: "100%",
           longitude: longlat[0],
           latitude: longlat[1],
-          zoom: flyZoom
+          zoom: flyZoom,
         };
 
         setViewport(newViewport);
@@ -216,7 +216,7 @@ const MapboxMap = ({
       curve: 1,
       easing: function(t) {
         return t;
-      }
+      },
     });
 
     // show reset (assuming viewport is not the default one)
@@ -257,8 +257,8 @@ const MapboxMap = ({
               plugins,
               callback: () => {
                 setShowTooltip(true);
-              }
-            }))
+              },
+            })),
           }}
         />
       );
@@ -288,9 +288,9 @@ const MapboxMap = ({
         {
           sourceTypeKey: "circle",
           layerListKey: "circleLayers",
-          curOption: circle
+          curOption: circle,
         },
-        { sourceTypeKey: "fill", layerListKey: "fillLayers", curOption: fill }
+        { sourceTypeKey: "fill", layerListKey: "fillLayers", curOption: fill },
       ];
 
       // for each type of layer to check, hide the layer and its auxiliary
@@ -366,7 +366,7 @@ const MapboxMap = ({
             // set loading flag to false (this block won't run again for
             // this map)
             setLoading(false);
-          }
+          },
         });
       } else {
         // if map had already loaded, then just bind feature states using the
@@ -476,7 +476,7 @@ const MapboxMap = ({
             if (circle) layers.push(circle + "-circle");
             if (fill) layers.push(fill + "-fill");
             const features = map.queryRenderedFeatures(e.point, {
-              layers: layers
+              layers: layers,
             });
 
             // unhover the currently hovered feature if any
@@ -543,6 +543,7 @@ const MapboxMap = ({
           // when map has loaded, add event listener to update the map data
           // whenever the map style, i.e., the type of map, is changed
           const map = mapRef.getMap();
+          conosle.log("Loaded");
 
           updateFillOrder({ map, f: null });
 
@@ -555,13 +556,13 @@ const MapboxMap = ({
                 ...viewport,
                 zoom: map.getZoom(),
                 longitude: center.lng,
-                latitude: center.lat
+                latitude: center.lat,
               });
               setDefaultViewport({
                 ...viewport,
                 zoom: map.getZoom(),
                 longitude: center.lng,
-                latitude: center.lat
+                latitude: center.lat,
               });
               setShowReset(false);
               map.off("moveend", test);
@@ -571,6 +572,7 @@ const MapboxMap = ({
           }
 
           map.on("styledataloading", function() {
+            console.log("styledataloading");
             getMapData();
           });
         }}
@@ -607,7 +609,7 @@ const MapboxMap = ({
             {showLegend ? "hide legend" : "show legend"}
             <i
               className={classNames("material-icons", {
-                [styles.flipped]: showLegend
+                [styles.flipped]: showLegend,
               })}
             >
               play_arrow
@@ -632,7 +634,7 @@ const MapboxMap = ({
                         {mapId === "us" ? " (log scale)" : ""}
                       </span>
                     ),
-                    ...metricMeta[circle].legendInfo.circle
+                    ...metricMeta[circle].legendInfo.circle,
                   }}
                 />
               )}
@@ -650,7 +652,7 @@ const MapboxMap = ({
                     metric_displayname: (
                       <span>{getFillLegendName({ filters, fill })}</span>
                     ),
-                    ...metricMeta[fill].legendInfo.fill
+                    ...metricMeta[fill].legendInfo.fill,
                   }}
                 />
               )}
@@ -666,7 +668,7 @@ const MapboxMap = ({
             position: "absolute",
             bottom: "3px",
             left: "5px",
-            padding: 0
+            padding: 0,
           }}
         >
           <NavigationControl />
@@ -686,7 +688,7 @@ export const geoHaveData = [
   "MHL",
   "NGA",
   "PHL",
-  "USA"
+  "USA",
 ];
 
 export default MapboxMap;
