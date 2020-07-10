@@ -150,25 +150,27 @@ const PolicyModel = ({ setLoading, setPage }) => {
   return (
     <div className={styles.background}>
       <article className={styles.main}>
-        <div className={styles.dataDates}>
-          <p>
-            {dataDates && (
-              <>
-                Policy data as of{" "}
-                <strong>{dataDates.last_policy_update}</strong>
-              </>
-            )}
-          </p>
-          <p>
-            {dataDates && (
-              <>
-                Caseload data as of{" "}
-                <strong>{dataDates.last_data_update}</strong>
-              </>
-            )}
-          </p>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>Social distancing policy model</h1>
+          <div className={styles.dataDates}>
+            <p>
+              {dataDates && (
+                <>
+                  Policy data as of{" "}
+                  <strong>{dataDates.last_policy_update}</strong>
+                </>
+              )}
+            </p>
+            <p>
+              {dataDates && (
+                <>
+                  Caseload data as of{" "}
+                  <strong>{dataDates.last_data_update}</strong>
+                </>
+              )}
+            </p>
+          </div>
         </div>
-        <h1 className={styles.title}>Social distancing policy model</h1>
         <div className={styles.tabrow}>
           {/* <button */}
           {/*   onClick={() => setActiveTab('existing')} */}
