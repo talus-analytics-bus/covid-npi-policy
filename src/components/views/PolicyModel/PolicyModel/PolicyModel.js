@@ -277,6 +277,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   </div>
                 }
                 allowHTML={true}
+                interactive={true}
                 maxWidth={"30rem"}
                 theme={"light"}
                 placement={"bottom"}

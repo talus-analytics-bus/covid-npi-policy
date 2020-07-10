@@ -78,9 +78,18 @@ const State = props => {
               <h4>
                 {formatNumber(props.curves.cases)}{" "}
                 <Tippy
-                  content={`Total number of cumulative confirmed and probable cases as of ${props.dataDates &&
-                    props.dataDates.last_data_update}. Source: New York Times`}
+                  interactive={true}
                   allowHTML={true}
+                  content={
+                    <p>
+                      Total number of cumulative confirmed and probable cases as
+                      of {props.dataDates && props.dataDates.last_data_update}.
+                      Source:{" "}
+                      <a href={"https://github.com/nytimes/covid-19-data"}>
+                        New York Times{" "}
+                      </a>
+                    </p>
+                  }
                   maxWidth={"30rem"}
                   theme={"light"}
                   placement={"bottom"}
