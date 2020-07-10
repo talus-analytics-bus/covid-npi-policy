@@ -167,8 +167,6 @@ const PolicyModel = props => {
           1000 * 60 * 60 * 24 * 5
     );
 
-    console.log(nearbyInterventions);
-
     const dotHeight =
       props.caseLoadAxis[1] * (0.8 - nearbyInterventions.length * 0.15);
 
