@@ -107,7 +107,16 @@ const PolicyModel = ({ setLoading, setPage }) => {
   React.useEffect(() => {
     const getDataDates = async () => {
       const dates = await axios.get(API_URL + "update_date/");
-      setDataDates(dates.data);
+      const formattedDates = {};
+      formattedDates.last_policy_update = new Date(
+        dates.data.last_policy_update
+      ).toLocaleDateString();
+      formattedDates.last_data_update = new Date(
+        dates.data.last_data_update
+      ).toLocaleDateString();
+
+      setDataDates(formattedDates);
+      console.log(formattedDates);
     };
 
     getDataDates();
