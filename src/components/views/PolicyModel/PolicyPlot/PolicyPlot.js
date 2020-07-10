@@ -285,24 +285,21 @@ const PolicyModel = props => {
       >
         <VictoryLabel
           text="R Effective"
-          // x={4.5}
-          // y={4}
-          x={50}
-          y={50}
+          x={4.5}
+          y={4}
           style={{
             fontSize: 6,
             fontWeight: 700,
             fontFamily: "Rawline",
             fill: "#6d6d6d",
           }}
-          transform={"rotate(90)"}
         />
         <VictoryAxis
           dependentAxis
           tickFormat={tick => (tick === parseInt(tick) ? parseInt(tick) : null)}
           offsetX={30}
           crossAxis={false}
-          label={"R Eff"}
+          // label={"R Eff"}
           axisLabelComponent={
             <VictoryLabel
               dy={10}
