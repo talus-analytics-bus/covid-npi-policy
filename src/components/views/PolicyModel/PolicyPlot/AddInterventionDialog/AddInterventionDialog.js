@@ -54,6 +54,7 @@ const PastInterventionInfo = props => {
               Effective Date
               <input
                 type="date"
+                min={new Date().toISOString().substr(0, 10)}
                 defaultValue={
                   props.position.date === ""
                     ? null
