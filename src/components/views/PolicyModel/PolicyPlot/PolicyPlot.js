@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   VictoryChart,
   VictoryZoomContainer,
@@ -10,81 +10,81 @@ import {
   createContainer,
   LineSegment,
   VictoryPortal,
-} from 'victory'
+} from "victory";
 
-import AddInterventionCursor from './AddInterventionCursor/AddInterventionCursor'
-import PastInterventionInfo from './PastInterventionInfo/PastInterventionInfo'
-import AddInterventionDialog from './AddInterventionDialog/AddInterventionDialog'
-import TodayLabel from './TodayLabel/TodayLabel'
+import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
+import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
+import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
+import TodayLabel from "./TodayLabel/TodayLabel";
 
-import styles from './PolicyPlot.module.scss'
+import styles from "./PolicyPlot.module.scss";
 
 const plotColors = [
   // '#00a79d',
-  '#173244',
-  '#6C92AB',
-  '#aeaeae',
-  '#00447c',
-  '#aeaeae',
-  '#7a4500',
-  '#aeaeae',
-  '#774573',
-]
+  "#173244",
+  "#6C92AB",
+  "#aeaeae",
+  "#00447c",
+  "#aeaeae",
+  "#7a4500",
+  "#aeaeae",
+  "#774573",
+];
 
 const interventionColors = {
-  Lockdown: '#661B3C',
-  'Unclear lockdown level': '#7F7F7F',
-  'Mixed distancing levels': '#7F7F7F',
-  'Stay at home': '#C1272D',
-  'Safer at home': '#D66B3E',
-  'New open': '#ECBD62',
-  'New normal': '#ECBD62',
-}
+  Lockdown: "#661B3C",
+  "Unclear lockdown level": "#7F7F7F",
+  "Mixed distancing levels": "#7F7F7F",
+  "Stay at home": "#C1272D",
+  "Safer at home": "#D66B3E",
+  "New open": "#ECBD62",
+  "New normal": "#ECBD62",
+};
 
-const VictoryZoomCursorContainer = createContainer('zoom', 'cursor')
+const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
 
 const PolicyModel = props => {
   const [pastInterventionProps, setPastInterventionProps] = React.useState({
     x: 0,
     y: 0,
-    policyName: '',
-    effectiveDate: '',
-  })
+    policyName: "",
+    effectiveDate: "",
+  });
 
   const [addIntDialogState, setAddIntDialogState] = React.useState({
     show: false,
     x: 0,
     y: 0,
-    date: '',
-  })
+    date: "",
+  });
 
   const [windowSize, setWindowSize] = React.useState({
     height: window.innerHeight,
     width: window.innerWidth,
-  })
+  });
 
   const updateWindowSize = e => {
     setWindowSize({
       height: window.innerHeight,
       width: window.innerWidth,
-    })
-  }
+    });
+  };
 
   React.useEffect(() => {
-    window.addEventListener('resize', updateWindowSize)
+    window.addEventListener("resize", updateWindowSize);
     return () => {
-      window.removeEventListener('resize', updateWindowSize)
-    }
-  }, [])
+      window.removeEventListener("resize", updateWindowSize);
+    };
+  }, []);
 
-  const percentProportion = 0.1
-  const chartProportion = 0.45
+  const percentProportion = 0.13;
+  const chartProportion = 0.45;
   // const navigatorProportion = 0.125
 
   // The actuals lines of the plot
   const actualsLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== 'R effective') {
+      if (curveName !== "R effective") {
         return (
           <VictoryLine
             key={curveName}
@@ -94,19 +94,19 @@ const PolicyModel = props => {
             data={data.actuals}
             // interpolation={'monotoneX'}
           />
-        )
+        );
       } else {
-        return false
+        return false;
       }
     }
-  )
+  );
 
   // WHY doesn't Victory let me return multiple lines from
   // the same map function? no reason that shouldn't work.
   // the model (dashed) lines of the plot
   const modelLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== 'R effective') {
+      if (curveName !== "R effective") {
         return (
           <VictoryLine
             key={curveName}
@@ -118,21 +118,21 @@ const PolicyModel = props => {
               },
             }}
             data={data.model}
-            interpolation={'natural'}
+            interpolation={"natural"}
           />
-        )
+        );
       } else {
-        return false
+        return false;
       }
     }
-  )
+  );
 
   const interventionLines = props.data.interventions.map(intervention => (
     <VictoryLine
       key={intervention.name + intervention.intervention_start_date}
       style={{
         data: {
-          stroke: interventionColors[intervention.name.split('_')[0]],
+          stroke: interventionColors[intervention.name.split("_")[0]],
           strokeWidth: 1,
         },
       }}
@@ -154,68 +154,79 @@ const PolicyModel = props => {
         },
       ]}
     />
-  ))
+  ));
 
-  const interventionPoints = props.data.interventions.map(intervention => (
-    <VictoryScatter
-      key={intervention.name + intervention.intervention_start_date}
-      labelComponent={<VictoryLabel style={{ display: 'none' }} />}
-      size={
-        new Date(intervention.intervention_start_date) > new Date() ? 3.5 : 4
-      }
-      style={{
-        data: {
-          fill:
-            new Date(intervention.intervention_start_date) > new Date()
-              ? 'white'
-              : interventionColors[intervention.name.split('_')[0]],
-          stroke:
-            new Date(intervention.intervention_start_date) > new Date()
-              ? interventionColors[intervention.name.split('_')[0]]
-              : 'white',
-          strokeWidth: 1,
-        },
-      }}
-      events={[
-        {
-          childName: 'all',
-          target: 'data',
+  const interventionPoints = props.data.interventions.map(intervention => {
+    const interStartDate = new Date(intervention.intervention_start_date);
+    const now = new Date();
 
-          eventHandlers: {
-            onMouseEnter: (event, eventKey) => {
-              setPastInterventionProps({
-                state: props.selectedState,
-                policyName: intervention.name.split('_')[0],
-                effectiveDate: intervention.intervention_start_date,
-                x:
-                  window.pageXOffset +
-                  event.target.getBoundingClientRect().left,
-                y:
-                  new Date(intervention.intervention_start_date) < new Date()
-                    ? window.pageYOffset +
-                      event.target.getBoundingClientRect().top
-                    : // need to adjust for the different size circle
-                      window.pageYOffset +
-                      event.target.getBoundingClientRect().top -
-                      2,
-              })
+    const nearbyInterventions = props.data.interventions.filter(
+      inter =>
+        new Date(inter.intervention_start_date) < interStartDate &&
+        interStartDate - new Date(inter.intervention_start_date) <
+          1000 * 60 * 60 * 24 * 5
+    );
+
+    console.log(nearbyInterventions);
+
+    const dotHeight =
+      props.caseLoadAxis[1] * (0.8 - nearbyInterventions.length * 0.15);
+
+    return (
+      <VictoryScatter
+        key={intervention.name + intervention.intervention_start_date}
+        labelComponent={<VictoryLabel style={{ display: "none" }} />}
+        size={interStartDate > now ? 3.5 : 4}
+        style={{
+          data: {
+            fill:
+              interStartDate > now
+                ? "white"
+                : interventionColors[intervention.name.split("_")[0]],
+            stroke:
+              interStartDate > now
+                ? interventionColors[intervention.name.split("_")[0]]
+                : "white",
+            strokeWidth: 1,
+          },
+        }}
+        events={[
+          {
+            childName: "all",
+            target: "data",
+
+            eventHandlers: {
+              onMouseEnter: (event, eventKey) => {
+                setPastInterventionProps({
+                  state: props.selectedState,
+                  policyName: intervention.name.split("_")[0],
+                  effectiveDate: intervention.intervention_start_date,
+                  x:
+                    window.pageXOffset +
+                    event.target.getBoundingClientRect().left,
+                  y:
+                    interStartDate < now
+                      ? window.pageYOffset +
+                        event.target.getBoundingClientRect().top
+                      : // need to adjust for the different size circle
+                        window.pageYOffset +
+                        event.target.getBoundingClientRect().top -
+                        2,
+                });
+              },
             },
           },
-        },
-      ]}
-      data={[
-        {
-          x: Date.parse(intervention.intervention_start_date),
-          y:
-            // new Date(intervention.intervention_start_date) > new Date()
-            // ? -(props.caseLoadAxis[1] * 0.004)
-            // :
-            props.caseLoadAxis[1] * 0.8,
-          label: intervention.name,
-        },
-      ]}
-    />
-  ))
+        ]}
+        data={[
+          {
+            x: interStartDate,
+            y: dotHeight,
+            label: intervention.name,
+          },
+        ]}
+      />
+    );
+  });
 
   return (
     <section className={styles.main}>
@@ -248,7 +259,7 @@ const PolicyModel = props => {
       {/*   </linearGradient> */}
       {/* </svg> */}
       <VictoryChart
-        padding={{ top: 11, bottom: 0, left: 30, right: 10 }}
+        padding={{ top: 11, bottom: 2, left: 30, right: 10 }}
         domainPadding={0}
         responsive={true}
         width={500}
@@ -258,8 +269,8 @@ const PolicyModel = props => {
             ? (windowSize.height / windowSize.width) * 500 * percentProportion
             : 25
         }
-        style={{ height: percentProportion * 100 + '%' }}
-        scale={{ x: 'time' }}
+        style={{ height: percentProportion * 100 + "%" }}
+        scale={{ x: "time" }}
         containerComponent={
           <VictoryZoomContainer
             className={styles.pct}
@@ -267,55 +278,72 @@ const PolicyModel = props => {
             zoomDimension="x"
             zoomDomain={{ x: props.zoomDateRange }}
             onZoomDomainChange={domain => {
-              props.setZoomDateRange(domain.x)
+              props.setZoomDateRange(domain.x);
             }}
           />
         }
       >
         <VictoryLabel
           text="R Effective"
-          x={4.5}
-          y={4}
+          // x={4.5}
+          // y={4}
+          x={50}
+          y={50}
           style={{
             fontSize: 6,
             fontWeight: 700,
-            fontFamily: 'Rawline',
-            fill: '#6d6d6d',
+            fontFamily: "Rawline",
+            fill: "#6d6d6d",
           }}
+          transform={"rotate(90)"}
         />
         <VictoryAxis
           dependentAxis
           tickFormat={tick => (tick === parseInt(tick) ? parseInt(tick) : null)}
           offsetX={30}
+          crossAxis={false}
+          label={"R Eff"}
+          axisLabelComponent={
+            <VictoryLabel
+              dy={10}
+              style={{
+                fill: "#6d6d6d",
+                fontFamily: "Rawline",
+                fontWeight: "500",
+                fontSize: 5,
+                textAnchor: "middle",
+              }}
+            />
+          }
           style={{
             grid: {
-              stroke: '#aaaaaa',
+              stroke: "#aaaaaa",
               strokeWidth: 0,
             },
-            axis: { stroke: '#fff', strokeWidth: 0 },
+            axis: { stroke: "#fff", strokeWidth: 0 },
             ticks: { strokeWidth: 0 },
             tickLabels: {
-              fill: '#6d6d6d',
-              fontFamily: 'Rawline',
-              fontWeight: '500',
+              fill: "#6d6d6d",
+              fontFamily: "Rawline",
+              fontWeight: "500",
               fontSize: 5,
-              textAnchor: 'middle',
+              textAnchor: "middle",
             },
           }}
         />
         <VictoryArea
           style={{
-            data: { stroke: 'grey', strokeWidth: 0.5, fill: '#3F9385' },
+            data: { stroke: "grey", strokeWidth: 0.5, fill: "#3F9385" },
           }}
-          data={props.data.curves['R effective'].actuals}
-          interpolation={'stepAfter'}
+          data={props.data.curves["R effective"].actuals}
+          interpolation={"stepAfter"}
         />
         <VictoryArea
           style={{
-            data: { stroke: 'grey', strokeWidth: 0.5, fill: '#C9E0DC' },
+            data: { stroke: "grey", strokeWidth: 0.5, fill: "#C9E0DC" },
           }}
-          data={props.data.curves['R effective'].model}
-          interpolation={'stepAfter'}
+          data={props.data.curves["R effective"].model}
+          interpolation={"stepAfter"}
         />
         <VictoryLine
           labelComponent={
@@ -324,7 +352,7 @@ const PolicyModel = props => {
             </VictoryPortal>
           }
           labels={[`TODAY`]}
-          style={{ data: { stroke: '#7FC6FA', strokeWidth: 1.5 } }}
+          style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
           data={[
             { x: new Date(), y: 0 },
             { x: new Date(), y: 3 },
@@ -334,18 +362,18 @@ const PolicyModel = props => {
       <VictoryChart
         // animate={{ duration: 1000 }}
         padding={{ top: 12, bottom: 20, left: 30, right: 10 }}
-        domainPadding={0}
+        domainPadding={5}
         responsive={true}
         width={500}
         // height={300}
         events={
-          props.activeTab === 'interventions'
+          props.activeTab === "interventions"
             ? [
                 {
-                  target: 'parent',
+                  target: "parent",
                   eventHandlers: {
                     onClick: (event, eventKey) => {
-                      const today = new Date()
+                      const today = new Date();
                       if (
                         eventKey.cursorValue !== null &&
                         eventKey.cursorValue.x > today
@@ -355,7 +383,7 @@ const PolicyModel = props => {
                           x: event.clientX,
                           y: window.pageYOffset + event.clientY,
                           date: eventKey.cursorValue.x,
-                        })
+                        });
                       }
                     },
                   },
@@ -368,20 +396,20 @@ const PolicyModel = props => {
             ? (windowSize.height / windowSize.width) * 500 * chartProportion
             : 100
         }
-        style={{ height: chartProportion * 100 + '%' }}
-        scale={{ x: 'time' }}
+        style={{ height: chartProportion * 100 + "%" }}
+        scale={{ x: "time" }}
         containerComponent={
           <VictoryZoomCursorContainer
             className={styles.chart}
             cursorLabelComponent={
-              (props.activeTab === 'interventions') &
-              (pastInterventionProps.policyName === '') ? (
+              (props.activeTab === "interventions") &
+              (pastInterventionProps.policyName === "") ? (
                 <AddInterventionCursor showLabel={!addIntDialogState.show} />
               ) : (
                 <LineSegment />
               )
             }
-            cursorComponent={<LineSegment style={{ display: 'none' }} />}
+            cursorComponent={<LineSegment style={{ display: "none" }} />}
             cursorLabel={({ datum }) => `add intervention`}
             allowZoom={false}
             // If we want to re-enable panning, there will
@@ -391,7 +419,7 @@ const PolicyModel = props => {
             zoomDimension="x"
             zoomDomain={{ x: props.zoomDateRange }}
             onZoomDomainChange={domain => {
-              props.setZoomDateRange(domain.x)
+              props.setZoomDateRange(domain.x);
             }}
           />
         }
@@ -403,25 +431,25 @@ const PolicyModel = props => {
           style={{
             fontSize: 6,
             fontWeight: 700,
-            fontFamily: 'Rawline',
-            fill: '#6d6d6d',
+            fontFamily: "Rawline",
+            fill: "#6d6d6d",
           }}
         />
         <VictoryAxis
           dependentAxis
-          tickFormat={tick => (tick >= 1000 ? tick / 1000 + 'K' : tick)}
+          tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
           offsetX={35}
           style={{
             grid: {
-              stroke: '#aaaaaa',
+              stroke: "#aaaaaa",
               strokeWidth: 1,
             },
-            axis: { stroke: '#fff', strokeWidth: 0 },
+            axis: { stroke: "#fff", strokeWidth: 0 },
             ticks: { strokeWidth: 0 },
             tickLabels: {
-              fill: '#6d6d6d',
-              fontFamily: 'Rawline',
-              fontWeight: '500',
+              fill: "#6d6d6d",
+              fontFamily: "Rawline",
+              fontWeight: "500",
               fontSize: 6,
             },
           }}
@@ -430,16 +458,16 @@ const PolicyModel = props => {
           orientation="bottom"
           style={{
             tickLabels: {
-              fontFamily: 'Rawline',
-              fontWeight: '500',
+              fontFamily: "Rawline",
+              fontWeight: "500",
               fontSize: 7,
-              fill: '#6d6d6d',
+              fill: "#6d6d6d",
             },
           }}
         />
         {/* Today marker */}
         <VictoryLine
-          style={{ data: { stroke: '#7FC6FA', strokeWidth: 1.5 } }}
+          style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
           data={[
             { x: new Date(), y: 0 },
             { x: new Date(), y: props.caseLoadAxis[1] },
@@ -460,7 +488,7 @@ const PolicyModel = props => {
       {/*   caseLoadAxis={props.caseLoadAxis} */}
       {/* /> */}
     </section>
-  )
-}
+  );
+};
 
-export default PolicyModel
+export default PolicyModel;

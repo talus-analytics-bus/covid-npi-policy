@@ -20,21 +20,24 @@ const State = props => {
     <section className={styles.state}>
       <header>
         <div className={styles.stateName}>
-          <select
-            value={props.selectedState}
-            onChange={e => {
-              const newSelectedStates = [...props.selectedStates];
-              newSelectedStates[props.index] = e.target.value;
-              props.setSelectedStates(newSelectedStates);
-            }}
-            aria-label={"Select a state to display"}
-          >
-            {states.map(state => (
-              <option key={state.abbr} value={state.abbr}>
-                {state.name}
-              </option>
-            ))}
-          </select>
+          <label>
+            Change state
+            <select
+              value={props.selectedState}
+              onChange={e => {
+                const newSelectedStates = [...props.selectedStates];
+                newSelectedStates[props.index] = e.target.value;
+                props.setSelectedStates(newSelectedStates);
+              }}
+              aria-label={"Select a state to display"}
+            >
+              {states.map(state => (
+                <option key={state.abbr} value={state.abbr}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             className={styles.resetState}
             onClick={e => {
@@ -83,7 +86,7 @@ const State = props => {
                   props.setCounterfactualSelected(!props.counterfactualSelected)
                 }
               />
-              COVID count with NO actions taken
+              What if we had done nothing?
             </label>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
