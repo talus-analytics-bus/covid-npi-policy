@@ -88,7 +88,7 @@ const MapTooltip = ({
         <div className={styles.content}>
           {tooltipMainContent.length === 0 && (
             <div>
-              <i>No policies to show</i>
+              <i>No data to show</i>
             </div>
           )}
           {tooltipMainContent.map(d => (

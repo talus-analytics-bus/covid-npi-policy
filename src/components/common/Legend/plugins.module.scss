@@ -1,0 +1,18 @@
+@import "../../../assets/styles/vars.scss";
+.style {
+  .content {
+    .entry {
+      .quantized {
+        .rectGroup {
+          &:nth-child(2) {
+            .rect {
+              &.labelsInside {
+                border-color: #808080 !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

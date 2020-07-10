@@ -12,7 +12,8 @@ import * as d3 from "d3/dist/d3.min";
 import moment from "moment";
 
 // utilities
-import { getLog10Scale, comma } from "../../../misc/Util";
+import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
+import { geoHaveData } from "../MapboxMap";
 
 // assets
 import dots from "./assets/images/dots.png";
@@ -67,7 +68,69 @@ const circleStyles = {
         return getLog10Scale({
           minSize: 5,
           zeroSize: 5,
-          maxValue: 1e9,
+          maxValue: 1e7,
+          featurePropertyKey: key
+        });
+      }
+    };
+  },
+  "metric-test-transp-linear": key => {
+    return {
+      circleColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#333",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "white"
+      ],
+      circleOpacity: 0.5,
+      circleStrokeColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#b3b3b3",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "#e65d36"
+      ],
+      circleStrokeOpacity: 1,
+      circleStrokeWidth: 3,
+      get circleRadius() {
+        return getLinearScale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 5e5,
+          featurePropertyKey: key
+        });
+      }
+    };
+  },
+  "metric-test-solid-linear": key => {
+    return {
+      circleColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#333",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "#e65d36"
+      ],
+      circleOpacity: 0.5,
+      circleStrokeColor: [
+        "case",
+        ["==", ["feature-state", key], 0],
+        "#b3b3b3",
+        ["==", ["feature-state", key], null],
+        "transparent",
+        "#e65d36"
+      ],
+      circleStrokeOpacity: 1,
+      circleStrokeWidth: 3,
+      get circleRadius() {
+        return getLinearScale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 3e6,
           featurePropertyKey: key
         });
       }
@@ -113,14 +176,21 @@ const fillStyles = {
   },
   "metric-test-outline": key => {
     return {
-      "line-color": "#ffffff",
+      "line-color": [
+        "case",
+        ["==", ["has", "state_name"], true],
+        "#ffffff",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        "#808080",
+        "#ffffff"
+      ],
       "line-width": [
         "case",
         ["==", ["feature-state", "clicked"], true],
-        6,
+        2,
         ["==", ["feature-state", "hovered"], true],
-        6,
-        2
+        2,
+        1
       ]
     };
   },
@@ -144,10 +214,14 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
-        ["==", ["feature-state", key], null],
-        "#eaeaea",
         ["==", ["feature-state", key], "t"],
         "#66CAC4",
+        ["==", ["has", "state_name"], true],
+        "#eaeaea",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        "#fff",
+        ["==", ["feature-state", key], null],
+        "#eaeaea",
         "#eaeaea"
       ]
     };
@@ -160,8 +234,6 @@ const fillStyles = {
     return {
       "fill-color": [
         "case",
-        ["==", ["feature-state", key], null],
-        "#eaeaea",
         ["==", ["feature-state", key], "Mixed distancing levels"],
         "transparent",
         ["==", ["feature-state", key], "New normal"],
@@ -170,6 +242,14 @@ const fillStyles = {
         "#86BFEB",
         ["==", ["feature-state", key], "Stay at home"],
         "#549FE2",
+        ["==", ["feature-state", key], "Lockdown"],
+        "#2165a1",
+        ["==", ["has", "state_name"], true],
+        "#eaeaea",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        "#ffffff",
+        ["==", ["feature-state", key], null],
+        "#eaeaea",
         "#eaeaea"
       ]
     };

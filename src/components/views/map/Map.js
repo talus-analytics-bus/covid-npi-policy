@@ -48,9 +48,10 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   const [mapId, setMapId] = useState(defaults.mapId);
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
-  const caseloadLastUpdated = versions.find(
-    d => d.type === "COVID-19 caseload data"
-  );
+  const caseloadLastUpdated =
+    mapId === "us"
+      ? versions.find(d => d.type === "COVID-19 caseload data")
+      : versions.find(d => d.type === "COVID-19 caseload data (countries)");
   const caseloadLastUpdatedDate = caseloadLastUpdated
     ? moment(caseloadLastUpdated.last_datum_date)
     : moment();
@@ -89,7 +90,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       // additional filters
       ph_measure_details: {
         field: "ph_measure_details",
-        label: "Policy subcategory",
+        label: "Policy subcategory filter",
         radio: false,
         primary: "primary_ph_measure",
         entity_name: "Policy",
@@ -148,7 +149,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // CONSTANTS // -----------------------------------------------------------//
   // last updated date of overall data
-  const lastUpdatedDateOverall = versions[0].date;
+  const lastUpdatedDateOverall = versions.filter(d => {
+    if (d.type === "COVID-19 caseload data (countries)" && mapId === "us") {
+      return false;
+    } else if (d.type === "COVID-19 caseload data" && mapId === "global") {
+      return false;
+    } else return true;
+  })[0].date;
 
   // collate mapbox component for the currently enabled maps
   // for each map defined in `mapStyles` (see ./plugins/sources.js):
@@ -232,21 +239,36 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             place={"left"}
                             text={
                               <div>
-                                {versions.map(d => (
-                                  <p key={d.type}>
-                                    <b>{d.type}</b> last updated on{" "}
-                                    {moment(d.date).format("MMM D, YYYY")}
-                                    {d.last_datum_date !== null && (
-                                      <span>
-                                        {" "}
-                                        with data available through{" "}
-                                        {moment(d.last_datum_date).format(
-                                          "MMM D, YYYY"
-                                        )}
-                                      </span>
-                                    )}
-                                  </p>
-                                ))}
+                                {versions
+                                  .filter(d => {
+                                    if (
+                                      d.type ===
+                                        "COVID-19 caseload data (countries)" &&
+                                      mapId === "us"
+                                    ) {
+                                      return false;
+                                    } else if (
+                                      d.type === "COVID-19 caseload data" &&
+                                      mapId === "global"
+                                    ) {
+                                      return false;
+                                    } else return true;
+                                  })
+                                  .map(d => (
+                                    <p key={d.type}>
+                                      <b>{d.type}</b> last updated on{" "}
+                                      {moment(d.date).format("MMM D, YYYY")}
+                                      {d.last_datum_date !== null && (
+                                        <span>
+                                          {" "}
+                                          with data available through{" "}
+                                          {moment(d.last_datum_date).format(
+                                            "MMM D, YYYY"
+                                          )}
+                                        </span>
+                                      )}
+                                    </p>
+                                  ))}
                               </div>
                             }
                             setInfoTooltipContent={props.setInfoTooltipContent}

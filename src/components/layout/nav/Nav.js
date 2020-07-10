@@ -92,6 +92,15 @@ const Nav = ({ page, ...props }) => {
               onClick={() => {
                 setShowMobileMenu(false);
               }}
+              className={page === "model" ? styles.active : ""}
+              to={"/model"}
+            >
+              Policy model
+            </Link>
+            <Link
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
               className={page === "data" ? styles.active : ""}
               to={"/data"}
             >

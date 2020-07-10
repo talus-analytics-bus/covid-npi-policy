@@ -90,12 +90,9 @@ const App = () => {
 
   // set versions data from API call
   useEffect(() => {
-    // setVersions([]);
     getData().then(newVersions => setVersions(newVersions));
   }, []);
 
-  console.log("versions");
-  console.log(versions);
   if (versions === null) return <div />;
   else
     return (
