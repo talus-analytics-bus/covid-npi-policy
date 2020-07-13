@@ -28,14 +28,13 @@ const API_URL = process.env.REACT_APP_API_URL;
 // primary data viewing and download page
 const Data = ({
   setLoading,
+  loading,
   setInfoTooltipContent,
   setPage,
   urlFilterParams
 }) => {
   const [docType, setDocType] = useState("policy");
-  const [entityInfo, setEntityInfo] = useState(
-    docType === "policy" ? policyInfo : planInfo
-  );
+  const [entityInfo, setEntityInfo] = useState({});
   // set `unspecified` component, etc., from entity info
   const unspecified = entityInfo.unspecified;
   const nouns = entityInfo.nouns;
@@ -73,19 +72,21 @@ const Data = ({
    * @param  {Object}  [filters={}] [description]
    * @return {Promise}              [description]
    */
-  const getData = async ({ filters: {}, entityInfoForQuery }) => {
-    const method = Object.keys(filters).length === 0 ? "get" : "post";
+  const getData = async ({ filtersForQuery, entityInfoForQuery }) => {
+    const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
     const initColumns = entityInfoForQuery.getColumns({ metadata: {} });
-
     const queries = {
-      instances: entityInfoForQuery.dataQuery({ method, filters }),
+      instances: entityInfoForQuery.dataQuery({
+        method,
+        filters: filtersForQuery
+      }),
       metadata: Metadata({
         method: "get",
         fields: initColumns.map(d => {
           if (!d.dataField.includes(".")) return docType + "." + d.dataField;
           else return d.dataField;
         }),
-        entity_class_name: nouns.s
+        entity_class_name: entityInfoForQuery.nouns.s
       })
     };
 
@@ -175,6 +176,7 @@ const Data = ({
   // when doc type changes, nullify columns / data / filter defs, then update
   // entity info
   useEffect(() => {
+    setLoading(true);
     setColumns(null);
     setData(null);
     setFilterDefs(null);
@@ -183,28 +185,23 @@ const Data = ({
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
     setEntityInfo(newEntityInfo);
     getData({
-      filters: {},
+      filtersForQuery: {},
       entityInfoForQuery: newEntityInfo,
       initializingForQuery: true
     });
   }, [docType]);
 
-  // // when entity info updated, update cols, data, and filter defs
-  // useEffect(() => {
-  //   console.log("Entity info is: " + entityInfo.nouns.s);
-  //
-  //   // set data
-  //   getData(filters);
-  // }, [entityInfo]);
-
-  // // when filters change, get data
-  // useEffect(() => {
-  //   console.log("Filters changed, getting new data");
-  //   console.log(entityInfo);
-  //
-  //   // set data
-  //   getData(filters);
-  // }, [filters]);
+  // when filters are updated, update data
+  useEffect(() => {
+    if (!loading) {
+      console.log("Doing it");
+      getData({
+        filtersForQuery: filters,
+        entityInfoForQuery: entityInfo,
+        initializingForQuery: true
+      });
+    }
+  }, [filters]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
