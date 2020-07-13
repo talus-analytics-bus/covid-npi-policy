@@ -70,7 +70,6 @@ export default function parseModelCurves(
 
     // initial r_0 for the percentage change calc
     const initialR_0 = trimmedData[0]["R effective"];
-    console.log(initialR_0);
 
     // create basic structure
     curves[state].curves["pctChange"] = {};
@@ -172,7 +171,7 @@ export default function parseModelCurves(
     curves[state].yMax = Math.max(...peaks);
   });
 
-  console.log(curves);
+  // console.log(curves);
 
   return curves;
 }

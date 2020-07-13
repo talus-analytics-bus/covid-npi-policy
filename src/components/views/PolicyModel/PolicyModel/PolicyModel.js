@@ -36,6 +36,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // 'infected_c',
     // 'dead',
     "R effective",
+    "pctChange",
   ]);
 
   const [curves, setCurves] = useState();
@@ -116,7 +117,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
       ).toLocaleDateString();
 
       setDataDates(formattedDates);
-      console.log(formattedDates);
     };
 
     getDataDates();

@@ -60,6 +60,10 @@ const LoadingState = props => {
                   model: [{ x: new Date("2020-01-01"), y: 0 }],
                   actuals: [{ x: new Date("2020-01-01"), y: 0 }],
                 },
+                pctChange: {
+                  model: [{ x: new Date("2020-01-01"), y: 0 }],
+                  actuals: [{ x: new Date("2020-01-01"), y: 0 }],
+                },
               },
               interventions: [],
               deaths: 0,

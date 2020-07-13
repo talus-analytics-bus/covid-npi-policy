@@ -1,22 +1,22 @@
-import React from 'react'
+import React from "react";
 import {
   VictoryChart,
   VictoryLine,
   VictoryArea,
   VictoryBrushContainer,
   VictoryAxis,
-} from 'victory'
+} from "victory";
 
-import CustomBrush from '../CustomBrush/CustomBrush'
-import styles from './NavigatorPlot.module.scss'
+import CustomBrush from "../CustomBrush/CustomBrush";
+import styles from "./NavigatorPlot.module.scss";
 
-const plotColors = ['#49615F99', '#394C5B99', '#4D3F2D99', '#4B384A99']
+const plotColors = ["#49615F99", "#394C5B99", "#4D3F2D99", "#4B384A99"];
 
 const NavigatorPlot = props => {
   // The actuals lines of the plot
   const actualsLines = Object.entries(props.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== 'R effective') {
+      if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
             key={curveName}
@@ -26,19 +26,19 @@ const NavigatorPlot = props => {
             data={data.actuals}
             // interpolation={'monotoneX'}
           />
-        )
+        );
       } else {
-        return false
+        return false;
       }
     }
-  )
+  );
 
   // WHY doesn't Victory let me return multiple lines from
   // the same map function? no reason that shouldn't work.
   // the model (dashed) lines of the plot
   const modelLines = Object.entries(props.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== 'R effective') {
+      if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
             key={curveName}
@@ -50,14 +50,14 @@ const NavigatorPlot = props => {
               },
             }}
             data={data.model}
-            interpolation={'monotoneX'}
+            interpolation={"monotoneX"}
           />
-        )
+        );
       } else {
-        return false
+        return false;
       }
     }
-  )
+  );
 
   return (
     <div className={styles.background}>
@@ -70,7 +70,7 @@ const NavigatorPlot = props => {
         padding={{ top: 0, bottom: 25, left: 0, right: 0 }}
         domainPadding={10}
         responsive={true}
-        scale={{ x: 'time' }}
+        scale={{ x: "time" }}
         // padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
         containerComponent={
           <VictoryBrushContainer
@@ -79,7 +79,7 @@ const NavigatorPlot = props => {
             brushDomain={{ x: props.zoomDateRange }}
             onBrushDomainChange={domain => {
               // props.setZoomDomain({ x: domain.x, y: props.zoomDomain.y });
-              props.setZoomDateRange(domain.x)
+              props.setZoomDateRange(domain.x);
             }}
           />
         }
@@ -94,10 +94,10 @@ const NavigatorPlot = props => {
           // }
           style={{
             tickLabels: {
-              fontFamily: 'Rawline',
-              fontWeight: '500',
-              fontSize: '5',
-              fill: '#6d6d6d',
+              fontFamily: "Rawline",
+              fontWeight: "500",
+              fontSize: "5",
+              fill: "#6d6d6d",
             },
           }}
         />
@@ -107,7 +107,7 @@ const NavigatorPlot = props => {
 
         <VictoryArea
           style={{
-            data: { fill: 'gray', opacity: 0.25 },
+            data: { fill: "gray", opacity: 0.25 },
           }}
           data={[
             { x: props.domain[0], y: props.caseLoadAxis[1] },
@@ -116,29 +116,27 @@ const NavigatorPlot = props => {
         />
         <VictoryArea
           style={{
-            data: { fill: 'gray', opacity: 0.25 },
+            data: { fill: "gray", opacity: 0.25 },
           }}
           data={[
             { x: props.domain[1], y: props.caseLoadAxis[1] },
             { x: props.zoomDateRange[1], y: props.caseLoadAxis[1] },
           ]}
         />
-        {
-          // only show date line when date is outside the range
-          (new Date() < props.zoomDateRange[0] ||
-            new Date() > props.zoomDateRange[1]) && (
-            <VictoryLine
-              style={{ data: { stroke: 'skyblue', strokeWidth: 1 } }}
-              data={[
-                { x: new Date(), y: 0 },
-                { x: new Date(), y: props.caseLoadAxis[1] },
-              ]}
-            />
-          )
-        }
+        {// only show date line when date is outside the range
+        (new Date() < props.zoomDateRange[0] ||
+          new Date() > props.zoomDateRange[1]) && (
+          <VictoryLine
+            style={{ data: { stroke: "skyblue", strokeWidth: 1 } }}
+            data={[
+              { x: new Date(), y: 0 },
+              { x: new Date(), y: props.caseLoadAxis[1] },
+            ]}
+          />
+        )}
       </VictoryChart>
     </div>
-  )
-}
+  );
+};
 
-export default NavigatorPlot
+export default NavigatorPlot;

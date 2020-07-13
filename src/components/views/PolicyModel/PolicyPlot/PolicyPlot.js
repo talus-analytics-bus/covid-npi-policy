@@ -106,7 +106,7 @@ const PolicyModel = props => {
   // the model (dashed) lines of the plot
   const modelLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== "R effective") {
+      if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
             key={curveName}
@@ -330,14 +330,14 @@ const PolicyModel = props => {
           style={{
             data: { stroke: "grey", strokeWidth: 0.5, fill: "#3F9385" },
           }}
-          data={props.data.curves["R effective"].actuals}
+          data={props.data.curves["pctChange"].actuals}
           interpolation={"stepAfter"}
         />
         <VictoryArea
           style={{
             data: { stroke: "grey", strokeWidth: 0.5, fill: "#C9E0DC" },
           }}
-          data={props.data.curves["R effective"].model}
+          data={props.data.curves["pctChange"].model}
           interpolation={"stepAfter"}
         />
         <VictoryLine
