@@ -51,6 +51,8 @@ $grey-highlight: #eee;
     align-items: space-between;
 
     .closeButton {
+      position: relative;
+      top: -0.125rem;
       background: none;
       border: none;
       padding: 0;
@@ -143,7 +145,7 @@ $grey-highlight: #eee;
   }
 
   .greySection {
-    padding-top: 1rem;
+    padding-top: 1.25rem;
     background-color: $grey-highlight;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
