@@ -51,7 +51,7 @@ const State = props => {
               props.resetState(props.selectedState);
             }}
           >
-            Reset Interventions
+            Reset Policies
           </button>
           <button
             className={styles.removeState}
@@ -63,8 +63,7 @@ const State = props => {
               props.setSelectedStates(newSelectedStates);
             }}
           >
-            Remove{" "}
-            {states.find(state => state.abbr === props.selectedState).name}
+            x
           </button>
           {/* <h1> */}
           {/*   {states.find(state => state.abbr === props.selectedState).name} */}
@@ -143,6 +142,10 @@ const State = props => {
             </div>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
+              <h5>
+                cumulative
+                <br /> cases
+              </h5>
             </div>
           </div>
         </div>

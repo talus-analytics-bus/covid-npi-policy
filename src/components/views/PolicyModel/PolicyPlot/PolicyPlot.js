@@ -373,7 +373,6 @@ const PolicyModel = props => {
             },
           }}
         />
-        {console.log(props.contactPlotType)}
         <VictoryArea
           style={{
             data: { stroke: "grey", strokeWidth: 0, fill: "#3F9385bb" },
