@@ -1,6 +1,7 @@
 // standard modules
 import React, { useEffect, useState } from "react";
 import styles from "./table.module.scss";
+import classNames from "classnames";
 
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
@@ -22,6 +23,7 @@ const Table = ({
   dataGetter,
   childGetter,
   defaultSortedField,
+  className,
   ...props
 }) => {
   // define search bar
@@ -164,7 +166,10 @@ const Table = ({
             <BootstrapTable
               pagination={pagination}
               expandRow={expandable ? expandRow : undefined}
-              classes={expandable ? styles.expandable : ""}
+              classes={classNames({
+                [styles.expandable]: expandable,
+                [className]: true
+              })}
               {...props.baseProps}
               defaultSorted={defaultSorted}
             />

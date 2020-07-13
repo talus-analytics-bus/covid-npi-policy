@@ -88,21 +88,33 @@
       top: 5px;
       z-index: 0;
     }
+    // manually set widths of certain table cols
   }
   table {
-    th,
-    td {
-      // set width of link column
-      &:last-child {
-        width: 88px;
+    &.policy {
+      th,
+      td {
+        // set width of link column
+        &:last-child {
+          width: 88px;
+        }
+        // set width of Description column
+        &:nth-child(3) {
+          width: 35%;
+        }
       }
-      // set width of Description column
-      &:nth-child(3) {
-        // width: 10%;
-      }
-      // set width of Description column
-      &:nth-child(3) {
-        width: 35%;
+    }
+    &.plan {
+      th,
+      td {
+        // set width of link column
+        &:last-child {
+          width: 88px;
+        }
+        // set width of Description column
+        &:nth-child(4) {
+          width: 35%;
+        }
       }
     }
   }

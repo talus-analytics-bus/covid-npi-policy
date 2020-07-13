@@ -212,7 +212,8 @@ const Data = ({
           {...{
             columns,
             data,
-            defaultSortedField: entityInfo.defaultSortedField
+            defaultSortedField: entityInfo.defaultSortedField,
+            className: styles[entityInfo.nouns.s.toLowerCase()]
           }}
         />
       );
