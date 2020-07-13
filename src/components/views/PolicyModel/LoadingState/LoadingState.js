@@ -73,6 +73,7 @@ const LoadingState = props => {
             domain={props.domain}
             activeTab={props.activeTab}
             counterfactualSelected={props.counterfactualSelected}
+            contactPlotType={props.contactPlotType}
           />
         </div>
       </div>

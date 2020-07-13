@@ -29,7 +29,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
 
-  // curves selected by the user
+  // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
     "infected_a",
     // 'infected_b',
@@ -38,6 +38,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
     "R effective",
     "pctChange",
   ]);
+
+  const [contactPlotType, setContactPlotType] = useState("pctChange");
 
   const [curves, setCurves] = useState();
   const [zoomDateRange, setZoomDateRange] = useState([
@@ -215,7 +217,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
             </label>
             <label>
               Show reduction in contacts by
-              <select>
+              <select onChange={e => setContactPlotType(e.target.value)}>
+                <option value="pctChange">% of normal contact rate</option>
                 <option value="R effective">Effective R Value</option>
               </select>
             </label>
@@ -315,6 +318,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setCounterfactualSelected={setCounterfactualSelected}
                   resetState={resetState}
                   dataDates={dataDates}
+                  contactPlotType={contactPlotType}
                 />
               );
             } else {
@@ -336,6 +340,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   activeTab={activeTab}
                   counterfactualSelected={counterfactualSelected}
                   setCounterfactualSelected={setCounterfactualSelected}
+                  contactPlotType={contactPlotType}
                 />
               );
             }

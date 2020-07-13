@@ -164,6 +164,7 @@ const State = props => {
           activeTab={props.activeTab}
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
+          contactPlotType={props.contactPlotType}
         />
       </div>
     </section>
