@@ -224,7 +224,7 @@ const Data = ({
           </p>
         </div>
       </div>
-      {!initializing && (
+      {!false && (
         <React.Fragment>
           <Drawer
             {...{
@@ -279,9 +279,6 @@ const Data = ({
                       {
                         name: "Plans",
                         value: "plan"
-                        // tooltip:
-                        //   "Plans are currently being added to the database and are not yet available.",
-                        // disabled: true
                       }
                     ]}
                     curVal={docType}
@@ -290,22 +287,26 @@ const Data = ({
                     selectpicker={false}
                     setInfoTooltipContent={setInfoTooltipContent}
                   />
-                  <div>
-                    Select filters to apply to {nouns.p.toLowerCase()}.{" "}
-                    {Object.keys(filters).length > 0 && (
-                      <button onClick={() => setFilters({})}>
-                        Clear filters
-                      </button>
-                    )}
-                  </div>
                   {table && (
-                    <FilterSet {...{ filterDefs, filters, setFilters }} />
+                    <>
+                      <div>
+                        Select filters to apply to {nouns.p.toLowerCase()}.{" "}
+                        {Object.keys(filters).length > 0 && (
+                          <button onClick={() => setFilters({})}>
+                            Clear filters
+                          </button>
+                        )}
+                      </div>
+
+                      <FilterSet {...{ filterDefs, filters, setFilters }} />
+                    </>
                   )}
                 </React.Fragment>
               )
             }}
           />
           {table}
+          {!table && <div style={{ height: "900px" }} />}
         </React.Fragment>
       )}
     </div>
