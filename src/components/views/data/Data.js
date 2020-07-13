@@ -194,7 +194,7 @@ const Data = ({
   // when filters are updated, update data
   useEffect(() => {
     if (!loading) {
-      console.log("Doing it");
+      setLoading(true);
       getData({
         filtersForQuery: filters,
         entityInfoForQuery: entityInfo,
