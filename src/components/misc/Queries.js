@@ -137,13 +137,11 @@ export const Plan = async function({
       params
     });
   } else if (method === "post") {
-    console.log("Error: Method not implemented for `Plan`: " + method);
-    return false;
     if (filters === null) {
       console.log("Error: `filters` is required for method POST.");
     }
     req = await axios.post(
-      `${API_URL}/post/policy`,
+      `${API_URL}/post/plan`,
       { filters },
       {
         params
