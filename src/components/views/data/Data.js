@@ -65,167 +65,7 @@ const Data = ({
   // TODO make simpler, probably removing the `field` key
   const [filterDefs, setFilterDefs] = useState(entityInfo.filters);
 
-  const [columns, setColumns] = useState([
-    {
-      dataField: "place.level",
-      header: "Level of government",
-      sort: true
-    },
-    {
-      dataField: "place.loc",
-      header: "Affected location",
-      defCharLimit: 1000,
-      sort: true,
-      formatter: v => {
-        return <ShowMore text={v} charLimit={60} />;
-      }
-    },
-    // {
-    //   dataField: "policy_name",
-    //   header: "Policy name",
-    //   sort: true,
-    //   formatter: v => {
-    //     // TODO REPLACE ALL
-    //     return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
-    //   }
-    // },
-    {
-      dataField: "desc",
-      header: "Policy name and description",
-      // width: "300",
-      defCharLimit: 1000,
-      sort: true,
-      formatter: (cell, row) => {
-        const title =
-          row.policy_name !== "Unspecified" &&
-          row.policy_name !== "" &&
-          row.policy_name !== null &&
-          row.policy_name !== undefined
-            ? row.policy_name + ": "
-            : "";
-        return <ShowMore text={title + cell} charLimit={200} />;
-      }
-      // formatter: v => {
-      //   return <ShowMore text={v} charLimit={90} />;
-      // }
-    },
-
-    {
-      dataField: "primary_ph_measure",
-      header: "Policy category",
-      sort: true
-    },
-    // {
-    //   dataField: "ph_measure_details",
-    //   header: "Policy sub-category",
-    //   sort: true
-    // },
-
-    {
-      dataField: "date_start_effective",
-      header: "Effective start date",
-      sort: true,
-      formatter: v =>
-        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    },
-    // {
-    //   dataField: "date_end_actual",
-    //   header: "Policy end date actual",
-    //   sort: true,
-    //   formatter: v =>
-    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    // },
-    // {
-    //   dataField: "date_end_anticipated",
-    //   header: "Policy end date anticipated",
-    //   sort: true,
-    //   formatter: v =>
-    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    // },
-    // {
-    //   dataField: "date_end_actual_or_anticipated",
-    //   header: "Policy end date",
-    //   sort: true,
-    //   sortFunc: (axx, bxx, order, dataField, a, b) => {
-    //     const getDateValue = d => {
-    //       if (d.date_end_actual !== null) return moment(d.date_end_actual);
-    //       else if (d.date_end_anticipated !== null)
-    //         return moment(d.date_end_anticipated);
-    //       else return -99999;
-    //     };
-    //     const aDate = getDateValue(a);
-    //     const bDate = getDateValue(b);
-    //     if (order === "asc") {
-    //       return aDate - bDate;
-    //     }
-    //     return bDate - aDate; // desc
-    //   },
-    //   formatter: (v, row) => {
-    //     const hasActual = row.date_end_actual !== null;
-    //     if (hasActual) return moment(row.date_end_actual).format("MMM D, YYYY");
-    //     else {
-    //       const hasAnticipated = row.date_end_anticipated !== null;
-    //       if (hasAnticipated) {
-    //         return (
-    //           moment(row.date_end_anticipated).format("MMM D, YYYY") +
-    //           " (anticipated)"
-    //         );
-    //       } else return unspecified;
-    //     }
-    //   }
-    // },
-    {
-      dataField: "authority_name",
-      header: "Relevant authority",
-      sort: true,
-      formatter: v => {
-        // TODO REPLACE ALL
-        return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
-      }
-    },
-    {
-      dataField: "file",
-      header: "Link",
-      // sort: true,
-      formatter: (row, cell) => {
-        const icons = cell.file.map((d, i) => {
-          const isLocalDownload = true;
-          // const isLocalDownload = d.filename && d.filename !== "";
-          const link = undefined;
-          const hasLink = link && link !== "";
-          if (isLocalDownload) {
-            const localDownloadLink =
-              d !== undefined
-                ? "/get/file/redirect?id=" + d.toString()
-                : undefined;
-            return (
-              <div
-                key={localDownloadLink + "-" + i}
-                className={styles.linkIcon}
-              >
-                <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
-                  <i className={"material-icons"}>insert_drive_file</i>
-                </a>
-              </div>
-            );
-          } else if (hasLink) {
-            return (
-              <div className={styles.linkIcon}>
-                <a target="_blank" href={link}>
-                  <i className={"material-icons"}>link</i>
-                </a>
-              </div>
-            );
-          } else return unspecified;
-        });
-        if (cell.file && cell.file.length > 0) {
-          return <div className={styles.linkIcons}>{icons}</div>;
-        } else {
-          return unspecified;
-        }
-      }
-    }
-  ]);
+  const [columns, setColumns] = useState(null);
 
   /**
    * Get data for page
@@ -235,12 +75,13 @@ const Data = ({
    */
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
+    const initColumns = entityInfo.getColumns({ metadata: {} });
 
     const queries = {
       instances: entityInfo.dataQuery({ method, filters }),
       metadata: Metadata({
         method: "get",
-        fields: columns.map(d => {
+        fields: initColumns.map(d => {
           if (!d.dataField.includes(".")) return "policy." + d.dataField;
           else return d.dataField;
         })
@@ -251,7 +92,7 @@ const Data = ({
     if (initializing) {
       queries.optionsets = OptionSet({
         method: "get",
-        fields: filterDefs
+        fields: entityInfo.filterDefs
           .map(d => Object.values(d).map(dd => dd))
           .flat()
           .filter(d => !d.field.startsWith("date"))
@@ -298,7 +139,7 @@ const Data = ({
       const optionsets = results["optionsets"];
 
       // set options for filters
-      const newFilterDefs = [...filterDefs];
+      const newFilterDefs = [...entityInfo.filterDefs];
       newFilterDefs.forEach(d => {
         for (const [k, v] of Object.entries(d)) {
           if (!k.startsWith("date")) d[k].items = optionsets[k];
@@ -312,6 +153,7 @@ const Data = ({
         }
       });
       setFilterDefs(newFilterDefs);
+      setColumns(entityInfo.getColumns({ metadata: results.metadata.data }));
       setInitializing(false);
     }
     setLoading(false);
@@ -330,13 +172,39 @@ const Data = ({
     setPage("data");
   }, []);
 
+  // when doc type changes, nullify columns / data / filter defs, then update
+  // entity info
+  useEffect(() => {
+    setColumns(null);
+    setData(null);
+    setFilterDefs(null);
+    setFilters({});
+    setInitializing(true);
+    setEntityInfo(docType === "policy" ? policyInfo : planInfo);
+  }, [docType]);
+
+  // when entity info updated, update cols, data, and filter defs
+  useEffect(() => {
+    console.log("Entity info set to: ");
+    console.log(entityInfo);
+
+    // set filterDefs
+    // console.log("entityInfo.filterDefs");
+    // console.log(entityInfo.filterDefs);
+    // setFilterDefs(entityInfo.filterDefs);
+
+    // set data
+    getData({});
+  }, [entityInfo]);
+
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
-    return <Table {...{ columns, data }} />;
+    if (columns === null || data === null || filterDefs === null) return null;
+    else return <Table {...{ columns, data }} />;
   };
 
-  if (columns === null) return <div />;
   const table = getTable({ docType });
+
   return (
     <div className={styles.data}>
       <div className={styles.header}>
@@ -377,7 +245,7 @@ const Data = ({
                   >
                     <img src={downloadSvg} />
                     <div>
-                      {!buttonLoading && (
+                      {!buttonLoading && table && (
                         <React.Fragment>
                           <span>
                             Download {isEmpty(filters) ? "all" : "filtered"}{" "}
@@ -430,7 +298,9 @@ const Data = ({
                       </button>
                     )}
                   </div>
-                  <FilterSet {...{ filterDefs, filters, setFilters }} />
+                  {table && (
+                    <FilterSet {...{ filterDefs, filters, setFilters }} />
+                  )}
                 </React.Fragment>
               )
             }}
