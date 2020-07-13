@@ -92,7 +92,11 @@ $grey-highlight: #eee;
       display: flex;
       flex-direction: column;
       font-weight: 800;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    input[type="date"] {
+      color: #333333;
     }
 
     fieldset {
@@ -100,7 +104,7 @@ $grey-highlight: #eee;
       background: none;
       padding: 0;
       margin: 0;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       padding-bottom: 1rem;
 
       legend {
@@ -112,6 +116,7 @@ $grey-highlight: #eee;
         align-items: center;
         font-weight: 400;
         margin-top: 0.25rem;
+        color: #333333;
       }
     }
 
