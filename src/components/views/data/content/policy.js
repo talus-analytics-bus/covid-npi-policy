@@ -122,9 +122,6 @@ export const policyInfo = {
               : "";
           return <ShowMore text={title + cell} charLimit={200} />;
         }
-        // formatter: v => {
-        //   return <ShowMore text={v} charLimit={90} />;
-        // }
       },
       {
         dataField: "primary_ph_measure",

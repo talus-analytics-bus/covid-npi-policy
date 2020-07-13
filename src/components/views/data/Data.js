@@ -82,9 +82,10 @@ const Data = ({
       metadata: Metadata({
         method: "get",
         fields: initColumns.map(d => {
-          if (!d.dataField.includes(".")) return "policy." + d.dataField;
+          if (!d.dataField.includes(".")) return docType + "." + d.dataField;
           else return d.dataField;
-        })
+        }),
+        entity_class_name: nouns.s
       })
     };
 

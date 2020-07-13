@@ -31,13 +31,18 @@ export const Version = async function() {
 /**
  * Get metadata for specified fields
  */
-export const Metadata = async function({ method, fields }) {
+export const Metadata = async function({
+  method,
+  fields,
+  entity_class_name = "Policy"
+}) {
   let req;
   if (method === "get") {
     const params = new URLSearchParams();
     fields.forEach(d => {
       params.append("fields", d);
     });
+    params.append("entity_class_name", entity_class_name);
     req = await axios(`${API_URL}/get/metadata`, {
       params
     });
