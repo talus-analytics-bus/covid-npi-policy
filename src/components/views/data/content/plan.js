@@ -49,7 +49,8 @@ export const planInfo = {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       { dataField: "org_name", header: "Organization name", sort: true },
-      { dataField: "org_type", header: "Organization type", sort: true },
+      { dataField: "org_type", header: "Org. type", sort: true },
+      { dataField: "place.loc", header: "Org. location", sort: true },
       {
         dataField: "desc",
         header: "Plan name and description",
@@ -164,10 +165,15 @@ export const planInfo = {
         "org_type",
         "org_name",
         "desc",
+        "date_issued",
+        "place",
         "file"
       ]
     });
   },
+
+  // default field to sort tabular data by
+  defaultSortedField: "date_issued",
 
   // JSX of content of table cells if data are unspecified, i.e., blank
   unspecified

@@ -244,6 +244,9 @@ export const policyInfo = {
     });
   },
 
+  // default field to sort tabular data by
+  defaultSortedField: "date_start_effective",
+
   // JSX of content of table cells if data are unspecified, i.e., blank
   unspecified
 };

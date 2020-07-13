@@ -206,7 +206,16 @@ const Data = ({
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
     if (columns === null || data === null || filterDefs === null) return null;
-    else return <Table {...{ columns, data }} />;
+    else
+      return (
+        <Table
+          {...{
+            columns,
+            data,
+            defaultSortedField: entityInfo.defaultSortedField
+          }}
+        />
+      );
   };
 
   const table = getTable({ docType });

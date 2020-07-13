@@ -15,7 +15,15 @@ import asc from "../../../assets/icons/table/sorted-asc.svg";
 import desc from "../../../assets/icons/table/sorted-desc.svg";
 import unsorted from "../../../assets/icons/table/unsorted.svg";
 
-const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
+const Table = ({
+  name,
+  data,
+  columns,
+  dataGetter,
+  childGetter,
+  defaultSortedField,
+  ...props
+}) => {
   // define search bar
   const { SearchBar } = Search;
 
@@ -140,7 +148,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
   const expandable = data.some(d => d.children !== undefined);
   const defaultSorted = [
     {
-      dataField: "date_start_effective",
+      dataField: defaultSortedField,
       order: "desc"
     }
   ];
