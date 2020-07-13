@@ -68,7 +68,14 @@ export default function parseModelCurves(
     const trimmedData = modelRun;
     // console.log(trimmedData)
 
+    // initial r_0 for the percentage change calc
+    const initialR_0 = trimmedData[0]["R effective"];
+    console.log(initialR_0);
+
     // create basic structure
+    curves[state].curves["pctChange"] = {};
+    curves[state].curves.pctChange["actuals"] = [];
+    curves[state].curves.pctChange["model"] = [];
     Object.keys(trimmedData[0]).forEach(column => {
       if (selectedCurves.includes(column)) {
         curves[state].curves[column] = {};
@@ -111,6 +118,14 @@ export default function parseModelCurves(
                 x: day.date.setDate(day.date.getDate() - 1),
                 y: counterfactualRun[index][column],
               });
+          }
+
+          // Calculate Percentage changed
+          if (column === "R effective") {
+            curves[state].curves.pctChange[source].push({
+              x: day.date,
+              y: day["R effective"] / initialR_0,
+            });
           }
 
           // Add curves based on name (column) and source
