@@ -2,6 +2,8 @@ import React from "react";
 
 import styles from "./AddInterventionDialog.module.scss";
 
+import closeButtonIconSVG from "../../../../../assets/icons/addInterventionCloseButton.svg";
+
 const PastInterventionInfo = props => {
   const width = 300;
   const arrowOffset = { x: 25, y: 41 };
@@ -43,6 +45,15 @@ const PastInterventionInfo = props => {
       <form>
         <div className={styles.greySection}>
           <h1>Add Policies</h1>
+          <button
+            className={styles.closeButton}
+            onClick={e => {
+              e.preventDefault();
+              props.setPosition({ ...props.position, show: false });
+            }}
+          >
+            <img src={closeButtonIconSVG} alt="Close add policy popup" />
+          </button>
         </div>
         <div className={styles.content}>
           <div className={styles.col}>
@@ -112,14 +123,6 @@ const PastInterventionInfo = props => {
             </fieldset>
 
             <div className={styles.buttonRow}>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  props.setPosition({ ...props.position, show: false });
-                }}
-              >
-                Cancel
-              </button>
               <button
                 onClick={e => {
                   e.preventDefault();

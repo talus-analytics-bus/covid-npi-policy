@@ -169,7 +169,7 @@ const PolicyModel = props => {
                 <LineExtension
                   color={interventionColors[intervention.name.split("_")[0]]}
                   strokeWidth={1}
-                  start={11}
+                  // start={11}
                 />
               </VictoryPortal>
             }
@@ -501,12 +501,12 @@ const PolicyModel = props => {
           }}
           axisLabelComponent={
             <VictoryLabel
-              dy={0}
+              dy={1}
               style={{
                 fill: "#6d6d6d",
                 fontFamily: "Rawline",
                 fontWeight: "500",
-                fontSize: 5,
+                fontSize: 6,
                 textAnchor: "middle",
               }}
             />
