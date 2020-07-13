@@ -118,7 +118,7 @@ const PastInterventionInfo = props => {
                   props.setPosition({ ...props.position, show: false });
                 }}
               >
-                cancel
+                Cancel
               </button>
               <button
                 onClick={e => {
@@ -142,7 +142,7 @@ const PastInterventionInfo = props => {
                   props.addIntervention(props.selectedState, intervention);
                 }}
               >
-                Appy &amp; run
+                Apply &amp; run
               </button>
             </div>
           </div>
