@@ -228,7 +228,6 @@ export const policyInfo = {
   // query to use when getting entity data
   // requires method and filters arguments
   dataQuery: ({ method, filters }) => {
-    console.log("Querying policy data...");
     return Policy({
       method,
       filters,

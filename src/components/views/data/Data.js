@@ -32,7 +32,6 @@ const Data = ({
   setPage,
   urlFilterParams
 }) => {
-  const [initializing, setInitializing] = useState(true);
   const [docType, setDocType] = useState("policy");
   const [entityInfo, setEntityInfo] = useState(
     docType === "policy" ? policyInfo : planInfo
@@ -43,10 +42,11 @@ const Data = ({
 
   // define data and metadata for table
   const [data, setData] = useState(null);
+
   const [metadata, setMetadata] = useState(null);
 
   // define filters
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState({});
 
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -73,12 +73,12 @@ const Data = ({
    * @param  {Object}  [filters={}] [description]
    * @return {Promise}              [description]
    */
-  const getData = async (filters = {}) => {
+  const getData = async ({ filters: {}, entityInfoForQuery }) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
-    const initColumns = entityInfo.getColumns({ metadata: {} });
+    const initColumns = entityInfoForQuery.getColumns({ metadata: {} });
 
     const queries = {
-      instances: entityInfo.dataQuery({ method, filters }),
+      instances: entityInfoForQuery.dataQuery({ method, filters }),
       metadata: Metadata({
         method: "get",
         fields: initColumns.map(d => {
@@ -90,24 +90,24 @@ const Data = ({
     };
 
     // TODO generalize to plans
-    if (initializing) {
-      queries.optionsets = OptionSet({
-        method: "get",
-        fields: entityInfo.filterDefs
-          .map(d => Object.values(d).map(dd => dd))
-          .flat()
-          .filter(d => !d.field.startsWith("date"))
-          .map(d => {
-            return d.entity_name + "." + d.field;
-          }),
-        entity_name: "Policy"
-      });
-    }
+    queries.optionsets = OptionSet({
+      method: "get",
+      fields: entityInfoForQuery.filterDefs
+        .map(d => Object.values(d).map(dd => dd))
+        .flat()
+        .filter(d => !d.field.startsWith("date"))
+        .map(d => {
+          return d.entity_name + "." + d.field;
+        }),
+      entity_name: entityInfoForQuery.nouns.s
+    });
 
+    // execute queries and collate results
     const results = await execute({
       queries
     });
-    console.log(results.instances.data);
+
+    // set data and metadata with results
     setData(results.instances.data);
     setMetadata(results.metadata.data);
 
@@ -136,27 +136,26 @@ const Data = ({
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
     // TODO move this out of main code if possible
-    if (initializing) {
-      const optionsets = results["optionsets"];
+    const optionsets = results["optionsets"];
 
-      // set options for filters
-      const newFilterDefs = [...entityInfo.filterDefs];
-      newFilterDefs.forEach(d => {
-        for (const [k, v] of Object.entries(d)) {
-          if (!k.startsWith("date")) d[k].items = optionsets[k];
-          if (k === "dates_in_effect") {
-            // set min/max date range for daterange filters
-            d[k].minMaxDate = {
-              min: newMinMaxStartDate.min,
-              max: undefined
-            };
-          }
+    // set options for filters
+    const newFilterDefs = [...entityInfoForQuery.filterDefs];
+    newFilterDefs.forEach(d => {
+      for (const [k, v] of Object.entries(d)) {
+        if (!k.startsWith("date")) d[k].items = optionsets[k];
+        if (k === "dates_in_effect") {
+          // set min/max date range for daterange filters
+          d[k].minMaxDate = {
+            min: newMinMaxStartDate.min,
+            max: undefined
+          };
         }
-      });
-      setFilterDefs(newFilterDefs);
-      setColumns(entityInfo.getColumns({ metadata: results.metadata.data }));
-      setInitializing(false);
-    }
+      }
+    });
+    setFilterDefs(newFilterDefs);
+    setColumns(
+      entityInfoForQuery.getColumns({ metadata: results.metadata.data })
+    );
     setLoading(false);
   };
 
@@ -180,23 +179,32 @@ const Data = ({
     setData(null);
     setFilterDefs(null);
     setFilters({});
-    setInitializing(true);
-    setEntityInfo(docType === "policy" ? policyInfo : planInfo);
+
+    const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
+    setEntityInfo(newEntityInfo);
+    getData({
+      filters: {},
+      entityInfoForQuery: newEntityInfo,
+      initializingForQuery: true
+    });
   }, [docType]);
 
-  // when entity info updated, update cols, data, and filter defs
-  useEffect(() => {
-    console.log("Entity info set to: ");
-    console.log(entityInfo);
+  // // when entity info updated, update cols, data, and filter defs
+  // useEffect(() => {
+  //   console.log("Entity info is: " + entityInfo.nouns.s);
+  //
+  //   // set data
+  //   getData(filters);
+  // }, [entityInfo]);
 
-    // set filterDefs
-    // console.log("entityInfo.filterDefs");
-    // console.log(entityInfo.filterDefs);
-    // setFilterDefs(entityInfo.filterDefs);
-
-    // set data
-    getData({});
-  }, [entityInfo]);
+  // // when filters change, get data
+  // useEffect(() => {
+  //   console.log("Filters changed, getting new data");
+  //   console.log(entityInfo);
+  //
+  //   // set data
+  //   getData(filters);
+  // }, [filters]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
