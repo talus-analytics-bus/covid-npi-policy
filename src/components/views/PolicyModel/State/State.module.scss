@@ -63,7 +63,6 @@
         font-weight: 700;
       }
 
-      .removeState,
       .resetState {
         background: none;
         border: none;
@@ -78,6 +77,16 @@
         &:disabled {
           opacity: 0.5;
         }
+      }
+
+      .removeState {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        width: 2rem;
+        height: 2rem;
       }
 
       // .removeState {
@@ -131,10 +140,14 @@
         > div {
           position: relative;
           margin: 1rem;
-          width: 14rem;
+          width: 12rem;
           display: flex;
           justify-content: center;
           flex-direction: column;
+        }
+
+        > div:first-of-type {
+          width: 16.5rem;
         }
 
         > div:first-of-type:after {
@@ -193,7 +206,7 @@
 
           h5 {
             font-size: 0.8rem;
-            width: 10em;
+            width: 100%;
             line-height: 1em;
             margin-left: 0.25em;
             display: flex;

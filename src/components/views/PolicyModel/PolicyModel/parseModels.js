@@ -55,22 +55,6 @@ export default function parseModelCurves(
       counterfactual_deaths: model.counterfactual_deaths,
     };
 
-    //     identify which run we want to use
-    //     let modelRun
-    //
-    //     if (counterfactualSelected) {
-    //       modelRun = parseModelString(
-    //         model.results
-    //           .filter(run => Object.keys(run)[0] !== run)
-    //           .find(inter => inter.name.includes('do_nothing')).run
-    //       )
-    //     } else {
-    //       modelRun = parseModelString(
-    //         model.results.filter(run => Object.keys(run)[0] !== run).slice(-1)[0]
-    //           .run
-    //       )
-    //     }
-
     const modelRun = parseModelString(
       model.results.filter(run => Object.keys(run)[0] !== run).slice(-1)[0].run
     );
@@ -81,20 +65,18 @@ export default function parseModelCurves(
         .find(inter => inter.name.includes("do_nothing")).run
     );
 
-    // console.log(counterfactualRun)
-
-    // console.log(
-    //   parseModelString(
-    //     model.results
-    //       .filter(run => Object.keys(run)[0] !== run)
-    //       .find(inter => inter.name.includes('do_nothing')).run
-    //   )
-    // )
-
     const trimmedData = modelRun;
     // console.log(trimmedData)
 
+    // initial r_0 for the percentage change calc
+    const initialR_0 = trimmedData[0]["R effective"];
+
     // create basic structure
+    curves[state].curves["pctChange"] = {};
+    curves[state].curves.pctChange["actuals"] = [];
+    curves[state].curves.pctChange["model"] = [];
+    curves[state].curves.pctChange["yMax"] = 0;
+
     Object.keys(trimmedData[0]).forEach(column => {
       if (selectedCurves.includes(column)) {
         curves[state].curves[column] = {};
@@ -118,53 +100,48 @@ export default function parseModelCurves(
         if (selectedCurves.includes(column)) {
           // splitting out sources to make plotting easier later
           const source = day.source === "actuals" ? "actuals" : "model";
-          // skipping every fifth day of the model just to improve
-          // rendering performance, especially with multiple plots
-          if (source === "model") {
-            if (
-              (column === "R effective") &
+
+          // Start the modeled R Effective one day sooner
+          // so that the plot does not have a gap because
+          // they are plotted as two curves with separate styles
+          if (
+            source === "model" &&
+            (column === "R effective") &
               (trimmedData[index - 1].source === "actuals")
-            ) {
-              curves[state].curves[column][source].push({
-                x: day.date.setDate(day.date.getDate() - 1),
-                y: value,
-              });
-              counterfactualSelected &&
-                counterfactualRun[index] &&
-                curves[state].curves["CF_" + column]["model"].push({
-                  x: day.date.setDate(day.date.getDate() - 1),
-                  y: counterfactualRun[index][column],
-                });
-            }
-            if (
-              index % 5 === 0 ||
-              trimmedData[index - 1].source === "actuals"
-            ) {
-              curves[state].curves[column][source].push({
-                x: day.date,
-                y: value,
-              });
-              counterfactualSelected &&
-                counterfactualRun[index] &&
-                curves[state].curves["CF_" + column]["model"].push({
-                  x: day.date,
-                  y: counterfactualRun[index][column],
-                });
-            }
-          } else {
+          ) {
             curves[state].curves[column][source].push({
-              x: day.date,
+              x: day.date.setDate(day.date.getDate() - 1),
               y: value,
             });
             counterfactualSelected &&
               counterfactualRun[index] &&
-              // column === 'none' &&
               curves[state].curves["CF_" + column]["model"].push({
-                x: day.date,
+                x: day.date.setDate(day.date.getDate() - 1),
                 y: counterfactualRun[index][column],
               });
           }
 
+          // Calculate Percentage changed
+          if (column === "R effective") {
+            curves[state].curves.pctChange[source].push({
+              x: day.date,
+              y: parseInt((day["R effective"] / initialR_0) * 100),
+            });
+          }
+
+          // Add curves based on name (column) and source
+          curves[state].curves[column][source].push({
+            x: day.date,
+            y: value,
+          });
+          counterfactualSelected &&
+            counterfactualRun[index] &&
+            curves[state].curves["CF_" + column]["model"].push({
+              x: day.date,
+              y: counterfactualRun[index][column],
+            });
+
+          // Add Counterfactual curves with CF prefix
           if (counterfactualSelected) {
             curves[state].curves["CF_" + column].yMax =
               curves[state].curves["CF_" + column].yMax >
@@ -187,16 +164,14 @@ export default function parseModelCurves(
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 
-    // console.log(Object.entries(curves[state].curves))
-
     // yMax for the state
     const peaks = Object.entries(curves[state].curves).map(
-      ([curve, points]) =>
-        // selectedCurves.includes(curve) ? points.yMax : 0
-        points.yMax
+      ([curve, points]) => points.yMax
     );
     curves[state].yMax = Math.max(...peaks);
   });
+
+  // console.log(curves);
 
   return curves;
 }

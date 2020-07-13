@@ -10,6 +10,7 @@ import states from "../PolicyModel/states.js";
 import styles from "./State.module.scss";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
+import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg";
 
 const formatNumber = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
@@ -51,21 +52,24 @@ const State = props => {
               props.resetState(props.selectedState);
             }}
           >
-            Reset Interventions
+            Reset Policies
           </button>
-          <button
-            className={styles.removeState}
-            disabled={props.selectedStates.length < 2}
-            onClick={e => {
-              e.preventDefault();
-              const newSelectedStates = [...props.selectedStates];
-              newSelectedStates.splice(props.index, 1);
-              props.setSelectedStates(newSelectedStates);
-            }}
-          >
-            Remove{" "}
-            {states.find(state => state.abbr === props.selectedState).name}
-          </button>
+          {props.selectedStates.length > 1 && (
+            <button
+              className={styles.removeState}
+              onClick={e => {
+                e.preventDefault();
+                const newSelectedStates = [...props.selectedStates];
+                newSelectedStates.splice(props.index, 1);
+                props.setSelectedStates(newSelectedStates);
+              }}
+            >
+              <img
+                src={stateCloseButtonIcon}
+                alt="Remove state from comparison"
+              />
+            </button>
+          )}
           {/* <h1> */}
           {/*   {states.find(state => state.abbr === props.selectedState).name} */}
           {/* </h1> */}
@@ -123,8 +127,9 @@ const State = props => {
             <div>
               <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
               <h5>
-                cumulative
-                <br /> cases{" "}
+                <h5>
+                  cases <br /> (cumulative)
+                </h5>
                 <Tippy
                   content={"Total cumulative cases (modeled)"}
                   allowHTML={true}
@@ -143,6 +148,9 @@ const State = props => {
             </div>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
+              <h5>
+                cases <br /> (cumulative)
+              </h5>
             </div>
           </div>
         </div>
@@ -164,6 +172,7 @@ const State = props => {
           activeTab={props.activeTab}
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
+          contactPlotType={props.contactPlotType}
         />
       </div>
     </section>

@@ -15,7 +15,7 @@ import {
 import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
 import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
 import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
-import TodayLabel from "./TodayLabel/TodayLabel";
+import LineExtension from "./LineExtension/LineExtension";
 
 import styles from "./PolicyPlot.module.scss";
 
@@ -58,33 +58,33 @@ const PolicyModel = props => {
     date: "",
   });
 
-  const [windowSize, setWindowSize] = React.useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
+  //   const [windowSize, setWindowSize] = React.useState({
+  //     height: window.innerHeight,
+  //     width: window.innerWidth,
+  //   });
+  //
+  //   const updateWindowSize = e => {
+  //     setWindowSize({
+  //       height: window.innerHeight,
+  //       width: window.innerWidth,
+  //     });
+  //   };
+  //
+  //   React.useEffect(() => {
+  //     window.addEventListener("resize", updateWindowSize);
+  //     return () => {
+  //       window.removeEventListener("resize", updateWindowSize);
+  //     };
+  //   }, []);
 
-  const updateWindowSize = e => {
-    setWindowSize({
-      height: window.innerHeight,
-      width: window.innerWidth,
-    });
-  };
-
-  React.useEffect(() => {
-    window.addEventListener("resize", updateWindowSize);
-    return () => {
-      window.removeEventListener("resize", updateWindowSize);
-    };
-  }, []);
-
-  const percentProportion = 0.13;
-  const chartProportion = 0.45;
+  // const percentProportion = 0.14;
+  // const chartProportion = 0.45;
   // const navigatorProportion = 0.125
 
   // The actuals lines of the plot
   const actualsLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== "R effective") {
+      if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
             key={curveName}
@@ -106,7 +106,7 @@ const PolicyModel = props => {
   // the model (dashed) lines of the plot
   const modelLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== "R effective") {
+      if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
             key={curveName}
@@ -118,7 +118,7 @@ const PolicyModel = props => {
               },
             }}
             data={data.model}
-            interpolation={"natural"}
+            // interpolation={"natural"}
           />
         );
       } else {
@@ -155,6 +155,48 @@ const PolicyModel = props => {
       ]}
     />
   ));
+
+  const pctChangeInterventionLines = props.data.interventions.map(
+    intervention => {
+      if (
+        new Date(intervention.intervention_start_date) > props.zoomDateRange[0]
+      ) {
+        return (
+          <VictoryLine
+            key={intervention.name + intervention.intervention_start_date}
+            labelComponent={
+              <VictoryPortal>
+                <LineExtension
+                  color={interventionColors[intervention.name.split("_")[0]]}
+                  strokeWidth={1}
+                  start={11}
+                />
+              </VictoryPortal>
+            }
+            labels={[""]}
+            style={{
+              data: {
+                stroke: interventionColors[intervention.name.split("_")[0]],
+                strokeWidth: 1,
+              },
+            }}
+            data={[
+              {
+                x: Date.parse(intervention.intervention_start_date),
+                y: 0,
+              },
+              {
+                x: Date.parse(intervention.intervention_start_date),
+                y: 0,
+              },
+            ]}
+          />
+        );
+      } else {
+        return null;
+      }
+    }
+  );
 
   const interventionPoints = props.data.interventions.map(intervention => {
     const interStartDate = new Date(intervention.intervention_start_date);
@@ -257,17 +299,17 @@ const PolicyModel = props => {
       {/*   </linearGradient> */}
       {/* </svg> */}
       <VictoryChart
-        padding={{ top: 11, bottom: 2, left: 30, right: 10 }}
-        domainPadding={0}
+        padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
+        // domainPadding={5}
         responsive={true}
         width={500}
-        // height={80}
-        height={
-          (windowSize.height / windowSize.width) * 500 * percentProportion > 25
-            ? (windowSize.height / windowSize.width) * 500 * percentProportion
-            : 25
-        }
-        style={{ height: percentProportion * 100 + "%" }}
+        height={40}
+        // height={
+        //   (windowSize.height / windowSize.width) * 500 * percentProportion > 25
+        //     ? (windowSize.height / windowSize.width) * 500 * percentProportion
+        //     : 25
+        // }
+        // style={{ height: percentProportion * 100 + "%" }}
         scale={{ x: "time" }}
         containerComponent={
           <VictoryZoomContainer
@@ -281,26 +323,30 @@ const PolicyModel = props => {
           />
         }
       >
-        <VictoryLabel
-          text="R Effective"
-          x={4.5}
-          y={4}
-          style={{
-            fontSize: 6,
-            fontWeight: 700,
-            fontFamily: "Rawline",
-            fill: "#6d6d6d",
-          }}
-        />
+        {/* <VictoryLabel */}
+        {/*   text="R Effective" */}
+        {/*   x={4.5} */}
+        {/*   y={4} */}
+        {/*   style={{ */}
+        {/*     fontSize: 6, */}
+        {/*     fontWeight: 700, */}
+        {/*     fontFamily: "Rawline", */}
+        {/*     fill: "#6d6d6d", */}
+        {/*   }} */}
+        {/* /> */}
         <VictoryAxis
           dependentAxis
           tickFormat={tick => (tick === parseInt(tick) ? parseInt(tick) : null)}
-          offsetX={30}
+          offsetX={50}
           crossAxis={false}
-          // label={"R Eff"}
+          label={
+            props.contactPlotType === "pctChange"
+              ? "% of normal\ncontact rate"
+              : "R Effective"
+          }
           axisLabelComponent={
             <VictoryLabel
-              dy={10}
+              dy={0}
               style={{
                 fill: "#6d6d6d",
                 fontFamily: "Rawline",
@@ -313,7 +359,7 @@ const PolicyModel = props => {
           style={{
             grid: {
               stroke: "#aaaaaa",
-              strokeWidth: 0,
+              strokeWidth: 1,
             },
             axis: { stroke: "#fff", strokeWidth: 0 },
             ticks: { strokeWidth: 0 },
@@ -322,28 +368,29 @@ const PolicyModel = props => {
               fontFamily: "Rawline",
               fontWeight: "500",
               fontSize: 5,
-              textAnchor: "middle",
+              textAnchor:
+                props.contactPlotType === "pctChange" ? "end" : "middle",
             },
           }}
         />
         <VictoryArea
           style={{
-            data: { stroke: "grey", strokeWidth: 0.5, fill: "#3F9385" },
+            data: { stroke: "grey", strokeWidth: 0, fill: "#3F9385bb" },
           }}
-          data={props.data.curves["R effective"].actuals}
+          data={props.data.curves[props.contactPlotType].actuals}
           interpolation={"stepAfter"}
         />
         <VictoryArea
           style={{
-            data: { stroke: "grey", strokeWidth: 0.5, fill: "#C9E0DC" },
+            data: { stroke: "grey", strokeWidth: 0, fill: "#A5CDC6BB" },
           }}
-          data={props.data.curves["R effective"].model}
+          data={props.data.curves[props.contactPlotType].model}
           interpolation={"stepAfter"}
         />
         <VictoryLine
           labelComponent={
             <VictoryPortal>
-              <TodayLabel />
+              <LineExtension />
             </VictoryPortal>
           }
           labels={[`TODAY`]}
@@ -353,14 +400,15 @@ const PolicyModel = props => {
             { x: new Date(), y: 3 },
           ]}
         />
+        {pctChangeInterventionLines}
       </VictoryChart>
       <VictoryChart
         // animate={{ duration: 1000 }}
-        padding={{ top: 12, bottom: 20, left: 30, right: 10 }}
-        domainPadding={5}
+        padding={{ top: 0, bottom: 20, left: 50, right: 10 }}
+        // domainPadding={5}
         responsive={true}
         width={500}
-        // height={300}
+        height={150}
         events={
           props.activeTab === "interventions"
             ? [
@@ -386,12 +434,12 @@ const PolicyModel = props => {
               ]
             : []
         }
-        height={
-          (windowSize.height / windowSize.width) * 500 * chartProportion > 100
-            ? (windowSize.height / windowSize.width) * 500 * chartProportion
-            : 100
-        }
-        style={{ height: chartProportion * 100 + "%" }}
+        // height={
+        //   (windowSize.height / windowSize.width) * 500 * chartProportion > 100
+        //     ? (windowSize.height / windowSize.width) * 500 * chartProportion
+        //     : 100
+        // }
+        // style={{ height: chartProportion * 100 + "%" }}
         scale={{ x: "time" }}
         containerComponent={
           <VictoryZoomCursorContainer
@@ -419,21 +467,24 @@ const PolicyModel = props => {
           />
         }
       >
-        <VictoryLabel
-          text="CASELOAD"
-          x={4.5}
-          y={6}
-          style={{
-            fontSize: 6,
-            fontWeight: 700,
-            fontFamily: "Rawline",
-            fill: "#6d6d6d",
-          }}
-        />
+        {/* <VictoryLabel */}
+        {/*   text="CASELOAD" */}
+        {/*   x={4.5} */}
+        {/*   y={6} */}
+        {/*   style={{ */}
+        {/*     fontSize: 6, */}
+        {/*     fontWeight: 700, */}
+        {/*     fontFamily: "Rawline", */}
+        {/*     fill: "#6d6d6d", */}
+        {/*   }} */}
+        {/* /> */}
         <VictoryAxis
           dependentAxis
+          label={
+            props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
+          }
           tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
-          offsetX={35}
+          offsetX={50}
           style={{
             grid: {
               stroke: "#aaaaaa",
@@ -448,6 +499,18 @@ const PolicyModel = props => {
               fontSize: 6,
             },
           }}
+          axisLabelComponent={
+            <VictoryLabel
+              dy={0}
+              style={{
+                fill: "#6d6d6d",
+                fontFamily: "Rawline",
+                fontWeight: "500",
+                fontSize: 5,
+                textAnchor: "middle",
+              }}
+            />
+          }
         />
         <VictoryAxis
           orientation="bottom"
