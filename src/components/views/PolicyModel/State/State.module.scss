@@ -63,7 +63,6 @@
         font-weight: 700;
       }
 
-      .removeState,
       .resetState {
         background: none;
         border: none;
@@ -82,8 +81,12 @@
 
       .removeState {
         position: absolute;
-        top: 0;
-        right: 0.5rem;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        width: 2rem;
+        height: 2rem;
       }
 
       // .removeState {

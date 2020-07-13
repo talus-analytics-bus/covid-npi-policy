@@ -199,22 +199,22 @@ const PolicyModel = ({ setLoading, setPage }) => {
         </div>
         <section className={styles.tabarea}>
           <div className={styles.settingsBar}>
-            <label>
-              Add a state to compare
-              <select
-                value={selectedStates[0]}
-                onChange={e =>
-                  setSelectedStates([e.target.value, ...selectedStates])
-                }
-                disabled={selectedStates.length >= 3}
-              >
-                {states.map(state => (
-                  <option key={state.abbr} value={state.abbr}>
-                    {state.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {/* <label> */}
+            {/*   Add a state to compare */}
+            {/*   <select */}
+            {/*     value={selectedStates[0]} */}
+            {/*     onChange={e => */}
+            {/*       setSelectedStates([e.target.value, ...selectedStates]) */}
+            {/*     } */}
+            {/*     disabled={selectedStates.length >= 3} */}
+            {/*   > */}
+            {/*     {states.map(state => ( */}
+            {/*       <option key={state.abbr} value={state.abbr}> */}
+            {/*         {state.name} */}
+            {/*       </option> */}
+            {/*     ))} */}
+            {/*   </select> */}
+            {/* </label> */}
             <label>
               Show reduction in contacts by
               <select onChange={e => setContactPlotType(e.target.value)}>

@@ -10,6 +10,7 @@ import states from "../PolicyModel/states.js";
 import styles from "./State.module.scss";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
+import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg";
 
 const formatNumber = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
@@ -53,18 +54,22 @@ const State = props => {
           >
             Reset Policies
           </button>
-          <button
-            className={styles.removeState}
-            disabled={props.selectedStates.length < 2}
-            onClick={e => {
-              e.preventDefault();
-              const newSelectedStates = [...props.selectedStates];
-              newSelectedStates.splice(props.index, 1);
-              props.setSelectedStates(newSelectedStates);
-            }}
-          >
-            x
-          </button>
+          {props.selectedStates.length > 1 && (
+            <button
+              className={styles.removeState}
+              onClick={e => {
+                e.preventDefault();
+                const newSelectedStates = [...props.selectedStates];
+                newSelectedStates.splice(props.index, 1);
+                props.setSelectedStates(newSelectedStates);
+              }}
+            >
+              <img
+                src={stateCloseButtonIcon}
+                alt="Remove state from comparison"
+              />
+            </button>
+          )}
           {/* <h1> */}
           {/*   {states.find(state => state.abbr === props.selectedState).name} */}
           {/* </h1> */}
