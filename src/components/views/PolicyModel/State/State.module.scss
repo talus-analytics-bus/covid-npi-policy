@@ -80,6 +80,12 @@
         }
       }
 
+      .removeState {
+        position: absolute;
+        top: 0;
+        right: 0.5rem;
+      }
+
       // .removeState {
       //   background-color: #815252;
       //   border: 1px solid #6a4344;
@@ -131,10 +137,14 @@
         > div {
           position: relative;
           margin: 1rem;
-          width: 14rem;
+          width: 12rem;
           display: flex;
           justify-content: center;
           flex-direction: column;
+        }
+
+        > div:first-of-type {
+          width: 16.5rem;
         }
 
         > div:first-of-type:after {
@@ -193,7 +203,7 @@
 
           h5 {
             font-size: 0.8rem;
-            width: 10em;
+            width: 100%;
             line-height: 1em;
             margin-left: 0.25em;
             display: flex;

@@ -122,8 +122,9 @@ const State = props => {
             <div>
               <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
               <h5>
-                cumulative
-                <br /> cases{" "}
+                <h5>
+                  cases <br /> (cumulative)
+                </h5>
                 <Tippy
                   content={"Total cumulative cases (modeled)"}
                   allowHTML={true}
@@ -143,8 +144,7 @@ const State = props => {
             <div>
               <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
               <h5>
-                cumulative
-                <br /> cases
+                cases <br /> (cumulative)
               </h5>
             </div>
           </div>
