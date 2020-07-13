@@ -84,7 +84,7 @@ const PolicyModel = props => {
   // The actuals lines of the plot
   const actualsLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (curveName !== "R effective") {
+      if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
             key={curveName}
@@ -297,7 +297,7 @@ const PolicyModel = props => {
           tickFormat={tick => (tick === parseInt(tick) ? parseInt(tick) : null)}
           offsetX={30}
           crossAxis={false}
-          // label={"R Eff"}
+          label={"R Eff"}
           axisLabelComponent={
             <VictoryLabel
               dy={10}

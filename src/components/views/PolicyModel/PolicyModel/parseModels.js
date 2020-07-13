@@ -76,6 +76,8 @@ export default function parseModelCurves(
     curves[state].curves["pctChange"] = {};
     curves[state].curves.pctChange["actuals"] = [];
     curves[state].curves.pctChange["model"] = [];
+    curves[state].curves.pctChange["yMax"] = 0;
+
     Object.keys(trimmedData[0]).forEach(column => {
       if (selectedCurves.includes(column)) {
         curves[state].curves[column] = {};
@@ -124,7 +126,7 @@ export default function parseModelCurves(
           if (column === "R effective") {
             curves[state].curves.pctChange[source].push({
               x: day.date,
-              y: day["R effective"] / initialR_0,
+              y: parseInt((day["R effective"] / initialR_0) * 100),
             });
           }
 
@@ -163,16 +165,14 @@ export default function parseModelCurves(
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 
-    // console.log(Object.entries(curves[state].curves))
-
     // yMax for the state
     const peaks = Object.entries(curves[state].curves).map(
-      ([curve, points]) =>
-        // selectedCurves.includes(curve) ? points.yMax : 0
-        points.yMax
+      ([curve, points]) => points.yMax
     );
     curves[state].yMax = Math.max(...peaks);
   });
+
+  console.log(curves);
 
   return curves;
 }
