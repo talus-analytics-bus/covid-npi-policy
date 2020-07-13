@@ -50,7 +50,7 @@ export const planInfo = {
     const newColumns = [
       { dataField: "org_name", header: "Organization name", sort: true },
       { dataField: "org_type", header: "Org. type", sort: true },
-      { dataField: "place.loc", header: "Org. location", sort: true },
+      { dataField: "primary_loc", header: "Org. location", sort: true },
       {
         dataField: "desc",
         header: "Plan name and description",
@@ -166,6 +166,7 @@ export const planInfo = {
         "org_name",
         "desc",
         "date_issued",
+        "primary_loc",
         "place",
         "file"
       ]
