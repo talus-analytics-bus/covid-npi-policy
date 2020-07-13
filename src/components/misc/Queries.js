@@ -204,7 +204,7 @@ export const PolicyStatus = async function({
 /**
  * Get export data from API.
  */
-export const Export = async function({ method, filters = null }) {
+export const Export = async function({ method, filters = null, class_name }) {
   let req;
   if (method === "get") {
     req = await axios(`${API_URL}/export`);
@@ -217,7 +217,8 @@ export const Export = async function({ method, filters = null }) {
       url: `${API_URL}/post/export`,
       method: "POST",
       responseType: "blob",
-      data: { filters }
+      data: { filters },
+      params: { class_name }
     });
 
     // TODO comments below
