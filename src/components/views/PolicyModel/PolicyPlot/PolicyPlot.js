@@ -157,37 +157,45 @@ const PolicyModel = props => {
   ));
 
   const pctChangeInterventionLines = props.data.interventions.map(
-    intervention => (
-      <VictoryLine
-        key={intervention.name + intervention.intervention_start_date}
-        labelComponent={
-          <VictoryPortal>
-            <LineExtension
-              color={interventionColors[intervention.name.split("_")[0]]}
-              strokeWidth={1}
-              start={11}
-            />
-          </VictoryPortal>
-        }
-        labels={[""]}
-        style={{
-          data: {
-            stroke: interventionColors[intervention.name.split("_")[0]],
-            strokeWidth: 1,
-          },
-        }}
-        data={[
-          {
-            x: Date.parse(intervention.intervention_start_date),
-            y: 0,
-          },
-          {
-            x: Date.parse(intervention.intervention_start_date),
-            y: 0,
-          },
-        ]}
-      />
-    )
+    intervention => {
+      if (
+        new Date(intervention.intervention_start_date) > props.zoomDateRange[0]
+      ) {
+        return (
+          <VictoryLine
+            key={intervention.name + intervention.intervention_start_date}
+            labelComponent={
+              <VictoryPortal>
+                <LineExtension
+                  color={interventionColors[intervention.name.split("_")[0]]}
+                  strokeWidth={1}
+                  start={11}
+                />
+              </VictoryPortal>
+            }
+            labels={[""]}
+            style={{
+              data: {
+                stroke: interventionColors[intervention.name.split("_")[0]],
+                strokeWidth: 1,
+              },
+            }}
+            data={[
+              {
+                x: Date.parse(intervention.intervention_start_date),
+                y: 0,
+              },
+              {
+                x: Date.parse(intervention.intervention_start_date),
+                y: 0,
+              },
+            ]}
+          />
+        );
+      } else {
+        return null;
+      }
+    }
   );
 
   const interventionPoints = props.data.interventions.map(intervention => {
@@ -291,8 +299,8 @@ const PolicyModel = props => {
       {/*   </linearGradient> */}
       {/* </svg> */}
       <VictoryChart
-        padding={{ top: 11, bottom: 2, left: 40, right: 10 }}
-        domainPadding={0}
+        padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
+        // domainPadding={5}
         responsive={true}
         width={500}
         height={40}
@@ -329,12 +337,16 @@ const PolicyModel = props => {
         <VictoryAxis
           dependentAxis
           tickFormat={tick => (tick === parseInt(tick) ? parseInt(tick) : null)}
-          offsetX={40}
+          offsetX={50}
           crossAxis={false}
-          label={"% of normal\ncontact rate"}
+          label={
+            props.contactPlotType === "pctChange"
+              ? "% of normal\ncontact rate"
+              : "R Effective"
+          }
           axisLabelComponent={
             <VictoryLabel
-              dy={5}
+              dy={0}
               style={{
                 fill: "#6d6d6d",
                 fontFamily: "Rawline",
@@ -356,7 +368,8 @@ const PolicyModel = props => {
               fontFamily: "Rawline",
               fontWeight: "500",
               fontSize: 5,
-              textAnchor: "middle",
+              textAnchor:
+                props.contactPlotType === "pctChange" ? "end" : "middle",
             },
           }}
         />
@@ -392,8 +405,8 @@ const PolicyModel = props => {
       </VictoryChart>
       <VictoryChart
         // animate={{ duration: 1000 }}
-        padding={{ top: 0, bottom: 20, left: 40, right: 10 }}
-        domainPadding={5}
+        padding={{ top: 0, bottom: 20, left: 50, right: 10 }}
+        // domainPadding={5}
         responsive={true}
         width={500}
         height={150}
@@ -468,9 +481,11 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          label={"caseload"}
+          label={
+            props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
+          }
           tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
-          offsetX={40}
+          offsetX={50}
           style={{
             grid: {
               stroke: "#aaaaaa",
