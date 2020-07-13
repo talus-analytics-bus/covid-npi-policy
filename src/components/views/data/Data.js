@@ -21,6 +21,8 @@ import classNames from "classnames";
 import downloadSvg from "../../../assets/icons/download.svg";
 
 // constants
+import policyInfo from "./content/policy";
+import planInfo from "./content/plan";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // primary data viewing and download page
@@ -32,24 +34,18 @@ const Data = ({
 }) => {
   const [initializing, setInitializing] = useState(true);
   const [docType, setDocType] = useState("policy");
-
-  // get nouns to use from doc type
-  const getNouns = docType => {
-    if (docType === "policy") {
-      return { s: "Policy", p: "Policies" };
-    } else {
-      return { s: "Plan", p: "Plans" };
-    }
-  };
-  const nouns = getNouns(docType);
+  const [entityInfo, setEntityInfo] = useState(
+    docType === "policy" ? policyInfo : planInfo
+  );
+  // set `unspecified` component, etc., from entity info
+  const unspecified = entityInfo.unspecified;
+  const nouns = entityInfo.nouns;
 
   // define data and metadata for table
   const [data, setData] = useState(null);
   const [metadata, setMetadata] = useState(null);
 
   // define filters
-  // TODO parse by policy/plan
-  // const [filters, setFilters] = useState({});
   const [filters, setFilters] = useState(null);
 
   // flag for whether the download button should say loading or not
@@ -67,72 +63,7 @@ const Data = ({
 
   // define filters in groups
   // TODO make simpler, probably removing the `field` key
-  const [filterDefs, setFilterDefs] = useState([
-    {
-      level: {
-        entity_name: "Place",
-        field: "level",
-        label: "Level of government"
-      }
-    },
-    {
-      country_name: {
-        entity_name: "Place",
-        field: "country_name",
-        label: "Country"
-      },
-      area1: {
-        entity_name: "Place",
-        field: "area1",
-        label: "State / Province",
-        withGrouping: true,
-        primary: "country_name",
-        disabledText: "Choose a country"
-      },
-      area2: {
-        entity_name: "Place",
-        field: "area2",
-        label: "Locality (county, city, ...)",
-        withGrouping: true,
-        primary: "area1",
-        disabledText: "Choose a state / province"
-      }
-    },
-    {
-      relaxing_or_restricting: {
-        entity_name: "Policy",
-        field: "relaxing_or_restricting",
-        label: "Relaxing or restricting"
-      }
-    },
-    {
-      primary_ph_measure: {
-        entity_name: "Policy",
-        field: "primary_ph_measure",
-        label: "Policy category"
-      },
-      ph_measure_details: {
-        entity_name: "Policy",
-        field: "ph_measure_details",
-        label: "Policy sub-category",
-        withGrouping: true,
-        primary: "primary_ph_measure",
-        disabledText: "Choose a policy category"
-      }
-    },
-    {
-      dates_in_effect: {
-        entity_name: "Policy",
-        field: "dates_in_effect",
-        label: "Dates policy in effect",
-        dateRange: true,
-        minMaxDate: { min: undefined, max: undefined }
-      }
-    }
-  ]);
-  const unspecified = (
-    <span className={styles.unspecified}>{"None available"}</span>
-  );
+  const [filterDefs, setFilterDefs] = useState(entityInfo.filters);
 
   const [columns, setColumns] = useState([
     {
@@ -304,24 +235,9 @@ const Data = ({
    */
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
+
     const queries = {
-      policies: Policy({
-        method,
-        filters,
-        fields: [
-          "id",
-          "place",
-          "primary_ph_measure",
-          "policy_name",
-          "authority_name",
-          // "ph_measure_details",
-          "desc",
-          "date_start_effective",
-          // "date_end_actual",
-          // "date_end_anticipated",
-          "file"
-        ]
-      }),
+      instances: entityInfo.dataQuery({ method, filters }),
       metadata: Metadata({
         method: "get",
         fields: columns.map(d => {
@@ -330,6 +246,8 @@ const Data = ({
         })
       })
     };
+
+    // TODO generalize to plans
     if (initializing) {
       queries.optionsets = OptionSet({
         method: "get",
@@ -347,17 +265,17 @@ const Data = ({
     const results = await execute({
       queries
     });
-
-    setData(results.policies.data);
+    console.log(results.instances.data);
+    setData(results.instances.data);
     setMetadata(results.metadata.data);
 
     // define min/max range of daterange pickers
     // TODO modularize and reuse repeated code
-    const policyDatesStart = results.policies.data
+    const policyDatesStart = results.instances.data
       .map(d => d.date_start_effective)
       .filter(d => d)
       .sort();
-    const policyDatesEnd = results.policies.data
+    const policyDatesEnd = results.instances.data
       .map(d => d.date_end_actual)
       .filter(d => d)
       .sort();
@@ -399,6 +317,7 @@ const Data = ({
     setLoading(false);
   };
 
+  // EFFECT HOOKS // ---------—---------—---------—---------—---------—------//
   // on initial page load, get all data and filter optionset values
   useEffect(() => {
     // scroll to top of page
@@ -411,8 +330,15 @@ const Data = ({
     setPage("data");
   }, []);
 
+  // if doc type changes, get new entity info
+  useEffect(() => {
+    // change entity info
+    setEntityInfo(docType === "policy" ? policyInfo : planInfo);
+  }, [docType]);
+
   // DEBUG url params change
   useEffect(() => {
+    console.log("urlFilterParams");
     if (urlFilterParams !== null && isEmpty(filters)) {
       // add filters from URL search params
       const newFilters = {};
@@ -432,15 +358,23 @@ const Data = ({
     }
   }, [urlFilterParams]);
 
+  // when entity type is changed, update filter defs and data
+  useEffect(() => {
+    // update filter definitions
+    setFilterDefs(entityInfo.filterDefs);
+    // set loading spinner to visible
+    setLoading(true);
+    setFilters({});
+  }, [entityInfo]);
+
   // when filters are changed, retrieve filtered data, and set loading spinner
-  // to visible
+  // to visible; do likewise if the document type is changed
   useEffect(() => {
     if (filters !== null) {
       // set loading spinner to visible
       setLoading(true);
 
       // get data (loading spinner turned off after API call)
-      console.log(filters);
       getData(filters);
 
       // if filters are empty, clear all URL search params
@@ -457,46 +391,22 @@ const Data = ({
     }
   }, [filters]);
 
-  // when metadata are retrieved, update columns with definitions
+  // when metadata are retrieved, update columns with definitions; likewise if
+  // the document type is changed (policy <--> plan)
   useEffect(() => {
     if (metadata !== null) {
-      const newColumns = [...columns];
-      newColumns.forEach(d => {
-        if (d.dataField === "file") {
-          d.definition = "PDF download of or external link to policy";
-          return;
-        }
-        const key = d.dataField.includes(".")
-          ? d.dataField
-          : "policy." + d.dataField;
-        d.definition = metadata[key] ? metadata[key].definition || "" : "";
-
-        // use only the first sentence of the definition
-        if (d.dataField !== "authority_name")
-          d.definition = d.definition.split(".")[0] + ".";
-
-        // special cases
-        if (d.dataField === "desc") {
-          d.definition =
-            "The name and a written description of the policy or law and who it impacts.";
-        }
-      });
+      const newColumns = entityInfo.getColumns({ metadata });
       setColumns(newColumns);
     }
-  }, [metadata]);
+  }, [metadata, entityInfo]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
-    switch (docType) {
-      case "policy":
-        return <Table {...{ columns, data }} />;
-      case "plan":
-      default:
-        return <div />;
-    }
+    return <Table {...{ columns, data }} />;
   };
-  const table = getTable({ docType });
 
+  if (columns === null) return <div />;
+  const table = getTable({ docType });
   return (
     <div className={styles.data}>
       <div className={styles.header}>
@@ -570,10 +480,10 @@ const Data = ({
                       { name: "Policies", value: "policy" },
                       {
                         name: "Plans",
-                        value: "plan",
-                        tooltip:
-                          "Plans are currently being added to the database and are not yet available.",
-                        disabled: true
+                        value: "plan"
+                        // tooltip:
+                        //   "Plans are currently being added to the database and are not yet available.",
+                        // disabled: true
                       }
                     ]}
                     curVal={docType}

@@ -101,6 +101,62 @@ export const Policy = async function({
   } else return false;
 };
 
+let allPlans = null;
+
+/**
+ * Get Plan data from API.
+ */
+export const Plan = async function({
+  method,
+  fields = [],
+  filters = null,
+  by_category = null
+}) {
+  // return cached result if available
+  if (isEmpty(filters) && allPlans !== null) {
+    return allPlans;
+  }
+
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+  // TODO implement `by_category` in future if needed
+  // if (by_category !== null) params.append("by_category", by_category);
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/get/plan`, {
+      params
+    });
+  } else if (method === "post") {
+    console.log("Error: Method not implemented for `Plan`: " + method);
+    return false;
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+    req = await axios.post(
+      `${API_URL}/post/policy`,
+      { filters },
+      {
+        params
+      }
+    );
+  } else {
+    console.log("Error: Method not implemented for `Plan`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) {
+    if (isEmpty(filters)) {
+      allPlans = res.data;
+    }
+    return res.data;
+  } else return false;
+};
+
 /**
  * Get policy status data from API.
  */
