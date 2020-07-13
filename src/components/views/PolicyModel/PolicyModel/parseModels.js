@@ -55,22 +55,6 @@ export default function parseModelCurves(
       counterfactual_deaths: model.counterfactual_deaths,
     };
 
-    //     identify which run we want to use
-    //     let modelRun
-    //
-    //     if (counterfactualSelected) {
-    //       modelRun = parseModelString(
-    //         model.results
-    //           .filter(run => Object.keys(run)[0] !== run)
-    //           .find(inter => inter.name.includes('do_nothing')).run
-    //       )
-    //     } else {
-    //       modelRun = parseModelString(
-    //         model.results.filter(run => Object.keys(run)[0] !== run).slice(-1)[0]
-    //           .run
-    //       )
-    //     }
-
     const modelRun = parseModelString(
       model.results.filter(run => Object.keys(run)[0] !== run).slice(-1)[0].run
     );
@@ -80,16 +64,6 @@ export default function parseModelCurves(
         .filter(run => Object.keys(run)[0] !== run)
         .find(inter => inter.name.includes("do_nothing")).run
     );
-
-    // console.log(counterfactualRun)
-
-    // console.log(
-    //   parseModelString(
-    //     model.results
-    //       .filter(run => Object.keys(run)[0] !== run)
-    //       .find(inter => inter.name.includes('do_nothing')).run
-    //   )
-    // )
 
     const trimmedData = modelRun;
     // console.log(trimmedData)
@@ -118,53 +92,40 @@ export default function parseModelCurves(
         if (selectedCurves.includes(column)) {
           // splitting out sources to make plotting easier later
           const source = day.source === "actuals" ? "actuals" : "model";
-          // skipping every fifth day of the model just to improve
-          // rendering performance, especially with multiple plots
-          if (source === "model") {
-            if (
-              (column === "R effective") &
+
+          // Start the modeled R Effective one day sooner
+          // so that the plot does not have a gap because
+          // they are plotted as two curves with separate styles
+          if (
+            source === "model" &&
+            (column === "R effective") &
               (trimmedData[index - 1].source === "actuals")
-            ) {
-              curves[state].curves[column][source].push({
-                x: day.date.setDate(day.date.getDate() - 1),
-                y: value,
-              });
-              counterfactualSelected &&
-                counterfactualRun[index] &&
-                curves[state].curves["CF_" + column]["model"].push({
-                  x: day.date.setDate(day.date.getDate() - 1),
-                  y: counterfactualRun[index][column],
-                });
-            }
-            if (
-              index % 5 === 0 ||
-              trimmedData[index - 1].source === "actuals"
-            ) {
-              curves[state].curves[column][source].push({
-                x: day.date,
-                y: value,
-              });
-              counterfactualSelected &&
-                counterfactualRun[index] &&
-                curves[state].curves["CF_" + column]["model"].push({
-                  x: day.date,
-                  y: counterfactualRun[index][column],
-                });
-            }
-          } else {
+          ) {
             curves[state].curves[column][source].push({
-              x: day.date,
+              x: day.date.setDate(day.date.getDate() - 1),
               y: value,
             });
             counterfactualSelected &&
               counterfactualRun[index] &&
-              // column === 'none' &&
               curves[state].curves["CF_" + column]["model"].push({
-                x: day.date,
+                x: day.date.setDate(day.date.getDate() - 1),
                 y: counterfactualRun[index][column],
               });
           }
 
+          // Add curves based on name (column) and source
+          curves[state].curves[column][source].push({
+            x: day.date,
+            y: value,
+          });
+          counterfactualSelected &&
+            counterfactualRun[index] &&
+            curves[state].curves["CF_" + column]["model"].push({
+              x: day.date,
+              y: counterfactualRun[index][column],
+            });
+
+          // Add Counterfactual curves with CF prefix
           if (counterfactualSelected) {
             curves[state].curves["CF_" + column].yMax =
               curves[state].curves["CF_" + column].yMax >
