@@ -324,7 +324,6 @@ const Data = ({
                 message: (
                   <React.Fragment>
                     <span>Download all data</span>
-                    <br />
                     <span>
                       {comma(counts["Policy"])} policies and{" "}
                       {comma(counts["Plan"])} plans
