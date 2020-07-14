@@ -149,7 +149,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     <div className={styles.background}>
       <article className={styles.main}>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>Social distancing policy model</h1>
+          <h1 className={styles.title}>COVID AMP policy model</h1>
           <div className={styles.dataDates}>
             <p>
               {dataDates && (
