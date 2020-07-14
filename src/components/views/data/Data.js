@@ -33,9 +33,10 @@ const Data = ({
   setPage,
   urlFilterParamsPolicy,
   urlFilterParamsPlan,
+  type,
   counts,
 }) => {
-  const [docType, setDocType] = useState("policy");
+  const [docType, setDocType] = useState(type || "policy");
   const [entityInfo, setEntityInfo] = useState(policyInfo);
 
   // set `unspecified` component, etc., from entity info
@@ -182,8 +183,6 @@ const Data = ({
     // set loading spinner to visible
     setLoading(true);
 
-    console.log("initial load");
-
     // set current page
     setPage("data");
   }, []);
@@ -197,15 +196,20 @@ const Data = ({
     setFilterDefs(null);
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
 
-    // // get current URL params
-    // const urlParams = new URLSearchParams(window.location.search);
-    //
-    // // update which doc type is being viewed
-    // urlParams.set("type", docType);
-    //
-    // // update URL
-    // const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
-    // window.history.replaceState({ }, "", newUrl);
+    // get current URL params
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // update which doc type is being viewed
+    urlParams.set("type", docType);
+
+    const newState = {};
+    for (const [k, v] of urlParams.entries()) {
+      if (v !== null && v !== "") {
+        newState[k] = v;
+      }
+    }
+    const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
+    window.history.replaceState(newState, "", newUrl);
 
     const newFilters = getFiltersFromUrlParams();
     setFilters(newFilters);
@@ -221,7 +225,6 @@ const Data = ({
 
   // when filters are updated, update data
   useEffect(() => {
-    console.log("loading = " + loading);
     if (!loading) {
       // update data
       setLoading(true);
@@ -242,11 +245,11 @@ const Data = ({
       const curUrlFilterParamsPlan = urlParams.get("filters_plan");
 
       // get key corresponding to the currently viewed doc type's filters
-      const filtersUrlParamKey = "filters_" + entityInfo.nouns.s.toLowerCase();
+      const filtersUrlParamKey = "filters_" + docType;
 
       // TODO make the below work with two filter sets
       // Default state is the currently selected filters per the URL params
-      const newState = {};
+      const newState = { type: docType };
       if (curUrlFilterParamsPolicy !== null)
         newState.filters_policy = curUrlFilterParamsPolicy;
       if (curUrlFilterParamsPlan !== null)
@@ -258,8 +261,6 @@ const Data = ({
       } else {
         newState[filtersUrlParamKey] = JSON.stringify(filters);
       }
-      console.log("newState");
-      console.log(newState);
       const newUrlParams = new URLSearchParams();
       for (const [k, v] of Object.entries(newState)) {
         if (v !== null && v !== "") {

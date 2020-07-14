@@ -120,10 +120,15 @@ const App = () => {
                       const urlParams = new URLSearchParams(
                         window.location.search
                       );
+                      const type = urlParams.get("type");
+                      const filtersPolicyStrLegacy = urlParams.get("filters");
                       const filtersPolicyStr = urlParams.get("filters_policy");
                       const filtersPlanStr = urlParams.get("filters_plan");
                       const urlFilterParamsPolicy = JSON.parse(
                         filtersPolicyStr
+                      );
+                      const urlFilterParamsPolicyLegacy = JSON.parse(
+                        filtersPolicyStrLegacy
                       );
                       const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
                       return (
@@ -133,9 +138,12 @@ const App = () => {
                             loading,
                             setPage,
                             setInfoTooltipContent,
-                            urlFilterParamsPolicy,
+                            urlFilterParamsPolicy:
+                              urlFilterParamsPolicyLegacy ||
+                              urlFilterParamsPolicy,
                             urlFilterParamsPlan,
                             counts,
+                            type,
                           }}
                         />
                       );
