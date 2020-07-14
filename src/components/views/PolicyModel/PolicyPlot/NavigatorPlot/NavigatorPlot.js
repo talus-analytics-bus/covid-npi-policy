@@ -59,6 +59,13 @@ const NavigatorPlot = props => {
     }
   );
 
+  // console.log("\nNavigatorPlot.js");
+
+  console.log("NavigatorPlot.js props.zoomDateRange");
+  console.log(props.zoomDateRange);
+  console.log("NavigatorPlot.js domain");
+  console.log(props.domain);
+
   return (
     <div className={styles.background}>
       <VictoryChart
@@ -78,7 +85,6 @@ const NavigatorPlot = props => {
             brushComponent={<CustomBrush />}
             brushDomain={{ x: props.zoomDateRange }}
             onBrushDomainChange={domain => {
-              // props.setZoomDomain({ x: domain.x, y: props.zoomDomain.y });
               props.setZoomDateRange(domain.x);
             }}
           />

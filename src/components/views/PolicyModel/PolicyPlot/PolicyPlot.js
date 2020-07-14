@@ -363,11 +363,12 @@ const PolicyModel = props => {
           <VictoryZoomContainer
             className={styles.pct}
             allowZoom={false}
+            allowPan={false}
             zoomDimension="x"
             zoomDomain={{ x: props.zoomDateRange }}
-            onZoomDomainChange={domain => {
-              props.setZoomDateRange(domain.x);
-            }}
+            // onZoomDomainChange={domain => {
+            //   props.setZoomDateRange(domain.x);
+            // }}
           />
         }
       >
@@ -509,9 +510,9 @@ const PolicyModel = props => {
             allowPan={false}
             zoomDimension="x"
             zoomDomain={{ x: props.zoomDateRange }}
-            onZoomDomainChange={domain => {
-              props.setZoomDateRange(domain.x);
-            }}
+            // onZoomDomainChange={domain => {
+            //   props.setZoomDateRange(domain.x);
+            // }}
           />
         }
       >

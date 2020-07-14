@@ -38,14 +38,28 @@ const PolicyModel = ({ setLoading, setPage }) => {
   const [contactPlotType, setContactPlotType] = useState("pctChange");
 
   const [curves, setCurves] = useState();
-  const [zoomDateRange, setZoomDateRange] = useState([
+  const [zoomDateRange, __setZoomDateRange] = useState([
     new Date("2020-01-01"),
     new Date("2021-01-01"),
   ]);
-  const [domain, setDomain] = useState([
+
+  const setZoomDateRange = React.useCallback(value => {
+    console.log("\n\nsetZoomDateRange");
+    console.log(value);
+    __setZoomDateRange(value);
+  }, []);
+
+  const [domain, __setDomain] = useState([
     new Date("2020-01-01"),
     new Date("2021-01-01"),
   ]);
+
+  const setDomain = React.useCallback(value => {
+    console.log("\n\nsetDomain");
+    console.log(value);
+    __setDomain(value);
+  }, []);
+
   const [caseLoadAxis, setCaseLoadAxis] = useState([0, 10000]);
 
   // memoization helps here but it would also
@@ -75,16 +89,34 @@ const PolicyModel = ({ setLoading, setPage }) => {
       .flat();
 
     // Initialize the zoom range as all dates
-    setZoomDateRange([
-      dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
-    ]);
+    const zoomStartDate = [...dates].reduce((prev, curr) =>
+      prev > curr ? curr : prev
+    );
+    const zoomEndDate = [...dates].reduce((prev, curr) =>
+      prev < curr ? curr : prev
+    );
+
+    // zoomStartDate.setMonth(zoomStartDate.getMonth() + 1);
+    // zoomEndDate.setMonth(zoomEndDate.getMonth() - 1);
+
+    setZoomDateRange([zoomStartDate, zoomEndDate]);
+    // console.log("\npolicymodel setZoomDateRange");
+    // console.log([zoomStartDate, zoomEndDate]);
+
+    //     const domainStartDate = [...dates].reduce((prev, curr) =>
+    //       prev > curr ? curr : prev
+    //     );
+    //     const domainEndDate = [...dates].reduce((prev, curr) =>
+    //       prev < curr ? curr : prev
+    //     );
+    //
+    //     domainStartDate.setMonth(domainStartDate.getMonth() - 1);
+    //     domainEndDate.setMonth(domainEndDate.getMonth() + 1);
 
     // set overall domain; this will be used for the navigator plot.
-    setDomain([
-      dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
-    ]);
+    // setDomain([domainStartDate, domainEndDate]);
+    // console.log("setup domain");
+    // console.log([domainStartDate, domainEndDate]);
 
     setCaseLoadAxis([
       0,
@@ -149,7 +181,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     <div className={styles.background}>
       <article className={styles.main}>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>Social distancing policy model</h1>
+          <h1 className={styles.title}>COVID AMP policy model</h1>
           <div className={styles.dataDates}>
             <p>
               {dataDates && (
@@ -230,6 +262,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
             </label>
           </div>
           <div className={styles.navigator}>
+            {/* {console.log("\npolicymodel zoomDateRange")} */}
+            {/* {console.log(zoomDateRange)} */}
             {curves && curves[selectedStates[0]] && (
               <NavigatorPlot
                 curves={curves[selectedStates[0]].curves}
