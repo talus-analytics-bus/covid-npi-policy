@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-const TodayLabel = props => {
+const LineExtension = props => {
   return (
     <g>
       {/* <rect */}
@@ -17,7 +17,7 @@ const TodayLabel = props => {
         x={props.x}
         y="5"
         fontSize="5"
-        fill="#7FC6FA"
+        fill={props.color || "#7FC6FA"}
         textAnchor="middle"
         dominantBaseline="middle"
         fontFamily="Raleway"
@@ -26,12 +26,12 @@ const TodayLabel = props => {
         {props.text}
       </text>
       <path
-        d={`M ${props.x} 8 L ${props.x} ${100}`}
-        stroke="#7FC6FA"
-        strokeWidth="1.5"
+        d={`M ${props.x} ${props.start || 8} L ${props.x} ${50}`}
+        stroke={props.color || "#7FC6FA"}
+        strokeWidth={props.strokeWidth || "1.5"}
       />
     </g>
-  )
-}
+  );
+};
 
-export default TodayLabel
+export default LineExtension;

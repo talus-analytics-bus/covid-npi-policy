@@ -1,25 +1,26 @@
-import React from 'react'
+import React from "react";
 
-import styles from './CustomBrush.module.scss'
+import styles from "./CustomBrush.module.scss";
 
 const CustomBrush = props => {
   // overall width of main vertical part of thumb
-  const width = 3.5
+  const width = 3.5;
 
   // padding between inner and outer portions
-  const pad = 0.75
+  const pad = 0.75;
 
   // corner radius of main vertical part
-  const cornerRad = 1.25
+  const cornerRad = 1.25;
 
   // width of rotated rectangle which forms the arrows
-  const arrowWidth = 5.25
+  const arrowWidth = 5.25;
 
-  const start = props.x
-  const end = props.x + props.width
+  const start = props.x;
+  const end = props.x + props.width;
 
-  const top = props.y + 6
-  const height = props.height - 6
+  // top plot padding adjustment
+  const top = props.y + 0;
+  const height = props.height - 0;
 
   return (
     <g>
@@ -91,7 +92,7 @@ const CustomBrush = props => {
         rx={cornerRad - pad}
       />
     </g>
-  )
-}
+  );
+};
 
-export default CustomBrush
+export default CustomBrush;

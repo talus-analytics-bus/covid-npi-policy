@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
-
 import loadModels, {
   requestIntervention,
   clearState,
@@ -29,24 +25,29 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
 
-  // curves selected by the user
+  // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
     "infected_a",
     // 'infected_b',
     // 'infected_c',
     // 'dead',
     "R effective",
+    "pctChange",
   ]);
+
+  const [contactPlotType, setContactPlotType] = useState("pctChange");
 
   const [curves, setCurves] = useState();
   const [zoomDateRange, setZoomDateRange] = useState([
     new Date("2020-01-01"),
     new Date("2021-01-01"),
   ]);
+
   const [domain, setDomain] = useState([
     new Date("2020-01-01"),
     new Date("2021-01-01"),
   ]);
+
   const [caseLoadAxis, setCaseLoadAxis] = useState([0, 10000]);
 
   // memoization helps here but it would also
@@ -73,19 +74,27 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // set up axes
     const dates = Object.values(modelCurves)
       .map(state => state.dateRange)
-      .flat();
+      .flat()
+      .sort((date1, date2) => {
+        if (date1 > date2) return 1;
+        if (date1 < date2) return -1;
+        return 0;
+      });
 
     // Initialize the zoom range as all dates
+    // using new Date() to create a separate date object
     setZoomDateRange([
-      dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
+      new Date(dates[0].toISOString()),
+      new Date(dates.slice(-1)[0].toISOString()),
     ]);
 
-    // set overall domain; this will be used for the navigator plot.
-    setDomain([
-      dates.reduce((prev, curr) => (prev > curr ? curr : prev)),
-      dates.reduce((prev, curr) => (prev < curr ? curr : prev)),
-    ]);
+    const domainStartDate = new Date(dates[0].toISOString());
+    const domainEndDate = new Date(dates.slice(-1)[0].toISOString());
+
+    domainStartDate.setMonth(domainStartDate.getMonth() - 1);
+    domainEndDate.setMonth(domainEndDate.getMonth() + 1);
+
+    setDomain([domainStartDate, domainEndDate]);
 
     setCaseLoadAxis([
       0,
@@ -116,7 +125,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
       ).toLocaleDateString();
 
       setDataDates(formattedDates);
-      console.log(formattedDates);
     };
 
     getDataDates();
@@ -151,7 +159,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     <div className={styles.background}>
       <article className={styles.main}>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>Social distancing policy model</h1>
+          <h1 className={styles.title}>COVID AMP policy model</h1>
           <div className={styles.dataDates}>
             <p>
               {dataDates && (
@@ -169,6 +177,80 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 </>
               )}
             </p>
+          </div>
+        </div>
+        <div className={styles.introduction}>
+          <p>
+            The COVID AMP policy model allows users to evaluate the impact of
+            policies on the outbreak:
+            <ol>
+              <li>
+                <strong>Visualize</strong> when policies were implemented in
+                each state relative to caseload and fatalities
+              </li>
+              <li>
+                <strong>Predict</strong> how future policies will impact
+                caseload
+              </li>
+              <li>
+                <strong>Show</strong> how much benefit previous policies had on
+                mitigating the outbreak
+              </li>
+            </ol>
+          </p>
+        </div>
+        <div className={styles.controlRow}>
+          <div className={styles.selectControls}>
+            <label>
+              Change state
+              <select
+                value={selectedStates[0]}
+                onChange={e => {
+                  setSelectedStates([e.target.value]);
+                }}
+                aria-label={"Select a state to display"}
+              >
+                {states.map(state => (
+                  <option key={state.abbr} value={state.abbr}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              COVID case count
+              <select
+                value={selectedCurves[0]}
+                onChange={e => {
+                  setSelectedCurves([e.target.value, "R effective"]);
+                }}
+              >
+                <option value="infected_a">Infected</option>
+                <option value="infected_b">Hospitalized</option>
+                <option value="infected_c">ICU</option>
+                <option value="dead">Deaths</option>
+              </select>
+            </label>
+            <label>
+              Reduction in contacts
+              <select onChange={e => setContactPlotType(e.target.value)}>
+                <option value="pctChange">% reduction</option>
+                <option value="R effective">Effective R Value</option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.navigator}>
+            {/* {console.log("\npolicymodel zoomDateRange")} */}
+            {/* {console.log(zoomDateRange)} */}
+            {curves && curves[selectedStates[0]] && (
+              <NavigatorPlot
+                curves={curves[selectedStates[0]].curves}
+                zoomDateRange={zoomDateRange}
+                setZoomDateRange={setZoomDateRange}
+                domain={domain}
+                caseLoadAxis={caseLoadAxis}
+              />
+            )}
           </div>
         </div>
         <div className={styles.tabrow}>
@@ -197,42 +279,22 @@ const PolicyModel = ({ setLoading, setPage }) => {
         </div>
         <section className={styles.tabarea}>
           <div className={styles.settingsBar}>
-            <label>
-              Add a state to compare
-              <select
-                value={selectedStates[0]}
-                onChange={e =>
-                  setSelectedStates([e.target.value, ...selectedStates])
-                }
-                disabled={selectedStates.length >= 3}
-              >
-                {states.map(state => (
-                  <option key={state.abbr} value={state.abbr}>
-                    {state.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Show reduction in contacts by
-              <select>
-                <option value="R effective">Effective R Value</option>
-              </select>
-            </label>
-            <label>
-              Show COVID count by
-              <select
-                value={selectedCurves[0]}
-                onChange={e => {
-                  setSelectedCurves([e.target.value, "R effective"]);
-                }}
-              >
-                <option value="infected_a">Infected</option>
-                <option value="infected_b">Hospitalized</option>
-                <option value="infected_c">ICU</option>
-                <option value="dead">Deaths</option>
-              </select>
-            </label>
+            {/* <label> */}
+            {/*   Add a state to compare */}
+            {/*   <select */}
+            {/*     value={selectedStates[0]} */}
+            {/*     onChange={e => */}
+            {/*       setSelectedStates([e.target.value, ...selectedStates]) */}
+            {/*     } */}
+            {/*     disabled={selectedStates.length >= 3} */}
+            {/*   > */}
+            {/*     {states.map(state => ( */}
+            {/*       <option key={state.abbr} value={state.abbr}> */}
+            {/*         {state.name} */}
+            {/*       </option> */}
+            {/*     ))} */}
+            {/*   </select> */}
+            {/* </label> */}
 
             {/* <label> */}
             {/*   <input */}
@@ -244,52 +306,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
             {/*   /> */}
             {/*   COVID COUNT WITH NO ACTIONS TAKEN */}
             {/* </label> */}
-            <label className={styles.legendLabel}>
-              <Tippy
-                content={
-                  <div className={styles.legend}>
-                    <div className={styles.lockdown}>
-                      <span />
-                      <p>Lockdown policies</p>
-                    </div>
-                    <div className={styles.safer}>
-                      <span />
-                      <p>Safer at home policies</p>
-                    </div>
-                    <div className={styles.stay}>
-                      <span />
-                      <p>Stay at home policies</p>
-                    </div>
-                    <div className={styles.normal}>
-                      <span />
-                      <p>New normal policies</p>
-                    </div>
-                    <div className={styles.proposed}>
-                      <span />
-                      <p>Proposed</p>
-                    </div>
-                    <div className={styles.actuals}>
-                      <span />
-                      <p>Actuals</p>
-                    </div>
-                    <div className={styles.modeled}>
-                      <span />
-                      <p>Modeled</p>
-                    </div>
-                  </div>
-                }
-                allowHTML={true}
-                interactive={true}
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <h4>
-                  Legend <span style={{ fontSize: ".75rem" }}>▼</span>
-                </h4>
-              </Tippy>
-            </label>
           </div>
           {selectedStates.map((state, index) => {
             if (curves && curves[state]) {
@@ -315,6 +331,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setCounterfactualSelected={setCounterfactualSelected}
                   resetState={resetState}
                   dataDates={dataDates}
+                  contactPlotType={contactPlotType}
                 />
               );
             } else {
@@ -336,19 +353,11 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   activeTab={activeTab}
                   counterfactualSelected={counterfactualSelected}
                   setCounterfactualSelected={setCounterfactualSelected}
+                  contactPlotType={contactPlotType}
                 />
               );
             }
           })}
-          {curves && curves[selectedStates[0]] && (
-            <NavigatorPlot
-              curves={curves[selectedStates[0]].curves}
-              zoomDateRange={zoomDateRange}
-              setZoomDateRange={setZoomDateRange}
-              domain={domain}
-              caseLoadAxis={caseLoadAxis}
-            />
-          )}
         </section>
       </article>
     </div>

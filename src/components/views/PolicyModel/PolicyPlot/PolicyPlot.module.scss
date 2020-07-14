@@ -3,7 +3,7 @@
   // height: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 1rem;
+
   .pct {
     // Height set in JS
     width: 100%;
@@ -21,5 +21,84 @@
     font-size: 1.1rem;
     text-transform: uppercase;
     color: #6d6d6d;
+  }
+}
+
+.legendLabel {
+  margin-left: auto;
+  margin-right: 2rem;
+  position: relative;
+  top: 1rem;
+
+  h4 {
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 0.25rem;
+    color: #333;
+  }
+}
+
+.legend {
+  width: 14rem;
+  padding: 0.25rem;
+
+  .lockdown,
+  .safer,
+  .stay,
+  .normal,
+  .proposed,
+  .actuals,
+  .modeled {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.25rem 0;
+    box-sizing: border-box;
+
+    span {
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 1em;
+      margin-right: 0.5em;
+    }
+  }
+  .lockdown {
+    span {
+      background-color: #661b3c;
+    }
+  }
+  .safer {
+    span {
+      background-color: #c1272d;
+    }
+  }
+  .stay {
+    span {
+      background-color: #d66b3e;
+    }
+  }
+  .normal {
+    span {
+      background-color: #ecbd62;
+    }
+  }
+  .proposed {
+    span {
+      border: 3px solid #661b3c;
+    }
+  }
+  .actuals {
+    span {
+      height: 0;
+      border: 2px solid #183344;
+    }
+  }
+  .modeled {
+    span {
+      height: 0;
+      border: 2px solid #183344;
+      border-style: dashed;
+    }
   }
 }

@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 
-import styles from './AddInterventionCursor.module.scss'
+import styles from "./AddInterventionCursor.module.scss";
 
 const AddInterventionCursor = props => {
-  const dateString = new Date(props.datum.x).toLocaleString('default', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  const dateString = new Date(props.datum.x).toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
-  const today = new Date()
+  const today = new Date();
 
   // Only display the cursor if the date is in the future
   if ((props.datum.x > today) & (props.y > 3)) {
@@ -17,7 +17,7 @@ const AddInterventionCursor = props => {
     if (props.x < 400) {
       // offset the SVG so the cursor is at the
       // middle of the "+" symbol
-      const [xOffset, yOffset] = [-7, 0]
+      const [xOffset, yOffset] = [-7, 0];
       return (
         <g transform={`translate(${props.x + xOffset} ,${props.y + yOffset})`}>
           <g transform="scale(.33)">
@@ -36,26 +36,26 @@ const AddInterventionCursor = props => {
                 />
                 <text
                   transform="matrix(0.9626 0 0 1 45.4868 32.6299)"
-                  className={styles.st6 + ' ' + styles.st7 + ' ' + styles.st8}
+                  className={styles.st6 + " " + styles.st7 + " " + styles.st8}
                 >
                   {dateString}
                 </text>
                 <text
                   transform="matrix(1 0 0 1 45.9296 59.5132)"
-                  className={styles.st3 + ' ' + styles.st4 + ' ' + styles.st5}
+                  className={styles.st3 + " " + styles.st4 + " " + styles.st5}
                 >
-                  Add intervention
+                  Add policy
                 </text>
               </>
             )}
           </g>
         </g>
-      )
+      );
       // else display reflected tooltip
     } else {
       // offset the SVG so the cursor is at the
       // middle of the "+" symbol
-      const [xOffset, yOffset] = [-70, 0]
+      const [xOffset, yOffset] = [-70, 0];
       return (
         <g transform={`translate(${props.x + xOffset} ,${props.y + yOffset})`}>
           <g transform="scale(.33)">
@@ -76,7 +76,7 @@ const AddInterventionCursor = props => {
                   x="160"
                   y="32"
                   textAnchor="end"
-                  className={styles.st6 + ' ' + styles.st7 + ' ' + styles.st8}
+                  className={styles.st6 + " " + styles.st7 + " " + styles.st8}
                 >
                   {dateString}
                 </text>
@@ -86,19 +86,19 @@ const AddInterventionCursor = props => {
                   x="160"
                   y="58"
                   textAnchor="end"
-                  className={styles.st3 + ' ' + styles.st4 + ' ' + styles.st5}
+                  className={styles.st3 + " " + styles.st4 + " " + styles.st5}
                 >
-                  Add intervention
+                  Add policy
                 </text>
               </>
             )}
           </g>
         </g>
-      )
+      );
     }
   } else {
-    return false
+    return false;
   }
-}
+};
 
-export default AddInterventionCursor
+export default AddInterventionCursor;

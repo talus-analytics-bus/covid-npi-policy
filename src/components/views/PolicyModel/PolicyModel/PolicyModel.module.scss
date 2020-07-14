@@ -3,7 +3,7 @@
 }
 
 .main {
-  // max-width: 2200px;
+  // max-width: 90rem;
   margin-left: auto;
   margin-right: auto;
   padding: 2rem;
@@ -84,6 +84,42 @@
     }
   }
 
+  .introduction {
+    color: white;
+    font-size: 1.2rem;
+    font-family: "Rawline";
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  .controlRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+
+    .selectControls {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 0.5rem;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        color: white;
+        margin-right: 1rem;
+
+        select {
+          margin-top: 0.5rem;
+          color: #333;
+        }
+      }
+    }
+    .navigator {
+      min-width: 50rem;
+    }
+  }
+
   .tabrow {
     display: flex;
 
@@ -136,80 +172,6 @@
           border-radius: 0.5em;
         }
       }
-    }
-  }
-}
-
-.legendLabel {
-  margin-left: auto;
-
-  h4 {
-    padding: 0.5rem 1rem;
-    background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: 0.25rem;
-  }
-}
-
-.legend {
-  padding: 0.25rem;
-
-  .lockdown,
-  .safer,
-  .stay,
-  .normal,
-  .proposed,
-  .actuals,
-  .modeled {
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    padding: 0.25rem 0;
-    box-sizing: border-box;
-
-    span {
-      width: 1.5em;
-      height: 1.5em;
-      border-radius: 1em;
-      margin-right: 0.5em;
-    }
-  }
-  .lockdown {
-    span {
-      background-color: #661b3c;
-    }
-  }
-  .safer {
-    span {
-      background-color: #c1272d;
-    }
-  }
-  .stay {
-    span {
-      background-color: #d66b3e;
-    }
-  }
-  .normal {
-    span {
-      background-color: #ecbd62;
-    }
-  }
-  .proposed {
-    span {
-      border: 3px solid #661b3c;
-    }
-  }
-  .actuals {
-    span {
-      height: 0;
-      border: 2px solid #183344;
-    }
-  }
-  .modeled {
-    span {
-      height: 0;
-      border: 2px solid #183344;
-      border-style: dashed;
     }
   }
 }
