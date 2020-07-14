@@ -48,10 +48,17 @@ const Data = ({
   const [metadata, setMetadata] = useState(null);
 
   // define filters
-  const [filters, setFilters] = useState({});
-
-  // // flag for whether the download button should say loading or not
-  // const [buttonLoading, setButtonLoading] = useState(false);
+  const getFiltersFromUrlParams = () => {
+    // If filters are specific in the url params, and they are for the current
+    // entity class, use them. Otherwise, clear them
+    const urlFilterParams =
+      docType === "policy" ? urlFilterParamsPolicy : urlFilterParamsPlan;
+    const useUrlFilters = urlFilterParams !== null;
+    const newFilters = useUrlFilters ? urlFilterParams : {};
+    return newFilters;
+  };
+  const initFilters = getFiltersFromUrlParams();
+  const [filters, setFilters] = useState(initFilters);
 
   // min and max dates for date range pickers dynamically determined by data
   const [minMaxStartDate, setMinMaxStartDate] = useState({
@@ -175,6 +182,8 @@ const Data = ({
     // set loading spinner to visible
     setLoading(true);
 
+    console.log("initial load");
+
     // set current page
     setPage("data");
   }, []);
@@ -188,16 +197,20 @@ const Data = ({
     setFilterDefs(null);
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
 
-    // If filters are specific in the url params, and they are for the current
-    // entity class, use them. Otherwise, clear them
-    const urlFilterParams =
-      docType === "policy" ? urlFilterParamsPolicy : urlFilterParamsPlan;
-    const useUrlFilters = urlFilterParams !== null;
+    // // get current URL params
+    // const urlParams = new URLSearchParams(window.location.search);
+    //
+    // // update which doc type is being viewed
+    // urlParams.set("type", docType);
+    //
+    // // update URL
+    // const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
+    // window.history.replaceState({ }, "", newUrl);
 
-    const newFilters = useUrlFilters ? urlFilterParams : {};
-
+    const newFilters = getFiltersFromUrlParams();
     setFilters(newFilters);
 
+    // update entity info and get data
     setEntityInfo(newEntityInfo);
     getData({
       filtersForQuery: newFilters,
@@ -208,6 +221,7 @@ const Data = ({
 
   // when filters are updated, update data
   useEffect(() => {
+    console.log("loading = " + loading);
     if (!loading) {
       // update data
       setLoading(true);
@@ -218,6 +232,44 @@ const Data = ({
       });
 
       // update URL params string
+      // if filters are empty, clear all URL search params
+
+      // get current URL params
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // get filter strings for each doc type
+      const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
+      const curUrlFilterParamsPlan = urlParams.get("filters_plan");
+
+      // get key corresponding to the currently viewed doc type's filters
+      const filtersUrlParamKey = "filters_" + entityInfo.nouns.s.toLowerCase();
+
+      // TODO make the below work with two filter sets
+      // Default state is the currently selected filters per the URL params
+      const newState = {};
+      if (curUrlFilterParamsPolicy !== null)
+        newState.filters_policy = curUrlFilterParamsPolicy;
+      if (curUrlFilterParamsPlan !== null)
+        newState.filters_plan = curUrlFilterParamsPlan;
+
+      if (isEmpty(filters)) {
+        // clear filters for current doc type and update window history
+        newState[filtersUrlParamKey] = "";
+      } else {
+        newState[filtersUrlParamKey] = JSON.stringify(filters);
+      }
+      console.log("newState");
+      console.log(newState);
+      const newUrlParams = new URLSearchParams();
+      for (const [k, v] of Object.entries(newState)) {
+        if (v !== null && v !== "") {
+          newUrlParams.append(k, v);
+        }
+      }
+      const newUrl =
+        newUrlParams.toString() !== "" ? `/data?${newUrlParams}` : "/data";
+
+      window.history.replaceState(newState, "", newUrl);
     }
   }, [filters]);
 
