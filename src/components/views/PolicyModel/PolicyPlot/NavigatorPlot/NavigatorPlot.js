@@ -70,7 +70,7 @@ const NavigatorPlot = props => {
         height={30}
         // height={(window.innerHeight / window.innerWidth) * 500 * props.proportion}
         padding={{ top: 0, bottom: 8, left: 0, right: 0 }}
-        domainPadding={5}
+        domainPadding={0}
         responsive={true}
         scale={{ x: "time" }}
         // padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
