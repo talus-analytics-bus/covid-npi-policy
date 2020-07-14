@@ -96,27 +96,26 @@ const PolicyModel = ({ setLoading, setPage }) => {
       prev < curr ? curr : prev
     );
 
-    // zoomStartDate.setMonth(zoomStartDate.getMonth() + 1);
-    // zoomEndDate.setMonth(zoomEndDate.getMonth() - 1);
+    zoomStartDate.setMonth(zoomStartDate.getMonth() + 1);
+    zoomEndDate.setMonth(zoomEndDate.getMonth() - 1);
 
     setZoomDateRange([zoomStartDate, zoomEndDate]);
-    // console.log("\npolicymodel setZoomDateRange");
-    // console.log([zoomStartDate, zoomEndDate]);
 
-    //     const domainStartDate = [...dates].reduce((prev, curr) =>
-    //       prev > curr ? curr : prev
-    //     );
-    //     const domainEndDate = [...dates].reduce((prev, curr) =>
-    //       prev < curr ? curr : prev
-    //     );
-    //
-    //     domainStartDate.setMonth(domainStartDate.getMonth() - 1);
-    //     domainEndDate.setMonth(domainEndDate.getMonth() + 1);
+    const domainStartDate = [...dates].reduce((prev, curr) =>
+      prev > curr ? curr : prev
+    );
+    // const domainEndDate = dates.reduce((prev, curr) =>
+    //   prev < curr ? curr : prev
+    // );
+
+    // This line is changing the value stored in the start date
+    // of zoomDateRange... somehow.
+    domainStartDate.setMonth(domainStartDate.getMonth() - 1);
+
+    // domainEndDate.setMonth(domainEndDate.getMonth() + 1);
 
     // set overall domain; this will be used for the navigator plot.
     // setDomain([domainStartDate, domainEndDate]);
-    // console.log("setup domain");
-    // console.log([domainStartDate, domainEndDate]);
 
     setCaseLoadAxis([
       0,
