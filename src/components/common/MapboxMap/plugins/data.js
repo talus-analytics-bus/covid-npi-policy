@@ -1193,7 +1193,7 @@ export const tooltipGetter = async ({
             <a
               key={"view"}
               target="_blank"
-              href={"/data?filters=" + filtersStr}
+              href={"/data?for=policy&filters=" + filtersStr}
             >
               {
                 <button>

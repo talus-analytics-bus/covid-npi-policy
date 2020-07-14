@@ -120,8 +120,12 @@ const App = () => {
                       const urlParams = new URLSearchParams(
                         window.location.search
                       );
-                      const filtersStr = urlParams.get("filters");
-                      const urlFilterParams = JSON.parse(filtersStr);
+                      const filtersPolicyStr = urlParams.get("filters_policy");
+                      const filtersPlanStr = urlParams.get("filters_plan");
+                      const urlFilterParamsPolicy = JSON.parse(
+                        filtersPolicyStr
+                      );
+                      const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
                       return (
                         <Data
                           {...{
@@ -129,7 +133,8 @@ const App = () => {
                             loading,
                             setPage,
                             setInfoTooltipContent,
-                            urlFilterParams,
+                            urlFilterParamsPolicy,
+                            urlFilterParamsPlan,
                             counts,
                           }}
                         />

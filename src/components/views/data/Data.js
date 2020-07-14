@@ -31,7 +31,8 @@ const Data = ({
   loading,
   setInfoTooltipContent,
   setPage,
-  urlFilterParams,
+  urlFilterParamsPolicy,
+  urlFilterParamsPlan,
   counts,
 }) => {
   const [docType, setDocType] = useState("policy");
@@ -185,12 +186,21 @@ const Data = ({
     setColumns(null);
     setData(null);
     setFilterDefs(null);
-    setFilters({});
-
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
+
+    // If filters are specific in the url params, and they are for the current
+    // entity class, use them. Otherwise, clear them
+    const urlFilterParams =
+      docType === "policy" ? urlFilterParamsPolicy : urlFilterParamsPlan;
+    const useUrlFilters = urlFilterParams !== null;
+
+    const newFilters = useUrlFilters ? urlFilterParams : {};
+
+    setFilters(newFilters);
+
     setEntityInfo(newEntityInfo);
     getData({
-      filtersForQuery: {},
+      filtersForQuery: newFilters,
       entityInfoForQuery: newEntityInfo,
       initializingForQuery: true,
     });
