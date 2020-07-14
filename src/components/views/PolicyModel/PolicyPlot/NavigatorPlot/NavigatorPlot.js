@@ -61,11 +61,6 @@ const NavigatorPlot = props => {
 
   // console.log("\nNavigatorPlot.js");
 
-  console.log("NavigatorPlot.js props.zoomDateRange");
-  console.log(props.zoomDateRange);
-  console.log("NavigatorPlot.js domain");
-  console.log(props.domain);
-
   return (
     <div className={styles.background}>
       <VictoryChart

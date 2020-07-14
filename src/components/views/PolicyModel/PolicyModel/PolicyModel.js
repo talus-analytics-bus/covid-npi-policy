@@ -86,36 +86,27 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // set up axes
     const dates = Object.values(modelCurves)
       .map(state => state.dateRange)
-      .flat();
+      .flat()
+      .sort((date1, date2) => {
+        if (date1 > date2) return 1;
+        if (date1 < date2) return -1;
+        return 0;
+      });
 
     // Initialize the zoom range as all dates
-    const zoomStartDate = [...dates].reduce((prev, curr) =>
-      prev > curr ? curr : prev
-    );
-    const zoomEndDate = [...dates].reduce((prev, curr) =>
-      prev < curr ? curr : prev
-    );
+    // using new Date() to create a separate date object
+    setZoomDateRange([
+      new Date(dates[0].toISOString()),
+      new Date(dates.slice(-1)[0].toISOString()),
+    ]);
 
-    zoomStartDate.setMonth(zoomStartDate.getMonth() + 1);
-    zoomEndDate.setMonth(zoomEndDate.getMonth() - 1);
+    const domainStartDate = new Date(dates[0].toISOString());
+    const domainEndDate = new Date(dates.slice(-1)[0].toISOString());
 
-    setZoomDateRange([zoomStartDate, zoomEndDate]);
-
-    const domainStartDate = [...dates].reduce((prev, curr) =>
-      prev > curr ? curr : prev
-    );
-    // const domainEndDate = dates.reduce((prev, curr) =>
-    //   prev < curr ? curr : prev
-    // );
-
-    // This line is changing the value stored in the start date
-    // of zoomDateRange... somehow.
     domainStartDate.setMonth(domainStartDate.getMonth() - 1);
+    domainEndDate.setMonth(domainEndDate.getMonth() + 1);
 
-    // domainEndDate.setMonth(domainEndDate.getMonth() + 1);
-
-    // set overall domain; this will be used for the navigator plot.
-    // setDomain([domainStartDate, domainEndDate]);
+    setDomain([domainStartDate, domainEndDate]);
 
     setCaseLoadAxis([
       0,
