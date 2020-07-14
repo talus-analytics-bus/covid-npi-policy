@@ -38,27 +38,15 @@ const PolicyModel = ({ setLoading, setPage }) => {
   const [contactPlotType, setContactPlotType] = useState("pctChange");
 
   const [curves, setCurves] = useState();
-  const [zoomDateRange, __setZoomDateRange] = useState([
+  const [zoomDateRange, setZoomDateRange] = useState([
     new Date("2020-01-01"),
     new Date("2021-01-01"),
   ]);
 
-  const setZoomDateRange = React.useCallback(value => {
-    console.log("\n\nsetZoomDateRange");
-    console.log(value);
-    __setZoomDateRange(value);
-  }, []);
-
-  const [domain, __setDomain] = useState([
+  const [domain, setDomain] = useState([
     new Date("2020-01-01"),
     new Date("2021-01-01"),
   ]);
-
-  const setDomain = React.useCallback(value => {
-    console.log("\n\nsetDomain");
-    console.log(value);
-    __setDomain(value);
-  }, []);
 
   const [caseLoadAxis, setCaseLoadAxis] = useState([0, 10000]);
 
