@@ -64,11 +64,11 @@ const NavigatorPlot = props => {
       <VictoryChart
         className={styles.navigator}
         // style={{ height: props.proportion * 100 + '%' }}
-        width={500}
-        height={60}
+        width={300}
+        height={30}
         // height={(window.innerHeight / window.innerWidth) * 500 * props.proportion}
-        padding={{ top: 0, bottom: 25, left: 0, right: 0 }}
-        domainPadding={10}
+        padding={{ top: 0, bottom: 8, left: 0, right: 0 }}
+        domainPadding={5}
         responsive={true}
         scale={{ x: "time" }}
         // padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
@@ -92,12 +92,14 @@ const NavigatorPlot = props => {
           // tickFormat={x =>
           //   new Date(x).toLocaleString('default', { month: 'short' })
           // }
+          padding={{ top: 0, bottom: 0, left: 0, right: 0 }}
           style={{
             tickLabels: {
               fontFamily: "Rawline",
               fontWeight: "500",
-              fontSize: "5",
+              fontSize: 5.5,
               fill: "#6d6d6d",
+              padding: 1,
             },
           }}
         />
