@@ -20,7 +20,7 @@ import Contact from "./components/views/contact/Contact.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
 
 // queries
-import { Version } from "./components/misc/Queries";
+import { Version, Count, execute } from "./components/misc/Queries";
 
 // styles and assets
 import styles from "./App.module.scss";
@@ -33,6 +33,7 @@ const App = () => {
   const [page, setPage] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const [versions, setVersions] = useState(null);
+  const [counts, setCounts] = useState(null);
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -45,7 +46,7 @@ const App = () => {
     edge: browser => browserModal("Edge"),
     ie: browser => browserModal("Internet Explorer"),
     opera: browser => browserModal("Opera"),
-    default: () => null
+    default: () => null,
   };
 
   // function to return modal content for unsupported browser modal
@@ -84,16 +85,24 @@ const App = () => {
 
   // render page only after versions data have been loaded
   const getData = async () => {
-    const data = await Version();
-    return data;
+    const queries = {
+      version: Version(),
+      count: Count({ class_names: ["Policy", "Plan"] }),
+    };
+    const results = await execute({
+      queries,
+    });
+
+    setVersions(results.version);
+    setCounts(results.count);
   };
 
   // set versions data from API call
   useEffect(() => {
-    getData().then(newVersions => setVersions(newVersions));
+    getData();
   }, []);
 
-  if (versions === null) return <div />;
+  if (versions === null || counts === null) return <div />;
   else
     return (
       <React.Fragment>
@@ -120,7 +129,8 @@ const App = () => {
                             loading,
                             setPage,
                             setInfoTooltipContent,
-                            urlFilterParams
+                            urlFilterParams,
+                            counts,
                           }}
                         />
                       );
@@ -150,7 +160,7 @@ const App = () => {
                             versions,
                             setPage,
                             setLoading,
-                            setInfoTooltipContent
+                            setInfoTooltipContent,
                           }}
                         />
                       );
@@ -167,7 +177,7 @@ const App = () => {
                           {...{
                             setPage,
                             setLoading,
-                            initTab: routeProps.match.params.subpage
+                            initTab: routeProps.match.params.subpage,
                           }}
                         />
                       );

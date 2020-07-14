@@ -118,6 +118,57 @@
       }
     }
   }
+
+  // drawer components
+  // content top section
+  .contentTop {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px; // TODO elegantly
+  }
+
+  // data download buttons
+  button {
+    // master download button
+    &.all {
+      &,
+      &:hover {
+        background-color: transparent;
+        color: $dark-navy-blue;
+      }
+      &:active {
+        color: black;
+        background-color: darken($light-blue-3, 5%);
+      }
+    }
+
+    // entity-specific download buttons
+    &.Policy,
+    &.Plan {
+      padding: 10px;
+      img {
+        height: 30px;
+        margin-right: 10px;
+      }
+      span,
+      div {
+        // line-height: 0;
+      }
+      div {
+        display: flex;
+        align-items: center;
+        // line-height: ;
+      }
+      span:first-child {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  // responsiveness
+  // TODO move to separate file
   @media #{$phone} {
     table {
       th,

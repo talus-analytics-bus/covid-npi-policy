@@ -36,17 +36,17 @@ export const planInfo = {
       },
     },
     {
-      country_name: {
-        entity_name: "Place",
-        field: "country_name",
-        label: "Country",
-      },
+      // country_name: {
+      //   entity_name: "Place",
+      //   field: "country_name",
+      //   label: "Country",
+      // },
       area1: {
         entity_name: "Place",
         field: "area1",
         label: "State / Province",
         withGrouping: true,
-        primary: "country_name",
+        // primary: "country_name",
         disabledText: "Choose a country",
       },
       area2: {

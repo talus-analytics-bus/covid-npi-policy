@@ -32,12 +32,16 @@ const Data = ({
   setInfoTooltipContent,
   setPage,
   urlFilterParams,
+  counts,
 }) => {
   const [docType, setDocType] = useState("policy");
-  const [entityInfo, setEntityInfo] = useState({});
+  const [entityInfo, setEntityInfo] = useState(policyInfo);
+
   // set `unspecified` component, etc., from entity info
   const unspecified = entityInfo.unspecified;
   const nouns = entityInfo.nouns;
+  console.log("nouns");
+  console.log(nouns);
 
   // define data and metadata for table
   const [data, setData] = useState(null);
@@ -47,8 +51,8 @@ const Data = ({
   // define filters
   const [filters, setFilters] = useState({});
 
-  // flag for whether the download button should say loading or not
-  const [buttonLoading, setButtonLoading] = useState(false);
+  // // flag for whether the download button should say loading or not
+  // const [buttonLoading, setButtonLoading] = useState(false);
 
   // min and max dates for date range pickers dynamically determined by data
   const [minMaxStartDate, setMinMaxStartDate] = useState({
@@ -248,67 +252,74 @@ const Data = ({
           <Drawer
             {...{
               title: <h2>Policy and plan database</h2>,
-              label: (
-                <React.Fragment>
-                  <button
-                    className={classNames(styles.downloadBtn, {
-                      [styles.loading]: buttonLoading,
-                    })}
-                    onClick={e => {
-                      e.stopPropagation();
-                      // setButtonLoading(true);
-                      Export({
-                        method: "post",
-                        filters,
-                        class_name: entityInfo.nouns.s,
-                      });
-                      // .then(d => setButtonLoading(false));
-                    }}
-                  >
-                    <img src={downloadSvg} />
-                    <div>
-                      {!buttonLoading && table && (
-                        <React.Fragment>
-                          <span>
-                            Download {isEmpty(filters) ? "all" : "filtered"}{" "}
-                            {nouns.p.toLowerCase()}
-                          </span>
-                          <br />
-                          <span>
-                            {comma(data.length)} record
-                            {data.length === 1 ? "" : "s"}
-                          </span>
-                        </React.Fragment>
-                      )}
-                      {buttonLoading && (
-                        <React.Fragment>
-                          <span>Downloading data</span>
-                          <br />
-                          <span>Please wait...</span>
-                        </React.Fragment>
-                      )}
-                    </div>
-                  </button>
-                </React.Fragment>
-              ),
+              label: DownloadBtn({
+                render: counts,
+                class_name: "all",
+                filters: {},
+                disabled: false,
+                message: (
+                  <React.Fragment>
+                    <span>Download all data</span>
+                    <br />
+                    <span>
+                      {comma(counts["Policy"])} policies and{" "}
+                      {comma(counts["Plan"])} plans
+                    </span>
+                  </React.Fragment>
+                ),
+              }),
               noCollapse: false,
               content: (
                 <React.Fragment>
-                  <RadioToggle
-                    label={"View"}
-                    choices={[
-                      { name: "Policies", value: "policy" },
-                      {
-                        name: "Plans",
-                        value: "plan",
-                      },
-                    ]}
-                    curVal={docType}
-                    callback={setDocType}
-                    horizontal={true}
-                    selectpicker={false}
-                    setInfoTooltipContent={setInfoTooltipContent}
-                  />
+                  <div className={styles.contentTop}>
+                    <RadioToggle
+                      label={"View"}
+                      choices={[
+                        { name: "Policies", value: "policy" },
+                        {
+                          name: "Plans",
+                          value: "plan",
+                        },
+                      ]}
+                      curVal={docType}
+                      callback={setDocType}
+                      horizontal={true}
+                      selectpicker={false}
+                      setInfoTooltipContent={setInfoTooltipContent}
+                    />
+                    {DownloadBtn({
+                      render: table,
+                      class_name: nouns.s,
+                      filters,
+                      disabled: data && data.length === 0,
+                      message: (
+                        <React.Fragment>
+                          <span>
+                            {data && data.length === 0 && (
+                              <>No {nouns.p.toLowerCase()} found</>
+                            )}
+                            {data && data.length > 0 && (
+                              <>
+                                Download {isEmpty(filters) ? "all" : "filtered"}{" "}
+                                {nouns.p.toLowerCase()} ({comma(data.length)})
+                              </>
+                            )}
+                          </span>
+
+                          {
+                            //   data && (
+                            //   <span>
+                            //     {comma(data.length)}{" "}
+                            //     {data.length === 1
+                            //       ? nouns.s.toLowerCase()
+                            //       : nouns.p.toLowerCase()}
+                            //   </span>
+                            // )
+                          }
+                        </React.Fragment>
+                      ),
+                    })}
+                  </div>
                   {table && (
                     <>
                       <div>
@@ -332,6 +343,41 @@ const Data = ({
         </React.Fragment>
       )}
     </div>
+  );
+};
+
+const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
+  // flag for whether the download button should say loading or not
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  return (
+    render && (
+      <button
+        className={classNames(styles.downloadBtn, {
+          [styles.loading]: buttonLoading || disabled,
+          [styles[class_name]]: true,
+        })}
+        onClick={e => {
+          e.stopPropagation();
+          setButtonLoading(true);
+          Export({
+            method: "post",
+            filters,
+            class_name,
+          }).then(d => setButtonLoading(false));
+        }}
+      >
+        <img src={downloadSvg} />
+        <div>
+          {!buttonLoading && render && message}
+          {buttonLoading && (
+            <React.Fragment>
+              <span>Downloading data, please wait...</span>
+            </React.Fragment>
+          )}
+        </div>
+      </button>
+    )
   );
 };
 

@@ -29,6 +29,26 @@ export const Version = async function() {
 };
 
 /**
+ * Get counts of data instances
+ */
+export const Count = async function({ class_names }) {
+  // prepare params
+  const params = new URLSearchParams();
+  class_names.forEach(d => {
+    params.append("class_names", d);
+  });
+
+  let req;
+  req = await axios(`${API_URL}/get/count`, {
+    params,
+  });
+
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
  * Get metadata for specified fields
  */
 export const Metadata = async function({
