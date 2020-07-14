@@ -1,6 +1,7 @@
 // standard modules
 import React, { useEffect, useState } from "react";
 import styles from "./table.module.scss";
+import classNames from "classnames";
 
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
@@ -15,7 +16,16 @@ import asc from "../../../assets/icons/table/sorted-asc.svg";
 import desc from "../../../assets/icons/table/sorted-desc.svg";
 import unsorted from "../../../assets/icons/table/unsorted.svg";
 
-const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
+const Table = ({
+  name,
+  data,
+  columns,
+  dataGetter,
+  childGetter,
+  defaultSortedField,
+  className,
+  ...props
+}) => {
   // define search bar
   const { SearchBar } = Search;
 
@@ -140,7 +150,7 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
   const expandable = data.some(d => d.children !== undefined);
   const defaultSorted = [
     {
-      dataField: "date_start_effective",
+      dataField: defaultSortedField,
       order: "desc"
     }
   ];
@@ -156,7 +166,10 @@ const Table = ({ name, data, columns, dataGetter, childGetter, ...props }) => {
             <BootstrapTable
               pagination={pagination}
               expandRow={expandable ? expandRow : undefined}
-              classes={expandable ? styles.expandable : ""}
+              classes={classNames({
+                [styles.expandable]: expandable,
+                [className]: true
+              })}
               {...props.baseProps}
               defaultSorted={defaultSorted}
             />

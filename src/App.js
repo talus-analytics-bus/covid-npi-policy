@@ -20,7 +20,7 @@ import Contact from "./components/views/contact/Contact.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
 
 // queries
-import { Version } from "./components/misc/Queries";
+import { Version, Count, execute } from "./components/misc/Queries";
 
 // styles and assets
 import styles from "./App.module.scss";
@@ -33,6 +33,7 @@ const App = () => {
   const [page, setPage] = useState(null);
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const [versions, setVersions] = useState(null);
+  const [counts, setCounts] = useState(null);
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -84,16 +85,24 @@ const App = () => {
 
   // render page only after versions data have been loaded
   const getData = async () => {
-    const data = await Version();
-    return data;
+    const queries = {
+      version: Version(),
+      count: Count({ class_names: ["Policy", "Plan"] }),
+    };
+    const results = await execute({
+      queries,
+    });
+
+    setVersions(results.version);
+    setCounts(results.count);
   };
 
   // set versions data from API call
   useEffect(() => {
-    getData().then(newVersions => setVersions(newVersions));
+    getData();
   }, []);
 
-  if (versions === null) return <div />;
+  if (versions === null || counts === null) return <div />;
   else
     return (
       <React.Fragment>
@@ -111,15 +120,30 @@ const App = () => {
                       const urlParams = new URLSearchParams(
                         window.location.search
                       );
-                      const filtersStr = urlParams.get("filters");
-                      const urlFilterParams = JSON.parse(filtersStr);
+                      const type = urlParams.get("type");
+                      const filtersPolicyStrLegacy = urlParams.get("filters");
+                      const filtersPolicyStr = urlParams.get("filters_policy");
+                      const filtersPlanStr = urlParams.get("filters_plan");
+                      const urlFilterParamsPolicy = JSON.parse(
+                        filtersPolicyStr
+                      );
+                      const urlFilterParamsPolicyLegacy = JSON.parse(
+                        filtersPolicyStrLegacy
+                      );
+                      const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
                       return (
                         <Data
                           {...{
                             setLoading,
+                            loading,
                             setPage,
                             setInfoTooltipContent,
-                            urlFilterParams,
+                            urlFilterParamsPolicy:
+                              urlFilterParamsPolicyLegacy ||
+                              urlFilterParamsPolicy,
+                            urlFilterParamsPlan,
+                            counts,
+                            type,
                           }}
                         />
                       );

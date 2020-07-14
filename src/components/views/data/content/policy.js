@@ -122,9 +122,6 @@ export const policyInfo = {
               : "";
           return <ShowMore text={title + cell} charLimit={200} />;
         }
-        // formatter: v => {
-        //   return <ShowMore text={v} charLimit={90} />;
-        // }
       },
       {
         dataField: "primary_ph_measure",
@@ -231,7 +228,6 @@ export const policyInfo = {
   // query to use when getting entity data
   // requires method and filters arguments
   dataQuery: ({ method, filters }) => {
-    console.log("Querying policy data...");
     return Policy({
       method,
       filters,
@@ -247,6 +243,9 @@ export const policyInfo = {
       ]
     });
   },
+
+  // default field to sort tabular data by
+  defaultSortedField: "date_start_effective",
 
   // JSX of content of table cells if data are unspecified, i.e., blank
   unspecified
