@@ -33,7 +33,7 @@ const PastInterventionInfo = props => {
     const stateFullName = states.find(state => state.abbr === props.state).name;
 
     policyURL =
-      `https://covidamp.org/data?filters=` +
+      `/data?type=policy&filters_policy=` +
       `{%22primary_ph_measure%22:[%22Social%20distancing%22],` +
       `%22dates_in_effect%22:[%22${props.effectiveDate}%22,` +
       `%22${props.effectiveDate}%22],` +
@@ -78,7 +78,11 @@ const PastInterventionInfo = props => {
           {proposed ? "Proposal Date: " : "Effective Date: "}
           {props.effectiveDate}
         </p>
-        {!proposed && <a href={policyURL}>view policies</a>}
+        {!proposed && (
+          <a target={"_blank"} href={policyURL}>
+            view policies
+          </a>
+        )}
       </div>
     </section>
   );
