@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
-
 import loadModels, {
   requestIntervention,
   clearState,
@@ -173,6 +169,78 @@ const PolicyModel = ({ setLoading, setPage }) => {
             </p>
           </div>
         </div>
+        <div className={styles.introduction}>
+          <p>
+            The COVID AMP policy model allows users to evaluate the impact of
+            policies on the outbreak:
+            <ol>
+              <li>
+                <strong>Visualize</strong> when policies were implemented in
+                each state relative to caseload and fatalities
+              </li>
+              <li>
+                <strong>Predict</strong> how future policies will impact
+                caseload
+              </li>
+              <li>
+                <strong>Show</strong> how much benefit previous policies had on
+                mitigating the outbreak
+              </li>
+            </ol>
+          </p>
+        </div>
+        <div className={styles.controlRow}>
+          <div className={styles.selectControls}>
+            <label>
+              Change state
+              <select
+                value={selectedStates[0]}
+                onChange={e => {
+                  setSelectedStates([e.target.value]);
+                }}
+                aria-label={"Select a state to display"}
+              >
+                {states.map(state => (
+                  <option key={state.abbr} value={state.abbr}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              COVID case count
+              <select
+                value={selectedCurves[0]}
+                onChange={e => {
+                  setSelectedCurves([e.target.value, "R effective"]);
+                }}
+              >
+                <option value="infected_a">Infected</option>
+                <option value="infected_b">Hospitalized</option>
+                <option value="infected_c">ICU</option>
+                <option value="dead">Deaths</option>
+              </select>
+            </label>
+            <label>
+              Reduction in contacts
+              <select onChange={e => setContactPlotType(e.target.value)}>
+                <option value="pctChange">% reduction</option>
+                <option value="R effective">Effective R Value</option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.navigator}>
+            {curves && curves[selectedStates[0]] && (
+              <NavigatorPlot
+                curves={curves[selectedStates[0]].curves}
+                zoomDateRange={zoomDateRange}
+                setZoomDateRange={setZoomDateRange}
+                domain={domain}
+                caseLoadAxis={caseLoadAxis}
+              />
+            )}
+          </div>
+        </div>
         <div className={styles.tabrow}>
           {/* <button */}
           {/*   onClick={() => setActiveTab('existing')} */}
@@ -215,27 +283,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
             {/*     ))} */}
             {/*   </select> */}
             {/* </label> */}
-            <label>
-              Show reduction in contacts by
-              <select onChange={e => setContactPlotType(e.target.value)}>
-                <option value="pctChange">% of normal contact rate</option>
-                <option value="R effective">Effective R Value</option>
-              </select>
-            </label>
-            <label>
-              Show COVID count by
-              <select
-                value={selectedCurves[0]}
-                onChange={e => {
-                  setSelectedCurves([e.target.value, "R effective"]);
-                }}
-              >
-                <option value="infected_a">Infected</option>
-                <option value="infected_b">Hospitalized</option>
-                <option value="infected_c">ICU</option>
-                <option value="dead">Deaths</option>
-              </select>
-            </label>
 
             {/* <label> */}
             {/*   <input */}
@@ -247,52 +294,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
             {/*   /> */}
             {/*   COVID COUNT WITH NO ACTIONS TAKEN */}
             {/* </label> */}
-            <label className={styles.legendLabel}>
-              <Tippy
-                content={
-                  <div className={styles.legend}>
-                    <div className={styles.lockdown}>
-                      <span />
-                      <p>Lockdown policies</p>
-                    </div>
-                    <div className={styles.safer}>
-                      <span />
-                      <p>Safer at home policies</p>
-                    </div>
-                    <div className={styles.stay}>
-                      <span />
-                      <p>Stay at home policies</p>
-                    </div>
-                    <div className={styles.normal}>
-                      <span />
-                      <p>New normal policies</p>
-                    </div>
-                    <div className={styles.proposed}>
-                      <span />
-                      <p>Proposed</p>
-                    </div>
-                    <div className={styles.actuals}>
-                      <span />
-                      <p>Actuals</p>
-                    </div>
-                    <div className={styles.modeled}>
-                      <span />
-                      <p>Modeled</p>
-                    </div>
-                  </div>
-                }
-                allowHTML={true}
-                interactive={true}
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <h4>
-                  Legend <span style={{ fontSize: ".75rem" }}>▼</span>
-                </h4>
-              </Tippy>
-            </label>
           </div>
           {selectedStates.map((state, index) => {
             if (curves && curves[state]) {
@@ -345,15 +346,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
               );
             }
           })}
-          {curves && curves[selectedStates[0]] && (
-            <NavigatorPlot
-              curves={curves[selectedStates[0]].curves}
-              zoomDateRange={zoomDateRange}
-              setZoomDateRange={setZoomDateRange}
-              domain={domain}
-              caseLoadAxis={caseLoadAxis}
-            />
-          )}
         </section>
       </article>
     </div>

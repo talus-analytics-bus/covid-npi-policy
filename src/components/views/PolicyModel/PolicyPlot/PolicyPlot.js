@@ -12,6 +12,10 @@ import {
   VictoryPortal,
 } from "victory";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
 import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
 import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
@@ -279,6 +283,50 @@ const PolicyModel = props => {
         addIntervention={props.addIntervention}
         selectedState={props.selectedState}
       />
+      <label className={styles.legendLabel}>
+        <Tippy
+          content={
+            <div className={styles.legend}>
+              <div className={styles.lockdown}>
+                <span />
+                <p>Lockdown policies</p>
+              </div>
+              <div className={styles.safer}>
+                <span />
+                <p>Safer at home policies</p>
+              </div>
+              <div className={styles.stay}>
+                <span />
+                <p>Stay at home policies</p>
+              </div>
+              <div className={styles.normal}>
+                <span />
+                <p>New normal policies</p>
+              </div>
+              <div className={styles.proposed}>
+                <span />
+                <p>Proposed</p>
+              </div>
+              <div className={styles.actuals}>
+                <span />
+                <p>Actuals</p>
+              </div>
+              <div className={styles.modeled}>
+                <span />
+                <p>Modeled</p>
+              </div>
+            </div>
+          }
+          allowHTML={true}
+          interactive={true}
+          maxWidth={"30rem"}
+          theme={"light"}
+          placement={"bottom"}
+          offset={[-30, 10]}
+        >
+          <h4>Legend</h4>
+        </Tippy>
+      </label>
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
@@ -444,15 +492,15 @@ const PolicyModel = props => {
         containerComponent={
           <VictoryZoomCursorContainer
             className={styles.chart}
-            // cursorLabelComponent={
-            //   (props.activeTab === "interventions") &
-            //   (pastInterventionProps.policyName === "") ? (
-            //     <AddInterventionCursor showLabel={!addIntDialogState.show} />
-            //   ) : (
-            //     <LineSegment />
-            //   )
-            // }
-            // cursorComponent={<LineSegment style={{ display: "none" }} />}
+            cursorLabelComponent={
+              (props.activeTab === "interventions") &
+              (pastInterventionProps.policyName === "") ? (
+                <AddInterventionCursor showLabel={!addIntDialogState.show} />
+              ) : (
+                <LineSegment />
+              )
+            }
+            cursorComponent={<LineSegment style={{ display: "none" }} />}
             cursorLabel={({ datum }) => `add intervention`}
             allowZoom={false}
             // If we want to re-enable panning, there will

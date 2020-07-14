@@ -9,8 +9,8 @@
   color: #00447c;
   // padding: 1rem;
   padding-top: 0;
+  padding-bottom: 1;
   margin-top: 1rem;
-  padding-bottom: 0;
 
   header {
     position: relative;
@@ -18,6 +18,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    background-color: #bde7ff;
 
     &:after {
       content: "";
@@ -27,6 +28,63 @@
       right: 1rem;
       bottom: 0;
       background-color: #bde7ff;
+    }
+    .stateHeader {
+      border-top: 4px solid #16467a;
+      width: 100%;
+      height: 10rem;
+      display: grid;
+
+      grid-template-columns: auto 12rem 8rem min-content 13rem min-content 13rem;
+      grid-template-rows: 1fr 1fr;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+      }
+
+      > div:nth-of-type(2),
+      > div:nth-of-type(3),
+      > div:nth-of-type(4),
+      > div:nth-of-type(5),
+      > div:nth-of-type(6),
+      > div:nth-of-type(7) {
+        // border-bottom: 2px solid #16467a;
+      }
+
+      .stateName {
+        grid-row-start: 1;
+        grid-row-end: 3;
+        font-size: 2rem;
+        font-weight: 800;
+        justify-content: flex-start;
+      }
+
+      .explanation {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .checkbox label {
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .cases {
+        text-align: right;
+        font-size: 1.2rem;
+      }
+
+      .casesLabel {
+        .label {
+          font-weight: 600;
+        }
+      }
     }
 
     // .stateName {
@@ -52,34 +110,34 @@
     //     font-size: 1rem;
     //   }
     // }
-    .stateName {
-      display: flex;
-      // flex-direction: column;
-      align-items: flex-end;
+    // .stateName {
+    //   display: flex;
+    //   // flex-direction: column;
+    //   align-items: flex-end;
 
-      padding: 2rem;
-      // padding-top: 1rem;
+    //   padding: 2rem;
+    //   // padding-top: 1rem;
 
-      label {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        color: #60605d;
-        font-weight: 600;
-      }
+    //   label {
+    //     display: flex;
+    //     flex-direction: column;
+    //     justify-content: flex-start;
+    //     color: #60605d;
+    //     font-weight: 600;
+    //   }
 
-      select {
-        margin-top: 0.25em;
-        font-family: "Rawline";
-        color: #00447c;
-        font-size: 1.6rem;
-        // padding: 0.4em 0.5em 0.25em 0.5em;
-        padding: 0.125em 0.25em;
-        border: 1px solid rgb(118, 118, 118);
-        border-radius: 0.25em;
-        font-weight: 700;
-      }
-    }
+    //   select {
+    //     margin-top: 0.25em;
+    //     font-family: "Rawline";
+    //     color: #00447c;
+    //     font-size: 1.6rem;
+    //     // padding: 0.4em 0.5em 0.25em 0.5em;
+    //     padding: 0.125em 0.25em;
+    //     border: 1px solid rgb(118, 118, 118);
+    //     border-radius: 0.25em;
+    //     font-weight: 700;
+    //   }
+    // }
   }
 
   .policyPlot {

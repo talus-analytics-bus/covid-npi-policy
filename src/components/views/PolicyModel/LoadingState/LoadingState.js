@@ -12,30 +12,59 @@ const LoadingState = props => {
   return (
     <section className={styles.state}>
       <header>
-        <div className={styles.stateName}>
-          {/* <h2>Loading model for</h2> */}
-          {/* <h1> */}
-          {/*   {states.find(state => state.abbr === props.selectedState).name} */}
-          {/* </h1> */}
-          <label>
-            Loading state...
-            <select
-              value={props.selectedState}
-              onChange={e => {
-                const newSelectedStates = [...props.selectedStates];
-                newSelectedStates[props.index] = e.target.value;
-                props.setSelectedStates(newSelectedStates);
-              }}
-              aria-label={"Select a state to display"}
-            >
-              {states.map(state => (
-                <option key={state.abbr} value={state.abbr}>
-                  {state.name}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className={styles.stateHeader}>
+          <div className={styles.stateName}>
+            {states.find(state => state.abbr === props.selectedState).name}
+          </div>
+          <div className={styles.explanation}></div>
+          <div className={styles.checkbox}></div>
+          <div className={styles.cases}></div>
+          <div className={styles.casesLabel}>
+            <p className={styles.label}></p>
+            <p className={styles.date}></p>
+          </div>
+          <div className={styles.cases}></div>
+          <div className={styles.casesLabel}>
+            <p className={styles.label}></p>
+            <p className={styles.date}></p>
+          </div>
+          <div className={styles.explanation}></div>
+          <div className={styles.checkbox}></div>
+          <div className={styles.cases}></div>
+          <div className={styles.casesLabel}>
+            <p className={styles.label}></p>
+            <p className={styles.date}></p>
+          </div>
+          <div className={styles.cases}></div>
+          <div className={styles.casesLabel}>
+            <p className={styles.label}></p>
+            <p className={styles.date}></p>
+          </div>
         </div>
+        {/* <div className={styles.stateName}> */}
+        {/*   {/* <h2>Loading model for</h2> */}
+        {/*   {/* <h1> */}
+        {/*   {/*   {states.find(state => state.abbr === props.selectedState).name} */}
+        {/*   {/* </h1> */}
+        {/*   <label> */}
+        {/*     Loading state... */}
+        {/*     <select */}
+        {/*       value={props.selectedState} */}
+        {/*       onChange={e => { */}
+        {/*         const newSelectedStates = [...props.selectedStates]; */}
+        {/*         newSelectedStates[props.index] = e.target.value; */}
+        {/*         props.setSelectedStates(newSelectedStates); */}
+        {/*       }} */}
+        {/*       aria-label={"Select a state to display"} */}
+        {/*     > */}
+        {/*       {states.map(state => ( */}
+        {/*         <option key={state.abbr} value={state.abbr}> */}
+        {/*           {state.name} */}
+        {/*         </option> */}
+        {/*       ))} */}
+        {/*     </select> */}
+        {/*   </label> */}
+        {/* </div> */}
       </header>
       <div className={styles.policyPlot}>
         <div className={styles.fader}></div>
