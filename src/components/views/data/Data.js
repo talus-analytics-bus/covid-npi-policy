@@ -209,12 +209,15 @@ const Data = ({
   // when filters are updated, update data
   useEffect(() => {
     if (!loading) {
+      // update data
       setLoading(true);
       getData({
         filtersForQuery: filters,
         entityInfoForQuery: entityInfo,
         initializingForQuery: true,
       });
+
+      // update URL params string
     }
   }, [filters]);
 
