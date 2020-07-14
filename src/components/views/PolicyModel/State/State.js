@@ -106,11 +106,17 @@ const State = props => {
                   />
                 </Tippy>
               </h4>
-              <h5>cumulative cases</h5>
+              <h5>
+                Cumulative cases as of{" "}
+                {props.dataDates && props.dataDates.last_data_update} (actual)
+              </h5>
             </div>
             <div>
               <h4>{formatNumber(props.curves.deaths)}</h4>
-              <h5>cumulative deaths</h5>
+              <h5>
+                Cumulative deaths as of{" "}
+                {props.dataDates && props.dataDates.last_data_update} (actual)
+              </h5>
             </div>
           </div>
           <div className={styles.noAction}>
@@ -125,11 +131,8 @@ const State = props => {
               What if we had done nothing?
             </label>
             <div>
-              <h4>{formatNumber(props.curves.counterfactual_cases)}</h4>
-              <h5>
-                <h5>
-                  cases <br /> (cumulative)
-                </h5>
+              <h4>
+                {formatNumber(props.curves.counterfactual_cases)}{" "}
                 <Tippy
                   content={"Total cumulative cases (modeled)"}
                   allowHTML={true}
@@ -144,12 +147,17 @@ const State = props => {
                     alt="More information"
                   />
                 </Tippy>
+              </h4>
+              <h5>
+                Cumulative Cases as of{" "}
+                {props.dataDates && props.dataDates.last_data_update} (modeled){" "}
               </h5>
             </div>
             <div>
               <h4>{formatNumber(props.curves.counterfactual_deaths)}</h4>
               <h5>
-                cases <br /> (cumulative)
+                Cumulative deaths as of{" "}
+                {props.dataDates && props.dataDates.last_data_update} (modeled)
               </h5>
             </div>
           </div>

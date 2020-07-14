@@ -147,7 +147,7 @@
         }
 
         > div:first-of-type {
-          width: 16.5rem;
+          width: 14rem;
         }
 
         > div:first-of-type:after {
@@ -174,8 +174,8 @@
         h4,
         h5 {
           margin: 0;
-          display: flex;
-          justify-content: space-between;
+          // display: flex;
+          // justify-content: space-between;
         }
 
         h4 {
@@ -195,8 +195,8 @@
         border-bottom: none;
 
         > div {
-          flex-direction: row;
-          align-items: center;
+          // flex-direction: row;
+          // align-items: center;
           justify-content: flex-start;
 
           h4 {
@@ -209,8 +209,8 @@
             width: 100%;
             line-height: 1em;
             margin-left: 0.25em;
-            display: flex;
-            justify-content: space-between;
+            // display: flex;
+            // justify-content: space-between;
           }
         }
         > div:first-of-type:after {

@@ -444,15 +444,15 @@ const PolicyModel = props => {
         containerComponent={
           <VictoryZoomCursorContainer
             className={styles.chart}
-            cursorLabelComponent={
-              (props.activeTab === "interventions") &
-              (pastInterventionProps.policyName === "") ? (
-                <AddInterventionCursor showLabel={!addIntDialogState.show} />
-              ) : (
-                <LineSegment />
-              )
-            }
-            cursorComponent={<LineSegment style={{ display: "none" }} />}
+            // cursorLabelComponent={
+            //   (props.activeTab === "interventions") &
+            //   (pastInterventionProps.policyName === "") ? (
+            //     <AddInterventionCursor showLabel={!addIntDialogState.show} />
+            //   ) : (
+            //     <LineSegment />
+            //   )
+            // }
+            // cursorComponent={<LineSegment style={{ display: "none" }} />}
             cursorLabel={({ datum }) => `add intervention`}
             allowZoom={false}
             // If we want to re-enable panning, there will
