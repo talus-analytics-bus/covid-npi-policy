@@ -32,8 +32,31 @@ export const planInfo = {
       org_type: {
         entity_name: "Plan",
         field: "org_type",
-        label: "Organization type"
-      }
+        label: "Organization type",
+      },
+    },
+    {
+      country_name: {
+        entity_name: "Place",
+        field: "country_name",
+        label: "Country",
+      },
+      area1: {
+        entity_name: "Place",
+        field: "area1",
+        label: "State / Province",
+        withGrouping: true,
+        primary: "country_name",
+        disabledText: "Choose a country",
+      },
+      area2: {
+        entity_name: "Place",
+        field: "area2",
+        label: "Locality (county, city, ...)",
+        withGrouping: true,
+        primary: "area1",
+        disabledText: "Choose a state / province",
+      },
     },
     {
       date_issued: {
@@ -41,9 +64,9 @@ export const planInfo = {
         field: "date_issued",
         label: "Date plan issued",
         dateRange: true,
-        minMaxDate: { min: undefined, max: undefined }
-      }
-    }
+        minMaxDate: { min: undefined, max: undefined },
+      },
+    },
   ],
   getColumns: ({ metadata }) => {
     // define initial columns which will be updated using the metadata
@@ -65,14 +88,14 @@ export const planInfo = {
               ? row.name + ": "
               : "";
           return <ShowMore text={title + cell} charLimit={200} />;
-        }
+        },
       },
       {
         dataField: "date_issued",
         header: "Date issued",
         sort: true,
         formatter: v =>
-          v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+          v !== null ? moment(v).format("MMM D, YYYY") : unspecified,
       },
       {
         dataField: "file",
@@ -113,8 +136,8 @@ export const planInfo = {
           } else {
             return unspecified;
           }
-        }
-      }
+        },
+      },
     ];
 
     // join elements of metadata to cols, like definitions, etc.
@@ -168,8 +191,8 @@ export const planInfo = {
         "date_issued",
         "primary_loc",
         "place",
-        "file"
-      ]
+        "file",
+      ],
     });
   },
 
@@ -177,7 +200,7 @@ export const planInfo = {
   defaultSortedField: "date_issued",
 
   // JSX of content of table cells if data are unspecified, i.e., blank
-  unspecified
+  unspecified,
 };
 
 export default planInfo;

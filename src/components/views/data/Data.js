@@ -11,7 +11,7 @@ import {
   Policy,
   OptionSet,
   Export,
-  execute
+  execute,
 } from "../../misc/Queries.js";
 import { isEmpty, comma } from "../../misc/Util.js";
 
@@ -31,7 +31,7 @@ const Data = ({
   loading,
   setInfoTooltipContent,
   setPage,
-  urlFilterParams
+  urlFilterParams,
 }) => {
   const [docType, setDocType] = useState("policy");
   const [entityInfo, setEntityInfo] = useState({});
@@ -53,11 +53,11 @@ const Data = ({
   // min and max dates for date range pickers dynamically determined by data
   const [minMaxStartDate, setMinMaxStartDate] = useState({
     min: undefined,
-    max: undefined
+    max: undefined,
   });
   const [minMaxEndDate, setMinMaxEndDate] = useState({
     min: undefined,
-    max: undefined
+    max: undefined,
   });
 
   // define filters in groups
@@ -78,7 +78,7 @@ const Data = ({
     const queries = {
       instances: entityInfoForQuery.dataQuery({
         method,
-        filters: filtersForQuery
+        filters: filtersForQuery,
       }),
       metadata: Metadata({
         method: "get",
@@ -86,13 +86,14 @@ const Data = ({
           if (!d.dataField.includes(".")) return docType + "." + d.dataField;
           else return d.dataField;
         }),
-        entity_class_name: entityInfoForQuery.nouns.s
-      })
+        entity_class_name: entityInfoForQuery.nouns.s,
+      }),
     };
 
     // TODO generalize to plans
     queries.optionsets = OptionSet({
       method: "get",
+      class_name: entityInfoForQuery.nouns.s,
       fields: entityInfoForQuery.filterDefs
         .map(d => Object.values(d).map(dd => dd))
         .flat()
@@ -100,12 +101,12 @@ const Data = ({
         .map(d => {
           return d.entity_name + "." + d.field;
         }),
-      entity_name: entityInfoForQuery.nouns.s
+      entity_name: entityInfoForQuery.nouns.s,
     });
 
     // execute queries and collate results
     const results = await execute({
-      queries
+      queries,
     });
 
     // set data and metadata with results
@@ -124,11 +125,13 @@ const Data = ({
       .sort();
     const newMinMaxStartDate = {
       min: new Date(moment(policyDatesStart[0]).utc()),
-      max: new Date(moment(policyDatesStart[policyDatesStart.length - 1]).utc())
+      max: new Date(
+        moment(policyDatesStart[policyDatesStart.length - 1]).utc()
+      ),
     };
     const newMinMaxEndDate = {
       min: new Date(moment(policyDatesEnd[0]).utc()),
-      max: new Date(moment(policyDatesEnd[policyDatesEnd.length - 1]).utc())
+      max: new Date(moment(policyDatesEnd[policyDatesEnd.length - 1]).utc()),
     };
 
     setMinMaxStartDate(newMinMaxStartDate);
@@ -148,7 +151,7 @@ const Data = ({
           // set min/max date range for daterange filters
           d[k].minMaxDate = {
             min: newMinMaxStartDate.min,
-            max: undefined
+            max: undefined,
           };
         }
       }
@@ -187,7 +190,7 @@ const Data = ({
     getData({
       filtersForQuery: {},
       entityInfoForQuery: newEntityInfo,
-      initializingForQuery: true
+      initializingForQuery: true,
     });
   }, [docType]);
 
@@ -198,7 +201,7 @@ const Data = ({
       getData({
         filtersForQuery: filters,
         entityInfoForQuery: entityInfo,
-        initializingForQuery: true
+        initializingForQuery: true,
       });
     }
   }, [filters]);
@@ -213,7 +216,7 @@ const Data = ({
             columns,
             data,
             defaultSortedField: entityInfo.defaultSortedField,
-            className: styles[entityInfo.nouns.s.toLowerCase()]
+            className: styles[entityInfo.nouns.s.toLowerCase()],
           }}
         />
       );
@@ -249,14 +252,17 @@ const Data = ({
                 <React.Fragment>
                   <button
                     className={classNames(styles.downloadBtn, {
-                      [styles.loading]: buttonLoading
+                      [styles.loading]: buttonLoading,
                     })}
                     onClick={e => {
                       e.stopPropagation();
-                      setButtonLoading(true);
-                      Export({ method: "post", filters }).then(d =>
-                        setButtonLoading(false)
-                      );
+                      // setButtonLoading(true);
+                      Export({
+                        method: "post",
+                        filters,
+                        class_name: entityInfo.nouns.s,
+                      });
+                      // .then(d => setButtonLoading(false));
                     }}
                   >
                     <img src={downloadSvg} />
@@ -294,8 +300,8 @@ const Data = ({
                       { name: "Policies", value: "policy" },
                       {
                         name: "Plans",
-                        value: "plan"
-                      }
+                        value: "plan",
+                      },
                     ]}
                     curVal={docType}
                     callback={setDocType}
@@ -318,7 +324,7 @@ const Data = ({
                     </>
                   )}
                 </React.Fragment>
-              )
+              ),
             }}
           />
           {table}

@@ -34,7 +34,7 @@ export const Version = async function() {
 export const Metadata = async function({
   method,
   fields,
-  entity_class_name = "Policy"
+  entity_class_name = "Policy",
 }) {
   let req;
   if (method === "get") {
@@ -44,7 +44,7 @@ export const Metadata = async function({
     });
     params.append("entity_class_name", entity_class_name);
     req = await axios(`${API_URL}/get/metadata`, {
-      params
+      params,
     });
   }
   const res = await req;
@@ -61,7 +61,7 @@ export const Policy = async function({
   method,
   fields = [],
   filters = null,
-  by_category = null
+  by_category = null,
 }) {
   // return cached result if available
   if (isEmpty(filters) && allPolicies !== null) {
@@ -80,7 +80,7 @@ export const Policy = async function({
   let req;
   if (method === "get") {
     req = await axios(`${API_URL}/get/policy`, {
-      params
+      params,
     });
   } else if (method === "post") {
     if (filters === null) {
@@ -90,7 +90,7 @@ export const Policy = async function({
       `${API_URL}/post/policy`,
       { filters },
       {
-        params
+        params,
       }
     );
   } else {
@@ -115,7 +115,7 @@ export const Plan = async function({
   method,
   fields = [],
   filters = null,
-  by_category = null
+  by_category = null,
 }) {
   // return cached result if available
   if (isEmpty(filters) && allPlans !== null) {
@@ -134,7 +134,7 @@ export const Plan = async function({
   let req;
   if (method === "get") {
     req = await axios(`${API_URL}/get/plan`, {
-      params
+      params,
     });
   } else if (method === "post") {
     if (filters === null) {
@@ -144,7 +144,7 @@ export const Plan = async function({
       `${API_URL}/post/plan`,
       { filters },
       {
-        params
+        params,
       }
     );
   } else {
@@ -167,7 +167,7 @@ export const PolicyStatus = async function({
   method,
   geo_res = "state",
   fields = [],
-  filters = null
+  filters = null,
 }) {
   // prepare params
   const params = new URLSearchParams();
@@ -179,7 +179,7 @@ export const PolicyStatus = async function({
   let req;
   if (method === "get") {
     req = await axios(`${API_URL}/get/policy_status/${geo_res}`, {
-      params
+      params,
     });
   } else if (method === "post") {
     if (filters === null) {
@@ -189,7 +189,7 @@ export const PolicyStatus = async function({
       `${API_URL}/post/policy_status/${geo_res}`,
       { filters },
       {
-        params
+        params,
       }
     );
   } else {
@@ -218,7 +218,7 @@ export const Export = async function({ method, filters = null, class_name }) {
       method: "POST",
       responseType: "blob",
       data: { filters },
-      params: { class_name }
+      params: { class_name },
     });
 
     // TODO comments below
@@ -247,7 +247,7 @@ export const Export = async function({ method, filters = null, class_name }) {
 export const OptionSet = async function({
   method,
   fields = null,
-  // entity_name = null,
+  class_name = null,
   ...params
 }) {
   let req;
@@ -266,10 +266,10 @@ export const OptionSet = async function({
     fields.forEach(d => {
       params.append("fields", d);
     });
-    // params.set("entity_name", entity_name);
+    params.set("class_name", class_name);
 
     req = await axios.get(`${API_URL}/get/optionset`, {
-      params
+      params,
     });
   } else {
     console.log("Error: Method not implemented for `OptionSet`: " + method);
