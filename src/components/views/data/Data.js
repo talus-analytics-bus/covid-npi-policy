@@ -40,8 +40,6 @@ const Data = ({
   // set `unspecified` component, etc., from entity info
   const unspecified = entityInfo.unspecified;
   const nouns = entityInfo.nouns;
-  console.log("nouns");
-  console.log(nouns);
 
   // define data and metadata for table
   const [data, setData] = useState(null);
