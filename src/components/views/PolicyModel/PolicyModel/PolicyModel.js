@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 import loadModels, {
   requestIntervention,
   clearState,
   API_URL,
 } from "./LoadModels";
+
 import parseModels from "./parseModels";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
@@ -16,6 +21,8 @@ import NavigatorPlot from "../PolicyPlot/NavigatorPlot/NavigatorPlot";
 import styles from "./PolicyModel.module.scss";
 
 import states from "./states";
+
+import infoIcon from "../../../../assets/icons/info-blue.svg";
 
 const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
@@ -230,13 +237,56 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 <option value="dead">Deaths</option>
               </select>
             </label>
+            <Tippy
+              interactive={true}
+              allowHTML={true}
+              content={
+                <p>
+                  Total number of cumulative confirmed and probable cases as of
+                </p>
+              }
+              maxWidth={"30rem"}
+              theme={"light"}
+              placement={"bottom"}
+              offset={[-30, 10]}
+            >
+              <img
+                className={styles.infoIcon}
+                src={infoIcon}
+                alt="More information"
+                style={{ position: "absolute", top: "2.75rem", left: "-5rem" }}
+              />
+            </Tippy>
             <label>
               Reduction in contacts
-              <select onChange={e => setContactPlotType(e.target.value)}>
+              <select
+                onChange={e => setContactPlotType(e.target.value)}
+                style={{ width: "13rem" }}
+              >
                 <option value="pctChange">% reduction</option>
                 <option value="R effective">Effective R Value</option>
               </select>
             </label>
+            <Tippy
+              interactive={true}
+              allowHTML={true}
+              content={
+                <p>
+                  Total number of cumulative confirmed and probable cases as of
+                </p>
+              }
+              maxWidth={"30rem"}
+              theme={"light"}
+              placement={"bottom"}
+              offset={[-30, 10]}
+            >
+              <img
+                className={styles.infoIcon}
+                src={infoIcon}
+                alt="More information"
+                style={{ position: "absolute", top: "2.75rem", left: "-5rem" }}
+              />
+            </Tippy>
           </div>
           <div className={styles.navigator}>
             {/* {console.log("\npolicymodel zoomDateRange")} */}
