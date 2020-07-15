@@ -20,7 +20,7 @@ const PastInterventionInfo = props => {
   const setState = props.setPastInterventionProps;
   props = { ...props.pastInterventionProps };
 
-  const width = 300;
+  const width = 500;
   // const arrowOffset = { x: 32, y: 28 }
   const arrowOffset = { x1: 8, x2: 19, y: 47 };
   const circleOffset = {
@@ -55,17 +55,20 @@ const PastInterventionInfo = props => {
       `%22country_name%22:[%22United%20States%20of%20America%20(USA)%22],` +
       `%22area1%22:[%22${stateFullName}%22]}`;
   }
-  // onMouseLeave={() => {
-  //   setState({
-  //     ...props,
-  //     policyName: "",
-  //     effectiveDate: "",
-  //   });
-  // }}
   return (
     <section
       display={props.policyName !== "" ? "block" : "none"}
-      className={popupStyleName}
+      className={classNames(popupStyleName, {
+        [styles.noArrow]: true,
+        // [styles.noArrow]: props.noArrow === true,
+      })}
+      onMouseLeave={() => {
+        setState({
+          ...props,
+          policyName: "",
+          effectiveDate: "",
+        });
+      }}
       style={{
         top: yPos,
         left: xPos,
@@ -75,7 +78,7 @@ const PastInterventionInfo = props => {
       }}
     >
       <div
-        style={{ borderBottom: `4px solid ${props.policyColor}` }}
+        style={{ borderBottom: `6px solid ${props.policyColor}` }}
         className={styles.greySection}
       >
         <h1 className={styles.title}>{formattedDate}</h1>

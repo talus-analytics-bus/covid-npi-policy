@@ -267,6 +267,34 @@ const PolicyModel = props => {
     const policyName = intervention.name.split("_")[0];
     const policyColor = interventionColors[policyName] || "gray";
 
+    // define popup trigger events for scatter bubbles and for main chart
+    // TODO differentiate them as needed by design
+    const events = [
+      {
+        childName: "all",
+        target: "data",
+
+        eventHandlers: {
+          onMouseEnter: (event, eventKey) => {
+            setPastInterventionProps({
+              state: props.selectedState,
+              policyName,
+              policyColor,
+              effectiveDate: intervention.intervention_start_date,
+              x: window.pageXOffset + event.target.getBoundingClientRect().left,
+              y:
+                interStartDate < now
+                  ? window.pageYOffset +
+                    event.target.getBoundingClientRect().top
+                  : // need to adjust for the different size circle
+                    window.pageYOffset +
+                    event.target.getBoundingClientRect().top -
+                    2,
+            });
+          },
+        },
+      },
+    ];
     return (
       <VictoryScatter
         key={intervention.name + intervention.intervention_start_date}
@@ -285,34 +313,7 @@ const PolicyModel = props => {
             strokeWidth: 0.75,
           },
         }}
-        events={[
-          {
-            childName: "all",
-            target: "data",
-
-            eventHandlers: {
-              onMouseEnter: (event, eventKey) => {
-                setPastInterventionProps({
-                  state: props.selectedState,
-                  policyName,
-                  policyColor,
-                  effectiveDate: intervention.intervention_start_date,
-                  x:
-                    window.pageXOffset +
-                    event.target.getBoundingClientRect().left,
-                  y:
-                    interStartDate < now
-                      ? window.pageYOffset +
-                        event.target.getBoundingClientRect().top
-                      : // need to adjust for the different size circle
-                        window.pageYOffset +
-                        event.target.getBoundingClientRect().top -
-                        2,
-                });
-              },
-            },
-          },
-        ]}
+        events={events}
         data={[
           {
             x: interStartDate,
@@ -323,6 +324,35 @@ const PolicyModel = props => {
       />
     );
   });
+
+  // define popup trigger events for main chart
+  // TODO differentiate them as needed by design
+  const events = [
+    {
+      childName: "all",
+      target: "data",
+
+      eventHandlers: {
+        onMouseEnter: (event, eventKey) => {
+          console.log("triggered onMouseEnter");
+          // setPastInterventionProps({
+          //   state: props.selectedState,
+          //   policyName,
+          //   policyColor,
+          //   effectiveDate: intervention.intervention_start_date,
+          //   x: window.pageXOffset + event.target.getBoundingClientRect().left,
+          //   y:
+          //     interStartDate < now
+          //       ? window.pageYOffset + event.target.getBoundingClientRect().top
+          //       : // need to adjust for the different size circle
+          //         window.pageYOffset +
+          //         event.target.getBoundingClientRect().top -
+          //         2,
+          // });
+        },
+      },
+    },
+  ];
 
   return (
     <section className={styles.main}>
