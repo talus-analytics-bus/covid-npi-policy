@@ -25,7 +25,8 @@ import styles from "./PolicyPlot.module.scss";
 
 const plotColors = [
   // '#00a79d',
-  "#173244",
+  "#14477A",
+  "#14477A",
   "#6C92AB",
   "#aeaeae",
   "#00447c",
@@ -37,6 +38,7 @@ const plotColors = [
 
 const interventionColors = {
   Lockdown: "#661B3C",
+  "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
   "Stay at home": "#C1272D",
@@ -110,7 +112,10 @@ const PolicyModel = props => {
   // the model (dashed) lines of the plot
   const modelLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
-      if (!["R effective", "pctChange"].includes(curveName)) {
+      if (
+        !["R effective", "pctChange"].includes(curveName) &
+        !curveName.startsWith("CF_")
+      ) {
         return (
           <VictoryLine
             key={curveName}
@@ -131,13 +136,37 @@ const PolicyModel = props => {
     }
   );
 
+  const counterfactualArea = Object.entries(props.data.curves).map(
+    ([curveName, data], index) => {
+      if (curveName.startsWith("CF_")) {
+        return (
+          <VictoryArea
+            key={curveName}
+            style={{
+              data: {
+                stroke: "#409385",
+                fill: "#40938566",
+                strokeWidth: 0.75,
+                strokeDasharray: 0,
+              },
+            }}
+            data={data.model}
+            // interpolation={"natural"}
+          />
+        );
+      } else {
+        return false;
+      }
+    }
+  );
+
   const interventionLines = props.data.interventions.map(intervention => (
     <VictoryLine
       key={intervention.name + intervention.intervention_start_date}
       style={{
         data: {
           stroke: interventionColors[intervention.name.split("_")[0]],
-          strokeWidth: 1,
+          strokeWidth: 0.75,
         },
       }}
       data={[
@@ -172,7 +201,7 @@ const PolicyModel = props => {
               <VictoryPortal>
                 <LineExtension
                   color={interventionColors[intervention.name.split("_")[0]]}
-                  strokeWidth={1}
+                  strokeWidth={0.75}
                   // start={11}
                 />
               </VictoryPortal>
@@ -181,7 +210,7 @@ const PolicyModel = props => {
             style={{
               data: {
                 stroke: interventionColors[intervention.name.split("_")[0]],
-                strokeWidth: 1,
+                strokeWidth: 0.75,
               },
             }}
             data={[
@@ -231,7 +260,7 @@ const PolicyModel = props => {
               interStartDate > now
                 ? interventionColors[intervention.name.split("_")[0]]
                 : "white",
-            strokeWidth: 1,
+            strokeWidth: 0.75,
           },
         }}
         events={[
@@ -314,6 +343,10 @@ const PolicyModel = props => {
               <div className={styles.modeled}>
                 <span />
                 <p>Modeled</p>
+              </div>
+              <div className={styles.noPolicies}>
+                <span />
+                <p>Cases Without Policies</p>
               </div>
             </div>
           }
@@ -424,14 +457,19 @@ const PolicyModel = props => {
         />
         <VictoryArea
           style={{
-            data: { stroke: "grey", strokeWidth: 0, fill: "#3F9385bb" },
+            data: { stroke: "#14477A", strokeWidth: 0.75, fill: "#14477Abb" },
           }}
           data={props.data.curves[props.contactPlotType].actuals}
           interpolation={"stepAfter"}
         />
         <VictoryArea
           style={{
-            data: { stroke: "grey", strokeWidth: 0, fill: "#A5CDC6BB" },
+            data: {
+              stroke: "#14477A",
+              strokeWidth: 0.75,
+              strokeDasharray: 2,
+              fill: "#5C87B3BB",
+            },
           }}
           data={props.data.curves[props.contactPlotType].model}
           interpolation={"stepAfter"}
@@ -453,7 +491,7 @@ const PolicyModel = props => {
       </VictoryChart>
       <VictoryChart
         // animate={{ duration: 1000 }}
-        padding={{ top: 0, bottom: 20, left: 50, right: 10 }}
+        padding={{ top: 6, bottom: 20, left: 50, right: 10 }}
         // domainPadding={5}
         responsive={true}
         width={500}
@@ -582,6 +620,7 @@ const PolicyModel = props => {
         />
 
         {actualsLines}
+        {counterfactualArea}
         {modelLines}
         {interventionLines}
         {interventionPoints}

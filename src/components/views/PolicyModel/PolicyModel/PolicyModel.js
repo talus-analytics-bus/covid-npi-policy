@@ -183,21 +183,20 @@ const PolicyModel = ({ setLoading, setPage }) => {
           <p>
             The COVID AMP policy model allows users to evaluate the impact of
             policies on the outbreak:
-            <ol>
-              <li>
-                <strong>Visualize</strong> when policies were implemented in
-                each state relative to caseload and fatalities
-              </li>
-              <li>
-                <strong>Predict</strong> how future policies will impact
-                caseload
-              </li>
-              <li>
-                <strong>Show</strong> how much benefit previous policies had on
-                mitigating the outbreak
-              </li>
-            </ol>
           </p>
+          <ol>
+            <li>
+              <strong>Visualize</strong> when policies were implemented in each
+              state relative to caseload and fatalities
+            </li>
+            <li>
+              <strong>Predict</strong> how future policies will impact caseload
+            </li>
+            <li>
+              <strong>Show</strong> how much benefit previous policies had on
+              mitigating the outbreak
+            </li>
+          </ol>
         </div>
         <div className={styles.controlRow}>
           <div className={styles.selectControls}>

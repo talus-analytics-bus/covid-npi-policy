@@ -38,7 +38,7 @@ export default function parseModelCurves(
   models.forEach(model => {
     const state = model.state;
     // console.log(state)
-    // console.log(model)
+    // console.log(model);
 
     // create state object
     curves[state] = {
@@ -46,11 +46,13 @@ export default function parseModelCurves(
       yMax: 0,
       curves: {},
       interventions: model.interventions.filter(
-        inter => inter.name !== "do_nothing"
+        inter =>
+          (inter.name !== "do_nothing") & (inter.name !== "mobility_drop")
       ),
       deaths: model.deaths,
       cases: model.cases,
       date: model.date,
+      population: model.population,
       counterfactual_cases: model.counterfactual_cases,
       counterfactual_deaths: model.counterfactual_deaths,
     };
@@ -62,7 +64,7 @@ export default function parseModelCurves(
     const counterfactualRun = parseModelString(
       model.results
         .filter(run => Object.keys(run)[0] !== run)
-        .find(inter => inter.name.includes("do_nothing")).run
+        .find(inter => inter.name.includes("mobility_drop")).run
     );
 
     const trimmedData = modelRun;
@@ -106,19 +108,30 @@ export default function parseModelCurves(
           // they are plotted as two curves with separate styles
           if (
             source === "model" &&
-            (column === "R effective") &
-              (trimmedData[index - 1].source === "actuals")
+            column === "R effective" &&
+            trimmedData[index - 1].source === "actuals"
           ) {
+            // create a new date object
+            const newDate = new Date(day.date.toISOString());
+            newDate.setDate(newDate.getDate() - 1);
+
+            // Add the value from the actuals as the
+            // first datapoint of the modeled data
             curves[state].curves[column][source].push({
-              x: day.date.setDate(day.date.getDate() - 1),
-              y: value,
+              x: newDate,
+              y: trimmedData[index - 1]["R effective"],
             });
-            counterfactualSelected &&
-              counterfactualRun[index] &&
-              curves[state].curves["CF_" + column]["model"].push({
-                x: day.date.setDate(day.date.getDate() - 1),
-                y: counterfactualRun[index][column],
+
+            // Calculate Percentage changed for the day
+            // before the first modeled date
+            if (column === "R effective") {
+              curves[state].curves.pctChange[source].push({
+                x: newDate,
+                y: parseInt(
+                  (trimmedData[index - 1]["R effective"] / initialR_0) * 100
+                ),
               });
+            }
           }
 
           // Calculate Percentage changed
