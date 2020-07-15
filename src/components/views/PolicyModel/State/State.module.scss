@@ -44,8 +44,9 @@
       height: 12rem;
       display: grid;
       font-family: "Rawline";
+      margin-bottom: 1rem;
 
-      grid-template-columns: auto 12rem 9rem min-content 15rem min-content 14rem;
+      grid-template-columns: auto 20rem min-content 15rem min-content 14rem;
       grid-template-rows: 1fr 1fr;
 
       > div {
@@ -63,9 +64,32 @@
       > div:nth-of-type(3),
       > div:nth-of-type(4),
       > div:nth-of-type(5),
-      > div:nth-of-type(6),
+      > div:nth-of-type(6) {
+        // border-bottom: 2px solid #16467a;
+      }
+
+      > div:nth-of-type(7),
+      > div:nth-of-type(8),
+      > div:nth-of-type(9),
+      > div:nth-of-type(10),
+      > div:nth-of-type(11),
+      > div:nth-of-type(12),
+      > div:nth-of-type(13) {
+        border-top: 2px solid #b9192a;
+        border-bottom: 2px solid #b9192a;
+        color: #b9192a;
+      }
+
       > div:nth-of-type(7) {
-        border-bottom: 2px solid #16467a;
+        border-left: 2px solid #b9192a;
+        border-top-left-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+      }
+
+      > div:nth-of-type(11) {
+        border-right: 2px solid #b9192a;
+        border-top-right-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
       }
 
       .stateName {
@@ -79,17 +103,16 @@
       .explanation {
         font-size: 1.2rem;
         font-weight: 600;
-      }
 
-      .checkbox label {
-        font-size: 0.9rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        label {
+          font-size: 0.9rem;
+          display: flex;
+          flex-direction: row;
 
-        input {
-          transform: scale(1.4);
+          input {
+            transform: scale(1.1);
+            margin-right: 0.5rem;
+          }
         }
       }
 
