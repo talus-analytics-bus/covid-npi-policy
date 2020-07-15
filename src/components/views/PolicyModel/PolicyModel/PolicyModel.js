@@ -21,7 +21,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
-  const [selectedStates, setSelectedStates] = useState(["CO"]);
+  const [selectedStates, setSelectedStates] = useState(["AK"]);
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
 
@@ -201,7 +201,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
         <div className={styles.controlRow}>
           <div className={styles.selectControls}>
             <label>
-              Change state
+              Choose state
               <select
                 value={selectedStates[0]}
                 onChange={e => {
@@ -217,7 +217,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               </select>
             </label>
             <label>
-              COVID case count
+              Show COVID count by
               <select
                 value={selectedCurves[0]}
                 onChange={e => {
@@ -331,6 +331,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   resetState={resetState}
                   dataDates={dataDates}
                   contactPlotType={contactPlotType}
+                  selectedCurves={selectedCurves}
                 />
               );
             } else {
@@ -343,6 +344,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   zoomDateRange={zoomDateRange}
                   setZoomDateRange={setZoomDateRange}
                   // dateOffset={0}
+                  selectedCurves={selectedCurves}
                   caseLoadAxis={caseLoadAxis}
                   selectedState={state}
                   setSelectedStates={setSelectedStates}

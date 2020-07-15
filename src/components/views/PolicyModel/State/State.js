@@ -12,7 +12,23 @@ import styles from "./State.module.scss";
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg";
 
-const formatNumber = number =>
+// round to nearest hundred and add commas
+const formatModeled = number => {
+  const integer = parseInt(number);
+  if (integer <= 10) {
+    return integer.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  } else if (integer <= 100) {
+    return (Math.round(integer / 10) * 10)
+      .toString()
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  } else {
+    return (Math.round(integer / 100) * 100)
+      .toString()
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+};
+
+const formatActuals = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 const formatDate = date =>
@@ -55,13 +71,41 @@ const State = props => {
             Case Count with Existing Policies
           </div>
           <div className={styles.checkbox}></div>
-          <div className={styles.cases}>{formatNumber(props.curves.cases)}</div>
+          <div className={styles.cases}>
+            {formatActuals(props.curves.cases)}
+          </div>
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Cases</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
               (actual)
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  <p>
+                    Total number of cumulative confirmed and probable cases as
+                    of{" "}
+                    {props.dataDates &&
+                      formatDate(props.dataDates.last_data_update)}
+                    . Source:{" "}
+                    <a href={"https://github.com/nytimes/covid-19-data"}>
+                      New York Times{" "}
+                    </a>
+                  </p>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                />
+              </Tippy>
             </p>
             <p className={styles.popPercent}>
               {((props.curves.cases / props.curves.population) * 100).toFixed(
@@ -71,7 +115,7 @@ const State = props => {
             </p>
           </div>
           <div className={styles.cases}>
-            {formatNumber(props.curves.deaths)}
+            {formatActuals(props.curves.deaths)}
           </div>
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Deaths</p>
@@ -95,7 +139,7 @@ const State = props => {
             </label>
           </div>
           <div className={styles.cases}>
-            {formatNumber(props.curves.counterfactual_cases)}
+            {formatModeled(props.curves.counterfactual_cases)}
           </div>
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Cases</p>
@@ -103,6 +147,27 @@ const State = props => {
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
               (modeled)
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  <p>
+                    Total number of cumulative cases modeled on the assumption
+                    no policies had been put in to effect, rounded to indicate
+                    confidence.
+                  </p>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                />
+              </Tippy>
             </p>
             <p className={styles.popPercent}>
               {(
@@ -113,7 +178,7 @@ const State = props => {
             </p>
           </div>
           <div className={styles.cases}>
-            {formatNumber(props.curves.counterfactual_deaths)}
+            {formatModeled(props.curves.counterfactual_deaths)}
           </div>
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Deaths</p>
@@ -258,6 +323,7 @@ const State = props => {
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
           contactPlotType={props.contactPlotType}
+          selectedCurves={props.selectedCurves}
         />
       </div>
       <div className={styles.bottomRow}>
