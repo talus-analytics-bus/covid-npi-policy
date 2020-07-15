@@ -10,7 +10,7 @@ import states from "../PolicyModel/states.js";
 import styles from "./State.module.scss";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
-import redInfoIcon from "../../../../assets/icons/info-red.svg";
+import greenInfoIcon from "../../../../assets/icons/info-green.svg";
 import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg";
 
 // round to nearest hundred and add commas
@@ -136,7 +136,8 @@ const State = props => {
                   props.setCounterfactualSelected(!props.counterfactualSelected)
                 }
               />
-              View cases without policies on graph
+              {/* View cases without policies on graph */}
+              View the "What if" scenario on the graph
             </label>
           </div>
           <div className={styles.cases}>
@@ -165,7 +166,7 @@ const State = props => {
               >
                 <img
                   className={styles.infoIcon}
-                  src={redInfoIcon}
+                  src={greenInfoIcon}
                   alt="More information"
                 />
               </Tippy>
@@ -339,7 +340,7 @@ const State = props => {
           </div>
           <div className={styles.noPolicies}>
             <span />
-            <p>Cases Without Policies</p>
+            <p>"What if we had done nothing" scenario</p>
           </div>
         </div>
         <button
