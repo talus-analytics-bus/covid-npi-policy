@@ -38,7 +38,7 @@ export default function parseModelCurves(
   models.forEach(model => {
     const state = model.state;
     // console.log(state)
-    // console.log(model);
+    console.log(model);
 
     // create state object
     curves[state] = {
@@ -66,6 +66,9 @@ export default function parseModelCurves(
         .filter(run => Object.keys(run)[0] !== run)
         .find(inter => inter.name.includes("mobility_drop")).run
     );
+
+    console.log("counterfactual");
+    console.log(counterfactualRun);
 
     const trimmedData = modelRun;
     // console.log(trimmedData)
