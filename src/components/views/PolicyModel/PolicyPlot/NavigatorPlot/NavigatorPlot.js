@@ -62,83 +62,88 @@ const NavigatorPlot = props => {
   // console.log("\nNavigatorPlot.js");
 
   return (
-    <div className={styles.background}>
-      <VictoryChart
-        className={styles.navigator}
-        // style={{ height: props.proportion * 100 + '%' }}
-        width={300}
-        height={30}
-        // height={(window.innerHeight / window.innerWidth) * 500 * props.proportion}
-        padding={{ top: 1, bottom: 8, left: 0, right: 0 }}
-        domainPadding={0}
-        responsive={true}
-        scale={{ x: "time" }}
-        // padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
-        containerComponent={
-          <VictoryBrushContainer
-            brushDimension="x"
-            brushComponent={<CustomBrush />}
-            brushDomain={{ x: props.zoomDateRange }}
-            onBrushDomainChange={domain => {
-              props.setZoomDateRange(domain.x);
+    <>
+      <div className={styles.instructions}>
+        Use sliders to adjust timeline shown in graph below
+      </div>
+      <div className={styles.background}>
+        <VictoryChart
+          className={styles.navigator}
+          // style={{ height: props.proportion * 100 + '%' }}
+          width={300}
+          height={30}
+          // height={(window.innerHeight / window.innerWidth) * 500 * props.proportion}
+          padding={{ top: 1, bottom: 8, left: 0, right: 0 }}
+          domainPadding={0}
+          responsive={true}
+          scale={{ x: "time" }}
+          // padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
+          containerComponent={
+            <VictoryBrushContainer
+              brushDimension="x"
+              brushComponent={<CustomBrush />}
+              brushDomain={{ x: props.zoomDateRange }}
+              onBrushDomainChange={domain => {
+                props.setZoomDateRange(domain.x);
+              }}
+            />
+          }
+        >
+          <VictoryAxis
+            // tickValues={props.curves['R effective'].actuals
+            //   .concat(props.curves['R effective'].model)
+            //   .map(day => day.x)
+            //   .filter((date, index) => index % 30 === 0)}
+            // tickFormat={x =>
+            //   new Date(x).toLocaleString('default', { month: 'short' })
+            // }
+            padding={{ top: 0, bottom: 0, left: 0, right: 0 }}
+            style={{
+              tickLabels: {
+                fontFamily: "Rawline",
+                fontWeight: "500",
+                fontSize: 5.5,
+                fill: "#6d6d6d",
+                padding: 1,
+              },
             }}
           />
-        }
-      >
-        <VictoryAxis
-          // tickValues={props.curves['R effective'].actuals
-          //   .concat(props.curves['R effective'].model)
-          //   .map(day => day.x)
-          //   .filter((date, index) => index % 30 === 0)}
-          // tickFormat={x =>
-          //   new Date(x).toLocaleString('default', { month: 'short' })
-          // }
-          padding={{ top: 0, bottom: 0, left: 0, right: 0 }}
-          style={{
-            tickLabels: {
-              fontFamily: "Rawline",
-              fontWeight: "500",
-              fontSize: 5.5,
-              fill: "#6d6d6d",
-              padding: 1,
-            },
-          }}
-        />
 
-        {actualsLines}
-        {modelLines}
+          {actualsLines}
+          {modelLines}
 
-        <VictoryArea
-          style={{
-            data: { fill: "gray", opacity: 0.25 },
-          }}
-          data={[
-            { x: props.domain[0], y: props.caseLoadAxis[1] },
-            { x: props.zoomDateRange[0], y: props.caseLoadAxis[1] },
-          ]}
-        />
-        <VictoryArea
-          style={{
-            data: { fill: "gray", opacity: 0.25 },
-          }}
-          data={[
-            { x: props.domain[1], y: props.caseLoadAxis[1] },
-            { x: props.zoomDateRange[1], y: props.caseLoadAxis[1] },
-          ]}
-        />
-        {// only show date line when date is outside the range
-        (new Date() < props.zoomDateRange[0] ||
-          new Date() > props.zoomDateRange[1]) && (
-          <VictoryLine
-            style={{ data: { stroke: "skyblue", strokeWidth: 1 } }}
+          <VictoryArea
+            style={{
+              data: { fill: "gray", opacity: 0.25 },
+            }}
             data={[
-              { x: new Date(), y: 0 },
-              { x: new Date(), y: props.caseLoadAxis[1] },
+              { x: props.domain[0], y: props.caseLoadAxis[1] },
+              { x: props.zoomDateRange[0], y: props.caseLoadAxis[1] },
             ]}
           />
-        )}
-      </VictoryChart>
-    </div>
+          <VictoryArea
+            style={{
+              data: { fill: "gray", opacity: 0.25 },
+            }}
+            data={[
+              { x: props.domain[1], y: props.caseLoadAxis[1] },
+              { x: props.zoomDateRange[1], y: props.caseLoadAxis[1] },
+            ]}
+          />
+          {// only show date line when date is outside the range
+          (new Date() < props.zoomDateRange[0] ||
+            new Date() > props.zoomDateRange[1]) && (
+            <VictoryLine
+              style={{ data: { stroke: "skyblue", strokeWidth: 1 } }}
+              data={[
+                { x: new Date(), y: 0 },
+                { x: new Date(), y: props.caseLoadAxis[1] },
+              ]}
+            />
+          )}
+        </VictoryChart>
+      </div>
+    </>
   );
 };
 
