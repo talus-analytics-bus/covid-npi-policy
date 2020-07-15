@@ -1198,7 +1198,7 @@ export const tooltipGetter = async ({
               {
                 <button>
                   View {catFilters ? "filtered" : "all"} policies
-                  <br /> ({nPolicies.total}) in effect
+                  <br /> ({comma(nPolicies.total)}) in effect
                 </button>
               }
               {
