@@ -90,7 +90,6 @@ const PastInterventionInfo = props => {
             view policies
           </a>
         )}
-        {!proposed && <a href={policyURL}>view policies</a>}
       </div>
     </section>
   );
