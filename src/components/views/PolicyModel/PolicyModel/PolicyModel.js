@@ -217,7 +217,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               </select>
             </label>
             <label>
-              COVID case count
+              Show COVID count by
               <select
                 value={selectedCurves[0]}
                 onChange={e => {

@@ -80,6 +80,32 @@ const State = props => {
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
               (actual)
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  <p>
+                    Total number of cumulative confirmed and probable cases as
+                    of{" "}
+                    {props.dataDates &&
+                      formatDate(props.dataDates.last_data_update)}
+                    . Source:{" "}
+                    <a href={"https://github.com/nytimes/covid-19-data"}>
+                      New York Times{" "}
+                    </a>
+                  </p>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                />
+              </Tippy>
             </p>
             <p className={styles.popPercent}>
               {((props.curves.cases / props.curves.population) * 100).toFixed(
@@ -121,6 +147,27 @@ const State = props => {
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
               (modeled)
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  <p>
+                    Total number of cumulative cases modeled on the assumption
+                    no policies had been put in to effect, rounded to indicate
+                    confidence.
+                  </p>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                />
+              </Tippy>
             </p>
             <p className={styles.popPercent}>
               {(
