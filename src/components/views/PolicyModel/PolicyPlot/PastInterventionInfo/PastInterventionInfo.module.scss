@@ -16,17 +16,15 @@ $grey-highlight: #eee;
   transition: opacity 150ms ease;
   min-height: 8rem;
 
-  &:not(.noArrow) {
-    &:before {
-      content: "";
-      position: absolute;
-      top: 30px;
-      width: $arrow-size;
-      height: $arrow-size;
-      transform: rotate(45deg);
-      background-color: $grey-highlight;
-      z-index: -2;
-    }
+  &:before {
+    content: "";
+    position: absolute;
+    top: 30px;
+    width: $arrow-size;
+    height: $arrow-size;
+    transform: rotate(45deg);
+    background-color: $grey-highlight;
+    z-index: -2;
   }
 
   // This pseudoelement expands the

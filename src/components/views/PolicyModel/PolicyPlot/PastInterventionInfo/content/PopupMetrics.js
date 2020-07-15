@@ -60,17 +60,6 @@ export const PopupMetrics = ({ ...props }) => {
       ),
     },
     {
-      label: "Counterfactual y-axis metric",
-      value: (
-        <div>
-          <div>
-            <div>Big number</div>
-            <div>Unit label</div>
-          </div>
-        </div>
-      ),
-    },
-    {
       label: "Reduction in contacts metric",
       value: (
         <div>
@@ -96,8 +85,8 @@ const Metric = ({ label, value }) => {
   return (
     <tr>
       <div className={styles.metric}>
-        <td className={styles.label}>{label}</td>
-        <td className={styles.value}>{value}</td>
+        <td>{label}</td>
+        <td>{value}</td>
       </div>
     </tr>
   );
