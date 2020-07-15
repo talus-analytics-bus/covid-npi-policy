@@ -378,63 +378,63 @@ const PolicyModel = props => {
           <h4>Legend</h4>
         </Tippy>
       </label>
-      <Tippy
-        interactive={true}
-        allowHTML={true}
-        content={<p>{covidCountHoverText[props.selectedCurves[0]]}</p>}
-        maxWidth={"30rem"}
-        theme={"light"}
-        placement={"bottom"}
-        offset={[-30, 10]}
-      >
-        <img
-          className={styles.infoIcon}
-          src={infoIcon}
-          alt="More information"
-          style={{
-            position: "relative",
-            top: {
-              infected_a: "19rem",
-              infected_b: "17.5rem",
-              infected_c: "20rem",
-              dead: "19rem",
-            }[props.selectedCurves[0]],
-            left: "2.25rem",
-          }}
-        />
-      </Tippy>
-      <Tippy
-        interactive={true}
-        allowHTML={true}
-        content={
-          props.contactPlotType === "pctChange" ? (
-            <p>
-              Estimated percentage reduction in contacts due to policies
-              implemented, relative to baseline contact rate.
-            </p>
-          ) : (
-            <p>
-              Estimated average number of people each infectious person is
-              expected to infect.
-            </p>
-          )
-        }
-        // maxWidth={"30rem"}
-        theme={"light"}
-        placement={"bottom"}
-        offset={[-30, 10]}
-      >
-        <img
-          className={styles.infoIcon}
-          src={infoIcon}
-          alt="More information"
-          style={{
-            position: "relative",
-            top: "1.5rem",
-            left: "2.5rem",
-          }}
-        />
-      </Tippy>
+      {/* <Tippy */}
+      {/*   interactive={true} */}
+      {/*   allowHTML={true} */}
+      {/*   content={<p>{covidCountHoverText[props.selectedCurves[0]]}</p>} */}
+      {/*   maxWidth={"30rem"} */}
+      {/*   theme={"light"} */}
+      {/*   placement={"bottom"} */}
+      {/*   offset={[-30, 10]} */}
+      {/* > */}
+      {/*   <img */}
+      {/*     className={styles.infoIcon} */}
+      {/*     src={infoIcon} */}
+      {/*     alt="More information" */}
+      {/*     style={{ */}
+      {/*       position: "relative", */}
+      {/*       top: { */}
+      {/*         infected_a: "19rem", */}
+      {/*         infected_b: "17.5rem", */}
+      {/*         infected_c: "20rem", */}
+      {/*         dead: "19rem", */}
+      {/*       }[props.selectedCurves[0]], */}
+      {/*       left: "2.25rem", */}
+      {/*     }} */}
+      {/*   /> */}
+      {/* </Tippy> */}
+      {/* <Tippy */}
+      {/*   interactive={true} */}
+      {/*   allowHTML={true} */}
+      {/*   content={ */}
+      {/*     props.contactPlotType === "pctChange" ? ( */}
+      {/*       <p> */}
+      {/*         Estimated percentage reduction in contacts due to policies */}
+      {/*         implemented, relative to baseline contact rate. */}
+      {/*       </p> */}
+      {/*     ) : ( */}
+      {/*       <p> */}
+      {/*         Estimated average number of people each infectious person is */}
+      {/*         expected to infect. */}
+      {/*       </p> */}
+      {/*     ) */}
+      {/*   } */}
+      {/*   // maxWidth={"30rem"} */}
+      {/*   theme={"light"} */}
+      {/*   placement={"bottom"} */}
+      {/*   offset={[-30, 10]} */}
+      {/* > */}
+      {/*   <img */}
+      {/*     className={styles.infoIcon} */}
+      {/*     src={infoIcon} */}
+      {/*     alt="More information" */}
+      {/*     style={{ */}
+      {/*       position: "relative", */}
+      {/*       top: "1.5rem", */}
+      {/*       left: "2.5rem", */}
+      {/*     }} */}
+      {/*   /> */}
+      {/* </Tippy> */}
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
