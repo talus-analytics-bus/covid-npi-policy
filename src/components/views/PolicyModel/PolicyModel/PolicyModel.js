@@ -24,6 +24,15 @@ import states from "./states";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 
+const covidCountHoverText = {
+  infected_a: "Number of individuals with an active COVID-19 infection by day",
+  infected_b:
+    "Number of individuals currently hospitalized for COVID-19 infection by day",
+  infected_c:
+    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+  dead: "Cumulative deaths from COVID-19 by day",
+};
+
 const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
 
@@ -237,30 +246,26 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 <option value="infected_c">ICU</option>
                 <option value="dead">Deaths</option>
               </select>
-              {/* <Tippy */}
-              {/*   interactive={true} */}
-              {/*   allowHTML={true} */}
-              {/*   content={ */}
-              {/*     <p> */}
-              {/*       Number of individuals with an active COVID-19 infection by day */}
-              {/*     </p> */}
-              {/*   } */}
-              {/*   maxWidth={"30rem"} */}
-              {/*   theme={"light"} */}
-              {/*   placement={"bottom"} */}
-              {/*   offset={[-30, 10]} */}
-              {/* > */}
-              {/*   <img */}
-              {/*     className={styles.infoIcon} */}
-              {/*     src={infoIcon} */}
-              {/*     alt="More information" */}
-              {/*     style={{ */}
-              {/*       position: "absolute", */}
-              {/*       top: "2.75rem", */}
-              {/*       right: "2.5rem", */}
-              {/*     }} */}
-              {/*   /> */}
-              {/* </Tippy> */}
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={<p>{covidCountHoverText[selectedCurves[0]]}</p>}
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                  style={{
+                    position: "absolute",
+                    top: "2.75rem",
+                    right: "2.5rem",
+                  }}
+                />
+              </Tippy>
             </label>
 
             <label>
