@@ -32,7 +32,7 @@
   }
   $row-padding: 10px;
   tr:not(:last-child) td {
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid #c9c9c8;
     padding-bottom: $row-padding;
   }
   tr:not(:first-child) td {

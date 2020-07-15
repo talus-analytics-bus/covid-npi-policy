@@ -59,8 +59,7 @@ const PastInterventionInfo = props => {
     <section
       display={props.policyName !== "" ? "block" : "none"}
       className={classNames(popupStyleName, {
-        [styles.noArrow]: true,
-        // [styles.noArrow]: props.noArrow === true,
+        [styles.noArrow]: props.noArrow === true,
       })}
       onMouseLeave={() => {
         setState({
