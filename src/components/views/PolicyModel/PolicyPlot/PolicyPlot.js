@@ -493,7 +493,8 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          tickFormat={tick => (tick === parseInt(tick) ? parseInt(tick) : null)}
+          tickValues={[0, 50, 100]}
+          tickFormat={tick => tick + "%"}
           offsetX={50}
           crossAxis={false}
           label={
