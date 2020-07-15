@@ -394,7 +394,7 @@ const PolicyModel = props => {
           style={{
             position: "relative",
             top: {
-              infected_a: "18.5rem",
+              infected_a: "19rem",
               infected_b: "17.5rem",
               infected_c: "20rem",
               dead: "19rem",
