@@ -574,7 +574,7 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          label={labelNames[props.selectedCurves[0]]}
+          label={labelNames[props.selectedCurves[0]] + "\n"}
           // props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
           // }
           tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}

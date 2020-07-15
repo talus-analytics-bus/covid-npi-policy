@@ -40,7 +40,7 @@ const PastInterventionInfo = props => {
     const stateFullName = states.find(state => state.abbr === props.state).name;
 
     policyURL =
-      `https://covidamp.org/data?filters=` +
+      `/data?filters=` +
       `{%22primary_ph_measure%22:[%22Social%20distancing%22],` +
       `%22dates_in_effect%22:[%22${props.effectiveDate}%22,` +
       `%22${props.effectiveDate}%22],` +
