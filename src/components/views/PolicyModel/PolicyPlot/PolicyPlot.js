@@ -344,6 +344,10 @@ const PolicyModel = props => {
                 <span />
                 <p>Modeled</p>
               </div>
+              <div className={styles.noPolicies}>
+                <span />
+                <p>Cases Without Policies</p>
+              </div>
             </div>
           }
           allowHTML={true}

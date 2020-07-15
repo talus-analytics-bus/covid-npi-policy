@@ -38,7 +38,7 @@ export default function parseModelCurves(
   models.forEach(model => {
     const state = model.state;
     // console.log(state)
-    // console.log(model)
+    // console.log(model);
 
     // create state object
     curves[state] = {
@@ -52,6 +52,7 @@ export default function parseModelCurves(
       deaths: model.deaths,
       cases: model.cases,
       date: model.date,
+      population: model.population,
       counterfactual_cases: model.counterfactual_cases,
       counterfactual_deaths: model.counterfactual_deaths,
     };
