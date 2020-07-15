@@ -697,11 +697,23 @@ export const geoHaveData = [
   "EST",
   "IND",
   "KOR",
-  "MEX",
   "MHL",
   "NGA",
   "PHL",
   "USA",
 ];
+// export const geoHaveData = [
+//   "BRA",
+//   "DJI",
+//   "EST",
+//   "IND",
+//   "KOR",
+//   "MEX",
+//   "MHL",
+//   "NGA",
+//   "PHL",
+//   "USA",
+//   "NZL",
+// ];
 
 export default MapboxMap;
