@@ -3,6 +3,13 @@ import React from "react";
 import styles from "./PastInterventionInfo.module.scss";
 import states from "../../PolicyModel/states.js";
 
+const formatDate = date =>
+  new Date(date).toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
 const PastInterventionInfo = props => {
   const setState = props.setPastInterventionProps;
   props = { ...props.pastInterventionProps };
@@ -76,13 +83,14 @@ const PastInterventionInfo = props => {
       <div className={styles.content}>
         <p>
           {proposed ? "Proposal Date: " : "Effective Date: "}
-          {props.effectiveDate}
+          {formatDate(props.effectiveDate)}
         </p>
         {!proposed && (
           <a target={"_blank"} href={policyURL}>
             view policies
           </a>
         )}
+        {!proposed && <a href={policyURL}>view policies</a>}
       </div>
     </section>
   );

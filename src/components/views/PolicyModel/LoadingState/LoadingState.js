@@ -100,6 +100,7 @@ const LoadingState = props => {
               date: "2020-01-01",
             }}
             domain={props.domain}
+            selectedCurves={props.selectedCurves}
             activeTab={props.activeTab}
             counterfactualSelected={props.counterfactualSelected}
             contactPlotType={props.contactPlotType}
