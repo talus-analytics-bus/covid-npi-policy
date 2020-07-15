@@ -55,7 +55,7 @@ export const defaults = {
   // `undefined` as value for each
   minMaxDate: {
     minDate: "2020-01-21",
-    maxDate: yesterday.format("YYYY-MM-DD")
+    maxDate: yesterday.format("YYYY-MM-DD"),
     // maxDate: "2021-03-01"
   },
 
@@ -66,10 +66,10 @@ export const defaults = {
     // id of default fill metric
     fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
-    priorLayer: "state-points"
+    priorLayer: "state-points",
   },
   // defaults for additional maps...
-  global: { circle: "25", fill: "policy_status", priorLayer: "country-label" }
+  global: { circle: "77", fill: "lockdown_level", priorLayer: "country-label" },
 };
 
 // constants
@@ -88,7 +88,7 @@ export const mapMetrics = {
       params: ({ filters }) => {
         const lockdownFilters = {
           ...filters,
-          lockdown_level: ["lockdown_level"]
+          lockdown_level: ["lockdown_level"],
         };
         // delete lockdownFilters.primary_ph_measure;
         delete lockdownFilters.ph_measure_details;
@@ -128,8 +128,8 @@ export const mapMetrics = {
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
-        pattern: true
-      }
+        pattern: true,
+      },
     },
     {
       // functions that, when passed `params`, returns the data for the map
@@ -170,12 +170,12 @@ export const mapMetrics = {
       styleOptions: {
         // whether layers that display this metric should be outlined
         // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true
+        outline: true,
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
-      }
+      },
     },
 
     {
@@ -184,14 +184,14 @@ export const mapMetrics = {
       params: {
         metric_id: 74,
         temporal_resolution: "daily",
-        spatial_resolution: "state"
+        spatial_resolution: "state",
       },
       id: "74",
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
-      styleOptions: { outline: true, pattern: true }
+      styleOptions: { outline: true, pattern: true },
     },
     {
       queryFunc: ObservationQuery,
@@ -199,15 +199,15 @@ export const mapMetrics = {
       params: {
         metric_id: 72,
         temporal_resolution: "daily",
-        spatial_resolution: "state"
+        spatial_resolution: "state",
       },
       id: "72",
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
-      styleOptions: { outline: true, pattern: true }
-    }
+      styleOptions: { outline: true, pattern: true },
+    },
   ],
   global: [
     {
@@ -249,28 +249,99 @@ export const mapMetrics = {
       styleOptions: {
         // whether layers that display this metric should be outlined
         // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true
+        outline: true,
 
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         // pattern: true
-      }
+      },
+    },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        const lockdownFilters = {
+          ...filters,
+          lockdown_level: ["lockdown_level"],
+        };
+        // delete lockdownFilters.primary_ph_measure;
+        delete lockdownFilters.ph_measure_details;
+        return {
+          method: "post",
+          filters: lockdownFilters,
+          iso3: "all",
+          geo_res: "country",
+        };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "lockdown_level",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "lockdown_level" },
+
+      // // filter to control what features are returned for layers that are
+      // // displaying this metric
+      // filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        pattern: true,
+      },
     },
     {
       queryFunc: ObservationQuery,
-      for: ["circle", "fill"],
+      for: ["circle"],
       params: {
-        metric_id: "25",
+        metric_id: "77",
         temporal_resolution: "daily",
-        spatial_resolution: "country"
+        spatial_resolution: "country",
       },
-      id: "25",
-      featureLinkField: "place_id",
-      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      id: "77",
+      featureLinkField: "place_iso3",
+      styleId: { fill: "metric-test", circle: "metric-test-transp-linear" },
       trend: true,
-      styleOptions: { outline: true, pattern: true }
-    }
-  ]
+      styleOptions: { outline: true, pattern: false },
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle"],
+      params: {
+        metric_id: "75",
+        temporal_resolution: "daily",
+        spatial_resolution: "country",
+      },
+      id: "75",
+      featureLinkField: "place_iso3",
+      styleId: { fill: "metric-test", circle: "metric-test-solid-linear" },
+      trend: true,
+      styleOptions: { outline: true, pattern: false },
+    },
+  ],
 };
 
 // get JSX for link to COVID-Local metrics page
@@ -295,7 +366,8 @@ export const metricMeta = {
     // metric definition
     metric_definition: (
       <span>
-        The number of new COVID-19 cases in the state in the past 7 days.
+        The number of new COVID-19 cases (confirmed and probable) in the state
+        in the past 7 days.
         <br />
         <i style={{ fontSize: ".8rem" }}>
           Source: Calculated from{" "}
@@ -311,7 +383,22 @@ export const metricMeta = {
     metric_displayname: "New COVID-19 cases in past 7 days",
 
     // Optional: Short name for metric where needed
-    shortName: "Caseload",
+    shortName: (
+      <>
+        <div>Caseload</div>
+        <div
+          style={{
+            fontFamily: "'rawline', serif",
+            fontSize: ".9rem",
+            fontWeight: "normal",
+            fontStyle: "italic",
+            lineHeight: "1.1",
+          }}
+        >
+          confirmed & probable cases
+        </div>
+      </>
+    ),
 
     // value formatter for metric
     value: v => comma(v),
@@ -354,8 +441,8 @@ export const metricMeta = {
         // each `for` category
         labels: {
           bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
+          basemap: { min: "Minimal", max: "High" },
+        },
       },
       // additional layer legend information...
       circle: {
@@ -368,10 +455,10 @@ export const metricMeta = {
           .range(["transparent", "transparent"]), // TODO dynamically
         labels: {
           bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
-      }
-    }
+          basemap: { min: "Minimal", max: "High" },
+        },
+      },
+    },
   },
   // additional metric legend information...
   get "72"() {
@@ -380,8 +467,8 @@ export const metricMeta = {
       metric_displayname: "Cumulative caseload (up to date selected)",
       metric_definition: (
         <span>
-          The total cumulative number of COVID-19 cases in the state as of the
-          indicated date
+          The total cumulative number of COVID-19 cases (confirmed and probable)
+          in the state as of the indicated date
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source:{" "}
@@ -400,6 +487,23 @@ export const metricMeta = {
           24 hours
         </React.Fragment>
       ),
+      // Optional: Short name for metric where needed
+      shortName: (
+        <>
+          <div>Caseload</div>
+          <div
+            style={{
+              fontFamily: "'rawline', serif",
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              fontStyle: "italic",
+              lineHeight: "1.1",
+            }}
+          >
+            confirmed & probable cases
+          </div>
+        </>
+      ),
       legendInfo: {
         ...this["74"].legendInfo,
         circle: {
@@ -412,47 +516,89 @@ export const metricMeta = {
             .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
           labels: {
             bubble: { min: "Low", max: "High" },
-            basemap: { min: "Minimal", max: "High" }
-          }
-        }
-      }
+            basemap: { min: "Minimal", max: "High" },
+          },
+        },
+      },
     };
   },
-  "25": {
-    metric_definition:
-      "Number of new COVID-19 cases reported in the country on the specified date.",
-    metric_displayname: "New COVID-19 cases on date",
-    value: v => comma(v),
-    unit: v => (v === 1 ? "new case" : "new cases"),
-    trendTimeframe: "over prior 24 hours",
-    legendInfo: {
-      fill: {
-        for: "basemap", // TODO dynamically
-        type: "quantized",
-        labelsInside: true,
-        colorscale: d3
-          .scaleOrdinal()
-          .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
-        labels: {
-          bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
-      },
-      circle: {
-        for: "bubble",
-        type: "continuous",
-        outline: "#e65d36",
-        colorscale: d3
-          .scaleLinear()
-          .domain([0, 100])
-          .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
-        labels: {
-          bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" }
-        }
-      }
-    }
+  get "77"() {
+    return {
+      ...this["74"],
+      metric_definition: (
+        <span>
+          The number of new COVID-19 cases (confirmed) in the country in the
+          past 7 days.
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source: Calculated from{" "}
+            <a
+              target="_blank"
+              href="https://github.com/CSSEGISandData/COVID-19"
+            >
+              COVID-19 Data Repository by the Center for Systems Science and
+              Engineering (CSSE) at Johns Hopkins University
+            </a>
+          </i>
+        </span>
+      ),
+      // Optional: Short name for metric where needed
+      shortName: (
+        <>
+          <div>Caseload</div>
+          <div
+            style={{
+              fontFamily: "'rawline', serif",
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              fontStyle: "italic",
+              lineHeight: "1.1",
+            }}
+          >
+            confirmed cases
+          </div>
+        </>
+      ),
+    };
+  },
+  get "75"() {
+    return {
+      ...this["72"],
+      // Optional: Short name for metric where needed
+      shortName: (
+        <>
+          <div>Caseload</div>
+          <div
+            style={{
+              fontFamily: "'rawline', serif",
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              fontStyle: "italic",
+              lineHeight: "1.1",
+            }}
+          >
+            confirmed cases
+          </div>
+        </>
+      ),
+      metric_definition: (
+        <span>
+          The total cumulative number of COVID-19 cases (confirmed) in the
+          country as of the indicated date
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source:{" "}
+            <a
+              target="_blank"
+              href="https://github.com/CSSEGISandData/COVID-19"
+            >
+              COVID-19 Data Repository by the Center for Systems Science and
+              Engineering (CSSE) at Johns Hopkins University
+            </a>
+          </i>
+        </span>
+      ),
+    };
   },
   policy_status: {
     metric_definition: (
@@ -465,7 +611,7 @@ export const metricMeta = {
                   <div
                     style={{
                       backgroundColor: "#66CAC4",
-                      marginRight: "20px"
+                      marginRight: "20px",
                     }}
                     className={infostyles.rect}
                   >
@@ -492,15 +638,25 @@ export const metricMeta = {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
+        domain: [
+          "no policy",
+          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            policy data
+            <br />
+            not available
+          </div>,
+          "policy in effect",
+        ],
+        // range: ["#eaeaea", "white", "#66CAC4"],
         colorscale: d3
           .scaleOrdinal()
           .domain(["no policy", "policy in effect"])
-          .range(["#eaeaea", "#66CAC4"])
+          .range(["#eaeaea", "white", "#66CAC4"]),
         // labels: {
         //   bubble: { min: "Low", max: "High" },
         //   basemap: { min: "Minimal", max: "High" }
         // }
-      }
+      },
       // circle: {
       //   for: "bubble",
       //   type: "continuous",
@@ -514,7 +670,7 @@ export const metricMeta = {
       //     basemap: { min: "Minimal", max: "High" }
       //   }
       // }
-    }
+    },
   },
   lockdown_level: {
     // last updated: 2020-06-24
@@ -530,7 +686,7 @@ export const metricMeta = {
             Policies do not allow residents to leave their place of residence
             unless explicitly permitted to do so.
           </span>
-        )
+        ),
       },
       "Stay at home": {
         label: "Stay-at-home",
@@ -541,7 +697,7 @@ export const metricMeta = {
           <span>
             Policies limit most in-person activities and social events.
           </span>
-        )
+        ),
       },
       "Safer at home": {
         label: "Safer-at-home",
@@ -554,7 +710,7 @@ export const metricMeta = {
             encouraging extra precautions and retaining limits on mass
             gatherings.
           </span>
-        )
+        ),
       },
       "New normal": {
         label: "New normal",
@@ -567,7 +723,7 @@ export const metricMeta = {
             non-essential businesses are lifted or expired, with some
             encouraging of safeguards such as face coverings.
           </span>
-        )
+        ),
       },
       "Mixed distancing levels": {
         label: "Mixed distancing levels",
@@ -578,8 +734,8 @@ export const metricMeta = {
           <span>
             Any combination of the above levels simultaneously in effect.
           </span>
-        )
-      }
+        ),
+      },
     },
     wideDefinition: true,
     get metric_definition() {
@@ -612,14 +768,14 @@ export const metricMeta = {
                                 backgroundColor: colorRange[i],
                                 color: isLightColor(colorRange[i])
                                   ? "#333"
-                                  : "white"
+                                  : "white",
                               }
                             : {
                                 backgroundImage: `url("${colorRange[i]}")`,
                                 backgroundPosition: "center",
                                 padding: "3px 10px",
                                 border: "2px solid #BBDAF5",
-                                color: "black"
+                                color: "black",
                               }
                         }
                         className={infostyles.rect}
@@ -661,33 +817,48 @@ export const metricMeta = {
         range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
         domain: [
           "no policy",
+          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            policy data
+            <br />
+            not available
+          </div>,
           getCovidLocalMetricLink("lockdown"),
           getCovidLocalMetricLink("stay-at-home"),
           getCovidLocalMetricLink("safer-at-home"),
           getCovidLocalMetricLink("new normal"),
-          "mixed"
+          "mixed",
         ],
         subLabels: [
-          "",
+          <span style={{ visibility: "hidden" }}>x</span>,
+          <span style={{ visibility: "hidden" }}>x</span>,
           getCovidLocalMetricLink("(phase I)"),
           getCovidLocalMetricLink("(phase II)"),
           getCovidLocalMetricLink("(phase III)"),
           getCovidLocalMetricLink("(phase IV)"),
-          ""
+          <span style={{ visibility: "hidden" }}>x</span>,
         ],
         colorscale: d3
           .scaleOrdinal()
           .domain([
             "no policy",
+            "no policy data available",
             getCovidLocalMetricLink("lockdown (phase I)"),
             getCovidLocalMetricLink("stay-at-home (phase II)"),
             getCovidLocalMetricLink("safer-at-home (phase III)"),
             getCovidLocalMetricLink("new normal (phase IV)"),
-            "mixed"
+            "mixed",
           ])
-          .range(["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots]) // TODO dynamically
+          .range([
+            "#eaeaea",
+            "white",
+            "#2165a1",
+            "#549FE2",
+            "#86BFEB",
+            "#BBDAF5",
+            dots,
+          ]), // TODO dynamically
         // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
-      }
+      },
       // circle: {
       //   for: "bubble",
       //   type: "continuous",
@@ -701,8 +872,8 @@ export const metricMeta = {
       //     basemap: { min: "Minimal", max: "High" }
       //   }
       // }
-    }
-  }
+    },
+  },
 };
 
 /**
@@ -723,7 +894,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   // define date parameters for API calls
   const dates = {
     start_date: date.format("YYYY-MM-DD"),
-    end_date: date.format("YYYY-MM-DD")
+    end_date: date.format("YYYY-MM-DD"),
   };
 
   // collate query definitions based on the metrics that are to be displayed
@@ -742,7 +913,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
       queryDefs[d.id] = {
         queryFunc: d.queryFunc,
         ...params,
-        ...dates
+        ...dates,
       };
 
       // add trend query if applicable
@@ -751,7 +922,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
         queryDefs[trendKey] = {
           queryFunc: TrendQuery,
           ...d.params,
-          end: dates.end_date
+          end: dates.end_date,
         };
       }
     }
@@ -761,7 +932,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   const queries = {};
   for (const [k, v] of Object.entries(queryDefs)) {
     queries[k] = v.queryFunc({
-      ...v
+      ...v,
     });
   }
 
@@ -793,13 +964,14 @@ export const tooltipGetter = async ({
   map,
   filters,
   plugins,
-  callback
+  callback,
+  ...props
 }) => {
   // define base tooltip data
   const tooltip = {
     tooltipHeader: null,
     tooltipMainContent: null,
-    actions: null
+    actions: null,
   };
 
   // for each map type, return the appropriate tooltip formation
@@ -808,28 +980,23 @@ export const tooltipGetter = async ({
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.state_name,
-      subtitle: null
+      subtitle: null,
     };
-    // add actions for bottom of tooltip
-    // tooltip.actions = [<button key={"view"}>View details</button>];
-    tooltip.actions = [];
-    tooltip.tooltipHeaderMetric = null;
   } else {
     // get tooltip header
     tooltip.tooltipHeader = {
       title: d.properties.NAME,
-      subtitle: null
+      subtitle: null,
     };
-
-    // add actions for bottom of tooltip
-    tooltip.actions = [<button key={"view"}>View country</button>];
   }
+  tooltip.actions = [];
+  tooltip.tooltipHeaderMetric = null;
+
   // get content from metric IDs / values in `state`
   tooltip.tooltipMainContent = [];
 
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
-  console.log();
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -845,6 +1012,8 @@ export const tooltipGetter = async ({
     )
       continue;
     else {
+      console.log("k");
+      console.log(k);
       // get metric metadata
       const thisMetricMeta = metricMeta[k];
 
@@ -852,7 +1021,7 @@ export const tooltipGetter = async ({
       const item = {
         label: thisMetricMeta.shortName || thisMetricMeta.metric_displayname,
         value: thisMetricMeta.value(v),
-        unit: thisMetricMeta.unit(v)
+        unit: thisMetricMeta.unit(v),
       };
 
       // TRENDS // ----------------------------------------------------------//
@@ -882,7 +1051,7 @@ export const tooltipGetter = async ({
           ),
           noun,
           timeframe: thisMetricMeta.trendTimeframe,
-          classes: []
+          classes: [],
         };
       }
 
@@ -904,7 +1073,7 @@ export const tooltipGetter = async ({
             </div>
           </div>
         );
-      } else if (k === "74" || k === "72") {
+      } else if (["72", "74", "75", "77"].includes(k)) {
         item.value = (
           <div className={styles[k]}>
             <div className={styles.value}>
@@ -946,82 +1115,89 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-      if (k === "policy_status" || k === "lockdown_level") {
-        const apiDate = date.format("YYYY-MM-DD");
+      const apiDate = date.format("YYYY-MM-DD");
 
-        // get relevant policy data
-        const policies = await Policy({
-          method: "post",
-          filters: {
-            area1: [d.properties.state_name],
-            // level: ["State / Province"],
-            dates_in_effect: [apiDate, apiDate],
+      // get relevant policy data
+      const policyFilters = {
+        dates_in_effect: [apiDate, apiDate],
 
-            // if doing distancing level, only allow all social distancing
-            // policies to be returned
-            primary_ph_measure:
-              plugins.fill !== "lockdown_level"
-                ? filters.primary_ph_measure
-                : ["Social distancing"],
-            ph_measure_details:
-              plugins.fill !== "lockdown_level"
-                ? filters.ph_measure_details
-                : []
-          },
-          // by_category: "ph_measure_details",
-          fields: ["id", "place"]
-        });
+        // if doing distancing level, only allow all social distancing
+        // policies to be returned
+        primary_ph_measure:
+          plugins.fill !== "lockdown_level"
+            ? filters.primary_ph_measure
+            : ["Social distancing"],
+        ph_measure_details:
+          plugins.fill !== "lockdown_level" ? filters.ph_measure_details : [],
+      };
+      if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
+      else policyFilters.iso3 = [d.properties.ISO_A3];
 
-        const nPolicies = {
-          total: 0,
-          local: 0,
-          state: 0,
-          country: 0
-        };
-        policies.data.forEach(d => {
-          nPolicies.total += 1;
-          switch (d.place.level) {
-            case "Local":
-              nPolicies.local += 1;
-              break;
-            case "State / Province":
-              nPolicies.state += 1;
-              break;
-            case "Country":
-              nPolicies.country += 1;
-              break;
-          }
-        });
+      const policies = await Policy({
+        method: "post",
+        filters: policyFilters,
+        fields: ["id", "place"],
+      });
 
-        // define right content of header metric based on metric type
-        // add actions for bottom of tooltip
-        const filtersStr = JSON.stringify({
-          primary_ph_measure:
-            plugins.fill !== "lockdown_level"
-              ? filters.primary_ph_measure
-              : ["Social distancing"],
-          ph_measure_details:
-            plugins.fill !== "lockdown_level"
-              ? filters.ph_measure_details || []
-              : [],
-          dates_in_effect: filters.dates_in_effect,
-          // TODO generalize
-          country_name: ["United States of America (USA)"],
-          area1: [d.properties.state_name]
-          // level: ["State / Province"]
-        });
+      const nPolicies = {
+        total: 0,
+        local: 0,
+        state: 0,
+        country: 0,
+      };
+      policies.data.forEach(d => {
+        nPolicies.total += 1;
+        switch (d.place.level) {
+          case "Local":
+            nPolicies.local += 1;
+            break;
+          case "State / Province":
+            nPolicies.state += 1;
+            break;
+          case "Country":
+            nPolicies.country += 1;
+            break;
+        }
+      });
 
-        // content for right side of header
-        tooltip.tooltipHeaderRight = (
-          <>
+      // define right content of header metric based on metric type
+      // add actions for bottom of tooltip
+      const filtersForStr = {
+        primary_ph_measure:
+          plugins.fill !== "lockdown_level"
+            ? filters.primary_ph_measure
+            : ["Social distancing"],
+        ph_measure_details:
+          plugins.fill !== "lockdown_level"
+            ? filters.ph_measure_details || []
+            : [],
+        dates_in_effect: filters.dates_in_effect,
+      };
+
+      if (mapId === "us") {
+        filtersForStr.country_name = ["United States of America (USA)"];
+        filtersForStr.area1 = [d.properties.state_name];
+      } else {
+        filtersForStr.country_name = [
+          `${d.properties.NAME} (${d.properties.ISO_A3})`,
+        ];
+      }
+      const filtersStr = JSON.stringify(filtersForStr);
+
+      // content for right side of header
+      const catFilters =
+        filters.ph_measure_details && filters.ph_measure_details.length > 0;
+      tooltip.tooltipHeaderRight = (
+        <>
+          {(props.geoHaveData || mapId === "us") && (
             <a
               key={"view"}
               target="_blank"
-              href={"/data?filters=" + filtersStr}
+              href={"/data?type=policy&filters_policy=" + filtersStr}
             >
               {
                 <button>
-                  View all policies
+                  View {catFilters ? "filtered" : "all"} policies
                   <br /> ({nPolicies.total}) in effect
                 </button>
               }
@@ -1033,22 +1209,89 @@ export const tooltipGetter = async ({
                 // </button>
               }
             </a>
-            <span>
-              as of <i>{formattedDate}</i>
-            </span>
-          </>
-        );
-        item.value = (
-          <div
-            className={infostyles.badge}
-            style={{
-              backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v)
-            }}
-          >
-            {thisMetricMeta.value(v)}
-          </div>
-        );
+          )}
+          <span>
+            as of <i>{formattedDate}</i>
+          </span>
+        </>
+      );
+      item.value = (
+        <div
+          className={infostyles.badge}
+          style={{
+            backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v),
+          }}
+        >
+          {thisMetricMeta.value(v)}
+        </div>
+      );
+
+      // special -- add note if policy data not yet collected
+      let message;
+      if (state.lockdown_level === null && mapId === "us") {
+        if (nPolicies.total > 0) {
+          message = (
+            <i>
+              No {mapId === "us" ? "state" : "country"}-level distancing
+              <br />
+              level could be determined
+              <br />
+              from policies in effect
+            </i>
+          );
+        } else {
+          message = <i>No policies in effect</i>;
+        }
+
+        tooltip.tooltipMainContent.push({
+          customContent: (
+            <>
+              <div className={styles.label}>Distancing level</div>
+              <div style={{ color: "gray" }} className={styles.value}>
+                {message}
+              </div>
+            </>
+          ),
+        });
+      } else if (
+        (state.lockdown_level === null || props.geoHaveData === false) &&
+        mapId === "global"
+      ) {
+        let message;
+        if (props.geoHaveData === false) {
+          message = (
+            <i>
+              No policies yet available,
+              <br />
+              data collection in progress
+            </i>
+          );
+        } else if (state.lockdown_level === null && nPolicies.total > 0) {
+          message = (
+            <i>
+              No country-level distancing
+              <br />
+              level could be determined
+              <br />
+              from policies in effect
+            </i>
+          );
+        } else {
+          message = <i>No policies in effect</i>;
+        }
+        if (state.lockdown_level === null)
+          tooltip.tooltipMainContent.push({
+            customContent: (
+              <>
+                <div className={styles.label}>Distancing level</div>
+                <div style={{ color: "gray" }} className={styles.value}>
+                  {message}
+                </div>
+              </>
+            ),
+          });
       }
+
       tooltip.tooltipMainContent.reverse();
       // tooltip.tooltipMainContent.push(item);
     }
@@ -1062,7 +1305,7 @@ const TableDrawer = ({
   open,
   openTableDrawer,
   setOpenTableDrawer,
-  children
+  children,
 }) => {
   return (
     <div className={styles.tableDrawer}>
@@ -1078,7 +1321,7 @@ const TableDrawer = ({
           {
             <i
               className={classNames("material-icons", {
-                [styles.flipped]: open
+                [styles.flipped]: open,
               })}
             >
               play_arrow

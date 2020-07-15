@@ -88,24 +88,93 @@
       top: 5px;
       z-index: 0;
     }
+    // manually set widths of certain table cols
   }
   table {
-    th,
-    td {
-      // set width of link column
-      &:last-child {
-        width: 88px;
+    &.policy {
+      th,
+      td {
+        // set width of link column
+        &:last-child {
+          width: 88px;
+        }
+        // set width of Description column
+        &:nth-child(3) {
+          width: 35%;
+        }
       }
-      // set width of Description column
-      &:nth-child(3) {
-        // width: 10%;
-      }
-      // set width of Description column
-      &:nth-child(3) {
-        width: 35%;
+    }
+    &.plan {
+      th,
+      td {
+        // set width of link column
+        &:last-child {
+          width: 88px;
+        }
+        // set width of Description column
+        &:nth-child(4) {
+          width: 35%;
+        }
       }
     }
   }
+
+  // drawer components
+  // content top section
+  .contentTop {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px; // TODO elegantly
+  }
+
+  // data download buttons
+  button {
+    &.all,
+    &.Policy,
+    &.Plan {
+      img {
+        height: 30px;
+        margin-right: 10px;
+      }
+      span:first-child {
+        font-size: 1rem;
+        font-weight: 500;
+        + span {
+          margin-top: 3px;
+        }
+      }
+      div {
+        display: flex;
+        // align-items: center;
+        flex-flow: column;
+        justify-content: center;
+      }
+    }
+
+    // master download button
+    &.all {
+      &,
+      &:hover {
+        background-color: transparent;
+        color: $dark-navy-blue;
+      }
+      &:active {
+        color: black;
+        background-color: darken($light-blue-3, 5%);
+      }
+    }
+
+    // entity-specific download buttons
+    &.Policy,
+    &.Plan {
+      padding: 10px;
+    }
+  }
+
+  // responsiveness
+  // TODO move to separate file
   @media #{$phone} {
     table {
       th,

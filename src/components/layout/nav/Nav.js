@@ -33,8 +33,9 @@ const Nav = ({ page, ...props }) => {
 
   return (
     <div
+      data-page={page}
       className={classNames(styles.navWrapper, {
-        [styles.wide]: page === "policymaps",
+        [styles.wide]: page === "policymaps" || page === "model",
         [styles.showMobileMenu]: showMobileMenu
       })}
     >
@@ -86,6 +87,15 @@ const Nav = ({ page, ...props }) => {
               to={"/policymaps"}
             >
               Policy maps
+            </Link>
+            <Link
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
+              className={page === "model" ? styles.active : ""}
+              to={"/model"}
+            >
+              Policy model
             </Link>
             <Link
               onClick={() => {

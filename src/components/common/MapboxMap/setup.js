@@ -45,6 +45,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
      * @return {[type]}     [description]
      */
     function handleRender() {
+      console.log("handleRender");
       if (!map.loaded()) {
         return;
       } // still not loaded; continue
@@ -103,8 +104,8 @@ export const initMap = ({ map, mapId, data, callback }) => {
                 // hide layer initially unless it is the current one
                 layout: {
                   visibility:
-                    defaults[mapId].fill === layer.id ? "visible" : "none"
-                }
+                    defaults[mapId].fill === layer.id ? "visible" : "none",
+                },
               },
               // insert this layer just behind the `priorLayer`
               defaults[mapId].priorLayer
@@ -129,8 +130,8 @@ export const initMap = ({ map, mapId, data, callback }) => {
                   // hide layer initially unless it is the current one
                   layout: {
                     visibility:
-                      defaults[mapId].fill === layer.id ? "visible" : "none"
-                  }
+                      defaults[mapId].fill === layer.id ? "visible" : "none",
+                  },
                 },
 
                 // insert this layer just behind the `priorLayer`
@@ -156,7 +157,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
                     "source-layer": source.sourceLayer,
                     paint: layerStyles["fill"][layerStyleName + "-outline"](
                       layer.id
-                    )
+                    ),
                   },
                   // insert this layer just behind the `priorLayer`
                   defaults[mapId].priorLayer
@@ -205,7 +206,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
             const circleShadowStyle = {
               "circle-radius-transition": {
                 duration: 1000,
-                delay: 0
+                delay: 0,
               },
               "circle-translate": [3, 3],
               "circle-radius": layerStyle.circleRadius,
@@ -215,7 +216,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
                 "case",
                 ["==", ["feature-state", layer.id], null],
                 0,
-                0.25
+                0.25,
               ],
               "circle-stroke-width": [
                 "case",
@@ -223,22 +224,22 @@ export const initMap = ({ map, mapId, data, callback }) => {
                 layerStyle.circleStrokeWidth * 2,
                 ["==", ["feature-state", "hovered"], true],
                 layerStyle.circleStrokeWidth * 2,
-                layerStyle.circleStrokeWidth
+                layerStyle.circleStrokeWidth,
               ],
               "circle-stroke-color": [
                 "case",
                 ["==", ["feature-state", layer.id], null],
                 "transparent",
-                "black"
+                "black",
               ],
-              "circle-stroke-opacity": 0.25
+              "circle-stroke-opacity": 0.25,
             };
 
             // define circle main style
             const circleMainStyle = {
               "circle-radius-transition": {
                 duration: 1000,
-                delay: 1000
+                delay: 1000,
               },
               "circle-radius": layerStyle.circleRadius,
               "circle-color": layerStyle.circleColor,
@@ -249,10 +250,10 @@ export const initMap = ({ map, mapId, data, callback }) => {
                 layerStyle.circleStrokeWidth * 2,
                 ["==", ["feature-state", "hovered"], true],
                 layerStyle.circleStrokeWidth * 2,
-                layerStyle.circleStrokeWidth
+                layerStyle.circleStrokeWidth,
               ],
               "circle-stroke-color": layerStyle.circleStrokeColor,
-              "circle-stroke-opacity": layerStyle.circleStrokeOpacity
+              "circle-stroke-opacity": layerStyle.circleStrokeOpacity,
             };
 
             // add circle shadow layer first
@@ -267,8 +268,8 @@ export const initMap = ({ map, mapId, data, callback }) => {
                 // hide layer initially unless it is the current one
                 layout: {
                   visibility:
-                    defaults[mapId].circle === layer.id ? "visible" : "none"
-                }
+                    defaults[mapId].circle === layer.id ? "visible" : "none",
+                },
               },
               // insert this layer just behind the `priorLayer`
               defaults[mapId].priorLayer
@@ -286,8 +287,8 @@ export const initMap = ({ map, mapId, data, callback }) => {
                 // hide layer initially unless it is the current one
                 layout: {
                   visibility:
-                    defaults[mapId].circle === layer.id ? "visible" : "none"
-                }
+                    defaults[mapId].circle === layer.id ? "visible" : "none",
+                },
               },
               // insert this layer just behind the `priorLayer`
               defaults[mapId].priorLayer
@@ -314,6 +315,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
   }
   // otherwise, when map is loaded, add geometries
   map.on("load", function() {
+    console.log("load");
     initGeoms();
   });
 };
@@ -356,7 +358,7 @@ export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
     mvmNew: mapSources[mapId],
     data,
     curMapMetrics,
-    selectedFeature
+    selectedFeature,
   });
 };
 
@@ -379,7 +381,7 @@ const bindFeatureStatesForSource = ({
   mvmNew,
   data,
   curMapMetrics,
-  selectedFeature
+  selectedFeature,
 }) => {
   for (const [sourceTypeKey, source] of Object.entries(mvmNew)) {
     // define standard layer list key, e.g., 'circleLayers', 'fillLayers', ...
@@ -390,7 +392,7 @@ const bindFeatureStatesForSource = ({
       // get all features from source, using filter if defined
       const feats = map.querySourceFeatures(source.name, {
         sourceLayer: source.sourceLayer,
-        filter: layer.filter
+        filter: layer.filter,
       });
 
       // get trend key (only applicable if trend is being tracked)
@@ -401,7 +403,7 @@ const bindFeatureStatesForSource = ({
           {
             source: source.name,
             sourceLayer: source.sourceLayer,
-            id: f.id
+            id: f.id,
           },
           { [layer.id]: null, [trendKey]: null }
         );
@@ -458,7 +460,7 @@ const bindFeatureStatesForSource = ({
         const featureProps = {
           source: source.name,
           sourceLayer: source.sourceLayer,
-          id: dd[layer.featureLinkField || "place_id"]
+          id: dd[layer.featureLinkField || "place_id"],
         };
         map.setFeatureState(featureProps, state);
       }

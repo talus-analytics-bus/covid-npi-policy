@@ -1,0 +1,175 @@
+$border-width: 1px;
+$border-color: #bbb;
+$arrow-size: 20px;
+$grey-highlight: #eee;
+
+.leftPopup,
+.rightPopup {
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.125);
+  // because victory uses z-index 99... why...
+  z-index: 100;
+  border: $border-width solid $border-color;
+  border-radius: 0.5rem;
+  // opacity: 0;
+  transition: opacity 150ms ease;
+  // min-height: 25rem;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 30px;
+    width: $arrow-size;
+    height: $arrow-size;
+    transform: rotate(45deg);
+    background-color: $grey-highlight;
+    z-index: -2;
+  }
+
+  // This pseudoelement expands the
+  // mouse event area to make it feel
+  // a little more reliable and easier
+  // to use without it accidentally disappearing
+  &:after {
+    position: absolute;
+    content: "";
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -40px;
+    z-index: -3;
+  }
+
+  .greySection,
+  .content {
+    height: 100%;
+    padding: 1rem;
+    padding-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: space-between;
+
+    .closeButton {
+      position: relative;
+      top: -0.125rem;
+      background: none;
+      border: none;
+      padding: 0;
+      width: 1.75rem;
+      height: 1.75rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .col {
+      flex-basis: 100%;
+    }
+
+    h1,
+    p,
+    a {
+      margin: 0;
+      padding: 0;
+      text-transform: initial;
+      color: #16467a;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #333333;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 800;
+      margin-top: 1.5rem;
+    }
+
+    input[type="date"] {
+      color: #333333;
+      font-weight: 400;
+    }
+
+    fieldset {
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 1.5rem;
+      padding-bottom: 1rem;
+
+      legend {
+        font-weight: 800;
+      }
+
+      label {
+        flex-direction: row;
+        align-items: center;
+        font-weight: 400;
+        margin-top: 0.25rem;
+        color: #333333;
+      }
+    }
+
+    .buttonRow {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+
+      button {
+        font-size: 1.2rem;
+        flex-grow: 0;
+        background-color: #044575;
+        border: 1px solid #022c4c;
+        color: white;
+        border-radius: 3px;
+        padding: 0.25em 0.5em;
+        margin-left: 1rem;
+      }
+
+      // button:first-of-type {
+      //   background-color: #586875;
+      //   border: 1px solid #2f373d;
+      // }
+    }
+
+    .verticalSlider {
+      width: 15rem;
+      transform: rotateZ(270deg) translate(-50%);
+    }
+  }
+
+  .greySection {
+    padding-top: 1.25rem;
+    background-color: $grey-highlight;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+}
+
+.leftPopup {
+  &:before {
+    left: -$arrow-size / 2px - $border-width;
+    border-left: $border-width solid $border-color;
+    border-bottom: $border-width solid $border-color;
+  }
+}
+
+.rightPopup {
+  &:before {
+    right: -$arrow-size / 2px - $border-width;
+    border-right: $border-width solid $border-color;
+    border-top: $border-width solid $border-color;
+  }
+}

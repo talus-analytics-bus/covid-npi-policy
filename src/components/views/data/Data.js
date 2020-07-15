@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
 
-// common compoments
+// common components
 import { FilterSet, Table, RadioToggle, ShowMore } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
@@ -11,7 +11,7 @@ import {
   Policy,
   OptionSet,
   Export,
-  execute
+  execute,
 } from "../../misc/Queries.js";
 import { isEmpty, comma } from "../../misc/Util.js";
 
@@ -21,280 +21,61 @@ import classNames from "classnames";
 import downloadSvg from "../../../assets/icons/download.svg";
 
 // constants
+import policyInfo from "./content/policy";
+import planInfo from "./content/plan";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // primary data viewing and download page
 const Data = ({
   setLoading,
+  loading,
   setInfoTooltipContent,
   setPage,
-  urlFilterParams
+  urlFilterParamsPolicy,
+  urlFilterParamsPlan,
+  type,
+  counts,
 }) => {
-  const [initializing, setInitializing] = useState(true);
-  const [docType, setDocType] = useState("policy");
+  const [docType, setDocType] = useState(type || "policy");
+  const [entityInfo, setEntityInfo] = useState(policyInfo);
 
-  // get nouns to use from doc type
-  const getNouns = docType => {
-    if (docType === "policy") {
-      return { s: "Policy", p: "Policies" };
-    } else {
-      return { s: "Plan", p: "Plans" };
-    }
-  };
-  const nouns = getNouns(docType);
+  // set `unspecified` component, etc., from entity info
+  const unspecified = entityInfo.unspecified;
+  const nouns = entityInfo.nouns;
 
   // define data and metadata for table
   const [data, setData] = useState(null);
+
   const [metadata, setMetadata] = useState(null);
 
   // define filters
-  // TODO parse by policy/plan
-  // const [filters, setFilters] = useState({});
-  const [filters, setFilters] = useState(null);
-
-  // flag for whether the download button should say loading or not
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const getFiltersFromUrlParams = () => {
+    // If filters are specific in the url params, and they are for the current
+    // entity class, use them. Otherwise, clear them
+    const urlFilterParams =
+      docType === "policy" ? urlFilterParamsPolicy : urlFilterParamsPlan;
+    const useUrlFilters = urlFilterParams !== null;
+    const newFilters = useUrlFilters ? urlFilterParams : {};
+    return newFilters;
+  };
+  const initFilters = getFiltersFromUrlParams();
+  const [filters, setFilters] = useState(initFilters);
 
   // min and max dates for date range pickers dynamically determined by data
   const [minMaxStartDate, setMinMaxStartDate] = useState({
     min: undefined,
-    max: undefined
+    max: undefined,
   });
   const [minMaxEndDate, setMinMaxEndDate] = useState({
     min: undefined,
-    max: undefined
+    max: undefined,
   });
 
   // define filters in groups
   // TODO make simpler, probably removing the `field` key
-  const [filterDefs, setFilterDefs] = useState([
-    {
-      level: {
-        entity_name: "Place",
-        field: "level",
-        label: "Level of government"
-      }
-    },
-    {
-      country_name: {
-        entity_name: "Place",
-        field: "country_name",
-        label: "Country"
-      },
-      area1: {
-        entity_name: "Place",
-        field: "area1",
-        label: "State / Province",
-        withGrouping: true,
-        primary: "country_name",
-        disabledText: "Choose a country"
-      },
-      area2: {
-        entity_name: "Place",
-        field: "area2",
-        label: "Locality (county, city, ...)",
-        withGrouping: true,
-        primary: "area1",
-        disabledText: "Choose a state / province"
-      }
-    },
-    {
-      relaxing_or_restricting: {
-        entity_name: "Policy",
-        field: "relaxing_or_restricting",
-        label: "Relaxing or restricting"
-      }
-    },
-    {
-      primary_ph_measure: {
-        entity_name: "Policy",
-        field: "primary_ph_measure",
-        label: "Policy category"
-      },
-      ph_measure_details: {
-        entity_name: "Policy",
-        field: "ph_measure_details",
-        label: "Policy sub-category",
-        withGrouping: true,
-        primary: "primary_ph_measure",
-        disabledText: "Choose a policy category"
-      }
-    },
-    {
-      dates_in_effect: {
-        entity_name: "Policy",
-        field: "dates_in_effect",
-        label: "Dates policy in effect",
-        dateRange: true,
-        minMaxDate: { min: undefined, max: undefined }
-      }
-    }
-  ]);
-  const unspecified = (
-    <span className={styles.unspecified}>{"None available"}</span>
-  );
+  const [filterDefs, setFilterDefs] = useState(entityInfo.filters);
 
-  const [columns, setColumns] = useState([
-    {
-      dataField: "place.level",
-      header: "Level of government",
-      sort: true
-    },
-    {
-      dataField: "place.loc",
-      header: "Affected location",
-      defCharLimit: 1000,
-      sort: true,
-      formatter: v => {
-        return <ShowMore text={v} charLimit={60} />;
-      }
-    },
-    // {
-    //   dataField: "policy_name",
-    //   header: "Policy name",
-    //   sort: true,
-    //   formatter: v => {
-    //     // TODO REPLACE ALL
-    //     return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
-    //   }
-    // },
-    {
-      dataField: "desc",
-      header: "Policy name and description",
-      // width: "300",
-      defCharLimit: 1000,
-      sort: true,
-      formatter: (cell, row) => {
-        const title =
-          row.policy_name !== "Unspecified" &&
-          row.policy_name !== "" &&
-          row.policy_name !== null &&
-          row.policy_name !== undefined
-            ? row.policy_name + ": "
-            : "";
-        return <ShowMore text={title + cell} charLimit={200} />;
-      }
-      // formatter: v => {
-      //   return <ShowMore text={v} charLimit={90} />;
-      // }
-    },
-
-    {
-      dataField: "primary_ph_measure",
-      header: "Policy category",
-      sort: true
-    },
-    // {
-    //   dataField: "ph_measure_details",
-    //   header: "Policy sub-category",
-    //   sort: true
-    // },
-
-    {
-      dataField: "date_start_effective",
-      header: "Effective start date",
-      sort: true,
-      formatter: v =>
-        v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    },
-    // {
-    //   dataField: "date_end_actual",
-    //   header: "Policy end date actual",
-    //   sort: true,
-    //   formatter: v =>
-    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    // },
-    // {
-    //   dataField: "date_end_anticipated",
-    //   header: "Policy end date anticipated",
-    //   sort: true,
-    //   formatter: v =>
-    //     v !== null ? moment(v).format("MMM D, YYYY") : unspecified
-    // },
-    // {
-    //   dataField: "date_end_actual_or_anticipated",
-    //   header: "Policy end date",
-    //   sort: true,
-    //   sortFunc: (axx, bxx, order, dataField, a, b) => {
-    //     const getDateValue = d => {
-    //       if (d.date_end_actual !== null) return moment(d.date_end_actual);
-    //       else if (d.date_end_anticipated !== null)
-    //         return moment(d.date_end_anticipated);
-    //       else return -99999;
-    //     };
-    //     const aDate = getDateValue(a);
-    //     const bDate = getDateValue(b);
-    //     if (order === "asc") {
-    //       return aDate - bDate;
-    //     }
-    //     return bDate - aDate; // desc
-    //   },
-    //   formatter: (v, row) => {
-    //     const hasActual = row.date_end_actual !== null;
-    //     if (hasActual) return moment(row.date_end_actual).format("MMM D, YYYY");
-    //     else {
-    //       const hasAnticipated = row.date_end_anticipated !== null;
-    //       if (hasAnticipated) {
-    //         return (
-    //           moment(row.date_end_anticipated).format("MMM D, YYYY") +
-    //           " (anticipated)"
-    //         );
-    //       } else return unspecified;
-    //     }
-    //   }
-    // },
-    {
-      dataField: "authority_name",
-      header: "Relevant authority",
-      sort: true,
-      formatter: v => {
-        // TODO REPLACE ALL
-        return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
-      }
-    },
-    {
-      dataField: "file",
-      header: "Link",
-      // sort: true,
-      formatter: (row, cell) => {
-        const icons = cell.file.map((d, i) => {
-          const isLocalDownload = true;
-          // const isLocalDownload = d.filename && d.filename !== "";
-          const link = undefined;
-          const hasLink = link && link !== "";
-          if (isLocalDownload) {
-            const localDownloadLink =
-              d !== undefined
-                ? "/get/file/redirect?id=" + d.toString()
-                : undefined;
-            return (
-              <div
-                key={localDownloadLink + "-" + i}
-                className={styles.linkIcon}
-              >
-                <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
-                  <i className={"material-icons"}>insert_drive_file</i>
-                </a>
-              </div>
-            );
-          } else if (hasLink) {
-            return (
-              <div className={styles.linkIcon}>
-                <a target="_blank" href={link}>
-                  <i className={"material-icons"}>link</i>
-                </a>
-              </div>
-            );
-          } else return unspecified;
-        });
-        if (cell.file && cell.file.length > 0) {
-          return <div className={styles.linkIcons}>{icons}</div>;
-        } else {
-          return unspecified;
-        }
-      }
-    }
-  ]);
+  const [columns, setColumns] = useState(null);
 
   /**
    * Get data for page
@@ -302,72 +83,70 @@ const Data = ({
    * @param  {Object}  [filters={}] [description]
    * @return {Promise}              [description]
    */
-  const getData = async (filters = {}) => {
-    const method = Object.keys(filters).length === 0 ? "get" : "post";
+  const getData = async ({
+    filtersForQuery,
+    entityInfoForQuery,
+    getOptionSets = false,
+  }) => {
+    const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
+    const initColumns = entityInfoForQuery.getColumns({ metadata: {} });
     const queries = {
-      policies: Policy({
+      instances: entityInfoForQuery.dataQuery({
         method,
-        filters,
-        fields: [
-          "id",
-          "place",
-          "primary_ph_measure",
-          "policy_name",
-          "authority_name",
-          // "ph_measure_details",
-          "desc",
-          "date_start_effective",
-          // "date_end_actual",
-          // "date_end_anticipated",
-          "file"
-        ]
+        filters: filtersForQuery,
       }),
-      metadata: Metadata({
-        method: "get",
-        fields: columns.map(d => {
-          if (!d.dataField.includes(".")) return "policy." + d.dataField;
-          else return d.dataField;
-        })
-      })
     };
-    if (initializing) {
+
+    if (getOptionSets) {
       queries.optionsets = OptionSet({
         method: "get",
-        fields: filterDefs
+        class_name: entityInfoForQuery.nouns.s,
+        fields: entityInfoForQuery.filterDefs
           .map(d => Object.values(d).map(dd => dd))
           .flat()
           .filter(d => !d.field.startsWith("date"))
           .map(d => {
             return d.entity_name + "." + d.field;
           }),
-        entity_name: "Policy"
+        entity_name: entityInfoForQuery.nouns.s,
+      });
+      queries.metadata = Metadata({
+        method: "get",
+        fields: initColumns.map(d => {
+          if (!d.dataField.includes(".")) return docType + "." + d.dataField;
+          else return d.dataField;
+        }),
+        entity_class_name: entityInfoForQuery.nouns.s,
       });
     }
 
+    // execute queries and collate results
     const results = await execute({
-      queries
+      queries,
     });
 
-    setData(results.policies.data);
-    setMetadata(results.metadata.data);
+    // set data and metadata with results
+    setData(results.instances.data);
 
     // define min/max range of daterange pickers
     // TODO modularize and reuse repeated code
-    const policyDatesStart = results.policies.data
+    const policyDatesStart = results.instances.data
       .map(d => d.date_start_effective)
       .filter(d => d)
       .sort();
-    const policyDatesEnd = results.policies.data
+    const policyDatesEnd = results.instances.data
       .map(d => d.date_end_actual)
       .filter(d => d)
       .sort();
     const newMinMaxStartDate = {
       min: new Date(moment(policyDatesStart[0]).utc()),
-      max: new Date(moment(policyDatesStart[policyDatesStart.length - 1]).utc())
+      max: new Date(
+        moment(policyDatesStart[policyDatesStart.length - 1]).utc()
+      ),
     };
     const newMinMaxEndDate = {
       min: new Date(moment(policyDatesEnd[0]).utc()),
-      max: new Date(moment(policyDatesEnd[policyDatesEnd.length - 1]).utc())
+      max: new Date(moment(policyDatesEnd[policyDatesEnd.length - 1]).utc()),
     };
 
     setMinMaxStartDate(newMinMaxStartDate);
@@ -376,11 +155,13 @@ const Data = ({
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
     // TODO move this out of main code if possible
-    if (initializing) {
+    if (getOptionSets) {
+      setMetadata(results.metadata.data);
+
       const optionsets = results["optionsets"];
 
       // set options for filters
-      const newFilterDefs = [...filterDefs];
+      const newFilterDefs = [...entityInfoForQuery.filterDefs];
       newFilterDefs.forEach(d => {
         for (const [k, v] of Object.entries(d)) {
           if (!k.startsWith("date")) d[k].items = optionsets[k];
@@ -388,17 +169,20 @@ const Data = ({
             // set min/max date range for daterange filters
             d[k].minMaxDate = {
               min: newMinMaxStartDate.min,
-              max: undefined
+              max: undefined,
             };
           }
         }
       });
       setFilterDefs(newFilterDefs);
-      setInitializing(false);
+      setColumns(
+        entityInfoForQuery.getColumns({ metadata: results.metadata.data })
+      );
     }
     setLoading(false);
   };
 
+  // EFFECT HOOKS // ---------—---------—---------—---------—---------—------//
   // on initial page load, get all data and filter optionset values
   useEffect(() => {
     // scroll to top of page
@@ -411,90 +195,110 @@ const Data = ({
     setPage("data");
   }, []);
 
-  // DEBUG url params change
+  // when doc type changes, nullify columns / data / filter defs, then update
+  // entity info
   useEffect(() => {
-    if (urlFilterParams !== null && isEmpty(filters)) {
-      // add filters from URL search params
-      const newFilters = {};
-      for (const [k, vs] of Object.entries(urlFilterParams)) {
-        vs.forEach(v => {
-          if (newFilters[k] === undefined) newFilters[k] = [v];
-          else {
-            if (k === "dates_in_effect" || !newFilters[k].includes(v))
-              newFilters[k].push(v);
-          }
-        });
+    setLoading(true);
+    setColumns(null);
+    setData(null);
+    setFilterDefs(null);
+    const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
+
+    // get current URL params
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // update which doc type is being viewed
+    urlParams.set("type", docType);
+
+    const newState = {};
+    for (const [k, v] of urlParams.entries()) {
+      if (v !== null && v !== "") {
+        newState[k] = v;
       }
-      // update filters
-      setFilters(newFilters);
-    } else if (filters === null) {
-      setFilters({});
     }
-  }, [urlFilterParams]);
+    const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
+    window.history.replaceState(newState, "", newUrl);
 
-  // when filters are changed, retrieve filtered data, and set loading spinner
-  // to visible
+    const newFilters = getFiltersFromUrlParams();
+    setFilters(newFilters);
+
+    // update entity info and get data
+    setEntityInfo(newEntityInfo);
+    getData({
+      filtersForQuery: newFilters,
+      entityInfoForQuery: newEntityInfo,
+      initializingForQuery: true,
+      getOptionSets: true,
+    });
+  }, [docType]);
+
+  // when filters are updated, update data
   useEffect(() => {
-    if (filters !== null) {
-      // set loading spinner to visible
+    if (!loading) {
+      // update data
       setLoading(true);
+      getData({
+        filtersForQuery: filters,
+        entityInfoForQuery: entityInfo,
+        initializingForQuery: true,
+      });
 
-      // get data (loading spinner turned off after API call)
-      console.log(filters);
-      getData(filters);
-
+      // update URL params string
       // if filters are empty, clear all URL search params
+
+      // get current URL params
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // get filter strings for each doc type
+      const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
+      const curUrlFilterParamsPlan = urlParams.get("filters_plan");
+
+      // get key corresponding to the currently viewed doc type's filters
+      const filtersUrlParamKey = "filters_" + docType;
+
+      // TODO make the below work with two filter sets
+      // Default state is the currently selected filters per the URL params
+      const newState = { type: docType };
+      if (curUrlFilterParamsPolicy !== null)
+        newState.filters_policy = curUrlFilterParamsPolicy;
+      if (curUrlFilterParamsPlan !== null)
+        newState.filters_plan = curUrlFilterParamsPlan;
+
       if (isEmpty(filters)) {
-        window.history.replaceState({ filtersStr: "" }, "", "/data");
+        // clear filters for current doc type and update window history
+        newState[filtersUrlParamKey] = "";
       } else {
-        const filtersStr = JSON.stringify(filters);
-        window.history.replaceState(
-          { filtersStr },
-          "",
-          "/data?filters=" + filtersStr
-        );
+        newState[filtersUrlParamKey] = JSON.stringify(filters);
       }
+      const newUrlParams = new URLSearchParams();
+      for (const [k, v] of Object.entries(newState)) {
+        if (v !== null && v !== "") {
+          newUrlParams.append(k, v);
+        }
+      }
+      const newUrl =
+        newUrlParams.toString() !== "" ? `/data?${newUrlParams}` : "/data";
+
+      window.history.replaceState(newState, "", newUrl);
     }
   }, [filters]);
 
-  // when metadata are retrieved, update columns with definitions
-  useEffect(() => {
-    if (metadata !== null) {
-      const newColumns = [...columns];
-      newColumns.forEach(d => {
-        if (d.dataField === "file") {
-          d.definition = "PDF download of or external link to policy";
-          return;
-        }
-        const key = d.dataField.includes(".")
-          ? d.dataField
-          : "policy." + d.dataField;
-        d.definition = metadata[key] ? metadata[key].definition || "" : "";
-
-        // use only the first sentence of the definition
-        if (d.dataField !== "authority_name")
-          d.definition = d.definition.split(".")[0] + ".";
-
-        // special cases
-        if (d.dataField === "desc") {
-          d.definition =
-            "The name and a written description of the policy or law and who it impacts.";
-        }
-      });
-      setColumns(newColumns);
-    }
-  }, [metadata]);
-
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
-    switch (docType) {
-      case "policy":
-        return <Table {...{ columns, data }} />;
-      case "plan":
-      default:
-        return <div />;
-    }
+    if (columns === null || data === null || filterDefs === null) return null;
+    else
+      return (
+        <Table
+          {...{
+            columns,
+            data,
+            defaultSortedField: entityInfo.defaultSortedField,
+            className: styles[entityInfo.nouns.s.toLowerCase()],
+          }}
+        />
+      );
   };
+
   const table = getTable({ docType });
 
   return (
@@ -516,89 +320,136 @@ const Data = ({
           </p>
         </div>
       </div>
-      {!initializing && (
+      {!false && (
         <React.Fragment>
           <Drawer
             {...{
               title: <h2>Policy and plan database</h2>,
-              label: (
-                <React.Fragment>
-                  <button
-                    className={classNames(styles.downloadBtn, {
-                      [styles.loading]: buttonLoading
-                    })}
-                    onClick={e => {
-                      e.stopPropagation();
-                      setButtonLoading(true);
-                      Export({ method: "post", filters }).then(d =>
-                        setButtonLoading(false)
-                      );
-                    }}
-                  >
-                    <img src={downloadSvg} />
-                    <div>
-                      {!buttonLoading && (
-                        <React.Fragment>
-                          <span>
-                            Download {isEmpty(filters) ? "all" : "filtered"}{" "}
-                            {nouns.p.toLowerCase()}
-                          </span>
-                          <br />
-                          <span>
-                            {comma(data.length)} record
-                            {data.length === 1 ? "" : "s"}
-                          </span>
-                        </React.Fragment>
-                      )}
-                      {buttonLoading && (
-                        <React.Fragment>
-                          <span>Downloading data</span>
-                          <br />
-                          <span>Please wait...</span>
-                        </React.Fragment>
-                      )}
-                    </div>
-                  </button>
-                </React.Fragment>
-              ),
+              label: DownloadBtn({
+                render: counts,
+                class_name: "all",
+                filters: {},
+                disabled: false,
+                message: (
+                  <React.Fragment>
+                    <span>Download all data</span>
+                    <span>
+                      {comma(counts["Policy"])} policies and{" "}
+                      {comma(counts["Plan"])} plans
+                    </span>
+                  </React.Fragment>
+                ),
+              }),
               noCollapse: false,
               content: (
                 <React.Fragment>
-                  <RadioToggle
-                    label={"View"}
-                    choices={[
-                      { name: "Policies", value: "policy" },
-                      {
-                        name: "Plans",
-                        value: "plan",
-                        tooltip:
-                          "Plans are currently being added to the database and are not yet available.",
-                        disabled: true
-                      }
-                    ]}
-                    curVal={docType}
-                    callback={setDocType}
-                    horizontal={true}
-                    selectpicker={false}
-                    setInfoTooltipContent={setInfoTooltipContent}
-                  />
-                  <div>
-                    Select filters to apply to {nouns.p.toLowerCase()}.{" "}
-                    {Object.keys(filters).length > 0 && (
-                      <button onClick={() => setFilters({})}>
-                        Clear filters
-                      </button>
-                    )}
+                  <div className={styles.contentTop}>
+                    <RadioToggle
+                      label={"View"}
+                      choices={[
+                        { name: "Policies", value: "policy" },
+                        {
+                          name: "Plans",
+                          value: "plan",
+                        },
+                      ]}
+                      curVal={docType}
+                      callback={setDocType}
+                      horizontal={true}
+                      selectpicker={false}
+                      setInfoTooltipContent={setInfoTooltipContent}
+                    />
+                    {DownloadBtn({
+                      render: table,
+                      class_name: nouns.s,
+                      filters,
+                      disabled: data && data.length === 0,
+                      message: (
+                        <React.Fragment>
+                          <span>
+                            {data && data.length === 0 && (
+                              <>No {nouns.p.toLowerCase()} found</>
+                            )}
+                            {data && data.length > 0 && (
+                              <>
+                                Download {isEmpty(filters) ? "all" : "filtered"}{" "}
+                                {nouns.p.toLowerCase()} ({comma(data.length)})
+                              </>
+                            )}
+                          </span>
+
+                          {
+                            //   data && (
+                            //   <span>
+                            //     {comma(data.length)}{" "}
+                            //     {data.length === 1
+                            //       ? nouns.s.toLowerCase()
+                            //       : nouns.p.toLowerCase()}
+                            //   </span>
+                            // )
+                          }
+                        </React.Fragment>
+                      ),
+                    })}
                   </div>
-                  <FilterSet {...{ filterDefs, filters, setFilters }} />
+                  {table && (
+                    <>
+                      <div>
+                        Select filters to apply to {nouns.p.toLowerCase()}.{" "}
+                        {Object.keys(filters).length > 0 && (
+                          <button onClick={() => setFilters({})}>
+                            Clear filters
+                          </button>
+                        )}
+                      </div>
+
+                      <FilterSet {...{ filterDefs, filters, setFilters }} />
+                    </>
+                  )}
                 </React.Fragment>
-              )
+              ),
             }}
           />
           {table}
+          {!table && <div style={{ height: "900px" }} />}
         </React.Fragment>
       )}
     </div>
+  );
+};
+
+const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
+  // flag for whether the download button should say loading or not
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  return (
+    render && (
+      <button
+        className={classNames(styles.downloadBtn, {
+          [styles.loading]: buttonLoading || disabled,
+          [styles[class_name]]: true,
+        })}
+        onClick={e => {
+          e.stopPropagation();
+          setButtonLoading(true);
+          Export({
+            method: "post",
+            filters,
+            class_name,
+          }).then(d => setButtonLoading(false));
+        }}
+      >
+        <img src={downloadSvg} />
+        <div>
+          {!buttonLoading && render && message}
+          {buttonLoading && (
+            <React.Fragment>
+              <span>Downloading data, please wait...</span>
+            </React.Fragment>
+          )}
+        </div>
+      </button>
+    )
   );
 };
 

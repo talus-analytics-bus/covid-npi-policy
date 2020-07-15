@@ -88,6 +88,17 @@ const MapboxMap = ({
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
 
+  const updateFillOrder = ({ map, f = null }) => {
+    // initialize the vertical order of shapes for certain metrics
+    if (mapId === "global")
+      map.setLayoutProperty("policy_status-fill-outline", "line-sort-key", [
+        "case",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        0,
+        1,
+      ]);
+  };
+
   const getFillLegendName = ({ filters, fill }) => {
     const isLockdownLevel = fill === "lockdown_level";
 
@@ -234,7 +245,11 @@ const MapboxMap = ({
             ...(await tooltipGetter({
               mapId: mapId,
               d: selectedFeature,
-              include: [circle, mapId === "us" ? "lockdown_level" : fill],
+              include: [circle, "lockdown_level"],
+              // include: [circle, fill],
+              geoHaveData: geoHaveData.includes(
+                selectedFeature.properties.BRK_A3
+              ),
               // include: [circle, fill],
               date,
               map,
@@ -414,10 +429,8 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
-        // console.log("feature");
-        // console.log(feature);
-        console.log("e.lngLat");
-        console.log(e.lngLat);
+        console.log("feature");
+        console.log(feature);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {
@@ -456,12 +469,6 @@ const MapboxMap = ({
         // if the cursor is not hovering on the map itself, unhover
         // all features
         const cursorOnMap = e.target.classList.contains("overlays");
-        //    &&
-        //   !e.target.classList.contains("mapboxgl-popup-content");
-        // console.log(`e.target.classList.contains("mapboxgl-popup-content")`);
-        // console.log(e.target.classList.contains("mapboxgl-popup-content"));
-        // console.log("e.target");
-        // console.log(e.target);
 
         if (!cursorOnMap) {
           if (hoveredFeature !== null) {
@@ -552,6 +559,8 @@ const MapboxMap = ({
             // whenever the map style, i.e., the type of map, is changed
             const map = mapRef.getMap();
 
+            updateFillOrder({ map, f: null });
+
             // if default fit bounds are specified, center the viewport on them
             // (fly animation relative to default viewport)
             if (mapStyle.defaultFitBounds !== undefined) {
@@ -633,7 +642,10 @@ const MapboxMap = ({
                       key: "basemap - quantized",
                       metric_definition: metricMeta[circle].metric_definition,
                       metric_displayname: (
-                        <span>{metricMeta[circle].metric_displayname}</span>
+                        <span>
+                          {metricMeta[circle].metric_displayname}
+                          {mapId === "us" ? " (log scale)" : ""}
+                        </span>
                       ),
                       ...metricMeta[circle].legendInfo.circle,
                     }}
@@ -678,5 +690,18 @@ const MapboxMap = ({
       </>
     );
 };
+
+export const geoHaveData = [
+  "BRA",
+  "DJI",
+  "EST",
+  "IND",
+  "KOR",
+  "MEX",
+  "MHL",
+  "NGA",
+  "PHL",
+  "USA",
+];
 
 export default MapboxMap;

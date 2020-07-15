@@ -11,8 +11,14 @@ import moment from "moment";
 
 const Footer = ({ page, versions }) => {
   // get last updated date
-  const lastUpdated = versions.find(d => d.type === "Policy data");
-  const lastUpdatedDate = lastUpdated !== undefined ? lastUpdated.date : null;
+  const lastUpdatedPolicy = versions.find(d => d.type === "Policy data");
+  const lastUpdatedCaseload = versions.find(
+    d => d.type === "COVID-19 caseload data"
+  );
+  const lastUpdatedDatePolicy =
+    lastUpdatedPolicy !== undefined ? lastUpdatedPolicy.date : null;
+  const lastUpdatedDateCaseload =
+    lastUpdatedCaseload !== undefined ? lastUpdatedCaseload.date : null;
 
   // define footer images and links
   const images = [
@@ -21,12 +27,12 @@ const Footer = ({ page, versions }) => {
       url: "https://ghss.georgetown.edu/",
       alt:
         "Georgetown University Center for Global Health Science and Security",
-      txt: null
+      txt: null,
     },
     {
       imgSrc: talus,
       url: "http://talusanalytics.com/",
-      alt: "Talus Analytics, LLC"
+      alt: "Talus Analytics, LLC",
       // txt: "Built by",
       // style: {
       //   height: "60px",
@@ -37,14 +43,14 @@ const Footer = ({ page, versions }) => {
       imgSrc: nti,
       url: "https://www.nti.org/about/biosecurity/",
       alt: "Nuclear Threat Initiative",
-      txt: null
-    }
+      txt: null,
+    },
   ];
 
   return (
     <div
       className={classNames(styles.footer, {
-        [styles.wide]: page === "policymaps"
+        [styles.wide]: page === "policymaps" || page === "model",
       })}
     >
       <div className={styles.wrapper}>
@@ -53,12 +59,29 @@ const Footer = ({ page, versions }) => {
             {
               // TODO set date dynamically from API
             }
-            {lastUpdated && (
+            {lastUpdatedDatePolicy && (
               <span>
-                Policy data last updated{" "}
-                {new moment(lastUpdatedDate).format("MMM D, YYYY")}
+                Policy and plan data last updated{" "}
+                {new moment(lastUpdatedDatePolicy).format("MMM D, YYYY")}
               </span>
             )}
+            .{" "}
+            {lastUpdatedDatePolicy && (
+              <span>
+                COVID caseload data last updated{" "}
+                {new moment(lastUpdatedDateCaseload).format("MMM D, YYYY")}
+                {lastUpdatedCaseload.last_datum_date !== null && (
+                  <span>
+                    {" "}
+                    with data available through{" "}
+                    {moment(lastUpdatedCaseload.last_datum_date).format(
+                      "MMM D, YYYY"
+                    )}
+                  </span>
+                )}
+              </span>
+            )}
+            .
           </div>
           <div className={styles.links}>
             {images.map(d => (

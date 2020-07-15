@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 204.8 77.5" style="enable-background:new 0 0 204.8 77.5;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#8D64DD;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;stroke:#C9C9C8;stroke-width:1.5269;stroke-miterlimit:10;}
+	.st2{fill:none;}
+	.st3{fill:#333333;}
+	.st4{font-family:'Lato-Regular';}
+	.st5{font-size:19.0138px;}
+	.st6{fill:#4682B4;}
+	.st7{font-family:'Rawline-SemiBold';}
+	.st8{font-size:16.9649px;}
+</style>
+<path class="st0" d="M195,20.4c-5.5,0-9.9,4.4-9.9,9.9s4.4,9.9,9.9,9.9c5.5,0,9.9-4.4,9.9-9.9S200.4,20.4,195,20.4z M199.6,31.1
+	h-3.4v3.4c0,0.7-0.5,1.2-1.2,1.2c-0.7,0-1.2-0.5-1.2-1.2v-3.4h-3.4c-0.7,0-1.2-0.5-1.2-1.2c0-0.7,0.5-1.2,1.2-1.2h3.4v-3.4
+	c0-0.7,0.5-1.2,1.2-1.2c0.7,0,1.2,0.5,1.2,1.2v3.4h3.4c0.7,0,1.2,0.5,1.2,1.2C200.8,30.6,200.2,31.1,199.6,31.1z"/>
+<path class="st1" d="M174.8,68.8V37.4l11.5-7.4l-11.5-8.1V8.7c0-4.4-2.4-7.9-7.7-7.9L8.4,0.8c-5.3,0-7.7,3.6-7.7,7.9l0,60.1
+	c0,4.4,2.4,7.9,7.7,7.9h158.7C172.5,76.8,174.8,73.2,174.8,68.8z"/>
+<g>
+	<rect x="10" y="43.2" class="st2" width="148.5" height="21.1"/>
+	<text transform="matrix(1 0 0 1 16.9548 59.5131)" class="st3 st4 st5">Add intervention</text>
+</g>
+<rect x="51.6" y="20.2" class="st2" width="106.9" height="16"/>
+<text transform="matrix(0.9626 0 0 1 61.0651 32.6299)" class="st6 st7 st8">May 1, 2020</text>
+</svg>
