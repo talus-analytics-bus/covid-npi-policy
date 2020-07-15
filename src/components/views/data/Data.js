@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
 
-// common compoments
+// common components
 import { FilterSet, Table, RadioToggle, ShowMore } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
