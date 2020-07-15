@@ -237,31 +237,31 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 <option value="infected_c">ICU</option>
                 <option value="dead">Deaths</option>
               </select>
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  <p>
-                    Total number of cumulative confirmed and probable cases as
-                    of
-                  </p>
-                }
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <img
-                  className={styles.infoIcon}
-                  src={infoIcon}
-                  alt="More information"
-                  style={{
-                    position: "absolute",
-                    top: "2.75rem",
-                    right: "2.5rem",
-                  }}
-                />
-              </Tippy>
+              {/* <Tippy */}
+              {/*   interactive={true} */}
+              {/*   allowHTML={true} */}
+              {/*   content={ */}
+              {/*     <p> */}
+              {/*       Total number of cumulative confirmed and probable cases as */}
+              {/*       of */}
+              {/*     </p> */}
+              {/*   } */}
+              {/*   maxWidth={"30rem"} */}
+              {/*   theme={"light"} */}
+              {/*   placement={"bottom"} */}
+              {/*   offset={[-30, 10]} */}
+              {/* > */}
+              {/*   <img */}
+              {/*     className={styles.infoIcon} */}
+              {/*     src={infoIcon} */}
+              {/*     alt="More information" */}
+              {/*     style={{ */}
+              {/*       position: "absolute", */}
+              {/*       top: "2.75rem", */}
+              {/*       right: "2.5rem", */}
+              {/*     }} */}
+              {/*   /> */}
+              {/* </Tippy> */}
             </label>
 
             <label>
