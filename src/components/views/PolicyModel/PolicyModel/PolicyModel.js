@@ -232,7 +232,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setSelectedCurves([e.target.value, "R effective"]);
                 }}
               >
-                <option value="infected_a">Infected</option>
+                <option value="infected_a">Caseload</option>
                 <option value="infected_b">Hospitalized</option>
                 <option value="infected_c">ICU</option>
                 <option value="dead">Deaths</option>
@@ -242,8 +242,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               {/*   allowHTML={true} */}
               {/*   content={ */}
               {/*     <p> */}
-              {/*       Total number of cumulative confirmed and probable cases as */}
-              {/*       of */}
+              {/*       Number of individuals with an active COVID-19 infection by day */}
               {/*     </p> */}
               {/*   } */}
               {/*   maxWidth={"30rem"} */}

@@ -48,7 +48,7 @@ const interventionColors = {
 };
 
 const labelNames = {
-  infected_a: "Infected",
+  infected_a: "Caseload",
   infected_b: "Hospitalized",
   infected_c: "ICU",
   dead: "Deaths",
