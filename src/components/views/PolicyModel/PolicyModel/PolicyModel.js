@@ -167,24 +167,24 @@ const PolicyModel = ({ setLoading, setPage }) => {
       <article className={styles.main}>
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>COVID AMP policy model</h1>
-          <div className={styles.dataDates}>
-            <p>
-              {dataDates && (
-                <>
-                  Policy data as of{" "}
-                  <strong>{dataDates.last_policy_update}</strong>
-                </>
-              )}
-            </p>
-            <p>
-              {dataDates && (
-                <>
-                  Caseload data as of{" "}
-                  <strong>{dataDates.last_data_update}</strong>
-                </>
-              )}
-            </p>
-          </div>
+          {/* <div className={styles.dataDates}> */}
+          {/*   <p> */}
+          {/*     {dataDates && ( */}
+          {/*       <> */}
+          {/*         Policy data as of{" "} */}
+          {/*         <strong>{dataDates.last_policy_update}</strong> */}
+          {/*       </> */}
+          {/*     )} */}
+          {/*   </p> */}
+          {/*   <p> */}
+          {/*     {dataDates && ( */}
+          {/*       <> */}
+          {/*         Caseload data as of{" "} */}
+          {/*         <strong>{dataDates.last_data_update}</strong> */}
+          {/*       </> */}
+          {/*     )} */}
+          {/*   </p> */}
+          {/* </div> */}
         </div>
         <div className={styles.introduction}>
           <p>
@@ -226,6 +226,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
             <label>
               Show COVID count by
               <select
+                style={{ width: "13rem" }}
                 value={selectedCurves[0]}
                 onChange={e => {
                   setSelectedCurves([e.target.value, "R effective"]);
@@ -236,27 +237,33 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 <option value="infected_c">ICU</option>
                 <option value="dead">Deaths</option>
               </select>
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  <p>
+                    Total number of cumulative confirmed and probable cases as
+                    of
+                  </p>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                  style={{
+                    position: "absolute",
+                    top: "2.75rem",
+                    right: "2.5rem",
+                  }}
+                />
+              </Tippy>
             </label>
-            <Tippy
-              interactive={true}
-              allowHTML={true}
-              content={
-                <p>
-                  Total number of cumulative confirmed and probable cases as of
-                </p>
-              }
-              maxWidth={"30rem"}
-              theme={"light"}
-              placement={"bottom"}
-              offset={[-30, 10]}
-            >
-              <img
-                className={styles.infoIcon}
-                src={infoIcon}
-                alt="More information"
-                style={{ position: "absolute", top: "2.75rem", left: "-5rem" }}
-              />
-            </Tippy>
+
             <label>
               Reduction in contacts
               <select
@@ -266,27 +273,39 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 <option value="pctChange">% reduction</option>
                 <option value="R effective">Effective R Value</option>
               </select>
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  contactPlotType === "pctChange" ? (
+                    <p>
+                      Estimated percentage reduction in contacts due to policies
+                      implemented, relative to baseline contact rate.
+                    </p>
+                  ) : (
+                    <p>
+                      Estimated average number of people each infectious person
+                      is expected to infect.
+                    </p>
+                  )
+                }
+                // maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                  style={{
+                    position: "absolute",
+                    top: "2.75rem",
+                    right: "2.5rem",
+                  }}
+                />
+              </Tippy>
             </label>
-            <Tippy
-              interactive={true}
-              allowHTML={true}
-              content={
-                <p>
-                  Total number of cumulative confirmed and probable cases as of
-                </p>
-              }
-              maxWidth={"30rem"}
-              theme={"light"}
-              placement={"bottom"}
-              offset={[-30, 10]}
-            >
-              <img
-                className={styles.infoIcon}
-                src={infoIcon}
-                alt="More information"
-                style={{ position: "absolute", top: "2.75rem", left: "-5rem" }}
-              />
-            </Tippy>
           </div>
           <div className={styles.navigator}>
             {/* {console.log("\npolicymodel zoomDateRange")} */}
