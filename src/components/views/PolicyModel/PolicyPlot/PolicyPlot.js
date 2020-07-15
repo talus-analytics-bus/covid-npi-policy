@@ -47,6 +47,13 @@ const interventionColors = {
   "New normal": "#ECBD62",
 };
 
+const labelNames = {
+  infected_a: "Infected",
+  infected_b: "Hospitalized",
+  infected_c: "ICU",
+  dead: "Deaths",
+};
+
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
 
 const PolicyModel = props => {
@@ -567,9 +574,9 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          label={
-            props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
-          }
+          label={labelNames[props.selectedCurves[0]]}
+          // props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
+          // }
           tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
           offsetX={50}
           style={{

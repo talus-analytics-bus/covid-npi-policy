@@ -1,9 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import styles from './PastInterventionInfo.module.scss';
-import states from '../../PolicyModel/states.js';
+import styles from "./PastInterventionInfo.module.scss";
+import states from "../../PolicyModel/states.js";
 
-const PastInterventionInfo = (props) => {
+const formatDate = date =>
+  new Date(date).toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+const PastInterventionInfo = props => {
   const setState = props.setPastInterventionProps;
   props = { ...props.pastInterventionProps };
 
@@ -28,10 +35,9 @@ const PastInterventionInfo = (props) => {
 
   const proposed = new Date(props.effectiveDate) > new Date();
 
-  let policyURL = '';
+  let policyURL = "";
   if (props.state !== undefined) {
-    const stateFullName = states.find((state) => state.abbr === props.state)
-      .name;
+    const stateFullName = states.find(state => state.abbr === props.state).name;
 
     policyURL =
       `https://covidamp.org/data?filters=` +
@@ -48,36 +54,36 @@ const PastInterventionInfo = (props) => {
 
   return (
     <section
-      display={props.policyName !== '' ? 'block' : 'none'}
+      display={props.policyName !== "" ? "block" : "none"}
       className={popupStyleName}
       style={{
         top: yPos,
         left: xPos,
         width: width,
-        opacity: props.policyName !== '' ? 1 : 0,
-        pointerEvents: props.policyName !== '' ? 'all' : 'none',
+        opacity: props.policyName !== "" ? 1 : 0,
+        pointerEvents: props.policyName !== "" ? "all" : "none",
       }}
       onMouseLeave={() => {
         setState({
           ...props,
-          policyName: '',
-          effectiveDate: '',
+          policyName: "",
+          effectiveDate: "",
         });
       }}
     >
       <div className={styles.greySection}>
         <h1 className={styles.title}>
-          {props.policyName}{' '}
-          {!proposed && props.policyName !== 'Mixed distancing levels'
-            ? 'Policies Implemented'
-            : ''}
-          {proposed && 'Policies Proposed'}
+          {props.policyName}{" "}
+          {!proposed && props.policyName !== "Mixed distancing levels"
+            ? "Policies Implemented"
+            : ""}
+          {proposed && "Policies Proposed"}
         </h1>
       </div>
       <div className={styles.content}>
         <p>
-          {proposed ? 'Proposal Date: ' : 'Effective Date: '}
-          {props.effectiveDate}
+          {proposed ? "Proposal Date: " : "Effective Date: "}
+          {formatDate(props.effectiveDate)}
         </p>
         {!proposed && <a href={policyURL}>view policies</a>}
       </div>

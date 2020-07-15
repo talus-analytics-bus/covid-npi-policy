@@ -323,6 +323,7 @@ const State = props => {
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
           contactPlotType={props.contactPlotType}
+          selectedCurves={props.selectedCurves}
         />
       </div>
       <div className={styles.bottomRow}>
