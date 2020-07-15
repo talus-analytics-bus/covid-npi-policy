@@ -18,7 +18,7 @@ import moment from "moment";
 import {
   defaults,
   mapMetrics,
-  metricMeta
+  metricMeta,
 } from "../../common/MapboxMap/plugins/data";
 import { mapStyles } from "../../common/MapboxMap/plugins/sources";
 
@@ -35,7 +35,7 @@ import {
   Drawer,
   DateSlider,
   FilterSet,
-  InfoTooltip
+  InfoTooltip,
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
@@ -84,7 +84,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         radio: true,
 
         // default value of radio selections
-        defaultRadioValue: "Social distancing"
+        defaultRadioValue: "Social distancing",
       },
 
       // additional filters
@@ -94,14 +94,14 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         radio: false,
         primary: "primary_ph_measure",
         entity_name: "Policy",
-        className: dark
-      }
-    }
+        className: dark,
+      },
+    },
   ]);
 
   // currently selected filters
   const [filters, setFilters] = useState({
-    primary_ph_measure: ["Social distancing"]
+    primary_ph_measure: ["Social distancing"],
   });
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
@@ -123,11 +123,11 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         .map(d => {
           return d.entity_name + "." + d.field;
         }),
-      entity_name: "Policy"
+      entity_name: "Policy",
     });
 
     const results = await execute({
-      queries
+      queries,
     });
 
     // if page is first initializing, also retrieve filter optionset values for
@@ -216,13 +216,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                 value,
                                 name,
                                 tooltip,
-                                disabled: value === "global"
+                                // disabled: value === "global"
                               };
                             }
                           ),
                           curVal: mapId,
                           callback: setMapId,
-                          label: "Geographic resolution"
+                          label: "Geographic resolution",
                         }}
                       />
                       {
@@ -294,13 +294,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                     value: d.id,
                                     name: metricMeta[d.id].metric_displayname,
                                     wideTooltip: d.id === "lockdown_level",
-                                    tooltip: metricMeta[d.id].metric_definition
+                                    tooltip: metricMeta[d.id].metric_definition,
                                   };
                                 }),
                               curVal: fill,
                               callback: setFill,
                               label: "View states by",
-                              key: "DataType"
+                              key: "DataType",
                             }}
                           />
                         ),
@@ -314,7 +314,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             // if true, the selected filters bay will show
                             // TODO style selected filters bay
                             showSelectedFilters: false,
-                            key: "FilterSet"
+                            key: "FilterSet",
                           }}
                         />,
                         <div key={"divider"} className={styles.divider} />,
@@ -327,7 +327,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             setDate,
                             // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
                             ...defaults.minMaxDate,
-                            key: "DateSlider"
+                            key: "DateSlider",
                           }}
                         />,
 
@@ -344,25 +344,25 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                   return {
                                     value: d.id,
                                     name: metricMeta[d.id].metric_displayname,
-                                    tooltip: metricMeta[d.id].metric_definition
+                                    tooltip: metricMeta[d.id].metric_definition,
                                   };
                                 }),
                               curVal: circle,
                               callback: setCircle,
                               label: "View COVID count by",
-                              key: "RadioToggle1"
+                              key: "RadioToggle1",
                             }}
                           />
-                        )
+                        ),
                       ].map(d => d)}
                     </div>
-                  )
+                  ),
                 }}
               />
             ),
             plugins: {
-              fill
-            }
+              fill,
+            },
           }}
         />
       )
