@@ -274,66 +274,75 @@ const MapboxMap = ({
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
-    const map = mapRef.getMap();
-    updateMapTooltip({ map });
+    if (mapRef.getMap !== undefined) {
+      const map = mapRef.getMap();
+      updateMapTooltip({ map });
+    }
   }, [selectedFeature, circle, fill]);
 
   // toggle visibility of map layers if selected metrics or map ID are updated
   useEffect(() => {
     // toggle visible layers based on selections
-    const map = mapRef.getMap();
-    if (map.loaded()) {
-      // define types of layers that should be checked
-      const layerTypeInfo = [
-        {
-          sourceTypeKey: "circle",
-          layerListKey: "circleLayers",
-          curOption: circle,
-        },
-        { sourceTypeKey: "fill", layerListKey: "fillLayers", curOption: fill },
-      ];
+    if (mapRef.getMap !== undefined) {
+      const map = mapRef.getMap();
+      if (map.loaded()) {
+        // define types of layers that should be checked
+        const layerTypeInfo = [
+          {
+            sourceTypeKey: "circle",
+            layerListKey: "circleLayers",
+            curOption: circle,
+          },
+          {
+            sourceTypeKey: "fill",
+            layerListKey: "fillLayers",
+            curOption: fill,
+          },
+        ];
 
-      // for each type of layer to check, hide the layer and its auxiliary
-      // layers if it's not the selected option for that layer type, or
-      // show them otherwise
-      layerTypeInfo.forEach(({ sourceTypeKey, layerListKey, curOption }) => {
-        // are there layers of this type defined in the map sources?
-        const hasLayersOfType = mapSources[mapId][sourceTypeKey] !== undefined;
-        if (hasLayersOfType) {
-          // get layers of this type (circle, fill, ...)
-          const layersOfType = mapSources[mapId][sourceTypeKey][layerListKey];
+        // for each type of layer to check, hide the layer and its auxiliary
+        // layers if it's not the selected option for that layer type, or
+        // show them otherwise
+        layerTypeInfo.forEach(({ sourceTypeKey, layerListKey, curOption }) => {
+          // are there layers of this type defined in the map sources?
+          const hasLayersOfType =
+            mapSources[mapId][sourceTypeKey] !== undefined;
+          if (hasLayersOfType) {
+            // get layers of this type (circle, fill, ...)
+            const layersOfType = mapSources[mapId][sourceTypeKey][layerListKey];
 
-          // for each layer determine whether it is visible
-          layersOfType.forEach(layer => {
-            // if layer is current option, it's visible
-            const visible = layer.id === curOption;
-            const visibility = visible ? "visible" : "none";
-            map.setLayoutProperty(
-              layer.id + "-" + sourceTypeKey,
-              "visibility",
-              visibility
-            );
-
-            // same for any associated pattern layers this layer has
-            if (layer.styleOptions.pattern === true) {
+            // for each layer determine whether it is visible
+            layersOfType.forEach(layer => {
+              // if layer is current option, it's visible
+              const visible = layer.id === curOption;
+              const visibility = visible ? "visible" : "none";
               map.setLayoutProperty(
-                layer.id + "-" + sourceTypeKey + "-pattern",
+                layer.id + "-" + sourceTypeKey,
                 "visibility",
                 visibility
               );
-            }
 
-            // same for circle shadow layers
-            if (sourceTypeKey === "circle") {
-              map.setLayoutProperty(
-                layer.id + "-" + sourceTypeKey + "-shadow",
-                "visibility",
-                visibility
-              );
-            }
-          });
-        } else return;
-      });
+              // same for any associated pattern layers this layer has
+              if (layer.styleOptions.pattern === true) {
+                map.setLayoutProperty(
+                  layer.id + "-" + sourceTypeKey + "-pattern",
+                  "visibility",
+                  visibility
+                );
+              }
+
+              // same for circle shadow layers
+              if (sourceTypeKey === "circle") {
+                map.setLayoutProperty(
+                  layer.id + "-" + sourceTypeKey + "-shadow",
+                  "visibility",
+                  visibility
+                );
+              }
+            });
+          } else return;
+        });
+      }
     }
   }, [circle, fill, mapId]);
 
@@ -510,173 +519,178 @@ const MapboxMap = ({
   };
 
   // JSX // -----------------------------------------------------------------//
-  return (
-    <>
-      {overlays}
+  if (data === null) return <div />;
+  else
+    return (
+      <>
+        {overlays}
 
-      <ReactMapGL
-        mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-        ref={map => {
-          mapRef = map;
-        }}
-        captureClick={true}
-        mapStyle={mapStyle.url}
-        {...viewport}
-        maxZoom={mapStyle.maxZoom}
-        minZoom={mapStyle.minZoom}
-        onViewportChange={newViewport => {
-          // set current viewport state variable to the new viewport
-          setViewport(newViewport);
-          const lngLatNotDefault =
-            newViewport.longitude !== defaultViewport.longitude ||
-            newViewport.latitude !== defaultViewport.latitude;
-          const zoomNotDefault = newViewport.zoom !== defaultViewport.zoom;
+        <ReactMapGL
+          mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+          ref={map => {
+            mapRef = map;
+          }}
+          captureClick={true}
+          mapStyle={mapStyle.url}
+          {...viewport}
+          maxZoom={mapStyle.maxZoom}
+          minZoom={mapStyle.minZoom}
+          onViewportChange={newViewport => {
+            // set current viewport state variable to the new viewport
+            setViewport(newViewport);
+            const lngLatNotDefault =
+              newViewport.longitude !== defaultViewport.longitude ||
+              newViewport.latitude !== defaultViewport.latitude;
+            const zoomNotDefault = newViewport.zoom !== defaultViewport.zoom;
 
-          // If viewport deviates from the default zoom or lnglat, show the
-          // "Reset" button, otherwise, hide it
-          if ((zoomNotDefault || lngLatNotDefault) && !isEmpty(defaultViewport))
-            setShowReset(true);
-          else setShowReset(false);
-        }}
-        onClick={handleClick}
-        onMouseMove={handleMouseMove}
-        onLoad={() => {
-          // when map has loaded, add event listener to update the map data
-          // whenever the map style, i.e., the type of map, is changed
-          const map = mapRef.getMap();
-          console.log("map onLoad run");
+            // If viewport deviates from the default zoom or lnglat, show the
+            // "Reset" button, otherwise, hide it
+            if (
+              (zoomNotDefault || lngLatNotDefault) &&
+              !isEmpty(defaultViewport)
+            )
+              setShowReset(true);
+            else setShowReset(false);
+          }}
+          onClick={handleClick}
+          onMouseMove={handleMouseMove}
+          onLoad={() => {
+            // when map has loaded, add event listener to update the map data
+            // whenever the map style, i.e., the type of map, is changed
+            const map = mapRef.getMap();
+            console.log("map onLoad run");
 
-          updateFillOrder({ map, f: null });
+            updateFillOrder({ map, f: null });
 
-          // if default fit bounds are specified, center the viewport on them
-          // (fly animation relative to default viewport)
-          if (mapStyle.defaultFitBounds !== undefined) {
-            const test = () => {
-              const center = map.getCenter();
-              setViewport({
-                ...viewport,
-                zoom: map.getZoom(),
-                longitude: center.lng,
-                latitude: center.lat,
-              });
-              setDefaultViewport({
-                ...viewport,
-                zoom: map.getZoom(),
-                longitude: center.lng,
-                latitude: center.lat,
-              });
-              setShowReset(false);
-              map.off("moveend", test);
-            };
-            map.on("moveend", test);
-            map.fitBounds(mapStyle.defaultFitBounds);
-          }
+            // if default fit bounds are specified, center the viewport on them
+            // (fly animation relative to default viewport)
+            if (mapStyle.defaultFitBounds !== undefined) {
+              const test = () => {
+                const center = map.getCenter();
+                setViewport({
+                  ...viewport,
+                  zoom: map.getZoom(),
+                  longitude: center.lng,
+                  latitude: center.lat,
+                });
+                setDefaultViewport({
+                  ...viewport,
+                  zoom: map.getZoom(),
+                  longitude: center.lng,
+                  latitude: center.lat,
+                });
+                setShowReset(false);
+                map.off("moveend", test);
+              };
+              map.on("moveend", test);
+              map.fitBounds(mapStyle.defaultFitBounds);
+            }
 
-          map.on("styledataloading", function() {
-            console.log("styledataloading");
-            getMapData();
-          });
-        }}
-        doubleClickZoom={false} //remove 300ms delay on clicking
-      >
-        {// map tooltip component
-        showTooltip && (
-          <div className={styles.mapboxMap}>
-            <Popup
-              id="tooltip"
-              longitude={cursorLngLat[0]}
-              latitude={cursorLngLat[1]}
-              closeButton={false}
-              closeOnClick={false}
-              captureScroll={true}
-              interactive={true}
-            >
-              {mapTooltip}
-            </Popup>
-          </div>
-        )}
-        {
-          // map legend
-        }
-        <div className={styles.legend}>
-          <button
-            onClick={e => {
-              // toggle legend show / hide on button click
-              e.stopPropagation();
-              e.preventDefault();
-              setShowLegend(!showLegend);
-            }}
-          >
-            {showLegend ? "hide legend" : "show legend"}
-            <i
-              className={classNames("material-icons", {
-                [styles.flipped]: showLegend,
-              })}
-            >
-              play_arrow
-            </i>
-          </button>
-          {showLegend && (
-            <div className={styles.entries}>
-              {
-                // fill legend entry
-                // note: legend entries are listed in reverse order
-              }
-              {circle !== null && (
-                <Legend
-                  {...{
-                    setInfoTooltipContent: props.setInfoTooltipContent,
-                    className: "mapboxLegend",
-                    key: "basemap - quantized",
-                    metric_definition: metricMeta[circle].metric_definition,
-                    metric_displayname: (
-                      <span>
-                        {metricMeta[circle].metric_displayname}
-                        {mapId === "us" ? " (log scale)" : ""}
-                      </span>
-                    ),
-                    ...metricMeta[circle].legendInfo.circle,
-                  }}
-                />
-              )}
-              {
-                // circle legend entry
-              }
-              {fill !== null && (
-                <Legend
-                  {...{
-                    setInfoTooltipContent: props.setInfoTooltipContent,
-                    className: "mapboxLegend",
-                    key: "bubble - linear",
-                    metric_definition: metricMeta[fill].metric_definition,
-                    wideDefinition: metricMeta[fill].wideDefinition,
-                    metric_displayname: (
-                      <span>{getFillLegendName({ filters, fill })}</span>
-                    ),
-                    ...metricMeta[fill].legendInfo.fill,
-                  }}
-                />
-              )}
+            map.on("styledataloading", function() {
+              console.log("styledataloading");
+              getMapData();
+            });
+          }}
+          doubleClickZoom={false} //remove 300ms delay on clicking
+        >
+          {// map tooltip component
+          showTooltip && (
+            <div className={styles.mapboxMap}>
+              <Popup
+                id="tooltip"
+                longitude={cursorLngLat[0]}
+                latitude={cursorLngLat[1]}
+                closeButton={false}
+                closeOnClick={false}
+                captureScroll={true}
+                interactive={true}
+              >
+                {mapTooltip}
+              </Popup>
             </div>
           )}
-        </div>
-        {showReset && <ResetZoom handleClick={resetViewport} />}
-        {
-          // map zoom plus and minus buttons
-        }
-        <div
-          style={{
-            position: "absolute",
-            bottom: "3px",
-            left: "5px",
-            padding: 0,
-          }}
-        >
-          <NavigationControl />
-        </div>
-      </ReactMapGL>
-    </>
-  );
+          {
+            // map legend
+          }
+          <div className={styles.legend}>
+            <button
+              onClick={e => {
+                // toggle legend show / hide on button click
+                e.stopPropagation();
+                e.preventDefault();
+                setShowLegend(!showLegend);
+              }}
+            >
+              {showLegend ? "hide legend" : "show legend"}
+              <i
+                className={classNames("material-icons", {
+                  [styles.flipped]: showLegend,
+                })}
+              >
+                play_arrow
+              </i>
+            </button>
+            {showLegend && (
+              <div className={styles.entries}>
+                {
+                  // fill legend entry
+                  // note: legend entries are listed in reverse order
+                }
+                {circle !== null && (
+                  <Legend
+                    {...{
+                      setInfoTooltipContent: props.setInfoTooltipContent,
+                      className: "mapboxLegend",
+                      key: "basemap - quantized",
+                      metric_definition: metricMeta[circle].metric_definition,
+                      metric_displayname: (
+                        <span>
+                          {metricMeta[circle].metric_displayname}
+                          {mapId === "us" ? " (log scale)" : ""}
+                        </span>
+                      ),
+                      ...metricMeta[circle].legendInfo.circle,
+                    }}
+                  />
+                )}
+                {
+                  // circle legend entry
+                }
+                {fill !== null && (
+                  <Legend
+                    {...{
+                      setInfoTooltipContent: props.setInfoTooltipContent,
+                      className: "mapboxLegend",
+                      key: "bubble - linear",
+                      metric_definition: metricMeta[fill].metric_definition,
+                      wideDefinition: metricMeta[fill].wideDefinition,
+                      metric_displayname: (
+                        <span>{getFillLegendName({ filters, fill })}</span>
+                      ),
+                      ...metricMeta[fill].legendInfo.fill,
+                    }}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+          {showReset && <ResetZoom handleClick={resetViewport} />}
+          {
+            // map zoom plus and minus buttons
+          }
+          <div
+            style={{
+              position: "absolute",
+              bottom: "3px",
+              left: "5px",
+              padding: 0,
+            }}
+          >
+            <NavigationControl />
+          </div>
+        </ReactMapGL>
+      </>
+    );
 };
 
 export const geoHaveData = [
