@@ -704,6 +704,7 @@ export const geoHaveData = [
   "NGA",
   "PHL",
   "USA",
+  "NZL",
 ];
 
 export default MapboxMap;
