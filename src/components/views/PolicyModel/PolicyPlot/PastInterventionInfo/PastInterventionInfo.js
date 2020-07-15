@@ -85,7 +85,11 @@ const PastInterventionInfo = props => {
           {proposed ? "Proposal Date: " : "Effective Date: "}
           {formatDate(props.effectiveDate)}
         </p>
-        {!proposed && <a href={policyURL}>view policies</a>}
+        {!proposed && (
+          <a href={policyURL} target="_blank" rel="noopener noreferrer">
+            view policies
+          </a>
+        )}
       </div>
     </section>
   );
