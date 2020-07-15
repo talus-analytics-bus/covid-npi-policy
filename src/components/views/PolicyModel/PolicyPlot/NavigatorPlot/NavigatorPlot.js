@@ -94,17 +94,19 @@ const NavigatorPlot = props => {
             //   .concat(props.curves['R effective'].model)
             //   .map(day => day.x)
             //   .filter((date, index) => index % 30 === 0)}
-            // tickFormat={x =>
-            //   new Date(x).toLocaleString('default', { month: 'short' })
-            // }
-            padding={{ top: 0, bottom: 0, left: 0, right: 0 }}
+            tickFormat={x =>
+              new Date(x).toLocaleString("default", { month: "short" }) +
+              " '" +
+              new Date(x).toLocaleString("default", { year: "2-digit" })
+            }
+            padding={{ top: 0, bottom: 2, left: 0, right: 0 }}
             style={{
               tickLabels: {
                 fontFamily: "Rawline",
                 fontWeight: "500",
-                fontSize: 5.5,
+                fontSize: 6,
                 fill: "#6d6d6d",
-                padding: 1,
+                padding: 0.5,
               },
             }}
           />
