@@ -15,6 +15,13 @@ import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg"
 const formatNumber = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
+const formatDate = date =>
+  new Date(date).toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
 const State = props => {
   // console.log(cumulativeCases);
   // const dateString = new Date(props.curves.date).toLocaleString('default', {
@@ -52,7 +59,9 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Cases</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (actual)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (actual)
             </p>
             {/* <p className={styles.popPercent}>12345% of total population</p> */}
           </div>
@@ -62,7 +71,9 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Deaths</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (actual)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (actual)
             </p>
           </div>
           <div className={styles.explanation}>What if we had done nothing?</div>
@@ -84,7 +95,9 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Cases</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (modeled)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (modeled)
             </p>
             {/* <p className={styles.popPercent}>12345% of total population</p> */}
           </div>
@@ -94,7 +107,9 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Deaths</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (modeled)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (modeled)
             </p>
           </div>
         </div>

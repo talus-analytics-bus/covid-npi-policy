@@ -38,6 +38,7 @@ const plotColors = [
 
 const interventionColors = {
   Lockdown: "#661B3C",
+  "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
   "Stay at home": "#C1272D",
@@ -109,9 +110,6 @@ const PolicyModel = props => {
   // WHY doesn't Victory let me return multiple lines from
   // the same map function? no reason that shouldn't work.
   // the model (dashed) lines of the plot
-
-  console.log(props.data.curves);
-
   const modelLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
       if (

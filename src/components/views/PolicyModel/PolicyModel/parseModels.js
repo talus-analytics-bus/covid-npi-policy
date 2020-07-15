@@ -46,7 +46,8 @@ export default function parseModelCurves(
       yMax: 0,
       curves: {},
       interventions: model.interventions.filter(
-        inter => inter.name !== "do_nothing"
+        inter =>
+          (inter.name !== "do_nothing") & (inter.name !== "mobility_drop")
       ),
       deaths: model.deaths,
       cases: model.cases,
@@ -62,7 +63,7 @@ export default function parseModelCurves(
     const counterfactualRun = parseModelString(
       model.results
         .filter(run => Object.keys(run)[0] !== run)
-        .find(inter => inter.name.includes("do_nothing")).run
+        .find(inter => inter.name.includes("mobility_drop")).run
     );
 
     const trimmedData = modelRun;

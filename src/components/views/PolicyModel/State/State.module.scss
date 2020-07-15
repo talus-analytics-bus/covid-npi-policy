@@ -42,7 +42,7 @@
       height: 10rem;
       display: grid;
 
-      grid-template-columns: auto 12rem 8rem min-content 13rem min-content 13rem;
+      grid-template-columns: auto 12rem 8rem min-content 14rem min-content 14rem;
       grid-template-rows: 1fr 1fr;
 
       > div {
@@ -80,16 +80,25 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        input {
+          transform: scale(1.4);
+        }
       }
 
       .cases {
         text-align: right;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+        font-weight: 500;
       }
 
       .casesLabel {
         .label {
           font-weight: 600;
+        }
+
+        .date {
+          font-size: 0.9rem;
         }
       }
     }
@@ -303,5 +312,20 @@
     // h1 {
     //   color: #00447c;
     // }
+  }
+}
+
+.bottomRow {
+  display: flex;
+
+  button {
+    background: none;
+    border: none;
+    background-color: #fff;
+    border-radius: 0.5em;
+    border: 1px solid #999;
+    color: #333;
+    padding: 0.5em 0.75em;
+    margin-left: auto;
   }
 }
