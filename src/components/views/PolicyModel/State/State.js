@@ -15,6 +15,13 @@ import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg"
 const formatNumber = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
+const formatDate = date =>
+  new Date(date).toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
 const State = props => {
   // console.log(cumulativeCases);
   // const dateString = new Date(props.curves.date).toLocaleString('default', {
@@ -52,9 +59,16 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Cases</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (actual)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (actual)
             </p>
-            {/* <p className={styles.popPercent}>12345% of total population</p> */}
+            <p className={styles.popPercent}>
+              {((props.curves.cases / props.curves.population) * 100).toFixed(
+                2
+              )}
+              % of total population
+            </p>
           </div>
           <div className={styles.cases}>
             {formatNumber(props.curves.deaths)}
@@ -62,7 +76,9 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Deaths</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (actual)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (actual)
             </p>
           </div>
           <div className={styles.explanation}>What if we had done nothing?</div>
@@ -84,9 +100,17 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Cases</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (modeled)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (modeled)
             </p>
-            {/* <p className={styles.popPercent}>12345% of total population</p> */}
+            <p className={styles.popPercent}>
+              {(
+                (props.curves.counterfactual_cases / props.curves.population) *
+                100
+              ).toFixed(2)}
+              % of total population
+            </p>
           </div>
           <div className={styles.cases}>
             {formatNumber(props.curves.counterfactual_deaths)}
@@ -94,7 +118,9 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>Cumulative Deaths</p>
             <p className={styles.date}>
-              {props.dataDates && props.dataDates.last_data_update} (modeled)
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              (modeled)
             </p>
           </div>
         </div>
@@ -235,6 +261,20 @@ const State = props => {
         />
       </div>
       <div className={styles.bottomRow}>
+        <div className={styles.miniLegend}>
+          <div className={styles.actuals}>
+            <span />
+            <p>Actuals</p>
+          </div>
+          <div className={styles.modeled}>
+            <span />
+            <p>Modeled</p>
+          </div>
+          <div className={styles.noPolicies}>
+            <span />
+            <p>Cases Without Policies</p>
+          </div>
+        </div>
         <button
           className={styles.resetState}
           onClick={e => {

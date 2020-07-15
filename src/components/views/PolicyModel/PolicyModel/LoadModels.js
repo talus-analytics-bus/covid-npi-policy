@@ -43,6 +43,7 @@ const reconstructInterventions = (model, runData) => {
   runData["counterfactual_cases"] = model.counterfactual_cases;
   runData["deaths"] = model.deaths;
   runData["counterfactual_deaths"] = model.counterfactual_deaths;
+  runData["population"] = model.population;
 
   // check if model interventions include the latest,
   // if not, copy the array from the old cached model
