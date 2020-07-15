@@ -17,7 +17,7 @@ $grey-highlight: #eee;
   min-height: 8rem;
 
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     top: 30px;
     width: $arrow-size;
@@ -33,7 +33,7 @@ $grey-highlight: #eee;
   // to use without it accidentally disappearing
   &:after {
     position: absolute;
-    content: '';
+    content: "";
     top: -10px;
     right: -40px;
     bottom: -10px;
@@ -52,9 +52,11 @@ $grey-highlight: #eee;
     }
 
     .title {
+      font-family: "Open Sans", sans-serif;
       font-size: 1.4rem;
       color: #1a4278;
-      text-transform: uppercase;
+      text-transform: none;
+      font-weight: 600;
     }
 
     p {

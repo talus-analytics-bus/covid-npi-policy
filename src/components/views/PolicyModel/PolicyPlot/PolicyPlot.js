@@ -263,6 +263,10 @@ const PolicyModel = props => {
     const dotHeight =
       props.caseLoadAxis[1] * (0.8 - nearbyInterventions.length * 0.15);
 
+    // define values for popup
+    const policyName = intervention.name.split("_")[0];
+    const policyColor = interventionColors[policyName] || "gray";
+
     return (
       <VictoryScatter
         key={intervention.name + intervention.intervention_start_date}
@@ -290,7 +294,8 @@ const PolicyModel = props => {
               onMouseEnter: (event, eventKey) => {
                 setPastInterventionProps({
                   state: props.selectedState,
-                  policyName: intervention.name.split("_")[0],
+                  policyName,
+                  policyColor,
                   effectiveDate: intervention.intervention_start_date,
                   x:
                     window.pageXOffset +

@@ -1,7 +1,13 @@
 import React from "react";
 
-import styles from "./PastInterventionInfo.module.scss";
 import states from "../../PolicyModel/states.js";
+
+// local components
+import { PopupMetrics } from "./content/PopupMetrics";
+
+// styles and assets
+import styles from "./PastInterventionInfo.module.scss";
+import classNames from "classnames";
 
 const formatDate = date =>
   new Date(date).toLocaleString("default", {
@@ -33,7 +39,9 @@ const PastInterventionInfo = props => {
   const popupStyleName =
     props.x < window.innerWidth / 2 ? styles.leftPopup : styles.rightPopup;
 
-  const proposed = new Date(props.effectiveDate) > new Date();
+  const dateObj = new Date(props.effectiveDate);
+  const proposed = dateObj > new Date();
+  const formattedDate = formatDate(dateObj);
 
   let policyURL = "";
   if (props.state !== undefined) {
@@ -46,12 +54,14 @@ const PastInterventionInfo = props => {
       `%22${props.effectiveDate}%22],` +
       `%22country_name%22:[%22United%20States%20of%20America%20(USA)%22],` +
       `%22area1%22:[%22${stateFullName}%22]}`;
-
-    // alert(policyURL)
-    // console.log(props.state)
-    // console.log(policyURL)
   }
-
+  // onMouseLeave={() => {
+  //   setState({
+  //     ...props,
+  //     policyName: "",
+  //     effectiveDate: "",
+  //   });
+  // }}
   return (
     <section
       display={props.policyName !== "" ? "block" : "none"}
@@ -63,34 +73,14 @@ const PastInterventionInfo = props => {
         opacity: props.policyName !== "" ? 1 : 0,
         pointerEvents: props.policyName !== "" ? "all" : "none",
       }}
-      onMouseLeave={() => {
-        setState({
-          ...props,
-          policyName: "",
-          effectiveDate: "",
-        });
-      }}
     >
-      <div className={styles.greySection}>
-        <h1 className={styles.title}>
-          {props.policyName}{" "}
-          {!proposed && props.policyName !== "Mixed distancing levels"
-            ? "Policies Implemented"
-            : ""}
-          {proposed && "Policies Proposed"}
-        </h1>
+      <div
+        style={{ borderBottom: `4px solid ${props.policyColor}` }}
+        className={styles.greySection}
+      >
+        <h1 className={styles.title}>{formattedDate}</h1>
       </div>
-      <div className={styles.content}>
-        <p>
-          {proposed ? "Proposal Date: " : "Effective Date: "}
-          {formatDate(props.effectiveDate)}
-        </p>
-        {!proposed && (
-          <a href={policyURL} target="_blank" rel="noopener noreferrer">
-            view policies
-          </a>
-        )}
-      </div>
+      <div className={styles.content}>{<PopupMetrics {...{ ...props }} />}</div>
     </section>
   );
 };
