@@ -142,27 +142,28 @@ const deleteModel = model => {
 // function to strip out user-added interventions
 export const clearState = async state =>
   // one-liner naieve solution
-  //   deleteModel((await loadModels([state]))[0])
-  // Better clearState function, clears locally
-  {
-    const model = (await loadModels([state]))[0];
-    const resetModel = Object.assign({}, model);
-    resetModel.interventions = model.interventions.filter(
-      inter => new Date(inter.startdate) < new Date()
-    );
-    const counterfactualName = resetModel.interventions[0].system_name;
-    const interventionName = resetModel.interventions.slice(-1)[0].system_name;
+  deleteModel((await loadModels([state]))[0]);
 
-    resetModel.results = model.results.filter(run =>
-      [counterfactualName, interventionName].includes(run.name)
-    );
-
-    // disconnecting from the server worker
-    resetModel.modelrun = "";
-
-    resetModel.dateRequested = new Date(model.dateRequested);
-    saveModel(resetModel);
-  };
+// Better clearState function, clears locally (no loading spinner)
+//   {
+//     const model = (await loadModels([state]))[0];
+//     const resetModel = Object.assign({}, model);
+//     resetModel.interventions = model.interventions.filter(
+//       inter => new Date(inter.startdate) < new Date()
+//     );
+//     const counterfactualName = resetModel.interventions[0].system_name;
+//     const interventionName = resetModel.interventions.slice(-1)[0].system_name;
+//
+//     resetModel.results = model.results.filter(run =>
+//       [counterfactualName, interventionName].includes(run.name)
+//     );
+//
+//     // disconnecting from the server worker
+//     resetModel.modelrun = "";
+//
+//     resetModel.dateRequested = new Date(model.dateRequested);
+//     saveModel(resetModel);
+//   };
 
 // check if there is a sufficiently recent model run to use
 // if not, request a model from the server.
@@ -208,6 +209,7 @@ export const loadModels = async states => {
     })
   );
 
+  console.log(models);
   return models;
 };
 
