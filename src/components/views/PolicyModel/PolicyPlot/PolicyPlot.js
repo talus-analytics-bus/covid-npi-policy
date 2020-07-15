@@ -16,6 +16,8 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
+import infoIcon from "../../../../assets/icons/info-blue.svg";
+
 import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
 import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
 import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
@@ -52,6 +54,15 @@ const labelNames = {
   infected_b: "Hospitalized",
   infected_c: "ICU",
   dead: "Deaths",
+};
+
+const covidCountHoverText = {
+  infected_a: "Number of individuals with an active COVID-19 infection by day",
+  infected_b:
+    "Number of individuals currently hospitalized for COVID-19 infection by day",
+  infected_c:
+    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+  dead: "Cumulative deaths from COVID-19 by day",
 };
 
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
@@ -367,6 +378,31 @@ const PolicyModel = props => {
           <h4>Legend</h4>
         </Tippy>
       </label>
+      <Tippy
+        interactive={true}
+        allowHTML={true}
+        content={<p>{covidCountHoverText[props.selectedCurves[0]]}</p>}
+        maxWidth={"30rem"}
+        theme={"light"}
+        placement={"bottom"}
+        offset={[-30, 10]}
+      >
+        <img
+          className={styles.infoIcon}
+          src={infoIcon}
+          alt="More information"
+          style={{
+            position: "relative",
+            top: {
+              infected_a: "18.5rem",
+              infected_b: "17.5rem",
+              infected_c: "20rem",
+              dead: "19rem",
+            }[props.selectedCurves[0]],
+            left: "2.25rem",
+          }}
+        />
+      </Tippy>
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
