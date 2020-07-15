@@ -403,6 +403,38 @@ const PolicyModel = props => {
           }}
         />
       </Tippy>
+      <Tippy
+        interactive={true}
+        allowHTML={true}
+        content={
+          props.contactPlotType === "pctChange" ? (
+            <p>
+              Estimated percentage reduction in contacts due to policies
+              implemented, relative to baseline contact rate.
+            </p>
+          ) : (
+            <p>
+              Estimated average number of people each infectious person is
+              expected to infect.
+            </p>
+          )
+        }
+        // maxWidth={"30rem"}
+        theme={"light"}
+        placement={"bottom"}
+        offset={[-30, 10]}
+      >
+        <img
+          className={styles.infoIcon}
+          src={infoIcon}
+          alt="More information"
+          style={{
+            position: "relative",
+            top: "1.5rem",
+            left: "2.5rem",
+          }}
+        />
+      </Tippy>
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
@@ -467,7 +499,7 @@ const PolicyModel = props => {
           label={
             props.contactPlotType === "pctChange"
               ? "% of normal\ncontact rate"
-              : "R Effective"
+              : "R Effective\n"
           }
           axisLabelComponent={
             <VictoryLabel
