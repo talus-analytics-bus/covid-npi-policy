@@ -83,7 +83,11 @@ const Data = ({
    * @param  {Object}  [filters={}] [description]
    * @return {Promise}              [description]
    */
-  const getData = async ({ filtersForQuery, entityInfoForQuery }) => {
+  const getData = async ({
+    filtersForQuery,
+    entityInfoForQuery,
+    getOptionSets = false,
+  }) => {
     const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
     const initColumns = entityInfoForQuery.getColumns({ metadata: {} });
     const queries = {
@@ -91,29 +95,30 @@ const Data = ({
         method,
         filters: filtersForQuery,
       }),
-      metadata: Metadata({
+    };
+
+    if (getOptionSets) {
+      queries.optionsets = OptionSet({
+        method: "get",
+        class_name: entityInfoForQuery.nouns.s,
+        fields: entityInfoForQuery.filterDefs
+          .map(d => Object.values(d).map(dd => dd))
+          .flat()
+          .filter(d => !d.field.startsWith("date"))
+          .map(d => {
+            return d.entity_name + "." + d.field;
+          }),
+        entity_name: entityInfoForQuery.nouns.s,
+      });
+      queries.metadata = Metadata({
         method: "get",
         fields: initColumns.map(d => {
           if (!d.dataField.includes(".")) return docType + "." + d.dataField;
           else return d.dataField;
         }),
         entity_class_name: entityInfoForQuery.nouns.s,
-      }),
-    };
-
-    // TODO generalize to plans
-    queries.optionsets = OptionSet({
-      method: "get",
-      class_name: entityInfoForQuery.nouns.s,
-      fields: entityInfoForQuery.filterDefs
-        .map(d => Object.values(d).map(dd => dd))
-        .flat()
-        .filter(d => !d.field.startsWith("date"))
-        .map(d => {
-          return d.entity_name + "." + d.field;
-        }),
-      entity_name: entityInfoForQuery.nouns.s,
-    });
+      });
+    }
 
     // execute queries and collate results
     const results = await execute({
@@ -122,7 +127,6 @@ const Data = ({
 
     // set data and metadata with results
     setData(results.instances.data);
-    setMetadata(results.metadata.data);
 
     // define min/max range of daterange pickers
     // TODO modularize and reuse repeated code
@@ -151,26 +155,30 @@ const Data = ({
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
     // TODO move this out of main code if possible
-    const optionsets = results["optionsets"];
+    if (getOptionSets) {
+      setMetadata(results.metadata.data);
 
-    // set options for filters
-    const newFilterDefs = [...entityInfoForQuery.filterDefs];
-    newFilterDefs.forEach(d => {
-      for (const [k, v] of Object.entries(d)) {
-        if (!k.startsWith("date")) d[k].items = optionsets[k];
-        if (k === "dates_in_effect") {
-          // set min/max date range for daterange filters
-          d[k].minMaxDate = {
-            min: newMinMaxStartDate.min,
-            max: undefined,
-          };
+      const optionsets = results["optionsets"];
+
+      // set options for filters
+      const newFilterDefs = [...entityInfoForQuery.filterDefs];
+      newFilterDefs.forEach(d => {
+        for (const [k, v] of Object.entries(d)) {
+          if (!k.startsWith("date")) d[k].items = optionsets[k];
+          if (k === "dates_in_effect") {
+            // set min/max date range for daterange filters
+            d[k].minMaxDate = {
+              min: newMinMaxStartDate.min,
+              max: undefined,
+            };
+          }
         }
-      }
-    });
-    setFilterDefs(newFilterDefs);
-    setColumns(
-      entityInfoForQuery.getColumns({ metadata: results.metadata.data })
-    );
+      });
+      setFilterDefs(newFilterDefs);
+      setColumns(
+        entityInfoForQuery.getColumns({ metadata: results.metadata.data })
+      );
+    }
     setLoading(false);
   };
 
@@ -220,6 +228,7 @@ const Data = ({
       filtersForQuery: newFilters,
       entityInfoForQuery: newEntityInfo,
       initializingForQuery: true,
+      getOptionSets: true,
     });
   }, [docType]);
 
