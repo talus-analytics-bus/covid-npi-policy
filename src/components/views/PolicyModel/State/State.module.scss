@@ -46,7 +46,7 @@
       font-family: "Rawline";
       margin-bottom: 1rem;
 
-      grid-template-columns: auto 20rem min-content 15rem min-content 14rem;
+      grid-template-columns: auto 22rem min-content 15rem min-content 14rem;
       grid-template-rows: 1fr 1fr;
 
       > div {
@@ -105,12 +105,14 @@
         font-weight: 600;
 
         label {
-          font-size: 0.9rem;
+          margin-top: 0.5rem;
+          font-size: 1rem;
           display: flex;
           flex-direction: row;
+          align-items: baseline;
 
           input {
-            transform: scale(1.1);
+            transform: scale(1.2);
             margin-right: 0.5rem;
           }
         }
