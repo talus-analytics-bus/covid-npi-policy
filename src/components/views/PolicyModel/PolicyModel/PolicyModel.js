@@ -37,7 +37,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
   const [activeTab] = useState("interventions");
 
   // use selected states to load the required models
-  const [selectedStates, setSelectedStates] = useState(["AK"]);
+  const [selectedStates, setSelectedStates] = useState(["AL"]);
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
 

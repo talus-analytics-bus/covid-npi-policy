@@ -10,6 +10,7 @@ import states from "../PolicyModel/states.js";
 import styles from "./State.module.scss";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
+import redInfoIcon from "../../../../assets/icons/info-red.svg";
 import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg";
 
 // round to nearest hundred and add commas
@@ -68,9 +69,9 @@ const State = props => {
             {states.find(state => state.abbr === props.selectedState).name}
           </div>
           <div className={styles.explanation}>
-            Case Count with Existing Policies
+            Case Count with
+            <br /> Existing Policies
           </div>
-          <div className={styles.checkbox}></div>
           <div className={styles.cases}>
             {formatActuals(props.curves.cases)}
           </div>
@@ -125,10 +126,9 @@ const State = props => {
               (actual)
             </p>
           </div>
-          <div className={styles.explanation}>What if we had done nothing?</div>
-          <div className={styles.checkbox}>
+          <div className={styles.explanation}>
+            What if we had <br /> done nothing?
             <label>
-              View on graph
               <input
                 type="checkbox"
                 checked={props.counterfactualSelected}
@@ -136,6 +136,7 @@ const State = props => {
                   props.setCounterfactualSelected(!props.counterfactualSelected)
                 }
               />
+              View cases without policies on graph
             </label>
           </div>
           <div className={styles.cases}>
@@ -164,7 +165,7 @@ const State = props => {
               >
                 <img
                   className={styles.infoIcon}
-                  src={infoIcon}
+                  src={redInfoIcon}
                   alt="More information"
                 />
               </Tippy>
