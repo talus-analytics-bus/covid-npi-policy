@@ -29,8 +29,8 @@ const defaultPatternStyle = key => {
       0,
       ["<", ["feature-state", key], 25],
       1,
-      0
-    ]
+      0,
+    ],
   };
 };
 
@@ -51,7 +51,7 @@ const circleStyles = {
         "#333",
         ["==", ["feature-state", key], null],
         "transparent",
-        "white"
+        "white",
       ],
       circleOpacity: 0.5,
       circleStrokeColor: [
@@ -60,7 +60,7 @@ const circleStyles = {
         "#b3b3b3",
         ["==", ["feature-state", key], null],
         "transparent",
-        "#e65d36"
+        "#e65d36",
       ],
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
@@ -69,9 +69,9 @@ const circleStyles = {
           minSize: 5,
           zeroSize: 5,
           maxValue: 1e7,
-          featurePropertyKey: key
+          featurePropertyKey: key,
         });
-      }
+      },
     };
   },
   "metric-test-transp-linear": key => {
@@ -82,7 +82,7 @@ const circleStyles = {
         "#333",
         ["==", ["feature-state", key], null],
         "transparent",
-        "white"
+        "white",
       ],
       circleOpacity: 0.5,
       circleStrokeColor: [
@@ -91,7 +91,7 @@ const circleStyles = {
         "#b3b3b3",
         ["==", ["feature-state", key], null],
         "transparent",
-        "#e65d36"
+        "#e65d36",
       ],
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
@@ -100,9 +100,9 @@ const circleStyles = {
           minSize: 5,
           zeroSize: 5,
           maxValue: 5e5,
-          featurePropertyKey: key
+          featurePropertyKey: key,
         });
-      }
+      },
     };
   },
   "metric-test-solid-linear": key => {
@@ -113,7 +113,7 @@ const circleStyles = {
         "#333",
         ["==", ["feature-state", key], null],
         "transparent",
-        "#e65d36"
+        "#e65d36",
       ],
       circleOpacity: 0.5,
       circleStrokeColor: [
@@ -122,7 +122,7 @@ const circleStyles = {
         "#b3b3b3",
         ["==", ["feature-state", key], null],
         "transparent",
-        "#e65d36"
+        "#e65d36",
       ],
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
@@ -131,9 +131,9 @@ const circleStyles = {
           minSize: 5,
           zeroSize: 5,
           maxValue: 3e6,
-          featurePropertyKey: key
+          featurePropertyKey: key,
         });
-      }
+      },
     };
   },
   "metric-test-solid": key => {
@@ -144,7 +144,7 @@ const circleStyles = {
         "#333",
         ["==", ["feature-state", key], null],
         "transparent",
-        "#e65d36"
+        "#e65d36",
       ],
       circleOpacity: 0.5,
       circleStrokeColor: [
@@ -153,7 +153,7 @@ const circleStyles = {
         "#b3b3b3",
         ["==", ["feature-state", key], null],
         "transparent",
-        "#e65d36"
+        "#e65d36",
       ],
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
@@ -162,11 +162,11 @@ const circleStyles = {
           minSize: 5,
           zeroSize: 5,
           maxValue: 1e9,
-          featurePropertyKey: key
+          featurePropertyKey: key,
         });
-      }
+      },
     };
-  }
+  },
 };
 
 // similar for fill styles
@@ -182,7 +182,7 @@ const fillStyles = {
         "#ffffff",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         "#808080",
-        "#ffffff"
+        "#ffffff",
       ],
       "line-width": [
         "case",
@@ -190,8 +190,8 @@ const fillStyles = {
         2,
         ["==", ["feature-state", "hovered"], true],
         2,
-        1
-      ]
+        1,
+      ],
     };
   },
   "metric-test": key => {
@@ -206,8 +206,8 @@ const fillStyles = {
         "#BBDAF5",
         ["<", ["feature-state", key], 75],
         "#86BFEB",
-        "#549FE2"
-      ]
+        "#549FE2",
+      ],
     };
   },
   policy_status: key => {
@@ -222,8 +222,8 @@ const fillStyles = {
         "#fff",
         ["==", ["feature-state", key], null],
         "#eaeaea",
-        "#eaeaea"
-      ]
+        "#eaeaea",
+      ],
     };
   },
   get "policy_status-outline"() {
@@ -250,8 +250,8 @@ const fillStyles = {
         "#ffffff",
         ["==", ["feature-state", key], null],
         "#eaeaea",
-        "#eaeaea"
-      ]
+        "#eaeaea",
+      ],
     };
   },
   "lockdown_level-pattern": key => {
@@ -261,25 +261,25 @@ const fillStyles = {
         "case",
         ["==", ["feature-state", key], "Mixed distancing levels"],
         1,
-        0
-      ]
+        0,
+      ],
     };
   },
   get "lockdown_level-outline"() {
     return this["policy_status-outline"];
-  }
+  },
 };
 
 // define layer styles
 export const layerStyles = {
   circle: circleStyles,
-  fill: fillStyles
+  fill: fillStyles,
 };
 
 // define images used by layers -- if none, then provide empty array
 export const layerImages = [
   {
     name: "dots",
-    asset: dots
-  }
+    asset: dots,
+  },
 ];

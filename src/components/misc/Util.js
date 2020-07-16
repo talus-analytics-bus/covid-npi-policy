@@ -28,7 +28,7 @@ export const getLog10Scale = ({
   maxValue,
   featurePropertyKey,
   zeroSize = 0,
-  totalDecadesOverride = null
+  totalDecadesOverride = null,
 }) => {
   // divide into 5 decades ending with the maxValue
   const x = Math.log10(maxValue);
@@ -44,23 +44,51 @@ export const getLog10Scale = ({
   // create decades
   for (let i = 1; i < totalDecades - 1; i++) {
     decades.push(Math.pow(10, x * (i / (totalDecades - 2))));
-    decades.push(minSize * Math.pow(2, i));
+    decades.push(0.33 * minSize * Math.pow(2, i));
   }
 
-  // return scale with decades
-  return [
+  const metricZoom = [
     "interpolate",
     ["linear"],
     ["feature-state", featurePropertyKey],
-    ...decades
+    ...decades,
   ];
+
+  // return scale with decades
+  console.log(decades);
+  const scaleFactor = 380 / 80;
+  return [
+    "interpolate",
+    ["linear"],
+    ["zoom"],
+    3.5,
+    metricZoom,
+    6,
+    ["*", metricZoom, 8],
+  ];
+  // return [
+  //   "interpolate",
+  //   ["linear"],
+  //   ["zoom"],
+  //   3.5,
+  //   20 * (90 / 90),
+  //   6,
+  //   20 * (380 / 90),
+  // ];
+
+  // return [
+  //   "interpolate",
+  //   ["linear"],
+  //   ["feature-state", featurePropertyKey],
+  //   ...decades,
+  // ];
 };
 
 export const getLinearScale = ({
   minSize,
   maxValue,
   featurePropertyKey,
-  zeroSize = 0
+  zeroSize = 0,
 }) => {
   // // divide into 5 decades ending with the maxValue
   // const x = Math.log10(maxValue);
@@ -89,7 +117,7 @@ export const getLinearScale = ({
     1,
     5,
     maxValue,
-    75
+    75,
   ];
 };
 
