@@ -33,8 +33,13 @@ const DateSlider = ({
   float = false,
   showCalendar = false,
   labelPos = "bottom",
+  useToggle = true,
   ...props
 }) => {
+  // STATE // ---------------------------------------------------------------//
+  // hide/show component, for floating version
+  const [show, setShow] = useState(true);
+
   // define playing state
   const [playing, setPlaying] = useState(false);
   const [playTimeouts, setPlayTimeouts] = useState([]);
@@ -261,7 +266,10 @@ const DateSlider = ({
   // JSX // -----------------------------------------------------------------//
   return (
     <div
-      className={classNames(styles.dateSlider, { [styles.float]: float })}
+      className={classNames(styles.dateSlider, {
+        [styles.float]: float,
+        [styles.hide]: !show,
+      })}
       style={wrapperStyle}
     >
       {
@@ -361,6 +369,19 @@ const DateSlider = ({
             }}
           />
         </FloatMenu>
+      )}
+      {float && useToggle && (
+        <button className={styles.toggle} onClick={() => setShow(!show)}>
+          <div>
+            {show ? (
+              "-"
+            ) : (
+              <span className={styles.buttonText}>
+                <span className={styles.icon}>+</span> time slider
+              </span>
+            )}
+          </div>
+        </button>
       )}
     </div>
   );
