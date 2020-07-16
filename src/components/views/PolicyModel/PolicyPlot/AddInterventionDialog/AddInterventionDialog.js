@@ -6,7 +6,7 @@ import closeButtonIconSVG from "../../../../../assets/icons/addInterventionClose
 
 const PastInterventionInfo = props => {
   const width = 300;
-  const arrowOffset = { x: 25, y: 41 };
+  const arrowOffset = { x: 25, y: 51 };
 
   const xPos =
     props.position.x < window.innerWidth / 2

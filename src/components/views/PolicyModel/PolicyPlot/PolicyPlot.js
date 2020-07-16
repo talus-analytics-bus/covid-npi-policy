@@ -18,8 +18,9 @@ import "tippy.js/themes/light.css";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 
-import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
-import InspectDayCursor from "./InspectDayCursor/InspectDayCursor.js";
+// import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
+import InspectDayCursor from "./InspectDayCursor/InspectDayCursor";
+import InspectDayLine from "./InspectDayLine/InspectDayLine";
 import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
 import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
 import LineExtension from "./LineExtension/LineExtension";
@@ -101,6 +102,24 @@ const PolicyModel = props => {
   //       window.removeEventListener("resize", updateWindowSize);
   //     };
   //   }, []);
+
+  const plotRef = React.useRef();
+  //   const [plotBBox, setPlotBBox] = React.useState();
+  //
+  //   const updatePlotBBox = e => {
+  //     setPlotBBox(plotRef.current.getBoundingClientRect());
+  //   };
+  //
+  //   React.useEffect(() => {
+  //     updatePlotBBox();
+  //
+  //     window.addEventListener("resize", updatePlotBBox);
+  //     return () => {
+  //       window.removeEventListener("resize", updatePlotBBox);
+  //     };
+  //   }, []);
+  //
+  //   console.log(plotBBox);
 
   // const percentProportion = 0.14;
   // const chartProportion = 0.45;
@@ -293,17 +312,18 @@ const PolicyModel = props => {
                   state: props.selectedState,
                   policyName: intervention.name.split("_")[0],
                   effectiveDate: intervention.intervention_start_date,
+                  dotSize: event.target.getBoundingClientRect().width,
                   x:
-                    window.pageXOffset +
-                    event.target.getBoundingClientRect().left,
+                    event.target.getBoundingClientRect().left -
+                    plotRef.current.getBoundingClientRect().left,
                   y:
-                    interStartDate < now
-                      ? window.pageYOffset +
-                        event.target.getBoundingClientRect().top
-                      : // need to adjust for the different size circle
-                        window.pageYOffset +
-                        event.target.getBoundingClientRect().top -
-                        2,
+                    event.target.getBoundingClientRect().top -
+                    plotRef.current.getBoundingClientRect().top,
+                  // window.pageYOffset,
+                  // interStartDate < now
+                  // ? event.target.getBoundingClientRect().top
+                  // : // need to adjust for the different size circle
+                  // event.target.getBoundingClientRect().top - 2,
                 });
               },
             },
@@ -321,7 +341,7 @@ const PolicyModel = props => {
   });
 
   return (
-    <section className={styles.main}>
+    <section className={styles.main} ref={plotRef}>
       <PastInterventionInfo
         {...{ pastInterventionProps, setPastInterventionProps }}
       />
@@ -592,8 +612,12 @@ const PolicyModel = props => {
                       ) {
                         setAddIntDialogState({
                           show: true,
-                          x: event.clientX,
-                          y: window.pageYOffset + event.clientY,
+                          x:
+                            event.clientX -
+                            plotRef.current.getBoundingClientRect().left,
+                          y:
+                            event.clientY -
+                            plotRef.current.getBoundingClientRect().top,
                           date: eventKey.cursorValue.x,
                         });
                       }
@@ -617,6 +641,7 @@ const PolicyModel = props => {
               (props.activeTab === "interventions") &
               (pastInterventionProps.policyName === "") ? (
                 <InspectDayCursor
+                  showInfo={!addIntDialogState.show}
                   data={props.data}
                   interventionColors={interventionColors}
                   state={props.selectedState}
@@ -627,13 +652,13 @@ const PolicyModel = props => {
                 <LineSegment />
               )
             }
-            cursorComponent={
-              pastInterventionProps.policyName === "" ? (
-                <LineSegment />
-              ) : (
-                <LineSegment style={{ display: "none" }} />
-              )
-            }
+            cursorComponent={<LineSegment style={{ display: "none" }} />}
+            //   pastInterventionProps.policyName === "" ? (
+            //     <LineSegment />
+            //   ) : (
+            //     <LineSegment style={{ display: "none" }} />
+            //   )
+            // }
             cursorLabel={({ datum }) => `add intervention`}
             allowZoom={false}
             // If we want to re-enable panning, there will
