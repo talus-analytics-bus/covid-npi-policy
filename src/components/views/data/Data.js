@@ -327,7 +327,7 @@ const Data = ({
               title: <h2>Policy and plan database</h2>,
               label: DownloadBtn({
                 render: counts,
-                class_name: "all",
+                class_name: "all_static",
                 filters: {},
                 disabled: false,
                 message: (
@@ -432,6 +432,7 @@ const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
         onClick={e => {
           e.stopPropagation();
           setButtonLoading(true);
+
           Export({
             method: "post",
             filters,

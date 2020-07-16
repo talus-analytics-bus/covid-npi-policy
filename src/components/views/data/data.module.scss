@@ -131,7 +131,7 @@
 
   // data download buttons
   button {
-    &.all,
+    &.all_static,
     &.Policy,
     &.Plan {
       img {
@@ -154,7 +154,7 @@
     }
 
     // master download button
-    &.all {
+    &.all_static {
       &,
       &:hover {
         background-color: transparent;
