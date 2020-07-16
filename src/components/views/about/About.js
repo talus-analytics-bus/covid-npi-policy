@@ -136,7 +136,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
                 target="_blank"
                 href={
                   process.env.PUBLIC_URL +
-                  "/export/COVID AMP documentation 062420.pdf"
+                  "/export/COVID AMP documentation 071620.pdf"
                 }
               >
                 <button>
