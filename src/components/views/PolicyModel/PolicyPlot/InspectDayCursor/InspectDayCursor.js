@@ -32,7 +32,6 @@ const formatActuals = number =>
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 const InspectDailyCursor = props => {
-  console.log(props.data);
   const [xOffset, yOffset] = [500 - props.x < 140 ? 4.75 : -4.75, 0];
 
   const popupDate = new Date(props.datum.x);
@@ -90,10 +89,6 @@ const InspectDailyCursor = props => {
       checkSameDay(point.x, popupDate)
     );
   }
-
-  console.log(popupDate.toISOString());
-
-  console.log(pctChange);
 
   return (
     <VictoryPortal>

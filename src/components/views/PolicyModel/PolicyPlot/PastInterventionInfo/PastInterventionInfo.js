@@ -54,8 +54,8 @@ const PastInterventionInfo = props => {
       display={props.policyName !== "" ? "block" : "none"}
       className={popupStyleName}
       style={{
-        top: yPos,
-        left: xPos,
+        top: yPos ? yPos : 0,
+        left: xPos ? xPos : 0,
         width: width,
         opacity: props.policyName !== "" ? 1 : 0,
         pointerEvents: props.policyName !== "" ? "all" : "none",
