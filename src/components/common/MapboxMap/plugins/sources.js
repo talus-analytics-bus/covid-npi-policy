@@ -34,8 +34,8 @@ export const mapSources = {
 
         // optional: the data field in each feature's properties that should be
         // used as the unique ID for that feature, if not simply `id`
-        promoteId: "state_name"
-      }
+        promoteId: "state_name",
+      },
     },
 
     // additional layer types and source defs...
@@ -45,9 +45,9 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://lobenichou.albersusa-points",
-        promoteId: "state_name"
-      }
-    }
+        promoteId: "state_name",
+      },
+    },
   },
 
   // additional map types, layer types, and source defs...
@@ -59,8 +59,8 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://traethethird.4kh7sxxt",
-        promoteId: "ADM0_A3"
-      }
+        promoteId: "ADM0_A3",
+      },
     },
     circle: {
       name: "centroids",
@@ -68,10 +68,10 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://nicoletalus.c4ujj0o1",
-        promoteId: "ADM0_A3"
-      }
-    }
-  }
+        promoteId: "ADM0_A3",
+      },
+    },
+  },
 };
 
 // define map styles to provide base layers for the maps
@@ -98,11 +98,11 @@ export const mapStyles = {
     // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
       [-20.695386255024797, 12.883963661378047],
-      [21.232614420916473, -13.352458619484214]
+      [21.232614420916473, -13.352458619484214],
     ],
 
     // optional: info tooltip to display for map in radio selections
-    tooltip: "View state-level data for the United States only"
+    tooltip: "View state-level data for the United States only",
   },
 
   // additional maps...
@@ -115,14 +115,14 @@ export const mapStyles = {
         <b>Currently in development</b>: View country-level data for the world
       </span>
     ),
-    minZoom: 0,
+    minZoom: 1.7246463935904246,
     maxZoom: 6,
 
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
       [-177.44289170791797, 64.05440369592642],
-      [179.97107965372615, -54.77460938717267]
-    ]
-  }
+      [179.97107965372615, -54.77460938717267],
+    ],
+  },
 };

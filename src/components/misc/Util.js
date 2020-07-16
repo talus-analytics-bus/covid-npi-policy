@@ -28,7 +28,7 @@ export const getLog10Scale = ({
   maxValue,
   featurePropertyKey,
   zeroSize = 0,
-  totalDecadesOverride = null
+  totalDecadesOverride = null,
 }) => {
   // divide into 5 decades ending with the maxValue
   const x = Math.log10(maxValue);
@@ -44,42 +44,77 @@ export const getLog10Scale = ({
   // create decades
   for (let i = 1; i < totalDecades - 1; i++) {
     decades.push(Math.pow(10, x * (i / (totalDecades - 2))));
-    decades.push(minSize * Math.pow(2, i));
+    decades.push(0.33 * minSize * Math.pow(2, i));
   }
 
-  // return scale with decades
-  return [
+  const metricZoom = [
     "interpolate",
     ["linear"],
     ["feature-state", featurePropertyKey],
-    ...decades
+    ...decades,
   ];
+
+  // define scale factor for each map that scales fully zoomed in bubbles to
+  // appear to occupy the same geographic space as fully zoomed out bubbles
+  // TODO define as parameter for function, because it depends upon the min
+  // and max zoom levels for the map.
+  const scaleFactor = 8;
+  return [
+    "interpolate",
+    ["linear"],
+    ["zoom"],
+    3.5,
+    metricZoom,
+    6,
+    ["*", metricZoom, scaleFactor],
+  ];
+
+  // Below: former way of doing log scales without heuristic size fix
+  // // return scale with decades
+  // return [
+  //   "interpolate",
+  //   ["linear"],
+  //   ["feature-state", featurePropertyKey],
+  //   ...decades,
+  // ];
 };
 
+/*
+ * Return linear circle radius scale for Mapbox map layer paint styling.
+ */
 export const getLinearScale = ({
   minSize,
   maxValue,
   featurePropertyKey,
-  zeroSize = 0
+  zeroSize = 0,
 }) => {
-  // // divide into 5 decades ending with the maxValue
-  // const x = Math.log10(maxValue);
-  //
-  // // store interpolator breakpoints as pairs of elements:
-  // // 1: value
-  // // 2: scale value at that value
-  // const decades = [0, zeroSize, 1, minSize];
-  //
-  // // total decades to define, including for zero and 1
-  // const totalDecades = 7;
-  //
-  // // create decades
-  // for (let i = 1; i < totalDecades - 1; i++) {
-  //   decades.push(Math.pow(10, x * (i / (totalDecades - 2))));
-  //   decades.push(minSize * Math.pow(2, i));
-  // }
+  const metricZoom = [
+    "interpolate",
+    ["linear"],
+    ["feature-state", featurePropertyKey],
+    0,
+    zeroSize,
+    1,
+    5,
+    maxValue,
+    75,
+  ];
 
-  // return scale with decades
+  // define scale factor for each map that scales fully zoomed in bubbles to
+  // appear to occupy the same geographic space as fully zoomed out bubbles
+  // TODO define as parameter for function, because it depends upon the min
+  // and max zoom levels for the map.
+  const scaleFactor = 12;
+  return [
+    "interpolate",
+    ["linear"],
+    ["zoom"],
+    3, // min zoom
+    metricZoom,
+    6, // max zoom
+    ["*", metricZoom, scaleFactor],
+  ];
+
   return [
     "interpolate",
     ["linear"],
@@ -89,8 +124,22 @@ export const getLinearScale = ({
     1,
     5,
     maxValue,
-    75
+    75,
   ];
+
+  // Below: former way of doing linear scales without heuristic size fix
+  // // return linear interpolation scale
+  // return [
+  //   "interpolate",
+  //   ["linear"],
+  //   ["feature-state", featurePropertyKey],
+  //   0,
+  //   zeroSize,
+  //   1,
+  //   5,
+  //   maxValue,
+  //   75,
+  // ];
 };
 
 /**
