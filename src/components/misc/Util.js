@@ -54,9 +54,11 @@ export const getLog10Scale = ({
     ...decades,
   ];
 
-  // return scale with decades
-  console.log(decades);
-  const scaleFactor = 380 / 80;
+  // define scale factor for each map that scales fully zoomed in bubbles to
+  // appear to occupy the same geographic space as fully zoomed out bubbles
+  // TODO define as parameter for function, because it depends upon the min
+  // and max zoom levels for the map.
+  const scaleFactor = 8;
   return [
     "interpolate",
     ["linear"],
@@ -64,18 +66,11 @@ export const getLog10Scale = ({
     3.5,
     metricZoom,
     6,
-    ["*", metricZoom, 8],
+    ["*", metricZoom, scaleFactor],
   ];
-  // return [
-  //   "interpolate",
-  //   ["linear"],
-  //   ["zoom"],
-  //   3.5,
-  //   20 * (90 / 90),
-  //   6,
-  //   20 * (380 / 90),
-  // ];
 
+  // Below: former way of doing log scales without heuristic size fix
+  // // return scale with decades
   // return [
   //   "interpolate",
   //   ["linear"],
