@@ -14,27 +14,39 @@
     margin-bottom: 15px;
   }
 
-  h3 {
+  h3,
+  h4 {
     margin-bottom: 5px;
   }
-  p,
-  ol {
-    + h2 {
+
+  h4 {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  p {
+    + h1,
+    + h2,
+    + h3 {
       margin-top: 30px;
     }
   }
+  ol,
   ul {
-    li {
-      margin-bottom: 10px;
+    + h1,
+    + h2,
+    + h3,
+    + p {
+      margin-top: 30px;
     }
-    margin-bottom: 20px;
   }
 
-  ol {
+  ol,
+  ul {
     > li {
       margin-bottom: 10px;
     }
-    ol {
+    ol,
+    ul {
       margin-top: 10px;
       margin-bottom: 20px;
     }
@@ -44,7 +56,8 @@
     p {
       margin: 0 !important;
     }
-    ul {
+    ul,
+    ol {
       margin-top: 5px;
       margin-bottom: 20px;
     }
