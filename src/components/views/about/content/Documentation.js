@@ -77,6 +77,32 @@ const Documentation = ({ ...props }) => {
           </ol>
         </li>
       </ol>
+      <p>
+        This work and underlying AMP dataset is available for use under the
+        Creative Commons Attribution By License agreement (
+        <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+          https://creativecommons.org/licenses/by/4.0/
+        </a>
+        ), with appropriate reference and acknowledgement of the original
+        research team, as available under the About section of{" "}
+        <a target="_blank" href="https://covid-local.org">
+          covid-local.org
+        </a>{" "}
+        and{" "}
+        <a target="_blank" href="https://covidamp.org">
+          covidamp.org
+        </a>
+        .
+      </p>
+      <p>
+        In addition to direct download from the site, we are happy to work with
+        your team to provide automated access <em>via</em> API or other data
+        sharing method. Please contact us at{" "}
+        <a target="_blank" href="mailto:info@talusanalytics.com">
+          info@talusanalytics.com
+        </a>
+        &nbsp;for more information.
+      </p>
       <h2>Annotated Policy Library</h2>
       <h3>Data coding process</h3>
       <p>
