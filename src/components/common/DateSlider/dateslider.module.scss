@@ -1,13 +1,5 @@
 @import "../../../assets/styles/vars.scss";
 .dateSlider {
-  // overriding module defaults
-  [class*="rc-slider-handle"] {
-    z-index: 1;
-  }
-  [class*="rc-slider-mark"] {
-    z-index: 0;
-  }
-
   display: flex;
   flex-flow: column;
 
@@ -83,14 +75,10 @@
   width: min-content;
   .label {
     width: max-content;
-    // font-weight: 700;
-    font-style: italic;
+    font-weight: 700;
     font-family: "Open Sans", sans-serif;
     min-width: 315px;
     margin-bottom: 30px;
-    &.bottom {
-      margin-bottom: 5px;
-    }
   }
 
   .content {
@@ -131,11 +119,6 @@
         font-size: 0.9rem;
         font-family: "Open Sans", sans-serif;
         padding: 4px;
-
-        &.bottom {
-          top: unset;
-          bottom: -$height - $padding * 2 - 10px;
-        }
       }
       .grooves {
         background-color: #0e223f;
@@ -150,10 +133,6 @@
         cursor: pointer;
         font-size: 1.25rem;
       }
-      .disabled {
-        color: $gray;
-        pointer-events: none;
-      }
     }
   }
   .calendarPicker {
@@ -166,6 +145,7 @@
       border-radius: 4px;
       border: 1px solid #b9b9b8;
 
+      $background-color: rgba(239, 239, 239, 0.95);
       background-color: $background-color;
 
       &:hover {
@@ -186,16 +166,5 @@
         background: unset;
       }
     }
-  }
-
-  // styling for "floating" version of date slider
-  &.float {
-    position: absolute;
-    z-index: 1;
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 15px;
-    border: 1px solid #b3b3b3;
-    border-width: 0 0 1px 1px;
   }
 }

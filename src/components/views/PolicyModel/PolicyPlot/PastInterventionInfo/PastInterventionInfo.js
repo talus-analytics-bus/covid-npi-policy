@@ -16,12 +16,13 @@ const PastInterventionInfo = props => {
 
   const width = 300;
   // const arrowOffset = { x: 32, y: 28 }
-  const arrowOffset = { x1: 8, x2: 19, y: 47 };
-  const circleOffset = {
-    x: (window.innerWidth * 0.0107) / 1.5,
-    y: window.innerWidth * 0.0107,
-  };
-  // const circleOffset = 0
+  const arrowOffset = { x1: 8, x2: 19, y: 42 };
+  // const circleOffset = {
+  //   x: (window.innerWidth * 0.0107) / 1.5,
+  //   y: window.innerWidth * 0.0107,
+  // };
+
+  const circleOffset = { x: props.dotSize / 2, y: props.dotSize / 2 };
 
   const xPos =
     props.x < window.innerWidth / 2
@@ -46,10 +47,6 @@ const PastInterventionInfo = props => {
       `%22${props.effectiveDate}%22],` +
       `%22country_name%22:[%22United%20States%20of%20America%20(USA)%22],` +
       `%22area1%22:[%22${stateFullName}%22]}`;
-
-    // alert(policyURL)
-    // console.log(props.state)
-    // console.log(policyURL)
   }
 
   return (
@@ -57,8 +54,8 @@ const PastInterventionInfo = props => {
       display={props.policyName !== "" ? "block" : "none"}
       className={popupStyleName}
       style={{
-        top: yPos,
-        left: xPos,
+        top: yPos ? yPos : 0,
+        left: xPos ? xPos : 0,
         width: width,
         opacity: props.policyName !== "" ? 1 : 0,
         pointerEvents: props.policyName !== "" ? "all" : "none",
