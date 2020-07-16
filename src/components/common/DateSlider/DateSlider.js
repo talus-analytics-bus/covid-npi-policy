@@ -377,7 +377,7 @@ const DateSlider = ({
               "-"
             ) : (
               <span className={styles.buttonText}>
-                <span className={styles.icon}>+</span> time slider
+                <span className={styles.icon}>+</span> Time slider
               </span>
             )}
           </div>
