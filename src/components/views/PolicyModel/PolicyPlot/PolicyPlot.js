@@ -330,54 +330,59 @@ const PolicyModel = props => {
         addIntervention={props.addIntervention}
         selectedState={props.selectedState}
       />
-      <label className={styles.legendLabel}>
-        <Tippy
-          content={
-            <div className={styles.legend}>
-              <div className={styles.lockdown}>
-                <span />
-                <p>Lockdown policies</p>
+      <div className={styles.abovePlot}>
+        <p className={styles.instruction}>
+          Use cursor on graph to set new policy
+        </p>
+        <label className={styles.legendLabel}>
+          <Tippy
+            content={
+              <div className={styles.legend}>
+                <div className={styles.lockdown}>
+                  <span />
+                  <p>Lockdown policies</p>
+                </div>
+                <div className={styles.safer}>
+                  <span />
+                  <p>Safer at home policies</p>
+                </div>
+                <div className={styles.stay}>
+                  <span />
+                  <p>Stay at home policies</p>
+                </div>
+                <div className={styles.normal}>
+                  <span />
+                  <p>New normal policies</p>
+                </div>
+                <div className={styles.proposed}>
+                  <span />
+                  <p>Proposed</p>
+                </div>
+                <div className={styles.actuals}>
+                  <span />
+                  <p>Actuals</p>
+                </div>
+                <div className={styles.modeled}>
+                  <span />
+                  <p>Modeled</p>
+                </div>
+                <div className={styles.noPolicies}>
+                  <span />
+                  <p>Cases Without Policies</p>
+                </div>
               </div>
-              <div className={styles.safer}>
-                <span />
-                <p>Safer at home policies</p>
-              </div>
-              <div className={styles.stay}>
-                <span />
-                <p>Stay at home policies</p>
-              </div>
-              <div className={styles.normal}>
-                <span />
-                <p>New normal policies</p>
-              </div>
-              <div className={styles.proposed}>
-                <span />
-                <p>Proposed</p>
-              </div>
-              <div className={styles.actuals}>
-                <span />
-                <p>Actuals</p>
-              </div>
-              <div className={styles.modeled}>
-                <span />
-                <p>Modeled</p>
-              </div>
-              <div className={styles.noPolicies}>
-                <span />
-                <p>Cases Without Policies</p>
-              </div>
-            </div>
-          }
-          allowHTML={true}
-          interactive={true}
-          maxWidth={"30rem"}
-          theme={"light"}
-          placement={"bottom"}
-          offset={[-30, 10]}
-        >
-          <h4>Legend</h4>
-        </Tippy>
-      </label>
+            }
+            allowHTML={true}
+            interactive={true}
+            maxWidth={"30rem"}
+            theme={"light"}
+            placement={"bottom"}
+            offset={[-30, 10]}
+          >
+            <h4>Legend</h4>
+          </Tippy>
+        </label>
+      </div>
       {/* <Tippy */}
       {/*   interactive={true} */}
       {/*   allowHTML={true} */}
