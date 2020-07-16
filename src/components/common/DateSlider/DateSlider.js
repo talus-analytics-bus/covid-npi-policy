@@ -24,22 +24,7 @@ import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap.css";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-const DateSlider = ({
-  label,
-  date,
-  setDate,
-  minDate,
-  maxDate,
-  float = false,
-  showCalendar = false,
-  labelPos = "bottom",
-  useToggle = true,
-  ...props
-}) => {
-  // STATE // ---------------------------------------------------------------//
-  // hide/show component, for floating version
-  const [show, setShow] = useState(true);
-
+const DateSlider = ({ label, date, setDate, minDate, maxDate, ...props }) => {
   // define playing state
   const [playing, setPlaying] = useState(false);
   const [playTimeouts, setPlayTimeouts] = useState([]);
@@ -88,7 +73,7 @@ const DateSlider = ({
     height: height + "px",
     display: "flex",
     justifyContent: "center",
-    top: "4px",
+    top: "4px"
   };
   const dotStyle = {
     // borderColor: "#96dbfa"
@@ -105,7 +90,7 @@ const DateSlider = ({
     return (
       <Handle data-tip={true} data-for={"sliderTooltip"} {...restProps}>
         {
-          <div className={classNames(styles.dateLabel, styles[labelPos])}>
+          <div className={styles.dateLabel}>
             {curSliderDate.format("MMM D")}
           </div>
         }
@@ -144,17 +129,9 @@ const DateSlider = ({
     // set playing to true
     setPlaying(true);
 
-    // if current value is max slider value, play from first slider value
-    let prev = curSliderVal;
-    if (prev === sliderMaxValue) {
-      console.log("Need to play from beginning");
-      handleSliderChange(0);
-      setCurSliderVal(0);
-      prev = -7;
-    }
-
     // iterate over each value on the slider until the end, pushing a timeout
     // event that triggers the slider movement
+    let prev = curSliderVal;
     let i = 0;
     let cur;
     const newPlayTimeouts = [];
@@ -231,7 +208,7 @@ const DateSlider = ({
       // return start and end date as the marks
       return {
         [sliderMinValue]: sliderMin.format("MMM D, YYYY"),
-        [sliderMaxValue]: sliderMax.format("MMM D, YYYY"),
+        [sliderMaxValue]: sliderMax.format("MMM D, YYYY")
       };
     } else {
       const marks = {};
@@ -265,17 +242,11 @@ const DateSlider = ({
 
   // JSX // -----------------------------------------------------------------//
   return (
-    <div
-      className={classNames(styles.dateSlider, {
-        [styles.float]: float,
-        [styles.hide]: !show,
-      })}
-      style={wrapperStyle}
-    >
+    <div className={styles.dateSlider} style={wrapperStyle}>
       {
         // label, e.g., "Date"
       }
-      <div className={classNames(styles.label, styles[labelPos])}>{label}</div>
+      <div className={styles.label}>{label}</div>
       {
         // main content of slider component
       }
@@ -308,7 +279,7 @@ const DateSlider = ({
             <i
               onClick={() => handleBackForward(-1)}
               className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal <= sliderMinValue,
+                [styles.disabled]: curSliderVal <= sliderMin
               })}
             >
               fast_rewind
@@ -316,7 +287,12 @@ const DateSlider = ({
           }
           {// Show play button if not playing, pause button otherwise
           !playing ? (
-            <i onClick={handlePlay} className={classNames("material-icons")}>
+            <i
+              onClick={handlePlay}
+              className={classNames("material-icons", {
+                [styles.disabled]: curSliderVal >= sliderMax
+              })}
+            >
               play_arrow
             </i>
           ) : (
@@ -328,7 +304,7 @@ const DateSlider = ({
             <i
               onClick={() => handleBackForward(+1)}
               className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal >= sliderMaxValue,
+                [styles.disabled]: curSliderVal >= sliderMax
               })}
             >
               fast_forward
@@ -339,50 +315,35 @@ const DateSlider = ({
       {
         // calendar datepicker
       }
-      {showCalendar && (
-        <FloatMenu
-          {...{
-            control: open => (
-              <div
-                className={classNames(styles.calendarPicker, {
-                  [styles.open]: open,
-                })}
-              >
-                <button>{date.format("MMM D, 'YY")}</button>{" "}
-                <img src={open ? calendarSelectedSvg : calendarSvg} />
-              </div>
-            ),
+      <FloatMenu
+        {...{
+          control: open => (
+            <div
+              className={classNames(styles.calendarPicker, {
+                [styles.open]: open
+              })}
+            >
+              <button>{date.format("MMM D, 'YY")}</button>{" "}
+              <img src={open ? calendarSelectedSvg : calendarSvg} />
+            </div>
+          )
+        }}
+      >
+        <Calendar
+          date={new Date(date)}
+          minDate={new Date(moment(minDate).utc())}
+          maxDate={new Date(moment(maxDate).utc())}
+          onChange={v => {
+            // when calendar date changes, update the dateslider date and the
+            // app date, and pause playback if it's playing
+            const vMoment = moment(v);
+            const newSliderVal = vMoment.diff(sliderMin, "days");
+            setCurSliderVal(newSliderVal);
+            handleSliderChange(newSliderVal);
+            if (playing) handlePause();
           }}
-        >
-          <Calendar
-            date={new Date(date)}
-            minDate={new Date(moment(minDate).utc())}
-            maxDate={new Date(moment(maxDate).utc())}
-            onChange={v => {
-              // when calendar date changes, update the dateslider date and the
-              // app date, and pause playback if it's playing
-              const vMoment = moment(v);
-              const newSliderVal = vMoment.diff(sliderMin, "days");
-              setCurSliderVal(newSliderVal);
-              handleSliderChange(newSliderVal);
-              if (playing) handlePause();
-            }}
-          />
-        </FloatMenu>
-      )}
-      {float && useToggle && (
-        <button className={styles.toggle} onClick={() => setShow(!show)}>
-          <div>
-            {show ? (
-              "-"
-            ) : (
-              <span className={styles.buttonText}>
-                <span className={styles.icon}>+</span> Time slider
-              </span>
-            )}
-          </div>
-        </button>
-      )}
+        />
+      </FloatMenu>
     </div>
   );
 };
