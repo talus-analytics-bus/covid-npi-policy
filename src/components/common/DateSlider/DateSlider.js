@@ -139,9 +139,17 @@ const DateSlider = ({
     // set playing to true
     setPlaying(true);
 
+    // if current value is max slider value, play from first slider value
+    let prev = curSliderVal;
+    if (prev === sliderMaxValue) {
+      console.log("Need to play from beginning");
+      handleSliderChange(0);
+      setCurSliderVal(0);
+      prev = -7;
+    }
+
     // iterate over each value on the slider until the end, pushing a timeout
     // event that triggers the slider movement
-    let prev = curSliderVal;
     let i = 0;
     let cur;
     const newPlayTimeouts = [];
@@ -292,7 +300,7 @@ const DateSlider = ({
             <i
               onClick={() => handleBackForward(-1)}
               className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal <= sliderMin,
+                [styles.disabled]: curSliderVal <= sliderMinValue,
               })}
             >
               fast_rewind
@@ -300,12 +308,7 @@ const DateSlider = ({
           }
           {// Show play button if not playing, pause button otherwise
           !playing ? (
-            <i
-              onClick={handlePlay}
-              className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal >= sliderMax,
-              })}
-            >
+            <i onClick={handlePlay} className={classNames("material-icons")}>
               play_arrow
             </i>
           ) : (
@@ -317,7 +320,7 @@ const DateSlider = ({
             <i
               onClick={() => handleBackForward(+1)}
               className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal >= sliderMax,
+                [styles.disabled]: curSliderVal >= sliderMaxValue,
               })}
             >
               fast_forward
