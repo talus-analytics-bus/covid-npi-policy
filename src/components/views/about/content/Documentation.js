@@ -530,7 +530,7 @@ const Documentation = ({ ...props }) => {
         </li>
       </ul>
       <p></p>
-      <h3>Modeling disease characteristics</h3>
+      <h4>Modeling disease characteristics</h4>
       <p>
         Values for the epidemiological model parameters are based on the best
         available data and academic consensus, wherever possible. Changes in
@@ -556,6 +556,37 @@ const Documentation = ({ ...props }) => {
         individuals and suppresses transmission more than a safer-at-home
         condition).
       </p>
+      <h4>What if we had done nothing? (Counterfactual)</h4>
+      <p>
+        As the outbreak has unfolded, we have added a counterfactual analysis to
+        assess how the event would have unfolded had states not implemented any
+        policies. The counterfactual scenario is modeled assuming contact rate
+        remained elevated throughout the Spring and early Summer of 2020, as
+        those states had not implemented social distancing policies. We start
+        from the caseload data on either the day of first distancing policy or
+        March 12th, whichever comes first. (Note: March 12 was the day the US
+        saw a significant decline in mobility regardless of policy).
+        <a data-type="ref" id="_ednref2" onClick={onClick}>
+          ii
+        </a>
+        <a data-type="ref" id="_ednref3" onClick={onClick}>
+          iii
+        </a>{" "}
+        We then project forward assuming using a R value of 2.1, slightly lower
+        than that before the event to account for changes in behavior as would
+        be expected with only reports of disease threat (as seen in states
+        without social distancing policies, but that still showed a reduction in
+        mobility.) Notably, variations in actual contact rate both between and
+        within states especially in the early months of the outbreak, the model
+        does not necessarily capture behavior early in the event, especially in
+        states with small or later outbreaks. In these cases, the comparison to
+        today’s actual caseload or deaths can suggest that doing nothing could
+        lead to fewer cases today, but all suggest that there will be far more
+        cases in the near future due to the exponential nature of growth with an
+        R greater than one. The implication is not that doing nothing would be a
+        better strategy because the number is lower today, but that this lack of
+        action puts the state on a dangerous trajectory.
+      </p>
       <table>
         <tbody>
           <tr>
@@ -580,8 +611,8 @@ const Documentation = ({ ...props }) => {
               <p>
                 <strong>
                   Corresponding Beta value
-                  <a data-type="ref" id="_ednref2" onClick={onClick}>
-                    <strong>ii</strong>
+                  <a data-type="ref" id="_ednref4" onClick={onClick}>
+                    <strong>iv</strong>
                   </a>
                 </strong>
               </p>
@@ -739,8 +770,8 @@ const Documentation = ({ ...props }) => {
             <td>
               <p>
                 6 days
-                <a data-type="ref" id="_ednref3" onClick={onClick}>
-                  iii
+                <a data-type="ref" id="_ednref5" onClick={onClick}>
+                  v
                 </a>
               </p>
             </td>
@@ -759,12 +790,6 @@ const Documentation = ({ ...props }) => {
             <td>
               <p>
                 6 days
-                <a data-type="ref" id="_ednref4" onClick={onClick}>
-                  iv
-                </a>
-                <a data-type="ref" id="_ednref5" onClick={onClick}>
-                  v
-                </a>
                 <a data-type="ref" id="_ednref6" onClick={onClick}>
                   vi
                 </a>
@@ -806,12 +831,6 @@ const Documentation = ({ ...props }) => {
                 <a data-type="ref" id="_ednref8" onClick={onClick}>
                   viii
                 </a>
-                <a data-type="ref" id="_ednref9" onClick={onClick}>
-                  ix
-                </a>
-                <a data-type="ref" id="_ednref10" onClick={onClick}>
-                  x
-                </a>
               </p>
             </td>
           </tr>
@@ -827,8 +846,8 @@ const Documentation = ({ ...props }) => {
             <td>
               <p>
                 22%
-                <a data-type="ref" id="_ednref11" onClick={onClick}>
-                  xi
+                <a data-type="ref" id="_ednref9" onClick={onClick}>
+                  ix
                 </a>
               </p>
             </td>
@@ -843,8 +862,8 @@ const Documentation = ({ ...props }) => {
             <td>
               <p>
                 1.09%
-                <a data-type="ref" id="_ednref12" onClick={onClick}>
-                  xii
+                <a data-type="ref" id="_ednref10" onClick={onClick}>
+                  x
                 </a>
               </p>
             </td>
@@ -862,8 +881,8 @@ const Documentation = ({ ...props }) => {
             <td>
               <p>
                 8 days
-                <a data-type="ref" id="_ednref13" onClick={onClick}>
-                  xiii
+                <a data-type="ref" id="_ednref11" onClick={onClick}>
+                  xi
                 </a>
               </p>
             </td>
@@ -884,165 +903,138 @@ const Documentation = ({ ...props }) => {
       <hr />
       <section className={styles.endnotes}>
         <p>
-          <a data-type="endnote" id="_edn1" onClick={onClick}>
+          <a data-type="endnote" onClick={onClick} id="_edn1">
             i
           </a>{" "}
           <p>
-            Hill, Alison, <em>et al</em>. "Modeling COVID-19 Spread vs
-            Healthcare Capacity".{" "}
-            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+            Hill, Alison, et al. "Modeling COVID-19 Spread vs Healthcare
+            Capacity"{" "}
+            <a href="https://alhill.shinyapps.io/COVID19seir/">
               https://alhill.shinyapps.io/COVID19seir/
             </a>
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn2" onClick={onClick}>
+          <a data-type="endnote" onClick={onClick} id="_edn2">
             ii
+          </a>{" "}
+          <p>
+            <a href="https://www.apple.com/covid19/mobility">
+              https://www.apple.com/covid19/mobility
+            </a>
+          </p>
+        </p>
+        <p>
+          <a data-type="endnote" onClick={onClick} id="_edn3">
+            iii
+          </a>{" "}
+          <p>
+            <a href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD">
+              https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD
+            </a>
+          </p>
+        </p>
+        <p>
+          <a data-type="endnote" onClick={onClick} id="_edn4">
+            iv
           </a>{" "}
           <p>
             Calculated based on a consideration of literature-reported R values,
             estimated reduction of transmission by non-pharmaceutical
             interventions, and bounded by estimated effective R values developed
             by the R<sub>t</sub> COVID-19 project (
-            <a target="_blank" href="https://rt.live/">
-              https://rt.live/
-            </a>
-            ).
+            <a href="https://rt.live/">https://rt.live/</a>).
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn3" onClick={onClick}>
-            iii
-          </a>{" "}
-          <p>
-            Guan, Wei-jie, <em>et al</em>. &ldquo;Clinical characteristics of
-            2019 novel coronavirus infection in China.&rdquo; <em>NEJM </em>
-            (2020) doi: 10.1056/NEJMoa2002032.
-          </p>
-        </p>
-        <p>
-          <a data-type="endnote" id="_edn4" onClick={onClick}>
-            iv
-          </a>{" "}
-          <p>
-            Hill, Alison, <em>et al</em>. "Modeling COVID-19 Spread vs
-            Healthcare Capacity".{" "}
-            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
-              https://alhill.shinyapps.io/COVID19seir/
-            </a>
-          </p>
-        </p>
-        <p>
-          <a data-type="endnote" id="_edn5" onClick={onClick}>
+          <a data-type="endnote" onClick={onClick} id="_edn5">
             v
           </a>{" "}
           <p>
-            Kain, Morgan, <em>et al</em>. &ldquo;Chopping the tail: how
-            preventing superspreading can help to maintain COVID-19
-            control&rdquo;{" "}
-            <a
-              target="_blank"
-              href="https://www.medrxiv.org/content/10.1101/2020.06.30.20143115v1.full.pdf"
-            >
-              https://www.medrxiv.org/content/10.1101/2020.06.30.20143115v1.full.pdf
+            Wei, Yongyue, et al. &ldquo;A systematic review and meta-analysis
+            reveals long and dispersive incubation period of COVID-19&rdquo;{" "}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1">
+              https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1
             </a>
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn6" onClick={onClick}>
+          <a data-type="endnote" onClick={onClick} id="_edn6">
             vi
           </a>{" "}
           <p>
-            Kohler, Matt, <em>et al</em>. &ldquo;Modeling COVID-19 for lifting
+            Koehler, Matt, et al. &ldquo;Modeling COVID-19 for lifting
             non-pharmaceutical interventions&rdquo;{" "}
-            <a
-              target="_blank"
-              href="https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1"
-            >
+            <a href="https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1">
               https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1
             </a>
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn7" onClick={onClick}>
+          <a data-type="endnote" onClick={onClick} id="_edn7">
             vii
           </a>{" "}
           <p>
-            Ferguson, Neil, <em>et al</em>. "Report 9: Impact of
-            non-pharmaceutical interventions (NPIs) to reduce COVID19 mortality
-            and healthcare demand." (2020). Note: As implemented in the model,
-            the reported values in this reference are weighted by US population
-            demographics.
+            Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
+            interventions (NPIs) to reduce COVID19 mortality and healthcare
+            demand"{" "}
+            <a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf">
+              https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
+            </a>
+            . Note: As implemented in the model, the reported values in this
+            reference are weighted by US population demographics.
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn8" onClick={onClick}>
+          <a data-type="endnote" onClick={onClick} id="_edn8">
             viii
           </a>{" "}
-          <p>
-            Hill, Alison, <em>et al</em>. "Modeling COVID-19 Spread vs
-            Healthcare Capacity".{" "}
-            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
-              https://alhill.shinyapps.io/COVID19seir/
-            </a>
-          </p>
-        </p>
-        <p>
-          <a data-type="endnote" id="_edn9" onClick={onClick}>
-            ix
-          </a>{" "}
-          <p>
-            Moghadas, Seyed, <em>et al</em>. &ldquo;Projecting hospital
-            utilization during the COVID-19 outbreaks in the United
-            States&rdquo;{" "}
-            <a target="_blank" href="https://www.pnas.org/content/117/16/9122">
-              https://www.pnas.org/content/117/16/9122
-            </a>
-          </p>
-        </p>
-        <p>
-          <a data-type="endnote" id="_edn10" onClick={onClick}>
-            x
-          </a>
           <p>
             US Centers for Disease Control and Prevention. &ldquo;Interim
             Clinical Guidance for Management of Patients with Confirmed
             Coronavirus Disease (COVID-19)&rdquo;{" "}
-            <a
-              target="_blank"
-              href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html"
-            >
+            <a href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html">
               https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html
             </a>
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn11" onClick={onClick}>
-            xi
+          <a data-type="endnote" onClick={onClick} id="_edn9">
+            ix
           </a>{" "}
           <p>
-            Ferguson, Neil, <em>et al</em>. "Report 9: Impact of
-            non-pharmaceutical interventions (NPIs) to reduce COVID19 mortality
-            and healthcare demand." (2020). Note: As implemented in the model,
-            the reported values in this reference are weighted by US population
-            demographics.
+            Cummings, Matthew, et al. "Epidemiology, clinical course, and
+            outcomes of critically ill adults with COVID-19 in New York City: a
+            prospective cohort study"{" "}
+            <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext">
+              https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext
+            </a>
           </p>
         </p>
         <p>
-          <a data-type="endnote" id="_edn12" onClick={onClick}>
-            xii
-          </a>{" "}
-          <p>Ibid.</p>
-        </p>
-        <p>
-          <a data-type="endnote" id="_edn13" onClick={onClick}>
-            xiii
+          <a data-type="endnote" onClick={onClick} id="_edn10">
+            x
           </a>{" "}
           <p>
-            Hill, Alison, <em>et al</em>. "Modeling COVID-19 Spread vs
-            Healthcare Capacity".{" "}
-            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
-              https://alhill.shinyapps.io/COVID19seir/
+            Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
+            interventions (NPIs) to reduce COVID19 mortality and healthcare
+            demand"{" "}
+            <a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf">
+              https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
+            </a>
+            . Note: As implemented in the model, the reported values in this
+            reference are weighted by US population demographics.
+          </p>
+        </p>
+        <p>
+          <a data-type="endnote" onClick={onClick} id="_edn11">
+            xi
+          </a>{" "}
+          <p>
+            European Centre for Disease Prevention and Control. &ldquo;Clinical
+            characteristics of COVID-19&rdquo;{" "}
+            <a href="https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical">
+              https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical
             </a>
           </p>
         </p>
