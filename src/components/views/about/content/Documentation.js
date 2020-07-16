@@ -38,20 +38,21 @@ const Documentation = ({ ...props }) => {
       <p>
         COVID AMP is an on-going research effort with data collection performed
         by researchers at the Georgetown University Center for Global Health
-        Science and Security and Talus Analytics. As of June 2020, data are most
+        Science and Security and Talus Analytics. As of July 2020, data are most
         complete for US states. Additional work is in progress to expand both to
         county-level data collection across the US and country-level data
         globally. In addition, a dataset of COVID-19-related plans published by
-        US states and other organizations is also being collated and will be
+        US states and other organizations is also being collated and is
         available on the site.
       </p>
       <p>The site includes:</p>
       <ol>
         <li>
           A searchable, filterable database of all policies and plans in the
-          dataset. The complete dataset can be downloaded in an Excel file
-          format directly from the site. If you are interested in establishing
-          an API or other direct access, please contact us at{" "}
+          dataset, including legal and regulatory analysis. The complete dataset
+          can be downloaded in an Excel file format directly from the site. If
+          you are interested in establishing an API or other direct access,
+          please contact us at{" "}
           <a target="_blank" href="mailto:outbreak@georgetown.edu">
             outbreak@georgetown.edu
           </a>{" "}
@@ -137,8 +138,8 @@ const Documentation = ({ ...props }) => {
       <p>
         Policies are coded and tagged with the relevant metadata manually. Each
         policy is tagged with a series of descriptive attributes based on a
-        review of the policy language, including (representative subset &ndash;
-        see data dictionary for full description of data fields):
+        review of the policy language, including (see data dictionary for
+        complete description of data fields):
       </p>
       <ul>
         <li>Policy name and description</li>
