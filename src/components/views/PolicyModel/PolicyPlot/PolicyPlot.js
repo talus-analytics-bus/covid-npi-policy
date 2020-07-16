@@ -19,6 +19,7 @@ import "tippy.js/themes/light.css";
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 
 import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
+import InspectDayCursor from "./InspectDayCursor/InspectDayCursor.js";
 import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
 import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
 import LineExtension from "./LineExtension/LineExtension";
@@ -56,14 +57,14 @@ const labelNames = {
   dead: "Deaths",
 };
 
-const covidCountHoverText = {
-  infected_a: "Number of individuals with an active COVID-19 infection by day",
-  infected_b:
-    "Number of individuals currently hospitalized for COVID-19 infection by day",
-  infected_c:
-    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-  dead: "Cumulative deaths from COVID-19 by day",
-};
+// const covidCountHoverText = {
+//   infected_a: "Number of individuals with an active COVID-19 infection by day",
+//   infected_b:
+//     "Number of individuals currently hospitalized for COVID-19 infection by day",
+//   infected_c:
+//     "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+//   dead: "Cumulative deaths from COVID-19 by day",
+// };
 
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
 
@@ -615,12 +616,24 @@ const PolicyModel = props => {
             cursorLabelComponent={
               (props.activeTab === "interventions") &
               (pastInterventionProps.policyName === "") ? (
-                <AddInterventionCursor showLabel={!addIntDialogState.show} />
+                <InspectDayCursor
+                  data={props.data}
+                  interventionColors={interventionColors}
+                  state={props.selectedState}
+                  labelNames={labelNames}
+                />
               ) : (
+                // <AddInterventionCursor showLabel={!addIntDialogState.show} />
                 <LineSegment />
               )
             }
-            cursorComponent={<LineSegment style={{ display: "none" }} />}
+            cursorComponent={
+              pastInterventionProps.policyName === "" ? (
+                <LineSegment />
+              ) : (
+                <LineSegment style={{ display: "none" }} />
+              )
+            }
             cursorLabel={({ datum }) => `add intervention`}
             allowZoom={false}
             // If we want to re-enable panning, there will
@@ -628,6 +641,7 @@ const PolicyModel = props => {
             // panning and clicking to add interventions.
             allowPan={false}
             zoomDimension="x"
+            cursorDimension="x"
             zoomDomain={{ x: props.zoomDateRange }}
             // onZoomDomainChange={domain => {
             //   props.setZoomDateRange(domain.x);

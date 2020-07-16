@@ -46,10 +46,6 @@ const PastInterventionInfo = props => {
       `%22${props.effectiveDate}%22],` +
       `%22country_name%22:[%22United%20States%20of%20America%20(USA)%22],` +
       `%22area1%22:[%22${stateFullName}%22]}`;
-
-    // alert(policyURL)
-    // console.log(props.state)
-    // console.log(policyURL)
   }
 
   return (
