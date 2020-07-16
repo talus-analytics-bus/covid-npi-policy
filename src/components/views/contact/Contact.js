@@ -69,15 +69,15 @@ const Contact = ({ setPage, setLoading }) => {
         label: "First name",
         required: true,
         type: "text",
-        tag: "input"
+        tag: "input",
       },
       {
         id: "Last_Name",
         label: "Last name",
         required: true,
         type: "text",
-        tag: "input"
-      }
+        tag: "input",
+      },
     ],
     [
       {
@@ -85,23 +85,23 @@ const Contact = ({ setPage, setLoading }) => {
         label: "Email",
         required: true,
         type: "email",
-        tag: "input"
+        tag: "input",
       },
       {
         id: "Organization_Name",
         label: "Organization name",
         required: true,
         type: "text",
-        tag: "input"
-      }
-    ]
+        tag: "input",
+      },
+    ],
   ];
 
   const options = [
     "Policy-related request",
     "Feedback",
     "Help accessing data",
-    "General"
+    "General",
   ];
 
   return (
@@ -112,14 +112,17 @@ const Contact = ({ setPage, setLoading }) => {
         <div>
           If you have any accessibility issues using this site, please contact
           us directly at{" "}
+          <a href="mailto:outbreaks@georgetown.edu" target="_blank">
+            outbreaks@georgetown.edu
+          </a>
+          ,{" "}
           <a href="mailto:covidlocal@nti.org" target="_blank">
             covidlocal@nti.org
-          </a>{" "}
-          or{" "}
-          <a href="mailto:ihrcosting@georgetown.edu" target="_blank">
-            ihrcosting@georgetown.edu
           </a>
-          .
+          , or{" "}
+          <a href="mailto:info@talusanalytics.com" target="_blank">
+            info@talusanalytics.com
+          </a>
         </div>
       </p>
       <form onSubmit={handleSubmit}>
