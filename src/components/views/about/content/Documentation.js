@@ -909,7 +909,7 @@ const Documentation = ({ ...props }) => {
           <p>
             Hill, Alison, et al. "Modeling COVID-19 Spread vs Healthcare
             Capacity"{" "}
-            <a href="https://alhill.shinyapps.io/COVID19seir/">
+            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
               https://alhill.shinyapps.io/COVID19seir/
             </a>
           </p>
@@ -919,7 +919,7 @@ const Documentation = ({ ...props }) => {
             ii
           </a>{" "}
           <p>
-            <a href="https://www.apple.com/covid19/mobility">
+            <a target="_blank" href="https://www.apple.com/covid19/mobility">
               https://www.apple.com/covid19/mobility
             </a>
           </p>
@@ -929,7 +929,10 @@ const Documentation = ({ ...props }) => {
             iii
           </a>{" "}
           <p>
-            <a href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD">
+            <a
+              target="_blank"
+              href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD"
+            >
               https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD
             </a>
           </p>
@@ -943,7 +946,10 @@ const Documentation = ({ ...props }) => {
             estimated reduction of transmission by non-pharmaceutical
             interventions, and bounded by estimated effective R values developed
             by the R<sub>t</sub> COVID-19 project (
-            <a href="https://rt.live/">https://rt.live/</a>).
+            <a target="_blank" href="https://rt.live/">
+              https://rt.live/
+            </a>
+            ).
           </p>
         </p>
         <p>
@@ -953,7 +959,10 @@ const Documentation = ({ ...props }) => {
           <p>
             Wei, Yongyue, et al. &ldquo;A systematic review and meta-analysis
             reveals long and dispersive incubation period of COVID-19&rdquo;{" "}
-            <a href="https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1">
+            <a
+              target="_blank"
+              href="https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1"
+            >
               https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1
             </a>
           </p>
@@ -965,7 +974,10 @@ const Documentation = ({ ...props }) => {
           <p>
             Koehler, Matt, et al. &ldquo;Modeling COVID-19 for lifting
             non-pharmaceutical interventions&rdquo;{" "}
-            <a href="https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1">
+            <a
+              target="_blank"
+              href="https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1"
+            >
               https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1
             </a>
           </p>
@@ -978,7 +990,10 @@ const Documentation = ({ ...props }) => {
             Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
             interventions (NPIs) to reduce COVID19 mortality and healthcare
             demand"{" "}
-            <a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf">
+            <a
+              target="_blank"
+              href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
+            >
               https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
             </a>
             . Note: As implemented in the model, the reported values in this
@@ -993,7 +1008,10 @@ const Documentation = ({ ...props }) => {
             US Centers for Disease Control and Prevention. &ldquo;Interim
             Clinical Guidance for Management of Patients with Confirmed
             Coronavirus Disease (COVID-19)&rdquo;{" "}
-            <a href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html">
+            <a
+              target="_blank"
+              href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html"
+            >
               https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html
             </a>
           </p>
@@ -1006,7 +1024,10 @@ const Documentation = ({ ...props }) => {
             Cummings, Matthew, et al. "Epidemiology, clinical course, and
             outcomes of critically ill adults with COVID-19 in New York City: a
             prospective cohort study"{" "}
-            <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext">
+            <a
+              target="_blank"
+              href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext"
+            >
               https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext
             </a>
           </p>
@@ -1019,7 +1040,10 @@ const Documentation = ({ ...props }) => {
             Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
             interventions (NPIs) to reduce COVID19 mortality and healthcare
             demand"{" "}
-            <a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf">
+            <a
+              target="_blank"
+              href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
+            >
               https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
             </a>
             . Note: As implemented in the model, the reported values in this
@@ -1033,7 +1057,10 @@ const Documentation = ({ ...props }) => {
           <p>
             European Centre for Disease Prevention and Control. &ldquo;Clinical
             characteristics of COVID-19&rdquo;{" "}
-            <a href="https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical">
+            <a
+              target="_blank"
+              href="https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical"
+            >
               https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical
             </a>
           </p>
