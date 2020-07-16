@@ -25,11 +25,25 @@
   }
 }
 
-.legendLabel {
+.abovePlot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.instruction {
   margin-left: auto;
+  display: inline-block;
+  font-style: italic;
+}
+
+.legendLabel {
+  display: inline-block;
+  margin-left: 2rem;
   margin-right: 2rem;
   position: relative;
   top: 1rem;
+  width: min-content;
 
   h4 {
     padding: 0.5rem 1rem;
