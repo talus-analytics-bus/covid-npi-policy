@@ -23,6 +23,7 @@ import styles from "./PolicyModel.module.scss";
 import states from "./states";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
+import ampLogo from "../../../../assets/images/ampLogo.svg";
 
 const covidCountHoverText = {
   infected_a: "Number of individuals with an active COVID-19 infection by day",
@@ -175,7 +176,38 @@ const PolicyModel = ({ setLoading, setPage }) => {
     <div className={styles.background}>
       <article className={styles.main}>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>COVID AMP Policy Model</h1>
+          <h1 className={styles.title}>
+            COVID AMP <strong>Policy Model</strong>
+          </h1>
+          <div className={styles.wrapContainer}>
+            <div className={styles.visualize}>
+              <img src={ampLogo} alt="COVID AMP Logo" />
+              <div className={styles.text}>
+                <h2>Visualize</h2>
+                <p>
+                  When policies were implemented in each state relative to
+                  caseload and fatalities
+                </p>
+              </div>
+            </div>
+            <div className={styles.predict}>
+              <img src={ampLogo} alt="COVID AMP Logo" />
+              <div className={styles.text}>
+                <h2>Predict</h2>
+                <p>How future policies will impact caseload</p>
+              </div>
+            </div>
+            <div className={styles.show}>
+              <img src={ampLogo} alt="COVID AMP Logo" />
+              <div className={styles.text}>
+                <h2>Show</h2>
+                <p>
+                  How much benefit previous policies had on mitigating the
+                  outbreak
+                </p>
+              </div>
+            </div>
+          </div>
           {/* <div className={styles.dataDates}> */}
           {/*   <p> */}
           {/*     {dataDates && ( */}
@@ -194,25 +226,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
           {/*     )} */}
           {/*   </p> */}
           {/* </div> */}
-        </div>
-        <div className={styles.introduction}>
-          <p>
-            The COVID AMP policy model allows users to evaluate the impact of
-            policies on the outbreak:
-          </p>
-          <ol>
-            <li>
-              <strong>Visualize</strong> when policies were implemented in each
-              state relative to caseload and fatalities
-            </li>
-            <li>
-              <strong>Predict</strong> how future policies will impact caseload
-            </li>
-            <li>
-              <strong>Show</strong> how much benefit previous policies had on
-              mitigating the outbreak
-            </li>
-          </ol>
         </div>
         <div className={styles.controlRow}>
           <div className={styles.selectControls}>
