@@ -202,6 +202,8 @@ export const initMap = ({ map, mapId, data, callback }) => {
           // if layer doesn't exist yet, add it, along with any applicable
           // auxiliary layers
           if (!map.getLayer(layerKey)) {
+            console.log("layerStyle.circleRadius");
+            console.log(layerStyle.circleRadius);
             // define circle shadow style
             const circleShadowStyle = {
               "circle-radius-transition": {
