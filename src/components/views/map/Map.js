@@ -18,7 +18,7 @@ import moment from "moment";
 import {
   defaults,
   mapMetrics,
-  metricMeta
+  metricMeta,
 } from "../../common/MapboxMap/plugins/data";
 import { mapStyles } from "../../common/MapboxMap/plugins/sources";
 
@@ -35,7 +35,7 @@ import {
   Drawer,
   DateSlider,
   FilterSet,
-  InfoTooltip
+  InfoTooltip,
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
@@ -84,7 +84,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         radio: true,
 
         // default value of radio selections
-        defaultRadioValue: "Social distancing"
+        defaultRadioValue: "Social distancing",
       },
 
       // additional filters
@@ -94,14 +94,14 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         radio: false,
         primary: "primary_ph_measure",
         entity_name: "Policy",
-        className: dark
-      }
-    }
+        className: dark,
+      },
+    },
   ]);
 
   // currently selected filters
   const [filters, setFilters] = useState({
-    primary_ph_measure: ["Social distancing"]
+    primary_ph_measure: ["Social distancing"],
   });
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
@@ -123,11 +123,11 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         .map(d => {
           return d.entity_name + "." + d.field;
         }),
-      entity_name: "Policy"
+      entity_name: "Policy",
     });
 
     const results = await execute({
-      queries
+      queries,
     });
 
     // if page is first initializing, also retrieve filter optionset values for
@@ -176,193 +176,203 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             fill,
             filters,
             overlays: (
-              <Drawer
-                {...{
-                  className: drawer,
-                  // if true, drawer floats at top of parent container and
-                  // content has translucent background
-                  float: true,
+              <>
+                <Drawer
+                  {...{
+                    className: drawer,
+                    // if true, drawer floats at top of parent container and
+                    // content has translucent background
+                    float: true,
 
-                  // closed by default
-                  defaultClosed: true,
+                    // closed by default
+                    defaultClosed: true,
 
-                  // if true, hides default toggle button
-                  customToggle: true,
+                    // if true, hides default toggle button
+                    customToggle: true,
 
-                  // header of drawer (JSX)
-                  label: (
-                    <React.Fragment>
-                      {
-                        // Header
-                      }
-                      <div className={styles.labelContainer}>
-                        <h1>Map options</h1>
-                        <button className={styles.toggle}>
-                          <i className={"material-icons"}>expand_less</i>
-                        </button>
-                      </div>
+                    // header of drawer (JSX)
+                    label: (
+                      <React.Fragment>
+                        {
+                          // Header
+                        }
+                        <div className={styles.labelContainer}>
+                          <h1>Map options</h1>
+                          <button className={styles.toggle}>
+                            <i className={"material-icons"}>expand_less</i>
+                          </button>
+                        </div>
 
-                      {
-                        // Toggle between the possible maps
-                      }
-                      <RadioToggle
-                        {...{
-                          left: true,
-                          horizontal: true,
-                          setInfoTooltipContent: props.setInfoTooltipContent,
-                          choices: Object.values(mapStyles).map(
-                            ({ value, name, tooltip }) => {
-                              return {
-                                value,
-                                name,
-                                tooltip
-                                // disabled: value === "global"
-                              };
-                            }
+                        {
+                          // Toggle between the possible maps
+                        }
+                        <RadioToggle
+                          {...{
+                            left: true,
+                            horizontal: true,
+                            setInfoTooltipContent: props.setInfoTooltipContent,
+                            choices: Object.values(mapStyles).map(
+                              ({ value, name, tooltip }) => {
+                                return {
+                                  value,
+                                  name,
+                                  tooltip,
+                                  // disabled: value === "global"
+                                };
+                              }
+                            ),
+                            curVal: mapId,
+                            callback: setMapId,
+                            label: "Geographic resolution",
+                          }}
+                        />
+                        {
+                          // Display active date
+                        }
+                        <div className={styles.dates}>
+                          <div className={styles.primary}>
+                            Data for {date.format("MMM D, YYYY")}
+                          </div>
+                          <div className={styles.secondary}>
+                            Data last updated on{" "}
+                            {moment(lastUpdatedDateOverall).format(
+                              "MMM D, YYYY"
+                            )}
+                            <InfoTooltip
+                              place={"left"}
+                              text={
+                                <div>
+                                  {versions
+                                    .filter(d => {
+                                      if (
+                                        d.type ===
+                                          "COVID-19 caseload data (countries)" &&
+                                        mapId === "us"
+                                      ) {
+                                        return false;
+                                      } else if (
+                                        d.type === "COVID-19 caseload data" &&
+                                        mapId === "global"
+                                      ) {
+                                        return false;
+                                      } else return true;
+                                    })
+                                    .map(d => (
+                                      <p key={d.type}>
+                                        <b>{d.type}</b> last updated on{" "}
+                                        {moment(d.date).format("MMM D, YYYY")}
+                                        {d.last_datum_date !== null && (
+                                          <span>
+                                            {" "}
+                                            with data available through{" "}
+                                            {moment(d.last_datum_date).format(
+                                              "MMM D, YYYY"
+                                            )}
+                                          </span>
+                                        )}
+                                      </p>
+                                    ))}
+                                </div>
+                              }
+                              setInfoTooltipContent={
+                                props.setInfoTooltipContent
+                              }
+                            />
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    ),
+                    content: (
+                      <div>
+                        {[
+                          // fill metric radio toggle
+                          fill !== null && (
+                            <RadioToggle
+                              {...{
+                                // TODO define choices based on current mapType
+                                setInfoTooltipContent:
+                                  props.setInfoTooltipContent,
+                                choices: mapMetrics[mapId]
+                                  .filter(d => d.for.includes("fill"))
+                                  .map(d => {
+                                    return {
+                                      value: d.id,
+                                      name: metricMeta[d.id].metric_displayname,
+                                      wideTooltip: d.id === "lockdown_level",
+                                      tooltip:
+                                        metricMeta[d.id].metric_definition,
+                                    };
+                                  }),
+                                curVal: fill,
+                                callback: setFill,
+                                label: "View states by",
+                                key: "DataType",
+                              }}
+                            />
                           ),
-                          curVal: mapId,
-                          callback: setMapId,
-                          label: "Geographic resolution"
-                        }}
-                      />
-                      {
-                        // Display active date
-                      }
-                      <div className={styles.dates}>
-                        <div className={styles.primary}>
-                          Data for {date.format("MMM D, YYYY")}
-                        </div>
-                        <div className={styles.secondary}>
-                          Data last updated on{" "}
-                          {moment(lastUpdatedDateOverall).format("MMM D, YYYY")}
-                          <InfoTooltip
-                            place={"left"}
-                            text={
-                              <div>
-                                {versions
-                                  .filter(d => {
-                                    if (
-                                      d.type ===
-                                        "COVID-19 caseload data (countries)" &&
-                                      mapId === "us"
-                                    ) {
-                                      return false;
-                                    } else if (
-                                      d.type === "COVID-19 caseload data" &&
-                                      mapId === "global"
-                                    ) {
-                                      return false;
-                                    } else return true;
-                                  })
-                                  .map(d => (
-                                    <p key={d.type}>
-                                      <b>{d.type}</b> last updated on{" "}
-                                      {moment(d.date).format("MMM D, YYYY")}
-                                      {d.last_datum_date !== null && (
-                                        <span>
-                                          {" "}
-                                          with data available through{" "}
-                                          {moment(d.last_datum_date).format(
-                                            "MMM D, YYYY"
-                                          )}
-                                        </span>
-                                      )}
-                                    </p>
-                                  ))}
-                              </div>
-                            }
-                            setInfoTooltipContent={props.setInfoTooltipContent}
-                          />
-                        </div>
+                          // Filter set containing the filters specified in `filterDefs`
+                          <FilterSet
+                            {...{
+                              disabled: fill !== "policy_status",
+                              filterDefs,
+                              filters,
+                              setFilters,
+                              // if true, the selected filters bay will show
+                              // TODO style selected filters bay
+                              showSelectedFilters: false,
+                              key: "FilterSet",
+                            }}
+                          />,
+
+                          // circle metric radio toggle
+                          circle !== null && (
+                            <RadioToggle
+                              {...{
+                                // TODO define choices based on current mapType
+                                // horizontal: true,
+                                setInfoTooltipContent:
+                                  props.setInfoTooltipContent,
+                                choices: mapMetrics[mapId]
+                                  .filter(d => d.for.includes("circle"))
+                                  .map(d => {
+                                    return {
+                                      value: d.id,
+                                      name: metricMeta[d.id].metric_displayname,
+                                      tooltip:
+                                        metricMeta[d.id].metric_definition,
+                                    };
+                                  }),
+                                curVal: circle,
+                                callback: setCircle,
+                                label: "View COVID count by",
+                                key: "RadioToggle1",
+                              }}
+                            />
+                          ),
+                        ].map(d => d)}
                       </div>
-                    </React.Fragment>
-                  ),
-                  content: (
-                    <div>
-                      {[
-                        // fill metric radio toggle
-                        fill !== null && (
-                          <RadioToggle
-                            {...{
-                              // TODO define choices based on current mapType
-                              setInfoTooltipContent:
-                                props.setInfoTooltipContent,
-                              choices: mapMetrics[mapId]
-                                .filter(d => d.for.includes("fill"))
-                                .map(d => {
-                                  return {
-                                    value: d.id,
-                                    name: metricMeta[d.id].metric_displayname,
-                                    wideTooltip: d.id === "lockdown_level",
-                                    tooltip: metricMeta[d.id].metric_definition
-                                  };
-                                }),
-                              curVal: fill,
-                              callback: setFill,
-                              label: "View states by",
-                              key: "DataType"
-                            }}
-                          />
-                        ),
-                        // Filter set containing the filters specified in `filterDefs`
-                        <FilterSet
-                          {...{
-                            disabled: fill !== "policy_status",
-                            filterDefs,
-                            filters,
-                            setFilters,
-                            // if true, the selected filters bay will show
-                            // TODO style selected filters bay
-                            showSelectedFilters: false,
-                            key: "FilterSet"
-                          }}
-                        />,
-                        <div key={"divider"} className={styles.divider} />,
-
-                        // slider to modify the current date, including a calendar picker
-                        <DateSlider
-                          {...{
-                            label: "Date (what policies are in effect, where)",
-                            date,
-                            setDate,
-                            // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
-                            ...defaults.minMaxDate,
-                            key: "DateSlider"
-                          }}
-                        />,
-
-                        // circle metric radio toggle
-                        circle !== null && (
-                          <RadioToggle
-                            {...{
-                              // TODO define choices based on current mapType
-                              setInfoTooltipContent:
-                                props.setInfoTooltipContent,
-                              choices: mapMetrics[mapId]
-                                .filter(d => d.for.includes("circle"))
-                                .map(d => {
-                                  return {
-                                    value: d.id,
-                                    name: metricMeta[d.id].metric_displayname,
-                                    tooltip: metricMeta[d.id].metric_definition
-                                  };
-                                }),
-                              curVal: circle,
-                              callback: setCircle,
-                              label: "View COVID count by",
-                              key: "RadioToggle1"
-                            }}
-                          />
-                        )
-                      ].map(d => d)}
-                    </div>
-                  )
-                }}
-              />
+                    ),
+                  }}
+                />
+                {
+                  <DateSlider
+                    {...{
+                      label:
+                        "View policies and cases over the course of the outbreak",
+                      date,
+                      setDate,
+                      float: true,
+                      // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
+                      ...defaults.minMaxDate,
+                      key: "DateSlider",
+                    }}
+                  />
+                }
+              </>
             ),
             plugins: {
-              fill
-            }
+              fill,
+            },
           }}
         />
       )
