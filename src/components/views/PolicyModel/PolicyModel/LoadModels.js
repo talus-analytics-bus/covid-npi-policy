@@ -18,8 +18,8 @@ const MODEL_VERSION = "2";
 // const API_URL = 'http://localhost:8000/'
 // const API_URL = "http://127.0.0.0:8000/";
 
-// export const API_URL = "https://amp-model-api.covidamp.org/";
-export const API_URL = "https://test-amp-model-api.covidamp.org/";
+export const API_URL = "https://amp-model-api.covidamp.org/";
+// export const API_URL = "https://test-amp-model-api.covidamp.org/";
 
 // request a model from the server
 // this should only happen if we
