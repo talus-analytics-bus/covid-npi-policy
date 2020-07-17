@@ -170,9 +170,11 @@ const InspectDailyCursor = props => {
                     <div className={styles.policy}>
                       <span
                         style={{
-                          backgroundColor: latestIntervention.name.includes("_")
-                            ? "white"
-                            : latestInterColor,
+                          backgroundColor:
+                            latestIntervention.intervention_type ===
+                            "intervention"
+                              ? "white"
+                              : latestInterColor,
                           borderColor: latestInterColor,
                         }}
                       />
