@@ -20,7 +20,7 @@ const MODEL_VERSION = "1";
 
 // export const API_URL = "https://amp-model-api.covidamp.org/";
 // export const API_URL = "http://localhost:8000/";
-export const API_URL = "http://test-amp-model-api.covidamp.org/";
+export const API_URL = "https://test-amp-model-api.covidamp.org/";
 
 // request a model from the server
 // this should only happen if we
