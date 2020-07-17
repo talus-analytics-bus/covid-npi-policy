@@ -352,6 +352,7 @@ const PolicyModel = props => {
         setPosition={setAddIntDialogState}
         addIntervention={props.addIntervention}
         selectedState={props.selectedState}
+        interventionColors={interventionColors}
       />
       <div className={styles.abovePlot}>
         <p className={styles.instruction}>

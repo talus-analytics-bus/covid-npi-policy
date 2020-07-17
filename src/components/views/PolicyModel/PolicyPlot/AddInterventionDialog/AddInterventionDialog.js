@@ -24,11 +24,26 @@ const PastInterventionInfo = props => {
   const [interDate, setInterDate] = React.useState(props.position.date);
 
   const policyNames = {
-    0.12: "Lockdown",
-    0.1375: "Stay-at-home",
-    0.19: "Safer-at-home",
     0.285: "New normal",
+    0.19: "Safer-at-home",
+    0.1375: "Stay-at-home",
+    0.12: "Lockdown",
   };
+
+  const policyOptions = Object.entries(policyNames).map(
+    ([optionRVal, name]) => (
+      <label key={name}>
+        <input
+          type="radio"
+          name={name}
+          value={optionRVal}
+          checked={rVal === optionRVal}
+          onChange={e => setRVal(Number(e.target.value))}
+        />
+        {name}
+      </label>
+    )
+  );
 
   return (
     <section
@@ -80,46 +95,7 @@ const PastInterventionInfo = props => {
 
             <fieldset>
               <legend>Add policies associated with</legend>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.12"
-                  checked={rVal === 0.12}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                Lockdown
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.1375"
-                  checked={rVal === 0.1375}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                Stay-at-home
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.19"
-                  checked={rVal === 0.19}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                Safer-at-home
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.285"
-                  checked={rVal === 0.285}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                New normal
-              </label>
+              {policyOptions}
             </fieldset>
 
             <div className={styles.buttonRow}>
