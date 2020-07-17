@@ -20,7 +20,7 @@ const PastInterventionInfo = props => {
       ? styles.leftPopup
       : styles.rightPopup;
 
-  const [rVal, setRVal] = React.useState(0.15);
+  const [rVal, setRVal] = React.useState(0.285);
   const [interDate, setInterDate] = React.useState(props.position.date);
 
   const policyNames = {
@@ -37,7 +37,7 @@ const PastInterventionInfo = props => {
           type="radio"
           name={name}
           value={optionRVal}
-          checked={rVal === optionRVal}
+          checked={Number(rVal) === Number(optionRVal)}
           onChange={e => setRVal(Number(e.target.value))}
         />
         {name}

@@ -119,6 +119,14 @@ $grey-highlight: #eee;
         margin-top: 0.25rem;
         color: #333333;
       }
+
+      input {
+        span {
+          width: 1em;
+          height: 1em;
+          border-radius: 1em;
+        }
+      }
     }
 
     .buttonRow {
