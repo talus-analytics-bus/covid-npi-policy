@@ -137,7 +137,7 @@ const InspectDailyCursor = props => {
                     <div className={styles.policy}>
                       <span style={{ background: latestInterColor }} />
                       <p style={{ color: latestInterColor }}>
-                        {latestIntervention.name} Policies
+                        {latestIntervention.name.split("_")[0]} Policies
                       </p>
                     </div>
                   </div>
