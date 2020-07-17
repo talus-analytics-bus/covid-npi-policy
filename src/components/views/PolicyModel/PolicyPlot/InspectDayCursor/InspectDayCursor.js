@@ -125,13 +125,6 @@ const InspectDailyCursor = props => {
   return (
     <VictoryPortal>
       <g>
-        <path
-          d={`M ${props.x - 5} -30 L ${props.x - 5} 130`}
-          style={{
-            stroke: popupDate > new Date() ? "#8D64DD" : "#aaa",
-            strokeWeight: popupDate > new Date() ? "1" : "0.25",
-          }}
-        />
         <g
           transform={`translate(${props.x + xOffset} ,${Math.min(
             props.y + yOffset,
@@ -214,18 +207,27 @@ const InspectDailyCursor = props => {
               </section>
             </foreignObject>
           )}
-          {popupDate > new Date() && (
-            <path
-              transform={`translate(${
-                500 - props.x < 140 ? -8 : -10
-              }, 2) scale(.33)`}
-              style={{ fill: "#8D64DD" }}
-              d="M21.6,3.7c-4.9-4.9-13-4.9-17.9,0s-4.9,13,0,17.9s13,4.9,17.9,0S26.5,8.6,21.6,3.7z M14,19.9
-  c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9v-6h-6c-0.5,0-0.9-0.4-0.9-0.9v-0.9c0-0.5,0.4-0.9,0.9-0.9h6l0-6
-  c0-0.5,0.4-0.9,0.9-0.9l0.9,0c0.5,0,0.9,0.4,0.9,0.9v6h6c0.5,0,0.9,0.4,0.9,0.9l0,0.9c0,0.5-0.4,0.9-0.9,0.9h-6L14,19.9z"
-            />
-          )}
         </g>
+        <path
+          d={`M ${props.x - 5} -31 L ${props.x - 5} 130`}
+          style={{
+            // stroke: popupDate > new Date() ? "#8D64DD" : "#aaa",
+            stroke: latestInterColor,
+            strokeWeight: popupDate > new Date() ? "1" : "0.25",
+          }}
+        />
+        {popupDate > new Date() && (
+          <g transform={`translate(${props.x - 9}, 26.5) scale(.33)`}>
+            <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
+            <path
+              style={{ fill: latestInterColor }}
+              d="M20.8,12.2l0,0.9c0,0.5-0.4,0.9-0.9,0.9h-6l0,6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9
+  v-6h-6c-0.5,0-0.9-0.4-0.9-0.9v-0.9c0-0.5,0.4-0.9,0.9-0.9h6l0-6c0-0.5,0.4-0.9,0.9-0.9h0.9c0.5,0,0.9,0.4,0.9,0.9v6h6
+  C20.4,11.3,20.8,11.7,20.8,12.2z M21.6,21.6c-4.9,4.9-13,4.9-17.9,0c-4.9-4.9-4.9-13,0-17.9c4.9-4.9,13-4.9,17.9,0
+  C26.5,8.6,26.5,16.7,21.6,21.6z M23.6,12.6c0-6.1-4.9-11-11-11s-11,4.9-11,11s4.9,11,11,11S23.6,18.7,23.6,12.6z"
+            />
+          </g>
+        )}
       </g>
     </VictoryPortal>
   );
