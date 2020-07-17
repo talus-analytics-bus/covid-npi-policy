@@ -521,8 +521,12 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          tickValues={[0, 50, 100]}
-          tickFormat={tick => tick + "%"}
+          tickValues={
+            props.contactPlotType === "pctChange" ? [0, 50, 100] : [0, 1, 2]
+          }
+          tickFormat={tick =>
+            props.contactPlotType === "pctChange" ? tick + "%" : tick
+          }
           offsetX={50}
           crossAxis={false}
           label={
