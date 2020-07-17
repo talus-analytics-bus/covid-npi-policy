@@ -72,14 +72,14 @@ const PastInterventionInfo = props => {
         <h1 className={styles.title}>
           {props.policyName}{" "}
           {!proposed && props.policyName !== "Mixed distancing levels"
-            ? "Policies Implemented"
+            ? "Policies implemented"
             : ""}
-          {proposed && "Policies Proposed"}
+          {proposed && "Policies proposed"}
         </h1>
       </div>
       <div className={styles.content}>
         <p>
-          {proposed ? "Proposal Date: " : "Effective Date: "}
+          {proposed ? "Proposal date: " : "Effective date: "}
           {formatDate(props.effectiveDate)}
         </p>
         {!proposed && (

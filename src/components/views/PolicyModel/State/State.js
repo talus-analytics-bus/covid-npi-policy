@@ -76,7 +76,7 @@ const State = props => {
             {formatActuals(props.curves.cases)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative cases</p>
+            <p className={styles.label}>cumulative cases</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -119,7 +119,7 @@ const State = props => {
             {formatActuals(props.curves.deaths)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative deaths</p>
+            <p className={styles.label}>cumulative deaths</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -144,7 +144,7 @@ const State = props => {
             {formatModeled(props.curves.counterfactual_cases)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative cases</p>
+            <p className={styles.label}>cumulative cases</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -183,7 +183,7 @@ const State = props => {
             {formatModeled(props.curves.counterfactual_deaths)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative deaths</p>
+            <p className={styles.label}>cumulative deaths</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
