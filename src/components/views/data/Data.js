@@ -327,7 +327,10 @@ const Data = ({
               title: <h2>Policy and plan database</h2>,
               label: DownloadBtn({
                 render: counts,
-                class_name: "all_static",
+                class_name: "all",
+                // temporarily do NOT serve static XLSX file since S3 downloads
+                // are being blocked in Chrome as of 2020-07-17 -MV
+                // class_name: "all_static",
                 filters: {},
                 disabled: false,
                 message: (
