@@ -45,10 +45,14 @@ export default function parseModelCurves(
       dateRange: [],
       yMax: 0,
       curves: {},
-      interventions: model.interventions.filter(
-        inter =>
-          (inter.name !== "do_nothing") & (inter.name !== "mobility_drop")
-      ),
+      interventions: model.interventions.filter(inter => {
+        // format intervention names to use hyphens, for consistency with rest of
+        // AMP site and with COVID-Local site
+        inter.name = inter.name.replace(" at ", "-at-");
+
+        // only return currently supported intervention types
+        return (inter.name !== "do_nothing") & (inter.name !== "mobility_drop");
+      }),
       deaths: model.deaths,
       cases: model.cases,
       date: model.date,

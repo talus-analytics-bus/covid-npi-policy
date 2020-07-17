@@ -45,6 +45,8 @@ const interventionColors = {
   "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
+  "Stay-at-home": "#C1272D",
+  "Safer-at-home": "#D66B3E",
   "Stay at home": "#C1272D",
   "Safer at home": "#D66B3E",
   "New open": "#ECBD62",
@@ -365,11 +367,11 @@ const PolicyModel = props => {
                 </div>
                 <div className={styles.safer}>
                   <span />
-                  <p>Safer at home policies</p>
+                  <p>Safer-at-home policies</p>
                 </div>
                 <div className={styles.stay}>
                   <span />
-                  <p>Stay at home policies</p>
+                  <p>Stay-at-home policies</p>
                 </div>
                 <div className={styles.normal}>
                   <span />

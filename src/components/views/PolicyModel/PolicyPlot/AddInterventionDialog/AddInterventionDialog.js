@@ -25,8 +25,8 @@ const PastInterventionInfo = props => {
 
   const policyNames = {
     0.12: "Lockdown",
-    0.1375: "Stay at home",
-    0.19: "Safer at home",
+    0.1375: "Stay-at-home",
+    0.19: "Safer-at-home",
     0.285: "New normal",
   };
 
@@ -98,7 +98,7 @@ const PastInterventionInfo = props => {
                   checked={rVal === 0.1375}
                   onChange={e => setRVal(Number(e.target.value))}
                 />
-                Stay at home
+                Stay-at-home
               </label>
               <label>
                 <input
@@ -108,7 +108,7 @@ const PastInterventionInfo = props => {
                   checked={rVal === 0.19}
                   onChange={e => setRVal(Number(e.target.value))}
                 />
-                Safer at home
+                Safer-at-home
               </label>
               <label>
                 <input
