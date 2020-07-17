@@ -41,20 +41,19 @@ const InspectDailyCursor = props => {
     year: "numeric",
   });
 
-  let latestIntervention =
-    props.data.interventions
-      .sort((inter1, inter2) => {
-        if (inter1.intervention_start_date > inter2.intervention_start_date)
-          return 1;
-        if (inter1.intervention_start_date < inter2.intervention_start_date)
-          return -1;
-        return 0;
-      })
-      .filter(
-        inter =>
-          Date.parse(inter.intervention_start_date) < Date.parse(props.datum.x)
-      )
-      .slice(-1)[0] || "Unclear lockdown level";
+  let latestIntervention = props.data.interventions
+    .sort((inter1, inter2) => {
+      if (inter1.intervention_start_date > inter2.intervention_start_date)
+        return 1;
+      if (inter1.intervention_start_date < inter2.intervention_start_date)
+        return -1;
+      return 0;
+    })
+    .filter(
+      inter =>
+        Date.parse(inter.intervention_start_date) < Date.parse(props.datum.x)
+    )
+    .slice(-1)[0] || { name: "Unclear lockdown level" };
 
   // latestIntervention =
   //   latestIntervention !== undefined
@@ -62,7 +61,7 @@ const InspectDailyCursor = props => {
   //     : "Unclear lockdown level";
 
   const latestInterColor = latestIntervention.name
-    ? props.interventionColors[latestIntervention.name]
+    ? props.interventionColors[latestIntervention.name.split("_")[0]]
     : "white";
 
   let pctChange = props.data.curves.pctChange.actuals.find(point =>
