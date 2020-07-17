@@ -44,7 +44,7 @@ const PastInterventionInfo = props => {
     >
       <form>
         <div className={styles.greySection}>
-          <h1>Add Policies</h1>
+          <h1>Add policies</h1>
           <button
             className={styles.closeButton}
             onClick={e => {
@@ -62,7 +62,7 @@ const PastInterventionInfo = props => {
             {/*   <input type="text" /> */}
             {/* </label> */}
             <label>
-              Effective Date
+              Effective date
               <input
                 type="date"
                 min={new Date().toISOString().substr(0, 10)}

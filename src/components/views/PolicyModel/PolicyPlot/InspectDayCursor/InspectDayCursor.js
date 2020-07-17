@@ -89,6 +89,39 @@ const InspectDailyCursor = props => {
     );
   }
 
+  // get popup's y-axis metric label based on the currently selected
+  // y-axis metric
+  // {props.labelNames[yAxis]} COVID-19 <br /> patients today
+  const getPopupLabelName = yAxisLabelName => {
+    switch (yAxisLabelName) {
+      case "Caseload":
+      default:
+        return (
+          <>
+            current COVID-19 <br /> patients today
+          </>
+        );
+      case "Hospitalized":
+        return (
+          <>
+            hospitalized COVID-19 <br /> patients today
+          </>
+        );
+      case "ICU":
+        return (
+          <>
+            hospitalized COVID-19 <br /> patients in ICU today
+          </>
+        );
+      case "Deaths":
+        return (
+          <>
+            cumulative COVID-19 <br /> deaths today
+          </>
+        );
+    }
+  };
+
   return (
     <VictoryPortal>
       <g>
@@ -130,7 +163,7 @@ const InspectDailyCursor = props => {
                 <div className={styles.main}>
                   <div className={styles.policies}>
                     <h2>
-                      Policies <br /> in place
+                      Policies <br /> in effect
                     </h2>
                   </div>
                   <div className={styles.policiesContent}>
@@ -144,7 +177,7 @@ const InspectDailyCursor = props => {
                         }}
                       />
                       <p style={{ color: latestInterColor }}>
-                        {latestIntervention.name.split("_")[0]} Policies
+                        {latestIntervention.name.split("_")[0]} policies
                       </p>
                     </div>
                   </div>
@@ -161,7 +194,7 @@ const InspectDailyCursor = props => {
                         : formatModeled(modeledCases.y)}
                     </p>
                     <p className={styles.label}>
-                      {props.labelNames[yAxis]} COVID-19 <br /> patients today
+                      {getPopupLabelName(props.labelNames[yAxis])}
                     </p>
                   </div>
                   <div className={styles.reduction}>
@@ -172,7 +205,7 @@ const InspectDailyCursor = props => {
                   <div className={styles.reductionContent}>
                     <p className={styles.number}>{pctChange.y}%</p>
                     <p className={styles.label}>
-                      estimated contact reduction <br /> with policies in place
+                      estimated contact reduction <br /> with policies in effect
                     </p>
                   </div>
                 </div>

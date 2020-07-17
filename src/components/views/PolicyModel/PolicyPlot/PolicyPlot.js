@@ -389,7 +389,7 @@ const PolicyModel = props => {
                 </div>
                 <div className={styles.noPolicies}>
                   <span />
-                  <p>Cases Without Policies</p>
+                  <p>"What if we had done nothing" scenario</p>
                 </div>
               </div>
             }
