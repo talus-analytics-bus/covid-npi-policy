@@ -64,7 +64,7 @@ const PastInterventionInfo = props => {
               },
             }
           )
-          .then(response => setPolicyCount(response.data.length));
+          .then(response => setPolicyCount(response));
       }
     };
     getPolicyCount();
