@@ -218,11 +218,13 @@ $grey-highlight: #eee;
     margin-bottom: 0.5rem;
 
     h1 {
+      text-transform: unset;
       font-size: 1.2rem;
       color: #16467a;
     }
 
     h2 {
+      text-transform: unset;
       font-size: 1rem;
       color: #16467a;
       font-weight: 400;
