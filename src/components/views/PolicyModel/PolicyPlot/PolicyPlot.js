@@ -623,9 +623,15 @@ const PolicyModel = props => {
                             event.clientX -
                             plotRef.current.getBoundingClientRect().left,
                           y:
-                            event.clientY -
-                            plotRef.current.getBoundingClientRect().top,
+                            plotRef.current.getBoundingClientRect().height *
+                            0.438,
+                          // plotRef.current.getBoundingClientRect().top,
                           date: eventKey.cursorValue.x,
+                        });
+                      } else {
+                        setAddIntDialogState({
+                          ...addIntDialogState,
+                          show: false,
                         });
                       }
                     },

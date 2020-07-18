@@ -1,17 +1,25 @@
 import React from "react";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+import infoIcon from "../../../../../assets/icons/info-blue.svg";
+
 import styles from "./AddInterventionDialog.module.scss";
 
 import closeButtonIconSVG from "../../../../../assets/icons/addInterventionCloseButton.svg";
 
+import { metricMeta } from "../../../../common/MapboxMap/plugins/data";
+import localLogo from "../../../../common/MapboxMap/plugins/assets/icons/logo-local-pill.png";
+
 const PastInterventionInfo = props => {
   const width = 300;
-  const arrowOffset = { x: 25, y: 51 };
+  const arrowOffset = { x: 24, y: 51 };
 
   const xPos =
     props.position.x < window.innerWidth / 2
       ? props.position.x + arrowOffset.x
-      : props.position.x - width - 6;
+      : props.position.x - width - arrowOffset.x;
 
   const yPos = props.position.y - arrowOffset.y;
 
@@ -32,7 +40,10 @@ const PastInterventionInfo = props => {
 
   const policyOptions = Object.entries(policyNames).map(
     ([optionRVal, name]) => (
-      <label key={name}>
+      <label
+        key={name}
+        // style={{ color: props.interventionColors[name] }}
+      >
         <input
           type="radio"
           name={name}
@@ -41,6 +52,44 @@ const PastInterventionInfo = props => {
           onChange={e => setRVal(Number(e.target.value))}
         />
         {name}
+        <span
+          className={styles.policyDot}
+          style={{ background: props.interventionColors[name] }}
+        />
+        <Tippy
+          // interactive={true}
+          allowHTML={true}
+          content={
+            <section className={styles.policyExplanation}>
+              <div className={styles.row}>
+                <h1>{name}</h1>
+                <h2>
+                  (
+                  {
+                    metricMeta.lockdown_level.valueStyling[
+                      name.replace(/-/g, " ")
+                    ].phase
+                  }
+                  )
+                </h2>
+              </div>
+              {
+                metricMeta.lockdown_level.valueStyling[name.replace(/-/g, " ")]
+                  .def
+              }
+            </section>
+          }
+          maxWidth={"30rem"}
+          theme={"light"}
+          placement={"bottom"}
+          offset={[-30, 10]}
+        >
+          <img
+            className={styles.infoIcon}
+            src={infoIcon}
+            alt="More information"
+          />
+        </Tippy>
       </label>
     )
   );
@@ -97,6 +146,14 @@ const PastInterventionInfo = props => {
               <legend>Add policies associated with</legend>
               {policyOptions}
             </fieldset>
+
+            <a
+              href="https://covid-local.org/metrics/"
+              className={styles.COVIDLocalLink}
+            >
+              <img src={localLogo} alt="COVID Local" />
+              View phases in COVID-Local
+            </a>
 
             <div className={styles.buttonRow}>
               <button
