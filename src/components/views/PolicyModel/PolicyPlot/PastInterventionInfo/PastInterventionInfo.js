@@ -55,8 +55,8 @@ const PastInterventionInfo = props => {
             {
               filters: {
                 dates_in_effect: [
-                  new Date(props.effectiveDate).toISOString(),
-                  new Date(props.effectiveDate).toISOString(),
+                  new Date(props.effectiveDate).toISOString().split("T")[0],
+                  new Date(props.effectiveDate).toISOString().split("T")[0],
                 ],
                 primary_ph_measure: ["Social distancing"],
                 ph_measure_details: [],
