@@ -53,6 +53,18 @@ const interventionColors = {
   "New normal": "#ECBD62",
 };
 
+const phaseNames = {
+  Lockdown: "Phase I",
+  "Unclear lockdown level": "",
+  "Mixed distancing levels": "",
+  "Stay-at-home": "Phase II",
+  "Safer-at-home": "Phase III",
+  "Stay at home": "Phase II",
+  "Safer at home": "Phase III",
+  "New open": "Phase IV",
+  "New normal": "Phase IV",
+};
+
 const labelNames = {
   infected_a: "Caseload",
   infected_b: "Hospitalized",
@@ -77,6 +89,8 @@ const PolicyModel = props => {
     y: 0,
     policyName: "",
     effectiveDate: "",
+    interventionColors: interventionColors,
+    phaseNames: phaseNames,
   });
 
   const [addIntDialogState, setAddIntDialogState] = React.useState({
@@ -311,6 +325,8 @@ const PolicyModel = props => {
             eventHandlers: {
               onMouseEnter: (event, eventKey) => {
                 setPastInterventionProps({
+                  interventionColors: interventionColors,
+                  phaseNames: phaseNames,
                   state: props.selectedState,
                   policyName: intervention.name.split("_")[0],
                   effectiveDate: intervention.intervention_start_date,

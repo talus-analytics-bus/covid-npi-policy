@@ -1,7 +1,16 @@
 import React from "react";
+import axios from "axios";
 
 import styles from "./PastInterventionInfo.module.scss";
 import states from "../../PolicyModel/states.js";
+
+import localLogo from "../../../../common/MapboxMap/plugins/assets/icons/logo-local-pill.png";
+
+import phase1 from "../../../../common/MapboxMap/plugins/assets/icons/phase-1.png";
+import phase2 from "../../../../common/MapboxMap/plugins/assets/icons/phase-2.png";
+import phase3 from "../../../../common/MapboxMap/plugins/assets/icons/phase-3.png";
+import phase4 from "../../../../common/MapboxMap/plugins/assets/icons/phase-4.png";
+import mixed from "../../../../common/MapboxMap/plugins/assets/icons/phase-mixed.png";
 
 const formatDate = date =>
   new Date(date).toLocaleString("default", {
@@ -10,11 +19,63 @@ const formatDate = date =>
     year: "numeric",
   });
 
+const phaseNames = {
+  Lockdown: "Phase I",
+  "Unclear lockdown level": "",
+  "Mixed distancing levels": "",
+  "Stay-at-home": "Phase II",
+  "Safer-at-home": "Phase III",
+  "Stay at home": "Phase II",
+  "Safer at home": "Phase III",
+  "New open": "Phase IV",
+  "New normal": "Phase IV",
+};
+
+const phaseIcons = {
+  Lockdown: phase1,
+  "Unclear lockdown level": mixed,
+  "Mixed distancing levels": mixed,
+  "Stay-at-home": phase2,
+  "Safer-at-home": phase3,
+  "Stay at home": phase2,
+  "Safer at home": phase3,
+  "New open": phase4,
+  "New normal": phase4,
+};
+
 const PastInterventionInfo = props => {
+  const [policyCount, setPolicyCount] = React.useState();
+  React.useEffect(() => {
+    const getPolicyCount = async () => {
+      if (props.effectiveDate) {
+        axios
+          .post(
+            process.env.REACT_APP_API_URL +
+              "/post/policy?fields=id&fields=place",
+            {
+              filters: {
+                dates_in_effect: [
+                  new Date(props.effectiveDate).toISOString(),
+                  new Date(props.effectiveDate).toISOString(),
+                ],
+                primary_ph_measure: ["Social distancing"],
+                ph_measure_details: [],
+                area1: [states.find(state => state.abbr === props.state).name],
+              },
+            }
+          )
+          .then(response => setPolicyCount(response.data.length));
+      }
+    };
+    getPolicyCount();
+  });
+
+  console.log(policyCount);
+
   const setState = props.setPastInterventionProps;
   props = { ...props.pastInterventionProps };
 
-  const width = 300;
+  const width = 350;
   // const arrowOffset = { x: 32, y: 28 }
   const arrowOffset = { x1: 8, x2: 19, y: 42 };
   // const circleOffset = {
@@ -69,24 +130,50 @@ const PastInterventionInfo = props => {
       }}
     >
       <div className={styles.greySection}>
+        {phaseIcons[props.policyName] && (
+          <img
+            src={phaseIcons[props.policyName]}
+            alt={phaseNames[props.policyName] + " icon"}
+          />
+        )}
         <h1 className={styles.title}>
-          {props.policyName}{" "}
+          {props.policyName}
+          <br />
           {!proposed && props.policyName !== "Mixed distancing levels"
-            ? "Policies implemented"
+            ? "policies implemented"
             : ""}
-          {proposed && "Policies proposed"}
+          {proposed && "policies proposed"}
         </h1>
       </div>
+      <div
+        className={styles.policyIndicatorBar}
+        style={{ background: props.interventionColors[props.policyName] }}
+      />
       <div className={styles.content}>
-        <p>
-          {proposed ? "Proposal date: " : "Effective date: "}
-          {formatDate(props.effectiveDate)}
-        </p>
+        {proposed && <p>Proposal Date: {formatDate(props.effectiveDate)}</p>}
         {!proposed && (
-          <a href={policyURL} target="_blank" rel="noopener noreferrer">
-            view policies
+          <a
+            className={styles.policyLink}
+            href={policyURL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View all policies <br /> in effect
           </a>
         )}
+        {!proposed && (
+          <p className={styles.asOfDate}>
+            {" "}
+            as of <span>{formatDate(props.effectiveDate)}</span>
+          </p>
+        )}
+        <a
+          href="https://covid-local.org/metrics/"
+          className={styles.COVIDLocalLink}
+        >
+          <img src={localLogo} alt="COVID Local" />
+          {phaseNames[props.policyName]} (view in COVID-Local)
+        </a>
       </div>
     </section>
   );

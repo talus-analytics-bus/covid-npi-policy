@@ -2,6 +2,7 @@ $border-width: 1px;
 $border-color: #bbb;
 $arrow-size: 20px;
 $grey-highlight: #eee;
+$grey-highlight-darker: #ccc;
 
 .leftPopup,
 .rightPopup {
@@ -51,10 +52,29 @@ $grey-highlight: #eee;
       padding: 0;
     }
 
+    h1 {
+    }
+
+    a.COVIDLocalLink {
+      margin-top: 0.5rem;
+      font-family: rawline, serif;
+      font-size: 0.75rem;
+      font-style: italic;
+      color: rgb(64, 147, 133);
+      text-decoration: underline;
+      display: flex;
+
+      img {
+        height: 1.25rem;
+        margin-right: 0.5em;
+      }
+    }
+
     .title {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
+      text-transform: unset;
+      font-weight: 600;
       color: #1a4278;
-      text-transform: uppercase;
     }
 
     p {
@@ -66,8 +86,65 @@ $grey-highlight: #eee;
 
   .greySection {
     background-color: $grey-highlight;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.45rem;
+    border-top-right-radius: 0.45rem;
+    display: flex;
+
+    img {
+      height: 3em;
+      border-radius: 5px;
+      margin-right: 0.5em;
+      border-right: 1px solid $grey-highlight-darker;
+      border-bottom: 1px solid $grey-highlight-darker;
+    }
+  }
+
+  .policyIndicatorBar {
+    width: 100%;
+    height: 4px;
+    flex-shrink: 0;
+  }
+
+  .content {
+    .policyLink {
+      display: block;
+      width: fit-content;
+      text-align: center;
+      color: rgb(255, 255, 255);
+      width: max-content;
+      white-space: nowrap;
+      font-family: rawline, serif;
+      font-weight: 700;
+      line-height: 1.2;
+      border-width: 2px;
+      border-style: solid;
+      border-color: transparent;
+      border-image: initial;
+      border-radius: 4px;
+      background: -webkit-linear-gradient(
+        top,
+        rgb(66, 83, 121),
+        rgb(33, 53, 97)
+      );
+      padding: 5px 15px;
+
+      &:hover {
+        color: rgb(33, 53, 97);
+        background: rgb(255, 255, 255);
+        border-color: rgb(33, 53, 97);
+        text-decoration: none;
+      }
+    }
+
+    .asOfDate {
+      color: #1a4278;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+
+      span {
+        font-style: italic;
+      }
+    }
   }
 }
 
