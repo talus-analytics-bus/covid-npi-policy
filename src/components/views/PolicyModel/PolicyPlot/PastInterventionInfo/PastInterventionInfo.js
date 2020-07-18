@@ -44,10 +44,13 @@ const phaseIcons = {
 };
 
 const PastInterventionInfo = props => {
+  const proposed = new Date(props.effectiveDate) > new Date();
+
   const [policyCount, setPolicyCount] = React.useState();
+
   React.useEffect(() => {
     const getPolicyCount = async () => {
-      if (props.effectiveDate) {
+      if (!proposed && props.effectiveDate) {
         axios
           .post(
             process.env.REACT_APP_API_URL +
@@ -64,13 +67,13 @@ const PastInterventionInfo = props => {
               },
             }
           )
-          .then(response => setPolicyCount(response));
+          .then(response => setPolicyCount(response.data.data.length));
       }
     };
     getPolicyCount();
   });
 
-  console.log(policyCount);
+  // console.log(policyCount);
 
   const setState = props.setPastInterventionProps;
   props = { ...props.pastInterventionProps };
@@ -94,8 +97,6 @@ const PastInterventionInfo = props => {
 
   const popupStyleName =
     props.x < window.innerWidth / 2 ? styles.leftPopup : styles.rightPopup;
-
-  const proposed = new Date(props.effectiveDate) > new Date();
 
   let policyURL = "";
   if (props.state !== undefined) {
@@ -158,7 +159,8 @@ const PastInterventionInfo = props => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            View all policies <br /> in effect
+            View all policies <br /> {policyCount && "(" + policyCount + ")"} in
+            effect
           </a>
         )}
         {!proposed && (
