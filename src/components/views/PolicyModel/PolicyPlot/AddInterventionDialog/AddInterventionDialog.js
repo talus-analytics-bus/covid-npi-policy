@@ -150,6 +150,8 @@ const PastInterventionInfo = props => {
             <a
               href="https://covid-local.org/metrics/"
               className={styles.COVIDLocalLink}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <img src={localLogo} alt="COVID Local" />
               View phases in COVID-Local
