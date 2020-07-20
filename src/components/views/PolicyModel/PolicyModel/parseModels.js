@@ -17,6 +17,8 @@
 //   },
 // }
 
+const INITIAL_R_0 = 2.474;
+
 // take a model run string and
 // parse it, including fixing dates
 const parseModelString = modelRun => {
@@ -75,7 +77,8 @@ export default function parseModelCurves(
     // console.log(trimmedData)
 
     // initial r_0 for the percentage change calc
-    const initialR_0 = trimmedData[0]["R effective"];
+    // const initialR_0 = trimmedData[0]["R effective"];
+    const initialR_0 = INITIAL_R_0;
 
     // create basic structure
     curves[state].curves["pctChange"] = {};
