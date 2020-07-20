@@ -18,7 +18,9 @@ import "tippy.js/themes/light.css";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 
-import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
+// import AddInterventionCursor from "./AddInterventionCursor/AddInterventionCursor";
+import InspectDayCursor from "./InspectDayCursor/InspectDayCursor";
+import InspectDayLine from "./InspectDayLine/InspectDayLine";
 import PastInterventionInfo from "./PastInterventionInfo/PastInterventionInfo";
 import AddInterventionDialog from "./AddInterventionDialog/AddInterventionDialog";
 import LineExtension from "./LineExtension/LineExtension";
@@ -43,10 +45,24 @@ const interventionColors = {
   "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
+  "Stay-at-home": "#C1272D",
+  "Safer-at-home": "#D66B3E",
   "Stay at home": "#C1272D",
   "Safer at home": "#D66B3E",
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
+};
+
+const phaseNames = {
+  Lockdown: "Phase I",
+  "Unclear lockdown level": "",
+  "Mixed distancing levels": "",
+  "Stay-at-home": "Phase II",
+  "Safer-at-home": "Phase III",
+  "Stay at home": "Phase II",
+  "Safer at home": "Phase III",
+  "New open": "Phase IV",
+  "New normal": "Phase IV",
 };
 
 const labelNames = {
@@ -56,14 +72,14 @@ const labelNames = {
   dead: "Deaths",
 };
 
-const covidCountHoverText = {
-  infected_a: "Number of individuals with an active COVID-19 infection by day",
-  infected_b:
-    "Number of individuals currently hospitalized for COVID-19 infection by day",
-  infected_c:
-    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-  dead: "Cumulative deaths from COVID-19 by day",
-};
+// const covidCountHoverText = {
+//   infected_a: "Number of individuals with an active COVID-19 infection by day",
+//   infected_b:
+//     "Number of individuals currently hospitalized for COVID-19 infection by day",
+//   infected_c:
+//     "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+//   dead: "Cumulative deaths from COVID-19 by day",
+// };
 
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
 
@@ -73,6 +89,8 @@ const PolicyModel = props => {
     y: 0,
     policyName: "",
     effectiveDate: "",
+    interventionColors: interventionColors,
+    phaseNames: phaseNames,
   });
 
   const [addIntDialogState, setAddIntDialogState] = React.useState({
@@ -100,6 +118,24 @@ const PolicyModel = props => {
   //       window.removeEventListener("resize", updateWindowSize);
   //     };
   //   }, []);
+
+  const plotRef = React.useRef();
+  //   const [plotBBox, setPlotBBox] = React.useState();
+  //
+  //   const updatePlotBBox = e => {
+  //     setPlotBBox(plotRef.current.getBoundingClientRect());
+  //   };
+  //
+  //   React.useEffect(() => {
+  //     updatePlotBBox();
+  //
+  //     window.addEventListener("resize", updatePlotBBox);
+  //     return () => {
+  //       window.removeEventListener("resize", updatePlotBBox);
+  //     };
+  //   }, []);
+  //
+  //   console.log(plotBBox);
 
   // const percentProportion = 0.14;
   // const chartProportion = 0.45;
@@ -289,20 +325,23 @@ const PolicyModel = props => {
             eventHandlers: {
               onMouseEnter: (event, eventKey) => {
                 setPastInterventionProps({
+                  interventionColors: interventionColors,
+                  phaseNames: phaseNames,
                   state: props.selectedState,
                   policyName: intervention.name.split("_")[0],
                   effectiveDate: intervention.intervention_start_date,
+                  dotSize: event.target.getBoundingClientRect().width,
                   x:
-                    window.pageXOffset +
-                    event.target.getBoundingClientRect().left,
+                    event.target.getBoundingClientRect().left -
+                    plotRef.current.getBoundingClientRect().left,
                   y:
-                    interStartDate < now
-                      ? window.pageYOffset +
-                        event.target.getBoundingClientRect().top
-                      : // need to adjust for the different size circle
-                        window.pageYOffset +
-                        event.target.getBoundingClientRect().top -
-                        2,
+                    event.target.getBoundingClientRect().top -
+                    plotRef.current.getBoundingClientRect().top,
+                  // window.pageYOffset,
+                  // interStartDate < now
+                  // ? event.target.getBoundingClientRect().top
+                  // : // need to adjust for the different size circle
+                  // event.target.getBoundingClientRect().top - 2,
                 });
               },
             },
@@ -320,7 +359,7 @@ const PolicyModel = props => {
   });
 
   return (
-    <section className={styles.main}>
+    <section className={styles.main} ref={plotRef}>
       <PastInterventionInfo
         {...{ pastInterventionProps, setPastInterventionProps }}
       />
@@ -329,6 +368,7 @@ const PolicyModel = props => {
         setPosition={setAddIntDialogState}
         addIntervention={props.addIntervention}
         selectedState={props.selectedState}
+        interventionColors={interventionColors}
       />
       <div className={styles.abovePlot}>
         <p className={styles.instruction}>
@@ -344,11 +384,11 @@ const PolicyModel = props => {
                 </div>
                 <div className={styles.safer}>
                   <span />
-                  <p>Safer at home policies</p>
+                  <p>Safer-at-home policies</p>
                 </div>
                 <div className={styles.stay}>
                   <span />
-                  <p>Stay at home policies</p>
+                  <p>Stay-at-home policies</p>
                 </div>
                 <div className={styles.normal}>
                   <span />
@@ -368,7 +408,7 @@ const PolicyModel = props => {
                 </div>
                 <div className={styles.noPolicies}>
                   <span />
-                  <p>Cases Without Policies</p>
+                  <p>"What if we had done nothing" scenario</p>
                 </div>
               </div>
             }
@@ -595,9 +635,19 @@ const PolicyModel = props => {
                       ) {
                         setAddIntDialogState({
                           show: true,
-                          x: event.clientX,
-                          y: window.pageYOffset + event.clientY,
+                          x:
+                            event.clientX -
+                            plotRef.current.getBoundingClientRect().left,
+                          y:
+                            plotRef.current.getBoundingClientRect().height *
+                            0.438,
+                          // plotRef.current.getBoundingClientRect().top,
                           date: eventKey.cursorValue.x,
+                        });
+                      } else {
+                        setAddIntDialogState({
+                          ...addIntDialogState,
+                          show: false,
                         });
                       }
                     },
@@ -619,12 +669,25 @@ const PolicyModel = props => {
             cursorLabelComponent={
               (props.activeTab === "interventions") &
               (pastInterventionProps.policyName === "") ? (
-                <AddInterventionCursor showLabel={!addIntDialogState.show} />
+                <InspectDayCursor
+                  showInfo={!addIntDialogState.show}
+                  data={props.data}
+                  interventionColors={interventionColors}
+                  state={props.selectedState}
+                  labelNames={labelNames}
+                />
               ) : (
+                // <AddInterventionCursor showLabel={!addIntDialogState.show} />
                 <LineSegment />
               )
             }
             cursorComponent={<LineSegment style={{ display: "none" }} />}
+            //   pastInterventionProps.policyName === "" ? (
+            //     <LineSegment />
+            //   ) : (
+            //     <LineSegment style={{ display: "none" }} />
+            //   )
+            // }
             cursorLabel={({ datum }) => `add intervention`}
             allowZoom={false}
             // If we want to re-enable panning, there will
@@ -632,6 +695,7 @@ const PolicyModel = props => {
             // panning and clicking to add interventions.
             allowPan={false}
             zoomDimension="x"
+            cursorDimension="x"
             zoomDomain={{ x: props.zoomDateRange }}
             // onZoomDomainChange={domain => {
             //   props.setZoomDateRange(domain.x);

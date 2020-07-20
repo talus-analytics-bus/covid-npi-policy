@@ -69,14 +69,14 @@ const State = props => {
             {states.find(state => state.abbr === props.selectedState).name}
           </div>
           <div className={styles.explanation}>
-            Case Count with
-            <br /> Existing Policies
+            Case count with
+            <br /> existing policies
           </div>
           <div className={styles.cases}>
             {formatActuals(props.curves.cases)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative Cases</p>
+            <p className={styles.label}>cumulative cases</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -119,7 +119,7 @@ const State = props => {
             {formatActuals(props.curves.deaths)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative Deaths</p>
+            <p className={styles.label}>cumulative deaths</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -144,7 +144,7 @@ const State = props => {
             {formatModeled(props.curves.counterfactual_cases)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative Cases</p>
+            <p className={styles.label}>cumulative cases</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -183,7 +183,7 @@ const State = props => {
             {formatModeled(props.curves.counterfactual_deaths)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>Cumulative Deaths</p>
+            <p className={styles.label}>cumulative deaths</p>
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
@@ -293,7 +293,7 @@ const State = props => {
         {/*         </Tippy> */}
         {/*       </h4> */}
         {/*       <h5> */}
-        {/*         Cumulative Cases as of{" "} */}
+        {/*         Cumulative cases as of{" "} */}
         {/*         {props.dataDates && props.dataDates.last_data_update} (modeled){" "} */}
         {/*       </h5> */}
         {/*     </div> */}
@@ -350,7 +350,7 @@ const State = props => {
             props.resetState(props.selectedState);
           }}
         >
-          Reset Policies
+          Reset policies
         </button>
       </div>
     </section>

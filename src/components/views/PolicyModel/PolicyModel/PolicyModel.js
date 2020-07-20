@@ -288,7 +288,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 style={{ width: "13rem" }}
               >
                 <option value="pctChange">% reduction</option>
-                <option value="R effective">Effective R Value</option>
+                <option value="R effective">Effective R value</option>
               </select>
               <Tippy
                 interactive={true}
