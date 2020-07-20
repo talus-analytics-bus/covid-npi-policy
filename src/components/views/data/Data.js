@@ -431,13 +431,19 @@ const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
         })}
         onClick={e => {
           e.stopPropagation();
-          setButtonLoading(true);
+          if (class_name === "all_static") {
+            window.location.assign(
+              "https://gida.ghscosting.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
+            );
+          } else {
+            setButtonLoading(true);
 
-          Export({
-            method: "post",
-            filters,
-            class_name,
-          }).then(d => setButtonLoading(false));
+            Export({
+              method: "post",
+              filters,
+              class_name,
+            }).then(d => setButtonLoading(false));
+          }
         }}
       >
         <img src={downloadSvg} />

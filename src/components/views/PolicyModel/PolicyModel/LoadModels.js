@@ -22,6 +22,7 @@ const MODEL_VERSION = "1";
 // export const API_URL = "http://localhost:8000/";
 export const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
+
 // request a model from the server
 // this should only happen if we
 // don't already have a recent model locally

@@ -356,7 +356,6 @@ const MapboxMap = ({
       // if map has not yet loaded
       if (loading) {
         // initialize the map
-        console.log("running initMap");
         initMap({
           map,
           mapId,
@@ -519,6 +518,7 @@ const MapboxMap = ({
   };
 
   // JSX // -----------------------------------------------------------------//
+  // render map only after data initially load
   if (data === null) return <div />;
   else
     return (
@@ -559,7 +559,6 @@ const MapboxMap = ({
             // when map has loaded, add event listener to update the map data
             // whenever the map style, i.e., the type of map, is changed
             const map = mapRef.getMap();
-            console.log("map onLoad run");
 
             updateFillOrder({ map, f: null });
 
@@ -588,7 +587,6 @@ const MapboxMap = ({
             }
 
             map.on("styledataloading", function() {
-              console.log("styledataloading");
               getMapData();
             });
           }}
