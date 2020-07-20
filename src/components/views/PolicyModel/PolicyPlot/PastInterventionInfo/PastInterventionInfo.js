@@ -17,6 +17,7 @@ const formatDate = date =>
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 
 const phaseNames = {
