@@ -7,6 +7,7 @@ const AddInterventionCursor = props => {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 
   const today = new Date();

@@ -39,6 +39,7 @@ const InspectDailyCursor = props => {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 
   let latestIntervention = props.data.interventions
