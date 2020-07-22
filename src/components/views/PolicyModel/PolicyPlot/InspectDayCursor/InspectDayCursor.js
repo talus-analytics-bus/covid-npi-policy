@@ -218,7 +218,7 @@ const InspectDailyCursor = props => {
         <path
           d={`M ${props.x - 5} -31 L ${props.x - 5} 130`}
           style={{
-            // stroke: popupDate > new Date() ? "#8D64DD" : "#aaa",
+            // stroke: popupDate > new Date() ? "#8D64DD" : "#8D64DD",
             stroke: latestInterColor,
             strokeWeight: popupDate > new Date() ? "1" : "0.25",
           }}
@@ -227,7 +227,7 @@ const InspectDailyCursor = props => {
           <g transform={`translate(${props.x - 9}, 26.5) scale(.33)`}>
             <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
             <path
-              style={{ fill: latestInterColor }}
+              style={{ fill: "#8D64DD" }}
               d="M20.8,12.2l0,0.9c0,0.5-0.4,0.9-0.9,0.9h-6l0,6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9
   v-6h-6c-0.5,0-0.9-0.4-0.9-0.9v-0.9c0-0.5,0.4-0.9,0.9-0.9h6l0-6c0-0.5,0.4-0.9,0.9-0.9h0.9c0.5,0,0.9,0.4,0.9,0.9v6h6
   C20.4,11.3,20.8,11.7,20.8,12.2z M21.6,21.6c-4.9,4.9-13,4.9-17.9,0c-4.9-4.9-4.9-13,0-17.9c4.9-4.9,13-4.9,17.9,0
