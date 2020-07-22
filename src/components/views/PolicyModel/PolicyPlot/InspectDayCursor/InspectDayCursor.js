@@ -44,9 +44,15 @@ const InspectDailyCursor = props => {
 
   let latestIntervention = props.data.interventions
     .sort((inter1, inter2) => {
-      if (inter1.intervention_start_date > inter2.intervention_start_date)
+      if (
+        Date.parse(inter1.intervention_start_date) >
+        Date.parse(inter2.intervention_start_date)
+      )
         return 1;
-      if (inter1.intervention_start_date < inter2.intervention_start_date)
+      if (
+        Date.parse(inter1.intervention_start_date) <
+        Date.parse(inter2.intervention_start_date)
+      )
         return -1;
       return 0;
     })

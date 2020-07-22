@@ -369,6 +369,7 @@ const PolicyModel = props => {
         addIntervention={props.addIntervention}
         selectedState={props.selectedState}
         interventionColors={interventionColors}
+        data={props.data}
       />
       <div className={styles.abovePlot}>
         <p className={styles.instruction}>
