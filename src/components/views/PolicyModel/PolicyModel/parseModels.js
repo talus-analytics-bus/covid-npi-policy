@@ -17,6 +17,8 @@
 //   },
 // }
 
+const INITIAL_R_0 = 2.474;
+
 // take a model run string and
 // parse it, including fixing dates
 const parseModelString = modelRun => {
@@ -45,10 +47,14 @@ export default function parseModelCurves(
       dateRange: [],
       yMax: 0,
       curves: {},
-      interventions: model.interventions.filter(
-        inter =>
-          (inter.name !== "do_nothing") & (inter.name !== "mobility_drop")
-      ),
+      interventions: model.interventions.filter(inter => {
+        // format intervention names to use hyphens, for consistency with rest of
+        // AMP site and with COVID-Local site
+        inter.name = inter.name.replace(" at ", "-at-");
+
+        // only return currently supported intervention types
+        return (inter.name !== "do_nothing") & (inter.name !== "mobility_drop");
+      }),
       deaths: model.deaths,
       cases: model.cases,
       date: model.date,
@@ -71,7 +77,8 @@ export default function parseModelCurves(
     // console.log(trimmedData)
 
     // initial r_0 for the percentage change calc
-    const initialR_0 = trimmedData[0]["R effective"];
+    // const initialR_0 = trimmedData[0]["R effective"];
+    const initialR_0 = INITIAL_R_0;
 
     // create basic structure
     curves[state].curves["pctChange"] = {};

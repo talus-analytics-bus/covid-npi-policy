@@ -1,17 +1,25 @@
 import React from "react";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+import infoIcon from "../../../../../assets/icons/info-blue.svg";
+
 import styles from "./AddInterventionDialog.module.scss";
 
 import closeButtonIconSVG from "../../../../../assets/icons/addInterventionCloseButton.svg";
 
+import { metricMeta } from "../../../../common/MapboxMap/plugins/data";
+import localLogo from "../../../../common/MapboxMap/plugins/assets/icons/logo-local-pill.png";
+
 const PastInterventionInfo = props => {
   const width = 300;
-  const arrowOffset = { x: 25, y: 41 };
+  const arrowOffset = { x: 24, y: 51 };
 
   const xPos =
     props.position.x < window.innerWidth / 2
       ? props.position.x + arrowOffset.x
-      : props.position.x - width - 6;
+      : props.position.x - width - arrowOffset.x;
 
   const yPos = props.position.y - arrowOffset.y;
 
@@ -20,23 +28,79 @@ const PastInterventionInfo = props => {
       ? styles.leftPopup
       : styles.rightPopup;
 
-  const [rVal, setRVal] = React.useState(0.15);
+  const [rVal, setRVal] = React.useState(0.285);
   const [interDate, setInterDate] = React.useState(props.position.date);
 
   const policyNames = {
-    0.12: "Lockdown",
-    0.1375: "Stay at home",
-    0.19: "Safer at home",
     0.285: "New normal",
+    0.19: "Safer-at-home",
+    0.1375: "Stay-at-home",
+    0.12: "Lockdown",
   };
+
+  const policyOptions = Object.entries(policyNames).map(
+    ([optionRVal, name]) => (
+      <label
+        key={name}
+        // style={{ color: props.interventionColors[name] }}
+      >
+        <input
+          type="radio"
+          name={name}
+          value={optionRVal}
+          checked={Number(rVal) === Number(optionRVal)}
+          onChange={e => setRVal(Number(e.target.value))}
+        />
+        {name}
+        <span
+          className={styles.policyDot}
+          style={{ background: props.interventionColors[name] }}
+        />
+        <Tippy
+          // interactive={true}
+          allowHTML={true}
+          content={
+            <section className={styles.policyExplanation}>
+              <div className={styles.row}>
+                <h1>{name}</h1>
+                <h2>
+                  (
+                  {
+                    metricMeta.lockdown_level.valueStyling[
+                      name.replace(/-/g, " ")
+                    ].phase
+                  }
+                  )
+                </h2>
+              </div>
+              {
+                metricMeta.lockdown_level.valueStyling[name.replace(/-/g, " ")]
+                  .def
+              }
+            </section>
+          }
+          maxWidth={"30rem"}
+          theme={"light"}
+          placement={"bottom"}
+          offset={[-30, 10]}
+        >
+          <img
+            className={styles.infoIcon}
+            src={infoIcon}
+            alt="More information"
+          />
+        </Tippy>
+      </label>
+    )
+  );
 
   return (
     <section
       display={props.position.show ? "block" : "none"}
       className={popupStyleName}
       style={{
-        top: yPos,
-        left: xPos,
+        top: yPos ? yPos : 0,
+        left: xPos ? xPos : 0,
         width: width,
         opacity: props.position.show ? 1 : 0,
         pointerEvents: props.position.show ? "all" : "none",
@@ -44,7 +108,7 @@ const PastInterventionInfo = props => {
     >
       <form>
         <div className={styles.greySection}>
-          <h1>Add Policies</h1>
+          <h1>Add policies</h1>
           <button
             className={styles.closeButton}
             onClick={e => {
@@ -62,7 +126,7 @@ const PastInterventionInfo = props => {
             {/*   <input type="text" /> */}
             {/* </label> */}
             <label>
-              Effective Date
+              Effective date
               <input
                 type="date"
                 min={new Date().toISOString().substr(0, 10)}
@@ -80,47 +144,18 @@ const PastInterventionInfo = props => {
 
             <fieldset>
               <legend>Add policies associated with</legend>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.12"
-                  checked={rVal === 0.12}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                Lockdown
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.1375"
-                  checked={rVal === 0.1375}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                Stay at home
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.19"
-                  checked={rVal === 0.19}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                Safer at home
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="phase"
-                  value="0.285"
-                  checked={rVal === 0.285}
-                  onChange={e => setRVal(Number(e.target.value))}
-                />
-                New normal
-              </label>
+              {policyOptions}
             </fieldset>
+
+            <a
+              href="https://covid-local.org/metrics/"
+              className={styles.COVIDLocalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={localLogo} alt="COVID Local" />
+              View phases in COVID-Local
+            </a>
 
             <div className={styles.buttonRow}>
               <button

@@ -23,7 +23,7 @@ import downloadSvg from "../../../assets/icons/download.svg";
 // constants
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
 // primary data viewing and download page
 const Data = ({

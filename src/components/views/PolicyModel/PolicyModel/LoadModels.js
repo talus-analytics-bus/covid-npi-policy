@@ -12,14 +12,16 @@ const LIFESPAN = 3 * 60 * 60 * 1000;
 // If the model versions do not match, drop the entire
 // localStorage. This lets us clear all client caching
 // if we push an incompatible update.
-const MODEL_VERSION = "2";
+const MODEL_VERSION = "1";
 //
 // const API_URL = 'http://192.168.1.33:8000/'
 // const API_URL = 'http://localhost:8000/'
 // const API_URL = "http://127.0.0.0:8000/";
 
-export const API_URL = "https://amp-model-api.covidamp.org/";
-// export const API_URL = "https://test-amp-model-api.covidamp.org/";
+// export const API_URL = "https://amp-model-api.covidamp.org/";
+// export const API_URL = "http://localhost:8000/";
+export const API_URL = process.env.REACT_APP_MODEL_API_URL;
+
 
 // request a model from the server
 // this should only happen if we
