@@ -129,9 +129,9 @@ const State = props => {
                   <p style={{ fontWeight: 400 }}>
                     On average so far, COVID patients die roughly 30 days after
                     exposure (there is wide variation). To show the impact of
-                    those people already exposed, regardless of policies
-                    implemented tomorrow, we show the cumulative deaths 30 days
-                    out.
+                    those people already exposed and the likely related deaths,
+                    regardless of policies implemented tomorrow, we show the
+                    cumulative deaths 30 days out.
                   </p>
                 }
                 maxWidth={"30rem"}
@@ -218,9 +218,9 @@ const State = props => {
                   <p style={{ fontWeight: 400 }}>
                     On average so far, COVID patients die roughly 30 days after
                     exposure (there is wide variation). To show the impact of
-                    those people already exposed, regardless of policies
-                    implemented tomorrow, we show the cumulative deaths 30 days
-                    out.
+                    those people already exposed and the likely related deaths,
+                    regardless of policies implemented tomorrow, we show the
+                    cumulative deaths 30 days out.
                   </p>
                 }
                 maxWidth={"30rem"}
