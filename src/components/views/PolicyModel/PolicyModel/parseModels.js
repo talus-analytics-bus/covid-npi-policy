@@ -56,6 +56,7 @@ export default function parseModelCurves(
         return (inter.name !== "do_nothing") & (inter.name !== "mobility_drop");
       }),
       deaths: model.deaths,
+      death_date: model.death_date,
       cases: model.cases,
       date: model.date,
       population: model.population,

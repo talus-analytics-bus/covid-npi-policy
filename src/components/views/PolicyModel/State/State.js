@@ -147,8 +147,7 @@ const State = props => {
               </Tippy>
             </p>
             <p className={styles.date}>
-              as of{" "}
-              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
               (actual)
             </p>
           </div>
@@ -236,8 +235,7 @@ const State = props => {
               </Tippy>
             </p>
             <p className={styles.date}>
-              as of{" "}
-              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
               (modeled)
             </p>
           </div>
