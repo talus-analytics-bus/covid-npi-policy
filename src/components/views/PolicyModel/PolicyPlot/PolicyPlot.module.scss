@@ -35,6 +35,15 @@
   margin-left: auto;
   display: inline-block;
   font-style: italic;
+  display: flex;
+  align-items: center;
+
+  svg {
+    flex-shrink: 0;
+    height: 1.1em;
+    width: 1.2em;
+    margin-right: 0.25em;
+  }
 }
 
 .legendLabel {

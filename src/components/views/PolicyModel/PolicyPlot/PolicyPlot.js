@@ -369,9 +369,20 @@ const PolicyModel = props => {
         addIntervention={props.addIntervention}
         selectedState={props.selectedState}
         interventionColors={interventionColors}
+        data={props.data}
       />
       <div className={styles.abovePlot}>
         <p className={styles.instruction}>
+          <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
+            <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
+            <path
+              style={{ fill: "#8D64DD" }}
+              d="M20.8,12.2v0.9c0,0.5-0.4,0.9-0.9,0.9h-6v6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9v-6h-6
+  c-0.5,0-0.9-0.4-0.9-0.9v-0.9c0-0.5,0.4-0.9,0.9-0.9h6v-6c0-0.5,0.4-0.9,0.9-0.9H13c0.5,0,0.9,0.4,0.9,0.9v6h6
+  C20.4,11.3,20.8,11.7,20.8,12.2z M21.6,21.6c-4.9,4.9-13,4.9-17.9,0s-4.9-13,0-17.9s13-4.9,17.9,0S26.5,16.7,21.6,21.6z M23.6,12.6
+  c0-6.1-4.9-11-11-11s-11,4.9-11,11s4.9,11,11,11S23.6,18.7,23.6,12.6z"
+            />
+          </svg>
           Use cursor on graph to set new policy
         </p>
         <label className={styles.legendLabel}>

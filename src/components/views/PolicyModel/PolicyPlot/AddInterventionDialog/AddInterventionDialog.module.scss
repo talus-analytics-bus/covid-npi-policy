@@ -138,6 +138,11 @@ $grey-highlight: #eee;
         display: flex;
       }
 
+      .disabled {
+        opacity: 0.5;
+        font-style: italic;
+      }
+
       .policyDot {
         width: 1em;
         height: 1em;

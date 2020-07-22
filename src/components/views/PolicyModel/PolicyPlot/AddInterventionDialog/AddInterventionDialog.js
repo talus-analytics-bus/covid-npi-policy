@@ -38,10 +38,35 @@ const PastInterventionInfo = props => {
     0.12: "Lockdown",
   };
 
+  let latestIntervention = props.data.interventions
+    .sort((inter1, inter2) => {
+      if (
+        Date.parse(inter1.intervention_start_date) >
+        Date.parse(inter2.intervention_start_date)
+      )
+        return 1;
+      if (
+        Date.parse(inter1.intervention_start_date) <
+        Date.parse(inter2.intervention_start_date)
+      )
+        return -1;
+      return 0;
+    })
+    .filter(
+      inter =>
+        Date.parse(inter.intervention_start_date) <
+        Date.parse(props.position.date)
+    )
+    .slice(-1)[0] || { name: "Unclear lockdown level" };
+
   const policyOptions = Object.entries(policyNames).map(
     ([optionRVal, name]) => (
       <label
         key={name}
+        className={
+          latestIntervention.name.split("_")[0] === name ? styles.disabled : ""
+        }
+
         // style={{ color: props.interventionColors[name] }}
       >
         <input
@@ -50,6 +75,7 @@ const PastInterventionInfo = props => {
           value={optionRVal}
           checked={Number(rVal) === Number(optionRVal)}
           onChange={e => setRVal(Number(e.target.value))}
+          disabled={latestIntervention.name.split("_")[0] === name}
         />
         {name}
         <span

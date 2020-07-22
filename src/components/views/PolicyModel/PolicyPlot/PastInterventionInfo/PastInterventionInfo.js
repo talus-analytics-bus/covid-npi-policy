@@ -109,8 +109,6 @@ const PastInterventionInfo = props => {
       `%22area1%22:[%22${stateFullName}%22]}`;
   }
 
-  console.log(props.effectiveDate);
-
   return (
     <section
       display={props.policyName !== "" ? "block" : "none"}
