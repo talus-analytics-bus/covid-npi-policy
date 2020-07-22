@@ -110,9 +110,15 @@ const State = props => {
               </Tippy>
             </p>
             <p className={styles.popPercent}>
-              {((props.curves.cases / props.curves.population) * 100).toFixed(
-                2
-              )}
+              {(props.curves.cases / props.curves.population) * 100 >= 0.5
+                ? (
+                    (props.curves.cases / props.curves.population) *
+                    100
+                  ).toFixed(0)
+                : (
+                    (props.curves.cases / props.curves.population) *
+                    100
+                  ).toFixed(1)}
               % of total population
             </p>
           </div>
@@ -195,10 +201,19 @@ const State = props => {
               </Tippy>
             </p>
             <p className={styles.popPercent}>
-              {(
-                (props.curves.counterfactual_cases / props.curves.population) *
-                100
-              ).toFixed(2)}
+              {(props.curves.counterfactual_cases / props.curves.population) *
+                100 >=
+              0.5
+                ? (
+                    (props.curves.counterfactual_cases /
+                      props.curves.population) *
+                    100
+                  ).toFixed(0)
+                : (
+                    (props.curves.counterfactual_cases /
+                      props.curves.population) *
+                    100
+                  ).toFixed(1)}
               % of total population
             </p>
           </div>
