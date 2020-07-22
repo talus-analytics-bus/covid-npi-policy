@@ -148,7 +148,7 @@ const State = props => {
             </p>
             <p className={styles.date}>
               as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (actual)
+              (modeled)
             </p>
           </div>
           <div className={styles.explanation}>

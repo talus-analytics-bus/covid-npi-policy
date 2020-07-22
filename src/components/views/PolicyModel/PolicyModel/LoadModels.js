@@ -12,7 +12,7 @@ const LIFESPAN = 3 * 60 * 60 * 1000;
 // If the model versions do not match, drop the entire
 // localStorage. This lets us clear all client caching
 // if we push an incompatible update.
-const MODEL_VERSION = "2";
+const MODEL_VERSION = "3";
 //
 // const API_URL = 'http://192.168.1.33:8000/'
 // const API_URL = 'http://localhost:8000/'
