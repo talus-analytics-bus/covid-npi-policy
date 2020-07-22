@@ -98,12 +98,14 @@ const PolicyModel = ({ setLoading, setPage }) => {
         return 0;
       });
 
+    const zoomStartDate = new Date(dates[0].toISOString());
+    const zoomEndDate = new Date(dates.slice(-1)[0].toISOString());
+
+    zoomStartDate.setDate(zoomStartDate.getDate() - 10);
+
     // Initialize the zoom range as all dates
     // using new Date() to create a separate date object
-    setZoomDateRange([
-      new Date(dates[0].toISOString()),
-      new Date(dates.slice(-1)[0].toISOString()),
-    ]);
+    setZoomDateRange([zoomStartDate, zoomEndDate]);
 
     const domainStartDate = new Date(dates[0].toISOString());
     const domainEndDate = new Date(dates.slice(-1)[0].toISOString());
