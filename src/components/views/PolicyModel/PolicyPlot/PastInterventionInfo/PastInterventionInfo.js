@@ -20,6 +20,14 @@ const formatDate = date =>
     timeZone: "UTC",
   });
 
+const formatDateForAPI = date => {
+  if (date !== "") {
+    return new Date(date).toISOString().split("T")[0];
+  } else {
+    return "";
+  }
+};
+
 const phaseNames = {
   Lockdown: "Phase I",
   "Unclear lockdown level": "",
@@ -58,7 +66,10 @@ const PastInterventionInfo = props => {
               "/post/policy?fields=id&fields=place",
             {
               filters: {
-                dates_in_effect: [props.effectiveDate, props.effectiveDate],
+                dates_in_effect: [
+                  formatDateForAPI(props.effectiveDate),
+                  formatDateForAPI(props.effectiveDate),
+                ],
                 primary_ph_measure: ["Social distancing"],
                 ph_measure_details: [],
                 area1: [states.find(state => state.abbr === props.state).name],
@@ -103,8 +114,8 @@ const PastInterventionInfo = props => {
     policyURL =
       `/data?type=policy&filters_policy=` +
       `{%22primary_ph_measure%22:[%22Social%20distancing%22],` +
-      `%22dates_in_effect%22:[%22${props.effectiveDate}%22,` +
-      `%22${props.effectiveDate}%22],` +
+      `%22dates_in_effect%22:[%22${formatDateForAPI(props.effectiveDate)}%22,` +
+      `%22${formatDateForAPI(props.effectiveDate)}%22],` +
       `%22country_name%22:[%22United%20States%20of%20America%20(USA)%22],` +
       `%22area1%22:[%22${stateFullName}%22]}`;
   }
