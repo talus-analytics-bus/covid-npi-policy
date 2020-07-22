@@ -704,8 +704,10 @@ export const geoHaveData = [
   "MHL",
   "NGA",
   "NZL",
+  "PER",
   "PHL",
   "SOM",
+  "THA",
   "USA",
 ];
 
