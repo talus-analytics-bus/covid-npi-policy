@@ -81,12 +81,12 @@ const State = props => {
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
-              (actual)
+              (actual){" "}
               <Tippy
                 interactive={true}
                 allowHTML={true}
                 content={
-                  <p>
+                  <p className={styles.ipopup}>
                     Total number of cumulative confirmed and probable cases as
                     of{" "}
                     {props.dataDates &&
@@ -120,18 +120,20 @@ const State = props => {
             {formatActuals(props.curves.deaths)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>
-              cumulative deaths
+            <p className={styles.label}>cumulative deaths</p>
+            <p className={styles.date}>
+              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
+              (modeled){" "}
               <Tippy
                 interactive={true}
                 allowHTML={true}
                 content={
-                  <p style={{ fontWeight: 400 }}>
-                    On average so far, COVID patients die roughly 30 days after
-                    exposure (there is wide variation). To show the impact of
-                    those people already exposed and the likely related deaths,
-                    regardless of policies implemented tomorrow, we show the
-                    cumulative deaths 30 days out.
+                  <p className={styles.ipopup}>
+                    Research indicates that COVID patients will die within
+                    approximately 30 days of initial infection. Therefore, to
+                    align these deaths with the caseload, we report the number
+                    of cases as of today’s date and the anticipated deaths
+                    associated with those cases as of 30 days from today.
                   </p>
                 }
                 maxWidth={"30rem"}
@@ -141,14 +143,10 @@ const State = props => {
               >
                 <img
                   className={styles.infoIcon}
-                  src={greenInfoIcon}
+                  src={infoIcon}
                   alt="More information"
                 />
               </Tippy>
-            </p>
-            <p className={styles.date}>
-              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (modeled)
             </p>
           </div>
           <div className={styles.explanation}>
@@ -173,12 +171,12 @@ const State = props => {
             <p className={styles.date}>
               as of{" "}
               {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
-              (modeled)
+              (modeled){" "}
               <Tippy
                 interactive={true}
                 allowHTML={true}
                 content={
-                  <p>
+                  <p className={styles.ipopup}>
                     Total number of cumulative cases modeled on the assumption
                     no policies had been put in to effect, rounded to indicate
                     confidence.
@@ -208,18 +206,20 @@ const State = props => {
             {formatModeled(props.curves.counterfactual_deaths)}
           </div>
           <div className={styles.casesLabel}>
-            <p className={styles.label}>
-              cumulative deaths
+            <p className={styles.label}>cumulative deaths</p>
+            <p className={styles.date}>
+              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
+              (modeled){" "}
               <Tippy
                 interactive={true}
                 allowHTML={true}
                 content={
-                  <p style={{ fontWeight: 400 }}>
-                    On average so far, COVID patients die roughly 30 days after
-                    exposure (there is wide variation). To show the impact of
-                    those people already exposed and the likely related deaths,
-                    regardless of policies implemented tomorrow, we show the
-                    cumulative deaths 30 days out.
+                  <p className={styles.ipopup}>
+                    Research indicates that COVID patients will die within
+                    approximately 30 days of initial infection. Therefore, to
+                    align these deaths with the caseload, we report the number
+                    of cases as of today’s date and the anticipated deaths
+                    associated with those cases as of 30 days from today.
                   </p>
                 }
                 maxWidth={"30rem"}
@@ -233,10 +233,6 @@ const State = props => {
                   alt="More information"
                 />
               </Tippy>
-            </p>
-            <p className={styles.date}>
-              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (modeled)
             </p>
           </div>
         </div>

@@ -39,7 +39,7 @@
       font-family: "Rawline";
       margin-bottom: 1rem;
 
-      grid-template-columns: auto 23rem min-content 15rem min-content 14rem;
+      grid-template-columns: auto 23rem min-content 15rem min-content 16rem;
       grid-template-rows: 1fr 1fr;
 
       > div {
@@ -344,6 +344,11 @@
     //   color: #00447c;
     // }
   }
+}
+
+.ipopup {
+  font-weight: 400;
+  font-style: italic;
 }
 
 .bottomRow {
