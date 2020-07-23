@@ -49,15 +49,23 @@ const Documentation = ({ ...props }) => {
       <ol>
         <li>
           A searchable, filterable database of all policies and plans in the
-          dataset, including legal and regulatory analysis. The complete dataset
+          dataset, including legal and governance analysis. The complete dataset
           can be downloaded in an Excel file format directly from the site. If
           you are interested in establishing an API or other direct access,
           please contact us at{" "}
-          <a target="_blank" href="mailto:outbreak@georgetown.edu">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="mailto:outbreak@georgetown.edu"
+          >
             outbreak@georgetown.edu
           </a>{" "}
           or{" "}
-          <a target="_blank" href="mailto:info@talusanalytics.com">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="mailto:info@talusanalytics.com"
+          >
             info@talusanalytics.com
           </a>
         </li>
@@ -81,16 +89,28 @@ const Documentation = ({ ...props }) => {
       <p>
         This work and underlying AMP dataset is available for use under the
         Creative Commons Attribution By License agreement (
-        <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://creativecommons.org/licenses/by/4.0/"
+        >
           https://creativecommons.org/licenses/by/4.0/
         </a>
         ), with appropriate reference and acknowledgement of the original
         research team, as available under the About section of{" "}
-        <a target="_blank" href="https://covid-local.org">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://covid-local.org"
+        >
           covid-local.org
         </a>{" "}
         and{" "}
-        <a target="_blank" href="https://covidamp.org">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://covidamp.org"
+        >
           covidamp.org
         </a>
         .
@@ -99,7 +119,11 @@ const Documentation = ({ ...props }) => {
         In addition to direct download from the site, we are happy to work with
         your team to provide automated access <em>via</em> API or other data
         sharing method. Please contact us at{" "}
-        <a target="_blank" href="mailto:info@talusanalytics.com">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="mailto:info@talusanalytics.com"
+        >
           info@talusanalytics.com
         </a>
         &nbsp;for more information.
@@ -138,8 +162,8 @@ const Documentation = ({ ...props }) => {
       <p>
         Policies are coded and tagged with the relevant metadata manually. Each
         policy is tagged with a series of descriptive attributes based on a
-        review of the policy language, including (see data dictionary for
-        complete description of data fields):
+        review of the policy language, including (this is a representative
+        subset—see data dictionary for complete description of data fields):
       </p>
       <ul>
         <li>Policy name and description</li>
@@ -375,7 +399,11 @@ const Documentation = ({ ...props }) => {
         US state-level COVID-19 caseload data, new cases in the last 7 days and
         cumulative cases, are sourced from the New York Times Coronavirus
         (Covid-19) Data in the United States (
-        <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/nytimes/covid-19-data"
+        >
           https://github.com/nytimes/covid-19-data
         </a>
         ). These data include confirmed cases and, where captured by public
@@ -390,7 +418,11 @@ const Documentation = ({ ...props }) => {
         cumulative cases, are sourced from the COVID-19 Data Repository by the
         Center for Systems Science and Engineering (CSSE) at Johns Hopkins
         University which holds the copyright to all data (
-        <a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/CSSEGISandData/COVID-19"
+        >
           https://github.com/CSSEGISandData/COVID-19
         </a>
         ). These data include only confirmed cases and are updated daily.
@@ -437,11 +469,19 @@ const Documentation = ({ ...props }) => {
         infectious, recovered) model adding multiple levels of infections and an
         asymptomatic class (see Figure 1 below). The COVID-19 SEIR model used
         here was developed in collaboration with{" "}
-        <a target="_blank" href="https://covidactnow.org/resources#model">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://covidactnow.org/resources#model"
+        >
           COVID Act Now
         </a>
         , originally adapted from the original{" "}
-        <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://alhill.shinyapps.io/COVID19seir/"
+        >
           work of Dr. Allison Hill
         </a>
         <a data-type="ref" id="_ednref1" onClick={onClick}>
@@ -563,30 +603,32 @@ const Documentation = ({ ...props }) => {
         assess how the event would have unfolded had states not implemented any
         policies. The counterfactual scenario is modeled assuming contact rate
         remained elevated throughout the Spring and early Summer of 2020, as
-        those states had not implemented social distancing policies. We start
-        from the caseload data on either the day of first distancing policy or
-        March 12th, whichever comes first. (Note: March 12 was the day the US
-        saw a significant decline in mobility regardless of policy).
-        <a data-type="ref" id="_ednref2" onClick={onClick}>
-          ii
-        </a>
-        <a data-type="ref" id="_ednref3" onClick={onClick}>
-          iii
-        </a>{" "}
-        We then project forward assuming using a R value of 2.1, slightly lower
-        than that before the event to account for changes in behavior as would
-        be expected with only reports of disease threat (as seen in states
+        those states had not implemented social distancing policies. We
+        initialize the model on the first day each state hit 100 cumulative
+        cases. We then project forward assuming using a R value of 2.1, slightly
+        lower than that before the event to account for changes in behavior as
+        would be expected with only reports of disease threat (as seen in states
         without social distancing policies, but that still showed a reduction in
-        mobility.) Notably, variations in actual contact rate both between and
-        within states especially in the early months of the outbreak, the model
-        does not necessarily capture behavior early in the event, especially in
-        states with small or later outbreaks. In these cases, the comparison to
-        today’s actual caseload or deaths can suggest that doing nothing could
-        lead to fewer cases today, but all suggest that there will be far more
-        cases in the near future due to the exponential nature of growth with an
-        R greater than one. The implication is not that doing nothing would be a
-        better strategy because the number is lower today, but that this lack of
-        action puts the state on a dangerous trajectory.
+        mobility.) In those states who experienced large, early outbreaks,
+        defined by more than 1,000 cumulative cases before May 15th, (New Jersey
+        and New York) we initialize the counterfactual at the end of these
+        outbreaks to better predict the effect of policies for the next wave. In
+        addition to plotting the counterfactual against the actuals (“What if we
+        had done nothing?”, we present the difference in current actual caseload
+        against the modelled caseload and the modelled number of deaths at the
+        upper right of the chart. Note that the caseload compares today against
+        the “What if” scenario today; for deaths, this value is adjusted to
+        account for modelled fatalities expected to result from the modelled
+        number of cases. (We report the modelled deaths as those 30 days in the
+        future to captured the average 30 day lag from start of infection to
+        death.)
+        {/* These two endnotes don't appear in the document anymore */}
+        {/* <a data-type="ref" id="_ednref2" onClick={onClick}> */}
+        {/*   ii */}
+        {/* </a> */}
+        {/* <a data-type="ref" id="_ednref3" onClick={onClick}> */}
+        {/*   iii */}
+        {/* </a>{" "} */}
       </p>
       <table>
         <tbody>
@@ -613,7 +655,7 @@ const Documentation = ({ ...props }) => {
                 <strong>
                   Corresponding Beta value
                   <a data-type="ref" id="_ednref4" onClick={onClick}>
-                    <strong>iv</strong>
+                    <strong>ii</strong>
                   </a>
                 </strong>
               </p>
@@ -772,7 +814,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 6 days
                 <a data-type="ref" id="_ednref5" onClick={onClick}>
-                  v
+                  iii
                 </a>
               </p>
             </td>
@@ -792,7 +834,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 6 days
                 <a data-type="ref" id="_ednref6" onClick={onClick}>
-                  vi
+                  iv
                 </a>
               </p>
             </td>
@@ -810,7 +852,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 7.27%
                 <a data-type="ref" id="_ednref7" onClick={onClick}>
-                  vii
+                  v
                 </a>
               </p>
             </td>
@@ -830,7 +872,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 11 days
                 <a data-type="ref" id="_ednref8" onClick={onClick}>
-                  viii
+                  vi
                 </a>
               </p>
             </td>
@@ -848,7 +890,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 22%
                 <a data-type="ref" id="_ednref9" onClick={onClick}>
-                  ix
+                  vii
                 </a>
               </p>
             </td>
@@ -864,7 +906,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 1.09%
                 <a data-type="ref" id="_ednref10" onClick={onClick}>
-                  x
+                  viii
                 </a>
               </p>
             </td>
@@ -883,7 +925,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 8 days
                 <a data-type="ref" id="_ednref11" onClick={onClick}>
-                  xi
+                  ix
                 </a>
               </p>
             </td>
@@ -910,44 +952,57 @@ const Documentation = ({ ...props }) => {
           <p>
             Hill, Alison, et al. "Modeling COVID-19 Spread vs Healthcare
             Capacity"{" "}
-            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://alhill.shinyapps.io/COVID19seir/"
+            >
               https://alhill.shinyapps.io/COVID19seir/
             </a>
           </p>
         </p>
-        <p>
-          <a data-type="endnote" onClick={onClick} id="_edn2">
-            ii
-          </a>{" "}
-          <p>
-            <a target="_blank" href="https://www.apple.com/covid19/mobility">
-              https://www.apple.com/covid19/mobility
-            </a>
-          </p>
-        </p>
-        <p>
-          <a data-type="endnote" onClick={onClick} id="_edn3">
-            iii
-          </a>{" "}
-          <p>
-            <a
-              target="_blank"
-              href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD"
-            >
-              https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD
-            </a>
-          </p>
-        </p>
+        {/* <p> */}
+        {/*   <a data-type="endnote" onClick={onClick} id="_edn2"> */}
+        {/*     ii */}
+        {/*   </a>{" "} */}
+        {/*   <p> */}
+        {/*     <a */}
+        {/*       target="_blank" */}
+        {/*       rel="noopener noreferrer" */}
+        {/*       href="https://www.apple.com/covid19/mobility" */}
+        {/*     > */}
+        {/*       https://www.apple.com/covid19/mobility */}
+        {/*     </a> */}
+        {/*   </p> */}
+        {/* </p> */}
+        {/* <p> */}
+        {/*   <a data-type="endnote" onClick={onClick} id="_edn3"> */}
+        {/*     iii */}
+        {/*   </a>{" "} */}
+        {/*   <p> */}
+        {/*     <a */}
+        {/*       target="_blank" */}
+        {/*       rel="noopener noreferrer" */}
+        {/*       href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD" */}
+        {/*     > */}
+        {/*       https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD */}
+        {/*     </a> */}
+        {/*   </p> */}
+        {/* </p> */}
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn4">
-            iv
+            ii
           </a>{" "}
           <p>
             Calculated based on a consideration of literature-reported R values,
             estimated reduction of transmission by non-pharmaceutical
             interventions, and bounded by estimated effective R values developed
             by the R<sub>t</sub> COVID-19 project (
-            <a target="_blank" href="https://rt.live/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://rt.live/"
+            >
               https://rt.live/
             </a>
             ).
@@ -955,13 +1010,14 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn5">
-            v
+            iii
           </a>{" "}
           <p>
             Wei, Yongyue, et al. &ldquo;A systematic review and meta-analysis
             reveals long and dispersive incubation period of COVID-19&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1"
             >
               https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1
@@ -970,13 +1026,14 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn6">
-            vi
+            iv
           </a>{" "}
           <p>
             Koehler, Matt, et al. &ldquo;Modeling COVID-19 for lifting
             non-pharmaceutical interventions&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1"
             >
               https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1
@@ -985,7 +1042,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn7">
-            vii
+            v
           </a>{" "}
           <p>
             Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
@@ -993,6 +1050,7 @@ const Documentation = ({ ...props }) => {
             demand"{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
             >
               https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
@@ -1003,7 +1061,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn8">
-            viii
+            vi
           </a>{" "}
           <p>
             US Centers for Disease Control and Prevention. &ldquo;Interim
@@ -1011,6 +1069,7 @@ const Documentation = ({ ...props }) => {
             Coronavirus Disease (COVID-19)&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html"
             >
               https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html
@@ -1019,7 +1078,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn9">
-            ix
+            vii
           </a>{" "}
           <p>
             Cummings, Matthew, et al. "Epidemiology, clinical course, and
@@ -1027,6 +1086,7 @@ const Documentation = ({ ...props }) => {
             prospective cohort study"{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext"
             >
               https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext
@@ -1035,7 +1095,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn10">
-            x
+            viii
           </a>{" "}
           <p>
             Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
@@ -1043,6 +1103,7 @@ const Documentation = ({ ...props }) => {
             demand"{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
             >
               https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
@@ -1053,13 +1114,14 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn11">
-            xi
+            ix
           </a>{" "}
           <p>
             European Centre for Disease Prevention and Control. &ldquo;Clinical
             characteristics of COVID-19&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical"
             >
               https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical
