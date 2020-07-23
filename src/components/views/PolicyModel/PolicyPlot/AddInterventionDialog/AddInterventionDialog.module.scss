@@ -214,6 +214,7 @@ $grey-highlight: #eee;
 
 .policyExplanation {
   padding: 0.5rem;
+  font-style: italic;
 
   .row {
     display: flex;
@@ -234,5 +235,9 @@ $grey-highlight: #eee;
       color: #16467a;
       font-weight: 400;
     }
+  }
+
+  p {
+    font-style: italic;
   }
 }
