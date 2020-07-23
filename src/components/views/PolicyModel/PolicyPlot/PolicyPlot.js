@@ -686,6 +686,7 @@ const PolicyModel = props => {
                   interventionColors={interventionColors}
                   state={props.selectedState}
                   labelNames={labelNames}
+                  contactPlotType={props.contactPlotType}
                 />
               ) : (
                 // <AddInterventionCursor showLabel={!addIntDialogState.show} />
