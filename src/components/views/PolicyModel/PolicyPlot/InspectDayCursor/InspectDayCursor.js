@@ -227,7 +227,9 @@ const InspectDailyCursor = props => {
                   </div>
                   <div className={styles.reductionContent}>
                     <p className={styles.number}>
-                      {contactRate.y}
+                      {props.contactPlotType === "pctChange"
+                        ? 100 - contactRate.y
+                        : contactRate.y}
                       {props.contactPlotType === "pctChange" ? "%" : ""}
                     </p>
                     <p className={styles.label}>
