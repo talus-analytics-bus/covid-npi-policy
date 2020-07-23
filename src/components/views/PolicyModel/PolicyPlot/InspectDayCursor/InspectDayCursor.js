@@ -71,14 +71,27 @@ const InspectDailyCursor = props => {
     ? props.interventionColors[latestIntervention.name.split("_")[0]]
     : "white";
 
-  let pctChange = props.data.curves.pctChange.actuals.find(point =>
-    checkSameDay(point.x, popupDate)
-  );
-
-  if (pctChange === undefined) {
-    pctChange = props.data.curves.pctChange.model.find(point =>
+  let contactRate;
+  if (props.contactPlotType === "pctChange") {
+    contactRate = props.data.curves.pctChange.actuals.find(point =>
       checkSameDay(point.x, popupDate)
     );
+
+    if (contactRate === undefined) {
+      contactRate = props.data.curves.pctChange.model.find(point =>
+        checkSameDay(point.x, popupDate)
+      );
+    }
+  } else {
+    contactRate = props.data.curves["R effective"].actuals.find(point =>
+      checkSameDay(point.x, popupDate)
+    );
+
+    if (contactRate === undefined) {
+      contactRate = props.data.curves["R effective"].model.find(point =>
+        checkSameDay(point.x, popupDate)
+      );
+    }
   }
 
   const yAxis = Object.keys(props.data.curves).find(
@@ -201,13 +214,35 @@ const InspectDailyCursor = props => {
                   </div>
                   <div className={styles.reduction}>
                     <h2>
-                      Reduction <br /> in contacts
+                      {props.contactPlotType === "pctChange" ? (
+                        <>
+                          Reduction <br /> in contacts
+                        </>
+                      ) : (
+                        <>
+                          Effective R <br /> value
+                        </>
+                      )}
                     </h2>
                   </div>
                   <div className={styles.reductionContent}>
-                    <p className={styles.number}>{pctChange.y}%</p>
+                    <p className={styles.number}>
+                      {props.contactPlotType === "pctChange"
+                        ? 100 - contactRate.y
+                        : contactRate.y}
+                      {props.contactPlotType === "pctChange" ? "%" : ""}
+                    </p>
                     <p className={styles.label}>
-                      estimated contact reduction <br /> with policies in effect
+                      {props.contactPlotType === "pctChange" ? (
+                        <>
+                          estimated contact reduction <br /> with policies in
+                          effect
+                        </>
+                      ) : (
+                        <>
+                          estimated effective R <br /> with policies in effect
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>

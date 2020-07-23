@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styles from "./nav.module.scss";
 import ReactTooltip from "react-tooltip";
 
@@ -36,7 +36,7 @@ const Nav = ({ page, ...props }) => {
       data-page={page}
       className={classNames(styles.navWrapper, {
         [styles.wide]: page === "policymaps" || page === "model",
-        [styles.showMobileMenu]: showMobileMenu
+        [styles.showMobileMenu]: showMobileMenu,
       })}
     >
       <div className={styles.nav}>
@@ -74,19 +74,10 @@ const Nav = ({ page, ...props }) => {
               onClick={() => {
                 setShowMobileMenu(false);
               }}
-              className={page === "about" ? styles.active : ""}
-              to={"/about/amp"}
-            >
-              About
-            </Link>
-            <Link
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
               className={page === "policymaps" ? styles.active : ""}
               to={"/policymaps"}
             >
-              Policy maps
+              Map
             </Link>
             <Link
               onClick={() => {
@@ -95,7 +86,7 @@ const Nav = ({ page, ...props }) => {
               className={page === "model" ? styles.active : ""}
               to={"/model"}
             >
-              Policy model
+              Model
             </Link>
             <Link
               onClick={() => {
@@ -106,6 +97,24 @@ const Nav = ({ page, ...props }) => {
             >
               Data
             </Link>
+            <NavLink
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
+              activeClassName={styles.active}
+              to={"/about/doc"}
+            >
+              Documentation
+            </NavLink>
+            <NavLink
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
+              activeClassName={styles.active}
+              to={"/about/amp"}
+            >
+              About
+            </NavLink>
             <Link
               onClick={() => {
                 setShowMobileMenu(false);
