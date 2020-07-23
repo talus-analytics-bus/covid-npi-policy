@@ -53,11 +53,19 @@ const Documentation = ({ ...props }) => {
           can be downloaded in an Excel file format directly from the site. If
           you are interested in establishing an API or other direct access,
           please contact us at{" "}
-          <a target="_blank" href="mailto:outbreak@georgetown.edu">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="mailto:outbreak@georgetown.edu"
+          >
             outbreak@georgetown.edu
           </a>{" "}
           or{" "}
-          <a target="_blank" href="mailto:info@talusanalytics.com">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="mailto:info@talusanalytics.com"
+          >
             info@talusanalytics.com
           </a>
         </li>
@@ -81,16 +89,28 @@ const Documentation = ({ ...props }) => {
       <p>
         This work and underlying AMP dataset is available for use under the
         Creative Commons Attribution By License agreement (
-        <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://creativecommons.org/licenses/by/4.0/"
+        >
           https://creativecommons.org/licenses/by/4.0/
         </a>
         ), with appropriate reference and acknowledgement of the original
         research team, as available under the About section of{" "}
-        <a target="_blank" href="https://covid-local.org">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://covid-local.org"
+        >
           covid-local.org
         </a>{" "}
         and{" "}
-        <a target="_blank" href="https://covidamp.org">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://covidamp.org"
+        >
           covidamp.org
         </a>
         .
@@ -99,7 +119,11 @@ const Documentation = ({ ...props }) => {
         In addition to direct download from the site, we are happy to work with
         your team to provide automated access <em>via</em> API or other data
         sharing method. Please contact us at{" "}
-        <a target="_blank" href="mailto:info@talusanalytics.com">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="mailto:info@talusanalytics.com"
+        >
           info@talusanalytics.com
         </a>
         &nbsp;for more information.
@@ -375,7 +399,11 @@ const Documentation = ({ ...props }) => {
         US state-level COVID-19 caseload data, new cases in the last 7 days and
         cumulative cases, are sourced from the New York Times Coronavirus
         (Covid-19) Data in the United States (
-        <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/nytimes/covid-19-data"
+        >
           https://github.com/nytimes/covid-19-data
         </a>
         ). These data include confirmed cases and, where captured by public
@@ -390,7 +418,11 @@ const Documentation = ({ ...props }) => {
         cumulative cases, are sourced from the COVID-19 Data Repository by the
         Center for Systems Science and Engineering (CSSE) at Johns Hopkins
         University which holds the copyright to all data (
-        <a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/CSSEGISandData/COVID-19"
+        >
           https://github.com/CSSEGISandData/COVID-19
         </a>
         ). These data include only confirmed cases and are updated daily.
@@ -437,11 +469,19 @@ const Documentation = ({ ...props }) => {
         infectious, recovered) model adding multiple levels of infections and an
         asymptomatic class (see Figure 1 below). The COVID-19 SEIR model used
         here was developed in collaboration with{" "}
-        <a target="_blank" href="https://covidactnow.org/resources#model">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://covidactnow.org/resources#model"
+        >
           COVID Act Now
         </a>
         , originally adapted from the original{" "}
-        <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://alhill.shinyapps.io/COVID19seir/"
+        >
           work of Dr. Allison Hill
         </a>
         <a data-type="ref" id="_ednref1" onClick={onClick}>
@@ -910,7 +950,11 @@ const Documentation = ({ ...props }) => {
           <p>
             Hill, Alison, et al. "Modeling COVID-19 Spread vs Healthcare
             Capacity"{" "}
-            <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://alhill.shinyapps.io/COVID19seir/"
+            >
               https://alhill.shinyapps.io/COVID19seir/
             </a>
           </p>
@@ -920,7 +964,11 @@ const Documentation = ({ ...props }) => {
             ii
           </a>{" "}
           <p>
-            <a target="_blank" href="https://www.apple.com/covid19/mobility">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.apple.com/covid19/mobility"
+            >
               https://www.apple.com/covid19/mobility
             </a>
           </p>
@@ -932,6 +980,7 @@ const Documentation = ({ ...props }) => {
           <p>
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD"
             >
               https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD
@@ -947,7 +996,11 @@ const Documentation = ({ ...props }) => {
             estimated reduction of transmission by non-pharmaceutical
             interventions, and bounded by estimated effective R values developed
             by the R<sub>t</sub> COVID-19 project (
-            <a target="_blank" href="https://rt.live/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://rt.live/"
+            >
               https://rt.live/
             </a>
             ).
@@ -962,6 +1015,7 @@ const Documentation = ({ ...props }) => {
             reveals long and dispersive incubation period of COVID-19&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1"
             >
               https://www.medrxiv.org/content/10.1101/2020.06.20.20134387v1
@@ -977,6 +1031,7 @@ const Documentation = ({ ...props }) => {
             non-pharmaceutical interventions&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1"
             >
               https://www.medrxiv.org/content/10.1101/2020.07.02.20145052v1
@@ -993,6 +1048,7 @@ const Documentation = ({ ...props }) => {
             demand"{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
             >
               https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
@@ -1011,6 +1067,7 @@ const Documentation = ({ ...props }) => {
             Coronavirus Disease (COVID-19)&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html"
             >
               https://www.cdc.gov/coronavirus/2019-ncov/hcp/clinical-guidance-management-patients.html
@@ -1027,6 +1084,7 @@ const Documentation = ({ ...props }) => {
             prospective cohort study"{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext"
             >
               https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31189-2/fulltext
@@ -1043,6 +1101,7 @@ const Documentation = ({ ...props }) => {
             demand"{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
             >
               https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
@@ -1060,6 +1119,7 @@ const Documentation = ({ ...props }) => {
             characteristics of COVID-19&rdquo;{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical"
             >
               https://www.ecdc.europa.eu/en/covid-19/latest-evidence/clinical
