@@ -72,14 +72,14 @@ const labelNames = {
   dead: "Deaths",
 };
 
-// const covidCountHoverText = {
-//   infected_a: "Number of individuals with an active COVID-19 infection by day",
-//   infected_b:
-//     "Number of individuals currently hospitalized for COVID-19 infection by day",
-//   infected_c:
-//     "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-//   dead: "Cumulative deaths from COVID-19 by day",
-// };
+const covidCountHoverText = {
+  infected_a: "Number of individuals with an active COVID-19 infection by day",
+  infected_b:
+    "Number of individuals currently hospitalized for COVID-19 infection by day",
+  infected_c:
+    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+  dead: "Cumulative deaths from COVID-19 by day",
+};
 
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
 
@@ -434,63 +434,65 @@ const PolicyModel = props => {
           </Tippy>
         </label>
       </div>
-      {/* <Tippy */}
-      {/*   interactive={true} */}
-      {/*   allowHTML={true} */}
-      {/*   content={<p>{covidCountHoverText[props.selectedCurves[0]]}</p>} */}
-      {/*   maxWidth={"30rem"} */}
-      {/*   theme={"light"} */}
-      {/*   placement={"bottom"} */}
-      {/*   offset={[-30, 10]} */}
-      {/* > */}
-      {/*   <img */}
-      {/*     className={styles.infoIcon} */}
-      {/*     src={infoIcon} */}
-      {/*     alt="More information" */}
-      {/*     style={{ */}
-      {/*       position: "relative", */}
-      {/*       top: { */}
-      {/*         infected_a: "19rem", */}
-      {/*         infected_b: "17.5rem", */}
-      {/*         infected_c: "20rem", */}
-      {/*         dead: "19rem", */}
-      {/*       }[props.selectedCurves[0]], */}
-      {/*       left: "2.25rem", */}
-      {/*     }} */}
-      {/*   /> */}
-      {/* </Tippy> */}
-      {/* <Tippy */}
-      {/*   interactive={true} */}
-      {/*   allowHTML={true} */}
-      {/*   content={ */}
-      {/*     props.contactPlotType === "pctChange" ? ( */}
-      {/*       <p> */}
-      {/*         Estimated percentage reduction in contacts due to policies */}
-      {/*         implemented, relative to baseline contact rate. */}
-      {/*       </p> */}
-      {/*     ) : ( */}
-      {/*       <p> */}
-      {/*         Estimated average number of people each infectious person is */}
-      {/*         expected to infect. */}
-      {/*       </p> */}
-      {/*     ) */}
-      {/*   } */}
-      {/*   // maxWidth={"30rem"} */}
-      {/*   theme={"light"} */}
-      {/*   placement={"bottom"} */}
-      {/*   offset={[-30, 10]} */}
-      {/* > */}
-      {/*   <img */}
-      {/*     className={styles.infoIcon} */}
-      {/*     src={infoIcon} */}
-      {/*     alt="More information" */}
-      {/*     style={{ */}
-      {/*       position: "relative", */}
-      {/*       top: "1.5rem", */}
-      {/*       left: "2.5rem", */}
-      {/*     }} */}
-      {/*   /> */}
-      {/* </Tippy> */}
+      <Tippy
+        interactive={true}
+        allowHTML={true}
+        content={<p>{covidCountHoverText[props.selectedCurves[0]]}</p>}
+        maxWidth={"30rem"}
+        theme={"light"}
+        placement={"bottom"}
+        offset={[-30, 10]}
+      >
+        <img
+          className={styles.infoIcon}
+          src={infoIcon}
+          alt="More information"
+          style={{
+            position: "absolute",
+            height: "2.5%",
+            top: {
+              infected_a: "50%",
+              infected_b: "48%",
+              infected_c: "53.5%",
+              dead: "51.5%",
+            }[props.selectedCurves[0]],
+            left: "2.1%",
+          }}
+        />
+      </Tippy>
+      <Tippy
+        interactive={true}
+        allowHTML={true}
+        content={
+          props.contactPlotType === "pctChange" ? (
+            <p>
+              Estimated percentage reduction in contacts due to policies
+              implemented, relative to baseline contact rate.
+            </p>
+          ) : (
+            <p>
+              Estimated average number of people each infectious person is
+              expected to infect.
+            </p>
+          )
+        }
+        // maxWidth={"30rem"}
+        theme={"light"}
+        placement={"bottom"}
+        offset={[-30, 10]}
+      >
+        <img
+          className={styles.infoIcon}
+          src={infoIcon}
+          alt="More information"
+          style={{
+            position: "absolute",
+            height: "2.5%",
+            top: "10.5%",
+            left: "2.7%",
+          }}
+        />
+      </Tippy>
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
