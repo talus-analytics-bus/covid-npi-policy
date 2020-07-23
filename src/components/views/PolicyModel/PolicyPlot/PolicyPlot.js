@@ -437,7 +437,11 @@ const PolicyModel = props => {
       <Tippy
         interactive={true}
         allowHTML={true}
-        content={<p>{covidCountHoverText[props.selectedCurves[0]]}</p>}
+        content={
+          <p className={styles.ipopup}>
+            {covidCountHoverText[props.selectedCurves[0]]}
+          </p>
+        }
         maxWidth={"30rem"}
         theme={"light"}
         placement={"bottom"}
@@ -465,12 +469,12 @@ const PolicyModel = props => {
         allowHTML={true}
         content={
           props.contactPlotType === "pctChange" ? (
-            <p>
+            <p className={styles.ipopup}>
               Estimated percentage reduction in contacts due to policies
               implemented, relative to baseline contact rate.
             </p>
           ) : (
-            <p>
+            <p className={styles.ipopup}>
               Estimated average number of people each infectious person is
               expected to infect.
             </p>
