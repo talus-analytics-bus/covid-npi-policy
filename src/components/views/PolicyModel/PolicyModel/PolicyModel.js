@@ -239,6 +239,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 value={selectedStates[0]}
                 onChange={e => {
                   setSelectedStates([e.target.value]);
+                  window.location.hash = e.target.value;
                 }}
                 aria-label={"Select a state to display"}
               >
