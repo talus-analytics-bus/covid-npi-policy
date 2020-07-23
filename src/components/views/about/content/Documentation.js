@@ -655,7 +655,7 @@ const Documentation = ({ ...props }) => {
                 <strong>
                   Corresponding Beta value
                   <a data-type="ref" id="_ednref4" onClick={onClick}>
-                    <strong>iv</strong>
+                    <strong>ii</strong>
                   </a>
                 </strong>
               </p>
@@ -814,7 +814,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 6 days
                 <a data-type="ref" id="_ednref5" onClick={onClick}>
-                  v
+                  iii
                 </a>
               </p>
             </td>
@@ -834,7 +834,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 6 days
                 <a data-type="ref" id="_ednref6" onClick={onClick}>
-                  vi
+                  iv
                 </a>
               </p>
             </td>
@@ -852,7 +852,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 7.27%
                 <a data-type="ref" id="_ednref7" onClick={onClick}>
-                  vii
+                  v
                 </a>
               </p>
             </td>
@@ -872,7 +872,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 11 days
                 <a data-type="ref" id="_ednref8" onClick={onClick}>
-                  viii
+                  vi
                 </a>
               </p>
             </td>
@@ -890,7 +890,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 22%
                 <a data-type="ref" id="_ednref9" onClick={onClick}>
-                  ix
+                  vii
                 </a>
               </p>
             </td>
@@ -906,7 +906,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 1.09%
                 <a data-type="ref" id="_ednref10" onClick={onClick}>
-                  x
+                  viii
                 </a>
               </p>
             </td>
@@ -925,7 +925,7 @@ const Documentation = ({ ...props }) => {
               <p>
                 8 days
                 <a data-type="ref" id="_ednref11" onClick={onClick}>
-                  xi
+                  ix
                 </a>
               </p>
             </td>
@@ -961,37 +961,37 @@ const Documentation = ({ ...props }) => {
             </a>
           </p>
         </p>
-        <p>
-          <a data-type="endnote" onClick={onClick} id="_edn2">
-            ii
-          </a>{" "}
-          <p>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.apple.com/covid19/mobility"
-            >
-              https://www.apple.com/covid19/mobility
-            </a>
-          </p>
-        </p>
-        <p>
-          <a data-type="endnote" onClick={onClick} id="_edn3">
-            iii
-          </a>{" "}
-          <p>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD"
-            >
-              https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD
-            </a>
-          </p>
-        </p>
+        {/* <p> */}
+        {/*   <a data-type="endnote" onClick={onClick} id="_edn2"> */}
+        {/*     ii */}
+        {/*   </a>{" "} */}
+        {/*   <p> */}
+        {/*     <a */}
+        {/*       target="_blank" */}
+        {/*       rel="noopener noreferrer" */}
+        {/*       href="https://www.apple.com/covid19/mobility" */}
+        {/*     > */}
+        {/*       https://www.apple.com/covid19/mobility */}
+        {/*     </a> */}
+        {/*   </p> */}
+        {/* </p> */}
+        {/* <p> */}
+        {/*   <a data-type="endnote" onClick={onClick} id="_edn3"> */}
+        {/*     iii */}
+        {/*   </a>{" "} */}
+        {/*   <p> */}
+        {/*     <a */}
+        {/*       target="_blank" */}
+        {/*       rel="noopener noreferrer" */}
+        {/*       href="https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD" */}
+        {/*     > */}
+        {/*       https://visualization.covid19mobility.org/?date=2020-07-09&amp;dates=2020-04-09_2020-07-09&amp;region=WORLD */}
+        {/*     </a> */}
+        {/*   </p> */}
+        {/* </p> */}
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn4">
-            iv
+            ii
           </a>{" "}
           <p>
             Calculated based on a consideration of literature-reported R values,
@@ -1010,7 +1010,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn5">
-            v
+            iii
           </a>{" "}
           <p>
             Wei, Yongyue, et al. &ldquo;A systematic review and meta-analysis
@@ -1026,7 +1026,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn6">
-            vi
+            iv
           </a>{" "}
           <p>
             Koehler, Matt, et al. &ldquo;Modeling COVID-19 for lifting
@@ -1042,7 +1042,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn7">
-            vii
+            v
           </a>{" "}
           <p>
             Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
@@ -1061,7 +1061,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn8">
-            viii
+            vi
           </a>{" "}
           <p>
             US Centers for Disease Control and Prevention. &ldquo;Interim
@@ -1078,7 +1078,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn9">
-            ix
+            vii
           </a>{" "}
           <p>
             Cummings, Matthew, et al. "Epidemiology, clinical course, and
@@ -1095,7 +1095,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn10">
-            x
+            viii
           </a>{" "}
           <p>
             Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
@@ -1114,7 +1114,7 @@ const Documentation = ({ ...props }) => {
         </p>
         <p>
           <a data-type="endnote" onClick={onClick} id="_edn11">
-            xi
+            ix
           </a>{" "}
           <p>
             European Centre for Disease Prevention and Control. &ldquo;Clinical
