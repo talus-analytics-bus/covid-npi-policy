@@ -49,7 +49,7 @@ const Documentation = ({ ...props }) => {
       <ol>
         <li>
           A searchable, filterable database of all policies and plans in the
-          dataset, including legal and regulatory analysis. The complete dataset
+          dataset, including legal and governance analysis. The complete dataset
           can be downloaded in an Excel file format directly from the site. If
           you are interested in establishing an API or other direct access,
           please contact us at{" "}
@@ -162,8 +162,8 @@ const Documentation = ({ ...props }) => {
       <p>
         Policies are coded and tagged with the relevant metadata manually. Each
         policy is tagged with a series of descriptive attributes based on a
-        review of the policy language, including (see data dictionary for
-        complete description of data fields):
+        review of the policy language, including (this is a representative
+        subset—see data dictionary for complete description of data fields):
       </p>
       <ul>
         <li>Policy name and description</li>
@@ -603,30 +603,32 @@ const Documentation = ({ ...props }) => {
         assess how the event would have unfolded had states not implemented any
         policies. The counterfactual scenario is modeled assuming contact rate
         remained elevated throughout the Spring and early Summer of 2020, as
-        those states had not implemented social distancing policies. We start
-        from the caseload data on either the day of first distancing policy or
-        March 12th, whichever comes first. (Note: March 12 was the day the US
-        saw a significant decline in mobility regardless of policy).
-        <a data-type="ref" id="_ednref2" onClick={onClick}>
-          ii
-        </a>
-        <a data-type="ref" id="_ednref3" onClick={onClick}>
-          iii
-        </a>{" "}
-        We then project forward assuming using a R value of 2.1, slightly lower
-        than that before the event to account for changes in behavior as would
-        be expected with only reports of disease threat (as seen in states
+        those states had not implemented social distancing policies. We
+        initialize the model on the first day each state hit 100 cumulative
+        cases. We then project forward assuming using a R value of 2.1, slightly
+        lower than that before the event to account for changes in behavior as
+        would be expected with only reports of disease threat (as seen in states
         without social distancing policies, but that still showed a reduction in
-        mobility.) Notably, variations in actual contact rate both between and
-        within states especially in the early months of the outbreak, the model
-        does not necessarily capture behavior early in the event, especially in
-        states with small or later outbreaks. In these cases, the comparison to
-        today’s actual caseload or deaths can suggest that doing nothing could
-        lead to fewer cases today, but all suggest that there will be far more
-        cases in the near future due to the exponential nature of growth with an
-        R greater than one. The implication is not that doing nothing would be a
-        better strategy because the number is lower today, but that this lack of
-        action puts the state on a dangerous trajectory.
+        mobility.) In those states who experienced large, early outbreaks,
+        defined by more than 1,000 cumulative cases before May 15th, (New Jersey
+        and New York) we initialize the counterfactual at the end of these
+        outbreaks to better predict the effect of policies for the next wave. In
+        addition to plotting the counterfactual against the actuals (“What if we
+        had done nothing?”, we present the difference in current actual caseload
+        against the modelled caseload and the modelled number of deaths at the
+        upper right of the chart. Note that the caseload compares today against
+        the “What if” scenario today; for deaths, this value is adjusted to
+        account for modelled fatalities expected to result from the modelled
+        number of cases. (We report the modelled deaths as those 30 days in the
+        future to captured the average 30 day lag from start of infection to
+        death.)
+        {/* These two endnotes don't appear in the document anymore */}
+        {/* <a data-type="ref" id="_ednref2" onClick={onClick}> */}
+        {/*   ii */}
+        {/* </a> */}
+        {/* <a data-type="ref" id="_ednref3" onClick={onClick}> */}
+        {/*   iii */}
+        {/* </a>{" "} */}
       </p>
       <table>
         <tbody>
