@@ -147,12 +147,13 @@ const PolicyModel = props => {
       if (!["R effective", "pctChange"].includes(curveName)) {
         return (
           <VictoryLine
+            // animate={{ duration: 1000 }}
             key={curveName}
             style={{
               data: { stroke: plotColors[index], strokeWidth: 0.75 },
             }}
             data={data.actuals}
-            // interpolation={'monotoneX'}
+            interpolation={"natural"}
           />
         );
       } else {
@@ -172,6 +173,7 @@ const PolicyModel = props => {
       ) {
         return (
           <VictoryLine
+            // animate={{ duration: 1000 }}
             key={curveName}
             style={{
               data: {
@@ -181,7 +183,7 @@ const PolicyModel = props => {
               },
             }}
             data={data.model}
-            // interpolation={"natural"}
+            interpolation={"natural"}
           />
         );
       } else {
@@ -195,6 +197,7 @@ const PolicyModel = props => {
       if (curveName.startsWith("CF_")) {
         return (
           <VictoryArea
+            // animate={{ duration: 2000 }}
             key={curveName}
             style={{
               data: {
@@ -205,7 +208,7 @@ const PolicyModel = props => {
               },
             }}
             data={data.model}
-            // interpolation={"natural"}
+            interpolation={"natural"}
           />
         );
       } else {
@@ -517,6 +520,7 @@ const PolicyModel = props => {
       {/*   </linearGradient> */}
       {/* </svg> */}
       <VictoryChart
+        animate={{ duration: 3000 }}
         padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
         // domainPadding={5}
         responsive={true}
@@ -632,7 +636,7 @@ const PolicyModel = props => {
         {pctChangeInterventionLines}
       </VictoryChart>
       <VictoryChart
-        // animate={{ duration: 1000 }}
+        animate={{ duration: 3000 }}
         padding={{ top: 6, bottom: 20, left: 50, right: 10 }}
         // domainPadding={5}
         responsive={true}
