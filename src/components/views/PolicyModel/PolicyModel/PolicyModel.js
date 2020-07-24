@@ -39,7 +39,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   // use selected states to load the required models
   const [selectedStates, setSelectedStates] = useState([
-    window.location.hash.split("#")[1].toUpperCase() || "AL",
+    window.location.hash.split("#")[1] || "AL",
   ]);
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
