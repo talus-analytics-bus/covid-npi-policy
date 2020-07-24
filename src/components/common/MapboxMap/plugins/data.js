@@ -833,16 +833,16 @@ export const metricMeta = {
         subLabels: [
           <span style={{ visibility: "hidden" }}>x</span>,
           <span style={{ visibility: "hidden" }}>x</span>,
-          getCovidLocalMetricLink("(Phase I)", "#661B3C", {
+          getCovidLocalMetricLink("Phase I", "#661B3C", {
             fontStyle: "italic",
           }),
-          getCovidLocalMetricLink("(Phase II)", "#C1272D", {
+          getCovidLocalMetricLink("Phase II", "#C1272D", {
             fontStyle: "italic",
           }),
-          getCovidLocalMetricLink("(Phase III)", "#D66B3E", {
+          getCovidLocalMetricLink("Phase III", "#D66B3E", {
             fontStyle: "italic",
           }),
-          getCovidLocalMetricLink("(Phase IV)", "#ECBD62", {
+          getCovidLocalMetricLink("Phase IV", "#ECBD62", {
             fontStyle: "italic",
           }),
           <span style={{ visibility: "hidden" }}>x</span>,
