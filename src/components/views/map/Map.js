@@ -65,6 +65,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // name of metric to use as circle by default
   const [circle, setCircle] = useState(defaults[mapId].circle);
 
+  const [showCircles, setShowCircles] = useState(true);
+
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
     {
@@ -325,29 +327,43 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                           />,
 
                           // circle metric radio toggle
-                          circle !== null && (
-                            <RadioToggle
-                              {...{
-                                // TODO define choices based on current mapType
-                                setInfoTooltipContent:
-                                  props.setInfoTooltipContent,
-                                choices: mapMetrics[mapId]
-                                  .filter(d => d.for.includes("circle"))
-                                  .map(d => {
-                                    return {
-                                      value: d.id,
-                                      name: metricMeta[d.id].metric_displayname,
-                                      tooltip:
-                                        metricMeta[d.id].metric_definition,
-                                    };
-                                  }),
-                                curVal: circle,
-                                callback: setCircle,
-                                label: "View COVID count by",
-                                key: "RadioToggle1",
-                              }}
-                            />
-                          ),
+                          <div>
+                            <label>
+                              <input
+                                name="casecount"
+                                type="checkbox"
+                                checked={circle !== null}
+                                onChange={e => {
+                                  setCircle(circle === null ? "74" : null);
+                                }}
+                              />{" "}
+                              View COVID count by
+                            </label>
+                            {circle !== null && (
+                              <RadioToggle
+                                {...{
+                                  // TODO define choices based on current mapType
+                                  setInfoTooltipContent:
+                                    props.setInfoTooltipContent,
+                                  choices: mapMetrics[mapId]
+                                    .filter(d => d.for.includes("circle"))
+                                    .map(d => {
+                                      return {
+                                        value: d.id,
+                                        name:
+                                          metricMeta[d.id].metric_displayname,
+                                        tooltip:
+                                          metricMeta[d.id].metric_definition,
+                                      };
+                                    }),
+                                  curVal: circle,
+                                  callback: setCircle,
+                                  label: "",
+                                  key: "RadioToggle1",
+                                }}
+                              />
+                            )}
+                          </div>,
                         ].map(d => d)}
                       </div>
                     ),
