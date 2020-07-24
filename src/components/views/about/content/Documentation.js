@@ -685,13 +685,13 @@ const Documentation = ({ ...props }) => {
               <p>Lockdown (Phase I)</p>
             </td>
             <td>
-              <p>0.79</p>
+              <p>0.84</p>
             </td>
             <td>
               <p>.012</p>
             </td>
             <td>
-              <p>68%</p>
+              <p>67%</p>
             </td>
           </tr>
           <tr>
@@ -699,13 +699,13 @@ const Documentation = ({ ...props }) => {
               <p>Stay-at-home (Phase II)</p>
             </td>
             <td>
-              <p>0.90</p>
+              <p>0.95</p>
             </td>
             <td>
               <p>0.14</p>
             </td>
             <td>
-              <p>64%</p>
+              <p>62%</p>
             </td>
           </tr>
           <tr>
@@ -713,13 +713,13 @@ const Documentation = ({ ...props }) => {
               <p>Safer-at-home (Phase III)</p>
             </td>
             <td>
-              <p>1.21</p>
+              <p>1.26</p>
             </td>
             <td>
               <p>0.19</p>
             </td>
             <td>
-              <p>49%</p>
+              <p>50%</p>
             </td>
           </tr>
           <tr>
@@ -727,13 +727,13 @@ const Documentation = ({ ...props }) => {
               <p>New normal (Phase IV)</p>
             </td>
             <td>
-              <p>1.78</p>
+              <p>1.83</p>
             </td>
             <td>
               <p>0.29</p>
             </td>
             <td>
-              <p>28%</p>
+              <p>27%</p>
             </td>
           </tr>
         </tbody>
