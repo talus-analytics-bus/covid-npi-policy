@@ -87,7 +87,6 @@ export const getLinearScale = ({
   maxValue,
   featurePropertyKey,
   zeroSize = 0,
-  maxSize = 75,
 }) => {
   const metricZoom = [
     "interpolate",
@@ -96,9 +95,9 @@ export const getLinearScale = ({
     0,
     zeroSize,
     1,
-    minSize,
+    5,
     maxValue,
-    maxSize,
+    75,
   ];
 
   // define scale factor for each map that scales fully zoomed in bubbles to

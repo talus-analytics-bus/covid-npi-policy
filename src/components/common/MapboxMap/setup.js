@@ -45,6 +45,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
      * @return {[type]}     [description]
      */
     function handleRender() {
+      console.log("handleRender");
       if (!map.loaded()) {
         return;
       } // still not loaded; continue
@@ -201,6 +202,8 @@ export const initMap = ({ map, mapId, data, callback }) => {
           // if layer doesn't exist yet, add it, along with any applicable
           // auxiliary layers
           if (!map.getLayer(layerKey)) {
+            console.log("layerStyle.circleRadius");
+            console.log(layerStyle.circleRadius);
             // define circle shadow style
             const circleShadowStyle = {
               "circle-radius-transition": {
@@ -314,6 +317,7 @@ export const initMap = ({ map, mapId, data, callback }) => {
   }
   // otherwise, when map is loaded, add geometries
   map.on("load", function() {
+    console.log("load");
     initGeoms();
   });
 };

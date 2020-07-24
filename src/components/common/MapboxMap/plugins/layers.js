@@ -43,7 +43,7 @@ const defaultPatternStyle = key => {
 // on the feature state defined by the `key` passed as an argument. Styles that
 // are not data-driven should be represented as functions without any arguments
 const circleStyles = {
-  "metric-test-transp": (key, linCircleScale = false) => {
+  "metric-test-transp": key => {
     return {
       circleColor: [
         "case",
@@ -65,25 +65,16 @@ const circleStyles = {
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
-        if (linCircleScale)
-          return getLinearScale({
-            minSize: 1,
-            zeroSize: 1,
-            maxValue: 8e4,
-            maxSize: 15,
-            featurePropertyKey: key,
-          });
-        else
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e7,
-            featurePropertyKey: key,
-          });
+        return getLog10Scale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 1e7,
+          featurePropertyKey: key,
+        });
       },
     };
   },
-  "metric-test-transp-linear": (key, linCircleScale = false) => {
+  "metric-test-transp-linear": key => {
     return {
       circleColor: [
         "case",
@@ -105,27 +96,16 @@ const circleStyles = {
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
-        if (linCircleScale)
-          return getLinearScale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 5e5,
-            // maxSize: 20,
-            featurePropertyKey: key,
-          });
-        else
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e7,
-            featurePropertyKey: key,
-          });
+        return getLinearScale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 5e5,
+          featurePropertyKey: key,
+        });
       },
     };
   },
-
-  // global
-  "metric-test-solid-linear": (key, linCircleScale = false) => {
+  "metric-test-solid-linear": key => {
     return {
       circleColor: [
         "case",
@@ -147,25 +127,16 @@ const circleStyles = {
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
-        if (linCircleScale)
-          return getLinearScale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 3e6,
-            // maxSize: 20,
-            featurePropertyKey: key,
-          });
-        else
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e7,
-            featurePropertyKey: key,
-          });
+        return getLinearScale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 3e6,
+          featurePropertyKey: key,
+        });
       },
     };
   },
-  "metric-test-solid": (key, linCircleScale = false) => {
+  "metric-test-solid": key => {
     return {
       circleColor: [
         "case",
@@ -187,21 +158,12 @@ const circleStyles = {
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
-        if (linCircleScale)
-          return getLinearScale({
-            minSize: 1,
-            zeroSize: 1,
-            maxValue: 4e5,
-            maxSize: 15,
-            featurePropertyKey: key,
-          });
-        else
-          return getLog10Scale({
-            minSize: 5,
-            zeroSize: 5,
-            maxValue: 1e9,
-            featurePropertyKey: key,
-          });
+        return getLog10Scale({
+          minSize: 5,
+          zeroSize: 5,
+          maxValue: 1e9,
+          featurePropertyKey: key,
+        });
       },
     };
   },
