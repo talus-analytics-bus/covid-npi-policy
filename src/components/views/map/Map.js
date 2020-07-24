@@ -46,7 +46,6 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // map circle scale linear? otherwise log
   const [linCircleScale, setLinCircleScale] = useState(false);
-  const circleScaleLabel = linCircleScale ? "Change to log" : "Change to lin";
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
