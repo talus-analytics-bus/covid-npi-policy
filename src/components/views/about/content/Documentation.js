@@ -655,7 +655,7 @@ const Documentation = ({ ...props }) => {
                 <strong>
                   Corresponding Beta value
                   <a data-type="ref" id="_ednref4" onClick={onClick}>
-                    <strong>ii</strong>
+                    ii
                   </a>
                 </strong>
               </p>
