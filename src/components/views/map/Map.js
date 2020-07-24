@@ -334,7 +334,11 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                 type="checkbox"
                                 checked={circle !== null}
                                 onChange={e => {
-                                  setCircle(circle === null ? "74" : null);
+                                  setCircle(
+                                    circle === null
+                                      ? defaults[mapId].circle
+                                      : null
+                                  );
                                 }}
                               />{" "}
                               View COVID count by
