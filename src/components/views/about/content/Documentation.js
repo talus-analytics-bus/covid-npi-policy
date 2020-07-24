@@ -671,7 +671,7 @@ const Documentation = ({ ...props }) => {
               <p>Early event (prior to any policy interventions)</p>
             </td>
             <td>
-              <p>2.47</p>
+              <p>2.52</p>
             </td>
             <td>
               <p>.04</p>
