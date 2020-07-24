@@ -44,6 +44,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
 
+  // map circle scale linear? otherwise log
+  const [linCircleScale, setLinCircleScale] = useState(false);
+
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
 
@@ -64,8 +67,6 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // name of metric to use as circle by default
   const [circle, setCircle] = useState(defaults[mapId].circle);
-
-  const [showCircles, setShowCircles] = useState(true);
 
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
@@ -171,6 +172,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
           {...{
             setInfoTooltipContent: props.setInfoTooltipContent,
             mapId: k,
+            linCircleScale,
             key: k,
             mapStyle: mapStyles[k],
             date,
@@ -325,6 +327,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                               key: "FilterSet",
                             }}
                           />,
+                          <div key={"divider"} className={styles.divider} />,
 
                           // circle metric radio toggle
                           <div>
