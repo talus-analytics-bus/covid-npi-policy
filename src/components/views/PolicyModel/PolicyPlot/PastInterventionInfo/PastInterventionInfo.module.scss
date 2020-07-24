@@ -106,6 +106,7 @@ $grey-highlight-darker: #ccc;
   }
 
   .content {
+    padding-top: 0.5rem;
     .policyLink {
       display: block;
       width: fit-content;
@@ -126,7 +127,9 @@ $grey-highlight-darker: #ccc;
         rgb(66, 83, 121),
         rgb(33, 53, 97)
       );
-      padding: 5px 15px;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
 
       &:hover {
         color: rgb(33, 53, 97);
@@ -134,12 +137,33 @@ $grey-highlight-darker: #ccc;
         border-color: rgb(33, 53, 97);
         text-decoration: none;
       }
+
+      svg {
+        width: 1em;
+        margin-right: 0.5em;
+        position: relative;
+        top: 0.125em;
+
+        path {
+          fill: #ffffff;
+        }
+      }
+
+      &:hover svg path {
+        fill: #344269;
+      }
+    }
+
+    .policyCount {
+      color: #1a4278;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
     .asOfDate {
       color: #1a4278;
       font-size: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
 
       span {
         font-style: italic;
