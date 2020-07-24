@@ -393,13 +393,13 @@ const PolicyModel = props => {
                   <span />
                   <p>Lockdown policies</p>
                 </div>
-                <div className={styles.safer}>
-                  <span />
-                  <p>Safer-at-home policies</p>
-                </div>
                 <div className={styles.stay}>
                   <span />
                   <p>Stay-at-home policies</p>
+                </div>
+                <div className={styles.safer}>
+                  <span />
+                  <p>Safer-at-home policies</p>
                 </div>
                 <div className={styles.normal}>
                   <span />

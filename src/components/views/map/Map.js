@@ -44,6 +44,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
 
+  // map circle scale linear? otherwise log
+  const [linCircleScale, setLinCircleScale] = useState(false);
+
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
 
@@ -169,6 +172,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
           {...{
             setInfoTooltipContent: props.setInfoTooltipContent,
             mapId: k,
+            linCircleScale,
             key: k,
             mapStyle: mapStyles[k],
             date,
@@ -326,29 +330,47 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                           <div key={"divider"} className={styles.divider} />,
 
                           // circle metric radio toggle
-                          circle !== null && (
-                            <RadioToggle
-                              {...{
-                                // TODO define choices based on current mapType
-                                setInfoTooltipContent:
-                                  props.setInfoTooltipContent,
-                                choices: mapMetrics[mapId]
-                                  .filter(d => d.for.includes("circle"))
-                                  .map(d => {
-                                    return {
-                                      value: d.id,
-                                      name: metricMeta[d.id].metric_displayname,
-                                      tooltip:
-                                        metricMeta[d.id].metric_definition,
-                                    };
-                                  }),
-                                curVal: circle,
-                                callback: setCircle,
-                                label: "View COVID count by",
-                                key: "RadioToggle1",
-                              }}
-                            />
-                          ),
+                          <div>
+                            <label>
+                              <input
+                                name="casecount"
+                                type="checkbox"
+                                checked={circle !== null}
+                                onChange={e => {
+                                  setCircle(
+                                    circle === null
+                                      ? defaults[mapId].circle
+                                      : null
+                                  );
+                                }}
+                              />{" "}
+                              View COVID count by
+                            </label>
+                            {circle !== null && (
+                              <RadioToggle
+                                {...{
+                                  // TODO define choices based on current mapType
+                                  setInfoTooltipContent:
+                                    props.setInfoTooltipContent,
+                                  choices: mapMetrics[mapId]
+                                    .filter(d => d.for.includes("circle"))
+                                    .map(d => {
+                                      return {
+                                        value: d.id,
+                                        name:
+                                          metricMeta[d.id].metric_displayname,
+                                        tooltip:
+                                          metricMeta[d.id].metric_definition,
+                                      };
+                                    }),
+                                  curVal: circle,
+                                  callback: setCircle,
+                                  label: "",
+                                  key: "RadioToggle1",
+                                }}
+                              />
+                            )}
+                          </div>,
                         ].map(d => d)}
                       </div>
                     ),

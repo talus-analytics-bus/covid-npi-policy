@@ -29,7 +29,12 @@
       }
       .subtitle {
         font-style: italic;
-        color: black;
+        color: #15477b;
+
+        span:first-of-type {
+          font-style: normal;
+          font-weight: 600;
+        }
       }
     }
     .infographic {
@@ -53,6 +58,33 @@
           font-weight: bold;
           padding: 5px 15px;
           line-height: 1.2;
+          width: 12em;
+          text-align: left;
+
+          &:first-of-type {
+            margin-bottom: 0.5em;
+          }
+
+          svg {
+            width: 1em;
+            margin-right: 0.5em;
+            position: relative;
+            top: 0.125em;
+
+            path {
+              fill: #ffffff;
+            }
+          }
+
+          &:hover svg path {
+            fill: #344269;
+          }
+
+          img {
+            height: 1em;
+            margin-right: 0.5em;
+            margin-bottom: 0.125em;
+          }
         }
         + span {
           color: $dark-blue;

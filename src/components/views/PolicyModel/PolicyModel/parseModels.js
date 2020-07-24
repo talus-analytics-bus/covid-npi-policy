@@ -17,7 +17,7 @@
 //   },
 // }
 
-const INITIAL_R_0 = 2.474;
+const INITIAL_R_0 = 2.524;
 
 // take a model run string and
 // parse it, including fixing dates
@@ -135,9 +135,7 @@ export default function parseModelCurves(
             if (column === "R effective") {
               curves[state].curves.pctChange[source].push({
                 x: newDate,
-                y: parseInt(
-                  (trimmedData[index - 1]["R effective"] / initialR_0) * 100
-                ),
+                y: (trimmedData[index - 1]["R effective"] / initialR_0) * 100,
               });
             }
           }
@@ -146,7 +144,7 @@ export default function parseModelCurves(
           if (column === "R effective") {
             curves[state].curves.pctChange[source].push({
               x: day.date,
-              y: parseInt((day["R effective"] / initialR_0) * 100),
+              y: (day["R effective"] / initialR_0) * 100,
             });
           }
 

@@ -162,22 +162,33 @@ const PastInterventionInfo = props => {
       <div className={styles.content}>
         {proposed && <p>Proposal Date: {formatDate(props.effectiveDate)}</p>}
         {!proposed && (
-          <a
-            className={styles.policyLink}
-            href={policyURL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View all policies <br /> {policyCount && "(" + policyCount + ")"} in
-            effect
-          </a>
+          <p className={styles.policyCount}>
+            {policyCount} {policyCount > 1 ? "policies" : "policy"} in effect
+          </p>
         )}
         {!proposed && (
           <p className={styles.asOfDate}>
-            {" "}
             as of <span>{formatDate(props.effectiveDate)}</span>
           </p>
         )}
+        <div className={styles.buttons}>
+          {!proposed && (
+            <a
+              className={styles.policyLink}
+              href={policyURL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg x="0px" y="0px" viewBox="0 0 10.5 11.1">
+                <path
+                  d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
+  H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
+                />
+              </svg>
+              view in data table
+            </a>
+          )}
+        </div>
         <a
           href="https://covid-local.org/metrics/"
           className={styles.COVIDLocalLink}

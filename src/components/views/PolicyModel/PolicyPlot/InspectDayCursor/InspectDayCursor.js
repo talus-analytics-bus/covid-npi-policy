@@ -228,7 +228,7 @@ const InspectDailyCursor = props => {
                   <div className={styles.reductionContent}>
                     <p className={styles.number}>
                       {props.contactPlotType === "pctChange"
-                        ? 100 - contactRate.y
+                        ? Math.round(100 - contactRate.y)
                         : contactRate.y}
                       {props.contactPlotType === "pctChange" ? "%" : ""}
                     </p>
