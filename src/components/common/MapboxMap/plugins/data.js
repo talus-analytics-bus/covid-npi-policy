@@ -34,6 +34,8 @@ import phase3 from "./assets/icons/phase-3.png";
 import phase4 from "./assets/icons/phase-4.png";
 import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
+import dataTableIcon from "../../../../assets/icons/dataTableIcon.svg";
+import modelIcon from "../../../../assets/icons/modelIcon.svg";
 
 // utilities and local components
 import { isEmpty, percentize } from "../../../misc/Util";
@@ -1190,31 +1192,68 @@ export const tooltipGetter = async ({
       tooltip.tooltipHeaderRight = (
         <>
           {(props.geoHaveData || mapId === "us") && (
-            <a
-              key={"view"}
-              target="_blank"
-              href={"/data?type=policy&filters_policy=" + filtersStr}
-            >
-              {
-                <button>
-                  View {catFilters ? "filtered" : "all"} policies
-                  <br /> ({comma(nPolicies.total)}) in effect
-                </button>
-              }
-              {
-                // Uncomment below to specify number of policies
-                // <button>
-                //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
-                //   {nPolicies.total === 1 ? "policy" : "policies"}
-                // </button>
-              }
-            </a>
+            <>
+              <a
+                key={"view"}
+                target="_blank"
+                href={"/data?type=policy&filters_policy=" + filtersStr}
+              >
+                {
+                  <button>
+                    <svg version="1.1" x="0px" y="0px" viewBox="0 0 10.5 11.1">
+                      <path
+                        d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
+                        H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
+                      />
+                    </svg>
+                    view in data table
+                    {/* View {catFilters ? "filtered" : "all"} policies */}
+                    {/* <br /> ({comma(nPolicies.total)}) in effect */}
+                  </button>
+                }
+                {
+                  // Uncomment below to specify number of policies
+                  // <button>
+                  //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
+                  //   {nPolicies.total === 1 ? "policy" : "policies"}
+                  // </button>
+                }
+              </a>
+              {mapId === "us" && (
+                <a
+                  key={"view"}
+                  target="_blank"
+                  href={"/model/#" + d.properties.state_abbrev.toUpperCase()}
+                >
+                  {
+                    <button>
+                      <svg x="0px" y="0px" viewBox="0 0 10.9 8.2">
+                        <path d="M10.9,7.1v1.1H0V7.1H10.9z M6.5,3.3H4.4v3.3h2.2V3.3z M9.8,0H7.6v6.5h2.2V0z M3.3,2.2H1.1v4.4h2.2 V2.2z" />
+                      </svg>
+                      view in model
+                    </button>
+                  }
+                </a>
+              )}
+            </>
           )}
-          <span>
-            as of <i>{formattedDate}</i>
-          </span>
+          {/* <span> */}
+          {/*   as of <i>{formattedDate}</i> */}
+          {/* </span> */}
         </>
       );
+      if (props.geoHaveData || mapId === "us") {
+        tooltip.tooltipHeader.subtitle = (
+          <>
+            <span>
+              {comma(nPolicies.total)}{" "}
+              {nPolicies.total === 1 ? "policy" : "policies"} in effect
+            </span>
+            <br />
+            <span> as of {formattedDate}</span>
+          </>
+        );
+      }
       item.value = (
         <div
           className={infostyles.badge}
