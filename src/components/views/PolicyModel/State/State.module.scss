@@ -11,7 +11,26 @@
   // padding: 1rem;
   padding-top: 0;
   padding-bottom: 1;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+
+  .documentationLink {
+    color: #344269;
+    margin-left: auto;
+    margin-bottom: 0.5rem;
+
+    svg {
+      width: 1em;
+      margin-right: 0.5em;
+      position: relative;
+      top: 0.125em;
+
+      path {
+        fill: #344269;
+      }
+    }
+  }
 
   header {
     position: relative;
