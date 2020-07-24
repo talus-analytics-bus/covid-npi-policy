@@ -347,10 +347,10 @@ export const mapMetrics = {
 };
 
 // get JSX for link to COVID-Local metrics page
-const getCovidLocalMetricLink = v => {
+const getCovidLocalMetricLink = (v, color, style) => {
   return (
     <a
-      style={{ color: "unset" }}
+      style={{ color: color || "unset", ...style }}
       href={COVID_LOCAL_URL + "metrics/"}
       target="_blank"
       key={v}
@@ -833,10 +833,18 @@ export const metricMeta = {
         subLabels: [
           <span style={{ visibility: "hidden" }}>x</span>,
           <span style={{ visibility: "hidden" }}>x</span>,
-          getCovidLocalMetricLink("(phase I)"),
-          getCovidLocalMetricLink("(phase II)"),
-          getCovidLocalMetricLink("(phase III)"),
-          getCovidLocalMetricLink("(phase IV)"),
+          getCovidLocalMetricLink("(Phase I)", "#661B3C", {
+            fontStyle: "italic",
+          }),
+          getCovidLocalMetricLink("(Phase II)", "#C1272D", {
+            fontStyle: "italic",
+          }),
+          getCovidLocalMetricLink("(Phase III)", "#D66B3E", {
+            fontStyle: "italic",
+          }),
+          getCovidLocalMetricLink("(Phase IV)", "#ECBD62", {
+            fontStyle: "italic",
+          }),
           <span style={{ visibility: "hidden" }}>x</span>,
         ],
         colorscale: d3
