@@ -198,10 +198,7 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
           // get style for this layer
           const layerStyleName =
             (layer.styleId && layer.styleId.circle) || layer.id;
-          const layerStyle = layerStyles["circle"][layerStyleName](
-            layer.id,
-            geoHaveData
-          );
+          const layerStyle = layerStyles["circle"][layerStyleName](layer.id);
 
           // define key for layer (unique ID)
           const layerKey = layer.id + "-circle";

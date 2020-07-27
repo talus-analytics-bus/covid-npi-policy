@@ -83,7 +83,7 @@ const circleStyles = {
       },
     };
   },
-  "metric-test-transp-linear": (key, linCircleScale = false) => {
+  "metric-test-transp-global": (key, linCircleScale = true) => {
     return {
       circleColor: [
         "case",
@@ -125,7 +125,7 @@ const circleStyles = {
   },
 
   // global
-  "metric-test-solid-linear": (key, linCircleScale = false) => {
+  "metric-test-solid-global": (key, linCircleScale = true) => {
     return {
       circleColor: [
         "case",
