@@ -141,6 +141,68 @@ const PolicyModel = props => {
   // const chartProportion = 0.45;
   // const navigatorProportion = 0.125
 
+  const [YZoomAnimated, setYZoomAnimated] = React.useState(
+    props.caseLoadAxis[1]
+  );
+  const [YZoomAfterAnimated, setYZoomAfterAnimated] = React.useState(
+    props.caseLoadAxis[1]
+  );
+  const [animID, setAnimID] = React.useState();
+
+  React.useEffect(() => {
+    // cancel existing animation if
+    // the animation is interrupted
+    if (animID !== undefined) {
+      // console.log("Cancel Animation");
+      cancelAnimationFrame(animID);
+    }
+    // console.log("Animation Setup\n\n\n");
+    const target = props.caseLoadAxis[1];
+    let start = YZoomAfterAnimated;
+    let current = YZoomAnimated;
+
+    // in case the animation is interrupted
+    if (start === target) {
+      start = current;
+    }
+
+    const targetDuration = 200; // ms
+    const steps = targetDuration / 16; // there's roughly 16 ms per frame
+    const yStep = (target - start) / steps;
+
+    const animationStep = () => {
+      // console.log("animationStep Called");
+      // console.log(`Current: ${current}, Target: ${target}, Step: ${yStep}`);
+
+      if (current === 10000) {
+        // console.log("Skip Animation");
+        setYZoomAnimated(target);
+        return;
+      }
+
+      if (current < target && current + yStep < target) {
+        setYZoomAnimated(current + yStep);
+        current += yStep;
+        setAnimID(requestAnimationFrame(animationStep));
+        return;
+      }
+
+      if (current > target && current + yStep > target) {
+        setYZoomAnimated(current + yStep);
+        current += yStep;
+        setAnimID(requestAnimationFrame(animationStep));
+        return;
+      }
+
+      // console.log("Done Animating");
+      setYZoomAnimated(target);
+      setYZoomAfterAnimated(target);
+      return;
+    };
+
+    setAnimID(requestAnimationFrame(animationStep));
+  }, [props.caseLoadAxis]);
+
   // The actuals lines of the plot
   const actualsLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
@@ -231,13 +293,13 @@ const PolicyModel = props => {
           // this is a hack, the proper approach would be a custom
           // label component that sits within a <VictoryPortal>.
           // not going to take the time because I expect this request to change.
-          // y: -(props.caseLoadAxis[1] * (window.innerWidth / 40000)),
+          // y: -(caseloadAxisAnimated[1] * (window.innerWidth / 40000)),
           // ...and it changed.
           y: 0,
         },
         {
           x: Date.parse(intervention.intervention_start_date),
-          y: props.caseLoadAxis[1],
+          y: YZoomAnimated,
         },
       ]}
     />
@@ -296,8 +358,7 @@ const PolicyModel = props => {
           1000 * 60 * 60 * 24 * 5
     );
 
-    const dotHeight =
-      props.caseLoadAxis[1] * (0.8 - nearbyInterventions.length * 0.15);
+    const dotHeight = YZoomAnimated * (0.8 - nearbyInterventions.length * 0.15);
 
     return (
       <VictoryScatter
@@ -712,9 +773,9 @@ const PolicyModel = props => {
             // need to be better event handling to separate
             // panning and clicking to add interventions.
             allowPan={false}
-            zoomDimension="x"
+            // zoomDimension="x"
             cursorDimension="x"
-            zoomDomain={{ x: props.zoomDateRange }}
+            zoomDomain={{ x: props.zoomDateRange, y: [0, YZoomAnimated] }}
             // onZoomDomainChange={domain => {
             //   props.setZoomDateRange(domain.x);
             // }}
@@ -782,7 +843,7 @@ const PolicyModel = props => {
           style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
           data={[
             { x: new Date(), y: 0 },
-            { x: new Date(), y: props.caseLoadAxis[1] },
+            { x: new Date(), y: YZoomAnimated },
           ]}
         />
 
@@ -798,7 +859,7 @@ const PolicyModel = props => {
       {/*   zoomDateRange={props.zoomDateRange} */}
       {/*   setZoomDateRange={props.setZoomDateRange} */}
       {/*   domain={props.domain} */}
-      {/*   caseLoadAxis={props.caseLoadAxis} */}
+      {/*   caseLoadAxis={caseloadAxisAnimated} */}
       {/* /> */}
     </section>
   );
