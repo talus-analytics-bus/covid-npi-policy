@@ -52,6 +52,7 @@ const MapboxMap = ({
   // array of JSX components that should go on top of the map field, e.g.,
   // map options and legend components
   overlays,
+  geoHaveData,
   plugins,
   linCircleScale, // `log` or `lin`
   ...props
@@ -398,6 +399,7 @@ const MapboxMap = ({
           map,
           mapId,
           data,
+          geoHaveData,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
             bindFeatureStates({ map, mapId, data });
@@ -574,7 +576,6 @@ const MapboxMap = ({
           maxZoom={mapStyle.maxZoom}
           minZoom={mapStyle.minZoom}
           onViewportChange={newViewport => {
-            console.log(newViewport.zoom);
             // set current viewport state variable to the new viewport
             setViewport(newViewport);
             const lngLatNotDefault =
@@ -730,25 +731,25 @@ const MapboxMap = ({
     );
 };
 
-export const geoHaveData = [
-  "AUS",
-  "BRA",
-  "DJI",
-  "EST",
-  "FRA",
-  "IND",
-  "ITA",
-  "JPN",
-  "KOR",
-  "MEX",
-  "MHL",
-  "NGA",
-  "NZL",
-  "PER",
-  "PHL",
-  "SOM",
-  "THA",
-  "USA",
-];
+// export const geoHaveData = [
+//   "AUS",
+//   "BRA",
+//   "DJI",
+//   "EST",
+//   "FRA",
+//   "IND",
+//   "ITA",
+//   "JPN",
+//   "KOR",
+//   "MEX",
+//   "MHL",
+//   "NGA",
+//   "NZL",
+//   "PER",
+//   "PHL",
+//   "SOM",
+//   "THA",
+//   "USA",
+// ];
 
 export default MapboxMap;

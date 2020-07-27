@@ -29,6 +29,17 @@ export const Version = async function() {
 };
 
 /**
+ * Get ISO3 codes of countries with distancing levels
+ */
+export const CountriesWithDistancingLevels = async function() {
+  let req;
+  req = await axios(`${API_URL}/get/countries_with_lockdown_levels`);
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
  * Get counts of data instances
  */
 export const Count = async function({ class_names }) {

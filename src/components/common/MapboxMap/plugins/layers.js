@@ -13,7 +13,7 @@ import moment from "moment";
 
 // utilities
 import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
-import { geoHaveData } from "../MapboxMap";
+// import { geoHaveData } from "../MapboxMap";
 
 // assets
 import dots from "./assets/images/dots.png";
@@ -83,7 +83,7 @@ const circleStyles = {
       },
     };
   },
-  "metric-test-transp-linear": (key, linCircleScale = false) => {
+  "metric-test-transp-global": (key, linCircleScale = true) => {
     return {
       circleColor: [
         "case",
@@ -125,7 +125,7 @@ const circleStyles = {
   },
 
   // global
-  "metric-test-solid-linear": (key, linCircleScale = false) => {
+  "metric-test-solid-global": (key, linCircleScale = true) => {
     return {
       circleColor: [
         "case",
@@ -212,7 +212,7 @@ const fillStyles = {
   "metric-test-pattern": key => {
     return defaultPatternStyle(key);
   },
-  "metric-test-outline": key => {
+  "metric-test-outline": (key, geoHaveData) => {
     return {
       "line-color": [
         "case",
@@ -248,7 +248,7 @@ const fillStyles = {
       ],
     };
   },
-  policy_status: key => {
+  policy_status: (key, geoHaveData) => {
     return {
       "fill-color": [
         "case",
@@ -268,7 +268,7 @@ const fillStyles = {
     return this["metric-test-outline"];
   },
   // LOCKDOWN LEVEL STYLING
-  lockdown_level: key => {
+  lockdown_level: (key, geoHaveData) => {
     return {
       "fill-color": [
         "case",
