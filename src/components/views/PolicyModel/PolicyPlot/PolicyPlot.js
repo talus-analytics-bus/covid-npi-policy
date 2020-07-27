@@ -838,7 +838,14 @@ const PolicyModel = props => {
             },
           }}
         />
+
+        {actualsLines}
+        {counterfactualArea}
+        {modelLines}
+        {interventionLines}
+        {interventionPoints}
         {/* Today marker */}
+
         <VictoryLine
           style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
           data={[
@@ -846,12 +853,6 @@ const PolicyModel = props => {
             { x: new Date(), y: YZoomAnimated },
           ]}
         />
-
-        {actualsLines}
-        {counterfactualArea}
-        {modelLines}
-        {interventionLines}
-        {interventionPoints}
       </VictoryChart>
 
       {/* <NavigatorPlot */}
