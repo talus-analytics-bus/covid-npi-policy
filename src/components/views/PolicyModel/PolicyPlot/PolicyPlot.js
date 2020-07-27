@@ -166,7 +166,7 @@ const PolicyModel = props => {
       start = current;
     }
 
-    const targetDuration = 200; // ms
+    const targetDuration = 100; // ms
     const steps = targetDuration / 16; // there's roughly 16 ms per frame
     const yStep = (target - start) / steps;
 
