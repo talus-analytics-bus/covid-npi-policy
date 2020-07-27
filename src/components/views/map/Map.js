@@ -50,6 +50,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // map circle scale linear? otherwise log
   const [linCircleScale, setLinCircleScale] = useState(false);
+  console.log("linCircleScale");
+  console.log(linCircleScale);
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
@@ -356,6 +358,20 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                               />{" "}
                               View COVID count by
                             </label>
+                            <select
+                              onChange={e => {
+                                setLinCircleScale(
+                                  e.target.value === "linear" ? true : false
+                                );
+                              }}
+                            >
+                              <option value="linear" selected={linCircleScale}>
+                                linear scale
+                              </option>
+                              <option value="log" selected={!linCircleScale}>
+                                logarithmic scale
+                              </option>
+                            </select>
                             {circle !== null && (
                               <RadioToggle
                                 {...{
