@@ -414,13 +414,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                     value="linear"
                                     selected={linCircleScale}
                                   >
-                                    linear scale
+                                    Linear scale
                                   </option>
                                   <option
                                     value="log"
                                     selected={!linCircleScale}
                                   >
-                                    logarithmic scale
+                                    Log scale
                                   </option>
                                 </select>
                               </>
