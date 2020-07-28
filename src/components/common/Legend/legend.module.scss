@@ -18,6 +18,9 @@
     @include spaceItemsHoriz(30px);
     justify-content: center;
     .entry {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
       $height: 20px;
       .symbols {
         display: flex;

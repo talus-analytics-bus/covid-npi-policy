@@ -157,6 +157,11 @@ export const initMap = ({ map, mapId, data, callback }) => {
                     paint: layerStyles["fill"][layerStyleName + "-outline"](
                       layer.id
                     ),
+                    // hide layer initially unless it is the current one
+                    layout: {
+                      visibility:
+                        defaults[mapId].fill === layer.id ? "visible" : "none",
+                    },
                   },
                   // insert this layer just behind the `priorLayer`
                   defaults[mapId].priorLayer
