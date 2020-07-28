@@ -162,6 +162,11 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
                       layer.id,
                       geoHaveData
                     ),
+                    // hide layer initially unless it is the current one
+                    layout: {
+                      visibility:
+                        defaults[mapId].fill === layer.id ? "visible" : "none",
+                    },
                   },
                   // insert this layer just behind the `priorLayer`
                   defaults[mapId].priorLayer

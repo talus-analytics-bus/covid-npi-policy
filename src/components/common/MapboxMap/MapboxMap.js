@@ -92,13 +92,20 @@ const MapboxMap = ({
 
   const updateFillOrder = ({ map, f = null }) => {
     // initialize the vertical order of shapes for certain metrics
-    if (mapId === "global")
+    if (mapId === "global") {
       map.setLayoutProperty("policy_status-fill-outline", "line-sort-key", [
         "case",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         0,
         1,
       ]);
+      map.setLayoutProperty("lockdown_level-fill-outline", "line-sort-key", [
+        "case",
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        0,
+        1,
+      ]);
+    }
   };
 
   const getFillLegendName = ({ filters, fill }) => {
@@ -354,6 +361,10 @@ const MapboxMap = ({
             layersOfType.forEach(layer => {
               // if layer is current option, it's visible
               const visible = layer.id === curOption;
+              console.log("\n\n\nlayer.id");
+              console.log(layer.id);
+              console.log("curOption");
+              console.log(curOption);
               const visibility = visible ? "visible" : "none";
               map.setLayoutProperty(
                 layer.id + "-" + sourceTypeKey,
@@ -374,6 +385,15 @@ const MapboxMap = ({
               if (sourceTypeKey === "circle") {
                 map.setLayoutProperty(
                   layer.id + "-" + sourceTypeKey + "-shadow",
+                  "visibility",
+                  visibility
+                );
+              }
+
+              // same for fill outline
+              if (sourceTypeKey === "fill") {
+                map.setLayoutProperty(
+                  layer.id + "-" + sourceTypeKey + "-outline",
                   "visibility",
                   visibility
                 );

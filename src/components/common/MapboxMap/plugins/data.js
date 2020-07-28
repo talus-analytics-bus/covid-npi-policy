@@ -634,19 +634,18 @@ export const metricMeta = {
     metric_displayname: "Policy status",
     value: v => v,
     unit: v => "",
-    // trendTimeframe: "over prior 24 hours",
     legendInfo: {
       fill: {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
         domain: [
-          "no policy",
           <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            policy data
+            data not
             <br />
-            not available
+            available
           </div>,
+          "no policy",
           "policy in effect",
         ],
         // range: ["#eaeaea", "white", "#66CAC4"],
@@ -654,24 +653,7 @@ export const metricMeta = {
           .scaleOrdinal()
           .domain(["no policy", "policy in effect"])
           .range(["#eaeaea", "white", "#66CAC4"]),
-        // labels: {
-        //   bubble: { min: "Low", max: "High" },
-        //   basemap: { min: "Minimal", max: "High" }
-        // }
       },
-      // circle: {
-      //   for: "bubble",
-      //   type: "continuous",
-      //   outline: "#e65d36",
-      //   colorscale: d3
-      //     .scaleLinear()
-      //     .domain([0, 100])
-      //     .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
-      //   labels: {
-      //     bubble: { min: "Low", max: "High" },
-      //     basemap: { min: "Minimal", max: "High" }
-      //   }
-      // }
     },
   },
   lockdown_level: {
@@ -818,12 +800,12 @@ export const metricMeta = {
         labelsInside: true,
         range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
         domain: [
-          "no policy",
           <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            policy data
+            data not
             <br />
-            not available
+            available
           </div>,
+          "no policy",
           getCovidLocalMetricLink("lockdown"),
           getCovidLocalMetricLink("stay-at-home"),
           getCovidLocalMetricLink("safer-at-home"),
