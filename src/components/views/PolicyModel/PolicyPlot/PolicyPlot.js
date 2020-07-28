@@ -167,7 +167,11 @@ const PolicyModel = props => {
     }
 
     const targetDuration = 100; // ms
-    const steps = targetDuration / 16; // there's roughly 16 ms per frame
+    // there's roughly 16 ms per frame...
+    // if you're running this on a supercomputer
+    // where this has a chance of actually
+    // hitting 60 fps...
+    const steps = targetDuration / 16;
     const yStep = (target - start) / steps;
 
     const animationStep = () => {

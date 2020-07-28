@@ -23,7 +23,11 @@ import {
 import { mapStyles } from "../../common/MapboxMap/plugins/sources";
 
 // queries
-import { OptionSet, execute } from "../../misc/Queries";
+import {
+  OptionSet,
+  CountriesWithDistancingLevels,
+  execute,
+} from "../../misc/Queries";
 
 // assets and styles
 import styles, { style, drawer, dark } from "./map.module.scss";
@@ -46,6 +50,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // map circle scale linear? otherwise log
   const [linCircleScale, setLinCircleScale] = useState(false);
+  console.log("linCircleScale");
+  console.log(linCircleScale);
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
@@ -67,6 +73,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // name of metric to use as circle by default
   const [circle, setCircle] = useState(defaults[mapId].circle);
+
+  // list of ISO3 codes of countries for which distancing levels are available
+  const [geoHaveData, setGeoHaveData] = useState(null);
 
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState([
@@ -128,6 +137,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         }),
       entity_name: "Policy",
     });
+    queries.countriesWithDistancingLevels = CountriesWithDistancingLevels();
 
     const results = await execute({
       queries,
@@ -146,6 +156,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       }
     });
     setFilterDefs(newFilterDefs);
+    setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
     setLoading(false);
   };
@@ -179,6 +190,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             circle,
             fill,
             filters,
+            geoHaveData,
             overlays: (
               <>
                 <Drawer
@@ -346,6 +358,20 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                               />{" "}
                               View COVID count by
                             </label>
+                            <select
+                              onChange={e => {
+                                setLinCircleScale(
+                                  e.target.value === "linear" ? true : false
+                                );
+                              }}
+                            >
+                              <option value="linear" selected={linCircleScale}>
+                                linear scale
+                              </option>
+                              <option value="log" selected={!linCircleScale}>
+                                logarithmic scale
+                              </option>
+                            </select>
                             {circle !== null && (
                               <RadioToggle
                                 {...{
