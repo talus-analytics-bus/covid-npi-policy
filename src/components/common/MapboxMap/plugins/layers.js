@@ -207,6 +207,12 @@ const circleStyles = {
   },
 };
 
+// colors
+const noDataColor = "#eaeaea";
+const noDataBorder = "#ffffff";
+const negColor = "#ffffff";
+const negBorder = "#808080";
+
 // similar for fill styles
 const fillStyles = {
   "metric-test-pattern": key => {
@@ -216,10 +222,12 @@ const fillStyles = {
     return {
       "line-color": [
         "case",
-        ["==", ["has", "state_name"], true],
+        ["==", ["feature-state", key], "t"],
         "#ffffff",
+        ["==", ["has", "state_name"], true], // all states are reporting data
+        negBorder,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        "#808080",
+        noDataBorder,
         "#ffffff",
       ],
       "line-width": [
@@ -232,22 +240,7 @@ const fillStyles = {
       ],
     };
   },
-  "metric-test": key => {
-    return {
-      "fill-color": [
-        "case",
-        ["==", ["feature-state", key], null],
-        "#eaeaea",
-        ["<", ["feature-state", key], 25],
-        "transparent",
-        ["<", ["feature-state", key], 50],
-        "#BBDAF5",
-        ["<", ["feature-state", key], 75],
-        "#86BFEB",
-        "#549FE2",
-      ],
-    };
-  },
+
   policy_status: (key, geoHaveData) => {
     return {
       "fill-color": [
@@ -255,17 +248,38 @@ const fillStyles = {
         ["==", ["feature-state", key], "t"],
         "#66CAC4",
         ["==", ["has", "state_name"], true],
-        "#eaeaea",
+        negColor,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        "#fff",
+        noDataColor,
         ["==", ["feature-state", key], null],
-        "#eaeaea",
-        "#eaeaea",
+        negColor,
+        negColor,
       ],
     };
   },
-  get "policy_status-outline"() {
-    return this["metric-test-outline"];
+  "policy_status-outline": (key, geoHaveData) => {
+    return {
+      "line-color": [
+        "case",
+        ["==", ["feature-state", key], "t"],
+        "#ffffff",
+        ["==", ["has", "state_name"], true], // all states are reporting data
+        negBorder,
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        noDataBorder,
+        ["==", ["feature-state", key], null],
+        negBorder,
+        "#ffffff",
+      ],
+      "line-width": [
+        "case",
+        ["==", ["feature-state", "clicked"], true],
+        2,
+        ["==", ["feature-state", "hovered"], true],
+        2,
+        1,
+      ],
+    };
   },
   // LOCKDOWN LEVEL STYLING
   lockdown_level: (key, geoHaveData) => {
@@ -283,12 +297,12 @@ const fillStyles = {
         ["==", ["feature-state", key], "Lockdown"],
         "#2165a1",
         ["==", ["has", "state_name"], true],
-        "#eaeaea",
+        negColor,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        "#ffffff",
+        noDataColor,
         ["==", ["feature-state", key], null],
-        "#eaeaea",
-        "#eaeaea",
+        negColor,
+        negColor,
       ],
     };
   },
@@ -303,8 +317,37 @@ const fillStyles = {
       ],
     };
   },
-  get "lockdown_level-outline"() {
-    return this["policy_status-outline"];
+  "lockdown_level-outline": (key, geoHaveData) => {
+    return {
+      "line-color": [
+        "case",
+        ["==", ["feature-state", key], "Mixed distancing levels"],
+        "white",
+        ["==", ["feature-state", key], "New normal"],
+        "white",
+        ["==", ["feature-state", key], "Safer at home"],
+        "white",
+        ["==", ["feature-state", key], "Stay at home"],
+        "white",
+        ["==", ["feature-state", key], "Lockdown"],
+        "white",
+        ["==", ["has", "state_name"], true],
+        negBorder,
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        noDataBorder,
+        ["==", ["feature-state", key], null],
+        negBorder,
+        negBorder,
+      ],
+      "line-width": [
+        "case",
+        ["==", ["feature-state", "clicked"], true],
+        2,
+        ["==", ["feature-state", "hovered"], true],
+        2,
+        1,
+      ],
+    };
   },
 };
 

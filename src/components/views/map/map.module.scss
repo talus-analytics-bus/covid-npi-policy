@@ -94,4 +94,23 @@
     border-bottom: 1px solid #b3b3b3;
   }
 }
+
+.rightControls {
+  .selectTooltipHolder {
+    display: flex;
+    align-items: center;
+  }
+  > div > label {
+    font-weight: normal;
+  }
+  select {
+    background: linear-gradient(to bottom, white, #e4e4e4);
+    border-radius: 3px;
+    border: 2px solid #d3d3d3;
+    padding: 0.25em 0.5em;
+    margin-top: 0.5em;
+    display: inline-block;
+  }
+}
+
 @import "./plugins.module.scss";

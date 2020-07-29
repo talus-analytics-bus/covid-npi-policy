@@ -13,7 +13,7 @@
     // @include sticky(118px);
     position: absolute;
     top: 0;
-    z-index: 1;
+    z-index: 3;
     .content {
       background-color: rgba(255, 255, 255, 0.95);
     }
@@ -89,6 +89,7 @@
     padding: $padding;
     font-size: 1rem;
     background-color: $light-gray-2;
+    z-index: 3;
     @include spaceItemsVert(20px);
     &.hidden {
       // visibility: hidden;
@@ -96,7 +97,21 @@
       height: 0;
       padding: 0 $padding;
     }
+
+    select {
+      display: block;
+    }
   }
+}
+
+.closer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  z-index: 2;
 }
 
 @import "./plugins.module.scss";

@@ -47,11 +47,17 @@ const Legend = ({ ...props }) => {
               height: radii[radii.length - 1],
               width: radii[radii.length - 1],
               transform: "scale(0.5)",
-              transformOrigin: "left center"
+              transformOrigin: "center",
             }}
           ></div>
           <div className={styles.labels}>
-            {["No data"].map(d => (
+            {[
+              <div style={{ lineHeight: 1.1 }}>
+                Data not
+                <br />
+                available
+              </div>,
+            ].map(d => (
               <div key={d}>{d}</div>
             ))}
           </div>
@@ -68,7 +74,7 @@ const Legend = ({ ...props }) => {
               height: radii[radii.length - 1],
               width: radii[radii.length - 1],
               transform: "scale(0.5)",
-              transformOrigin: "left center"
+              // transformOrigin: "left center",
             }}
           ></div>
           <div className={styles.labels}>
@@ -96,7 +102,7 @@ const Legend = ({ ...props }) => {
                     border:
                       props.outline !== undefined
                         ? `2px solid ${props.outline}`
-                        : undefined
+                        : undefined,
                   }}
                 />
               ))}
@@ -117,7 +123,7 @@ const Legend = ({ ...props }) => {
           <div
             className={classNames(styles.rect, styles.hatched)}
             style={{
-              backgroundColor: "#ccc"
+              backgroundColor: "#ccc",
             }}
           ></div>
           <div className={styles.labels}>
@@ -133,7 +139,7 @@ const Legend = ({ ...props }) => {
             className={styles.rect}
             style={{
               backgroundColor: noDataGray,
-              border: `1px solid ${noDataGray}`
+              border: `1px solid ${noDataGray}`,
             }}
           ></div>
           <div className={styles.labels}>
@@ -152,7 +158,7 @@ const Legend = ({ ...props }) => {
               <div
                 className={styles.gradientBar}
                 style={{
-                  background: `linear-gradient(90deg, ${range[0]} 0%, ${range[1]} 100%)`
+                  background: `linear-gradient(90deg, ${range[0]} 0%, ${range[1]} 100%)`,
                 }}
               ></div>
             </div>
@@ -172,7 +178,7 @@ const Legend = ({ ...props }) => {
           <div
             className={classNames(styles.rect, styles.hatched)}
             style={{
-              backgroundColor: "#ccc"
+              backgroundColor: "#ccc",
             }}
           ></div>
           <div className={styles.labels}>
@@ -187,11 +193,11 @@ const Legend = ({ ...props }) => {
       const styleEntries = range.map(d => {
         if (d.startsWith("#"))
           return {
-            backgroundColor: d
+            backgroundColor: d,
           };
         else {
           return {
-            "background-image": `url("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png")`
+            "background-image": `url("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png")`,
           };
         }
       });
@@ -233,7 +239,7 @@ const Legend = ({ ...props }) => {
         if (d.startsWith("#"))
           return {
             backgroundColor: d,
-            color: isLightColor(d) ? "#333" : "white"
+            color: isLightColor(d) ? "#333" : "white",
           };
         else {
           // TODO generalize the custom styles in this
@@ -241,7 +247,7 @@ const Legend = ({ ...props }) => {
             backgroundImage: `url("${d}")`,
             backgroundPosition: "center",
             padding: "3px 10px",
-            border: "2px solid #BBDAF5"
+            border: "2px solid #BBDAF5",
           };
         }
       });
@@ -252,14 +258,14 @@ const Legend = ({ ...props }) => {
             <div
               className={styles.quantized}
               style={{
-                gridTemplateColumns: `repeat(${range.length}, 1fr)`
+                gridTemplateColumns: `repeat(${range.length}, 1fr)`,
               }}
             >
               {styleEntries.map((d, i) => (
                 <div className={styles.rectGroup} key={i}>
                   <div
                     className={classNames(styles.rect, {
-                      [styles.labelsInside]: labelsInside
+                      [styles.labelsInside]: labelsInside,
                     })}
                     style={d}
                   >
@@ -312,7 +318,7 @@ const Legend = ({ ...props }) => {
   return (
     <div
       className={classNames(styles.style, {
-        [styles[props.className]]: props.className !== undefined
+        [styles[props.className]]: props.className !== undefined,
       })}
     >
       <div className={styles.name}>{sectionHeader}</div>

@@ -340,46 +340,116 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                           <div key={"divider"} className={styles.divider} />,
 
                           // circle metric radio toggle
-                          <div>
-                            <label>
-                              <input
-                                name="casecount"
-                                type="checkbox"
-                                checked={circle !== null}
-                                onChange={e => {
-                                  setCircle(
-                                    circle === null
-                                      ? defaults[mapId].circle
-                                      : null
-                                  );
-                                }}
-                              />{" "}
-                              View COVID count by
-                            </label>
+                          <div className={styles.rightControls}>
+                            <label>COVID caseload</label>
+                            <div
+                              onChange={e => {
+                                setCircle(
+                                  e.target.value === "show"
+                                    ? defaults[mapId].circle
+                                    : null
+                                );
+                              }}
+                            >
+                              <label>
+                                <input
+                                  type="radio"
+                                  value="show"
+                                  name="casecount"
+                                  defaultChecked
+                                />{" "}
+                                Show
+                              </label>
+                              <br />
+                              <label>
+                                <input
+                                  type="radio"
+                                  value="hide"
+                                  name="casecount"
+                                />{" "}
+                                Hide
+                              </label>
+                            </div>
+
                             {circle !== null && (
-                              <RadioToggle
-                                {...{
-                                  // TODO define choices based on current mapType
-                                  setInfoTooltipContent:
-                                    props.setInfoTooltipContent,
-                                  choices: mapMetrics[mapId]
-                                    .filter(d => d.for.includes("circle"))
-                                    .map(d => {
-                                      return {
-                                        value: d.id,
-                                        name:
-                                          metricMeta[d.id].metric_displayname,
-                                        tooltip:
-                                          metricMeta[d.id].metric_definition,
-                                      };
-                                    }),
-                                  curVal: circle,
-                                  callback: setCircle,
-                                  label: "",
-                                  key: "RadioToggle1",
-                                }}
-                              />
+                              <>
+                                <div className={styles.selectTooltipHolder}>
+                                  <select
+                                    onChange={e => {
+                                      setCircle(e.target.value);
+                                    }}
+                                  >
+                                    {mapMetrics[mapId]
+                                      .filter(d => d.for.includes("circle"))
+                                      .map(d => (
+                                        <option
+                                          key={d.id}
+                                          value={d.id}
+                                          selected={
+                                            circle.toString() ===
+                                            d.id.toString()
+                                          }
+                                        >
+                                          {metricMeta[d.id].metric_displayname}
+                                        </option>
+                                      ))}
+                                  </select>
+                                  <InfoTooltip
+                                    text={metricMeta[circle].metric_definition}
+                                    setInfoTooltipContent={
+                                      props.setInfoTooltipContent
+                                    }
+                                    place={"left"}
+                                  />
+                                </div>
+
+                                <select
+                                  onChange={e => {
+                                    setLinCircleScale(
+                                      e.target.value === "linear" ? true : false
+                                    );
+                                  }}
+                                >
+                                  <option
+                                    value="linear"
+                                    selected={linCircleScale}
+                                  >
+                                    Linear scale
+                                  </option>
+                                  <option
+                                    value="log"
+                                    selected={!linCircleScale}
+                                  >
+                                    Log scale
+                                  </option>
+                                </select>
+                              </>
                             )}
+
+                            {/* {circle !== null && ( */}
+                            {/*   <RadioToggle */}
+                            {/*     {...{ */}
+                            {/*       // TODO define choices based on current mapType */}
+                            {/*       setInfoTooltipContent: */}
+                            {/*         props.setInfoTooltipContent, */}
+                            {/*       choices: mapMetrics[mapId] */}
+                            {/*         .filter(d => d.for.includes("circle")) */}
+                            {/*         .map(d => { */}
+                            {/*           return { */}
+                            {/*             value: d.id, */}
+                            {/*             name: */}
+                            {/*               metricMeta[d.id].metric_displayname, */}
+                            {/*             tooltip: */}
+                            {/*               metricMeta[d.id].metric_definition, */}
+                            {/*           }; */}
+                            {/*         }), */}
+                            {/*       curVal: circle, */}
+                            {/*       callback: setCircle, */}
+                            {/*       label: "", */}
+                            {/*       key: "RadioToggle1", */}
+                            {/*     }} */}
+                            {/*   /> */}
+                            {/* )} */}
                           </div>,
                         ].map(d => d)}
                       </div>
