@@ -674,7 +674,7 @@ const Documentation = ({ ...props }) => {
               <p>2.52</p>
             </td>
             <td>
-              <p>.04</p>
+              <p>0.04</p>
             </td>
             <td>
               <p>N/A</p>
@@ -688,7 +688,7 @@ const Documentation = ({ ...props }) => {
               <p>0.84</p>
             </td>
             <td>
-              <p>.012</p>
+              <p>0.012</p>
             </td>
             <td>
               <p>67%</p>
