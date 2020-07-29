@@ -704,7 +704,7 @@ const MapboxMap = ({
                       metric_displayname: (
                         <span>
                           {metricMeta[circle].metric_displayname}
-                          {mapId === "us" ? " (log scale)" : ""}
+                          {!linCircleScale ? " (log scale)" : ""}
                         </span>
                       ),
                       ...metricMeta[circle].legendInfo.circle,
