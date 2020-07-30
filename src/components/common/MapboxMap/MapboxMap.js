@@ -89,6 +89,40 @@ const MapboxMap = ({
   const [showReset, setShowReset] = useState(false);
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
+  const setLinLogCircleStyle = () => {
+    console.log("setting lin/log paint");
+    const map = mapRef.getMap();
+
+    // does map have circle layers?
+    const hasCircleLayers = mapSources[mapId].circle !== undefined;
+
+    // if yes, update scale type of circle and its shadow
+    const circleLayers = mapSources[mapId].circle.circleLayers;
+    if (hasCircleLayers) {
+      circleLayers.forEach(layer => {
+        const layerId = layer.id + "-circle";
+
+        const circleStyle = layerStyles.circle[layer.styleId.circle](
+          layer.id,
+          linCircleScale
+        );
+
+        // circle
+        map.setPaintProperty(
+          layerId,
+          "circle-radius",
+          circleStyle.circleRadius
+        );
+
+        // its shadow
+        map.setPaintProperty(
+          layerId + "-shadow",
+          "circle-radius",
+          circleStyle.circleRadius
+        );
+      });
+    }
+  };
 
   const updateFillOrder = ({ map, f = null }) => {
     // initialize the vertical order of shapes for certain metrics
@@ -292,37 +326,7 @@ const MapboxMap = ({
   // update log/lin scale selection for circles
   useEffect(() => {
     if (mapRef.getMap !== undefined) {
-      const map = mapRef.getMap();
-
-      // does map have circle layers?
-      const hasCircleLayers = mapSources[mapId].circle !== undefined;
-
-      // if yes, update scale type of circle and its shadow
-      const circleLayers = mapSources[mapId].circle.circleLayers;
-      if (hasCircleLayers) {
-        circleLayers.forEach(layer => {
-          const layerId = layer.id + "-circle";
-
-          const circleStyle = layerStyles.circle[layer.styleId.circle](
-            layer.id,
-            linCircleScale
-          );
-
-          // circle
-          map.setPaintProperty(
-            layerId,
-            "circle-radius",
-            circleStyle.circleRadius
-          );
-
-          // its shadow
-          map.setPaintProperty(
-            layerId + "-shadow",
-            "circle-radius",
-            circleStyle.circleRadius
-          );
-        });
-      }
+      setLinLogCircleStyle();
     }
   }, [linCircleScale]);
 
@@ -620,6 +624,7 @@ const MapboxMap = ({
             const map = mapRef.getMap();
 
             updateFillOrder({ map, f: null });
+            setLinLogCircleStyle();
 
             // if default fit bounds are specified, center the viewport on them
             // (fly animation relative to default viewport)
