@@ -113,8 +113,9 @@ const Data = ({
       queries.metadata = Metadata({
         method: "get",
         fields: initColumns.map(d => {
-          if (!d.dataField.includes(".")) return docType + "." + d.dataField;
-          else return d.dataField;
+          const key = d.defKey || d.dataField;
+          if (!key.includes(".")) return docType + "." + key;
+          else return key;
         }),
         entity_class_name: entityInfoForQuery.nouns.s,
       });
