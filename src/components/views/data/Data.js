@@ -42,6 +42,7 @@ const Data = ({
   const [ordering, setOrdering] = useState([]);
   console.log("ordering");
   console.log(ordering);
+  let searchRef = useRef(null);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
@@ -252,8 +253,10 @@ const Data = ({
     if (!loading) {
       // update data
       setLoading(true);
+      console.log("searchRef.current.value");
+      console.log(searchRef.current.value);
       getData({
-        filtersForQuery: filters,
+        filtersForQuery: { ...filters, _text: [searchRef.current.value] },
         entityInfoForQuery: entityInfo,
         initializingForQuery: true,
       });
@@ -432,6 +435,7 @@ const Data = ({
           >
             Next page
           </button>
+          <input type="text" ref={searchRef}></input>
           {table}
           {!table && <div style={{ height: "900px" }} />}
         </React.Fragment>
