@@ -38,6 +38,10 @@ const Data = ({
 }) => {
   const [docType, setDocType] = useState(type || "policy");
   const [entityInfo, setEntityInfo] = useState(policyInfo);
+  const [curPage, setCurPage] = useState(1);
+  console.log("curPage");
+  console.log(curPage);
+  const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
   const unspecified = entityInfo.unspecified;
@@ -94,6 +98,7 @@ const Data = ({
       instances: entityInfoForQuery.dataQuery({
         method,
         filters: filtersForQuery,
+        page: curPage,
       }),
     };
 
@@ -282,7 +287,7 @@ const Data = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  }, [filters]);
+  }, [filters, curPage]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
@@ -411,6 +416,13 @@ const Data = ({
               ),
             }}
           />
+          <button
+            onClick={() => {
+              setCurPage(curPage + 1);
+            }}
+          >
+            Next page
+          </button>
           {table}
           {!table && <div style={{ height: "900px" }} />}
         </React.Fragment>
