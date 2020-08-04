@@ -110,20 +110,23 @@ export const policyInfo = {
         },
       },
       {
-        dataField: "place",
+        dataField: "place.loc",
         defKey: "place.loc",
         header: "Affected location",
         defCharLimit: 1000,
         sort: true,
-        sortValue: v => {
-          if (v !== undefined) return v.map(d => d.loc).join("; ");
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.loc).join("; ");
           else return "zzz";
         },
-        formatter: v => {
-          console.log(v);
-          if (v !== undefined && v.length > 0)
+        formatter: (cell, row) => {
+          if (row.place !== undefined && row.place.length > 0)
             return (
-              <ShowMore text={v.map(d => d.loc).join("; ")} charLimit={60} />
+              <ShowMore
+                text={row.place.map(d => d.loc).join("; ")}
+                charLimit={60}
+              />
             );
           else return null;
         },
