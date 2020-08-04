@@ -57,8 +57,6 @@ const MapboxMap = ({
   linCircleScale, // `log` or `lin`
   ...props
 }) => {
-  console.log("linCircleScale");
-  console.log(linCircleScale);
   // STATE // ---------------------------------------------------------------//
   // store map reference which is frequently invoked to get the current
   // Mapbox map object in effect hooks
@@ -91,7 +89,6 @@ const MapboxMap = ({
   const [showReset, setShowReset] = useState(false);
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
-
   const setLinLogCircleStyle = () => {
     console.log("setting lin/log paint");
     const map = mapRef.getMap();
@@ -627,7 +624,6 @@ const MapboxMap = ({
             const map = mapRef.getMap();
 
             updateFillOrder({ map, f: null });
-
             setLinLogCircleStyle();
 
             // if default fit bounds are specified, center the viewport on them
@@ -713,7 +709,7 @@ const MapboxMap = ({
                       metric_displayname: (
                         <span>
                           {metricMeta[circle].metric_displayname}
-                          {linCircleScale ? "" : " (log scale)"}
+                          {!linCircleScale ? " (log scale)" : ""}
                         </span>
                       ),
                       ...metricMeta[circle].legendInfo.circle,

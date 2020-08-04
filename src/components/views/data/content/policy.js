@@ -32,14 +32,14 @@ export const policyInfo = {
       level: {
         entity_name: "Place",
         field: "level",
-        label: "Level of government"
-      }
+        label: "Level of government",
+      },
     },
     {
       country_name: {
         entity_name: "Place",
         field: "country_name",
-        label: "Country"
+        label: "Country",
       },
       area1: {
         entity_name: "Place",
@@ -47,7 +47,7 @@ export const policyInfo = {
         label: "State / Province",
         withGrouping: true,
         primary: "country_name",
-        disabledText: "Choose a country"
+        disabledText: "Choose a country",
       },
       area2: {
         entity_name: "Place",
@@ -55,21 +55,21 @@ export const policyInfo = {
         label: "Locality (county, city, ...)",
         withGrouping: true,
         primary: "area1",
-        disabledText: "Choose a state / province"
-      }
+        disabledText: "Choose a state / province",
+      },
     },
     {
       relaxing_or_restricting: {
         entity_name: "Policy",
         field: "relaxing_or_restricting",
-        label: "Relaxing or restricting"
-      }
+        label: "Relaxing or restricting",
+      },
     },
     {
       primary_ph_measure: {
         entity_name: "Policy",
         field: "primary_ph_measure",
-        label: "Policy category"
+        label: "Policy category",
       },
       ph_measure_details: {
         entity_name: "Policy",
@@ -77,8 +77,8 @@ export const policyInfo = {
         label: "Policy sub-category",
         withGrouping: true,
         primary: "primary_ph_measure",
-        disabledText: "Choose a policy category"
-      }
+        disabledText: "Choose a policy category",
+      },
     },
     {
       dates_in_effect: {
@@ -86,26 +86,50 @@ export const policyInfo = {
         field: "dates_in_effect",
         label: "Dates policy in effect",
         dateRange: true,
-        minMaxDate: { min: undefined, max: undefined }
-      }
-    }
+        minMaxDate: { min: undefined, max: undefined },
+      },
+    },
   ],
   getColumns: ({ metadata }) => {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       {
         dataField: "place.level",
+        defKey: "place.level",
         header: "Level of government",
-        sort: true
+        sort: true,
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) => {
+          if (row.place !== undefined && row.place.length > 0)
+            return row.place[0].level;
+          else return null;
+        },
       },
       {
         dataField: "place.loc",
+        defKey: "place.loc",
         header: "Affected location",
         defCharLimit: 1000,
         sort: true,
-        formatter: v => {
-          return <ShowMore text={v} charLimit={60} />;
-        }
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.loc).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) => {
+          if (row.place !== undefined && row.place.length > 0)
+            return (
+              <ShowMore
+                text={row.place.map(d => d.loc).join("; ")}
+                charLimit={60}
+              />
+            );
+          else return null;
+        },
       },
       {
         dataField: "desc",
@@ -113,6 +137,8 @@ export const policyInfo = {
         defCharLimit: 1000,
         sort: true,
         formatter: (cell, row) => {
+          console.log("row");
+          console.log(row);
           const title =
             row.policy_name !== "Unspecified" &&
             row.policy_name !== "" &&
@@ -121,19 +147,19 @@ export const policyInfo = {
               ? row.policy_name + ": "
               : "";
           return <ShowMore text={title + cell} charLimit={200} />;
-        }
+        },
       },
       {
         dataField: "primary_ph_measure",
         header: "Policy category",
-        sort: true
+        sort: true,
       },
       {
         dataField: "date_start_effective",
         header: "Effective start date",
         sort: true,
         formatter: v =>
-          v !== null ? moment(v).format("MMM D, YYYY") : unspecified
+          v !== null ? moment(v).format("MMM D, YYYY") : unspecified,
       },
       {
         dataField: "authority_name",
@@ -143,7 +169,7 @@ export const policyInfo = {
           // TODO REPLACE ALL
           if (v === undefined) return "";
           return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
-        }
+        },
       },
       {
         dataField: "file",
@@ -184,8 +210,8 @@ export const policyInfo = {
           } else {
             return unspecified;
           }
-        }
-      }
+        },
+      },
     ];
 
     // join elements of metadata to cols, like definitions, etc.
@@ -201,9 +227,8 @@ export const policyInfo = {
       }
 
       // definition updates
-      const key = d.dataField.includes(".")
-        ? d.dataField
-        : "policy." + d.dataField;
+      const keyTmp = d.defKey || d.dataField;
+      const key = keyTmp.includes(".") ? keyTmp : "policy." + keyTmp;
       d.definition = metadata[key] ? metadata[key].definition || "" : "";
 
       // use only the first sentence of the definition
@@ -239,8 +264,8 @@ export const policyInfo = {
         "authority_name",
         "desc",
         "date_start_effective",
-        "file"
-      ]
+        "file",
+      ],
     });
   },
 
@@ -248,7 +273,7 @@ export const policyInfo = {
   defaultSortedField: "date_start_effective",
 
   // JSX of content of table cells if data are unspecified, i.e., blank
-  unspecified
+  unspecified,
 };
 
 export default policyInfo;

@@ -371,8 +371,32 @@ const Documentation = ({ ...props }) => {
           No stay-at-home or safer-at-home order in place (including by
           expiration)
         </li>
-        <li>No private sector closures</li>
-        <li>No mass gathering restrictions</li>
+        <li>
+          Some restrictions on either mass gathering or private sector
+          businesses
+        </li>
+        <li>
+          Includes reopening policies for private sector and/or mass gatherings
+        </li>
+        <li>Schools may or may not be reopened</li>
+      </ul>
+      <p>
+        <strong>No restrictions (Full recovery):</strong>&nbsp;A&nbsp;All
+        policies on mass gatherings and non-essential businesses, including
+        policies governing reopening guidelines, are lifted or expired
+      </p>
+      <p>
+        These conditions are analogous to those prior to the pandemic when all
+        movement and interactions not restricted due to event-specific public
+        health measures.
+      </p>
+      <ul>
+        <li>No stay-at-home or safer-at-home order in place </li>
+        <li>No private sector closures, and no re-opening specific policies</li>
+        <li>
+          No mass gathering restrictions, and no re-opening specific policies
+        </li>
+        <li>No school closures in place</li>
       </ul>
       <h3>Visualizing policies in place, by category, over time</h3>
       <p>
@@ -674,7 +698,7 @@ const Documentation = ({ ...props }) => {
               <p>2.52</p>
             </td>
             <td>
-              <p>.04</p>
+              <p>0.04</p>
             </td>
             <td>
               <p>N/A</p>
@@ -688,7 +712,7 @@ const Documentation = ({ ...props }) => {
               <p>0.84</p>
             </td>
             <td>
-              <p>.012</p>
+              <p>0.012</p>
             </td>
             <td>
               <p>67%</p>
