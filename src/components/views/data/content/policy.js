@@ -94,34 +94,39 @@ export const policyInfo = {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       {
-        dataField: "place",
+        dataField: "place.level",
         defKey: "place.level",
         header: "Level of government",
         sort: true,
-        sortValue: v => {
-          if (v !== undefined) return v.map(d => d.level).join("; ");
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
           else return "zzz";
         },
-        formatter: v => {
-          if (v !== undefined && v.length > 0) return v[0].level;
+        formatter: (cell, row) => {
+          if (row.place !== undefined && row.place.length > 0)
+            return row.place[0].level;
           else return null;
         },
       },
       {
-        dataField: "place",
+        dataField: "place.loc",
         defKey: "place.loc",
         header: "Affected location",
         defCharLimit: 1000,
         sort: true,
-        sortValue: v => {
-          if (v !== undefined) return v.map(d => d.loc).join("; ");
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.loc).join("; ");
           else return "zzz";
         },
-        formatter: v => {
-          console.log(v);
-          if (v !== undefined && v.length > 0)
+        formatter: (cell, row) => {
+          if (row.place !== undefined && row.place.length > 0)
             return (
-              <ShowMore text={v.map(d => d.loc).join("; ")} charLimit={60} />
+              <ShowMore
+                text={row.place.map(d => d.loc).join("; ")}
+                charLimit={60}
+              />
             );
           else return null;
         },
