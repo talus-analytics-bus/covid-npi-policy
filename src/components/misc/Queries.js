@@ -95,6 +95,7 @@ export const Policy = async function({
   fields = [],
   filters = null,
   by_category = null,
+  ordering = [],
 }) {
   // return cached result if available
   // if (isEmpty(filters) && allPolicies !== null) {
@@ -123,7 +124,7 @@ export const Policy = async function({
     }
     req = await axios.post(
       `${API_URL}/post/policy`,
-      { filters },
+      { filters, ordering },
       {
         params,
       }

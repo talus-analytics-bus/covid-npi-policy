@@ -22,6 +22,16 @@ const unspecified = (
 );
 const API_URL = process.env.REACT_APP_API_URL;
 
+// function to get current ordering
+export const getOrder = rootEl => {
+  if (rootEl !== undefined) {
+    const els = rootEl.getElementsByClassName("sortable");
+    console.log("els");
+    console.log(els);
+  }
+  return [];
+};
+
 /**
  * Define all info needed in the Data page to fetch and show policies.
  * @type {Object}
@@ -90,13 +100,16 @@ export const policyInfo = {
       },
     },
   ],
-  getColumns: ({ metadata }) => {
+  getColumns: ({ metadata, setOrdering }) => {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       {
         dataField: "place.level",
         defKey: "place.level",
         header: "Level of government",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
         sort: true,
         sortValue: (cell, row) => {
           if (row.place !== undefined)
@@ -115,6 +128,9 @@ export const policyInfo = {
         header: "Affected location",
         defCharLimit: 1000,
         sort: true,
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
         sortValue: (cell, row) => {
           if (row.place !== undefined)
             return row.place.map(d => d.loc).join("; ");
@@ -136,9 +152,10 @@ export const policyInfo = {
         header: "Policy name and description",
         defCharLimit: 1000,
         sort: true,
+        onSort: (field, order) => {
+          setOrdering([["policy_name", order]]);
+        },
         formatter: (cell, row) => {
-          console.log("row");
-          console.log(row);
           const title =
             row.policy_name !== "Unspecified" &&
             row.policy_name !== "" &&
@@ -153,11 +170,17 @@ export const policyInfo = {
         dataField: "primary_ph_measure",
         header: "Policy category",
         sort: true,
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
       },
       {
         dataField: "date_start_effective",
         header: "Effective start date",
         sort: true,
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
         formatter: v =>
           v !== null ? moment(v).format("MMM D, YYYY") : unspecified,
       },
@@ -165,6 +188,9 @@ export const policyInfo = {
         dataField: "authority_name",
         header: "Relevant authority",
         sort: true,
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
         formatter: v => {
           // TODO REPLACE ALL
           if (v === undefined) return "";
@@ -252,12 +278,13 @@ export const policyInfo = {
 
   // query to use when getting entity data
   // requires method and filters arguments
-  dataQuery: ({ method, filters, page = 1, pagesize = 5 }) => {
+  dataQuery: ({ method, filters, page = 1, pagesize = 5, ordering = [] }) => {
     return Policy({
       method,
       filters,
       page,
       pagesize,
+      ordering,
       fields: [
         "id",
         "place",

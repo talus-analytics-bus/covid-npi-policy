@@ -90,7 +90,7 @@ const Table = ({
             ))}
           </div>
         );
-    }
+    },
   };
 
   // define threshold at which to show pagination controls
@@ -123,21 +123,21 @@ const Table = ({
     sizePerPageList: [
       {
         text: "5",
-        value: 5
+        value: 5,
       },
       {
         text: "10",
-        value: 10
+        value: 10,
       },
       {
         text: "50",
-        value: 50
+        value: 50,
       },
       {
         text: "All",
-        value: data.length
-      }
-    ]
+        value: data.length,
+      },
+    ],
   };
 
   // define pagination factory if record count is above pagination threshold
@@ -151,10 +151,29 @@ const Table = ({
   const defaultSorted = [
     {
       dataField: defaultSortedField,
-      order: "desc"
-    }
+      order: "desc",
+    },
   ];
+
+  // effect hooks
+
   // main jsx for Bootstrap table
+  // return (
+  //   <div className={styles.table}>
+  //     <table>
+  //       <thead>
+  //         <tr>
+  //           <th>test</th>
+  //         </tr>
+  //       </thead>
+  //       <tbody>
+  //         <tr>
+  //           <td>mvm</td>
+  //         </tr>
+  //       </tbody>
+  //     </table>
+  //   </div>
+  // );
   return (
     <div className={styles.table}>
       <ToolkitProvider keyField="id" data={data} columns={columns} search>
@@ -168,7 +187,7 @@ const Table = ({
               expandRow={expandable ? expandRow : undefined}
               classes={classNames({
                 [styles.expandable]: expandable,
-                [className]: true
+                [className]: true,
               })}
               {...props.baseProps}
               defaultSorted={defaultSorted}

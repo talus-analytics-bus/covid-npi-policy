@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import axios from "axios";
 
@@ -39,8 +39,9 @@ const Data = ({
   const [docType, setDocType] = useState(type || "policy");
   const [entityInfo, setEntityInfo] = useState(policyInfo);
   const [curPage, setCurPage] = useState(1);
-  console.log("curPage");
-  console.log(curPage);
+  const [ordering, setOrdering] = useState([]);
+  console.log("ordering");
+  console.log(ordering);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
@@ -92,13 +93,18 @@ const Data = ({
     entityInfoForQuery,
     getOptionSets = false,
   }) => {
-    const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
-    const initColumns = entityInfoForQuery.getColumns({ metadata: {} });
+    const method = "post";
+    // const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
+    const initColumns = entityInfoForQuery.getColumns({
+      metadata: {},
+      setOrdering,
+    });
     const queries = {
       instances: entityInfoForQuery.dataQuery({
         method,
         filters: filtersForQuery,
         page: curPage,
+        ordering,
       }),
     };
 
@@ -182,7 +188,10 @@ const Data = ({
       });
       setFilterDefs(newFilterDefs);
       setColumns(
-        entityInfoForQuery.getColumns({ metadata: results.metadata.data })
+        entityInfoForQuery.getColumns({
+          metadata: results.metadata.data,
+          setOrdering,
+        })
       );
     }
     setLoading(false);
@@ -287,7 +296,7 @@ const Data = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  }, [filters, curPage]);
+  }, [filters, curPage, ordering]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
