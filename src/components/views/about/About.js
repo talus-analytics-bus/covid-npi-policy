@@ -74,6 +74,43 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
   // define tabs and content
   const tabs = [
     {
+      name: "Documentation",
+      slug: "doc",
+      content: (
+        <div>
+          <div>
+            <div className={styles.downloads}>
+              <a
+                className={classNames(styles.download, styles.mini)}
+                href={
+                  process.env.PUBLIC_URL +
+                  "/export/COVID AMP data dictionary.xlsx"
+                }
+              >
+                <button>
+                  <i className={"material-icons"}>get_app</i>Download data
+                  dictionary
+                </button>
+              </a>
+              <a
+                className={classNames(styles.download, styles.mini)}
+                target="_blank"
+                href={
+                  process.env.PUBLIC_URL +
+                  "/export/COVID AMP documentation 071620.pdf"
+                }
+              >
+                <button>
+                  <i className={"material-icons"}>get_app</i>Download as PDF
+                </button>
+              </a>
+            </div>
+            <Documentation />
+          </div>
+        </div>
+      ),
+    },
+    {
       name: "What is COVID AMP?",
       slug: "amp",
       content: (
@@ -113,43 +150,6 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             </div>
           </section>
         </>
-      ),
-    },
-    {
-      name: "Documentation",
-      slug: "doc",
-      content: (
-        <div>
-          <div>
-            <div className={styles.downloads}>
-              <a
-                className={classNames(styles.download, styles.mini)}
-                href={
-                  process.env.PUBLIC_URL +
-                  "/export/COVID AMP data dictionary.xlsx"
-                }
-              >
-                <button>
-                  <i className={"material-icons"}>get_app</i>Download data
-                  dictionary
-                </button>
-              </a>
-              <a
-                className={classNames(styles.download, styles.mini)}
-                target="_blank"
-                href={
-                  process.env.PUBLIC_URL +
-                  "/export/COVID AMP documentation 071620.pdf"
-                }
-              >
-                <button>
-                  <i className={"material-icons"}>get_app</i>Download as PDF
-                </button>
-              </a>
-            </div>
-            <Documentation />
-          </div>
-        </div>
       ),
     },
   ];
