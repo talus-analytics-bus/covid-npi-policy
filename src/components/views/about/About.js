@@ -6,6 +6,9 @@ import styles from "./about.module.scss";
 // content
 import Documentation from "./content/Documentation";
 
+// local components
+import { AccessibilityNote } from "../../common";
+
 // assets
 import logo from "../../../assets/images/logo.svg";
 import talus from "../../../assets/images/logo-talus.png";
@@ -164,6 +167,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
   return (
     <div className={styles.about}>
       <h2 className={styles.title}>About</h2>
+      <AccessibilityNote />
       <div className={styles.tabs}>
         {tabs.map(d => (
           <Link to={"/about/" + d.slug}>

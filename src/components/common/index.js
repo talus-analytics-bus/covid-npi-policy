@@ -12,6 +12,7 @@ import InfoTooltip from "./InfoTooltip/InfoTooltip.js";
 import DateSlider from "./DateSlider/DateSlider.js";
 import FloatMenu from "./FloatMenu/FloatMenu.js";
 import Drawer from "./Drawer/Drawer.js";
+import AccessibilityNote from "./AccessibilityNote/AccessibilityNote.js";
 export {
   Selectpicker,
   CheckboxSet,
@@ -26,5 +27,6 @@ export {
   InfoTooltip,
   DateSlider,
   FloatMenu,
-  Drawer
+  Drawer,
+  AccessibilityNote,
 };
