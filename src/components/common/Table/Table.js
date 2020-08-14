@@ -139,6 +139,7 @@ const Table = ({
           pagesize,
           curPage,
           setCurPage,
+          nTotalRecords,
         }}
       />
     </>

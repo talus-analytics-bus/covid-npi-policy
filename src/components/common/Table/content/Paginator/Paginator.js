@@ -22,7 +22,7 @@ export const Paginator = ({
   const maxRecords = 1e9;
 
   // max pagination buttons to show at once
-  const maxButtons = 9;
+  const maxButtons = 8;
 
   // pagination buttons to show
   const numPages = Math.ceil(nTotalRecords / pagesize);
@@ -48,8 +48,13 @@ export const Paginator = ({
 
   // add "first" and "next" buttons
   // add middle buttons
-  const firstButtonNum = Math.max(curPage - maxButtons / 2, curPage);
-  const lastButtonNum = Math.min(curPage + maxButtons / 2, curPage);
+
+  let firstButtonNum = curPage;
+  let lastButtonNum = numPages;
+  if (curPage < maxButtons / 2) {
+    firstButtonNum = curPage;
+    lastButtonNum = maxButtons;
+  }
 
   const onLastPage = curPage >= numPages;
   const onFirstPage = curPage <= 1;
@@ -116,6 +121,7 @@ export const Paginator = ({
       </div>
       <div className={styles.pageButtons}>
         {prevButton}
+        {firstButtonNum} {lastButtonNum}
         {nextButton}
       </div>
     </div>
