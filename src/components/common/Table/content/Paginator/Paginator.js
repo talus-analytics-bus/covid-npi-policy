@@ -4,6 +4,7 @@ import React, { useState } from "react";
 // assets and styles
 import styles from "./paginator.module.scss";
 import classNames from "classnames";
+import { comma } from "../../../../misc/Util";
 
 /**
  * @method Paginator
@@ -17,7 +18,62 @@ export const Paginator = ({
   setPagesize,
 }) => {
   // constants
+  // max records to show on 'All' selection
   const maxRecords = 1e9;
+
+  // max pagination buttons to show at once
+  const maxButtons = 9;
+
+  // pagination buttons to show
+  const numPages = Math.ceil(nTotalRecords / pagesize);
+
+  const PageButton = ({
+    label = null,
+    iconName = null,
+    onClick,
+    customClassNames = {},
+  }) => {
+    const icon =
+      iconName !== null ? (
+        <i className={classNames("material-icons")}>{iconName}</i>
+      ) : null;
+
+    return (
+      <button className={classNames(customClassNames)} {...{ onClick }}>
+        {icon}
+        {label}
+      </button>
+    );
+  };
+
+  // add "first" and "next" buttons
+  // add middle buttons
+  const firstButtonNum = Math.max(curPage - maxButtons / 2, curPage);
+  const lastButtonNum = Math.min(curPage + maxButtons / 2, curPage);
+
+  const onLastPage = curPage >= numPages;
+  const onFirstPage = curPage <= 1;
+  const prevButton = PageButton({
+    onClick: () => {
+      if (!onFirstPage) setCurPage(curPage - 1);
+    },
+    customClassNames: {
+      [styles.disabled]: onFirstPage,
+    },
+    iconName: "keyboard_arrow_left",
+  });
+  const nextButton = PageButton({
+    onClick: () => {
+      if (!onLastPage) setCurPage(curPage + 1);
+    },
+    customClassNames: {
+      [styles.disabled]: onLastPage,
+    },
+    iconName: "keyboard_arrow_right",
+  });
+
+  let i = 0;
+
   // state
   // pagesize selector
   const pagesizeOptions = [
@@ -42,6 +98,7 @@ export const Paginator = ({
       value: maxRecords,
     },
   ];
+
   return (
     <div className={styles.paginator}>
       <div className={styles.pagesizePicker}>
@@ -56,6 +113,10 @@ export const Paginator = ({
             <option value={d.value}>{d.label}</option>
           ))}
         </select>
+      </div>
+      <div className={styles.pageButtons}>
+        {prevButton}
+        {nextButton}
       </div>
     </div>
   );
