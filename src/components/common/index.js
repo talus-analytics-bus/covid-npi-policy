@@ -26,5 +26,5 @@ export {
   InfoTooltip,
   DateSlider,
   FloatMenu,
-  Drawer
+  Drawer,
 };

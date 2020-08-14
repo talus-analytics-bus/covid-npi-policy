@@ -10,6 +10,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 // utilities and common components
 import { comma } from "../../misc/Util";
 import { ShowMore } from "../../common/";
+import { Paginator } from "./content/Paginator/Paginator";
 
 // assets
 import asc from "../../../assets/icons/table/sorted-asc.svg";
@@ -26,7 +27,9 @@ const Table = ({
   className,
   nTotalRecords,
   curPage,
+  setCurPage,
   pagesize,
+  setPagesize,
   ...props
 }) => {
   // define search bar
@@ -99,64 +102,6 @@ const Table = ({
     },
   };
 
-  // define threshold at which to show pagination controls
-  const paginationThresh = 0;
-
-  // define pagination options for Bootstrap table
-  const customTotal = () => {
-    // get current record indices
-    const from = pagesize * curPage - pagesize + 1;
-    const to = Math.min(nTotalRecords, pagesize * curPage);
-    return (
-      <span className={styles.paginationTotal}>
-        Showing {comma(from)} to {comma(to)} of {comma(nTotalRecords)} records
-      </span>
-    );
-  };
-  const paginationOptions = {
-    paginationSize: 10,
-    pageStartIndex: 1,
-    // alwaysShowAllBtns: true, // Always show next and previous button
-    // withFirstAndLast: false, // Hide the going to First and Last page button
-    // hideSizePerPage: true, // Hide the sizePerPage dropdown always
-    // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
-    firstPageText: "First",
-    prePageText: "Back",
-    nextPageText: "Next",
-    lastPageText: "Last",
-    nextPageTitle: "First page",
-    prePageTitle: "Pre page",
-    firstPageTitle: "Next page",
-    lastPageTitle: "Last page",
-    showTotal: true,
-    paginationTotalRenderer: customTotal,
-    disablePageTitle: true,
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "50",
-        value: 50,
-      },
-      {
-        text: "All",
-        value: data.length,
-      },
-    ],
-  };
-
-  // define pagination factory if record count is above pagination threshold
-  const pagination =
-    data.length > paginationThresh
-      ? paginationFactory(paginationOptions)
-      : undefined;
-
   // table is expandable if at least on row has children to show
   const expandable = data.some(d => d.children !== undefined);
   const defaultSorted = [
@@ -166,47 +111,37 @@ const Table = ({
     },
   ];
 
-  // effect hooks
-
-  // main jsx for Bootstrap table
-  // return (
-  //   <div className={styles.table}>
-  //     <table>
-  //       <thead>
-  //         <tr>
-  //           <th>test</th>
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         <tr>
-  //           <td>mvm</td>
-  //         </tr>
-  //       </tbody>
-  //     </table>
-  //   </div>
-  // );
   return (
-    <div className={styles.table}>
-      <ToolkitProvider keyField="id" data={data} columns={columns} search>
-        {props => (
-          <div>
-            <SearchBar
-              {...{ ...props.searchProps, placeholder: "search for..." }}
-            />
-            <BootstrapTable
-              pagination={pagination}
-              expandRow={expandable ? expandRow : undefined}
-              classes={classNames({
-                [styles.expandable]: expandable,
-                [className]: true,
-              })}
-              {...props.baseProps}
-              defaultSorted={defaultSorted}
-            />
-          </div>
-        )}
-      </ToolkitProvider>
-    </div>
+    <>
+      <div className={styles.table}>
+        <ToolkitProvider keyField="id" data={data} columns={columns} search>
+          {props => (
+            <div>
+              <SearchBar
+                {...{ ...props.searchProps, placeholder: "search for..." }}
+              />
+              <BootstrapTable
+                expandRow={expandable ? expandRow : undefined}
+                classes={classNames({
+                  [styles.expandable]: expandable,
+                  [className]: true,
+                })}
+                {...props.baseProps}
+                defaultSorted={defaultSorted}
+              />
+            </div>
+          )}
+        </ToolkitProvider>
+      </div>
+      <Paginator
+        {...{
+          setPagesize,
+          pagesize,
+          curPage,
+          setCurPage,
+        }}
+      />
+    </>
   );
   // const defaultSorted = [
   //   {

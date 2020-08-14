@@ -106,6 +106,7 @@ const Data = ({
         method,
         filters: filtersForQuery,
         page: curPage,
+        pagesize,
         ordering,
       }),
     };
@@ -301,7 +302,7 @@ const Data = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  }, [filters, curPage, ordering]);
+  }, [filters, curPage, ordering, pagesize]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
@@ -312,11 +313,13 @@ const Data = ({
           {...{
             nTotalRecords: numInstances,
             curPage,
+            setCurPage,
             pagesize,
             columns,
             data,
             defaultSortedField: entityInfo.defaultSortedField,
             className: styles[entityInfo.nouns.s.toLowerCase()],
+            setPagesize,
           }}
         />
       );
