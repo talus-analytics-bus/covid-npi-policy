@@ -311,6 +311,8 @@ const Data = ({
         <Table
           {...{
             nTotalRecords: numInstances,
+            curPage,
+            pagesize,
             columns,
             data,
             defaultSortedField: entityInfo.defaultSortedField,
@@ -394,7 +396,7 @@ const Data = ({
                             {data && data.length > 0 && (
                               <>
                                 Download {isEmpty(filters) ? "all" : "filtered"}{" "}
-                                {nouns.p.toLowerCase()} ({comma(data.length)})
+                                {nouns.p.toLowerCase()} ({comma(numInstances)})
                               </>
                             )}
                           </span>

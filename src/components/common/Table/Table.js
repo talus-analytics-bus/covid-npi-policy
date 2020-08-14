@@ -25,6 +25,8 @@ const Table = ({
   defaultSortedField,
   className,
   nTotalRecords,
+  curPage,
+  pagesize,
   ...props
 }) => {
   // define search bar
@@ -43,6 +45,9 @@ const Table = ({
   // for each column, specify various constants, including the null value,
   // sort carets, etc.
   columns.forEach(d => {
+    d.sortFunc = (a, b, order, dataField) => {
+      return 1;
+    };
     d.sortCaret = sortCaret;
     if (d.definition) {
       d.text = (
@@ -98,11 +103,16 @@ const Table = ({
   const paginationThresh = 0;
 
   // define pagination options for Bootstrap table
-  const customTotal = (from, to, size) => (
-    <span className={styles.paginationTotal}>
-      Showing {comma(from)} to {comma(to)} of {comma(nTotalRecords)} records
-    </span>
-  );
+  const customTotal = () => {
+    // get current record indices
+    const from = pagesize * curPage - pagesize + 1;
+    const to = Math.min(nTotalRecords, pagesize * curPage);
+    return (
+      <span className={styles.paginationTotal}>
+        Showing {comma(from)} to {comma(to)} of {comma(nTotalRecords)} records
+      </span>
+    );
+  };
   const paginationOptions = {
     paginationSize: 10,
     pageStartIndex: 1,
