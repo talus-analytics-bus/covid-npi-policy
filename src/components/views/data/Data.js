@@ -39,6 +39,7 @@ const Data = ({
   const [docType, setDocType] = useState(type || "policy");
   const [entityInfo, setEntityInfo] = useState(policyInfo);
   const [curPage, setCurPage] = useState(1);
+  const [numInstances, setNumInstances] = useState(null);
   const [ordering, setOrdering] = useState([]);
   console.log("ordering");
   console.log(ordering);
@@ -140,6 +141,7 @@ const Data = ({
 
     // set data and metadata with results
     setData(results.instances.data);
+    setNumInstances(results.instances.n);
 
     // define min/max range of daterange pickers
     // TODO modularize and reuse repeated code
@@ -308,6 +310,7 @@ const Data = ({
       return (
         <Table
           {...{
+            nTotalRecords: numInstances,
             columns,
             data,
             defaultSortedField: entityInfo.defaultSortedField,

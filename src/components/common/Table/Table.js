@@ -24,6 +24,7 @@ const Table = ({
   childGetter,
   defaultSortedField,
   className,
+  nTotalRecords,
   ...props
 }) => {
   // define search bar
@@ -99,7 +100,7 @@ const Table = ({
   // define pagination options for Bootstrap table
   const customTotal = (from, to, size) => (
     <span className={styles.paginationTotal}>
-      Showing {comma(from)} to {comma(to)} of {comma(size)} records
+      Showing {comma(from)} to {comma(to)} of {comma(nTotalRecords)} records
     </span>
   );
   const paginationOptions = {
