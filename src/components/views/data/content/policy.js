@@ -22,16 +22,6 @@ const unspecified = (
 );
 const API_URL = process.env.REACT_APP_API_URL;
 
-// function to get current ordering
-export const getOrder = rootEl => {
-  if (rootEl !== undefined) {
-    const els = rootEl.getElementsByClassName("sortable");
-    console.log("els");
-    console.log(els);
-  }
-  return [];
-};
-
 /**
  * Define all info needed in the Data page to fetch and show policies.
  * @type {Object}

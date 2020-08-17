@@ -149,6 +149,8 @@ let allPlans = null;
  */
 export const Plan = async function({
   method,
+  page = 1,
+  pagesize = 1000000,
   fields = [],
   filters = null,
   by_category = null,
@@ -163,6 +165,8 @@ export const Plan = async function({
   fields.forEach(d => {
     params.append("fields", d);
   });
+  params.append("page", page);
+  params.append("pagesize", pagesize);
   // TODO implement `by_category` in future if needed
   // if (by_category !== null) params.append("by_category", by_category);
 
