@@ -220,6 +220,7 @@ const Data = ({
     setColumns(null);
     setData(null);
     setFilterDefs(null);
+    setSearchText(null);
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
 
     // get current URL params
