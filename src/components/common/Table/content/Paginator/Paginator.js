@@ -22,24 +22,39 @@ export const Paginator = ({
   const maxRecords = 1e9;
 
   // max pagination buttons to show at once
-  const maxButtons = 8;
+  const maxButtons = 9; // make odd
+  const middleMax = (maxButtons - 1) / 2;
 
   // pagination buttons to show
   const numPages = Math.ceil(nTotalRecords / pagesize);
 
+  /**
+   * Numbered button that when clicked sets current page to that number
+   * @method PageButton
+   * @param  {[type]}   [label=null]          [description]
+   * @param  {[type]}   [iconName=null]       [description]
+   * @param  {[type]}   onClick               [description]
+   * @param  {Object}   [customClassNames={}] [description]
+   * @param  {[type]}   }                     [description]
+   */
   const PageButton = ({
-    label = null,
-    iconName = null,
-    onClick,
-    customClassNames = {},
+    label = null, // button label, the number
+    iconName = null, // optional: name of material icon to show
+    onClick, // callback fired when button clicked
+    customClassNames = {}, // optional: key = class name, value = true if use
   }) => {
+    // get material icon if any
     const icon =
       iconName !== null ? (
         <i className={classNames("material-icons")}>{iconName}</i>
       ) : null;
 
+    // return page button
     return (
-      <button className={classNames(customClassNames)} {...{ onClick }}>
+      <button
+        className={classNames(styles.pageButton, customClassNames)}
+        {...{ onClick }}
+      >
         {icon}
         {label}
       </button>
@@ -49,15 +64,43 @@ export const Paginator = ({
   // add "first" and "next" buttons
   // add middle buttons
 
-  let firstButtonNum = curPage;
-  let lastButtonNum = numPages;
-  if (curPage < maxButtons / 2) {
-    firstButtonNum = curPage;
-    lastButtonNum = maxButtons;
+  let firstButtonNum = Math.max(
+    Math.min(Math.max(curPage - middleMax, 1), numPages - maxButtons + 1),
+    1
+  );
+  let lastButtonNum = Math.min(firstButtonNum + maxButtons - 1, numPages);
+
+  const middleButtons = [];
+  let i = firstButtonNum;
+  while (i < lastButtonNum + 1) {
+    const page = i;
+    middleButtons.push(
+      PageButton({
+        label: comma(page),
+        customClassNames: { [styles.selected]: curPage === page },
+        onClick: () => {
+          setCurPage(page);
+        },
+      })
+    );
+    i++;
   }
 
   const onLastPage = curPage >= numPages;
   const onFirstPage = curPage <= 1;
+
+  // first page
+  const firstButton = PageButton({
+    onClick: () => {
+      if (!onFirstPage) setCurPage(1);
+    },
+    customClassNames: {
+      [styles.disabled]: onFirstPage,
+    },
+    iconName: "fast_rewind",
+  });
+
+  // previous page
   const prevButton = PageButton({
     onClick: () => {
       if (!onFirstPage) setCurPage(curPage - 1);
@@ -67,6 +110,8 @@ export const Paginator = ({
     },
     iconName: "keyboard_arrow_left",
   });
+
+  // next page
   const nextButton = PageButton({
     onClick: () => {
       if (!onLastPage) setCurPage(curPage + 1);
@@ -77,7 +122,16 @@ export const Paginator = ({
     iconName: "keyboard_arrow_right",
   });
 
-  let i = 0;
+  // last page
+  const lastButton = PageButton({
+    onClick: () => {
+      if (!onLastPage) setCurPage(numPages);
+    },
+    customClassNames: {
+      [styles.disabled]: onLastPage,
+    },
+    iconName: "fast_forward",
+  });
 
   // state
   // pagesize selector
@@ -120,10 +174,17 @@ export const Paginator = ({
         </select>
       </div>
       <div className={styles.pageButtons}>
+        {firstButton}
         {prevButton}
-        {firstButtonNum} {lastButtonNum}
+        {middleButtons}
         {nextButton}
+        {lastButton}
       </div>
+      curPage = {curPage}
+      <br />
+      numPages = {numPages}
+      <br />
+      pagesize = {pagesize}
     </div>
   );
 };
