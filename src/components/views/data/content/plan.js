@@ -68,7 +68,7 @@ export const planInfo = {
       },
     },
   ],
-  getColumns: ({ metadata }) => {
+  getColumns: ({ metadata, setOrdering }) => {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       { dataField: "org_name", header: "Organization name", sort: true },
@@ -140,6 +140,13 @@ export const planInfo = {
       },
     ];
 
+    // add onSort function to update ordering info for API call
+    newColumns.forEach(d => {
+      d.onSort = (field, order) => {
+        setOrdering([[field, order]]);
+      };
+    });
+
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing
     // TODO move static data processing into initial declaration of `newColumns`
@@ -177,10 +184,13 @@ export const planInfo = {
 
   // query to use when getting entity data
   // requires method and filters arguments
-  dataQuery: ({ method, filters }) => {
+  dataQuery: ({ method, filters, page = 1, pagesize = 5, ordering = [] }) => {
     return Plan({
       method,
       filters,
+      page,
+      pagesize,
+      ordering,
       fields: [
         "id",
         "source_id",
