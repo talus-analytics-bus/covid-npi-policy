@@ -442,13 +442,7 @@ const Data = ({
               ),
             }}
           />
-          <button
-            onClick={() => {
-              setCurPage(curPage + 1);
-            }}
-          >
-            Next page
-          </button>
+
           <input type="text" ref={searchRef}></input>
           {table}
           {!table && <div style={{ height: "900px" }} />}

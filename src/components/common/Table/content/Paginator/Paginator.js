@@ -160,31 +160,36 @@ export const Paginator = ({
 
   return (
     <div className={styles.paginator}>
-      <div className={styles.pagesizePicker}>
-        <select
-          value={pagesize}
-          onChange={e => {
-            const v = e.target.value;
-            setPagesize(v);
-          }}
-        >
-          {pagesizeOptions.map(d => (
-            <option value={d.value}>{d.label}</option>
-          ))}
-        </select>
+      <div className={styles.leftSide}>
+        <div className={styles.pagesizePicker}>
+          <label>Page size</label>
+          <select
+            value={pagesize}
+            onChange={e => {
+              const v = e.target.value;
+              setPagesize(v);
+            }}
+          >
+            {pagesizeOptions.map(d => (
+              <option value={d.value}>{d.label}</option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.rowNumberTracker}>
+          Showing {comma(curPage * pagesize - pagesize + 1)} to{" "}
+          {comma(Math.min(curPage * pagesize, nTotalRecords))} of{" "}
+          {comma(nTotalRecords)} rows
+        </div>
       </div>
-      <div className={styles.pageButtons}>
-        {firstButton}
-        {prevButton}
-        {middleButtons}
-        {nextButton}
-        {lastButton}
+      <div className={styles.rightSide}>
+        <div className={styles.pageButtons}>
+          {firstButton}
+          {prevButton}
+          {middleButtons}
+          {nextButton}
+          {lastButton}
+        </div>
       </div>
-      curPage = {curPage}
-      <br />
-      numPages = {numPages}
-      <br />
-      pagesize = {pagesize}
     </div>
   );
 };

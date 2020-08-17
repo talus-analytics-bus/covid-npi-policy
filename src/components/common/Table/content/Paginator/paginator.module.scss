@@ -1,4 +1,19 @@
 .paginator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  // pagesize picker (select)
+  .pagesizePicker {
+    display: flex;
+    label {
+      margin: 0;
+      margin-right: 5px;
+    }
+  }
+  .rowNumberTracker {
+    margin-top: 5px;
+  }
   .pageButtons {
     display: flex;
     align-items: center;
@@ -16,7 +31,7 @@
         background-color: darken(white, 5%);
       }
       &.disabled {
-        color: gray;
+        color: lightgray;
         cursor: not-allowed;
       }
       &:hover {
