@@ -365,6 +365,7 @@ const Data = ({
                 render: counts,
                 class_name: "all_static",
                 filters: {},
+                searchText,
                 disabled: false,
                 message: (
                   <React.Fragment>
@@ -398,6 +399,7 @@ const Data = ({
                     {DownloadBtn({
                       render: table,
                       class_name: nouns.s,
+                      searchText,
                       filters,
                       disabled: data && data.length === 0,
                       message: (
@@ -408,7 +410,11 @@ const Data = ({
                             )}
                             {data && data.length > 0 && (
                               <>
-                                Download {isEmpty(filters) ? "all" : "filtered"}{" "}
+                                Download{" "}
+                                {isEmpty(filters) &&
+                                (searchText === null || searchText === "")
+                                  ? "all"
+                                  : "filtered"}{" "}
                                 {nouns.p.toLowerCase()} ({comma(numInstances)})
                               </>
                             )}
@@ -470,10 +476,18 @@ const Data = ({
   );
 };
 
-const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
+const DownloadBtn = ({
+  render,
+  message,
+  class_name,
+  filters,
+  disabled,
+  searchText,
+}) => {
   // flag for whether the download button should say loading or not
   const [buttonLoading, setButtonLoading] = useState(false);
-
+  console.log("searchText");
+  console.log(searchText);
   return (
     render && (
       <button
@@ -492,7 +506,10 @@ const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
 
             Export({
               method: "post",
-              filters,
+              filters: {
+                ...filters,
+                _text: searchText !== null ? [searchText] : [],
+              },
               class_name,
             }).then(d => setButtonLoading(false));
           }
