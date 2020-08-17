@@ -4,6 +4,7 @@ import moment from "moment";
 import axios from "axios";
 
 // common components
+import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle, ShowMore } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
@@ -41,7 +42,7 @@ const Data = ({
   const [curPage, setCurPage] = useState(1);
   const [numInstances, setNumInstances] = useState(null);
   const [ordering, setOrdering] = useState([]);
-  let searchRef = useRef(null);
+  const [searchText, setSearchText] = useState(null);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
@@ -254,7 +255,10 @@ const Data = ({
       // update data
       setLoading(true);
       getData({
-        filtersForQuery: { ...filters, _text: [searchRef.current.value] },
+        filtersForQuery: {
+          ...filters,
+          _text: searchText !== null ? [searchText] : [],
+        },
         entityInfoForQuery: entityInfo,
         initializingForQuery: true,
       });
@@ -303,7 +307,7 @@ const Data = ({
     if (curPage !== 1) setCurPage(1);
     else updateData();
     // updateData();
-  }, [filters, pagesize]);
+  }, [filters, pagesize, searchText]);
 
   // when filters are updated, update data
   useEffect(() => {
@@ -427,23 +431,30 @@ const Data = ({
                   {table && (
                     <>
                       <div className={styles.filtersHeader}>
-                        Select filters to apply to {nouns.p.toLowerCase()}.{" "}
+                        Select filters to apply to {nouns.p.toLowerCase()}.
                         {Object.keys(filters).length > 0 && (
-                          <button onClick={() => setFilters({})}>
-                            Clear filters
-                          </button>
+                          <>
+                            &nbsp;
+                            <button onClick={() => setFilters({})}>
+                              Clear filters
+                            </button>
+                          </>
                         )}
-                        <div className={styles.search}>
-                          <input
-                            ref={searchRef}
-                            type="text"
-                            placeholder="search for..."
-                          />
-                          <i className={"material-icons"}>search</i>
-                        </div>
+                        <Search
+                          searchText={searchText}
+                          onChangeFunc={setSearchText}
+                        />
                       </div>
 
-                      <FilterSet {...{ filterDefs, filters, setFilters }} />
+                      <FilterSet
+                        {...{
+                          filterDefs,
+                          filters,
+                          setFilters,
+                          searchText,
+                          setSearchText,
+                        }}
+                      />
                     </>
                   )}
                 </React.Fragment>

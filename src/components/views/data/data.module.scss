@@ -32,26 +32,6 @@
   .filtersHeader {
     display: flex;
     align-items: center;
-    .search {
-      margin-left: auto;
-      position: relative;
-      input {
-        padding: 5px 10px;
-        border: none;
-        &::placeholder {
-          font-style: italic;
-        }
-      }
-
-      // magnifying glass
-      i {
-        position: absolute;
-        right: 0;
-        top: 3px;
-        color: #4682b4;
-        font-weight: bold;
-      }
-    }
   }
 
   // TODO move to a component
