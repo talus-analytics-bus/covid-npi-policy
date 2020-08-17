@@ -41,7 +41,7 @@ const Data = ({
   const [entityInfo, setEntityInfo] = useState(policyInfo);
   const [curPage, setCurPage] = useState(1);
   const [numInstances, setNumInstances] = useState(null);
-  const [ordering, setOrdering] = useState([]);
+  const [ordering, setOrdering] = useState([["date_start_effective", "desc"]]);
   const [searchText, setSearchText] = useState(null);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
