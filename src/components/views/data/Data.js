@@ -41,8 +41,6 @@ const Data = ({
   const [curPage, setCurPage] = useState(1);
   const [numInstances, setNumInstances] = useState(null);
   const [ordering, setOrdering] = useState([]);
-  console.log("ordering");
-  console.log(ordering);
   let searchRef = useRef(null);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
@@ -251,13 +249,10 @@ const Data = ({
     });
   }, [docType]);
 
-  // when filters are updated, update data
-  useEffect(() => {
+  const updateData = () => {
     if (!loading) {
       // update data
       setLoading(true);
-      console.log("searchRef.current.value");
-      console.log(searchRef.current.value);
       getData({
         filtersForQuery: { ...filters, _text: [searchRef.current.value] },
         entityInfoForQuery: entityInfo,
@@ -302,7 +297,18 @@ const Data = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  }, [filters, curPage, ordering, pagesize]);
+  };
+
+  useEffect(() => {
+    if (curPage !== 1) setCurPage(1);
+    else updateData();
+    // updateData();
+  }, [filters, pagesize]);
+
+  // when filters are updated, update data
+  useEffect(() => {
+    updateData();
+  }, [ordering, curPage]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
