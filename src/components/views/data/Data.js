@@ -439,10 +439,16 @@ const Data = ({
                     <>
                       <div className={styles.filtersHeader}>
                         Select filters to apply to {nouns.p.toLowerCase()}.
-                        {Object.keys(filters).length > 0 && (
+                        {(Object.keys(filters).length > 0 ||
+                          (searchText !== null && searchText !== "")) && (
                           <>
                             &nbsp;
-                            <button onClick={() => setFilters({})}>
+                            <button
+                              onClick={() => {
+                                setSearchText(null);
+                                setFilters({});
+                              }}
+                            >
                               Clear filters
                             </button>
                           </>
