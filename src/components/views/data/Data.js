@@ -426,13 +426,21 @@ const Data = ({
                   </div>
                   {table && (
                     <>
-                      <div>
+                      <div className={styles.filtersHeader}>
                         Select filters to apply to {nouns.p.toLowerCase()}.{" "}
                         {Object.keys(filters).length > 0 && (
                           <button onClick={() => setFilters({})}>
                             Clear filters
                           </button>
                         )}
+                        <div className={styles.search}>
+                          <input
+                            ref={searchRef}
+                            type="text"
+                            placeholder="search for..."
+                          />
+                          <i className={"material-icons"}>search</i>
+                        </div>
                       </div>
 
                       <FilterSet {...{ filterDefs, filters, setFilters }} />
@@ -443,7 +451,6 @@ const Data = ({
             }}
           />
 
-          <input type="text" ref={searchRef}></input>
           {table}
           {!table && <div style={{ height: "900px" }} />}
         </React.Fragment>

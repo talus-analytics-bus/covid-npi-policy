@@ -4,7 +4,8 @@ import styles from "./table.module.scss";
 import classNames from "classnames";
 
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+// import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
 // utilities and common components
@@ -32,8 +33,8 @@ const Table = ({
   setPagesize,
   ...props
 }) => {
-  // define search bar
-  const { SearchBar } = Search;
+  // // define search bar
+  // const { SearchBar } = Search;
 
   // define custom design for sort carets
   const sortCaret = (order, column) => {
@@ -111,15 +112,20 @@ const Table = ({
     },
   ];
 
+  // TKP component with search bar enabled
+  // <ToolkitProvider keyField="id" data={data} columns={columns} search>
+
   return (
     <>
       <div className={styles.table}>
-        <ToolkitProvider keyField="id" data={data} columns={columns} search>
+        <ToolkitProvider keyField="id" data={data} columns={columns}>
           {props => (
             <div>
-              <SearchBar
-                {...{ ...props.searchProps, placeholder: "search for..." }}
-              />
+              {
+                // <SearchBar
+                //   {...{ ...props.searchProps, placeholder: "search for..." }}
+                // />
+              }
               <BootstrapTable
                 expandRow={expandable ? expandRow : undefined}
                 classes={classNames({
