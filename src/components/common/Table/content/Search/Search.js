@@ -29,7 +29,7 @@ export const Search = ({
       <input
         onChange={e => {
           clearTimeout(curTimeout);
-          const v = e.target.value;
+          const v = e.target.value !== "" ? e.target.value : null;
           const newTimeout = setTimeout(() => {
             onChangeFunc(v);
           }, 500);
