@@ -30,6 +30,7 @@ const FilterSet = ({
   disabledValues = ["Country"],
   searchText = null,
   setSearchText,
+  children = null,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -191,6 +192,7 @@ const FilterSet = ({
           </div>
         ))}
       </div>
+      {children}
       {badgesToShow && selectedFilters}
     </React.Fragment>
   );
