@@ -91,46 +91,46 @@ export const Paginator = ({
 
   // first page
   const firstButton = PageButton({
+    label: "«",
     onClick: () => {
       if (!onFirstPage) setCurPage(1);
     },
     customClassNames: {
       [styles.disabled]: onFirstPage,
     },
-    iconName: "fast_rewind",
   });
 
   // previous page
   const prevButton = PageButton({
+    label: "‹",
     onClick: () => {
       if (!onFirstPage) setCurPage(curPage - 1);
     },
     customClassNames: {
       [styles.disabled]: onFirstPage,
     },
-    iconName: "keyboard_arrow_left",
   });
 
   // next page
   const nextButton = PageButton({
+    label: "›",
     onClick: () => {
       if (!onLastPage) setCurPage(curPage + 1);
     },
     customClassNames: {
       [styles.disabled]: onLastPage,
     },
-    iconName: "keyboard_arrow_right",
   });
 
   // last page
   const lastButton = PageButton({
+    label: "»",
     onClick: () => {
       if (!onLastPage) setCurPage(numPages);
     },
     customClassNames: {
       [styles.disabled]: onLastPage,
     },
-    iconName: "fast_forward",
   });
 
   // state
