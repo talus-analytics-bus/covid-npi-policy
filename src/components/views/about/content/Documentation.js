@@ -921,14 +921,14 @@ const Documentation = ({ ...props }) => {
           </tr>
           <tr>
             <td>
-              <p>Case fatality rate (CFR)</p>
+              <p>Infection fatality rate (IFR)</p>
             </td>
             <td>
-              <p>Fraction of all cases resulting in death</p>
+              <p>Fraction of all infections (including asymptomatic) resulting in death</p>
             </td>
             <td>
               <p>
-                1.09%
+                0.65%
                 <a data-type="ref" id="_ednref10" onClick={onClick}>
                   viii
                 </a>
@@ -1122,18 +1122,23 @@ const Documentation = ({ ...props }) => {
             viii
           </a>{" "}
           <p>
-            Ferguson, Neil, et al. "Report 9: Impact of non-pharmaceutical
-            interventions (NPIs) to reduce COVID19 mortality and healthcare
-            demand"{" "}
+            CDC COVID-19 Pandemic Planning Scenarios. Scenario 5: Current Best Estimate"{" "}
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"
+              href="https://www.cdc.gov/coronavirus/2019-ncov/hcp/planning-scenarios.html"
             >
-              https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf
+              https://www.cdc.gov/coronavirus/2019-ncov/hcp/planning-scenarios.html{" "}
             </a>
-            . Note: As implemented in the model, the reported values in this
-            reference are weighted by US population demographics.
+            referencing{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.medrxiv.org/content/10.1101/2020.05.03.20089854v4"
+              >
+            Meyerowitz-Katz, G., & Merone, L. (2020). A systematic review and
+            meta-analysis of published research data on COVID-19 infection-fatality rates. <i>medRxiv</i>.
+            </a>
           </p>
         </p>
         <p>

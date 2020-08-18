@@ -1,0 +1,59 @@
+.paginator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  // pagesize picker (select)
+  .pagesizePicker {
+    display: flex;
+    label {
+      margin: 0;
+      margin-right: 5px;
+    }
+  }
+  .rowNumberTracker {
+    margin-top: 5px;
+  }
+  .pageButtons {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+
+    // page buttons
+    .pageButton {
+      background: none;
+      border: 1px solid lightgray;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      &.selected {
+        color: #0096c2;
+        background-color: darken(white, 5%);
+      }
+      &.disabled {
+        color: lightgray;
+        cursor: not-allowed;
+      }
+      &:hover {
+        background-color: darken(white, 5%);
+      }
+      &:active {
+        background-color: darken(white, 10%);
+      }
+
+      // hide extra borders
+      &:not(:first-child) {
+        border-left: none;
+      }
+
+      // border styling
+      $border-radius: 4px;
+      &:first-child {
+        border-radius: $border-radius 0 0 $border-radius;
+      }
+      &:last-child {
+        border-radius: 0 $border-radius $border-radius 0;
+      }
+    }
+  }
+}

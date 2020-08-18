@@ -28,11 +28,16 @@ const FilterSet = ({
   setFilters,
   disabled = false,
   disabledValues = ["Country"],
+  searchText = null,
+  setSearchText,
+  children = null,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
   const filterGroups = [];
   const filterDefsObj = {};
+  const badgesToShow =
+    !isEmpty(filters) || (searchText !== null && searchText !== "");
   filterDefs.forEach(filterGroup => {
     const filterGroupComponents = [];
 
@@ -66,7 +71,7 @@ const FilterSet = ({
             setFilters,
             activeFilter,
             setActiveFilter,
-            withGrouping: v.withGrouping
+            withGrouping: v.withGrouping,
           }}
         />
       );
@@ -98,17 +103,21 @@ const FilterSet = ({
         <div
           className={styles.close}
           onClick={() => {
-            const newFilters = { ...filters };
-            newFilters[field] = newFilters[field].filter(v => v !== value);
+            if (field !== "Text") {
+              const newFilters = { ...filters };
+              newFilters[field] = newFilters[field].filter(v => v !== value);
 
-            if (
-              filterDefsObj[field].dateRange ||
-              newFilters[field].length === 0
-            ) {
-              delete newFilters[field];
-              setFilters(newFilters);
+              if (
+                filterDefsObj[field].dateRange ||
+                newFilters[field].length === 0
+              ) {
+                delete newFilters[field];
+                setFilters(newFilters);
+              } else {
+                setFilters(newFilters);
+              }
             } else {
-              setFilters(newFilters);
+              setSearchText(null);
             }
           }}
         >
@@ -138,7 +147,7 @@ const FilterSet = ({
                     getBadge({
                       label: filterDefsObj[field].label,
                       field,
-                      value
+                      value,
                     })
                   )}
                 {filterDefsObj[field].dateRange &&
@@ -148,12 +157,19 @@ const FilterSet = ({
                     value: getInputLabel({
                       dateRange: true,
                       dateRangeState: [
-                        { startDate: values[0], endDate: values[1] }
-                      ]
-                    })
+                        { startDate: values[0], endDate: values[1] },
+                      ],
+                    }),
                   })}
               </React.Fragment>
             ))}
+          {searchText !== null &&
+            searchText !== "" &&
+            getBadge({
+              label: "Text",
+              field: "Text",
+              value: searchText,
+            })}
         </div>
       </div>
     );
@@ -162,21 +178,22 @@ const FilterSet = ({
     <React.Fragment>
       <div
         className={classNames(styles.filterSet, {
-          [styles.disabled]: disabled
+          [styles.disabled]: disabled,
         })}
       >
         {filterGroups.map(d => (
           <div
             key={d.map(dd => dd.key).join("-")}
             className={classNames(styles.filterGroup, {
-              [styles.dropdowns]: d.dropdowns
+              [styles.dropdowns]: d.dropdowns,
             })}
           >
             {d}
           </div>
         ))}
       </div>
-      {!isEmpty(filters) && selectedFilters}
+      {children}
+      {badgesToShow && selectedFilters}
     </React.Fragment>
   );
 };

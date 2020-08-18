@@ -90,15 +90,18 @@ let allPolicies = null;
  */
 export const Policy = async function({
   method,
+  page = 1,
+  pagesize = 1000000,
   fields = [],
   filters = null,
   by_category = null,
+  ordering = [],
 }) {
   // return cached result if available
-  if (isEmpty(filters) && allPolicies !== null) {
-    // console.log("\n\ndoing it");
-    return allPolicies;
-  }
+  // if (isEmpty(filters) && allPolicies !== null) {
+  //   // console.log("\n\ndoing it");
+  //   return allPolicies;
+  // }
 
   // prepare params
   const params = new URLSearchParams();
@@ -106,6 +109,8 @@ export const Policy = async function({
     params.append("fields", d);
   });
   if (by_category !== null) params.append("by_category", by_category);
+  params.append("page", page);
+  params.append("pagesize", pagesize);
 
   // prepare request
   let req;
@@ -119,7 +124,7 @@ export const Policy = async function({
     }
     req = await axios.post(
       `${API_URL}/post/policy`,
-      { filters },
+      { filters, ordering },
       {
         params,
       }
@@ -144,6 +149,8 @@ let allPlans = null;
  */
 export const Plan = async function({
   method,
+  page = 1,
+  pagesize = 1000000,
   fields = [],
   filters = null,
   by_category = null,
@@ -158,6 +165,8 @@ export const Plan = async function({
   fields.forEach(d => {
     params.append("fields", d);
   });
+  params.append("page", page);
+  params.append("pagesize", pagesize);
   // TODO implement `by_category` in future if needed
   // if (by_category !== null) params.append("by_category", by_category);
 

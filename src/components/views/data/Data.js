@@ -1,9 +1,10 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import axios from "axios";
 
 // common components
+import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle, ShowMore } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
@@ -38,6 +39,12 @@ const Data = ({
 }) => {
   const [docType, setDocType] = useState(type || "policy");
   const [entityInfo, setEntityInfo] = useState(policyInfo);
+  const [curPage, setCurPage] = useState(1);
+  const [numInstances, setNumInstances] = useState(null);
+  const [ordering, setOrdering] = useState([["date_start_effective", "desc"]]);
+  const [searchText, setSearchText] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
   const unspecified = entityInfo.unspecified;
@@ -88,12 +95,19 @@ const Data = ({
     entityInfoForQuery,
     getOptionSets = false,
   }) => {
-    const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
-    const initColumns = entityInfoForQuery.getColumns({ metadata: {} });
+    const method = "post";
+    // const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
+    const initColumns = entityInfoForQuery.getColumns({
+      metadata: {},
+      setOrdering,
+    });
     const queries = {
       instances: entityInfoForQuery.dataQuery({
         method,
         filters: filtersForQuery,
+        page: curPage,
+        pagesize,
+        ordering,
       }),
     };
 
@@ -128,6 +142,7 @@ const Data = ({
 
     // set data and metadata with results
     setData(results.instances.data);
+    setNumInstances(results.instances.n);
 
     // define min/max range of daterange pickers
     // TODO modularize and reuse repeated code
@@ -177,7 +192,10 @@ const Data = ({
       });
       setFilterDefs(newFilterDefs);
       setColumns(
-        entityInfoForQuery.getColumns({ metadata: results.metadata.data })
+        entityInfoForQuery.getColumns({
+          metadata: results.metadata.data,
+          setOrdering,
+        })
       );
     }
     setLoading(false);
@@ -203,6 +221,7 @@ const Data = ({
     setColumns(null);
     setData(null);
     setFilterDefs(null);
+    setSearchText(null);
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
 
     // get current URL params
@@ -233,13 +252,15 @@ const Data = ({
     });
   }, [docType]);
 
-  // when filters are updated, update data
-  useEffect(() => {
+  const updateData = () => {
     if (!loading) {
       // update data
       setLoading(true);
       getData({
-        filtersForQuery: filters,
+        filtersForQuery: {
+          ...filters,
+          _text: searchText !== null ? [searchText] : [],
+        },
         entityInfoForQuery: entityInfo,
         initializingForQuery: true,
       });
@@ -282,7 +303,18 @@ const Data = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  }, [filters]);
+  };
+
+  useEffect(() => {
+    if (curPage !== 1) setCurPage(1);
+    else updateData();
+    // updateData();
+  }, [filters, pagesize, searchText]);
+
+  // when filters are updated, update data
+  useEffect(() => {
+    updateData();
+  }, [ordering, curPage]);
 
   // define which table component to show based on selected doc type
   const getTable = ({ docType }) => {
@@ -291,10 +323,15 @@ const Data = ({
       return (
         <Table
           {...{
+            nTotalRecords: numInstances,
+            curPage,
+            setCurPage,
+            pagesize,
             columns,
             data,
             defaultSortedField: entityInfo.defaultSortedField,
             className: styles[entityInfo.nouns.s.toLowerCase()],
+            setPagesize,
           }}
         />
       );
@@ -322,7 +359,7 @@ const Data = ({
         </div>
       </div>
       {!false && (
-        <React.Fragment>
+        <>
           <Drawer
             {...{
               title: <h2>Policy and plan database</h2>,
@@ -330,20 +367,21 @@ const Data = ({
                 render: counts,
                 class_name: "all_static",
                 filters: {},
+                searchText,
                 disabled: false,
                 message: (
-                  <React.Fragment>
+                  <>
                     <span>Download all data</span>
                     <span>
                       {comma(counts["Policy"])} policies and{" "}
                       {comma(counts["Plan"])} plans
                     </span>
-                  </React.Fragment>
+                  </>
                 ),
               }),
               noCollapse: false,
               content: (
-                <React.Fragment>
+                <>
                   <div className={styles.contentTop}>
                     <RadioToggle
                       label={"View"}
@@ -360,69 +398,101 @@ const Data = ({
                       selectpicker={false}
                       setInfoTooltipContent={setInfoTooltipContent}
                     />
-                    {DownloadBtn({
-                      render: table,
-                      class_name: nouns.s,
-                      filters,
-                      disabled: data && data.length === 0,
-                      message: (
-                        <React.Fragment>
-                          <span>
-                            {data && data.length === 0 && (
-                              <>No {nouns.p.toLowerCase()} found</>
-                            )}
-                            {data && data.length > 0 && (
+                    <Search
+                      searchText={searchText}
+                      onChangeFunc={setSearchText}
+                    />
+                  </div>
+                  {
+                    <>
+                      {table && (
+                        <>
+                          {" "}
+                          <div className={styles.filtersHeader}>
+                            Select filters to apply to {nouns.p.toLowerCase()}.
+                            {(Object.keys(filters).length > 0 ||
+                              (searchText !== null && searchText !== "")) && (
                               <>
-                                Download {isEmpty(filters) ? "all" : "filtered"}{" "}
-                                {nouns.p.toLowerCase()} ({comma(data.length)})
+                                &nbsp;
+                                <button
+                                  onClick={() => {
+                                    setSearchText(null);
+                                    setFilters({});
+                                  }}
+                                >
+                                  Clear filters
+                                </button>
                               </>
                             )}
-                          </span>
-
-                          {
-                            //   data && (
-                            //   <span>
-                            //     {comma(data.length)}{" "}
-                            //     {data.length === 1
-                            //       ? nouns.s.toLowerCase()
-                            //       : nouns.p.toLowerCase()}
-                            //   </span>
-                            // )
-                          }
-                        </React.Fragment>
-                      ),
-                    })}
-                  </div>
-                  {table && (
-                    <>
-                      <div>
-                        Select filters to apply to {nouns.p.toLowerCase()}.{" "}
-                        {Object.keys(filters).length > 0 && (
-                          <button onClick={() => setFilters({})}>
-                            Clear filters
-                          </button>
-                        )}
-                      </div>
-
-                      <FilterSet {...{ filterDefs, filters, setFilters }} />
+                          </div>
+                          <FilterSet
+                            {...{
+                              filterDefs,
+                              filters,
+                              setFilters,
+                              searchText,
+                              setSearchText,
+                            }}
+                          >
+                            {DownloadBtn({
+                              render: table,
+                              class_name: nouns.s,
+                              buttonLoading,
+                              setButtonLoading,
+                              searchText,
+                              filters,
+                              disabled: data && data.length === 0,
+                              message: (
+                                <>
+                                  <span>
+                                    {data && data.length === 0 && (
+                                      <>No {nouns.p.toLowerCase()} found</>
+                                    )}
+                                    {data && data.length > 0 && (
+                                      <>
+                                        Download{" "}
+                                        {isEmpty(filters) &&
+                                        (searchText === null ||
+                                          searchText === "")
+                                          ? "all"
+                                          : "filtered"}{" "}
+                                        {nouns.p.toLowerCase()} (
+                                        {comma(numInstances)})
+                                      </>
+                                    )}
+                                  </span>
+                                </>
+                              ),
+                            })}
+                          </FilterSet>
+                        </>
+                      )}
                     </>
-                  )}
-                </React.Fragment>
+                  }
+                </>
               ),
             }}
           />
+
           {table}
           {!table && <div style={{ height: "900px" }} />}
-        </React.Fragment>
+        </>
       )}
     </div>
   );
 };
 
-const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
+const DownloadBtn = ({
+  render,
+  message,
+  class_name,
+  filters,
+  disabled,
+  searchText,
+  buttonLoading = false,
+  setButtonLoading = () => "",
+}) => {
   // flag for whether the download button should say loading or not
-  const [buttonLoading, setButtonLoading] = useState(false);
-
   return (
     render && (
       <button
@@ -441,7 +511,10 @@ const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
 
             Export({
               method: "post",
-              filters,
+              filters: {
+                ...filters,
+                _text: searchText !== null ? [searchText] : [],
+              },
               class_name,
             }).then(d => setButtonLoading(false));
           }
@@ -451,9 +524,9 @@ const DownloadBtn = ({ render, message, class_name, filters, disabled }) => {
         <div>
           {!buttonLoading && render && message}
           {buttonLoading && (
-            <React.Fragment>
+            <>
               <span>Downloading data, please wait...</span>
-            </React.Fragment>
+            </>
           )}
         </div>
       </button>

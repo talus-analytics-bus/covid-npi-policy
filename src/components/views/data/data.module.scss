@@ -27,6 +27,14 @@
     font-style: italic;
     color: $gray;
   }
+
+  // filter header with instructions, clear filters button, search bar
+  .filtersHeader {
+    display: flex;
+    align-items: center;
+    margin-top: unset !important;
+  }
+
   // TODO move to a component
   .downloadBtn {
     background-color: $dark-blue;

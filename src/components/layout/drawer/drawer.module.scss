@@ -72,6 +72,8 @@
   }
   .content {
     padding: $padding;
+    padding-top: 0;
+    // padding: $padding;
     font-size: 1rem;
     background-color: $light-gray-2;
     @include spaceItemsVert(20px);
