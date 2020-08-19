@@ -138,22 +138,22 @@ export const policyInfo = {
         },
       },
       {
-        dataField: "desc",
+        dataField: "name_and_desc",
         header: "Policy name and description",
         defCharLimit: 1000,
         sort: true,
         onSort: (field, order) => {
-          setOrdering([["policy_name", order]]);
+          setOrdering([["name_and_desc", order]]);
         },
         formatter: (cell, row) => {
-          const title =
-            row.policy_name !== "Unspecified" &&
-            row.policy_name !== "" &&
-            row.policy_name !== null &&
-            row.policy_name !== undefined
-              ? row.policy_name + ": "
-              : "";
-          return <ShowMore text={title + cell} charLimit={200} />;
+          // const title =
+          //   row.policy_name !== "Unspecified" &&
+          //   row.policy_name !== "" &&
+          //   row.policy_name !== null &&
+          //   row.policy_name !== undefined
+          //     ? row.policy_name + ": "
+          //     : "";
+          return <ShowMore text={cell} charLimit={200} />;
         },
       },
       {
@@ -254,7 +254,7 @@ export const policyInfo = {
       // special cases
       // TODO move static data processing into initial declaration
       // of `newColumns`
-      if (d.dataField === "desc") {
+      if (d.dataField === "name_and_desc") {
         d.definition =
           "The name and a written description of the policy or law and who it impacts.";
       }
@@ -279,9 +279,8 @@ export const policyInfo = {
         "id",
         "place",
         "primary_ph_measure",
-        "policy_name",
         "authority_name",
-        "desc",
+        "name_and_desc",
         "date_start_effective",
         "file",
       ],

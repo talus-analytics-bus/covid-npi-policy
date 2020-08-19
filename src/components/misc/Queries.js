@@ -153,6 +153,7 @@ export const Plan = async function({
   pagesize = 1000000,
   fields = [],
   filters = null,
+  ordering,
   by_category = null,
 }) {
   // return cached result if available
@@ -182,7 +183,7 @@ export const Plan = async function({
     }
     req = await axios.post(
       `${API_URL}/post/plan`,
-      { filters },
+      { filters, ordering },
       {
         params,
       }

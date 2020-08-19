@@ -75,19 +75,12 @@ export const planInfo = {
       { dataField: "org_type", header: "Org. type", sort: true },
       { dataField: "primary_loc", header: "Org. location", sort: true },
       {
-        dataField: "desc",
-        header: "Plan name and description",
+        dataField: "name_and_desc",
+        header: "Policy name and description",
         defCharLimit: 1000,
         sort: true,
         formatter: (cell, row) => {
-          const title =
-            row.name !== "Unspecified" &&
-            row.name !== "" &&
-            row.name !== null &&
-            row.name !== undefined
-              ? row.name + ": "
-              : "";
-          return <ShowMore text={title + cell} charLimit={200} />;
+          return <ShowMore text={cell} charLimit={200} />;
         },
       },
       {
@@ -140,17 +133,15 @@ export const planInfo = {
       },
     ];
 
-    // add onSort function to update ordering info for API call
-    newColumns.forEach(d => {
-      d.onSort = (field, order) => {
-        setOrdering([[field, order]]);
-      };
-    });
-
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing
     // TODO move static data processing into initial declaration of `newColumns`
     newColumns.forEach(d => {
+      // add onSort function to update ordering info for API call
+      d.onSort = (field, order) => {
+        setOrdering([[field, order]]);
+      };
+
       // static update to definition
       // TODO move static data processing into initial declaration
       // of `newColumns`
@@ -172,7 +163,7 @@ export const planInfo = {
       // special cases
       // TODO move static data processing into initial declaration
       // of `newColumns`
-      if (d.dataField === "desc") {
+      if (d.dataField === "name_and_desc") {
         d.definition = "The name and a written description of the plan.";
       }
     });
@@ -197,7 +188,7 @@ export const planInfo = {
         "name",
         "org_type",
         "org_name",
-        "desc",
+        "name_and_desc",
         "date_issued",
         "primary_loc",
         "place",
