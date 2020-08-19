@@ -43,6 +43,7 @@ const Data = ({
   const [numInstances, setNumInstances] = useState(null);
   const [ordering, setOrdering] = useState([["date_start_effective", "desc"]]);
   const [searchText, setSearchText] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
@@ -358,7 +359,7 @@ const Data = ({
         </div>
       </div>
       {!false && (
-        <React.Fragment>
+        <>
           <Drawer
             {...{
               title: <h2>Policy and plan database</h2>,
@@ -369,18 +370,18 @@ const Data = ({
                 searchText,
                 disabled: false,
                 message: (
-                  <React.Fragment>
+                  <>
                     <span>Download all data</span>
                     <span>
                       {comma(counts["Policy"])} policies and{" "}
                       {comma(counts["Plan"])} plans
                     </span>
-                  </React.Fragment>
+                  </>
                 ),
               }),
               noCollapse: false,
               content: (
-                <React.Fragment>
+                <>
                   <div className={styles.contentTop}>
                     <RadioToggle
                       label={"View"}
@@ -397,87 +398,85 @@ const Data = ({
                       selectpicker={false}
                       setInfoTooltipContent={setInfoTooltipContent}
                     />
-                    {DownloadBtn({
-                      render: table,
-                      class_name: nouns.s,
-                      searchText,
-                      filters,
-                      disabled: data && data.length === 0,
-                      message: (
-                        <React.Fragment>
-                          <span>
-                            {data && data.length === 0 && (
-                              <>No {nouns.p.toLowerCase()} found</>
-                            )}
-                            {data && data.length > 0 && (
+                    <Search
+                      searchText={searchText}
+                      onChangeFunc={setSearchText}
+                    />
+                  </div>
+                  {
+                    <>
+                      {table && (
+                        <>
+                          {" "}
+                          <div className={styles.filtersHeader}>
+                            Select filters to apply to {nouns.p.toLowerCase()}.
+                            {(Object.keys(filters).length > 0 ||
+                              (searchText !== null && searchText !== "")) && (
                               <>
-                                Download{" "}
-                                {isEmpty(filters) &&
-                                (searchText === null || searchText === "")
-                                  ? "all"
-                                  : "filtered"}{" "}
-                                {nouns.p.toLowerCase()} ({comma(numInstances)})
+                                &nbsp;
+                                <button
+                                  onClick={() => {
+                                    setSearchText(null);
+                                    setFilters({});
+                                  }}
+                                >
+                                  Clear filters
+                                </button>
                               </>
                             )}
-                          </span>
-
-                          {
-                            //   data && (
-                            //   <span>
-                            //     {comma(data.length)}{" "}
-                            //     {data.length === 1
-                            //       ? nouns.s.toLowerCase()
-                            //       : nouns.p.toLowerCase()}
-                            //   </span>
-                            // )
-                          }
-                        </React.Fragment>
-                      ),
-                    })}
-                  </div>
-                  {table && (
-                    <>
-                      <div className={styles.filtersHeader}>
-                        Select filters to apply to {nouns.p.toLowerCase()}.
-                        {(Object.keys(filters).length > 0 ||
-                          (searchText !== null && searchText !== "")) && (
-                          <>
-                            &nbsp;
-                            <button
-                              onClick={() => {
-                                setSearchText(null);
-                                setFilters({});
-                              }}
-                            >
-                              Clear filters
-                            </button>
-                          </>
-                        )}
-                        <Search
-                          searchText={searchText}
-                          onChangeFunc={setSearchText}
-                        />
-                      </div>
-
-                      <FilterSet
-                        {...{
-                          filterDefs,
-                          filters,
-                          setFilters,
-                          searchText,
-                          setSearchText,
-                        }}
-                      />
+                          </div>
+                          <FilterSet
+                            {...{
+                              filterDefs,
+                              filters,
+                              setFilters,
+                              searchText,
+                              setSearchText,
+                            }}
+                          >
+                            {DownloadBtn({
+                              render: table,
+                              class_name: nouns.s,
+                              buttonLoading,
+                              setButtonLoading,
+                              searchText,
+                              filters,
+                              disabled: data && data.length === 0,
+                              message: (
+                                <>
+                                  <span>
+                                    {data && data.length === 0 && (
+                                      <>No {nouns.p.toLowerCase()} found</>
+                                    )}
+                                    {data && data.length > 0 && (
+                                      <>
+                                        Download{" "}
+                                        {isEmpty(filters) &&
+                                        (searchText === null ||
+                                          searchText === "")
+                                          ? "all"
+                                          : "filtered"}{" "}
+                                        {nouns.p.toLowerCase()} (
+                                        {comma(numInstances)})
+                                      </>
+                                    )}
+                                  </span>
+                                </>
+                              ),
+                            })}
+                          </FilterSet>
+                        </>
+                      )}
                     </>
-                  )}
-                </React.Fragment>
+                  }
+                </>
               ),
             }}
           />
 
           {table}
           {!table && <div style={{ height: "900px" }} />}
-        </React.Fragment>
+        </>
       )}
     </div>
   );
@@ -490,11 +489,10 @@ const DownloadBtn = ({
   filters,
   disabled,
   searchText,
+  buttonLoading = false,
+  setButtonLoading = () => "",
 }) => {
   // flag for whether the download button should say loading or not
-  const [buttonLoading, setButtonLoading] = useState(false);
-  console.log("searchText");
-  console.log(searchText);
   return (
     render && (
       <button
@@ -526,9 +524,9 @@ const DownloadBtn = ({
         <div>
           {!buttonLoading && render && message}
           {buttonLoading && (
-            <React.Fragment>
+            <>
               <span>Downloading data, please wait...</span>
-            </React.Fragment>
+            </>
           )}
         </div>
       </button>
