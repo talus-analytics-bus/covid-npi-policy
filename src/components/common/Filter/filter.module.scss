@@ -135,6 +135,7 @@
 
 @media #{$phone} {
   .filter:not(:last-child) {
+    margin-bottom: 10px !important;
     .filterButton {
       border-right: none;
     }

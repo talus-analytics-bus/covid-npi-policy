@@ -132,9 +132,20 @@
   .contentTop {
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
     align-items: center;
     min-height: 50px; // TODO elegantly
+    @media #{$phone} {
+      flex-flow: column;
+      align-items: flex-start;
+      > div {
+        margin-left: 0;
+        margin-bottom: 10px;
+        &:first-child {
+          margin-top: 10px;
+        }
+      }
+      // @include spaceItemsVert(10px);
+    }
   }
 
   // data download buttons
