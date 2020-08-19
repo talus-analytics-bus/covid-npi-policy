@@ -93,6 +93,7 @@ const Data = ({
   const getData = async ({
     filtersForQuery,
     entityInfoForQuery,
+    orderingForQuery = ordering,
     getOptionSets = false,
   }) => {
     const method = "post";
@@ -105,9 +106,9 @@ const Data = ({
       instances: entityInfoForQuery.dataQuery({
         method,
         filters: filtersForQuery,
+        ordering: orderingForQuery,
         page: curPage,
         pagesize,
-        ordering,
       }),
     };
 
@@ -222,6 +223,7 @@ const Data = ({
     setData(null);
     setFilterDefs(null);
     setSearchText(null);
+    setOrdering([["date_start_effective", "desc"]]);
     const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
 
     // get current URL params
@@ -246,6 +248,7 @@ const Data = ({
     setEntityInfo(newEntityInfo);
     getData({
       filtersForQuery: newFilters,
+      orderingForQuery: [["date_start_effective", "desc"]],
       entityInfoForQuery: newEntityInfo,
       initializingForQuery: true,
       getOptionSets: true,
