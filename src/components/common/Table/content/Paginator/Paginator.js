@@ -97,6 +97,7 @@ export const Paginator = ({
     },
     customClassNames: {
       [styles.disabled]: onFirstPage,
+      [styles.control]: true,
     },
   });
 
@@ -108,6 +109,7 @@ export const Paginator = ({
     },
     customClassNames: {
       [styles.disabled]: onFirstPage,
+      [styles.control]: true,
     },
   });
 
@@ -119,6 +121,7 @@ export const Paginator = ({
     },
     customClassNames: {
       [styles.disabled]: onLastPage,
+      [styles.control]: true,
     },
   });
 
@@ -130,6 +133,7 @@ export const Paginator = ({
     },
     customClassNames: {
       [styles.disabled]: onLastPage,
+      [styles.control]: true,
     },
   });
 
