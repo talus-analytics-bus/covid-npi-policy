@@ -43,6 +43,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
   ]);
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
+  const [masksSelected, setMasksSelected] = useState(false)
 
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
@@ -427,6 +428,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   dataDates={dataDates}
                   contactPlotType={contactPlotType}
                   selectedCurves={selectedCurves}
+                  masksSelected={masksSelected}
+                  setMasksSelected={setMasksSelected}
                 />
               );
             } else {
