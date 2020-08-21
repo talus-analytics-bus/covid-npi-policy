@@ -160,6 +160,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   };
 
   // CONSTANTS // -----------------------------------------------------------//
+  // Label for "View [xxx] by" radio button set
+  const viewLabel = `View ${mapId === "us" ? "states" : "countries"} by`;
+
   // last updated date of overall data
   const lastUpdatedDateOverall = versions.filter(d => {
     if (d.type === "COVID-19 caseload data (countries)" && mapId === "us") {
@@ -319,7 +322,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                   }),
                                 curVal: fill,
                                 callback: setFill,
-                                label: "View states by",
+                                label: viewLabel,
                                 key: "DataType",
                               }}
                             />
