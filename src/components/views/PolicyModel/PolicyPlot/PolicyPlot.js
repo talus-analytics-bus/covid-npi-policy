@@ -158,7 +158,7 @@ const PolicyModel = props => {
     }
     // console.log("Animation Setup\n\n\n");
     const target = props.caseLoadAxis[1];
-    let start = YZoomAfterAnimated;
+    let start = props.caseLoadAxis[1];
     let current = YZoomAnimated;
 
     // in case the animation is interrupted
