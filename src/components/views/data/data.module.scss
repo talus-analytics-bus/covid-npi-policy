@@ -90,7 +90,7 @@
   // table styles
   .linkIcons {
     display: flex;
-    flex-flow: row;
+    flex-flow: row wrap;
     .linkIcon {
       position: relative;
       top: 5px;
