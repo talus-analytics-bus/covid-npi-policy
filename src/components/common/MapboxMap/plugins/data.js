@@ -219,52 +219,6 @@ export const mapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "country" };
-      },
-
-      // array of layer types for which this metric is used
-      for: ["fill"],
-
-      // unique ID of this metric
-      id: "policy_status",
-
-      // data field with which to link metric to features;
-      // features potentially linking to this metric must have an ID that
-      // matches the value for this key for the datum
-      featureLinkField: "place_name",
-
-      // OPTIONAL:
-      // style IDs to use for the metric for each layer type -- if none are
-      // defined, then the metric's ID will be used to look up the appropriate
-      // style.
-      styleId: { fill: "policy_status" },
-
-      // // filter to control what features are returned for layers that are
-      // // displaying this metric
-      // filter: ["==", ["get", "type"], "state"],
-
-      // whether trend data should be retrieved for this metric
-      // NOTE: only applies to generalized metrics
-      trend: false,
-
-      // info about layers that use this metric
-      styleOptions: {
-        // whether layers that display this metric should be outlined
-        // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true,
-
-        // whether layers that display this metric should have a pattern layers
-        // NOTE: if true, a pattern style must be defined in `./layers.js`
-        // pattern: true
-      },
-    },
-    {
-      // functions that, when passed `params`, returns the data for the map
-      // for this metric
-      queryFunc: PolicyStatus,
-
-      // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
         const lockdownFilters = {
           ...filters,
           lockdown_level: ["lockdown_level"],
@@ -315,6 +269,53 @@ export const mapMetrics = {
         pattern: true,
       },
     },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        return { method: "post", filters, geo_res: "country" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status" },
+
+      // // filter to control what features are returned for layers that are
+      // // displaying this metric
+      // filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      },
+    },
+
     {
       queryFunc: ObservationQuery,
       for: ["circle"],
