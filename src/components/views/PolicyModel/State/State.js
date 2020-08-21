@@ -86,8 +86,7 @@ const State = props => {
           <div className={styles.rows}>
             <div className={styles.headerRow}>
               <div className={styles.explanation}>
-                Case count with
-                <br /> existing policies
+                Case count with <br />existing policies
               </div>
               <div className={styles.cases}>
                 {formatActuals(props.curves.cases)}
