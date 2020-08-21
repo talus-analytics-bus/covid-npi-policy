@@ -1129,9 +1129,14 @@ export const tooltipGetter = async ({
           plugins.fill !== "lockdown_level"
             ? filters.primary_ph_measure
             : ["Social distancing"],
-        ph_measure_details:
-          plugins.fill !== "lockdown_level" ? filters.ph_measure_details : [],
       };
+      if (
+        plugins.fill !== "lockdown_level" &&
+        filters.ph_measure_details !== undefined &&
+        filters.ph_measure_details.length > 0
+      ) {
+        policyFilters.ph_measure_details = filters.ph_measure_details;
+      }
       if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
       else policyFilters.iso3 = [d.properties.ISO_A3];
 
@@ -1172,7 +1177,7 @@ export const tooltipGetter = async ({
         ph_measure_details:
           plugins.fill !== "lockdown_level"
             ? filters.ph_measure_details || []
-            : [],
+            : undefined,
         dates_in_effect: filters.dates_in_effect,
       };
 
