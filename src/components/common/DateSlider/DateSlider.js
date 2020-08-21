@@ -147,7 +147,6 @@ const DateSlider = ({
     // if current value is max slider value, play from first slider value
     let prev = curSliderVal;
     if (prev === sliderMaxValue) {
-      console.log("Need to play from beginning");
       handleSliderChange(0);
       setCurSliderVal(0);
       prev = -7;

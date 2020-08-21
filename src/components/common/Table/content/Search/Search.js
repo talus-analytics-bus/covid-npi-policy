@@ -9,13 +9,7 @@ import classNames from "classnames";
  * @method Search
  * Handle custom pagination for `Table` component
  */
-export const Search = ({
-  onChangeFunc = val => {
-    console.log(val);
-  },
-  searchText,
-  ...props
-}) => {
+export const Search = ({ onChangeFunc = val => {}, searchText, ...props }) => {
   const [curTimeout, setCurTimeout] = useState(null);
   let searchRef = useRef(null);
 
