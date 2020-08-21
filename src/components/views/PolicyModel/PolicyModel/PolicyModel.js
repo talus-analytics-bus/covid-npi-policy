@@ -44,6 +44,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
   const [masksSelected, setMasksSelected] = useState(false)
+  const [percentCompliance, setPercentCompliance] = useState("0.75")
 
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
@@ -430,6 +431,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   selectedCurves={selectedCurves}
                   masksSelected={masksSelected}
                   setMasksSelected={setMasksSelected}
+                  percentCompliance={percentCompliance}
+                  setPercentCompliance={setPercentCompliance}
                 />
               );
             } else {

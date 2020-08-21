@@ -337,15 +337,36 @@ const State = props => {
                       props.counterfactualSelected ? styles.disabledControl : null
                     )}>
                     <div className={styles.radioButton}>
-                      <input type="radio" id="25" name="compliance" value="25" />
+                      <input 
+                        type="radio" 
+                        id="25" 
+                        name="compliance" 
+                        value={0.25}
+                        checked={props.percentCompliance === "0.25"}
+                        onChange={e => props.setPercentCompliance(e.target.value)}
+                      />
                       <label for="25">25%</label>
                     </div>
                     <div className={styles.radioButton}>
-                      <input type="radio" id="50" name="compliance" value="50" />
+                      <input 
+                        type="radio" 
+                        id="50" 
+                        name="compliance" 
+                        value={0.5} 
+                        checked={props.percentCompliance === "0.5"}
+                        onChange={e => props.setPercentCompliance(e.target.value)}
+                      />
                       <label for="50">50%</label>
                     </div>
                     <div className={styles.radioButton}>
-                      <input type="radio" id="75" name="compliance" value="75" />
+                      <input 
+                        type="radio" 
+                        id="75" 
+                        name="compliance" 
+                        value={0.75} 
+                        checked={props.percentCompliance === "0.75"}
+                        onChange={e => props.setPercentCompliance(e.target.value)}
+                      />
                       <label for="75">75%</label>
                     </div>
                   </div>
