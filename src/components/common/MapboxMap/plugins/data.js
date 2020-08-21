@@ -977,10 +977,21 @@ export const tooltipGetter = async ({
     };
   } else {
     // get tooltip header
-    tooltip.tooltipHeader = {
-      title: d.properties.NAME,
-      subtitle: null,
-    };
+    // find place match or use geo properties
+    const matchingPlace = plugins.places.find(
+      dd => dd.iso === d.properties.ISO_A3
+    );
+    if (matchingPlace) {
+      tooltip.tooltipHeader = {
+        title: matchingPlace.name,
+        subtitle: null,
+      };
+    } else {
+      tooltip.tooltipHeader = {
+        title: d.properties.NAME,
+        subtitle: null,
+      };
+    }
   }
   tooltip.actions = [];
   tooltip.tooltipHeaderMetric = null;
@@ -1005,8 +1016,6 @@ export const tooltipGetter = async ({
     )
       continue;
     else {
-      console.log("k");
-      console.log(k);
       // get metric metadata
       const thisMetricMeta = metricMeta[k];
 
@@ -1171,9 +1180,19 @@ export const tooltipGetter = async ({
         filtersForStr.country_name = ["United States of America (USA)"];
         filtersForStr.area1 = [d.properties.state_name];
       } else {
-        filtersForStr.country_name = [
-          `${d.properties.NAME} (${d.properties.ISO_A3})`,
-        ];
+        // find place match
+        const matchingPlace = plugins.places.find(
+          dd => dd.iso === d.properties.ISO_A3
+        );
+        if (matchingPlace) {
+          filtersForStr.country_name = [
+            `${matchingPlace.name} (${matchingPlace.iso})`,
+          ];
+        } else {
+          filtersForStr.country_name = [
+            `${d.properties.NAME} (${d.properties.ISO_A3})`,
+          ];
+        }
       }
       const filtersStr = JSON.stringify(filtersForStr);
 
