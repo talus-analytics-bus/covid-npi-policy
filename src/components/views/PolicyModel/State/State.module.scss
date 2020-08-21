@@ -63,11 +63,25 @@
       }
 
       .rows {
+        .disabled {
+          position: absolute;
+          left: 0;
+          top: 0;
+          background-color: hsla(0, 0, 100, 0.6);
+          width: 100%;
+          height: 100%;
+          z-index: 5;
+          pointer-events: none;
+        }
+        .disabledControl {
+          input,
+          label {
+            pointer-events: none;
+          }
+        }
         .headerRow {
           padding: 10px;
           padding-left: 20px;
-        }
-        .headerRow {
           display: grid;
           grid-template-columns: 1fr .7fr 1.1fr .7fr 1.1fr;
           grid-gap: 15px;
@@ -77,6 +91,16 @@
             color: #0b6354;
             border: 2px solid #0b6354;
             border-radius: 0.5rem;
+            position: relative;
+            .disabled {
+              border: 2px solid hsla(0, 0, 100, 0.6);
+              border-radius: 0.5rem;
+              //fix positioning, taking into account borders
+              top:-2px;
+              left:-2px;
+              width: calc(100% + 4px);
+              height: calc(100% + 4px);
+            }
           }
           div {
             display: flex;
@@ -89,11 +113,15 @@
           flex-direction: row;
           justify-content: flex-end;
           margin-top: 20px;
+          position: relative;
+          .disabled {
+            border: 2px solid hsla(0, 0, 100, 0.6);
+            border-radius: 0.75rem;
+          }
         }
         .coveringContainer {
           font-size: 1.5rem;
           font-weight: 500;
-          height: 45px;
           color: white;
           cursor: pointer;
           flex-direction: row;
@@ -101,7 +129,8 @@
           justify-content: flex-start;
           background-color: #50ADBC;
           transition: all 1s ease;
-          width: 240px;       
+          width: 240px;
+          height: 45px;       
           padding: 10px;
           display: flex;
           border: 2px solid #50ADBC;

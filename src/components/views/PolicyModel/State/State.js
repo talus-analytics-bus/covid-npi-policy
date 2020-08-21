@@ -176,15 +176,23 @@ const State = props => {
               styles.headerRow,
               styles.counterfactualRow
             )}>
-              <div className={styles.explanation}>
+              {props.masksSelected &&
+                <div className={styles.disabled}> </div>
+              }
+              <div className={classNames(
+                styles.explanation,
+                props.masksSelected ? styles.disabledControl : null
+              )}>
                 What if we had <br /> done nothing?
                 <label>
                   <input
                     type="checkbox"
                     checked={props.counterfactualSelected}
-                    onChange={() =>
-                      props.setCounterfactualSelected(!props.counterfactualSelected)
-                    }
+                    onChange={() => {
+                      if(!props.masksSelected){
+                        props.setCounterfactualSelected(!props.counterfactualSelected)
+                      }
+                    }}
                   />
                   {/* View cases without policies on graph */}
                   View the "What if" scenario on the graph
@@ -273,12 +281,22 @@ const State = props => {
               </div>
             </div>
             <div className={styles.coveringRow}>
+              {props.counterfactualSelected && maskControlActivated &&
+                <div className={styles.disabled}></div>
+              }
               <div 
                 className={classNames(
                   styles.coveringContainer,
                   maskControlActivated ? styles.expanded : null
                 )}
-                onClick={() => setMaskControlActivated(true)}
+                onClick={() => {
+                  if(!maskControlActivated){
+                    if(props.counterfactualSelected){
+                      props.setCounterfactualSelected(false)
+                    }
+                    setMaskControlActivated(true)
+                  }
+                }}
               >
                 <div>
                   <div className={styles.coveringTitle}>
@@ -292,14 +310,19 @@ const State = props => {
                     </div>
                   </div>
                   {maskControlActivated && 
-                    <div className={styles.maskControl}>
+                    <div className={classNames(
+                      styles.maskControl,
+                      props.counterfactualSelected ? styles.disabledControl : null
+                    )}>
                       <label>
                         <input
                           type="checkbox"
                           checked={props.masksSelected}
-                          onChange={() =>
-                            props.setMasksSelected(!props.masksSelected)
-                          }
+                          onChange={() => {
+                            if(!props.counterfactualSelected){
+                              props.setMasksSelected(!props.masksSelected)
+                            }
+                          }}
                         />
                         {/* View impact of masking on graph */}
                         View impact of face coverings on graph
@@ -310,7 +333,10 @@ const State = props => {
                 {maskControlActivated && 
                 <div className={styles.complianceContainer}>
                   <div className={styles.complianceLabel}>Compliance rate</div>
-                  <div className={styles.radioButtons}>
+                  <div className={classNames(
+                      styles.radioButtons, 
+                      props.counterfactualSelected ? styles.disabledControl : null
+                    )}>
                     <div className={styles.radioButton}>
                       <input type="radio" id="25" name="compliance" value="25" />
                       <label for="25">25%</label>
