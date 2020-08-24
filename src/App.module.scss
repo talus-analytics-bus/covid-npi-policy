@@ -14,7 +14,8 @@
   min-height: calc(100% - 108px - 127px);
 
   &.policymaps,
-  &.model {
+  &.model,
+  &.landing {
     max-width: unset;
     padding: unset;
   }
