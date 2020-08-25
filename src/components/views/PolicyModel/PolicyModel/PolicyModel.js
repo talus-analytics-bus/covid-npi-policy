@@ -43,15 +43,19 @@ const PolicyModel = ({ setLoading, setPage }) => {
   ]);
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
-  const [masksSelected, setMasksSelected] = useState(false)
-  const [percentCompliance, setPercentCompliance] = useState("0.75")
+  const [masksSelected, setMasksSelected] = useState(false);
+  const [percentCompliance, setPercentCompliance] = useState("0.75");
 
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
+    // "infected",
     "infected_a",
     // 'infected_b',
     // 'infected_c',
     // 'dead',
+    "masks_high_infected_a",
+    "masks_medium_infected_a",
+    "masks_low_infected_a",
     "R effective",
     "pctChange",
   ]);
@@ -81,6 +85,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const setup = React.useCallback(async () => {
     const loadedModels = await loadModels(selectedStates);
+
+    console.log(selectedCurves);
 
     // get curves, max, min from models
     const modelCurves = parseModels(

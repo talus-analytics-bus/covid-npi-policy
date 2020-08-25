@@ -18,9 +18,8 @@ const MODEL_VERSION = "3";
 // const API_URL = 'http://localhost:8000/'
 // const API_URL = "http://127.0.0.0:8000/";
 
-// export const API_URL = "https://amp-model-api.covidamp.org/";
-// export const API_URL = "http://localhost:8000/";
-export const API_URL = process.env.REACT_APP_MODEL_API_URL;
+export const API_URL = `http://127.0.0.1:5000/`;
+// export const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
 // request a model from the server
 // this should only happen if we
@@ -102,7 +101,9 @@ export const requestIntervention = async (state, intervention) => {
 // take a model run string and
 // parse it, including fixing dates
 const parseModelDates = runData => {
-  runData.results.run = JSON.parse(runData.results[0].run).map(day => ({
+  runData.results.slice(-1)[0].run = JSON.parse(
+    runData.results.slice(-1)[0].run
+  ).map(day => ({
     ...day,
     date: new Date(day.date),
   }));
@@ -205,6 +206,7 @@ export const loadModels = async states => {
       if (modelName) {
         console.log("ModelCache: retrieving " + modelName);
         const modelString = localStorage.getItem(modelName);
+
         return parseModelDates(JSON.parse(modelString));
       } else {
         return requestModel(state);
@@ -212,8 +214,123 @@ export const loadModels = async states => {
     })
   );
 
-  // console.log(models);
-  return models;
+  console.log(models);
+
+  // models.forEach(async model => console.log(await addMaskingData(model)));
+
+  const modelsWithMasks = await Promise.all(
+    models.map(model => addMaskingData(model))
+  );
+
+  console.log(await Promise.all(modelsWithMasks));
+
+  // await Promise.all(modelsWithMasks);
+
+  return modelsWithMasks;
+};
+
+const addMaskingData = async model => {
+  // pass in model to add masks to
+
+  const modelName = model.dateRequested + "_" + model.state + "_MR";
+  console.log(`Adding masking data to: ${modelName}`);
+
+  // request masks from server
+
+  // console.log(model.interventions);
+  const interventionList = model.interventions
+    // drop past-actual interventions
+    .filter(
+      intervention =>
+        (intervention.intervention_type !== "past-actual") &
+        (intervention.intervention_type !== "past-counterfactual")
+    )
+    // re-format dates into API format
+    .map(intervention => ({
+      ...intervention,
+      model_start_date: new Date(intervention.model_start_date)
+        .toISOString()
+        .split("T")[0],
+      startdate: new Date(intervention.startdate).toISOString().split("T")[0],
+      intervention_start_date: new Date(intervention.intervention_start_date)
+        .toISOString()
+        .split("T")[0],
+    }));
+
+  // console.log(interventionList);
+
+  const interventionObject = JSON.stringify({
+    list: interventionList,
+  });
+
+  const result = await axios.post(API_URL + "masks/AL", interventionObject, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const parsed = JSON.parse(result.request.response);
+
+  console.log(parsed);
+
+  // parse dates in Masks runData
+
+  Object.entries(parsed).forEach(([complianceLevel, runData]) => {
+    parsed[complianceLevel] = parseModelDates(runData);
+  });
+
+  console.log(parsed);
+
+  // insert all mask datapoints in model
+  // masks_low_infected_a, masks_medium_infected_a, so on
+
+  // console.log("model results");
+  // console.log(model.results);
+
+  // console.log(model.results.slice(-1)[0].run);
+
+  model.results.slice(-1)[0].run = JSON.stringify(
+    model.results.slice(-1)[0].run.map((day, index) =>
+      day.source === "actuals"
+        ? day
+        : {
+            ...day,
+            date: new Date(day.date),
+            masks_high_infected_a: parsed.high.results.slice(-1)[0].run[index]
+              ? parsed.high.results.slice(-1)[0].run[index].infected_a
+              : null,
+            masks_medium_infected_a: parsed.medium.results.slice(-1)[0].run[
+              index
+            ]
+              ? parsed.medium.results.slice(-1)[0].run[index].infected_a
+              : null,
+            masks_low_infected_a: parsed.low.results.slice(-1)[0].run[index]
+              ? parsed.low.results.slice(-1)[0].run[index].infected_a
+              : null,
+          }
+    )
+  );
+
+  // console.log(model.results.slice(-1)[0].run);
+
+  // delete old instance of model in localStorage
+
+  // save model with masking data
+
+  //
+  //   const result = await axios.post(API_URL + "masks/AL", interventions, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //
+  //   const parsed = JSON.parse(result.request.response);
+  //
+  //   Object.entries(parsed).forEach(([complianceLevel, runData]) => {
+  //     console.log(parseModelDates(runData));
+  //   });
+  //
+  return model;
 };
 
 export default loadModels;

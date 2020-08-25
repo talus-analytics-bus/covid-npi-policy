@@ -22,6 +22,7 @@ const INITIAL_R_0 = 2.524;
 // take a model run string and
 // parse it, including fixing dates
 const parseModelString = modelRun => {
+  console.log(modelRun);
   const modelRunParsed = JSON.parse(modelRun).map(day => ({
     ...day,
     date: new Date(day.date),
@@ -41,6 +42,7 @@ export default function parseModelCurves(
     const state = model.state;
     // console.log(state)
     // console.log(model);
+    console.log(selectedCurves);
 
     // create state object
     curves[state] = {
@@ -75,7 +77,7 @@ export default function parseModelCurves(
     );
 
     const trimmedData = modelRun;
-    // console.log(trimmedData)
+    // console.log(trimmedData);
 
     // initial r_0 for the percentage change calc
     // const initialR_0 = trimmedData[0]["R effective"];
@@ -87,7 +89,7 @@ export default function parseModelCurves(
     curves[state].curves.pctChange["model"] = [];
     curves[state].curves.pctChange["yMax"] = 0;
 
-    Object.keys(trimmedData[0]).forEach(column => {
+    Object.keys(trimmedData.slice(-1)[0]).forEach(column => {
       if (selectedCurves.includes(column)) {
         curves[state].curves[column] = {};
         curves[state].curves[column]["actuals"] = [];
@@ -102,6 +104,8 @@ export default function parseModelCurves(
         }
       }
     });
+
+    // console.log(curves);
 
     // split data into curves and maxiumus
     // split out actuals and model run
@@ -149,6 +153,7 @@ export default function parseModelCurves(
           }
 
           // Add curves based on name (column) and source
+          // console.log(`column: ${column}, source: ${source}`);
           curves[state].curves[column][source].push({
             x: day.date,
             y: value,
@@ -179,7 +184,9 @@ export default function parseModelCurves(
     });
 
     // date range for the state
-    const dates = model.results.run.map(day => day.date);
+    const dates = JSON.parse(model.results.slice(-1)[0].run).map(
+      day => new Date(day.date)
+    );
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 

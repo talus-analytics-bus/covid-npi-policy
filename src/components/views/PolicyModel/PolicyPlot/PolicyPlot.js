@@ -28,6 +28,10 @@ import LineExtension from "./LineExtension/LineExtension";
 import styles from "./PolicyPlot.module.scss";
 
 const plotColors = [
+  "blue",
+  "green",
+  "firebrick",
+  "purple",
   // '#00a79d',
   "#14477A",
   "#14477A",
@@ -39,6 +43,13 @@ const plotColors = [
   "#aeaeae",
   "#774573",
 ];
+
+const namedLineColors = {
+  infected_a: "royalblue",
+  masks_high_infected_a: "firebrick",
+  masks_medium_infected_a: "purple",
+  masks_low_infected_a: "darkgreen",
+};
 
 const interventionColors = {
   Lockdown: "#661B3C",
@@ -211,11 +222,12 @@ const PolicyModel = props => {
   const actualsLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
       if (!["R effective", "pctChange"].includes(curveName)) {
+        console.log(curveName, namedLineColors[curveName]);
         return (
           <VictoryLine
             key={curveName}
             style={{
-              data: { stroke: plotColors[index], strokeWidth: 0.75 },
+              data: { stroke: namedLineColors[curveName], strokeWidth: 0.75 },
             }}
             data={data.actuals}
             // interpolation={'monotoneX'}
@@ -241,8 +253,10 @@ const PolicyModel = props => {
             key={curveName}
             style={{
               data: {
-                stroke: plotColors[index],
-                strokeWidth: 0.75,
+                // stroke: plotColors[index],
+                stroke: namedLineColors[curveName],
+                // strokeWidth: 0.75,
+                strokeWidth: 1,
                 strokeDasharray: 2,
               },
             }}
