@@ -9,6 +9,7 @@ import loadModels, {
   requestIntervention,
   clearState,
   API_URL,
+  addMaskingData,
 } from "./LoadModels";
 
 import parseModels from "./parseModels";
@@ -48,14 +49,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
-    // "infected",
-    // "infected_a",
-    "infected_b",
+    "infected_a",
+    // "infected_b",
     // 'infected_c',
     // 'dead',
-    "masks_high_infected_b",
-    "masks_medium_infected_b",
-    "masks_low_infected_b",
+    "masks_high_infected_a",
+    "masks_medium_infected_a",
+    "masks_low_infected_a",
     "R effective",
     "pctChange",
   ]);
@@ -158,6 +158,18 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
     getDataDates();
   }, []);
+
+  React.useEffect(() => {
+    const addMasks = async state => {
+      const model = await addMaskingData(selectedStates[0]);
+      const modelCurves = parseModels([model], selectedCurves, false);
+      setCurves(modelCurves);
+    };
+
+    if (masksSelected) {
+      addMasks(selectedStates[0]);
+    }
+  }, [masksSelected, selectedStates, selectedCurves]);
 
   const addIntervention = (state, intervention) => {
     const newCurves = Object.assign({}, curves);

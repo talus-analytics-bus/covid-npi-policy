@@ -228,15 +228,18 @@ export const loadModels = async states => {
 
   // console.log(models);
 
-  const modelsWithMasks = await Promise.all(
-    models.map(model => addMaskingData(model))
-  );
+  // const modelsWithMasks = await Promise.all(
+  //   models.map(model => addMaskingData(model))
+  // );
 
-  return modelsWithMasks;
+  return models;
 };
 
-const addMaskingData = async model => {
-  // pass in model to add masks to
+export const addMaskingData = async state => {
+  // get model to add masks to
+  const model = (await loadModels([state]))[0];
+
+  // ToDo: check if model contains masks before making request
 
   const modelName = model.dateRequested + "_" + model.state + "_MR";
   console.log(`Adding masking data to: ${modelName}`);
@@ -269,11 +272,15 @@ const addMaskingData = async model => {
     list: interventionList,
   });
 
-  const result = await axios.post(API_URL + "masks/AL", interventionObject, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const result = await axios.post(
+    API_URL + `masks/${model.state}`,
+    interventionObject,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   const parsed = JSON.parse(result.request.response);
 
@@ -318,7 +325,8 @@ const addMaskingData = async model => {
     model.results.slice(-1)[0].run.map((day, index) => {
       if (day.source === "actuals") {
         return day;
-      } else {
+      }
+      if (parsed.low.results.slice(-1)[0].run[index] !== undefined) {
         const newDay = { ...day };
         modelCurves.forEach(curveName =>
           MASKING_LEVELS.forEach(level => {
@@ -328,30 +336,16 @@ const addMaskingData = async model => {
           })
         );
         return newDay;
+      } else {
+        return day;
       }
     })
   );
-
-  // console.log(model.results[0].run);
 
   // delete old instance of model in localStorage
 
   // save model with masking data
 
-  //
-  //   const result = await axios.post(API_URL + "masks/AL", interventions, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-  //
-  //   const parsed = JSON.parse(result.request.response);
-  //
-  //   Object.entries(parsed).forEach(([complianceLevel, runData]) => {
-  //     console.log(parseModelDates(runData));
-  //   });
-  //
-  // console.log(model);
   return model;
 };
 

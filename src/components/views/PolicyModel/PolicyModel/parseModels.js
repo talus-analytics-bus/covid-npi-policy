@@ -23,12 +23,21 @@ const INITIAL_R_0 = 2.524;
 // parse it, including fixing dates
 const parseModelString = modelRun => {
   // console.log(modelRun);
-  const modelRunParsed = JSON.parse(modelRun).map(day => ({
-    ...day,
-    date: new Date(day.date),
-  }));
+  try {
+    const modelRunParsed = JSON.parse(modelRun).map(day => ({
+      ...day,
+      date: new Date(day.date),
+    }));
 
-  return modelRunParsed;
+    return modelRunParsed;
+  } catch (err) {
+    const modelRunParsed = modelRun.map(day => ({
+      ...day,
+      date: new Date(day.date),
+    }));
+
+    return modelRunParsed;
+  }
 };
 
 export default function parseModelCurves(
@@ -42,7 +51,7 @@ export default function parseModelCurves(
     const state = model.state;
     // console.log(state)
     // console.log(model);
-    console.log(selectedCurves);
+    // console.log(selectedCurves);
 
     // create state object
     curves[state] = {
@@ -71,12 +80,12 @@ export default function parseModelCurves(
 
     const modelRun = parseModelString(model.results.slice(-1)[0].run);
 
-    const counterfactualRun = model.results.find(inter =>
-      inter.name.includes("mobility_drop")
-    ).run;
+    const counterfactualRun = parseModelString(
+      model.results.find(inter => inter.name.includes("mobility_drop")).run
+    );
 
     const trimmedData = modelRun;
-    console.log(trimmedData);
+    // console.log(trimmedData);
 
     // initial r_0 for the percentage change calc
     // const initialR_0 = trimmedData[0]["R effective"];
@@ -88,21 +97,23 @@ export default function parseModelCurves(
     curves[state].curves.pctChange["model"] = [];
     curves[state].curves.pctChange["yMax"] = 0;
 
-    Object.keys(trimmedData.slice(-1)[0]).forEach(column => {
-      if (selectedCurves.includes(column)) {
-        curves[state].curves[column] = {};
-        curves[state].curves[column]["actuals"] = [];
-        curves[state].curves[column]["model"] = [];
-        curves[state].curves[column]["yMax"] = 0;
+    Object.keys(trimmedData.find(day => day.source !== "actuals")).forEach(
+      column => {
+        if (selectedCurves.includes(column)) {
+          curves[state].curves[column] = {};
+          curves[state].curves[column]["actuals"] = [];
+          curves[state].curves[column]["model"] = [];
+          curves[state].curves[column]["yMax"] = 0;
 
-        if (counterfactualSelected) {
-          curves[state].curves["CF_" + column] = {};
-          curves[state].curves["CF_" + column]["actuals"] = [];
-          curves[state].curves["CF_" + column]["model"] = [];
-          curves[state].curves["CF_" + column]["yMax"] = 0;
+          if (counterfactualSelected) {
+            curves[state].curves["CF_" + column] = {};
+            curves[state].curves["CF_" + column]["actuals"] = [];
+            curves[state].curves["CF_" + column]["model"] = [];
+            curves[state].curves["CF_" + column]["yMax"] = 0;
+          }
         }
       }
-    });
+    );
 
     // console.log(curves);
 
@@ -183,9 +194,15 @@ export default function parseModelCurves(
     });
 
     // date range for the state
-    const dates = JSON.parse(model.results.slice(-1)[0].run).map(
-      day => new Date(day.date)
-    );
+    let dates = [];
+    try {
+      dates = model.results.slice(-1)[0].run.map(day => new Date(day.date));
+    } catch (err) {
+      dates = JSON.parse(model.results.slice(-1)[0].run).map(
+        day => new Date(day.date)
+      );
+    }
+
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 
@@ -196,7 +213,7 @@ export default function parseModelCurves(
     curves[state].yMax = Math.max(...peaks);
   });
 
-  console.log(curves);
+  // console.log(curves);
 
   return curves;
 }

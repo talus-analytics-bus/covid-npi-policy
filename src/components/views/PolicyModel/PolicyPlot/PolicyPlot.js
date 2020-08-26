@@ -259,8 +259,8 @@ const PolicyModel = props => {
               data: {
                 // stroke: plotColors[index],
                 stroke: namedLineColors[curveName],
-                // strokeWidth: 0.75,
-                strokeWidth: 1,
+                strokeWidth: 0.75,
+                // strokeWidth: 1,
                 strokeDasharray: 2,
               },
             }}
