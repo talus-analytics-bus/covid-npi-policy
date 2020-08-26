@@ -45,7 +45,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
   const [masksSelected, setMasksSelected] = useState(false);
-  const [percentCompliance, setPercentCompliance] = useState("0.75");
+  const [maskingCompliance, setMaskingCompliance] = useState("medium");
+  console.log(maskingCompliance);
 
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
@@ -53,8 +54,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // "infected_b",
     // 'infected_c',
     // 'dead',
-    "masks_high_infected_a",
-    "masks_medium_infected_a",
+    // "masks_high_infected_a",
+    // "masks_medium_infected_a",
     "masks_low_infected_a",
     "R effective",
     "pctChange",
@@ -449,8 +450,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   selectedCurves={selectedCurves}
                   masksSelected={masksSelected}
                   setMasksSelected={setMasksSelected}
-                  percentCompliance={percentCompliance}
-                  setPercentCompliance={setPercentCompliance}
+                  maskingCompliance={maskingCompliance}
+                  setMaskingCompliance={setMaskingCompliance}
                 />
               );
             } else {

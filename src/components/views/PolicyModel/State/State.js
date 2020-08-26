@@ -354,41 +354,41 @@ const State = props => {
                       <div className={styles.radioButton}>
                         <input
                           type="radio"
-                          id="25"
+                          id="low"
                           name="compliance"
-                          value={0.25}
-                          checked={props.percentCompliance === "0.25"}
+                          value={"low"}
+                          checked={props.maskingCompliance === "low"}
                           onChange={e =>
-                            props.setPercentCompliance(e.target.value)
+                            props.setMaskingCompliance(e.target.value)
                           }
                         />
-                        <label htmlFor="25">25%</label>
+                        <label htmlFor="low">25%</label>
                       </div>
                       <div className={styles.radioButton}>
                         <input
                           type="radio"
-                          id="50"
+                          id="medium"
                           name="compliance"
-                          value={0.5}
-                          checked={props.percentCompliance === "0.5"}
+                          value={"medium"}
+                          checked={props.maskingCompliance === "medium"}
                           onChange={e =>
-                            props.setPercentCompliance(e.target.value)
+                            props.setMaskingCompliance(e.target.value)
                           }
                         />
-                        <label htmlFor="50">50%</label>
+                        <label htmlFor="medium">50%</label>
                       </div>
                       <div className={styles.radioButton}>
                         <input
                           type="radio"
-                          id="75"
+                          id="high"
                           name="compliance"
-                          value={0.75}
-                          checked={props.percentCompliance === "0.75"}
+                          value={"high"}
+                          checked={props.maskingCompliance === "high"}
                           onChange={e =>
-                            props.setPercentCompliance(e.target.value)
+                            props.setMaskingCompliance(e.target.value)
                           }
                         />
-                        <label htmlFor="75">75%</label>
+                        <label htmlFor="high">75%</label>
                       </div>
                     </div>
                   </div>
