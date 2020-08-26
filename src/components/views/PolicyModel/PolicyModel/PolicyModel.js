@@ -49,13 +49,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
     // "infected",
-    "infected_a",
-    // 'infected_b',
+    // "infected_a",
+    "infected_b",
     // 'infected_c',
     // 'dead',
-    "masks_high_infected_a",
-    "masks_medium_infected_a",
-    "masks_low_infected_a",
+    "masks_high_infected_b",
+    "masks_medium_infected_b",
+    "masks_low_infected_b",
     "R effective",
     "pctChange",
   ]);

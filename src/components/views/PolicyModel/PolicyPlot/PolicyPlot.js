@@ -49,6 +49,10 @@ const namedLineColors = {
   masks_high_infected_a: "firebrick",
   masks_medium_infected_a: "purple",
   masks_low_infected_a: "darkgreen",
+  infected_b: "royalblue",
+  masks_high_infected_b: "firebrick",
+  masks_medium_infected_b: "purple",
+  masks_low_infected_b: "darkgreen",
 };
 
 const interventionColors = {
@@ -222,7 +226,7 @@ const PolicyModel = props => {
   const actualsLines = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
       if (!["R effective", "pctChange"].includes(curveName)) {
-        console.log(curveName, namedLineColors[curveName]);
+        // console.log(curveName, namedLineColors[curveName]);
         return (
           <VictoryLine
             key={curveName}

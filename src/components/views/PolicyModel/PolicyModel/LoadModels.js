@@ -21,6 +21,8 @@ const MODEL_VERSION = "3";
 export const API_URL = `http://127.0.0.1:5000/`;
 // export const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
+const MASKING_LEVELS = ["low", "medium", "high"];
+
 // request a model from the server
 // this should only happen if we
 // don't already have a recent model locally
@@ -101,14 +103,24 @@ export const requestIntervention = async (state, intervention) => {
 // take a model run string and
 // parse it, including fixing dates
 const parseModelDates = runData => {
-  runData.results.slice(-1)[0].run = JSON.parse(
-    runData.results.slice(-1)[0].run
-  ).map(day => ({
-    ...day,
-    date: new Date(day.date),
-  }));
-
-  return runData;
+  // console.log(runData);
+  try {
+    runData.results.slice(-1)[0].run = runData.results
+      .slice(-1)[0]
+      .run.map(day => ({
+        ...day,
+        date: new Date(day.date),
+      }));
+    return runData;
+  } catch (err) {
+    runData.results.slice(-1)[0].run = JSON.parse(
+      runData.results.slice(-1)[0].run
+    ).map(day => ({
+      ...day,
+      date: new Date(day.date),
+    }));
+    return runData;
+  }
 };
 
 // save a model into local storage
@@ -214,17 +226,11 @@ export const loadModels = async states => {
     })
   );
 
-  console.log(models);
-
-  // models.forEach(async model => console.log(await addMaskingData(model)));
+  // console.log(models);
 
   const modelsWithMasks = await Promise.all(
     models.map(model => addMaskingData(model))
   );
-
-  console.log(await Promise.all(modelsWithMasks));
-
-  // await Promise.all(modelsWithMasks);
 
   return modelsWithMasks;
 };
@@ -271,7 +277,7 @@ const addMaskingData = async model => {
 
   const parsed = JSON.parse(result.request.response);
 
-  console.log(parsed);
+  // console.log(parsed);
 
   // parse dates in Masks runData
 
@@ -279,7 +285,7 @@ const addMaskingData = async model => {
     parsed[complianceLevel] = parseModelDates(runData);
   });
 
-  console.log(parsed);
+  // console.log(parsed);
 
   // insert all mask datapoints in model
   // masks_low_infected_a, masks_medium_infected_a, so on
@@ -287,31 +293,46 @@ const addMaskingData = async model => {
   // console.log("model results");
   // console.log(model.results);
 
-  // console.log(model.results.slice(-1)[0].run);
+  // console.log(model.results.slice(-1)[0].run[0]);
 
-  model.results.slice(-1)[0].run = JSON.stringify(
-    model.results.slice(-1)[0].run.map((day, index) =>
-      day.source === "actuals"
-        ? day
-        : {
-            ...day,
-            date: new Date(day.date),
-            masks_high_infected_a: parsed.high.results.slice(-1)[0].run[index]
-              ? parsed.high.results.slice(-1)[0].run[index].infected_a
-              : null,
-            masks_medium_infected_a: parsed.medium.results.slice(-1)[0].run[
-              index
-            ]
-              ? parsed.medium.results.slice(-1)[0].run[index].infected_a
-              : null,
-            masks_low_infected_a: parsed.low.results.slice(-1)[0].run[index]
-              ? parsed.low.results.slice(-1)[0].run[index].infected_a
-              : null,
-          }
-    )
+  // get curves in the model
+
+  const modelCurves = Object.keys(model.results.slice(-1)[0].run[0]).filter(
+    key =>
+      ![
+        "date",
+        "R effective",
+        "pct_change",
+        "source",
+        "infected",
+        "doubling_time",
+        "exposed",
+      ].includes(key)
   );
 
-  // console.log(model.results.slice(-1)[0].run);
+  // console.log(modelCurves);
+
+  // match them up to low, med, high
+
+  model.results.slice(-1)[0].run = JSON.stringify(
+    model.results.slice(-1)[0].run.map((day, index) => {
+      if (day.source === "actuals") {
+        return day;
+      } else {
+        const newDay = { ...day };
+        modelCurves.forEach(curveName =>
+          MASKING_LEVELS.forEach(level => {
+            newDay[`masks_${level}_${curveName}`] = parsed[level].results.slice(
+              -1
+            )[0].run[index][curveName];
+          })
+        );
+        return newDay;
+      }
+    })
+  );
+
+  // console.log(model.results[0].run);
 
   // delete old instance of model in localStorage
 
@@ -330,6 +351,7 @@ const addMaskingData = async model => {
   //     console.log(parseModelDates(runData));
   //   });
   //
+  // console.log(model);
   return model;
 };
 

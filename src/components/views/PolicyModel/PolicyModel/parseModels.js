@@ -22,7 +22,7 @@ const INITIAL_R_0 = 2.524;
 // take a model run string and
 // parse it, including fixing dates
 const parseModelString = modelRun => {
-  console.log(modelRun);
+  // console.log(modelRun);
   const modelRunParsed = JSON.parse(modelRun).map(day => ({
     ...day,
     date: new Date(day.date),
@@ -66,18 +66,17 @@ export default function parseModelCurves(
       counterfactual_deaths: model.counterfactual_deaths,
     };
 
-    const modelRun = parseModelString(
-      model.results.filter(run => Object.keys(run)[0] !== run).slice(-1)[0].run
-    );
+    // console.log(model.results);
+    // console.log(model.results.filter(run => Object.keys(run)[0] !== run));
 
-    const counterfactualRun = parseModelString(
-      model.results
-        .filter(run => Object.keys(run)[0] !== run)
-        .find(inter => inter.name.includes("mobility_drop")).run
-    );
+    const modelRun = parseModelString(model.results.slice(-1)[0].run);
+
+    const counterfactualRun = model.results.find(inter =>
+      inter.name.includes("mobility_drop")
+    ).run;
 
     const trimmedData = modelRun;
-    // console.log(trimmedData);
+    console.log(trimmedData);
 
     // initial r_0 for the percentage change calc
     // const initialR_0 = trimmedData[0]["R effective"];
@@ -197,7 +196,7 @@ export default function parseModelCurves(
     curves[state].yMax = Math.max(...peaks);
   });
 
-  // console.log(curves);
+  console.log(curves);
 
   return curves;
 }
