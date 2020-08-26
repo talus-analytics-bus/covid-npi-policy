@@ -8,13 +8,13 @@ import PolicyPlot from "../PolicyPlot/PolicyPlot";
 import states from "../PolicyModel/states.js";
 
 import styles from "./State.module.scss";
-import classNames from 'classnames'
+import classNames from "classnames";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 import greenInfoIcon from "../../../../assets/icons/info-green.svg";
 import stateCloseButtonIcon from "../../../../assets/icons/stateCloseButton.svg";
-import whiteMaskIcon from '../../../../assets/icons/mask-white.png'
-import blueMaskIcon from '../../../../assets/icons/mask-blue.png'
+import whiteMaskIcon from "../../../../assets/icons/mask-white.png";
+import blueMaskIcon from "../../../../assets/icons/mask-blue.png";
 
 // round to nearest hundred and add commas
 const formatModeled = number => {
@@ -50,7 +50,7 @@ const State = props => {
   //   day: 'numeric',
   //   year: 'numeric',
   // })
-  const [maskControlActivated, setMaskControlActivated] = useState(false)
+  const [maskControlActivated, setMaskControlActivated] = useState(false);
 
   return (
     <section className={styles.state}>
@@ -86,7 +86,8 @@ const State = props => {
           <div className={styles.rows}>
             <div className={styles.headerRow}>
               <div className={styles.explanation}>
-                Case count with <br />existing policies
+                Case count with <br />
+                existing policies
               </div>
               <div className={styles.cases}>
                 {formatActuals(props.curves.cases)}
@@ -95,15 +96,16 @@ const State = props => {
                 <p className={styles.label}>cumulative cases</p>
                 <p className={styles.date}>
                   as of{" "}
-                  {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+                  {props.dataDates &&
+                    formatDate(props.dataDates.last_data_update)}{" "}
                   (actual){" "}
                   <Tippy
                     interactive={true}
                     allowHTML={true}
                     content={
                       <p className={styles.ipopup}>
-                        Total number of cumulative confirmed and probable cases as
-                        of{" "}
+                        Total number of cumulative confirmed and probable cases
+                        as of{" "}
                         {props.dataDates &&
                           formatDate(props.dataDates.last_data_update)}
                         . Source:{" "}
@@ -151,10 +153,11 @@ const State = props => {
                     content={
                       <p className={styles.ipopup}>
                         Research indicates that COVID patients will die within
-                        approximately 30 days of initial infection. Therefore, to
-                        align these deaths with the caseload, we report the number
-                        of cases as of today’s date and the anticipated deaths
-                        associated with those cases as of 30 days from today.
+                        approximately 30 days of initial infection. Therefore,
+                        to align these deaths with the caseload, we report the
+                        number of cases as of today’s date and the anticipated
+                        deaths associated with those cases as of 30 days from
+                        today.
                       </p>
                     }
                     maxWidth={"30rem"}
@@ -171,25 +174,26 @@ const State = props => {
                 </p>
               </div>
             </div>
-            <div className={classNames(
-              styles.headerRow,
-              styles.counterfactualRow
-            )}>
-              {props.masksSelected &&
-                <div className={styles.disabled}> </div>
-              }
-              <div className={classNames(
-                styles.explanation,
-                props.masksSelected ? styles.disabledControl : null
-              )}>
+            <div
+              className={classNames(styles.headerRow, styles.counterfactualRow)}
+            >
+              {props.masksSelected && <div className={styles.disabled}> </div>}
+              <div
+                className={classNames(
+                  styles.explanation,
+                  props.masksSelected ? styles.disabledControl : null
+                )}
+              >
                 What if we had <br /> done nothing?
                 <label>
                   <input
                     type="checkbox"
                     checked={props.counterfactualSelected}
                     onChange={() => {
-                      if(!props.masksSelected){
-                        props.setCounterfactualSelected(!props.counterfactualSelected)
+                      if (!props.masksSelected) {
+                        props.setCounterfactualSelected(
+                          !props.counterfactualSelected
+                        );
                       }
                     }}
                   />
@@ -204,16 +208,17 @@ const State = props => {
                 <p className={styles.label}>cumulative cases</p>
                 <p className={styles.date}>
                   as of{" "}
-                  {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
+                  {props.dataDates &&
+                    formatDate(props.dataDates.last_data_update)}{" "}
                   (modeled){" "}
                   <Tippy
                     interactive={true}
                     allowHTML={true}
                     content={
                       <p className={styles.ipopup}>
-                        Total number of cumulative cases modeled on the assumption
-                        no policies had been put in to effect, rounded to indicate
-                        confidence.
+                        Total number of cumulative cases modeled on the
+                        assumption no policies had been put in to effect,
+                        rounded to indicate confidence.
                       </p>
                     }
                     maxWidth={"30rem"}
@@ -229,7 +234,8 @@ const State = props => {
                   </Tippy>
                 </p>
                 <p className={styles.popPercent}>
-                  {(props.curves.counterfactual_cases / props.curves.population) *
+                  {(props.curves.counterfactual_cases /
+                    props.curves.population) *
                     100 >=
                   0.5
                     ? (
@@ -259,10 +265,11 @@ const State = props => {
                     content={
                       <p className={styles.ipopup}>
                         Research indicates that COVID patients will die within
-                        approximately 30 days of initial infection. Therefore, to
-                        align these deaths with the caseload, we report the number
-                        of cases as of today’s date and the anticipated deaths
-                        associated with those cases as of 30 days from today.
+                        approximately 30 days of initial infection. Therefore,
+                        to align these deaths with the caseload, we report the
+                        number of cases as of today’s date and the anticipated
+                        deaths associated with those cases as of 30 days from
+                        today.
                       </p>
                     }
                     maxWidth={"30rem"}
@@ -280,46 +287,48 @@ const State = props => {
               </div>
             </div>
             <div className={styles.coveringRow}>
-              {props.counterfactualSelected && maskControlActivated &&
+              {props.counterfactualSelected && maskControlActivated && (
                 <div className={styles.disabled}></div>
-              }
-              <div 
+              )}
+              <div
                 className={classNames(
                   styles.coveringContainer,
                   maskControlActivated ? styles.expanded : null
                 )}
                 onClick={() => {
-                  if(!maskControlActivated){
-                    if(props.counterfactualSelected){
-                      props.setCounterfactualSelected(false)
+                  if (!maskControlActivated) {
+                    if (props.counterfactualSelected) {
+                      props.setCounterfactualSelected(false);
                     }
-                    setMaskControlActivated(true)
+                    setMaskControlActivated(true);
                   }
                 }}
               >
                 <div>
                   <div className={styles.coveringTitle}>
-                    <img 
+                    <img
                       src={maskControlActivated ? blueMaskIcon : whiteMaskIcon}
-                      alt={'Mask icon'}
+                      alt={"Mask icon"}
                       className={styles.maskIcon}
                     />
-                    <div className={styles.title}>
-                      Face coverings
-                    </div>
+                    <div className={styles.title}>Face coverings</div>
                   </div>
-                  {maskControlActivated && 
-                    <div className={classNames(
-                      styles.maskControl,
-                      props.counterfactualSelected ? styles.disabledControl : null
-                    )}>
+                  {maskControlActivated && (
+                    <div
+                      className={classNames(
+                        styles.maskControl,
+                        props.counterfactualSelected
+                          ? styles.disabledControl
+                          : null
+                      )}
+                    >
                       <label>
                         <input
                           type="checkbox"
                           checked={props.masksSelected}
                           onChange={() => {
-                            if(!props.counterfactualSelected){
-                              props.setMasksSelected(!props.masksSelected)
+                            if (!props.counterfactualSelected) {
+                              props.setMasksSelected(!props.masksSelected);
                             }
                           }}
                         />
@@ -327,51 +336,63 @@ const State = props => {
                         View impact of face coverings on graph
                       </label>
                     </div>
-                  }
+                  )}
                 </div>
-                {maskControlActivated && 
-                <div className={styles.complianceContainer}>
-                  <div className={styles.complianceLabel}>Compliance rate</div>
-                  <div className={classNames(
-                      styles.radioButtons, 
-                      props.counterfactualSelected ? styles.disabledControl : null
-                    )}>
-                    <div className={styles.radioButton}>
-                      <input 
-                        type="radio" 
-                        id="25" 
-                        name="compliance" 
-                        value={0.25}
-                        checked={props.percentCompliance === "0.25"}
-                        onChange={e => props.setPercentCompliance(e.target.value)}
-                      />
-                      <label for="25">25%</label>
+                {maskControlActivated && (
+                  <div className={styles.complianceContainer}>
+                    <div className={styles.complianceLabel}>
+                      Compliance rate
                     </div>
-                    <div className={styles.radioButton}>
-                      <input 
-                        type="radio" 
-                        id="50" 
-                        name="compliance" 
-                        value={0.5} 
-                        checked={props.percentCompliance === "0.5"}
-                        onChange={e => props.setPercentCompliance(e.target.value)}
-                      />
-                      <label for="50">50%</label>
-                    </div>
-                    <div className={styles.radioButton}>
-                      <input 
-                        type="radio" 
-                        id="75" 
-                        name="compliance" 
-                        value={0.75} 
-                        checked={props.percentCompliance === "0.75"}
-                        onChange={e => props.setPercentCompliance(e.target.value)}
-                      />
-                      <label for="75">75%</label>
+                    <div
+                      className={classNames(
+                        styles.radioButtons,
+                        props.counterfactualSelected
+                          ? styles.disabledControl
+                          : null
+                      )}
+                    >
+                      <div className={styles.radioButton}>
+                        <input
+                          type="radio"
+                          id="25"
+                          name="compliance"
+                          value={0.25}
+                          checked={props.percentCompliance === "0.25"}
+                          onChange={e =>
+                            props.setPercentCompliance(e.target.value)
+                          }
+                        />
+                        <label htmlFor="25">25%</label>
+                      </div>
+                      <div className={styles.radioButton}>
+                        <input
+                          type="radio"
+                          id="50"
+                          name="compliance"
+                          value={0.5}
+                          checked={props.percentCompliance === "0.5"}
+                          onChange={e =>
+                            props.setPercentCompliance(e.target.value)
+                          }
+                        />
+                        <label htmlFor="50">50%</label>
+                      </div>
+                      <div className={styles.radioButton}>
+                        <input
+                          type="radio"
+                          id="75"
+                          name="compliance"
+                          value={0.75}
+                          checked={props.percentCompliance === "0.75"}
+                          onChange={e =>
+                            props.setPercentCompliance(e.target.value)
+                          }
+                        />
+                        <label htmlFor="75">75%</label>
+                      </div>
                     </div>
                   </div>
-                </div>
-                }
+                )}
               </div>
             </div>
           </div>
