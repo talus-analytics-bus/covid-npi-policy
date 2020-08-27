@@ -190,8 +190,12 @@
                   flex-direction: row;
                   align-items: center;
                   color: black;
+                  input {
+                    margin-right: 0;
+                  }
                   label {
                     margin-top: 0;
+                    padding-left: 0.5em;
                   }
                 }
               }
