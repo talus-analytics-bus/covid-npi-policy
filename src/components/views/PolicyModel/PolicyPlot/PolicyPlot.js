@@ -28,10 +28,6 @@ import LineExtension from "./LineExtension/LineExtension";
 import styles from "./PolicyPlot.module.scss";
 
 const plotColors = [
-  "blue",
-  "green",
-  "firebrick",
-  "purple",
   // '#00a79d',
   "#14477A",
   "#14477A",
@@ -44,16 +40,16 @@ const plotColors = [
   "#774573",
 ];
 
-const namedLineColors = {
-  infected_a: "royalblue",
-  masks_high_infected_a: "firebrick",
-  masks_medium_infected_a: "purple",
-  masks_low_infected_a: "darkgreen",
-  infected_b: "royalblue",
-  masks_high_infected_b: "firebrick",
-  masks_medium_infected_b: "purple",
-  masks_low_infected_b: "darkgreen",
-};
+// const namedLineColors = {
+//   infected_a: "royalblue",
+//   masks_high_infected_a: "firebrick",
+//   masks_medium_infected_a: "purple",
+//   masks_low_infected_a: "darkgreen",
+//   infected_b: "royalblue",
+//   masks_high_infected_b: "firebrick",
+//   masks_medium_infected_b: "purple",
+//   masks_low_infected_b: "darkgreen",
+// };
 
 const interventionColors = {
   Lockdown: "#661B3C",
@@ -231,7 +227,7 @@ const PolicyModel = props => {
           <VictoryLine
             key={curveName}
             style={{
-              data: { stroke: namedLineColors[curveName], strokeWidth: 0.75 },
+              data: { stroke: plotColors[index], strokeWidth: 0.75 },
             }}
             data={data.actuals}
             // interpolation={'monotoneX'}
@@ -258,8 +254,8 @@ const PolicyModel = props => {
             key={curveName}
             style={{
               data: {
-                // stroke: plotColors[index],
-                stroke: namedLineColors[curveName],
+                stroke: plotColors[index],
+                // stroke: namedLineColors[curveName],
                 strokeWidth: 0.75,
                 // strokeWidth: 1,
                 strokeDasharray: 2,
