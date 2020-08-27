@@ -52,6 +52,18 @@ const State = props => {
   // })
   const [maskControlActivated, setMaskControlActivated] = useState(false);
 
+  let mainCurveName;
+  if (props.curves && props.masksSelected) {
+    mainCurveName = Object.keys(props.curves.curves).find(
+      curveName =>
+        !["R effective", "pctChange"].includes(curveName) &
+        !curveName.startsWith("CF_") &
+        !curveName.startsWith("masks_")
+    );
+  }
+
+  console.log(mainCurveName);
+
   return (
     <section className={styles.state}>
       {props.selectedStates.length > 1 && (
@@ -311,7 +323,15 @@ const State = props => {
                       alt={"Mask icon"}
                       className={styles.maskIcon}
                     />
-                    <div className={styles.title}>Face coverings</div>
+                    <div className={styles.title}>
+                      {/* This needs to be replaced with a real loading state */}
+                      {mainCurveName &&
+                      props.curves.curves[
+                        `masks_${props.maskingCompliance}_${mainCurveName}`
+                      ] === undefined
+                        ? "Loading face coverings..."
+                        : "Face coverings"}
+                    </div>
                   </div>
                   {maskControlActivated && (
                     <div

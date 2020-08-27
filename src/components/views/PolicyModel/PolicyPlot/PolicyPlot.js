@@ -295,7 +295,7 @@ const PolicyModel = props => {
     }
   );
 
-  let [mainCurveName, mainCurve] = [{}, {}];
+  let [mainCurveName, mainCurve] = ["", {}];
   if (props.masksSelected) {
     [mainCurveName, mainCurve] = Object.entries(props.data.curves).find(
       ([curveName, curve]) =>
@@ -318,7 +318,7 @@ const PolicyModel = props => {
       y0: point.y,
     }));
 
-  const maskingArea = props.masksSelected && (
+  const maskingArea = props.masksSelected && maskingCurveArea && (
     <VictoryArea
       style={{
         data: {
