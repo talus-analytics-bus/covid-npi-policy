@@ -46,6 +46,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
   const [masksSelected, setMasksSelected] = useState(false);
+  const [maskControlActivated, setMaskControlActivated] = useState(false);
   const [maskingCompliance, setMaskingCompliance] = useState("medium");
 
   // curves selected for parsing
@@ -467,6 +468,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setMasksSelected={setMasksSelected}
                   maskingCompliance={maskingCompliance}
                   setMaskingCompliance={setMaskingCompliance}
+                  maskControlActivated={maskControlActivated}
+                  setMaskControlActivated={setMaskControlActivated}
                 />
               );
             } else {

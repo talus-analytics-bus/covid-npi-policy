@@ -50,7 +50,6 @@ const State = props => {
   //   day: 'numeric',
   //   year: 'numeric',
   // })
-  const [maskControlActivated, setMaskControlActivated] = useState(false);
 
   let mainCurveName;
   if (props.curves && props.masksSelected) {
@@ -297,27 +296,31 @@ const State = props => {
               </div>
             </div>
             <div className={styles.coveringRow}>
-              {props.counterfactualSelected && maskControlActivated && (
+              {props.counterfactualSelected && props.maskControlActivated && (
                 <div className={styles.disabled}></div>
               )}
               <div
                 className={classNames(
                   styles.coveringContainer,
-                  maskControlActivated ? styles.expanded : null
+                  props.maskControlActivated ? styles.expanded : null
                 )}
                 onClick={() => {
-                  if (!maskControlActivated) {
+                  if (!props.maskControlActivated) {
                     if (props.counterfactualSelected) {
                       props.setCounterfactualSelected(false);
                     }
-                    setMaskControlActivated(true);
+                    props.setMaskControlActivated(true);
                   }
                 }}
               >
                 <div>
                   <div className={styles.coveringTitle}>
                     <img
-                      src={maskControlActivated ? blueMaskIcon : whiteMaskIcon}
+                      src={
+                        props.maskControlActivated
+                          ? blueMaskIcon
+                          : whiteMaskIcon
+                      }
                       alt={"Mask icon"}
                       className={styles.maskIcon}
                     />
@@ -331,7 +334,7 @@ const State = props => {
                         : "Face coverings"}
                     </div>
                   </div>
-                  {maskControlActivated && (
+                  {props.maskControlActivated && (
                     <div
                       className={classNames(
                         styles.maskControl,
@@ -356,7 +359,7 @@ const State = props => {
                     </div>
                   )}
                 </div>
-                {maskControlActivated && (
+                {props.maskControlActivated && (
                   <div className={styles.complianceContainer}>
                     <div className={styles.complianceLabel}>
                       Compliance rate
