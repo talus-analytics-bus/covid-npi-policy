@@ -250,7 +250,8 @@ const PolicyModel = props => {
     ([curveName, data], index) => {
       if (
         !["R effective", "pctChange"].includes(curveName) &
-        !curveName.startsWith("CF_")
+        !curveName.startsWith("CF_") &
+        !curveName.startsWith("masks_")
       ) {
         return (
           <VictoryLine
@@ -296,6 +297,42 @@ const PolicyModel = props => {
         return false;
       }
     }
+  );
+
+  let [mainCurveName, mainCurve] = [{}, {}];
+  if (props.masksSelected) {
+    [mainCurveName, mainCurve] = Object.entries(props.data.curves).find(
+      ([curveName, curve]) =>
+        !["R effective", "pctChange"].includes(curveName) &
+        !curveName.startsWith("CF_") &
+        !curveName.startsWith("masks_")
+    );
+  }
+
+  const maskingCurve =
+    props.masksSelected &&
+    props.data.curves[`masks_${props.maskingCompliance}_${mainCurveName}`];
+
+  const maskingCurveArea =
+    props.masksSelected &&
+    maskingCurve &&
+    maskingCurve.model.map((point, index) => ({
+      x: point.x,
+      y: mainCurve.model[index].y,
+      y0: point.y,
+    }));
+
+  const maskingArea = props.masksSelected && (
+    <VictoryArea
+      style={{
+        data: {
+          fill: "#A6E6ED99",
+          strokeWidth: 0,
+          strokeDasharray: 0,
+        },
+      }}
+      data={maskingCurveArea}
+    />
   );
 
   const interventionLines = props.data.interventions.map(intervention => (
@@ -861,6 +898,7 @@ const PolicyModel = props => {
           }}
         />
 
+        {maskingArea}
         {actualsLines}
         {counterfactualArea}
         {modelLines}

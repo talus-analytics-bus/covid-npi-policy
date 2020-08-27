@@ -532,6 +532,8 @@ const State = props => {
           addIntervention={props.addIntervention}
           contactPlotType={props.contactPlotType}
           selectedCurves={props.selectedCurves}
+          maskingCompliance={props.maskingCompliance}
+          masksSelected={props.masksSelected}
         />
       </div>
       <div className={styles.bottomRow}>

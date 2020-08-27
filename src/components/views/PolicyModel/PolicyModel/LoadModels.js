@@ -342,9 +342,13 @@ export const addMaskingData = async state => {
     })
   );
 
+  model.dateRequested = new Date(model.dateRequested);
+
   // delete old instance of model in localStorage
+  deleteModel(model);
 
   // save model with masking data
+  saveModel(model);
 
   return model;
 };

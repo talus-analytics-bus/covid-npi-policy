@@ -46,7 +46,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
   const [counterfactualSelected, setCounterfactualSelected] = useState(false);
   const [masksSelected, setMasksSelected] = useState(false);
   const [maskingCompliance, setMaskingCompliance] = useState("medium");
-  console.log(maskingCompliance);
 
   // curves selected for parsing
   const [selectedCurves, setSelectedCurves] = useState([
@@ -54,8 +53,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // "infected_b",
     // 'infected_c',
     // 'dead',
-    // "masks_high_infected_a",
-    // "masks_medium_infected_a",
+    "masks_high_infected_a",
+    "masks_medium_infected_a",
     "masks_low_infected_a",
     "R effective",
     "pctChange",
@@ -160,6 +159,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
     getDataDates();
   }, []);
 
+  // this should just trigger initial mask setup,
+  // it should do nothing on subsequent checks / unchecks
   React.useEffect(() => {
     const addMasks = async state => {
       const model = await addMaskingData(selectedStates[0]);
@@ -167,10 +168,18 @@ const PolicyModel = ({ setLoading, setPage }) => {
       setCurves(modelCurves);
     };
 
-    if (masksSelected) {
+    const includesMaskingCurves =
+      curves &&
+      curves[selectedStates[0]] &&
+      Object.keys(curves[selectedStates[0]].curves).reduce(
+        (prev, curveName) => curveName.startsWith("masks_") || prev,
+        false
+      );
+
+    if (masksSelected & !includesMaskingCurves) {
       addMasks(selectedStates[0]);
     }
-  }, [masksSelected, selectedStates, selectedCurves]);
+  }, [masksSelected, selectedStates, selectedCurves, curves]);
 
   const addIntervention = (state, intervention) => {
     const newCurves = Object.assign({}, curves);

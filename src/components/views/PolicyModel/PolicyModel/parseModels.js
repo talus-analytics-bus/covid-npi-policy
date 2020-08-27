@@ -105,7 +105,7 @@ export default function parseModelCurves(
           curves[state].curves[column]["model"] = [];
           curves[state].curves[column]["yMax"] = 0;
 
-          if (counterfactualSelected) {
+          if (counterfactualSelected & !column.startsWith("masks_")) {
             curves[state].curves["CF_" + column] = {};
             curves[state].curves["CF_" + column]["actuals"] = [];
             curves[state].curves["CF_" + column]["model"] = [];
@@ -170,13 +170,14 @@ export default function parseModelCurves(
           });
           counterfactualSelected &&
             counterfactualRun[index] &&
+            !column.startsWith("masks_") &&
             curves[state].curves["CF_" + column]["model"].push({
               x: day.date,
               y: counterfactualRun[index][column],
             });
 
           // Add Counterfactual curves with CF prefix
-          if (counterfactualSelected) {
+          if (counterfactualSelected & !column.startsWith("masks_")) {
             curves[state].curves["CF_" + column].yMax =
               curves[state].curves["CF_" + column].yMax >
               counterfactualRun[index][column]

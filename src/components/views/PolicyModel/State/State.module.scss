@@ -55,7 +55,7 @@
       font-family: "Rawline";
       margin-bottom: 1rem;
 
-      @media screen and (max-width: 1350px){
+      @media screen and (max-width: 1350px) {
         flex-direction: column;
       }
 
@@ -87,11 +87,11 @@
           padding: 10px;
           padding-left: 20px;
           display: grid;
-          grid-template-columns: 1fr .7fr 1.3fr .6fr 1.3fr;
+          grid-template-columns: 1fr 0.7fr 1.3fr 0.6fr 1.3fr;
           grid-gap: 15px;
           border: 2px solid transparent;
           border-radius: 0.5rem;
-          @media screen and (max-width: 1050px){
+          @media screen and (max-width: 1050px) {
             display: grid;
             grid-template-columns: 160px auto;
             grid-template-rows: repeat(3, auto);
@@ -106,8 +106,8 @@
               border: 2px solid hsla(0, 0, 100, 0.6);
               border-radius: 0.5rem;
               //fix positioning, taking into account borders
-              top:-2px;
-              left:-2px;
+              top: -2px;
+              left: -2px;
               width: calc(100% + 4px);
               height: calc(100% + 4px);
             }
@@ -137,13 +137,13 @@
           flex-direction: row;
           align-items: center;
           justify-content: flex-start;
-          background-color: #50ADBC;
+          background-color: #50adbc;
           //transition: all 1s ease;
           width: 240px;
-          height: 45px;       
+          height: 45px;
           padding: 10px;
           display: flex;
-          border: 2px solid #50ADBC;
+          border: 2px solid #50adbc;
           border-radius: 0.75rem;
           .coveringTitle {
             display: flex;
@@ -160,7 +160,7 @@
           }
           &.expanded {
             background-color: white;
-            color: #50ADBC;
+            color: #50adbc;
             cursor: unset;
             width: 100%;
             height: 100%;
@@ -175,7 +175,7 @@
               flex-direction: row;
               align-items: flex-start;
               height: 100%;
-              font-family: 'Open Sans';
+              font-family: "Open Sans";
               .complianceLabel {
                 font-size: 1.1rem;
                 font-weight: 600;
@@ -203,7 +203,7 @@
       .explanation {
         font-size: 1.2rem;
         font-weight: 600;
-        @media screen and (max-width: 1050px){
+        @media screen and (max-width: 1050px) {
           grid-column-start: 1;
           grid-column-end: 3;
           br {
@@ -234,7 +234,7 @@
         text-align: right;
         font-size: 1.8rem;
         font-weight: 500;
-        @media screen and (max-width: 1050px){
+        @media screen and (max-width: 1050px) {
           grid-column-start: 1;
           grid-column-end: 2;
         }
@@ -243,7 +243,7 @@
 
       .casesLabel {
         justify-content: flex-start;
-        @media screen and (max-width: 1050px){
+        @media screen and (max-width: 1050px) {
           grid-column-start: 2;
           grid-column-end: 3;
         }
