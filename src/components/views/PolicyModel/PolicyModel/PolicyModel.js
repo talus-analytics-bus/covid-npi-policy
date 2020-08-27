@@ -6,10 +6,11 @@ import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
 import loadModels, {
-  requestIntervention,
-  clearState,
   API_URL,
+  clearState,
   addMaskingData,
+  MASKING_LEVELS,
+  requestIntervention,
 } from "./LoadModels";
 
 import parseModels from "./parseModels";
@@ -85,8 +86,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   const setup = React.useCallback(async () => {
     const loadedModels = await loadModels(selectedStates);
-
-    console.log(selectedCurves);
 
     // get curves, max, min from models
     const modelCurves = parseModels(
@@ -286,7 +285,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 style={{ width: "13rem" }}
                 value={selectedCurves[0]}
                 onChange={e => {
-                  setSelectedCurves([e.target.value, "R effective"]);
+                  setSelectedCurves([
+                    e.target.value,
+                    ...MASKING_LEVELS.map(
+                      level => `masks_${level}_${e.target.value}`
+                    ),
+                    "R effective",
+                  ]);
                 }}
               >
                 <option value="infected_a">Caseload</option>

@@ -21,7 +21,7 @@ const MODEL_VERSION = "3";
 export const API_URL = `http://127.0.0.1:5000/`;
 // export const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
-const MASKING_LEVELS = ["low", "medium", "high"];
+export const MASKING_LEVELS = ["low", "medium", "high"];
 
 // request a model from the server
 // this should only happen if we
