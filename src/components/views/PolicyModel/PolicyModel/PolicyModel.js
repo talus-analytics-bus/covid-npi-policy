@@ -167,16 +167,17 @@ const PolicyModel = ({ setLoading, setPage }) => {
       setCurves(modelCurves);
     };
 
-    const includesMaskingCurves =
-      curves &&
-      curves[selectedStates[0]] &&
-      Object.keys(curves[selectedStates[0]].curves).reduce(
+    if (curves && curves[selectedStates[0]]) {
+      const includesMaskingCurves = Object.keys(
+        curves[selectedStates[0]].curves
+      ).reduce(
         (prev, curveName) => curveName.startsWith("masks_") || prev,
         false
       );
 
-    if (masksSelected & !includesMaskingCurves) {
-      addMasks(selectedStates[0]);
+      if (masksSelected && !includesMaskingCurves) {
+        addMasks(selectedStates[0]);
+      }
     }
   }, [masksSelected, selectedStates, selectedCurves, curves]);
 

@@ -241,7 +241,6 @@ export const addMaskingData = async state => {
 
   // ToDo: check if model contains masks before making request
 
-  const modelName = model.dateRequested + "_" + model.state + "_MR";
   console.log(`ModelCache: requesting mask data for ${model.state}`);
 
   // request masks from server
@@ -283,6 +282,9 @@ export const addMaskingData = async state => {
   );
 
   const parsed = JSON.parse(result.request.response);
+
+  const modelName =
+    new Date(model.dateRequested).toISOString() + "_" + model.state + "_MR";
   console.log(`ModelCache: merging masks with: ${modelName}`);
 
   // parse dates in Masks runData
