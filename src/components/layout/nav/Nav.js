@@ -32,119 +32,119 @@ const Nav = ({ page, ...props }) => {
   }, [showMobileMenu]);
 
   return (
-    <div
-      data-page={page}
-      className={classNames(styles.navWrapper, {
-        [styles.wide]: page === "policymaps" || page === "model",
-        [styles.showMobileMenu]: showMobileMenu,
-      })}
-    >
-      <div className={styles.nav}>
-        <div className={styles.logos}>
-          <a
-            target="_blank"
-            href={COVID_LOCAL_URL}
-            className={styles.localBanner}
-          >
-            <img src={localBanner} />
-          </a>
-          <a
-            target="_blank"
-            href={COVID_LOCAL_URL + "amp"}
-            className={styles.logo}
-          >
-            <img src={logo} />
-          </a>
-        </div>
-        <div className={styles.menu}>
-          <button ref={hamburgerRef} className={styles.hamburger}>
-            <i
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowMobileMenu(!showMobileMenu);
-              }}
-              className={classNames("material-icons")}
-            >
-              {showMobileMenu ? "close" : "menu"}
-            </i>
-          </button>
-          <div ref={linksRef} className={styles.links}>
-            <Link
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              className={page === "policymaps" ? styles.active : ""}
-              to={"/policymaps"}
-            >
-              Map
-            </Link>
-            <Link
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              className={page === "model" ? styles.active : ""}
-              to={"/model"}
-            >
-              Model
-            </Link>
-            <Link
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              className={page === "data" ? styles.active : ""}
-              to={"/data"}
-            >
-              Data
-            </Link>
-            <NavLink
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              activeClassName={styles.active}
-              to={"/about/doc"}
-            >
-              Documentation
-            </NavLink>
-            <NavLink
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              activeClassName={styles.active}
-              to={"/about/amp"}
-            >
-              About
-            </NavLink>
-            <Link
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              className={page === "contact" ? styles.active : ""}
-              to={"/contact"}
-            >
-              Contact us
-            </Link>
-            {
-              // <Link
-              //   onClick={() => {
-              //     setShowMobileMenu(false);
-              //   }}
-              //   className={page === "documentation" ? styles.active : ""}
-              //   to={"/data/documentation"}
-              // >
-              //   Documentation
-              // </Link>
-            }
+    <>
+      {page !== "landing" && (
+        <div
+          data-page={page}
+          className={classNames(styles.navWrapper, {
+            [styles.wide]: page === "policymaps" || page === "model",
+            [styles.showMobileMenu]: showMobileMenu,
+          })}
+        >
+          <div className={styles.nav}>
+            <div className={styles.logos}>
+              <a
+                target="_blank"
+                href={COVID_LOCAL_URL}
+                className={styles.localBanner}
+              >
+                <img src={localBanner} alt="COVID Local" />
+              </a>
+              <Link to="/" className={styles.logo}>
+                <img src={logo} alt="Landing Page" />
+              </Link>
+            </div>
+            <div className={styles.menu}>
+              <button ref={hamburgerRef} className={styles.hamburger}>
+                <i
+                  onClick={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowMobileMenu(!showMobileMenu);
+                  }}
+                  className={classNames("material-icons")}
+                >
+                  {showMobileMenu ? "close" : "menu"}
+                </i>
+              </button>
+              <div ref={linksRef} className={styles.links}>
+                <Link
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                  }}
+                  className={page === "policymaps" ? styles.active : ""}
+                  to={"/policymaps"}
+                >
+                  Map
+                </Link>
+                <Link
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                  }}
+                  className={page === "model" ? styles.active : ""}
+                  to={"/model"}
+                >
+                  Model
+                </Link>
+                <Link
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                  }}
+                  className={page === "data" ? styles.active : ""}
+                  to={"/data"}
+                >
+                  Data
+                </Link>
+                <NavLink
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                  }}
+                  activeClassName={styles.active}
+                  to={"/about/doc"}
+                >
+                  Documentation
+                </NavLink>
+                <NavLink
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                  }}
+                  activeClassName={styles.active}
+                  to={"/about/amp"}
+                >
+                  About
+                </NavLink>
+                <Link
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                  }}
+                  className={page === "contact" ? styles.active : ""}
+                  to={"/contact"}
+                >
+                  Contact us
+                </Link>
+                {
+                  // <Link
+                  //   onClick={() => {
+                  //     setShowMobileMenu(false);
+                  //   }}
+                  //   className={page === "documentation" ? styles.active : ""}
+                  //   to={"/data/documentation"}
+                  // >
+                  //   Documentation
+                  // </Link>
+                }
 
-            {
-              // <a target="_blank" href="https://gida.ghscosting.org/">
-              //   gida.ghscosting.org
-              // </a>
-            }
+                {
+                  // <a target="_blank" href="https://gida.ghscosting.org/">
+                  //   gida.ghscosting.org
+                  // </a>
+                }
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

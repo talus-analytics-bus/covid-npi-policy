@@ -97,12 +97,6 @@ export const Policy = async function({
   by_category = null,
   ordering = [],
 }) {
-  // return cached result if available
-  // if (isEmpty(filters) && allPolicies !== null) {
-  //   // console.log("\n\ndoing it");
-  //   return allPolicies;
-  // }
-
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {

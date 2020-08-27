@@ -90,7 +90,6 @@ const MapboxMap = ({
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   const setLinLogCircleStyle = () => {
-    console.log("setting lin/log paint");
     const map = mapRef.getMap();
 
     // does map have circle layers?
@@ -365,10 +364,6 @@ const MapboxMap = ({
             layersOfType.forEach(layer => {
               // if layer is current option, it's visible
               const visible = layer.id === curOption;
-              console.log("\n\n\nlayer.id");
-              console.log(layer.id);
-              console.log("curOption");
-              console.log(curOption);
               const visibility = visible ? "visible" : "none";
               map.setLayoutProperty(
                 layer.id + "-" + sourceTypeKey,
@@ -493,8 +488,6 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
-        console.log("feature");
-        console.log(feature);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {

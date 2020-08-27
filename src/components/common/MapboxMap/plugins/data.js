@@ -219,52 +219,6 @@ export const mapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "country" };
-      },
-
-      // array of layer types for which this metric is used
-      for: ["fill"],
-
-      // unique ID of this metric
-      id: "policy_status",
-
-      // data field with which to link metric to features;
-      // features potentially linking to this metric must have an ID that
-      // matches the value for this key for the datum
-      featureLinkField: "place_name",
-
-      // OPTIONAL:
-      // style IDs to use for the metric for each layer type -- if none are
-      // defined, then the metric's ID will be used to look up the appropriate
-      // style.
-      styleId: { fill: "policy_status" },
-
-      // // filter to control what features are returned for layers that are
-      // // displaying this metric
-      // filter: ["==", ["get", "type"], "state"],
-
-      // whether trend data should be retrieved for this metric
-      // NOTE: only applies to generalized metrics
-      trend: false,
-
-      // info about layers that use this metric
-      styleOptions: {
-        // whether layers that display this metric should be outlined
-        // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true,
-
-        // whether layers that display this metric should have a pattern layers
-        // NOTE: if true, a pattern style must be defined in `./layers.js`
-        // pattern: true
-      },
-    },
-    {
-      // functions that, when passed `params`, returns the data for the map
-      // for this metric
-      queryFunc: PolicyStatus,
-
-      // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
         const lockdownFilters = {
           ...filters,
           lockdown_level: ["lockdown_level"],
@@ -315,6 +269,53 @@ export const mapMetrics = {
         pattern: true,
       },
     },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatus,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        return { method: "post", filters, geo_res: "country" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status" },
+
+      // // filter to control what features are returned for layers that are
+      // // displaying this metric
+      // filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      },
+    },
+
     {
       queryFunc: ObservationQuery,
       for: ["circle"],
@@ -976,10 +977,21 @@ export const tooltipGetter = async ({
     };
   } else {
     // get tooltip header
-    tooltip.tooltipHeader = {
-      title: d.properties.NAME,
-      subtitle: null,
-    };
+    // find place match or use geo properties
+    const matchingPlace = plugins.places.find(
+      dd => dd.iso === d.properties.ISO_A3
+    );
+    if (matchingPlace) {
+      tooltip.tooltipHeader = {
+        title: matchingPlace.name,
+        subtitle: null,
+      };
+    } else {
+      tooltip.tooltipHeader = {
+        title: d.properties.NAME,
+        subtitle: null,
+      };
+    }
   }
   tooltip.actions = [];
   tooltip.tooltipHeaderMetric = null;
@@ -1004,8 +1016,6 @@ export const tooltipGetter = async ({
     )
       continue;
     else {
-      console.log("k");
-      console.log(k);
       // get metric metadata
       const thisMetricMeta = metricMeta[k];
 
@@ -1119,9 +1129,14 @@ export const tooltipGetter = async ({
           plugins.fill !== "lockdown_level"
             ? filters.primary_ph_measure
             : ["Social distancing"],
-        ph_measure_details:
-          plugins.fill !== "lockdown_level" ? filters.ph_measure_details : [],
       };
+      if (
+        plugins.fill !== "lockdown_level" &&
+        filters.ph_measure_details !== undefined &&
+        filters.ph_measure_details.length > 0
+      ) {
+        policyFilters.ph_measure_details = filters.ph_measure_details;
+      }
       if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
       else policyFilters.iso3 = [d.properties.ISO_A3];
 
@@ -1162,7 +1177,7 @@ export const tooltipGetter = async ({
         ph_measure_details:
           plugins.fill !== "lockdown_level"
             ? filters.ph_measure_details || []
-            : [],
+            : undefined,
         dates_in_effect: filters.dates_in_effect,
       };
 
@@ -1170,9 +1185,19 @@ export const tooltipGetter = async ({
         filtersForStr.country_name = ["United States of America (USA)"];
         filtersForStr.area1 = [d.properties.state_name];
       } else {
-        filtersForStr.country_name = [
-          `${d.properties.NAME} (${d.properties.ISO_A3})`,
-        ];
+        // find place match
+        const matchingPlace = plugins.places.find(
+          dd => dd.iso === d.properties.ISO_A3
+        );
+        if (matchingPlace) {
+          filtersForStr.country_name = [
+            `${matchingPlace.name} (${matchingPlace.iso})`,
+          ];
+        } else {
+          filtersForStr.country_name = [
+            `${d.properties.NAME} (${d.properties.ISO_A3})`,
+          ];
+        }
       }
       const filtersStr = JSON.stringify(filtersForStr);
 

@@ -28,6 +28,7 @@ import {
   CountriesWithDistancingLevels,
   execute,
 } from "../../misc/Queries";
+import PlaceQuery from "../../misc/PlaceQuery";
 
 // assets and styles
 import styles, { style, drawer, dark } from "./map.module.scss";
@@ -114,6 +115,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     primary_ph_measure: ["Social distancing"],
   });
 
+  // country data for tooltip names
+  const [places, setPlaces] = useState(null);
+
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   /**
    * Get data for page
@@ -124,6 +128,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   const getData = async (filters = {}) => {
     const method = Object.keys(filters).length === 0 ? "get" : "post";
     const queries = {};
+    // get all country places for tooltip names, etc.
+    queries.places = PlaceQuery({ place_type: ["country"] });
+
     queries.optionsets = OptionSet({
       method: "get",
       fields: filterDefs
@@ -153,6 +160,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
           d[k].items = optionsets[k];
       }
     });
+    setPlaces(results.places);
     setFilterDefs(newFilterDefs);
     setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
@@ -160,6 +168,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   };
 
   // CONSTANTS // -----------------------------------------------------------//
+  // Label for "View [xxx] by" radio button set
+  const viewLabel = `View ${mapId === "us" ? "states" : "countries"} by`;
+
   // last updated date of overall data
   const lastUpdatedDateOverall = versions.filter(d => {
     if (d.type === "COVID-19 caseload data (countries)" && mapId === "us") {
@@ -319,7 +330,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                   }),
                                 curVal: fill,
                                 callback: setFill,
-                                label: "View states by",
+                                label: viewLabel,
                                 key: "DataType",
                               }}
                             />
@@ -474,6 +485,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             ),
             plugins: {
               fill,
+              places,
             },
           }}
         />

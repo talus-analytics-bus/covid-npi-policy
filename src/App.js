@@ -18,6 +18,7 @@ import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
+import Landing from "./components/views/landing/Landing";
 
 // queries
 import { Version, Count, execute } from "./components/misc/Queries";
@@ -151,13 +152,12 @@ const App = () => {
                   />
                 }
                 {
-                  // Root: redirect to data page
+                  // Root: Landing Page
                   <Route
                     exact
                     path="/"
-                    component={() => {
-                      window.location.href = "https://www.covid-local.org/amp/";
-                      return null;
+                    render={() => {
+                      return <Landing {...{ setPage, setLoading }} />;
                     }}
                   />
                 }
@@ -237,7 +237,9 @@ const App = () => {
               </div>
             </React.Fragment>
           </Switch>
-          {page !== "policymaps" && <Footer {...{ page, versions }} />}
+          {page !== "policymaps" && page !== "landing" && (
+            <Footer {...{ page, versions }} />
+          )}
           {
             // Loading spinner
             <div
