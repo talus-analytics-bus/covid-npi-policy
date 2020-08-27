@@ -242,7 +242,7 @@ export const addMaskingData = async state => {
   // ToDo: check if model contains masks before making request
 
   const modelName = model.dateRequested + "_" + model.state + "_MR";
-  console.log(`Adding masking data to: ${modelName}`);
+  console.log(`ModelCache: requesting mask data for ${model.state}`);
 
   // request masks from server
 
@@ -283,26 +283,12 @@ export const addMaskingData = async state => {
   );
 
   const parsed = JSON.parse(result.request.response);
-
-  // console.log(parsed);
+  console.log(`ModelCache: merging masks with: ${modelName}`);
 
   // parse dates in Masks runData
-
   Object.entries(parsed).forEach(([complianceLevel, runData]) => {
     parsed[complianceLevel] = parseModelDates(runData);
   });
-
-  // console.log(parsed);
-
-  // insert all mask datapoints in model
-  // masks_low_infected_a, masks_medium_infected_a, so on
-
-  // console.log("model results");
-  // console.log(model.results);
-
-  // console.log(model.results.slice(-1)[0].run[0]);
-
-  // get curves in the model
 
   const modelCurves = Object.keys(model.results.slice(-1)[0].run[0]).filter(
     key =>
@@ -320,7 +306,6 @@ export const addMaskingData = async state => {
   // console.log(modelCurves);
 
   // match them up to low, med, high
-
   model.results.slice(-1)[0].run = JSON.stringify(
     model.results.slice(-1)[0].run.map((day, index) => {
       if (day.source === "actuals") {
@@ -344,10 +329,7 @@ export const addMaskingData = async state => {
 
   model.dateRequested = new Date(model.dateRequested);
 
-  // delete old instance of model in localStorage
-  deleteModel(model);
-
-  // save model with masking data
+  // save model with merged masking data
   saveModel(model);
 
   return model;

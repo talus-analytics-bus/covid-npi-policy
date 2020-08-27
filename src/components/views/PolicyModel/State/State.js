@@ -62,8 +62,6 @@ const State = props => {
     );
   }
 
-  console.log(mainCurveName);
-
   return (
     <section className={styles.state}>
       {props.selectedStates.length > 1 && (
