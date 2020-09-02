@@ -64,7 +64,9 @@ const PastInterventionInfo = props => {
       <label
         key={name}
         className={
-          latestIntervention.name.split("_")[0] === name ? styles.disabled : ""
+          latestIntervention.name.split("_")[0] === name
+            ? styles.currentlyActive
+            : ""
         }
 
         // style={{ color: props.interventionColors[name] }}
@@ -75,7 +77,7 @@ const PastInterventionInfo = props => {
           value={optionRVal}
           checked={Number(rVal) === Number(optionRVal)}
           onChange={e => setRVal(Number(e.target.value))}
-          disabled={latestIntervention.name.split("_")[0] === name}
+          // disabled={latestIntervention.name.split("_")[0] === name}
         />
         {name}
         <span
@@ -173,6 +175,39 @@ const PastInterventionInfo = props => {
               {policyOptions}
             </fieldset>
 
+            <label className={styles.masking}>
+              <input
+                type="checkbox"
+                // selected={interDate}
+                // onChange={e => {
+                // setInterDate(new Date(e.target.value));
+                // }}
+              />
+              Mask mandate in effect{" "}
+              <Tippy
+                // interactive={true}
+                allowHTML={true}
+                content={
+                  <section className={styles.policyExplanation}>
+                    <div className={styles.row}>
+                      <h1>Face Coverings Policy Explanation</h1>
+                    </div>
+                    <p>Description goes here</p>
+                  </section>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                />
+              </Tippy>
+            </label>
+
             <a
               href="https://covid-local.org/metrics/"
               className={styles.COVIDLocalLink}
@@ -183,8 +218,21 @@ const PastInterventionInfo = props => {
               View phases in COVID-Local
             </a>
 
+            {latestIntervention.name.split("_")[0] === policyNames[rVal] ? (
+              <p key="alreadyApplied" className={styles.alreadyApplied}>
+                Current selections already applied
+              </p>
+            ) : (
+              <p key="alreadyApplied" className={styles.alreadyApplied}>
+                &nbsp;
+              </p>
+            )}
+
             <div className={styles.buttonRow}>
               <button
+                disabled={
+                  latestIntervention.name.split("_")[0] === policyNames[rVal]
+                }
                 onClick={e => {
                   e.preventDefault();
                   const startDate =

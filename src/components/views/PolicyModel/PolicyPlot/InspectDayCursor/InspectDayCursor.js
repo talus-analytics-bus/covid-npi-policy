@@ -109,6 +109,15 @@ const InspectDailyCursor = props => {
     );
   }
 
+  let counterfactual;
+  if (Object.keys(props.data.curves).includes("CF_" + yAxis)) {
+    counterfactual = props.data.curves["CF_" + yAxis].model.find(point =>
+      checkSameDay(point.x, popupDate)
+    );
+  }
+
+  // counterfactual = 10;
+
   // get popup's y-axis metric label based on the currently selected
   // y-axis metric
   // {props.labelNames[yAxis]} COVID-19 <br /> patients today
@@ -155,14 +164,14 @@ const InspectDailyCursor = props => {
           {/* <rect x="0" y="0" width="100" height="100" fill="firebrick"></rect> */}
           {props.showInfo && (
             <foreignObject
-              x={500 - props.x < 140 ? -140 : 0}
+              x={500 - props.x < 150 ? -150 : 0}
               y="0"
-              width="140"
+              width="150"
               height="100"
             >
               <section
                 className={
-                  500 - props.x < 140 ? styles.leftPopup : styles.rightPopup
+                  500 - props.x < 150 ? styles.leftPopup : styles.rightPopup
                 }
               >
                 <header className={styles.titlebox}>
@@ -212,39 +221,25 @@ const InspectDailyCursor = props => {
                       {getPopupLabelName(props.labelNames[yAxis])}
                     </p>
                   </div>
-                  <div className={styles.reduction}>
-                    <h2>
-                      {props.contactPlotType === "pctChange" ? (
-                        <>
-                          Reduction <br /> in contacts
-                        </>
-                      ) : (
-                        <>
-                          Effective R <br /> value
-                        </>
-                      )}
-                    </h2>
-                  </div>
-                  <div className={styles.reductionContent}>
-                    <p className={styles.number}>
-                      {props.contactPlotType === "pctChange"
-                        ? Math.round(100 - contactRate.y)
-                        : contactRate.y}
-                      {props.contactPlotType === "pctChange" ? "%" : ""}
-                    </p>
-                    <p className={styles.label}>
-                      {props.contactPlotType === "pctChange" ? (
-                        <>
-                          estimated contact reduction <br /> with policies in
-                          effect
-                        </>
-                      ) : (
-                        <>
-                          estimated effective R <br /> with policies in effect
-                        </>
-                      )}
-                    </p>
-                  </div>
+                  {counterfactual && (
+                    <>
+                      {" "}
+                      <div className={styles.reduction}>
+                        <h2>
+                          If we had <br /> done nothing
+                        </h2>
+                      </div>
+                      <div className={styles.reductionContent}>
+                        <p className={styles.number}>
+                          {formatModeled(counterfactual.y)}
+                        </p>
+                        <p className={styles.label}>
+                          estimated {props.labelNames[yAxis].toLowerCase()}{" "}
+                          <br /> with no policies in effect
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </section>
             </foreignObject>
