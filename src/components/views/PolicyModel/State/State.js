@@ -79,107 +79,115 @@ const State = props => {
           <div className={styles.stateName}>
             {states.find(state => state.abbr === props.selectedState).name}
           </div>
-          <div className={styles.explanation}>
-            Case count with
-            <br /> existing policies
-          </div>
-          <div className={styles.cases}>
-            {formatActuals(props.curves.cases)}
-          </div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}>cumulative cases</p>
-            <p className={styles.date}>
-              as of{" "}
-              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
-              (actual){" "}
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  <p className={styles.ipopup}>
-                    Total number of cumulative confirmed and probable cases as
-                    of{" "}
-                    {props.dataDates &&
-                      formatDate(props.dataDates.last_data_update)}
-                    . Source:{" "}
-                    <a href={"https://github.com/nytimes/covid-19-data"}>
-                      New York Times{" "}
-                    </a>
-                  </p>
-                }
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <img
-                  className={styles.infoIcon}
-                  src={infoIcon}
-                  alt="More information"
-                />
-              </Tippy>
-            </p>
-            <p className={styles.popPercent}>
-              {(props.curves.cases / props.curves.population) * 100 >= 0.5
-                ? (
-                    (props.curves.cases / props.curves.population) *
-                    100
-                  ).toFixed(0)
-                : (
-                    (props.curves.cases / props.curves.population) *
-                    100
-                  ).toFixed(1)}
-              % of total population
-            </p>
-          </div>
-          <div className={styles.cases}>
-            {formatModeled(props.curves.deaths)}
-          </div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}>cumulative deaths</p>
-            <p className={styles.date}>
-              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (projected){" "}
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  <p className={styles.ipopup}>
-                    Research indicates that COVID patients will die within
-                    approximately 30 days of initial infection. Therefore, to
-                    align these deaths with the caseload, we report the number
-                    of cases as of today’s date and the anticipated deaths
-                    associated with those cases as of 30 days from today.
-                  </p>
-                }
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <img
-                  className={styles.infoIcon}
-                  src={infoIcon}
-                  alt="More information"
-                />
-              </Tippy>
-            </p>
-          </div>
-        </div>
-        <div className={styles.counterContainer}>
-          <div className={styles.counterfactual}>
-            What if we had done nothing?
-            <label>
-              <input
-                type="checkbox"
-                checked={props.counterfactualSelected}
-                onChange={() =>
-                  props.setCounterfactualSelected(!props.counterfactualSelected)
-                }
-              />
-              {/* View cases without policies on graph */}
-              View the "What if" scenario on the graph
-            </label>
+          <div className={styles.rows}>
+            <div className={styles.caseRow}>
+              <div className={styles.explanation}>
+                Case count with
+                <br /> existing policies
+              </div>
+              <div className={styles.cases}>
+                {formatActuals(props.curves.cases)}
+              </div>
+              <div className={styles.casesLabel}>
+                <p className={styles.label}>cumulative cases</p>
+                <p className={styles.date}>
+                  as of{" "}
+                  {props.dataDates &&
+                    formatDate(props.dataDates.last_data_update)}{" "}
+                  (actual){" "}
+                  <Tippy
+                    interactive={true}
+                    allowHTML={true}
+                    content={
+                      <p className={styles.ipopup}>
+                        Total number of cumulative confirmed and probable cases
+                        as of{" "}
+                        {props.dataDates &&
+                          formatDate(props.dataDates.last_data_update)}
+                        . Source:{" "}
+                        <a href={"https://github.com/nytimes/covid-19-data"}>
+                          New York Times{" "}
+                        </a>
+                      </p>
+                    }
+                    maxWidth={"30rem"}
+                    theme={"light"}
+                    placement={"bottom"}
+                    offset={[-30, 10]}
+                  >
+                    <img
+                      className={styles.infoIcon}
+                      src={infoIcon}
+                      alt="More information"
+                    />
+                  </Tippy>
+                </p>
+                <p className={styles.popPercent}>
+                  {(props.curves.cases / props.curves.population) * 100 >= 0.5
+                    ? (
+                        (props.curves.cases / props.curves.population) *
+                        100
+                      ).toFixed(0)
+                    : (
+                        (props.curves.cases / props.curves.population) *
+                        100
+                      ).toFixed(1)}
+                  % of total population
+                </p>
+              </div>
+              <div className={styles.cases}>
+                {formatModeled(props.curves.deaths)}
+              </div>
+              <div className={styles.casesLabel}>
+                <p className={styles.label}>cumulative deaths</p>
+                <p className={styles.date}>
+                  as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
+                  (projected){" "}
+                  <Tippy
+                    interactive={true}
+                    allowHTML={true}
+                    content={
+                      <p className={styles.ipopup}>
+                        Research indicates that COVID patients will die within
+                        approximately 30 days of initial infection. Therefore,
+                        to align these deaths with the caseload, we report the
+                        number of cases as of today’s date and the anticipated
+                        deaths associated with those cases as of 30 days from
+                        today.
+                      </p>
+                    }
+                    maxWidth={"30rem"}
+                    theme={"light"}
+                    placement={"bottom"}
+                    offset={[-30, 10]}
+                  >
+                    <img
+                      className={styles.infoIcon}
+                      src={infoIcon}
+                      alt="More information"
+                    />
+                  </Tippy>
+                </p>
+              </div>
+            </div>
+            <div className={styles.counterRow}>
+              <div className={styles.counterfactual}>
+                What if we had done nothing?
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={props.counterfactualSelected}
+                    onChange={() =>
+                      props.setCounterfactualSelected(
+                        !props.counterfactualSelected
+                      )
+                    }
+                  />
+                  {/* View cases without policies on graph */}
+                  View the "What if" scenario on the graph
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         {/* <div className={styles.stateName}> */}
