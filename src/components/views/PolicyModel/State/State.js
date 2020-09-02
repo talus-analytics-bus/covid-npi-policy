@@ -8,6 +8,7 @@ import PolicyPlot from "../PolicyPlot/PolicyPlot";
 import states from "../PolicyModel/states.js";
 
 import styles from "./State.module.scss";
+import classNames from "classnames";
 
 import infoIcon from "../../../../assets/icons/info-blue.svg";
 import greenInfoIcon from "../../../../assets/icons/info-green.svg";
@@ -170,24 +171,26 @@ const State = props => {
                 </p>
               </div>
             </div>
-            <div className={styles.counterRow}>
-              <div className={styles.counterfactual}>
-                What if we had done nothing?
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={props.counterfactualSelected}
-                    onChange={() =>
-                      props.setCounterfactualSelected(
-                        !props.counterfactualSelected
-                      )
-                    }
-                  />
-                  {/* View cases without policies on graph */}
-                  View the "What if" scenario on the graph
-                </label>
+            {props.selectedCurves[0] !== "dead" && (
+              <div className={styles.counterRow}>
+                <div className={styles.counterfactual}>
+                  What if we had done nothing?
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={props.counterfactualSelected}
+                      onChange={() =>
+                        props.setCounterfactualSelected(
+                          !props.counterfactualSelected
+                        )
+                      }
+                    />
+                    {/* View cases without policies on graph */}
+                    View the "What if" scenario on the graph
+                  </label>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         {/* <div className={styles.stateName}> */}
