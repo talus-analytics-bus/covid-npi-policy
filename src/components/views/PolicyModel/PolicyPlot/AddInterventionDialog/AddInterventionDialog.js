@@ -183,7 +183,29 @@ const PastInterventionInfo = props => {
                 // setInterDate(new Date(e.target.value));
                 // }}
               />
-              Face Coverings
+              Mask mandate in effect{" "}
+              <Tippy
+                // interactive={true}
+                allowHTML={true}
+                content={
+                  <section className={styles.policyExplanation}>
+                    <div className={styles.row}>
+                      <h1>Face Coverings Policy Explanation</h1>
+                    </div>
+                    <p>Description goes here</p>
+                  </section>
+                }
+                maxWidth={"30rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <img
+                  className={styles.infoIcon}
+                  src={infoIcon}
+                  alt="More information"
+                />
+              </Tippy>
             </label>
 
             <a

@@ -134,7 +134,7 @@ $grey-highlight: #eee;
         font-weight: 400;
         margin-top: 0.25rem;
         color: #333333;
-        width: 12em;
+        width: 13.5em;
         display: flex;
       }
 
@@ -163,6 +163,12 @@ $grey-highlight: #eee;
       align-items: baseline;
       margin-top: 0;
       padding-bottom: 1rem;
+      width: 13.5em;
+
+      img {
+        position: relative;
+        top: 2px;
+      }
 
       input {
         margin-right: 0.2em;
