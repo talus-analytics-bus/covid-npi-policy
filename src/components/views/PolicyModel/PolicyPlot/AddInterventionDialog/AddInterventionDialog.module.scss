@@ -169,11 +169,19 @@ $grey-highlight: #eee;
       }
     }
 
+    .alreadyApplied {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: darkgrey;
+      text-align: right;
+      margin-top: 1rem;
+    }
+
     .buttonRow {
+      margin-top: 0.25rem;
       width: 100%;
       display: flex;
       justify-content: flex-end;
-      margin-top: 1rem;
 
       button {
         font-size: 1rem;
@@ -184,6 +192,11 @@ $grey-highlight: #eee;
         border-radius: 3px;
         padding: 0.25em 0.5em;
         margin-left: 1rem;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        font-style: italic;
       }
 
       // button:first-of-type {

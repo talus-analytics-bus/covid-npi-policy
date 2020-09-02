@@ -196,8 +196,21 @@ const PastInterventionInfo = props => {
               View phases in COVID-Local
             </a>
 
+            {latestIntervention.name.split("_")[0] === policyNames[rVal] ? (
+              <p key="alreadyApplied" className={styles.alreadyApplied}>
+                Current selections already applied
+              </p>
+            ) : (
+              <p key="alreadyApplied" className={styles.alreadyApplied}>
+                &nbsp;
+              </p>
+            )}
+
             <div className={styles.buttonRow}>
               <button
+                disabled={
+                  latestIntervention.name.split("_")[0] === policyNames[rVal]
+                }
                 onClick={e => {
                   e.preventDefault();
                   const startDate =
