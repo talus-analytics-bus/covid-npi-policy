@@ -122,7 +122,7 @@ $grey-highlight: #eee;
       padding: 0;
       margin: 0;
       margin-top: 1.5rem;
-      padding-bottom: 1rem;
+      padding-bottom: 0.75rem;
 
       legend {
         font-weight: 800;
@@ -138,6 +138,10 @@ $grey-highlight: #eee;
         display: flex;
       }
 
+      .currentlyActive {
+        font-weight: 800;
+      }
+
       .disabled {
         opacity: 0.5;
         font-style: italic;
@@ -148,6 +152,20 @@ $grey-highlight: #eee;
         height: 1em;
         border-radius: 1em;
         margin-left: auto;
+      }
+    }
+
+    .masking {
+      font-weight: 400;
+      color: #333333;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      margin-top: 0;
+      padding-bottom: 1rem;
+
+      input {
+        margin-right: 0.2em;
       }
     }
 

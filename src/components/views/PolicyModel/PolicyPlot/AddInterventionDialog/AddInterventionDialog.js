@@ -64,7 +64,9 @@ const PastInterventionInfo = props => {
       <label
         key={name}
         className={
-          latestIntervention.name.split("_")[0] === name ? styles.disabled : ""
+          latestIntervention.name.split("_")[0] === name
+            ? styles.currentlyActive
+            : ""
         }
 
         // style={{ color: props.interventionColors[name] }}
@@ -75,7 +77,7 @@ const PastInterventionInfo = props => {
           value={optionRVal}
           checked={Number(rVal) === Number(optionRVal)}
           onChange={e => setRVal(Number(e.target.value))}
-          disabled={latestIntervention.name.split("_")[0] === name}
+          // disabled={latestIntervention.name.split("_")[0] === name}
         />
         {name}
         <span
@@ -172,6 +174,17 @@ const PastInterventionInfo = props => {
               <legend>Add policies associated with</legend>
               {policyOptions}
             </fieldset>
+
+            <label className={styles.masking}>
+              <input
+                type="checkbox"
+                // selected={interDate}
+                // onChange={e => {
+                // setInterDate(new Date(e.target.value));
+                // }}
+              />
+              Face Coverings
+            </label>
 
             <a
               href="https://covid-local.org/metrics/"
