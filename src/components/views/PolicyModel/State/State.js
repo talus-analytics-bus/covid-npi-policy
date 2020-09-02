@@ -165,6 +165,8 @@ const State = props => {
               </Tippy>
             </p>
           </div>
+        </div>
+        <div className={styles.counterContainer}>
           <div className={styles.counterfactual}>
             What if we had done nothing?
             <label>
