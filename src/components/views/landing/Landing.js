@@ -44,22 +44,10 @@ const Landing = ({ setPage, setLoading }, props) => {
               <h2>ANALYSIS AND MAPPING OF POLICIES</h2>
             </div>
           </div>
-          {/* <div className={styles.links}> */}
-          {/*   <a */}
-          {/*     target="_blank" */}
-          {/*     rel="noopener noreferrer" */}
-          {/*     href="https://covidamp.org/about/doc" */}
-          {/*   > */}
-          {/*     Documentation */}
-          {/*   </a> */}
-          {/*   <a */}
-          {/*     target="_blank" */}
-          {/*     rel="noopener noreferrer" */}
-          {/*     href="https://covidamp.org/about/amp" */}
-          {/*   > */}
-          {/*     About */}
-          {/*   </a> */}
-          {/* </div> */}
+          <div className={styles.links}>
+            <Link to="/about/doc">Documentation</Link>
+            <Link to="/about/amp">About</Link>
+          </div>
         </div>
         <div className={styles.ampDescription}>
           <h3>Visualizing the impact of policies on COVID response</h3>
