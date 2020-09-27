@@ -164,10 +164,11 @@ export default function parseModelCurves(
           if (counterfactualSelected) {
             curves[state].curves["CF_" + column].yMax =
               curves[state].curves["CF_" + column].yMax >
-              counterfactualRun[index][column]
+              counterfactualRun[index]
                 ?
-                  ? curves[state].curves["CF_" + column].yMax
-                  : counterfactualRun[index][column];
+                counterfactualRun[index][column]
+                    ? curves[state].curves["CF_" + column].yMax
+                    : counterfactualRun[index][column]
                 : 0
           }
 
