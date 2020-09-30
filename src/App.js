@@ -18,6 +18,7 @@ import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
+import PolicyPage from "./components/views/PolicyPage/PolicyPage/PolicyPage";
 import Landing from "./components/views/landing/Landing";
 
 // queries
@@ -231,6 +232,16 @@ const App = () => {
                     path="/model"
                     render={() => {
                       return <PolicyModel {...{ setPage, setLoading }} />;
+                    }}
+                  />
+                }
+                {
+                  // Model page
+                  <Route
+                    exact
+                    path="/policy"
+                    render={() => {
+                      return <PolicyPage {...{ setPage, setLoading }} />;
                     }}
                   />
                 }
