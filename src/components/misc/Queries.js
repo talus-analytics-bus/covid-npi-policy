@@ -140,6 +140,59 @@ export const Policy = async function({
   } else return false;
 };
 
+// let allChallenges = null;
+
+/**
+ * Get challenge data from API.
+ */
+export const Challenge = async function({
+  method = "get",
+  page = 1,
+  pagesize = 1000000,
+  fields = [],
+  filters = {},
+  by_category = null,
+  ordering = [],
+}) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+  if (by_category !== null) params.append("by_category", by_category);
+  params.append("page", page);
+  params.append("pagesize", pagesize);
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/get/challenge`, {
+      params,
+    });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+    req = await axios.post(
+      `${API_URL}/post/challenge`,
+      { filters, ordering },
+      {
+        params,
+      }
+    );
+  } else {
+    console.log("Error: Method not implemented for `Challenge`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) {
+    // if (isEmpty(filters)) {
+    //   allChallenges = res.data;
+    // }
+    return res.data;
+  } else return false;
+};
+
 let allPlans = null;
 
 /**
