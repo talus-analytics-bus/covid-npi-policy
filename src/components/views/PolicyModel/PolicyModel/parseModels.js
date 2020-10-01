@@ -162,11 +162,14 @@ export default function parseModelCurves(
 
           // Add Counterfactual curves with CF prefix
           if (counterfactualSelected) {
-            curves[state].curves["CF_" + column].yMax =
-              curves[state].curves["CF_" + column].yMax >
-              counterfactualRun[index][column]
-                ? curves[state].curves["CF_" + column].yMax
-                : counterfactualRun[index][column];
+            curves[state].curves["CF_" + column].yMax = counterfactualRun[index]
+              ? counterfactualRun[index][column]
+                ? counterfactualRun[index][column] >
+                  curves[state].curves["CF_" + column].yMax
+                  ? counterfactualRun[index][column]
+                  : curves[state].curves["CF_" + column].yMax
+                : 0
+              : curves[state].curves["CF_" + column].yMax;
           }
 
           // doing yMax as we go because we're already looping anyway
