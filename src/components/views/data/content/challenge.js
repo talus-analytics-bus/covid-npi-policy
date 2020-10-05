@@ -20,6 +20,9 @@ import styles from "../data.module.scss";
 const unspecified = (
   <span className={styles.unspecified}>{"None available"}</span>
 );
+const not_available = (
+  <span className={styles.unspecified}>{"Not available"}</span>
+);
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
@@ -29,26 +32,35 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const policyInfo = {
   filterDefs: [
     {
-      jurisdiction: {
+      complaint_category: {
         entity_name: "Court_Challenge",
-        field: "jurisdiction",
-        label: "Jurisdiction",
+        field: "complaint_category",
+        label: "Complaint Category",
       },
     },
     {
-      court: {
+      date_of_complaint: {
         entity_name: "Court_Challenge",
-        field: "court",
-        label: "Court",
-      },
-    },
-    {
-      complaint_date_range: {
-        entity_name: "Court_Challenge",
-        field: "dates_in_effect",
+        field: "date_of_complaint",
         label: "Complaint Date Range",
         dateRange: true,
         minMaxDate: { min: undefined, max: undefined },
+      },
+    },
+    {
+      date_of_decision: {
+        entity_name: "Court_Challenge",
+        field: "date_of_decision",
+        label: "Decision Date Range",
+        dateRange: true,
+        minMaxDate: { min: undefined, max: undefined },
+      },
+    },
+    {
+      holding: {
+        entity_name: "Court_Challenge",
+        field: "holding",
+        label: "Status",
       },
     },
   ],
@@ -56,8 +68,8 @@ export const policyInfo = {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       {
-        dataField: "case_name",
-        header: "Case Name",
+        dataField: "jurisdiction",
+        header: "Jurisdiction",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -67,48 +79,10 @@ export const policyInfo = {
             return row.place.map(d => d.level).join("; ");
           else return "zzz";
         },
-        // formatter: (cell, row) => {
-        //   console.log(row);
-        //   return row.case_name;
-        // },
-      },
-      {
-        dataField: "case_number",
-        header: "Case Number",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        // formatter: (cell, row) => {
-        //   console.log(row);
-        //   return row;
-        // },
-      },
-      {
-        dataField: "court",
-        header: "Court",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        // formatter: (cell, row) => {
-        //   console.log(row);
-        //   return row;
-        // },
       },
       {
         dataField: "parties",
-        header: "Parties",
+        header: "Parties: Legal Citation || Case Number: Court",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -118,28 +92,157 @@ export const policyInfo = {
             return row.place.map(d => d.level).join("; ");
           else return "zzz";
         },
-        // formatter: (cell, row) => {
-        //   console.log(row);
-        //   return row;
-        // },
+        formatter: (cell, row) => {
+          if ((row.parties !== "") & (row.legal_citation !== "")) {
+            return `${row.parties}: ${row.legal_citation}`;
+          } else {
+            return `${row.case_number}: ${row.court}`;
+          }
+        },
+      },
+      {
+        dataField: "complaint_category",
+        header: "Complaint Category",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        formatter: (cell, row) => {
+          console.log(cell.join(", "));
+          if (cell[0] !== "") {
+            return cell.join(", ");
+          } else {
+            return unspecified;
+          }
+        },
+      },
+      {
+        dataField: "summary_of_action",
+        header: "Summary of Action",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) =>
+          cell !== "" ? (
+            <ShowMore text={cell} charLimit={100} />
+          ) : (
+            not_available
+          ),
+      },
+      {
+        dataField: "policy_or_law_name",
+        header: "Policy or Law Name",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) =>
+          cell !== "" ? (
+            <ShowMore text={cell} charLimit={100} />
+          ) : (
+            not_available
+          ),
+      },
+      {
+        dataField: "holding",
+        header: "Holding",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) => {
+          return row.holding !== "" ? (
+            <ShowMore text={cell} charLimit={100} />
+          ) : (
+            "Pending"
+          );
+        },
+      },
+      {
+        dataField: "data_source_for_complaint",
+        header: "Complaint & Decision Sources",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) => {
+          console.log(row);
+          console.log([
+            row.data_source_for_complaint,
+            row.data_source_for_decision,
+          ]);
+          const icons = [
+            row.data_source_for_complaint,
+            row.data_source_for_decision,
+          ].map((d, i) => {
+            if (d !== "") {
+              return (
+                <div className={styles.linkIcon}>
+                  <a target="_blank" rel="noopener" href={d}>
+                    {["Complaint: ", "Decision: "][i]}
+                    {d.startsWith("http") ? (
+                      <i className={"material-icons"}>insert_drive_file</i>
+                    ) : (
+                      <i className={"material-icons"}>link</i>
+                    )}
+                  </a>
+                </div>
+              );
+            } else {
+              return "";
+            }
+          });
+          if (
+            row.data_source_for_complaint !== "" ||
+            row.data_source_for_decision !== ""
+          ) {
+            return <div className={styles.linkIcons}>{icons}</div>;
+          } else {
+            return unspecified;
+          }
+        },
       },
       {
         dataField: "date_of_complaint",
         header: "Date of Complaint",
+        sort: true,
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        // formatter: (cell, row) => {
-        //   console.log(row);
-        //   return row;
-        // },
+        formatter: v =>
+          v !== null ? moment(v).format("MMM D, YYYY") : not_available,
       },
+      // {
+      //   dataField: "date_of_decision",
+      //   header: "Date of Decision",
+      //   sort: true,
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   formatter: v =>
+      //     v !== null ? moment(v).format("MMM D, YYYY") : not_available,
+      // },
     ];
 
     // join elements of metadata to cols, like definitions, etc.
@@ -191,10 +294,12 @@ export const policyInfo = {
         "id",
         "matter_numbers",
         "case_name",
+        "case_number",
         "court",
         "jurisdiction",
         "parties",
         "filed_in_state_or_federal_court",
+        "policy_or_law_name",
         "date_of_complaint",
         "date_of_decision",
         "summary_of_action",
