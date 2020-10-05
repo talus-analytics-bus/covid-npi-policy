@@ -124,12 +124,18 @@ const App = () => {
                       const type = urlParams.get("type");
                       const filtersPolicyStrLegacy = urlParams.get("filters");
                       const filtersPolicyStr = urlParams.get("filters_policy");
+                      const filtersChallengeStr = urlParams.get(
+                        "filters_challenge"
+                      );
                       const filtersPlanStr = urlParams.get("filters_plan");
                       const urlFilterParamsPolicy = JSON.parse(
                         filtersPolicyStr
                       );
                       const urlFilterParamsPolicyLegacy = JSON.parse(
                         filtersPolicyStrLegacy
+                      );
+                      const urlFilterParamsChallenge = JSON.parse(
+                        filtersChallengeStr
                       );
                       const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
                       return (
@@ -143,6 +149,7 @@ const App = () => {
                               urlFilterParamsPolicyLegacy ||
                               urlFilterParamsPolicy,
                             urlFilterParamsPlan,
+                            urlFilterParamsChallenge,
                             counts,
                             type,
                           }}
