@@ -31,6 +31,13 @@ const API_URL = process.env.REACT_APP_API_URL;
  */
 export const policyInfo = {
   filterDefs: [
+   // {
+   //    jurisdiction: {
+   //      entity_name: "Court_Challenge",
+   //      field: "complaint_category",
+   //      label: "Complaint Category",
+   //    },
+   //  },
     {
       complaint_category: {
         entity_name: "Court_Challenge",
@@ -82,7 +89,7 @@ export const policyInfo = {
       },
       {
         dataField: "parties",
-        header: "Parties: Legal Citation || Case Number: Court",
+        header: "Parties or Citation",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -93,28 +100,47 @@ export const policyInfo = {
           else return "zzz";
         },
         formatter: (cell, row) => {
-          if ((row.parties !== "") & (row.legal_citation !== "")) {
-            return `${row.parties}: ${row.legal_citation}`;
+          if ((row.parties !== "")) {
+            return `${row.parties}`;
           } else {
-            return `${row.case_number}: ${row.court}`;
+            return `${row.legal_citation}`;
           }
         },
       },
+      // {
+      //   dataField: "complaint_category",
+      //   header: "Complaint Category",
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   sort: true,
+      //   formatter: (cell, row) => {
+      //     console.log(cell.join(", "));
+      //     if (cell[0] !== "") {
+      //       return cell.join(", ");
+      //     } else {
+      //       return unspecified;
+      //     }
+      //   },
+      // },
       {
-        dataField: "complaint_category",
-        header: "Complaint Category",
+        dataField: "policy_or_law_name",
+        header: "Policy or Law Name",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
         sort: true,
-        formatter: (cell, row) => {
-          console.log(cell.join(", "));
-          if (cell[0] !== "") {
-            return cell.join(", ");
-          } else {
-            return unspecified;
-          }
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
         },
+        formatter: (cell, row) =>
+          cell !== "" ? (
+            <ShowMore text={cell} charLimit={100} />
+          ) : (
+            not_available
+          ),
       },
       {
         dataField: "summary_of_action",
@@ -136,27 +162,8 @@ export const policyInfo = {
           ),
       },
       {
-        dataField: "policy_or_law_name",
-        header: "Policy or Law Name",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        formatter: (cell, row) =>
-          cell !== "" ? (
-            <ShowMore text={cell} charLimit={100} />
-          ) : (
-            not_available
-          ),
-      },
-      {
-        dataField: "holding",
-        header: "Holding",
+        dataField: "government_order_upheld_or_enjoined",
+        header: "Upheld?",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -167,8 +174,8 @@ export const policyInfo = {
           else return "zzz";
         },
         formatter: (cell, row) => {
-          return row.holding !== "" ? (
-            <ShowMore text={cell} charLimit={100} />
+          return cell !== "" ? (
+            cell
           ) : (
             "Pending"
           );
@@ -176,7 +183,7 @@ export const policyInfo = {
       },
       {
         dataField: "data_source_for_complaint",
-        header: "Complaint & Decision Sources",
+        header: "Sources",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
