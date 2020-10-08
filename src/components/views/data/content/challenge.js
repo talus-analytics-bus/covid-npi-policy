@@ -31,18 +31,25 @@ const API_URL = process.env.REACT_APP_API_URL;
  */
 export const policyInfo = {
   filterDefs: [
-   // {
-   //    jurisdiction: {
-   //      entity_name: "Court_Challenge",
-   //      field: "complaint_category",
-   //      label: "Complaint Category",
-   //    },
-   //  },
+    {
+      jurisdiction: {
+        entity_name: "Court_Challenge",
+        field: "jurisdiction",
+        label: "Jurisdiction",
+      },
+    },
     {
       complaint_category: {
         entity_name: "Court_Challenge",
         field: "complaint_category",
         label: "Complaint Category",
+      },
+    },
+    {
+      government_order_upheld_or_enjoined: {
+        entity_name: "Court_Challenge",
+        field: "government_order_upheld_or_enjoined",
+        label: "Upheld?",
       },
     },
     {
@@ -61,13 +68,6 @@ export const policyInfo = {
         label: "Decision Date Range",
         dateRange: true,
         minMaxDate: { min: undefined, max: undefined },
-      },
-    },
-    {
-      holding: {
-        entity_name: "Court_Challenge",
-        field: "holding",
-        label: "Status",
       },
     },
   ],
@@ -100,29 +100,13 @@ export const policyInfo = {
           else return "zzz";
         },
         formatter: (cell, row) => {
-          if ((row.parties !== "")) {
+          if (row.parties !== "") {
             return `${row.parties}`;
           } else {
             return `${row.legal_citation}`;
           }
         },
       },
-      // {
-      //   dataField: "complaint_category",
-      //   header: "Complaint Category",
-      //   onSort: (field, order) => {
-      //     setOrdering([[field, order]]);
-      //   },
-      //   sort: true,
-      //   formatter: (cell, row) => {
-      //     console.log(cell.join(", "));
-      //     if (cell[0] !== "") {
-      //       return cell.join(", ");
-      //     } else {
-      //       return unspecified;
-      //     }
-      //   },
-      // },
       {
         dataField: "policy_or_law_name",
         header: "Policy or Law Name",
@@ -174,11 +158,7 @@ export const policyInfo = {
           else return "zzz";
         },
         formatter: (cell, row) => {
-          return cell !== "" ? (
-            cell
-          ) : (
-            "Pending"
-          );
+          return cell !== "" ? cell : "Pending";
         },
       },
       {
@@ -207,7 +187,7 @@ export const policyInfo = {
               return (
                 <div className={styles.linkIcon}>
                   <a target="_blank" rel="noopener" href={d}>
-                    {["Complaint: ", "Decision: "][i]}
+                    {["Complaint ", "Decision "][i]}
                     {d.startsWith("http") ? (
                       <i className={"material-icons"}>insert_drive_file</i>
                     ) : (
@@ -286,7 +266,7 @@ export const policyInfo = {
   },
 
   // nouns to use when referring to entity (sing and plur)
-  nouns: { s: "Case", p: "Cases" },
+  nouns: { s: "Court_Challenge", p: "Court challenges" },
 
   // query to use when getting entity data
   // requires method and filters arguments
