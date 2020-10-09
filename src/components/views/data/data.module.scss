@@ -125,29 +125,29 @@
         }
       }
     }
-    &.Court_Challenge {
+    &.court_challenge {
       th,
       td {
         &:nth-child(1) {
-          width: 120px;
+          width: 110px;
         }
         &:nth-child(2) {
-          width: 200px;
+          width: 110px;
         }
         &:nth-child(3) {
-          width: 200px;
+          width: 150px;
         }
         &:nth-child(4) {
-          width: 200px;
+          width: 300px;
         }
         &:nth-child(5) {
-          width: 110px;
+          width: 90px;
         }
         &:nth-child(6) {
           width: 110px;
         }
         &:nth-child(7) {
-          width: 110px;
+          width: 100px;
         }
 
         i {

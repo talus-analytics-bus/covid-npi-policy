@@ -140,7 +140,7 @@ export const policyInfo = {
         },
         formatter: (cell, row) =>
           cell !== "" ? (
-            <ShowMore text={cell} charLimit={100} />
+            <ShowMore text={cell} charLimit={200} />
           ) : (
             not_available
           ),
