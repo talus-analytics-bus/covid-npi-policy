@@ -125,6 +125,37 @@
         }
       }
     }
+    &.court_challenge {
+      th,
+      td {
+        &:nth-child(1) {
+          width: 110px;
+        }
+        &:nth-child(2) {
+          width: 110px;
+        }
+        &:nth-child(3) {
+          width: 150px;
+        }
+        &:nth-child(4) {
+          width: 300px;
+        }
+        &:nth-child(5) {
+          width: 90px;
+        }
+        &:nth-child(6) {
+          width: 110px;
+        }
+        &:nth-child(7) {
+          width: 100px;
+        }
+
+        i {
+          position: relative;
+          top: 7px;
+        }
+      }
+    }
   }
 
   // drawer components
