@@ -368,7 +368,7 @@ const Data = ({
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>COVID AMP policy and plan database</h1>
+        <h1>COVID AMP Data Access</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
@@ -388,7 +388,7 @@ const Data = ({
         <>
           <Drawer
             {...{
-              title: <h2>Policy and plan database</h2>,
+              title: <h2>COVID AMP Data Access</h2>,
               label: DownloadBtn({
                 render: counts,
                 class_name: "all_static",
@@ -414,7 +414,7 @@ const Data = ({
                       choices={[
                         { name: "Policies", value: "policy" },
                         { name: "Plans", value: "plan" },
-                        { name: "Challenges", value: "challenge" },
+                        { name: "Court Challenges", value: "challenge" },
                       ]}
                       curVal={docType}
                       callback={setDocType}
