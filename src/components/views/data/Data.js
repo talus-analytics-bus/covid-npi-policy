@@ -388,7 +388,7 @@ const Data = ({
         <>
           <Drawer
             {...{
-              title: <h2>COVID AMP Data Access</h2>,
+              title: <h2>Search and Filter</h2>,
               label: DownloadBtn({
                 render: counts,
                 class_name: "all_static",
