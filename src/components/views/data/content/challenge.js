@@ -246,7 +246,7 @@ export const policyInfo = {
 
       // definition updates
       const keyTmp = d.defKey || d.dataField;
-      const key = keyTmp.includes(".") ? keyTmp : "policy." + keyTmp;
+      const key = keyTmp.includes(".") ? keyTmp : "court_challenge." + keyTmp;
       d.definition = metadata[key] ? metadata[key].definition || "" : "";
 
       // use only the first sentence of the definition

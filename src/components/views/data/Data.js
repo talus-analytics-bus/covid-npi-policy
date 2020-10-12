@@ -139,7 +139,8 @@ const Data = ({
         method: "get",
         fields: initColumns.map(d => {
           const key = d.defKey || d.dataField;
-          if (!key.includes(".")) return docType + "." + key;
+          if (!key.includes("."))
+            return entityInfoForQuery.nouns.s.toLowerCase() + "." + key;
           else return key;
         }),
         entity_class_name: entityInfoForQuery.nouns.s,
