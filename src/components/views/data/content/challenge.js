@@ -42,7 +42,7 @@ export const policyInfo = {
       complaint_category: {
         entity_name: "Court_Challenge",
         field: "complaint_category",
-        label: "Complaint Category",
+        label: "Complaint category",
       },
     },
     {
@@ -56,7 +56,7 @@ export const policyInfo = {
       date_of_complaint: {
         entity_name: "Court_Challenge",
         field: "date_of_complaint",
-        label: "Complaint Date Range",
+        label: "Complaint date range",
         dateRange: true,
         minMaxDate: { min: undefined, max: undefined },
       },
@@ -65,7 +65,7 @@ export const policyInfo = {
       date_of_decision: {
         entity_name: "Court_Challenge",
         field: "date_of_decision",
-        label: "Decision Date Range",
+        label: "Decision date range",
         dateRange: true,
         minMaxDate: { min: undefined, max: undefined },
       },
@@ -89,7 +89,7 @@ export const policyInfo = {
       },
       {
         dataField: "parties",
-        header: "Parties or Citation",
+        header: "Parties or citation",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -109,7 +109,7 @@ export const policyInfo = {
       },
       {
         dataField: "policy_or_law_name",
-        header: "Policy or Law Name",
+        header: "Policy or law name",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -128,7 +128,7 @@ export const policyInfo = {
       },
       {
         dataField: "summary_of_action",
-        header: "Summary of Action",
+        header: "Summary of action",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -212,7 +212,7 @@ export const policyInfo = {
       },
       {
         dataField: "date_of_complaint",
-        header: "Date of Complaint",
+        header: "Date of complaint",
         sort: true,
         onSort: (field, order) => {
           setOrdering([[field, order]]);
