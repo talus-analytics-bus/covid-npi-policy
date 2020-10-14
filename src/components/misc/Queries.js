@@ -2,6 +2,10 @@ import axios from "axios";
 import moment from "moment";
 import { isEmpty } from "./Util";
 
+// local utility functions
+import ObservationQuery from "./ObservationQuery";
+
+// constants
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
@@ -328,4 +332,43 @@ export const execute = async function({ queries }) {
     results[k] = res;
   }
   return results;
+};
+
+/*
+ * Get COVID-19 caseload time series for country or for state in USA.
+ * NOTE: Either an ID *or* a name for the country / state should be provided
+ * but not both for response to behave as expected.
+ * TODO implement countries other than USA
+ */
+export const Caseload = async ({
+  countryId, // place_id for country, e.g., 239
+  countryName, // name for country, e.g., United States of America
+  stateId, // place_id for state, e.g., 264
+  stateName, // name for state, e.g., Alabama
+}) => {
+  // determine metric ID based on whether country or state data requested.
+  // 74: state-level new COVID-19 cases in last 7 days
+  // 77: country-level new COVID-19 cases in last 7 days
+  const isState = stateName !== undefined || stateId !== undefined;
+  const metric_id = isState ? 74 : 77;
+
+  // define spatial resolution based on same
+  const spatial_resolution = isState ? "state" : "country";
+
+  // prepare parameters
+  const params = {
+    metric_id,
+    spatial_resolution,
+    temporal_resolution: "daily",
+  };
+
+  // define country place ID based on same
+  // TODO get USA place ID dynamically instead of harcoded
+  if (countryId !== undefined) params.place_id = countryId;
+  if (stateId !== undefined) params.place_id = stateId;
+  if (countryName !== undefined) params.place_name = countryName;
+  if (stateName !== undefined) params.place_name = stateName;
+
+  // send request and return response data
+  return await ObservationQuery({ ...params });
 };
