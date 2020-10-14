@@ -99,7 +99,6 @@ const PolicyPage = ({ setLoading, setPage }) => {
         </div>
       </section>
       <section className={styles.policySection}>
-        <button className={styles.downloadButton}>Download (pdf)</button>
         <BlueExpandBox>
           <header className={styles.policySectionHeader}>
             <h1>[Date]</h1>
