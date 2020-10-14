@@ -5,17 +5,35 @@ import BlueExpandBox from "../BlueExpandBox/BlueExpandBox";
 import styles from "./PolicyPage.module.scss";
 
 // local utility functions
-import { Policy, execute } from "../../../misc/Queries"; // requests policy data
+import {
+  Policy, // requests policy data
+  Caseload, // ...caseload data
+  execute, // executes a set of API requests
+} from "../../../misc/Queries";
+import ObservationQuery from "../../../misc/ObservationQuery";
 
 const PolicyPage = ({ setLoading, setPage }) => {
   // STATE // -------------------------------------------------------------- //
   // policy number for policies to be displayed on page
-  // TODO set dynamically based on URL param, pathname, etc.
+  // TODO obtain dynamically based on URL param, pathname, etc.
   // DEBUG expect 5 policy records with `policy_number` = 298882742
   const [policyNumber, setPolicyNumber] = React.useState(298882742);
 
   // policies that share the policy number associated with this page
   const [policies, setPolicies] = React.useState([]);
+
+  // caseload time series for country or state associated with policy
+  const [caseload, setCaseload] = React.useState([]);
+
+  // name of country affected by policy
+  // TODO obtain dynamically based on policies or other method
+  const [countryName, setCountryName] = React.useState(
+    "United States of America"
+  );
+
+  // name of state / province affected by policy
+  // TODO obtain dynamically based on policies or other method
+  const [stateName, setStateName] = React.useState("Texas");
 
   // FUNCTIONS // ---------------------------------------------------------- //
   /**
@@ -39,13 +57,17 @@ const PolicyPage = ({ setLoading, setPage }) => {
 
     // time series for COVID cases for a given state (in US) or
     // country (global)
-    // TODO
+    queries.caseload = Caseload({
+      countryName,
+      stateName, // leave undefined if country-level data required
+    });
 
     // get results
     const results = await execute({ queries });
 
     // set state based on results
     setPolicies(results.policy.data);
+    setCaseload(results.caseload);
   };
 
   // EFFECT HOOKS // ------------------------------------------------------- //
