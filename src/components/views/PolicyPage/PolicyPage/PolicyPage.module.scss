@@ -55,12 +55,14 @@
   }
 
   .policySection {
-    position: relative;
+    .policySectionHeader {
+      width: 100%;
+      display: flex;
+      align-items: center;
 
-    .downloadButton {
-      position: absolute;
-      top: 3rem;
-      right: 1rem;
+      a {
+        margin-left: auto;
+      }
     }
   }
 }

@@ -42,11 +42,13 @@ const PolicyPage = ({ setLoading, setPage }) => {
         </div>
       </section>
       <section className={styles.policySection}>
-        <button className={styles.downloadButton}>Download (pdf)</button>
         <BlueExpandBox>
-          <header>
+          <header className={styles.policySectionHeader}>
             <h1>[Date]</h1>
             <h2>[Sections Count]</h2>
+            <a href="/downloadFile" className={styles.downloadButton}>
+              Download (pdf)
+            </a>
           </header>
           <p>lorem ipsum</p>
         </BlueExpandBox>

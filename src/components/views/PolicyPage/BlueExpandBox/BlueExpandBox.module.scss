@@ -58,11 +58,12 @@
     width: 100%;
     display: flex;
     background-color: #d4eef9;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
     margin: 0;
     padding: 1rem;
     min-height: 6rem;
-    padding-left: 2rem;
+    padding-left: 5rem;
 
     .flag {
       display: block;
@@ -78,20 +79,17 @@
 
     .buttonIcon {
       flex-shrink: 0;
-      margin-left: 1rem;
-      margin-bottom: 1rem;
-      margin-right: 1rem;
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 51.25 25.34' style='enable-background:new 0 0 51.25 25.34;' xml:space='preserve'%3E%3Cpolyline style='fill-rule:evenodd;clip-rule:evenodd;fill:none;stroke:%2320365E;stroke-width:3.3131;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;' points=' 49.59,1.66 25.59,23.69 1.66,1.66 '/%3E%3C/svg%3E%0A");
       background-size: contain;
       background-repeat: no-repeat;
-      width: 1.75rem;
-      height: 0.75rem;
+      width: 2rem;
+      height: 1rem;
       transform: scale(1, 1);
       transition: 250ms ease;
       margin-left: auto;
       position: absolute;
-      top: 5rem;
-      left: 3rem;
+      top: 2.5rem;
+      left: 2rem;
     }
   }
 
