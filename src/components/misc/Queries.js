@@ -398,6 +398,7 @@ export const Caseload = async ({
   countryName, // name for country, e.g., United States of America
   stateId, // place_id for state, e.g., 264
   stateName, // name for state, e.g., Alabama
+  fields = ["date_time", "value"], // fields to return, return all if empty
 }) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
@@ -414,6 +415,9 @@ export const Caseload = async ({
     spatial_resolution,
     temporal_resolution: "daily",
   };
+
+  // get fields to return
+  if (fields.length > 0) params.fields = fields;
 
   // define country place ID based on same
   // TODO get USA place ID dynamically instead of harcoded
