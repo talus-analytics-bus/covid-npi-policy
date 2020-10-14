@@ -127,6 +127,16 @@ const getData = async ({
   queries.policy = Policy({
     method: "post",
     filters: { policy_number: [policyNumber] },
+    fields: [
+      "id",
+      "place",
+      "auth_entity",
+      "primary_ph_measure",
+      "authority_name",
+      "name_and_desc",
+      "date_start_effective",
+      "file",
+    ],
   });
 
   // court cases which refer to the policy number
