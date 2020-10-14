@@ -14,8 +14,6 @@ import ObservationQuery from "../../../misc/ObservationQuery";
 
 const PolicyPage = ({ setLoading, setPage }) => {
   // STATE // -------------------------------------------------------------- //
-  // was initial data loaded?
-  const [initialDataLoaded, setInitialDataLoaded] = React.useState(false);
   // policy number for policies to be displayed on page
   // TODO obtain dynamically based on URL param, pathname, etc.
   // DEBUG expect 5 policy records with `policy_number` = 298882742
@@ -46,26 +44,14 @@ const PolicyPage = ({ setLoading, setPage }) => {
   }, [setLoading, setPage]);
 
   React.useEffect(() => {
-    // retrieve initial data, including policies, caseload, and
-    // court challenges
-    if (!initialDataLoaded) {
-      setInitialDataLoaded(true);
-      getData({
-        policyNumber, // the policy number that unites policy records
-        countryName, // the name of the country to get caseload data for
-        stateName, // the name of the state / province to get caseload data for
-        setPolicies, // state setter for policy data
-        setCaseload, // set setter for caseload data
-      });
-    }
-  }, [
-    caseload,
-    countryName,
-    initialDataLoaded,
-    policies,
-    policyNumber,
-    stateName,
-  ]);
+    getData({
+      policyNumber, // the policy number that unites policy records
+      countryName, // the name of the country to get caseload data for
+      stateName, // the name of the state / province to get caseload data for
+      setPolicies, // state setter for policy data
+      setCaseload, // set setter for caseload data
+    });
+  }, [countryName, policyNumber, stateName]);
 
   // JSX // ---------------------------------------------------------------- //
   return (
