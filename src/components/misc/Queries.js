@@ -395,7 +395,7 @@ export const execute = async function({ queries }) {
  */
 export const Caseload = async ({
   countryId, // place_id for country, e.g., 239
-  countryName, // name for country, e.g., United States of America
+  countryIso3, // name for country, e.g., United States of America
   stateId, // place_id for state, e.g., 264
   stateName, // name for state, e.g., Alabama
   fields = ["date_time", "value"], // fields to return, return all if empty
@@ -423,7 +423,7 @@ export const Caseload = async ({
   // TODO get USA place ID dynamically instead of harcoded
   if (countryId !== undefined) params.place_id = countryId;
   if (stateId !== undefined) params.place_id = stateId;
-  if (countryName !== undefined) params.place_name = countryName;
+  if (countryIso3 !== undefined) params.place_name = countryIso3;
   if (stateName !== undefined) params.place_name = stateName;
 
   // send request and return response data

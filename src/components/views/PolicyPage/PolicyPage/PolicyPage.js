@@ -31,9 +31,7 @@ const PolicyPage = ({ setLoading, setPage }) => {
 
   // name of country affected by policy
   // TODO obtain dynamically based on policies or other method
-  const [countryName, setCountryName] = React.useState(
-    "United States of America"
-  );
+  const [countryIso3, setCountryIso3] = React.useState("USA");
 
   // name of state / province affected by policy
   // TODO obtain dynamically based on policies or other method
@@ -50,13 +48,13 @@ const PolicyPage = ({ setLoading, setPage }) => {
   React.useEffect(() => {
     getData({
       policyNumber, // the policy number that unites policy records
-      countryName, // the name of the country to get caseload data for
+      countryIso3, // the name of the country to get caseload data for
       stateName, // the name of the state / province to get caseload data for
       setPolicies, // state setter for policy data
       setChallenges, // state setter for challenges data
       setCaseload, // state setter for caseload data
     });
-  }, [countryName, policyNumber, stateName]);
+  }, [countryIso3, policyNumber, stateName]);
 
   // JSX // ---------------------------------------------------------------- //
   return (
@@ -114,7 +112,7 @@ const PolicyPage = ({ setLoading, setPage }) => {
  */
 const getData = async ({
   policyNumber, // the policy number that unites policy records
-  countryName, // the name of the country to get caseload data for
+  countryIso3, // the name of the country to get caseload data for
   stateName, // the name of the state / province to get caseload data for
   setPolicies, // state setter for policy data
   setChallenges, // state setter for challenges data
@@ -149,7 +147,7 @@ const getData = async ({
   // time series for COVID cases for a given state (in US) or
   // country (global)
   queries.caseload = Caseload({
-    countryName,
+    countryIso3,
     stateName, // leave undefined if country-level data required
   });
 
