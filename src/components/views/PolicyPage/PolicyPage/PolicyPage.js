@@ -7,6 +7,7 @@ import styles from "./PolicyPage.module.scss";
 // local utility functions
 import {
   Policy, // requests policy data
+  Challenge, // court challenges associated with policies
   Caseload, // ...caseload data
   execute, // executes a set of API requests
 } from "../../../misc/Queries";
@@ -16,11 +17,14 @@ const PolicyPage = ({ setLoading, setPage }) => {
   // STATE // -------------------------------------------------------------- //
   // policy number for policies to be displayed on page
   // TODO obtain dynamically based on URL param, pathname, etc.
-  // DEBUG expect 5 policy records with `policy_number` = 298882742
-  const [policyNumber, setPolicyNumber] = React.useState(298882742);
+  // DEBUG expect 4 policy records with `policy_number` = 446762756
+  const [policyNumber, setPolicyNumber] = React.useState(446762756);
 
   // policies that share the policy number associated with this page
   const [policies, setPolicies] = React.useState(null);
+
+  // court challenges associated with those policies
+  const [challenges, setChallenges] = React.useState(null);
 
   // caseload time series for country or state associated with policy
   const [caseload, setCaseload] = React.useState(null);
@@ -49,7 +53,8 @@ const PolicyPage = ({ setLoading, setPage }) => {
       countryName, // the name of the country to get caseload data for
       stateName, // the name of the state / province to get caseload data for
       setPolicies, // state setter for policy data
-      setCaseload, // set setter for caseload data
+      setChallenges, // state setter for challenges data
+      setCaseload, // state setter for caseload data
     });
   }, [countryName, policyNumber, stateName]);
 
@@ -112,7 +117,8 @@ const getData = async ({
   countryName, // the name of the country to get caseload data for
   stateName, // the name of the state / province to get caseload data for
   setPolicies, // state setter for policy data
-  setCaseload, // set setter for caseload data
+  setChallenges, // state setter for challenges data
+  setCaseload, // state setter for caseload data
 }) => {
   // define queries
   const queries = {};
@@ -124,7 +130,11 @@ const getData = async ({
   });
 
   // court cases which refer to the policy number
-  // TODO
+  queries.challenge = Challenge({
+    method: "post",
+    filters: { "policy.policy_number": [policyNumber] },
+    // fields: [], // TODO include only needed fields in response
+  });
 
   // time series for COVID cases for a given state (in US) or
   // country (global)
@@ -139,6 +149,7 @@ const getData = async ({
   // set state based on results
   setPolicies(results.policy.data);
   setCaseload(results.caseload);
+  setChallenges(results.challenge.data);
 };
 
 export default PolicyPage;
