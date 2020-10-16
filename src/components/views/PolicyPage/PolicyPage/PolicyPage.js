@@ -21,7 +21,7 @@ const PolicyPage = ({ setLoading, setPage }) => {
   const [policyNumber, setPolicyNumber] = React.useState(446762756);
 
   // policies that share the policy number associated with this page
-  const [policies, setPolicies] = React.useState(null);
+  const [firstPolicy, setFirstPolicy] = React.useState(null);
   const [policiesByDate, setPoliciesByDate] = React.useState(null);
 
   // court challenges associated with those policies
@@ -55,18 +55,11 @@ const PolicyPage = ({ setLoading, setPage }) => {
         fields: [
           "id",
           "policy_name",
-          // "place",
           "auth_entity",
-          // "dillons_rule",
-          // "primary_ph_measure",
-          // "authority_name",
-          // "name_and_desc",
           "date_start_effective",
           "file",
         ],
       });
-
-      setPolicies(data);
 
       const groupByDate = {};
       data.forEach(policy => {
@@ -77,6 +70,7 @@ const PolicyPage = ({ setLoading, setPage }) => {
           : [policy];
       });
 
+      setFirstPolicy(data[0]);
       setPoliciesByDate(groupByDate);
     };
     getPolicies();
@@ -94,37 +88,39 @@ const PolicyPage = ({ setLoading, setPage }) => {
   // }, [countryIso3, policyNumber, stateName]);
 
   // JSX // ---------------------------------------------------------------- //
-  console.log(policies);
+  console.log(firstPolicy);
   console.log(policiesByDate);
 
   return (
     <div className={styles.main}>
       <header className={styles.titleHeader}>
-        <h1>{policies && policies[0].policy_name}</h1>
+        <h1>{firstPolicy && firstPolicy.policy_name}</h1>
       </header>
       <section className={styles.metadata}>
         <div className={styles.leftCol}>
           <h2>Government</h2>
-          <p>{policies && policies[0].auth_entity[0].place.loc}</p>
+          <p>{firstPolicy && firstPolicy.auth_entity[0].place.loc}</p>
           <h2>Authority</h2>
           <h3>Office</h3>
-          <p>{policies && policies[0].auth_entity[0].office}</p>
+          <p>{firstPolicy && firstPolicy.auth_entity[0].office}</p>
           <h3>Official</h3>
           <p>
-            {policies &&
-              policies[0].auth_entity[0].official &&
-              policies[0].auth_entity[0].official + ", "}
-            {policies && policies[0].auth_entity[0].name}
+            {firstPolicy &&
+              firstPolicy.auth_entity[0].official &&
+              firstPolicy.auth_entity[0].official + ", "}
+            {firstPolicy && firstPolicy.auth_entity[0].name}
           </p>
           <h2>State Structure</h2>
           <div className={styles.cols}>
             <div className={styles.col}>
               <h3>Home Rule</h3>
-              <p>{policies && policies[0].auth_entity[0].place.home_rule}</p>
+              <p>{firstPolicy && firstPolicy.auth_entity[0].place.home_rule}</p>
             </div>
             <div className={styles.col}>
               <h3>Dillon's Rule</h3>
-              <p>{policies && policies[0].auth_entity[0].place.dillons_rule}</p>
+              <p>
+                {firstPolicy && firstPolicy.auth_entity[0].place.dillons_rule}
+              </p>
             </div>
           </div>
         </div>
