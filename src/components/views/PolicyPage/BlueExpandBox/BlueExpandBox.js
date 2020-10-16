@@ -1,7 +1,5 @@
 import React, { useState, useRef, Children } from "react";
 
-import useEventListener from "../hooks/useEventListener";
-
 import styles from "./BlueExpandBox.module.scss";
 
 const ExpandBox = props => {
@@ -23,17 +21,14 @@ const ExpandBox = props => {
     }
   };
 
-  const expandHider = () => {
-    // only call expand hider, don't toggle it
-    console.log("expandHider called");
-    if (hiderStyle.height === 0) {
-      console.log("Expand the box");
+  // animate the blue box open right after component mounts
+  // if props.open is true
+  React.useEffect(() => {
+    if (props.open && content.current !== undefined) {
       setHiderStyle({ height: content.current.offsetHeight });
       setIconStyle({ transform: "scale(1, -1)" });
     }
-  };
-
-  useEventListener("expand", expandHider, button.current);
+  }, [props.open]);
 
   return (
     <section className={styles.main + " " + props.className}>
@@ -42,12 +37,7 @@ const ExpandBox = props => {
         className={styles.firstSection}
         onClick={toggleHider}
         ref={button}
-        // style={arrowStyle}
       >
-        {/* <div */}
-        {/*   className={styles.flag} */}
-        {/*   style={{ backgroundColor: props.flagColor }} */}
-        {/* ></div> */}
         {children[0]}
         <span className={styles.buttonIcon} style={iconStyle}></span>
       </button>
