@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 import PolicyDateSection from "./PolicyDateSection/PolicyDateSection";
 
@@ -13,12 +14,15 @@ import {
 } from "../../../misc/Queries";
 import ObservationQuery from "../../../misc/ObservationQuery";
 
-const PolicyPage = ({ setLoading, setPage }) => {
+const PolicyPage = ({ setPage, setLoading }, props) => {
   // STATE // -------------------------------------------------------------- //
   // policy number for policies to be displayed on page
   // TODO obtain dynamically based on URL param, pathname, etc.
   // DEBUG expect 4 policy records with `policy_number` = 446762756
-  const [policyNumber, setPolicyNumber] = React.useState(446762756);
+  const location = useLocation();
+
+  // const [policyNumber,] = React.useState(446762756);
+  // const [policyNumber] = React.useState(policyFromURL);
 
   // policies that share the policy number associated with this page
   const [firstPolicy, setFirstPolicy] = React.useState(null);
@@ -49,6 +53,10 @@ const PolicyPage = ({ setLoading, setPage }) => {
   // Request Policies when policyNumber changes
   React.useEffect(() => {
     const getPolicies = async () => {
+      const policyNumber = Number(
+        location.pathname.replace(/[a-z]*\/|\//g, "")
+      );
+
       const { data } = await Policy({
         method: "post",
         filters: { policy_number: [policyNumber] },
@@ -74,7 +82,7 @@ const PolicyPage = ({ setLoading, setPage }) => {
       setPoliciesByDate(groupByDate);
     };
     getPolicies();
-  }, [policyNumber]);
+  }, [location.pathname]);
 
   const auth_entity = firstPolicy && firstPolicy.auth_entity[0];
 

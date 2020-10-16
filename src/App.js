@@ -236,9 +236,8 @@ const App = () => {
                   />
                 }
                 {
-                  // Model page
+                  // policy page
                   <Route
-                    exact
                     path="/policy"
                     render={() => {
                       return <PolicyPage {...{ setPage, setLoading }} />;
