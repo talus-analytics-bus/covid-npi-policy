@@ -76,6 +76,8 @@ const PolicyPage = ({ setLoading, setPage }) => {
     getPolicies();
   }, [policyNumber]);
 
+  const auth_entity = firstPolicy && firstPolicy.auth_entity[0];
+
   // React.useEffect(() => {
   //   getData({
   //     policyNumber, // the policy number that unites policy records
@@ -99,28 +101,24 @@ const PolicyPage = ({ setLoading, setPage }) => {
       <section className={styles.metadata}>
         <div className={styles.leftCol}>
           <h2>Government</h2>
-          <p>{firstPolicy && firstPolicy.auth_entity[0].place.loc}</p>
+          <p>{auth_entity && auth_entity.place.loc}</p>
           <h2>Authority</h2>
           <h3>Office</h3>
-          <p>{firstPolicy && firstPolicy.auth_entity[0].office}</p>
+          <p>{auth_entity && auth_entity.office}</p>
           <h3>Official</h3>
           <p>
-            {firstPolicy &&
-              firstPolicy.auth_entity[0].official &&
-              firstPolicy.auth_entity[0].official + ", "}
-            {firstPolicy && firstPolicy.auth_entity[0].name}
+            {auth_entity && auth_entity.official && auth_entity.official + ", "}
+            {auth_entity && auth_entity.name}
           </p>
           <h2>State Structure</h2>
           <div className={styles.cols}>
             <div className={styles.col}>
               <h3>Home Rule</h3>
-              <p>{firstPolicy && firstPolicy.auth_entity[0].place.home_rule}</p>
+              <p>{auth_entity && auth_entity.place.home_rule}</p>
             </div>
             <div className={styles.col}>
               <h3>Dillon's Rule</h3>
-              <p>
-                {firstPolicy && firstPolicy.auth_entity[0].place.dillons_rule}
-              </p>
+              <p>{auth_entity && auth_entity.place.dillons_rule}</p>
             </div>
           </div>
         </div>
