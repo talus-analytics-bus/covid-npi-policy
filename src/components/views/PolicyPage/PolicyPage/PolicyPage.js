@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 import PolicyDateSection from "./PolicyDateSection/PolicyDateSection";
+import PolicySection from "./PolicySection/PolicySection";
 
 import styles from "./PolicyPage.module.scss";
 
@@ -59,6 +60,10 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
           "policy_name",
           "auth_entity",
           "date_start_effective",
+          "desc",
+          "primary_ph_measure",
+          "ph_measure_details",
+          "subtarget",
           "file",
         ],
       });
@@ -133,8 +138,9 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
             policies={policies}
             open={Object.keys(policiesByDate).length === 1}
           >
-            <p>Lorem ipsum</p>
-            <p>Lorem ipsum</p>
+            {policies.map(policy => (
+              <PolicySection key={policy.desc} policy={policy} />
+            ))}
           </PolicyDateSection>
         ))}
     </div>

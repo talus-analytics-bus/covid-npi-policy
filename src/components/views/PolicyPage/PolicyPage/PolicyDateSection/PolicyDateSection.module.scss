@@ -1,11 +1,26 @@
-.policySection {
-  .policySectionHeader {
+.policyDateSection {
+  .policyDateSectionHeader {
     width: 100%;
     display: flex;
     align-items: center;
 
     a {
       margin-left: auto;
+    }
+  }
+  .policySections {
+    background-color: #e4f6fb;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      content: "";
+      top: 0;
+      left: 2rem;
+      right: 2rem;
+      background-color: #173244;
+      height: 4px;
+      border-radius: 4px;
     }
   }
 }

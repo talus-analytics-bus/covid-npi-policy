@@ -1,0 +1,28 @@
+.policySection {
+  h1 {
+    padding-top: 4rem;
+  }
+  h1,
+  h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: #586477;
+  }
+  h2,
+  h4 {
+    font-size: 1.5rem;
+    color: #29334b;
+    margin-bottom: 2rem;
+    text-transform: capitalize;
+    font-weight: 500;
+  }
+  h3 {
+    font-size: 0.9rem;
+  }
+  h4 {
+    font-size: 1.125rem;
+  }
+  p {
+    font-size: 1.1rem;
+  }
+}

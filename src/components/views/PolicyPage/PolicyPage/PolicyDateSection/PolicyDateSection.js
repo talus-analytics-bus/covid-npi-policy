@@ -4,9 +4,9 @@ import BlueExpandBox from "../../BlueExpandBox/BlueExpandBox";
 import styles from "./PolicyDateSection.module.scss";
 
 const PolicyDateSection = props => (
-  <section className={styles.policySection}>
+  <section className={styles.policyDateSection}>
     <BlueExpandBox open={props.open}>
-      <header className={styles.policySectionHeader}>
+      <header className={styles.policyDateSectionHeader}>
         <h1>{props.date}</h1>
         <h2>
           {props.policies.length === 1
@@ -21,7 +21,7 @@ const PolicyDateSection = props => (
           Download (pdf)
         </a>
       </header>
-      {props.children}
+      <div className={styles.policySections}>{props.children}</div>
     </BlueExpandBox>
   </section>
 );
