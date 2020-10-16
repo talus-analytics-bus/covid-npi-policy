@@ -1,6 +1,6 @@
 import React from "react";
 
-import BlueExpandBox from "../BlueExpandBox/BlueExpandBox";
+import PolicyDateSection from "./PolicyDateSection/PolicyDateSection";
 
 import styles from "./PolicyPage.module.scss";
 
@@ -22,6 +22,7 @@ const PolicyPage = ({ setLoading, setPage }) => {
 
   // policies that share the policy number associated with this page
   const [policies, setPolicies] = React.useState(null);
+  const [policiesByDate, setPoliciesByDate] = React.useState(null);
 
   // court challenges associated with those policies
   const [challenges, setChallenges] = React.useState(null);
@@ -45,60 +46,101 @@ const PolicyPage = ({ setLoading, setPage }) => {
     setLoading(false);
   }, [setLoading, setPage]);
 
+  // Request Policies when policyNumber changes
   React.useEffect(() => {
-    getData({
-      policyNumber, // the policy number that unites policy records
-      countryIso3, // the name of the country to get caseload data for
-      stateName, // the name of the state / province to get caseload data for
-      setPolicies, // state setter for policy data
-      setChallenges, // state setter for challenges data
-      setCaseload, // state setter for caseload data
-    });
-  }, [countryIso3, policyNumber, stateName]);
+    const getPolicies = async () => {
+      const { data } = await Policy({
+        method: "post",
+        filters: { policy_number: [policyNumber] },
+        fields: [
+          "id",
+          "policy_name",
+          // "place",
+          "auth_entity",
+          // "dillons_rule",
+          // "primary_ph_measure",
+          // "authority_name",
+          // "name_and_desc",
+          "date_start_effective",
+          "file",
+        ],
+      });
+
+      setPolicies(data);
+
+      const groupByDate = {};
+      data.forEach(policy => {
+        groupByDate[policy.date_start_effective] = groupByDate[
+          policy.date_start_effective
+        ]
+          ? [...groupByDate[policy.date_start_effective], policy]
+          : [policy];
+      });
+
+      setPoliciesByDate(groupByDate);
+    };
+    getPolicies();
+  }, [policyNumber]);
+
+  // React.useEffect(() => {
+  //   getData({
+  //     policyNumber, // the policy number that unites policy records
+  //     countryIso3, // the name of the country to get caseload data for
+  //     stateName, // the name of the state / province to get caseload data for
+  //     setPolicies, // state setter for policy data
+  //     setChallenges, // state setter for challenges data
+  //     setCaseload, // state setter for caseload data
+  //   });
+  // }, [countryIso3, policyNumber, stateName]);
 
   // JSX // ---------------------------------------------------------------- //
+  console.log(policies);
+  console.log(policiesByDate);
+
   return (
     <div className={styles.main}>
       <header className={styles.titleHeader}>
-        <h1>
-          PROCLAMATION BY THE GOVERNOR 20-25.4; SAFE START WASHINGTON MAY 31
-          VERSION
-        </h1>
+        <h1>{policies && policies[0].policy_name}</h1>
       </header>
       <section className={styles.metadata}>
         <div className={styles.leftCol}>
           <h2>Government</h2>
-          <p>[county] [state] [country]</p>
+          <p>{policies && policies[0].auth_entity[0].place.loc}</p>
           <h2>Authority</h2>
           <h3>Office</h3>
-          <p>[Office]</p>
+          <p>{policies && policies[0].auth_entity[0].office}</p>
           <h3>Official</h3>
-          <p>[Official]</p>
+          <p>
+            {policies &&
+              policies[0].auth_entity[0].official &&
+              policies[0].auth_entity[0].official + ", "}
+            {policies && policies[0].auth_entity[0].name}
+          </p>
           <h2>State Structure</h2>
           <div className={styles.cols}>
             <div className={styles.col}>
               <h3>Home Rule</h3>
-              <p>[Home Rule]</p>
+              <p>{policies && policies[0].auth_entity[0].place.home_rule}</p>
             </div>
             <div className={styles.col}>
               <h3>Dillon's Rule</h3>
-              <p>[Home Rule]</p>
+              <p>{policies && policies[0].auth_entity[0].place.dillons_rule}</p>
             </div>
           </div>
         </div>
       </section>
-      <section className={styles.policySection}>
-        <BlueExpandBox>
-          <header className={styles.policySectionHeader}>
-            <h1>[Date]</h1>
-            <h2>[Sections Count]</h2>
-            <a href="/downloadFile" className={styles.downloadButton}>
-              Download (pdf)
-            </a>
-          </header>
-          <p>lorem ipsum</p>
-        </BlueExpandBox>
-      </section>
+      {policiesByDate &&
+        Object.entries(policiesByDate).map(([date, policies]) => (
+          <PolicyDateSection
+            key={date}
+            date={date}
+            policies={policies}
+            open={Object.keys(policiesByDate).length === 1}
+          >
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+          </PolicyDateSection>
+        ))}
     </div>
   );
 };
