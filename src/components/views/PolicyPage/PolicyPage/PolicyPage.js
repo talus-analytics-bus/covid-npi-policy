@@ -77,12 +77,18 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
           : [policy];
       });
 
-      setPoliciesByDate(groupByDate);
+      const sortedByDate = Object.entries(groupByDate).sort(
+        (a, b) => new Date(a[0]) - new Date(b[0])
+      );
+
+      console.log(sortedByDate);
+
+      setPoliciesByDate(sortedByDate);
     };
     getPolicies();
   }, [location.pathname]);
 
-  const firstPolicy = policiesByDate && Object.values(policiesByDate)[0][0];
+  const firstPolicy = policiesByDate && policiesByDate[0][1][0];
   const auth_entity = firstPolicy && firstPolicy.auth_entity[0];
 
   // React.useEffect(() => {
@@ -131,12 +137,12 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
         </div>
       </section>
       {policiesByDate &&
-        Object.entries(policiesByDate).map(([date, policies]) => (
+        policiesByDate.map(([date, policies]) => (
           <PolicyDateSection
             key={date}
             date={date}
             policies={policies}
-            open={Object.keys(policiesByDate).length === 1}
+            open={policiesByDate.length === 1}
           >
             {policies.map(policy => (
               <PolicySection key={policy.desc} policy={policy} />
