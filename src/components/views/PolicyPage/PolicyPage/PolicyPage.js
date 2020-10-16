@@ -16,16 +16,10 @@ import ObservationQuery from "../../../misc/ObservationQuery";
 
 const PolicyPage = ({ setPage, setLoading }, props) => {
   // STATE // -------------------------------------------------------------- //
-  // policy number for policies to be displayed on page
-  // TODO obtain dynamically based on URL param, pathname, etc.
   // DEBUG expect 4 policy records with `policy_number` = 446762756
   const location = useLocation();
 
-  // const [policyNumber,] = React.useState(446762756);
-  // const [policyNumber] = React.useState(policyFromURL);
-
   // policies that share the policy number associated with this page
-  const [firstPolicy, setFirstPolicy] = React.useState(null);
   const [policiesByDate, setPoliciesByDate] = React.useState(null);
 
   // court challenges associated with those policies
@@ -78,12 +72,12 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
           : [policy];
       });
 
-      setFirstPolicy(data[0]);
       setPoliciesByDate(groupByDate);
     };
     getPolicies();
   }, [location.pathname]);
 
+  const firstPolicy = policiesByDate && Object.values(policiesByDate)[0][0];
   const auth_entity = firstPolicy && firstPolicy.auth_entity[0];
 
   // React.useEffect(() => {
