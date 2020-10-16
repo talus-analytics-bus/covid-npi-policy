@@ -1,0 +1,14 @@
+.container {
+  padding: 4rem;
+
+  .placeholder {
+    width: 10rem;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #cccccc;
+    border: 1px solid #707070;
+    text-align: center;
+  }
+}
