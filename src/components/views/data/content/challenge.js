@@ -183,7 +183,7 @@ export const policyInfo = {
             row.data_source_for_complaint,
             row.data_source_for_decision,
           ].map((d, i) => {
-            if (d !== "") {
+            if (d !== "" && d !== undefined && d !== null) {
               return (
                 <div className={styles.linkIcon}>
                   <a target="_blank" rel="noopener" href={d}>
