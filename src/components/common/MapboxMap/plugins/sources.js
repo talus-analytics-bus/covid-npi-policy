@@ -95,6 +95,7 @@ export const mapSources = {
         type: "vector",
         url: "mapbox://nicoletalus.c4ujj0o1",
         promoteId: "ADM0_A3",
+        filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
       },
     },
   },
