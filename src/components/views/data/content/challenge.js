@@ -138,12 +138,15 @@ export const policyInfo = {
             return row.place.map(d => d.level).join("; ");
           else return "zzz";
         },
-        formatter: (cell, row) =>
-          cell !== "" ? (
-            <ShowMore text={cell} charLimit={200} />
+        formatter: (cell, row) => {
+          // remove any text enclosed in square braces (comments)
+          const text = cell.replace(/\[.*\]/g, "");
+          return text !== "" ? (
+            <ShowMore text={text} charLimit={200} />
           ) : (
             not_available
-          ),
+          );
+        },
       },
       {
         dataField: "government_order_upheld_or_enjoined",
