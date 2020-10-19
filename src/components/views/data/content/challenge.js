@@ -177,11 +177,6 @@ export const policyInfo = {
           else return "zzz";
         },
         formatter: (cell, row) => {
-          console.log(row);
-          console.log([
-            row.data_source_for_complaint,
-            row.data_source_for_decision,
-          ]);
           const icons = [
             row.data_source_for_complaint,
             row.data_source_for_decision,
