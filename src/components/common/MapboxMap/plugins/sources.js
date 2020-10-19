@@ -62,32 +62,6 @@ export const mapSources = {
         promoteId: "ADM0_A3",
       },
     },
-    fill: {
-      name: "geoms",
-      sourceLayer: "countries",
-      def: {
-        type: "vector",
-        url: "mapbox://nicoletalus.c768qb2r",
-        // filter to control what features are returned for layers that are
-        // displaying this metric
-        promoteId: "ADM0_A3",
-        // filter: [
-        //   "==",
-        //   ["in", ["get", "ADM0_A3"], ["literal", ["TWN", "HKG"]]],
-        //   false,
-        // ],
-      },
-    },
-    // fill: {
-    //   name: "geoms",
-    //   sourceLayer: "countries_id_rpr",
-    //   pattern: true,
-    //   def: {
-    //     type: "vector",
-    //     url: "mapbox://traethethird.4kh7sxxt",
-    //     promoteId: "ADM0_A3",
-    //   },
-    // },
     circle: {
       name: "centroids",
       sourceLayer: "mvmupdatescentroidsv2-62u4it",
