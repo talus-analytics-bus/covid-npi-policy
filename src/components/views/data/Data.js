@@ -415,7 +415,7 @@ const Data = ({
                       choices={[
                         { name: "Policies", value: "policy" },
                         { name: "Plans", value: "plan" },
-                        { name: "Court Challenges", value: "challenge" },
+                        { name: "Court challenges", value: "challenge" },
                       ]}
                       curVal={docType}
                       callback={setDocType}
