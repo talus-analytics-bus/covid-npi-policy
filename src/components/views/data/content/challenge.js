@@ -263,6 +263,10 @@ export const policyInfo = {
         d.definition =
           "The name and a written description of the policy or law and who it impacts.";
       }
+      if (d.dataField === "data_source_for_complaint") {
+        d.definition =
+          "External links to primary data sources for complaints or decisions, if available.";
+      }
     });
 
     return newColumns;
