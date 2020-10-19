@@ -181,12 +181,17 @@ export const policyInfo = {
             row.data_source_for_complaint,
             row.data_source_for_decision,
           ].map((d, i) => {
-            if (d !== "" && d !== undefined && d !== null) {
+            if (
+              d !== "" &&
+              d !== undefined &&
+              d !== null &&
+              d.startsWith("http")
+            ) {
               return (
                 <div className={styles.linkIcon}>
                   <a target="_blank" rel="noopener" href={d}>
                     {["Complaint ", "Decision "][i]}
-                    {d.startsWith("http") ? (
+                    {!d.startsWith("http") ? (
                       <i className={"material-icons"}>insert_drive_file</i>
                     ) : (
                       <i className={"material-icons"}>link</i>
