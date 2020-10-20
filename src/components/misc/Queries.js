@@ -422,7 +422,7 @@ export const Caseload = async ({
   // TODO get USA place ID dynamically instead of harcoded
   if (countryId !== undefined) params.place_id = countryId;
   if (stateId !== undefined) params.place_id = stateId;
-  if (countryIso3 !== undefined) params.place_name = countryIso3;
+  if (countryIso3 !== undefined) params.place_iso3 = countryIso3;
   if (stateName !== undefined) params.place_name = stateName;
 
   // send request and return response data
