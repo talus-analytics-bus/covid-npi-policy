@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import * as MiniMap from "./MiniMap/MiniMap";
 
 import PolicyDateSection from "./PolicyDateSection/PolicyDateSection";
 import PolicySection from "./PolicySection/PolicySection";
@@ -81,10 +82,9 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
         (a, b) => new Date(a[0]) - new Date(b[0])
       );
 
-      console.log(sortedByDate);
-
       setPoliciesByDate(sortedByDate);
     };
+
     getPolicies();
   }, [location.pathname]);
 
@@ -103,9 +103,6 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
   // }, [countryIso3, policyNumber, stateName]);
 
   // JSX // ---------------------------------------------------------------- //
-  console.log(firstPolicy);
-  console.log(policiesByDate);
-
   return (
     <div className={styles.main}>
       <header className={styles.titleHeader}>
@@ -136,19 +133,21 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
           </div>
         </div>
       </section>
-      {policiesByDate &&
-        policiesByDate.map(([date, policies]) => (
-          <PolicyDateSection
-            key={date}
-            date={date}
-            policies={policies}
-            open={policiesByDate.length === 1}
-          >
-            {policies.map(policy => (
-              <PolicySection key={policy.desc} policy={policy} />
-            ))}
-          </PolicyDateSection>
-        ))}
+      <MiniMap.Provider scope={"USA"}>
+        {policiesByDate &&
+          policiesByDate.map(([date, policies]) => (
+            <PolicyDateSection
+              key={date}
+              date={date}
+              policies={policies}
+              open={policiesByDate.length === 1}
+            >
+              {policies.map(policy => (
+                <PolicySection key={policy.desc} policy={policy} />
+              ))}
+            </PolicyDateSection>
+          ))}
+      </MiniMap.Provider>
     </div>
   );
 };

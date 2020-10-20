@@ -1,12 +1,13 @@
 import React from "react";
 
-import MiniMap from "../MiniMap/MiniMap";
+import * as MiniMap from "../MiniMap/MiniMap";
 
 import styles from "./PolicySection.module.scss";
 
 const PolicySection = props => (
   <section className={styles.policySection}>
-    <MiniMap />
+    {console.log(props.policy)}
+    <MiniMap.SVG state={props.policy.auth_entity[0].place.area1} />
     <div className={styles.description}>
       <h1>Section</h1>
       <h2>
