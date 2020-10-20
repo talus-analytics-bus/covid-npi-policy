@@ -49,7 +49,7 @@ export const policyInfo = {
       government_order_upheld_or_enjoined: {
         entity_name: "Court_Challenge",
         field: "government_order_upheld_or_enjoined",
-        label: "Upheld?",
+        label: "Upheld or enjoined?",
       },
     },
     {
@@ -87,26 +87,26 @@ export const policyInfo = {
           else return "zzz";
         },
       },
-      {
-        dataField: "parties",
-        header: "Parties or citation",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        formatter: (cell, row) => {
-          if (row.parties !== "") {
-            return `${row.parties}`;
-          } else {
-            return `${row.legal_citation}`;
-          }
-        },
-      },
+      // {
+      //   dataField: "parties",
+      //   header: "Parties or citation",
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   sort: true,
+      //   sortValue: (cell, row) => {
+      //     if (row.place !== undefined)
+      //       return row.place.map(d => d.level).join("; ");
+      //     else return "zzz";
+      //   },
+      //   formatter: (cell, row) => {
+      //     if (row.parties !== "") {
+      //       return `${row.parties}`;
+      //     } else {
+      //       return `${row.legal_citation}`;
+      //     }
+      //   },
+      // },
       {
         dataField: "policy_or_law_name",
         header: "Policy or law name",
@@ -127,8 +127,8 @@ export const policyInfo = {
           ),
       },
       {
-        dataField: "summary_of_action",
-        header: "Summary of action",
+        dataField: "parties_or_citation_and_summary_of_action",
+        header: "Parties or citation and summary of action",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -139,18 +139,17 @@ export const policyInfo = {
           else return "zzz";
         },
         formatter: (cell, row) => {
-          // remove any text enclosed in square braces (comments)
-          const text = cell.replace(/\[.*\]/g, "");
-          return text !== "" ? (
-            <ShowMore text={text} charLimit={200} />
-          ) : (
-            not_available
-          );
+          console.log(cell);
+          if (cell !== "") {
+            return <ShowMore text={cell} charLimit={200} />;
+          } else {
+            return not_available;
+          }
         },
       },
       {
         dataField: "government_order_upheld_or_enjoined",
-        header: "Upheld?",
+        header: "Upheld or enjoined?",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -267,6 +266,10 @@ export const policyInfo = {
         d.definition =
           "External links to primary data sources for complaints or decisions, if available.";
       }
+      if (d.dataField === "parties_or_citation_and_summary_of_action") {
+        d.definition =
+          "The persons who are directly involved or interested in the legal proceeding and a description outlining the main components of the legal challenge.";
+      }
     });
 
     return newColumns;
@@ -291,7 +294,6 @@ export const policyInfo = {
         "case_number",
         "court",
         "jurisdiction",
-        "parties",
         "filed_in_state_or_federal_court",
         "government_order_upheld_or_enjoined",
         "policy_or_law_name",
@@ -299,8 +301,8 @@ export const policyInfo = {
         "date_of_decision",
         "data_source_for_complaint",
         "data_source_for_decision",
-        "summary_of_action",
         "holding",
+        "parties_or_citation_and_summary_of_action",
       ],
     });
   },
