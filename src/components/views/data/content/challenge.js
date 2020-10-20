@@ -238,6 +238,7 @@ export const policyInfo = {
     // and perform some data processing
     // TODO move static data processing into initial declaration of `newColumns`
     newColumns.forEach(d => {
+      d.defCharLimit = 1e6;
       // static update to definition
       // TODO move static data processing into initial declaration
       // of `newColumns`
@@ -249,7 +250,21 @@ export const policyInfo = {
       // definition updates
       const keyTmp = d.defKey || d.dataField;
       const key = keyTmp.includes(".") ? keyTmp : "court_challenge." + keyTmp;
-      d.definition = metadata[key] ? metadata[key].definition || "" : "";
+
+      d.definition = "";
+      if (metadata[key] !== undefined) {
+        if (
+          metadata[key].tooltip !== "" &&
+          metadata[key].tooltip !== undefined
+        ) {
+          d.definition = metadata[key].tooltip;
+        } else if (
+          metadata[key].definition !== "" &&
+          metadata[key].definition !== undefined
+        ) {
+          d.definition = metadata[key].definition;
+        }
+      }
 
       // use only the first sentence of the definition
       if (d.dataField !== "authority_name")
@@ -262,13 +277,19 @@ export const policyInfo = {
         d.definition =
           "The name and a written description of the policy or law and who it impacts.";
       }
+      if (d.dataField === "policy_or_law_name") {
+        d.definition = "Policies at issue in the challenge.";
+      }
       if (d.dataField === "data_source_for_complaint") {
         d.definition =
           "External links to primary data sources for complaints or decisions, if available.";
       }
       if (d.dataField === "parties_or_citation_and_summary_of_action") {
         d.definition =
-          "The persons who are directly involved or interested in the legal proceeding and a description outlining the main components of the legal challenge.";
+          "Persons directly involved with legal proceeding and main components of the legal challenge.";
+      }
+      if (d.dataField === "data_source_for_complaint") {
+        d.definition = "Link to primary data source.";
       }
     });
 
