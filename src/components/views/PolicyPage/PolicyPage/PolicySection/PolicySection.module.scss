@@ -1,7 +1,21 @@
 .policySection {
   display: flex;
 
+  svg {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .placeHolder {
+    margin: 4rem;
+    width: 10rem;
+    height: 10rem;
+    flex-shrink: 0;
+  }
+
   .description {
+    padding-right: 4rem;
+
     h1 {
       padding-top: 4rem;
     }
