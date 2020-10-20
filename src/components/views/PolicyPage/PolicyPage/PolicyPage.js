@@ -58,6 +58,7 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
         filters: { policy_number: [policyNumber] },
         fields: [
           "id",
+          "place",
           "policy_name",
           "auth_entity",
           "date_start_effective",
@@ -90,6 +91,12 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
 
   const firstPolicy = policiesByDate && policiesByDate[0][1][0];
   const auth_entity = firstPolicy && firstPolicy.auth_entity[0];
+  const mapScope =
+    auth_entity === null
+      ? null
+      : auth_entity.place.iso3 === "USA"
+      ? "USA"
+      : "world";
 
   // React.useEffect(() => {
   //   getData({
@@ -103,6 +110,7 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
   // }, [countryIso3, policyNumber, stateName]);
 
   // JSX // ---------------------------------------------------------------- //
+  console.log(policiesByDate);
   return (
     <div className={styles.main}>
       <header className={styles.titleHeader}>
@@ -117,23 +125,30 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
           <p>{auth_entity && auth_entity.office}</p>
           <h3>Official</h3>
           <p>
-            {auth_entity && auth_entity.official && auth_entity.official + ", "}
+            {auth_entity &&
+              auth_entity.official &&
+              auth_entity.official !== "Unspecified" &&
+              auth_entity.official + ", "}
             {auth_entity && auth_entity.name}
           </p>
-          <h2>State Structure</h2>
-          <div className={styles.cols}>
-            <div className={styles.col}>
-              <h3>Home Rule</h3>
-              <p>{auth_entity && auth_entity.place.home_rule}</p>
-            </div>
-            <div className={styles.col}>
-              <h3>Dillon's Rule</h3>
-              <p>{auth_entity && auth_entity.place.dillons_rule}</p>
-            </div>
-          </div>
+          {auth_entity && auth_entity.place.iso3 === "USA" && (
+            <>
+              <h2>State Structure</h2>
+              <div className={styles.cols}>
+                <div className={styles.col}>
+                  <h3>Home Rule</h3>
+                  <p>{auth_entity && auth_entity.place.home_rule}</p>
+                </div>
+                <div className={styles.col}>
+                  <h3>Dillon's Rule</h3>
+                  <p>{auth_entity && auth_entity.place.dillons_rule}</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </section>
-      <MiniMap.Provider scope={"USA"}>
+      <MiniMap.Provider scope={mapScope}>
         {policiesByDate &&
           policiesByDate.map(([date, policies]) => (
             <PolicyDateSection
@@ -142,8 +157,11 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
               policies={policies}
               open={policiesByDate.length === 1}
             >
-              {policies.map(policy => (
-                <PolicySection key={policy.desc} policy={policy} />
+              {policies.map((policy, index) => (
+                <PolicySection
+                  key={policy.desc}
+                  {...{ index, policies, policy }}
+                />
               ))}
             </PolicyDateSection>
           ))}
