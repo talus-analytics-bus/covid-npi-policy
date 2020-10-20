@@ -24,6 +24,7 @@ import downloadSvg from "../../../assets/icons/download.svg";
 // constants
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
+import challengeInfo from "./content/challenge.js";
 const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
 // primary data viewing and download page
@@ -34,6 +35,7 @@ const Data = ({
   setPage,
   urlFilterParamsPolicy,
   urlFilterParamsPlan,
+  urlFilterParamsChallenge,
   type,
   counts,
 }) => {
@@ -41,7 +43,11 @@ const Data = ({
   const [entityInfo, setEntityInfo] = useState(policyInfo);
   const [curPage, setCurPage] = useState(1);
   const [numInstances, setNumInstances] = useState(null);
-  const [ordering, setOrdering] = useState([["date_start_effective", "desc"]]);
+  const [ordering, setOrdering] = useState(
+    docType === "challenge"
+      ? [["date_of_complaint", "desc"]]
+      : [["date_start_effective", "desc"]]
+  );
   const [searchText, setSearchText] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
@@ -59,8 +65,12 @@ const Data = ({
   const getFiltersFromUrlParams = () => {
     // If filters are specific in the url params, and they are for the current
     // entity class, use them. Otherwise, clear them
-    const urlFilterParams =
-      docType === "policy" ? urlFilterParamsPolicy : urlFilterParamsPlan;
+    const urlFilterParams = {
+      policy: urlFilterParamsPolicy,
+      plan: urlFilterParamsPlan,
+      challenge: urlFilterParamsChallenge,
+    }[docType];
+
     const useUrlFilters = urlFilterParams !== null;
     const newFilters = useUrlFilters ? urlFilterParams : {};
     return newFilters;
@@ -129,7 +139,8 @@ const Data = ({
         method: "get",
         fields: initColumns.map(d => {
           const key = d.defKey || d.dataField;
-          if (!key.includes(".")) return docType + "." + key;
+          if (!key.includes("."))
+            return entityInfoForQuery.nouns.s.toLowerCase() + "." + key;
           else return key;
         }),
         entity_class_name: entityInfoForQuery.nouns.s,
@@ -223,8 +234,17 @@ const Data = ({
     setData(null);
     setFilterDefs(null);
     setSearchText(null);
-    setOrdering([["date_start_effective", "desc"]]);
-    const newEntityInfo = docType === "policy" ? policyInfo : planInfo;
+    setOrdering(
+      docType === "challenge"
+        ? [["date_of_complaint", "desc"]]
+        : [["date_start_effective", "desc"]]
+    );
+
+    const newEntityInfo = {
+      policy: policyInfo,
+      plan: planInfo,
+      challenge: challengeInfo,
+    }[docType];
 
     // get current URL params
     const urlParams = new URLSearchParams(window.location.search);
@@ -248,7 +268,10 @@ const Data = ({
     setEntityInfo(newEntityInfo);
     getData({
       filtersForQuery: newFilters,
-      orderingForQuery: [["date_start_effective", "desc"]],
+      orderingForQuery:
+        docType === "challenge"
+          ? [["date_of_complaint", "desc"]]
+          : [["date_start_effective", "desc"]],
       entityInfoForQuery: newEntityInfo,
       initializingForQuery: true,
       getOptionSets: true,
@@ -277,6 +300,7 @@ const Data = ({
       // get filter strings for each doc type
       const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
       const curUrlFilterParamsPlan = urlParams.get("filters_plan");
+      const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
 
       // get key corresponding to the currently viewed doc type's filters
       const filtersUrlParamKey = "filters_" + docType;
@@ -345,7 +369,7 @@ const Data = ({
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>COVID AMP policy and plan database</h1>
+        <h1>COVID AMP Data Access</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
@@ -365,7 +389,7 @@ const Data = ({
         <>
           <Drawer
             {...{
-              title: <h2>Policy and plan database</h2>,
+              title: <h2>Search and Filter</h2>,
               label: DownloadBtn({
                 render: counts,
                 class_name: "all_static",
@@ -390,10 +414,8 @@ const Data = ({
                       label={"View"}
                       choices={[
                         { name: "Policies", value: "policy" },
-                        {
-                          name: "Plans",
-                          value: "plan",
-                        },
+                        { name: "Plans", value: "plan" },
+                        { name: "Court challenges", value: "challenge" },
                       ]}
                       curVal={docType}
                       callback={setDocType}
