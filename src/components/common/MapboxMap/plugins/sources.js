@@ -67,7 +67,7 @@ export const mapSources = {
       sourceLayer: "countries",
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.8618t2wp",
+        url: "mapbox://nicoletalus.8k5jxx58",
         // filter to control what features are returned for layers that are
         // displaying this metric
         promoteId: "ADM0_A3",
