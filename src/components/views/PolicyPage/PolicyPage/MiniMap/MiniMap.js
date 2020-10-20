@@ -1,7 +1,14 @@
 import React from "react";
 import axios from "axios";
 import { feature } from "topojson";
-import { geoAlbersUsa, geoPath } from "d3-geo";
+import {
+  geoAlbersUsa,
+  geoPath,
+  geoMercator,
+  // These are for ortho
+  // geoOrthographic,
+  // geoCentroid,
+} from "d3-geo";
 
 import styles from "./MiniMap.module.scss";
 
@@ -24,21 +31,38 @@ export const Provider = props => {
   const featureContextValue = { features };
 
   React.useEffect(() => {
-    const getTopology = async country => {
-      axios.get("/maps/counties-albers-10m.json").then(response => {
+    const getUSTopology = async country => {
+      axios.get("/maps/counties-10m.json").then(response => {
         const topology = response.data;
 
         // These topojson.feature() is an expensive computation
         // so we want this to only happen once, and keep the result
         setFeatures({
-          // countries: feature(topology, topology.objects.nation).features,
           states: feature(topology, topology.objects.states).features,
           counties: feature(topology, topology.objects.counties).features,
         });
       });
     };
 
-    getTopology(props.scope);
+    const getWorldTopology = async country => {
+      axios.get("/maps/countries.json").then(response => {
+        const topology = response.data;
+
+        console.log(topology);
+
+        setFeatures({
+          countries: feature(topology, topology.objects.countries_v13c_limited)
+            .features,
+        });
+      });
+    };
+
+    if (props.scope === "USA") {
+      getUSTopology();
+    }
+    if (props.scope === "world") {
+      getWorldTopology();
+    }
   }, [props.scope]);
 
   return (
@@ -49,7 +73,7 @@ export const Provider = props => {
 };
 
 // API:
-// <MiniMap country={} state={} county={} />
+// <MiniMap country={} state={} counties={[]} />
 // draws a single map with some features
 // contained in the scope of the Provider
 
@@ -62,10 +86,9 @@ export const SVG = props => {
   const height = 500;
   // const country = props.country || "USA";
 
-  let countyPaths = null;
+  let paths = null;
 
-  console.log(props.state);
-
+  // TODO: combine these if statements
   if (featureContextConsumer.features.counties) {
     const state = featureContextConsumer.features.states.find(
       state => state.properties.name === props.state
@@ -81,19 +104,52 @@ export const SVG = props => {
       features: selectedCounties,
     });
 
-    countyPaths = selectedCounties.map((geometry, index) => {
+    paths = selectedCounties.map((geometry, index) => {
       const path = geoPath().projection(projection)(geometry);
       return (
         <path
           key={geometry.properties.name}
-          fill={"#CCCCCC"}
+          fill={
+            props.counties.includes(geometry.properties.name) ||
+            props.counties[0] === "Unspecified"
+              ? "#C1272D"
+              : "#CCCCCC"
+          }
+          stroke={
+            props.counties.includes(geometry.properties.name) ||
+            props.counties[0] === "Unspecified"
+              ? "#661417"
+              : "#707070"
+          }
+          d={path}
+        />
+      );
+    });
+  }
+
+  if (featureContextConsumer.features.countries) {
+    const country = featureContextConsumer.features.countries.find(
+      country => country.properties.ADM0_A3 === props.country
+    );
+
+    const projection = geoMercator().fitSize([width, height], {
+      type: "FeatureCollection",
+      features: [country],
+    });
+    // .rotate(geoCentroid(country).map((x, i) => (i === 1 ? -23 : x * -1)));
+
+    paths = featureContextConsumer.features.countries.map((geometry, index) => {
+      const path = geoPath().projection(projection)(geometry);
+      return (
+        <path
+          key={geometry.properties.name}
+          fill={
+            geometry.properties.ADM0_A3 === props.country
+              ? "#C1272D"
+              : "#CCCCCC"
+          }
           stroke={"#707070"}
           d={path}
-          // style={{
-          //   fill: props.color,
-          //   strokeWidth: props.darkLines ? 1 : 0.5,
-          //   stroke: props.darkLines ? `rgba(100, 100, 100, 1)` : "white",
-          // }}
         />
       );
     });
@@ -101,12 +157,14 @@ export const SVG = props => {
 
   return (
     <div className={styles.container}>
-      {props.state && countyPaths === null ? (
+      {props.country && paths === null ? (
         <div className={styles.placeholder}>
           <em>loading map...</em>
         </div>
       ) : (
-        <svg viewBox={`0 0 ${width} ${height}`}>{countyPaths}</svg>
+        <svg viewBox={`0 0 ${width} ${height}`}>
+          <g transform={"scale(1)"}>{paths}</g>
+        </svg>
       )}
     </div>
   );
