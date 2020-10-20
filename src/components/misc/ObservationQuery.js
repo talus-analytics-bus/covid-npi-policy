@@ -18,6 +18,7 @@ const ObservationQuery = async function({
   spatial_resolution = "country",
   place_id,
   place_name,
+  place_iso3,
   fields,
 }) {
   end_date = typeof end_date !== "undefined" ? end_date : start_date;
@@ -40,6 +41,8 @@ const ObservationQuery = async function({
     params["place_id"] = place_id;
   } else if (place_name !== undefined) {
     params["place_name"] = place_name;
+  } else if (place_iso3 !== undefined) {
+    params["place_iso3"] = place_iso3;
   }
 
   const res = await axios(`${API_URL}/observations`, {
