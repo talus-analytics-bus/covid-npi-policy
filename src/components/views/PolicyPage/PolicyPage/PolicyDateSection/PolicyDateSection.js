@@ -7,7 +7,14 @@ const PolicyDateSection = props => (
   <section className={styles.policyDateSection}>
     <BlueExpandBox open={props.open}>
       <header className={styles.policyDateSectionHeader}>
-        <h1>{props.date}</h1>
+        <h1>
+          {new Date(props.date).toLocaleString("default", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            timeZone: "UTC",
+          })}
+        </h1>
         <h2>
           {props.policies.length === 1
             ? "1 Policy section"

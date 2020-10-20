@@ -1,15 +1,14 @@
 .policySection {
   display: flex;
 
-  svg {
-    width: 10rem;
-    height: 10rem;
+  svg,
+  .placeHolder {
+    width: 12rem;
+    height: 12rem;
   }
 
   .placeHolder {
     margin: 4rem;
-    width: 10rem;
-    height: 10rem;
     flex-shrink: 0;
   }
 

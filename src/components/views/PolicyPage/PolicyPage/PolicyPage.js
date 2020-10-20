@@ -98,17 +98,6 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
       ? "USA"
       : "world";
 
-  // React.useEffect(() => {
-  //   getData({
-  //     policyNumber, // the policy number that unites policy records
-  //     countryIso3, // the name of the country to get caseload data for
-  //     stateName, // the name of the state / province to get caseload data for
-  //     setPolicies, // state setter for policy data
-  //     setChallenges, // state setter for challenges data
-  //     setCaseload, // state setter for caseload data
-  //   });
-  // }, [countryIso3, policyNumber, stateName]);
-
   // JSX // ---------------------------------------------------------------- //
   console.log(policiesByDate);
   return (
