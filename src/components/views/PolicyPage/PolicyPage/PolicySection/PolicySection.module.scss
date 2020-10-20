@@ -1,14 +1,20 @@
 .policySection {
   display: flex;
 
+  &:last-of-type {
+    padding-bottom: 6rem;
+  }
+
   svg,
   .placeHolder {
     width: 12rem;
     height: 12rem;
+    margin: 0 4rem;
+    margin-top: 2rem;
   }
 
   .placeHolder {
-    margin: 4rem;
+    margin: 0 4rem;
     flex-shrink: 0;
   }
 
