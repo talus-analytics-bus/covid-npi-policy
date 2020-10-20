@@ -306,7 +306,7 @@ export const policyInfo = {
   },
 
   // default field to sort tabular data by
-  defaultSortedField: "case_name",
+  defaultSortedField: "date_of_complaint",
 
   // JSX of content of table cells if data are unspecified, i.e., blank
   unspecified,
