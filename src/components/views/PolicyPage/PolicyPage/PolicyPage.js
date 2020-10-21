@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import * as MiniMap from "./MiniMap/MiniMap";
 
+import CaseloadPlot from "../CaseloadPlot/CaseloadPlot";
 import PolicyDateSection from "./PolicyDateSection/PolicyDateSection";
 import PolicySection from "./PolicySection/PolicySection";
 
@@ -16,31 +17,34 @@ import {
 } from "../../../misc/Queries";
 import ObservationQuery from "../../../misc/ObservationQuery";
 
-const PolicyPage = ({ setPage, setLoading }, props) => {
+const PolicyPage = props => {
+  console.log(props.policyPageCaseload);
+
   // STATE // -------------------------------------------------------------- //
   // DEBUG expect 4 policy records with `policy_number` = 446762756
   const location = useLocation();
 
   // policies that share the policy number associated with this page
-  const [policiesByDate, setPoliciesByDate] = React.useState(null);
+  const [policiesByDate, setPoliciesByDate] = React.useState();
 
-  // court challenges associated with those policies
-  const [challenges, setChallenges] = React.useState(null);
-
-  // caseload time series for country or state associated with policy
-  const [caseload, setCaseload] = React.useState(null);
-
-  // name of country affected by policy
-  // TODO obtain dynamically based on policies or other method
-  const [countryIso3, setCountryIso3] = React.useState("USA");
-
-  // name of state / province affected by policy
-  // TODO obtain dynamically based on policies or other method
-  const [stateName, setStateName] = React.useState("Texas");
+  //   // court challenges associated with those policies
+  //   const [challenges, setChallenges] = React.useState(null);
+  //
+  //   // caseload time series for country or state associated with policy
+  //   const [caseload, setCaseload] = React.useState(null);
+  //
+  //   // name of country affected by policy
+  //   // TODO obtain dynamically based on policies or other method
+  //   const [countryIso3, setCountryIso3] = React.useState("USA");
+  //
+  //   // name of state / province affected by policy
+  //   // TODO obtain dynamically based on policies or other method
+  //   const [stateName, setStateName] = React.useState("Texas");
 
   // EFFECT HOOKS // ------------------------------------------------------- //
   // on init render, set loading to false and page to `policy`
   // and get data for policy
+  const [setPage, setLoading] = [props.setPage, props.setLoading];
   React.useEffect(() => {
     setPage("policy");
     setLoading(false);
@@ -136,6 +140,15 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
             </>
           )}
         </div>
+        <div className={styles.rightCol}>
+          {console.log(auth_entity && auth_entity.place)}
+          <CaseloadPlot
+            policyPageCaseload={props.policyPageCaseload}
+            setPolicyPageCaseload={props.setPolicyPageCaseload}
+            country={auth_entity && auth_entity.place.iso3}
+            state={auth_entity && auth_entity.place.area1}
+          />
+        </div>
       </section>
       <MiniMap.Provider scope={mapScope}>
         {policiesByDate &&
@@ -166,54 +179,54 @@ const PolicyPage = ({ setPage, setLoading }, props) => {
  * are not yet implemented: court cases, time series for COVID cases.
  * @method getData
  */
-const getData = async ({
-  policyNumber, // the policy number that unites policy records
-  countryIso3, // the name of the country to get caseload data for
-  stateName, // the name of the state / province to get caseload data for
-  setPolicies, // state setter for policy data
-  setChallenges, // state setter for challenges data
-  setCaseload, // state setter for caseload data
-}) => {
-  // define queries
-  const queries = {};
-
-  // policy data
-  queries.policy = Policy({
-    method: "post",
-    filters: { policy_number: [policyNumber] },
-    fields: [
-      "id",
-      "place",
-      "auth_entity",
-      "primary_ph_measure",
-      "authority_name",
-      "name_and_desc",
-      "date_start_effective",
-      "file",
-    ],
-  });
-
-  // court cases which refer to the policy number
-  queries.challenge = Challenge({
-    method: "post",
-    filters: { "policy.policy_number": [policyNumber] },
-    // fields: [], // TODO include only needed fields in response
-  });
-
-  // time series for COVID cases for a given state (in US) or
-  // country (global)
-  queries.caseload = Caseload({
-    countryIso3,
-    stateName, // leave undefined if country-level data required
-  });
-
-  // get results
-  const results = await execute({ queries });
-
-  // set state based on results
-  setPolicies(results.policy.data);
-  setCaseload(results.caseload);
-  setChallenges(results.challenge.data);
-};
+// const getData = async ({
+//   policyNumber, // the policy number that unites policy records
+//   countryIso3, // the name of the country to get caseload data for
+//   stateName, // the name of the state / province to get caseload data for
+//   setPolicies, // state setter for policy data
+//   setChallenges, // state setter for challenges data
+//   setCaseload, // state setter for caseload data
+// }) => {
+//   // define queries
+//   const queries = {};
+//
+//   // policy data
+//   queries.policy = Policy({
+//     method: "post",
+//     filters: { policy_number: [policyNumber] },
+//     fields: [
+//       "id",
+//       "place",
+//       "auth_entity",
+//       "primary_ph_measure",
+//       "authority_name",
+//       "name_and_desc",
+//       "date_start_effective",
+//       "file",
+//     ],
+//   });
+//
+//   // court cases which refer to the policy number
+//   queries.challenge = Challenge({
+//     method: "post",
+//     filters: { "policy.policy_number": [policyNumber] },
+//     // fields: [], // TODO include only needed fields in response
+//   });
+//
+//   // time series for COVID cases for a given state (in US) or
+//   // country (global)
+//   queries.caseload = Caseload({
+//     countryIso3,
+//     stateName, // leave undefined if country-level data required
+//   });
+//
+//   // get results
+//   const results = await execute({ queries });
+//
+//   // set state based on results
+//   setPolicies(results.policy.data);
+//   setCaseload(results.caseload);
+//   setChallenges(results.challenge.data);
+// };
 
 export default PolicyPage;

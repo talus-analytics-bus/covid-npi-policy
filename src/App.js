@@ -19,6 +19,7 @@ import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
 import PolicyPage from "./components/views/PolicyPage/PolicyPage/PolicyPage";
+import ListPoliciesPage from "./components/views/PolicyPage/ListPoliciesPage/ListPoliciesPage";
 import Landing from "./components/views/landing/Landing";
 
 // queries
@@ -36,6 +37,8 @@ const App = () => {
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const [versions, setVersions] = useState(null);
   const [counts, setCounts] = useState(null);
+
+  const [policyPageCaseload, setPolicyPageCaseload] = useState({});
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -240,7 +243,34 @@ const App = () => {
                   <Route
                     path="/policy"
                     render={() => {
-                      return <PolicyPage {...{ setPage, setLoading }} />;
+                      return (
+                        <PolicyPage
+                          {...{
+                            setPage,
+                            setLoading,
+                            policyPageCaseload,
+                            setPolicyPageCaseload,
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // policy page
+                  <Route
+                    path="/policies"
+                    render={() => {
+                      return (
+                        <ListPoliciesPage
+                          {...{
+                            setPage,
+                            setLoading,
+                            policyPageCaseload,
+                            setPolicyPageCaseload,
+                          }}
+                        />
+                      );
                     }}
                   />
                 }

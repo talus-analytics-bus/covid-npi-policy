@@ -15,14 +15,11 @@ const PolicySection = props => {
         place => place.area2.split(" County")[0]
       );
   }
+
   const renderMap = Boolean(
     props.index === 0 ||
       JSON.stringify(counties) !== JSON.stringify(prevCounties)
   );
-  console.log(props.index);
-  console.log(counties);
-  console.log(prevCounties);
-  console.log(renderMap);
 
   return (
     <section className={styles.policySection}>

@@ -108,7 +108,7 @@ export const SVG = props => {
       const path = geoPath().projection(projection)(geometry);
       return (
         <path
-          key={geometry.properties.name + index}
+          key={index}
           fill={
             props.counties.includes(geometry.properties.name) ||
             props.counties[0] === "Unspecified"
@@ -142,7 +142,7 @@ export const SVG = props => {
       const path = geoPath().projection(projection)(geometry);
       return (
         <path
-          key={geometry.properties.name + index}
+          key={index}
           fill={
             geometry.properties.ADM0_A3 === props.country
               ? "#C1272D"
