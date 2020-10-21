@@ -391,7 +391,6 @@ export const execute = async function({ queries }) {
  * Get COVID-19 caseload time series for country or for state in USA.
  * NOTE: Either an ID *or* a name for the country / state should be provided
  * but not both for response to behave as expected.
- * TODO implement countries other than USA
  */
 export const Caseload = async ({
   countryId, // place_id for country, e.g., 239
@@ -423,7 +422,7 @@ export const Caseload = async ({
   // TODO get USA place ID dynamically instead of harcoded
   if (countryId !== undefined) params.place_id = countryId;
   if (stateId !== undefined) params.place_id = stateId;
-  if (countryIso3 !== undefined) params.place_name = countryIso3;
+  if (countryIso3 !== undefined) params.place_iso3 = countryIso3;
   if (stateName !== undefined) params.place_name = stateName;
 
   // send request and return response data
