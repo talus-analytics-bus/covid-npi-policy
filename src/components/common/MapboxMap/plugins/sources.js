@@ -90,10 +90,10 @@ export const mapSources = {
     // },
     circle: {
       name: "centroids",
-      sourceLayer: "mvmupdatescentroidsv2-62u4it",
+      sourceLayer: "centroids_v3-abrc0x",
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.c4ujj0o1",
+        url: "mapbox://nicoletalus.3hl37c3u",
         promoteId: "ADM0_A3",
         filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
       },
