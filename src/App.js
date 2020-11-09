@@ -1,6 +1,6 @@
 // standard modules
 import React, { useState, useEffect } from "react";
-import { Route, Redirect, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";

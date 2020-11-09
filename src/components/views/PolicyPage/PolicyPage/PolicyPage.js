@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import * as MiniMap from "./MiniMap/MiniMap";
+import * as MiniMap from "../MiniMap/MiniMap";
 
 import CaseloadPlot from "../CaseloadPlot/CaseloadPlot";
 import PolicyDateSection from "./PolicyDateSection/PolicyDateSection";
@@ -18,8 +18,6 @@ import {
 import ObservationQuery from "../../../misc/ObservationQuery";
 
 const PolicyPage = props => {
-  console.log(props.policyPageCaseload);
-
   // STATE // -------------------------------------------------------------- //
   // DEBUG expect 4 policy records with `policy_number` = 446762756
   const location = useLocation();
@@ -74,6 +72,8 @@ const PolicyPage = props => {
         ],
       });
 
+      console.log(data);
+
       const groupByDate = {};
       data.forEach(policy => {
         groupByDate[policy.date_start_effective] = groupByDate[
@@ -87,23 +87,23 @@ const PolicyPage = props => {
         (a, b) => new Date(a[0]) - new Date(b[0])
       );
 
+      console.log(sortedByDate);
+
       setPoliciesByDate(sortedByDate);
     };
 
     getPolicies();
   }, [location.pathname]);
 
-  const firstPolicy = policiesByDate && policiesByDate[0][1][0];
+  console.log(policiesByDate);
+
+  const firstPolicy =
+    policiesByDate && policiesByDate.length > 0 && policiesByDate[0][1][0];
   const auth_entity = firstPolicy && firstPolicy.auth_entity[0];
   const mapScope =
-    auth_entity === null
-      ? null
-      : auth_entity.place.iso3 === "USA"
-      ? "USA"
-      : "world";
+    auth_entity && auth_entity.place.iso3 === "USA" ? "USA" : "world";
 
   // JSX // ---------------------------------------------------------------- //
-  console.log(policiesByDate);
   return (
     <div className={styles.main}>
       <header className={styles.titleHeader}>
@@ -141,7 +141,6 @@ const PolicyPage = props => {
           )}
         </div>
         <div className={styles.rightCol}>
-          {console.log(auth_entity && auth_entity.place)}
           <CaseloadPlot
             policyPageCaseload={props.policyPageCaseload}
             setPolicyPageCaseload={props.setPolicyPageCaseload}

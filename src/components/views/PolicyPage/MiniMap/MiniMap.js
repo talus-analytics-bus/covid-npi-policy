@@ -132,6 +132,12 @@ export const SVG = props => {
       country => country.properties.ADM0_A3 === props.country
     );
 
+    console.log(country);
+
+    if (country === undefined) {
+      return <></>;
+    }
+
     const projection = geoMercator().fitSize([width, height], {
       type: "FeatureCollection",
       features: [country],

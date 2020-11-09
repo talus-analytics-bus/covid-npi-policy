@@ -39,50 +39,41 @@ const CaseloadPlot = ({
   // const country = country
   const stateForAPI = state === "Unspecified" ? undefined : state;
 
-  console.log(policyPageCaseload);
-
-  React.useEffect(() => {
-    const getCaseload = async () => {
-      console.log(`MAKE REQUEST: ${country}, ${stateForAPI}`);
-      console.log({
-        countryIso3: country,
-        stateName: stateForAPI, // leave undefined if country-level data required
-      });
-      const response = await Caseload({
-        countryIso3: country,
-        stateName: stateForAPI, // leave undefined if country-level data required
-      });
-
-      setPolicyPageCaseload({
-        ...policyPageCaseload,
-        [country]: {
-          [stateForAPI || "national"]: response.map(point => ({
-            x: Date.parse(point.date_time),
-            y: point.value,
-          })),
-        },
-      });
-    };
-
-    if (country) {
-      if (!Object.keys(policyPageCaseload).includes(country)) {
-        getCaseload();
-      }
-      if (Object.keys(policyPageCaseload).includes(country)) {
-        if (!policyPageCaseload[country][stateForAPI || "national"]) {
-          console.log([stateForAPI || "national"]);
-          getCaseload();
-        }
-      }
-    }
-  }, [country, stateForAPI, policyPageCaseload, setPolicyPageCaseload]);
-
-  console.log(policyPageCaseload);
+  //   React.useEffect(() => {
+  //     const getCaseload = async () => {
+  //       console.log(`MAKE REQUEST: ${country}, ${stateForAPI}`);
+  //       const response = await Caseload({
+  //         countryIso3: country,
+  //         stateName: stateForAPI, // leave undefined if country-level data required
+  //       });
+  //
+  //       setPolicyPageCaseload({
+  //         ...policyPageCaseload,
+  //         [country]: {
+  //           [stateForAPI || "national"]: response.map(point => ({
+  //             x: Date.parse(point.date_time),
+  //             y: point.value,
+  //           })),
+  //         },
+  //       });
+  //     };
+  //
+  //     if (country) {
+  //       if (!Object.keys(policyPageCaseload).includes(country)) {
+  //         getCaseload();
+  //       }
+  //       if (Object.keys(policyPageCaseload).includes(country)) {
+  //         if (!policyPageCaseload[country][stateForAPI || "national"]) {
+  //           getCaseload();
+  //         }
+  //       }
+  //     }
+  //   }, [country, stateForAPI, policyPageCaseload, setPolicyPageCaseload]);
 
   return (
     <VictoryChart
       // animate={{ duration: 1000 }}
-      padding={{ top: 6, bottom: 20, left: 50, right: 10 }}
+      padding={{ top: 6, bottom: 20, left: 40, right: 10 }}
       // domainPadding={5}
       responsive={true}
       width={500}
@@ -111,7 +102,7 @@ const CaseloadPlot = ({
         dependentAxis
         label={"Caseload\n"}
         tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
-        offsetX={50}
+        offsetX={40}
         style={{
           grid: {
             stroke: "#aaaaaa",

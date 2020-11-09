@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as MiniMap from "../MiniMap/MiniMap";
+import * as MiniMap from "../../MiniMap/MiniMap";
 
 import styles from "./PolicySection.module.scss";
 
