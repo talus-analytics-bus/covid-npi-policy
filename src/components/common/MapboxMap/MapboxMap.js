@@ -139,6 +139,34 @@ const MapboxMap = ({
         1,
       ]);
     }
+
+    // if circle layers are being used, then order circles smallest to
+    // biggest for optimal click-ability
+    const hasCircleLayers = mapSources[mapId].circle !== undefined;
+    if (hasCircleLayers) {
+      // get data fields to bind data to geo feature
+      const featureLinkField = mapSources[mapId].circle.circleLayers.find(
+        d => d.id === circle
+      ).featureLinkField;
+      const promoteId = mapSources[mapId].circle.def.promoteId;
+
+      // get sort order of circles based on covid caseload metric
+      const sortOrderMetricId = circle;
+      if (sortOrderMetricId === undefined) return;
+      else {
+        const featureOrder = {};
+        data[sortOrderMetricId].forEach(d => {
+          featureOrder[d[featureLinkField]] = -d.value;
+        });
+
+        // update circle ordering
+        map.setLayoutProperty(
+          sortOrderMetricId + "-circle",
+          "circle-sort-key",
+          ["get", ["get", promoteId], ["literal", featureOrder]]
+        );
+      }
+    }
   };
 
   const getFillLegendName = ({ filters, fill }) => {
@@ -400,6 +428,9 @@ const MapboxMap = ({
             });
           } else return;
         });
+
+        // update sort order of circles, etc.
+        updateFillOrder({ map, f: null });
       }
     }
   }, [circle, fill, mapId]);
@@ -440,6 +471,7 @@ const MapboxMap = ({
         // if map had already loaded, then just bind feature states using the
         // latest map data
         bindFeatureStates({ map, mapId, data, selectedFeature });
+        updateFillOrder({ map, f: null });
         updateMapTooltip({ map });
       }
     }
@@ -488,6 +520,8 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
+        console.log("feature");
+        console.log(feature);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {
