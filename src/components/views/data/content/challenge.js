@@ -44,6 +44,11 @@ export const policyInfo = {
         field: "complaint_category",
         label: "Complaint category",
       },
+      policy_categories: {
+        entity_name: "Court_Challenge",
+        field: "policy_categories",
+        label: "Policy category",
+      },
     },
     {
       government_order_upheld_or_enjoined: {
@@ -71,8 +76,6 @@ export const policyInfo = {
           endDatePlaceholder: "Latest",
         },
       },
-    },
-    {
       date_of_decision: {
         entity_name: "Court_Challenge",
         field: "date_of_decision",

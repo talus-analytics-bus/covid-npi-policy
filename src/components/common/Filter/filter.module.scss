@@ -3,6 +3,7 @@
 .filter {
   display: flex;
   flex-flow: column;
+  justify-content: flex-end;
   &:not(:last-child) .filterButton {
     border-right: $border;
   }
