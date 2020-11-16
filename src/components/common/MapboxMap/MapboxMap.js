@@ -123,21 +123,70 @@ const MapboxMap = ({
     }
   };
 
-  const updateFillOrder = ({ map, f = null }) => {
+  const updateFeatureOrder = ({ map, f = null }) => {
     // initialize the vertical order of shapes for certain metrics
     if (mapId === "global") {
-      map.setLayoutProperty("policy_status-fill-outline", "line-sort-key", [
-        "case",
-        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        0,
-        1,
-      ]);
-      map.setLayoutProperty("lockdown_level-fill-outline", "line-sort-key", [
-        "case",
-        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        0,
-        1,
-      ]);
+      const hasFillLayers = mapSources[mapId].fill !== undefined;
+      if (hasFillLayers) {
+        // get data fields to bind data to geo feature
+        const featureLinkField = mapSources[mapId].fill.fillLayers.find(
+          d => d.id === fill
+        ).featureLinkField;
+        const promoteId = mapSources[mapId].fill.def.promoteId;
+
+        // get sort order of circles based on covid caseload metric
+        const sortOrderMetricId = fill;
+        if (sortOrderMetricId === undefined) return;
+        else {
+          const featureOrder = {};
+          data[sortOrderMetricId].forEach(d => {
+            const hasBorder = d.value === "No restrictions" || d.value === null;
+            featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
+          });
+          if (mapId === "global") {
+            geoHaveData.forEach(d => {
+              // set any geographies that have no data to 2
+              if (featureOrder[d] === undefined) {
+                featureOrder[d] = 2;
+              }
+            });
+          }
+
+          // update circle ordering
+          map.setLayoutProperty(
+            sortOrderMetricId + "-fill-outline",
+            "line-sort-key",
+            ["get", ["get", promoteId], ["literal", featureOrder]]
+          );
+        }
+      }
+    } else if (mapId === "us") {
+      const hasFillLayers = mapSources[mapId].fill !== undefined;
+      if (hasFillLayers) {
+        // get data fields to bind data to geo feature
+        const featureLinkField = mapSources[mapId].fill.fillLayers.find(
+          d => d.id === fill
+        ).featureLinkField;
+        const promoteId = mapSources[mapId].fill.def.promoteId;
+
+        // get sort order of circles based on covid caseload metric
+        const sortOrderMetricId = fill;
+        if (sortOrderMetricId === undefined) return;
+        else {
+          const featureOrder = {};
+          data[sortOrderMetricId].forEach(d => {
+            const hasBorder = d.value === "No restrictions" || d.value === null;
+            featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
+          });
+
+          // update circle ordering
+          map.setLayoutProperty(
+            sortOrderMetricId + "-fill-outline",
+            "line-sort-key",
+            ["get", ["get", promoteId], ["literal", featureOrder]]
+          );
+        }
+      }
     }
 
     // if circle layers are being used, then order circles smallest to
@@ -430,7 +479,7 @@ const MapboxMap = ({
         });
 
         // update sort order of circles, etc.
-        updateFillOrder({ map, f: null });
+        updateFeatureOrder({ map, f: null });
       }
     }
   }, [circle, fill, mapId]);
@@ -471,7 +520,7 @@ const MapboxMap = ({
         // if map had already loaded, then just bind feature states using the
         // latest map data
         bindFeatureStates({ map, mapId, data, selectedFeature });
-        updateFillOrder({ map, f: null });
+        updateFeatureOrder({ map, f: null });
         updateMapTooltip({ map });
       }
     }
@@ -650,7 +699,7 @@ const MapboxMap = ({
             // whenever the map style, i.e., the type of map, is changed
             const map = mapRef.getMap();
 
-            updateFillOrder({ map, f: null });
+            updateFeatureOrder({ map, f: null });
             setLinLogCircleStyle();
 
             // if default fit bounds are specified, center the viewport on them

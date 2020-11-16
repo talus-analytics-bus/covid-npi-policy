@@ -663,6 +663,17 @@ export const metricMeta = {
     // last updated: 2020-06-24
     // MV via JK and GU
     valueStyling: {
+      "No restrictions": {
+        label: "No active restrictions",
+        phase: "",
+        color: "#fff",
+        // icon: phase1,
+        def: (
+          <span>
+            No active social distancing policies with restrictions are in place
+          </span>
+        ),
+      },
       Lockdown: {
         label: "Lockdown",
         phase: "Phase I",
@@ -801,14 +812,26 @@ export const metricMeta = {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
-        range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
+        range: [
+          "#eaeaea",
+          "#fff",
+          "#2165a1",
+          "#549FE2",
+          "#86BFEB",
+          "#BBDAF5",
+          dots,
+        ],
         domain: [
           <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
             data not
             <br />
             available
           </div>,
-          "no policy",
+          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            no active
+            <br />
+            restrictions
+          </div>,
           getCovidLocalMetricLink("lockdown"),
           getCovidLocalMetricLink("stay-at-home"),
           getCovidLocalMetricLink("safer-at-home"),
@@ -1004,6 +1027,11 @@ export const tooltipGetter = async ({
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
 
+  // if lockdown level is null, set it to "no restrictions"
+  const replaceNullData = props.geoHaveData || mapId === "us";
+  if (state.lockdown_level === null && replaceNullData)
+    state.lockdown_level = "No restrictions";
+
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
   // tooltip, otherwise skip
@@ -1061,6 +1089,7 @@ export const tooltipGetter = async ({
 
       // define special tooltip items
       if (k === "lockdown_level") {
+        // if (v === "No restrictions") continue;
         const valueStyling = thisMetricMeta.valueStyling[v];
         const label = valueStyling.labelShort || valueStyling.label;
         item.value = (
@@ -1322,7 +1351,10 @@ export const tooltipGetter = async ({
               data collection in progress
             </i>
           );
-        } else if (state.lockdown_level === null && nPolicies.total > 0) {
+        } else if (
+          [null, "No restrictions"].includes(state.lockdown_level) &&
+          nPolicies.total > 0
+        ) {
           message = (
             <i>
               No country-level distancing
