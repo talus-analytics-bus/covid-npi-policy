@@ -70,6 +70,23 @@ export const policyInfo = {
         minMaxDate: { min: undefined, max: undefined },
       },
     },
+    // {
+    //   complaint_category_new: {
+    //     entity_name: "Court_Challenge",
+    //     field: "complaint_category_new",
+    //     label: "Complaint category (fake)",
+    //   },
+    // },
+    // {
+    //   complaint_subcategory_new: {
+    //     entity_name: "Court_Challenge",
+    //     field: "complaint_subcategory_new",
+    //     label: "Complaint subcategory (fake)",
+    //     withGrouping: true,
+    //     primary: "complaint_category_new",
+    //     disabledText: "Choose a complaint category",
+    //   },
+    // },
   ],
   getColumns: ({ metadata, setOrdering }) => {
     // define initial columns which will be updated using the metadata
