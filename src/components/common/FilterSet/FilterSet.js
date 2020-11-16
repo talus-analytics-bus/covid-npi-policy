@@ -53,6 +53,9 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
+      if (v.field === "date_of_complaint") {
+        debugger;
+      }
       filterGroupComponents.push(
         <Filter
           {...{
@@ -72,6 +75,8 @@ const FilterSet = ({
             activeFilter,
             setActiveFilter,
             withGrouping: v.withGrouping,
+            params: v.params,
+            ...props,
           }}
         />
       );
@@ -145,14 +150,18 @@ const FilterSet = ({
                 {!filterDefsObj[field].dateRange &&
                   values.map(value =>
                     getBadge({
-                      label: filterDefsObj[field].label,
+                      label:
+                        filterDefsObj[field].labelShort ||
+                        filterDefsObj[field].label,
                       field,
                       value,
                     })
                   )}
                 {filterDefsObj[field].dateRange &&
                   getBadge({
-                    label: filterDefsObj[field].label,
+                    label:
+                      filterDefsObj[field].labelShort ||
+                      filterDefsObj[field].label,
                     field,
                     value: getInputLabel({
                       dateRange: true,

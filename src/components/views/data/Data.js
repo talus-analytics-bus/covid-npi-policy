@@ -193,13 +193,6 @@ const Data = ({
       newFilterDefs.forEach(d => {
         for (const [k, v] of Object.entries(d)) {
           if (!k.startsWith("date")) d[k].items = optionsets[k];
-          // if (k === "dates_in_effect") {
-          //   // set min/max date range for daterange filters
-          //   d[k].minMaxDate = {
-          //     min: newMinMaxStartDate.min,
-          //     max: undefined,
-          //   };
-          // }
         }
       });
       setFilterDefs(newFilterDefs);

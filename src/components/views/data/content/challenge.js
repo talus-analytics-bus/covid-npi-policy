@@ -56,18 +56,40 @@ export const policyInfo = {
       date_of_complaint: {
         entity_name: "Court_Challenge",
         field: "date_of_complaint",
-        label: "Complaint date range",
+        label: (
+          <>
+            Complaint date
+            <br />
+            <i style={{ fontWeight: "normal" }}>(select range)</i>
+          </>
+        ),
+        labelShort: "Complaint date",
         dateRange: true,
         minMaxDate: { min: undefined, max: undefined },
+        params: {
+          startDatePlaceholder: "Earliest",
+          endDatePlaceholder: "Latest",
+        },
       },
     },
     {
       date_of_decision: {
         entity_name: "Court_Challenge",
         field: "date_of_decision",
-        label: "Decision date range",
+        label: (
+          <>
+            Decision date
+            <br />
+            <i style={{ fontWeight: "normal" }}>(select range)</i>
+          </>
+        ),
+        labelShort: "Decision date",
         dateRange: true,
         minMaxDate: { min: undefined, max: undefined },
+        params: {
+          startDatePlaceholder: "Earliest",
+          endDatePlaceholder: "Latest",
+        },
       },
     },
     // {

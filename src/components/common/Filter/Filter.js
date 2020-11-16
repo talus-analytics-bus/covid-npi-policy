@@ -36,6 +36,7 @@ const Filter = ({
   minMaxDate,
   withGrouping = false,
   className,
+  params = {},
   ...props
 }) => {
   const [show, setShow] = useState(false);
@@ -55,7 +56,7 @@ const Filter = ({
   const disabled = primaryFiltersOff;
   const [filterState, setFilterState] = useState({
     items,
-    selectedItems: initSelectedItems
+    selectedItems: initSelectedItems,
   });
   const [showRangeSelection, setShowRangeSelection] = useState(false);
   const initDateRangeState = [
@@ -68,8 +69,8 @@ const Filter = ({
         initSelectedItems.length > 0
           ? new Date(moment(initSelectedItems[1]))
           : undefined,
-      key: "selection"
-    }
+      key: "selection",
+    },
   ];
   const [dateRangeState, setDateRangeState] = useState(initDateRangeState);
 
@@ -150,13 +151,13 @@ const Filter = ({
           updatedSelectedItems = newFilters;
           setFilterState({
             ...filterState,
-            selectedItems: updatedSelectedItems
+            selectedItems: updatedSelectedItems,
           });
         } else {
           updatedSelectedItems = [];
           setFilterState({
             ...filterState,
-            selectedItems: updatedSelectedItems
+            selectedItems: updatedSelectedItems,
           });
         }
       }
@@ -198,7 +199,7 @@ const Filter = ({
       if (startRaw === undefined || endRaw === undefined) {
         setFilterState({
           ...filterState,
-          selectedItems: []
+          selectedItems: [],
         });
         return;
       } else {
@@ -208,11 +209,11 @@ const Filter = ({
             .format("YYYY-MM-DD"),
           moment(dateRangeState[0].endDate)
             .utc()
-            .format("YYYY-MM-DD")
+            .format("YYYY-MM-DD"),
         ];
         setFilterState({
           ...filterState,
-          selectedItems: v
+          selectedItems: v,
         });
         // update filters
         setFilters({ ...filters, [field]: v });
@@ -235,7 +236,7 @@ const Filter = ({
     return (
       <div
         className={classNames(styles.filter, {
-          [styles.disabled]: disabled || noItems
+          [styles.disabled]: disabled || noItems,
         })}
       >
         <div className={styles.label}>{label}</div>
@@ -245,7 +246,7 @@ const Filter = ({
             className={classNames(styles.filterButton, className, {
               [styles.shown]: show,
               [styles.selected]: nCur > 0,
-              [styles.disabled]: disabled || noItems
+              [styles.disabled]: disabled || noItems,
             })}
             onClick={e => {
               if (activeFilter !== field) {
@@ -264,7 +265,7 @@ const Filter = ({
                   dateRangeState,
                   selectedItems: filterState.selectedItems,
                   disabledText,
-                  disabled
+                  disabled,
                 })}
               </span>
               <span className={styles.selections}>
@@ -283,7 +284,7 @@ const Filter = ({
             id={elId}
             className={classNames(styles.filterMenu, {
               [styles.shown]: show,
-              [styles.dateRange]: dateRange
+              [styles.dateRange]: dateRange,
             })}
             onMouseDown={e => {
               // reveal blue selected range only when calendar has been
@@ -309,7 +310,7 @@ const Filter = ({
                 onChange={v => {
                   setFilterState({
                     ...filterState,
-                    selectedItems: v
+                    selectedItems: v,
                   });
 
                   // update filters
@@ -332,8 +333,10 @@ const Filter = ({
                 ranges={dateRangeState}
                 minDate={minMaxDate.min}
                 maxDate={minMaxDate.max}
-                startDatePlaceholder={"Start date"}
-                endDatePlaceholder={"End date"}
+                startDatePlaceholder={
+                  params.startDatePlaceholder || "Start date"
+                }
+                endDatePlaceholder={params.endDatePlaceholder || "End date"}
                 onPreviewChange={() => {
                   // override default behavior when mousing over the calendar
                   // in order to support custom styling
@@ -360,13 +363,13 @@ const Filter = ({
             const vItem = items.find(d => d.value === v);
             setFilterState({
               ...filterState,
-              selectedItems: [vItem]
+              selectedItems: [vItem],
             });
 
             // update filters
             setFilters({ ...filters, [field]: [vItem.value] });
           },
-          label
+          label,
         }}
       />
     );
@@ -390,7 +393,7 @@ export const getInputLabel = ({
   items,
   selectedItems,
   disabledText,
-  disabled
+  disabled,
 }) => {
   if (!dateRange) {
     // if this filter has a primary and it isn't active, disable it
