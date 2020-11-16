@@ -74,6 +74,7 @@ const PastInterventionInfo = props => {
                 ph_measure_details: [],
                 area1: [states.find(state => state.abbr === props.state).name],
               },
+              ordering: [["id", "asc"]],
             }
           )
           .then(response => setPolicyCount(response.data.data.length));
