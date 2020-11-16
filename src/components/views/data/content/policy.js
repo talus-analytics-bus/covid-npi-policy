@@ -189,7 +189,7 @@ export const policyInfo = {
       },
       {
         dataField: "file",
-        header: "Link",
+        header: "PDF / Link",
         formatter: (row, cell) => {
           if (cell.file === undefined) return "";
           const icons = cell.file.map((d, i) => {
@@ -238,7 +238,7 @@ export const policyInfo = {
       // TODO move static data processing into initial declaration
       // of `newColumns`
       if (d.dataField === "file") {
-        d.definition = "PDF download of or external link to policy";
+        d.definition = "";
         return;
       }
 
