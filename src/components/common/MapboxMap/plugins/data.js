@@ -187,6 +187,7 @@ export const mapMetrics = {
         metric_id: 74,
         temporal_resolution: "daily",
         spatial_resolution: "state",
+        fields: ["value", "date_time", "place_name"],
       },
       id: "74",
       featureLinkField: "place_name",
