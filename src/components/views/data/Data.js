@@ -384,17 +384,32 @@ const Data = ({
             {...{
               title: <h2>Search and Filter</h2>,
               label: DownloadBtn({
-                render: counts,
-                class_name: "all_static",
-                filters: {},
+                render: table,
+                class_name: [nouns.s, "secondary"],
+                classNameForApi: nouns.s,
+                buttonLoading,
+                setButtonLoading,
                 searchText,
-                disabled: false,
+                filters,
+                disabled: data && data.length === 0,
                 message: (
                   <>
-                    <span>Download all data</span>
                     <span>
-                      {comma(counts["Policy"])} policies and{" "}
-                      {comma(counts["Plan"])} plans
+                      {data && data.length === 0 && (
+                        <>No {nouns.p.toLowerCase()} found</>
+                      )}
+                      {data && data.length > 0 && (
+                        <>
+                          Download complete metadata
+                          <br />
+                          for{" "}
+                          {isEmpty(filters) &&
+                          (searchText === null || searchText === "")
+                            ? "all"
+                            : "filtered"}{" "}
+                          {nouns.p.toLowerCase()} ({comma(numInstances)})
+                        </>
+                      )}
                     </span>
                   </>
                 ),
@@ -451,38 +466,7 @@ const Data = ({
                               searchText,
                               setSearchText,
                             }}
-                          >
-                            {DownloadBtn({
-                              render: table,
-                              class_name: nouns.s,
-                              buttonLoading,
-                              setButtonLoading,
-                              searchText,
-                              filters,
-                              disabled: data && data.length === 0,
-                              message: (
-                                <>
-                                  <span>
-                                    {data && data.length === 0 && (
-                                      <>No {nouns.p.toLowerCase()} found</>
-                                    )}
-                                    {data && data.length > 0 && (
-                                      <>
-                                        Download{" "}
-                                        {isEmpty(filters) &&
-                                        (searchText === null ||
-                                          searchText === "")
-                                          ? "all"
-                                          : "filtered"}{" "}
-                                        {nouns.p.toLowerCase()} (
-                                        {comma(numInstances)})
-                                      </>
-                                    )}
-                                  </span>
-                                </>
-                              ),
-                            })}
-                          </FilterSet>
+                          ></FilterSet>
                         </>
                       )}
                     </>
@@ -504,20 +488,25 @@ const DownloadBtn = ({
   render,
   message,
   class_name,
+  classNameForApi,
   filters,
   disabled,
   searchText,
   buttonLoading = false,
   setButtonLoading = () => "",
 }) => {
+  // define custom class names
+  const thisClassNames = {
+    [styles.loading]: buttonLoading || disabled,
+  };
+  class_name.forEach(d => {
+    thisClassNames[styles[d]] = true;
+  });
   // flag for whether the download button should say loading or not
   return (
     render && (
       <button
-        className={classNames(styles.downloadBtn, {
-          [styles.loading]: buttonLoading || disabled,
-          [styles[class_name]]: true,
-        })}
+        className={classNames(styles.downloadBtn, thisClassNames)}
         onClick={e => {
           e.stopPropagation();
           if (class_name === "all_static") {
@@ -533,7 +522,7 @@ const DownloadBtn = ({
                 ...filters,
                 _text: searchText !== null ? [searchText] : [],
               },
-              class_name,
+              class_name: classNameForApi,
             }).then(d => setButtonLoading(false));
           }
         }}

@@ -58,7 +58,10 @@ const Table = ({
         <div>
           <p>{d.header}</p>
           <p className={styles.definition}>
-            {<ShowMore text={d.definition} charLimit={d.defCharLimit || 30} />}
+            {
+              d.definition
+              // <ShowMore text={d.definition} charLimit={d.defCharLimit || 30} />
+            }
           </p>
         </div>
       );

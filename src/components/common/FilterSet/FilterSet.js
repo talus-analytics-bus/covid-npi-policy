@@ -53,9 +53,7 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
-      if (v.field === "date_of_complaint") {
-        debugger;
-      }
+
       filterGroupComponents.push(
         <Filter
           {...{

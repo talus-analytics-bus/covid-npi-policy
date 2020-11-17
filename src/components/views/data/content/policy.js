@@ -249,7 +249,7 @@ export const policyInfo = {
 
       // use only the first sentence of the definition
       if (d.dataField !== "authority_name")
-        d.definition = d.definition.split(".")[0] + ".";
+        d.definition = d.definition.split(".")[0];
 
       // special cases
       // TODO move static data processing into initial declaration
