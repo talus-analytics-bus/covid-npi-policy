@@ -90,7 +90,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
               >
                 <button>
                   <i className={"material-icons"}>get_app</i>Download data
-                  dictionary
+                  dictionary as Excel
                 </button>
               </a>
               <a
@@ -102,7 +102,8 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
                 }
               >
                 <button>
-                  <i className={"material-icons"}>get_app</i>Download as PDF
+                  <i className={"material-icons"}>get_app</i>Download
+                  documentation as PDF
                 </button>
               </a>
             </div>

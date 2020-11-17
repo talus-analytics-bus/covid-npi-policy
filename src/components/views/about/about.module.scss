@@ -74,7 +74,14 @@
     @include spaceItemsHoriz(10px);
     position: relative;
     top: 1px;
-    font-size: 1.2rem;
+    > a,
+    > button span:first-child {
+      font-size: 1.2rem;
+    }
+    > button img {
+      height: 30px;
+      width: 30px;
+    }
     z-index: 1;
     align-items: flex-end;
     display: flex;
