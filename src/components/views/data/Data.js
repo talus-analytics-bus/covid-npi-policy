@@ -48,7 +48,6 @@ const Data = ({
       ? [["date_of_complaint", "desc"]]
       : [["date_start_effective", "desc"]]
   );
-  const [searchText, setSearchText] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
@@ -77,6 +76,10 @@ const Data = ({
   };
   const initFilters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState(initFilters);
+
+  const [searchText, setSearchText] = useState(
+    initFilters._text !== undefined ? initFilters._text[0] : null
+  );
 
   // min and max dates for date range pickers dynamically determined by data
   const [minMaxStartDate, setMinMaxStartDate] = useState({
@@ -226,7 +229,6 @@ const Data = ({
     setColumns(null);
     setData(null);
     setFilterDefs(null);
-    setSearchText(null);
     setOrdering(
       docType === "challenge"
         ? [["date_of_complaint", "desc"]]
@@ -256,6 +258,7 @@ const Data = ({
 
     const newFilters = getFiltersFromUrlParams();
     setFilters(newFilters);
+    setSearchText(newFilters._text !== undefined ? newFilters._text[0] : null);
 
     // update entity info and get data
     setEntityInfo(newEntityInfo);
@@ -306,11 +309,14 @@ const Data = ({
       if (curUrlFilterParamsPlan !== null)
         newState.filters_plan = curUrlFilterParamsPlan;
 
-      if (isEmpty(filters)) {
+      if (isEmpty(filters) && searchText === null) {
         // clear filters for current doc type and update window history
         newState[filtersUrlParamKey] = "";
       } else {
-        newState[filtersUrlParamKey] = JSON.stringify(filters);
+        newState[filtersUrlParamKey] = JSON.stringify({
+          ...filters,
+          _text: [searchText],
+        });
       }
       const newUrlParams = new URLSearchParams();
       for (const [k, v] of Object.entries(newState)) {

@@ -131,6 +131,8 @@ const FilterSet = ({
   };
 
   // display selected filters as list of badges that can be clicked off
+  const filterKeys = Object.keys(filters);
+  const noNonTextFilters = filterKeys.length === 1 && filterKeys[0] === "_text";
   const selectedFilters =
     props.showSelectedFilters === false ? null : (
       <div className={styles.selectedFilters}>
@@ -142,10 +144,12 @@ const FilterSet = ({
         </div>
 
         <div className={styles.badges}>
-          {!isEmpty(filters) &&
+          {!noNonTextFilters &&
             Object.entries(filters).map(([field, values]) => (
               <React.Fragment key={field + "-" + values.join("-")}>
-                {!filterDefsObj[field].dateRange &&
+                {field !== "_text" &&
+                  filterDefsObj[field] !== undefined &&
+                  !filterDefsObj[field].dateRange &&
                   values.map(value =>
                     getBadge({
                       label:
@@ -155,7 +159,9 @@ const FilterSet = ({
                       value,
                     })
                   )}
-                {filterDefsObj[field].dateRange &&
+                {field !== "_text" &&
+                  filterDefsObj[field] !== undefined &&
+                  filterDefsObj[field].dateRange &&
                   getBadge({
                     label:
                       filterDefsObj[field].labelShort ||
