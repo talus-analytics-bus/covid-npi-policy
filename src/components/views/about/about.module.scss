@@ -76,7 +76,9 @@
     top: 1px;
     font-size: 1.2rem;
     z-index: 1;
-    button {
+    align-items: flex-end;
+    display: flex;
+    a button {
       font-family: "rawline", serif;
 
       background: none;

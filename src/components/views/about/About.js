@@ -8,6 +8,7 @@ import Documentation from "./content/Documentation";
 
 // local components
 import { AccessibilityNote } from "../../common";
+import { DownloadBtn } from "../data/Data";
 
 // assets
 import logo from "../../../assets/images/logo.svg";
@@ -180,6 +181,11 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             </button>
           </Link>
         ))}
+        {DownloadBtn({
+          message: <span>Download complete metadata</span>,
+          class_name: ["all_static"],
+          classNameForApi: "all_static",
+        })}
       </div>
       {tabs.map(
         d =>

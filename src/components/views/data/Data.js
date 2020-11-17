@@ -393,25 +393,23 @@ const Data = ({
                 filters,
                 disabled: data && data.length === 0,
                 message: (
-                  <>
-                    <span>
-                      {data && data.length === 0 && (
-                        <>No {nouns.p.toLowerCase()} found</>
-                      )}
-                      {data && data.length > 0 && (
-                        <>
-                          Download complete metadata
-                          <br />
-                          for{" "}
-                          {isEmpty(filters) &&
-                          (searchText === null || searchText === "")
-                            ? "all"
-                            : "filtered"}{" "}
-                          {nouns.p.toLowerCase()} ({comma(numInstances)})
-                        </>
-                      )}
-                    </span>
-                  </>
+                  <span>
+                    {data && data.length === 0 && (
+                      <>No {nouns.p.toLowerCase()} found</>
+                    )}
+                    {data && data.length > 0 && (
+                      <>
+                        Download complete metadata
+                        <br />
+                        for{" "}
+                        {isEmpty(filters) &&
+                        (searchText === null || searchText === "")
+                          ? "all"
+                          : "filtered"}{" "}
+                        {nouns.p.toLowerCase()} ({comma(numInstances)})
+                      </>
+                    )}
+                  </span>
                 ),
               }),
               noCollapse: false,
@@ -484,10 +482,10 @@ const Data = ({
   );
 };
 
-const DownloadBtn = ({
-  render,
-  message,
-  class_name,
+export const DownloadBtn = ({
+  render = true,
+  message = "Download",
+  class_name = [],
   classNameForApi,
   filters,
   disabled,
