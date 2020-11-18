@@ -70,8 +70,6 @@ const MapboxMap = ({
   // data to display in map -- reloaded whenever date or filter is changed
   const [allData, setAllData] = useState(null);
   const [data, setData] = useState(null);
-  console.log("data");
-  console.log(data);
 
   // current viewport of map
   const [viewport, setViewport] = useState({});
@@ -352,14 +350,11 @@ const MapboxMap = ({
     getMapData({ date: initDate, filters: filtersForRequests, mapId });
   }, [JSON.stringify(filters), mapId]);
 
-  // if all data initialized or date changed then setup data
-  const pullForward = ["lockdown_level"];
   useEffect(() => {
     if (allData !== null) {
       const newData = {};
       const dtStr = date.format("YYYY-MM-DD");
       for (const [id, values] of Object.entries(allData)) {
-        if (pullForward.includes("id")) continue;
         if (values.length === 0) newData[id] = [];
         else {
           let field =
@@ -370,31 +365,6 @@ const MapboxMap = ({
           newData[id] = values.filter(d => d[field].startsWith(dtStr));
         }
       }
-
-      // pull forward certain values
-      pullForward.forEach(id => {
-        // group all data by place name
-        const byPlace = {};
-        allData[id].forEach(d => {
-          if (byPlace[d.place_name] === undefined) {
-            byPlace[d.place_name] = [d];
-          } else byPlace[d.place_name].push(d);
-        });
-
-        debugger;
-
-        // for each place
-        const field = "datestamp"; // TODO dynamically
-        for (const [place_name, values] of Object.entries(byPlace)) {
-          let match;
-          match = values.find(d => d[field].startsWith(dtStr));
-          if (match === undefined) {
-            // fill in missing values -- but probably should do this in API...
-          }
-        }
-        // assuming already sorted by date: find matching OR most recent obs
-        // convert to correct format
-      });
       setData(newData);
     }
   }, [date, allData]);
