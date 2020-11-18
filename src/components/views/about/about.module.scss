@@ -82,6 +82,9 @@
       height: 30px;
       width: 30px;
     }
+    > button {
+      padding: 5px 0 5px 10px;
+    }
     z-index: 1;
     align-items: flex-end;
     display: flex;
@@ -207,6 +210,7 @@
         font-size: 0.8rem;
         button {
           padding: 5px 10px;
+
           i {
             margin-right: 5px;
             margin-left: -5px;
