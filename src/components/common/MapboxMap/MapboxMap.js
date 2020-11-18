@@ -348,8 +348,13 @@ const MapboxMap = ({
     const filtersForRequests = { ...filters };
     delete filtersForRequests.dates_in_effect;
 
-    getMapData({ date: initDate, filters: filtersForRequests, mapId });
-  }, [JSON.stringify(filters), mapId]);
+    getMapData({
+      date: initDate,
+      filters: filtersForRequests,
+      mapId,
+      metricIds: [circle, fill],
+    });
+  }, [circle, fill, JSON.stringify(filters)]);
 
   // update current slice of data from "all data" whenever the date changes
   useEffect(() => {
@@ -375,6 +380,8 @@ const MapboxMap = ({
   useEffect(() => {
     if (mapRef.getMap !== undefined) {
       const map = mapRef.getMap();
+      map.circle = circle;
+      map.fill = fill;
       updateMapTooltip({ map });
     }
   }, [selectedFeature, circle, fill]);
@@ -488,7 +495,7 @@ const MapboxMap = ({
           geoHaveData,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
-            bindFeatureStates({ map, mapId, data });
+            bindFeatureStates({ map, mapId, data, metricIds: [circle, fill] });
 
             // load layer images, if any, for pattern layers
             layerImages.forEach(({ asset, name }) => {
@@ -506,7 +513,13 @@ const MapboxMap = ({
       } else {
         // if map had already loaded, then just bind feature states using the
         // latest map data
-        bindFeatureStates({ map, mapId, data, selectedFeature });
+        bindFeatureStates({
+          map,
+          mapId,
+          data,
+          selectedFeature,
+          metricIds: [circle, fill],
+        });
         updateFillOrder({ map, f: null });
         updateMapTooltip({ map });
       }
@@ -712,7 +725,7 @@ const MapboxMap = ({
             }
 
             map.on("styledataloading", function() {
-              getMapData();
+              // getMapData();
             });
           }}
           doubleClickZoom={false} //remove 300ms delay on clicking

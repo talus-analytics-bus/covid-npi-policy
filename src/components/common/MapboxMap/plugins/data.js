@@ -892,9 +892,10 @@ export const metricMeta = {
  * @param  {[type]}   map     [description]
  * @return {Promise}          [description]
  */
-export const dataGetter = async ({ date, mapId, filters, map }) => {
+export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
   // get all metrics displayed in the current map
   const metrics = mapMetrics[mapId];
+  // const metrics = mapMetrics[mapId].filter(d => metricIds.includes(d.id));
 
   // define date parameters for API calls
   const dates = {
@@ -906,6 +907,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
   const queryDefs = {};
+  const queries = {};
   metrics.forEach(d => {
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
@@ -935,11 +937,14 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   });
 
   // collate queries in object to be called by the `execute method below`
-  const queries = {};
   for (const [k, v] of Object.entries(queryDefs)) {
-    queries[k] = v.queryFunc({
-      ...v,
-    });
+    // if metric not in list of ids to fetch, set data as empty array
+    const fetchData = metricIds.includes(k);
+    if (fetchData)
+      queries[k] = v.queryFunc({
+        ...v,
+      });
+    else queries[k] = async () => [];
   }
 
   // execute queries in parallel

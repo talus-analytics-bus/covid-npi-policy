@@ -60,6 +60,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
+  const [shownMapId, setShownMapId] = useState(null);
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
   const caseloadLastUpdated =
@@ -193,7 +194,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     // add the mapbox map component for the map to the array as long as it is
     // the currently enabled map
     maps.push(
-      k === mapId && (
+      k === shownMapId && (
         <MapboxMap
           {...{
             setInfoTooltipContent: props.setInfoTooltipContent,
@@ -534,6 +535,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     function updateDefaultMetrics() {
       setCircle(defaults[mapId].circle);
       setFill(defaults[mapId].fill);
+      setShownMapId(mapId);
     },
     [mapId]
   );
