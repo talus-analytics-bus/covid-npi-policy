@@ -156,9 +156,10 @@ const DateSlider = ({
     // event that triggers the slider movement
     let i = 0;
     let cur;
+    const stepSize = 1;
     const newPlayTimeouts = [];
     while (prev < sliderMaxValue) {
-      cur = Math.min(prev + 7, sliderMaxValue);
+      cur = Math.min(prev + stepSize, sliderMaxValue);
       prev = cur;
       const timeoutPrev = prev;
 
@@ -170,7 +171,7 @@ const DateSlider = ({
           // update dates, etc.
           handleSliderChange(timeoutPrev);
           setCurSliderVal(timeoutPrev);
-        }, 2000 * i)
+        }, 50 * i)
       );
       i = i + 1;
     }

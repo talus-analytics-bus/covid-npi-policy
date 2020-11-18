@@ -46,6 +46,7 @@ const MapboxMap = ({
   mapId,
   mapStyle,
   date,
+  initDate,
   circle,
   fill,
   filters,
@@ -66,7 +67,10 @@ const MapboxMap = ({
   const [loading, setLoading] = useState(true);
 
   // data to display in map -- reloaded whenever date or filter is changed
+  const [allData, setAllData] = useState(null);
   const [data, setData] = useState(null);
+  console.log("data");
+  console.log(data);
 
   // current viewport of map
   const [viewport, setViewport] = useState({});
@@ -297,7 +301,7 @@ const MapboxMap = ({
   // map data updater function
   const getMapData = async dataArgs => {
     const newMapData = await dataGetter(dataArgs);
-    setData(newMapData);
+    setAllData(newMapData);
   };
 
   /**
@@ -339,8 +343,36 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    getMapData({ date, filters, mapId });
-  }, [filters, mapId]);
+    console.log("Getting map data");
+    getMapData({ date: initDate, filters: {}, mapId });
+    // getMapData({ date: initDate, filters, mapId });
+  }, [mapId]);
+  // }, [filters, mapId]);
+
+  // if all data initialized or date changed then setup data
+  useEffect(() => {
+    if (allData !== null) {
+      const newData = {};
+      const dtStr = date.format("YYYY-MM-DD");
+      for (const [id, values] of Object.entries(allData)) {
+        if (values.length === 0) newData[id] = [];
+        else {
+          let field =
+            values[0].date_time !== undefined ? "date_time" : "datestamp";
+          if (id.endsWith("trend")) {
+            field = "end_date";
+            debugger;
+          }
+          console.log("\n\n\nid");
+          console.log(id);
+          console.log("values");
+          console.log(values);
+          newData[id] = values.filter(d => d[field].startsWith(dtStr));
+        }
+      }
+      setData(newData);
+    }
+  }, [date, allData]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {

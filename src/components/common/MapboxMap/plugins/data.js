@@ -203,6 +203,7 @@ export const mapMetrics = {
         metric_id: 72,
         temporal_resolution: "daily",
         spatial_resolution: "state",
+        fields: ["value", "date_time", "place_name"],
       },
       id: "72",
       featureLinkField: "place_name",
@@ -324,6 +325,7 @@ export const mapMetrics = {
         metric_id: "77",
         temporal_resolution: "daily",
         spatial_resolution: "country",
+        fields: ["value", "date_time", "place_iso3"],
       },
       id: "77",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
@@ -339,6 +341,7 @@ export const mapMetrics = {
         metric_id: "75",
         temporal_resolution: "daily",
         spatial_resolution: "country",
+        fields: ["value", "date_time", "place_iso3"],
       },
       id: "75",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
@@ -889,8 +892,9 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
 
   // define date parameters for API calls
   const dates = {
+    end_date: moment("2019-12-31").format("YYYY-MM-DD"),
+    // end_date: date.format("YYYY-MM-DD"),
     start_date: date.format("YYYY-MM-DD"),
-    end_date: date.format("YYYY-MM-DD"),
   };
 
   // collate query definitions based on the metrics that are to be displayed
