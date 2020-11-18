@@ -278,7 +278,13 @@ export const mapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "country" };
+        return {
+          method: "post",
+          filters,
+          geo_res: "country",
+          start: "2020-10-10",
+          end: "2020-11-10",
+        };
       },
 
       // array of layer types for which this metric is used

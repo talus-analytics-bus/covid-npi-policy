@@ -55,6 +55,7 @@ const MapboxMap = ({
   overlays,
   geoHaveData,
   plugins,
+  setAppLoading,
   linCircleScale, // `log` or `lin`
   ...props
 }) => {
@@ -300,7 +301,9 @@ const MapboxMap = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = async dataArgs => {
+    setAppLoading(true);
     const newMapData = await dataGetter(dataArgs);
+    setAppLoading(false);
     setAllData(newMapData);
   };
 
@@ -343,33 +346,55 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    console.log("Getting map data");
-    getMapData({ date: initDate, filters: {}, mapId });
-    // getMapData({ date: initDate, filters, mapId });
-  }, [mapId]);
-  // }, [filters, mapId]);
+    const filtersForRequests = { ...filters };
+    delete filtersForRequests.dates_in_effect;
+
+    getMapData({ date: initDate, filters: filtersForRequests, mapId });
+  }, [JSON.stringify(filters), mapId]);
 
   // if all data initialized or date changed then setup data
+  const pullForward = ["lockdown_level"];
   useEffect(() => {
     if (allData !== null) {
       const newData = {};
       const dtStr = date.format("YYYY-MM-DD");
       for (const [id, values] of Object.entries(allData)) {
+        if (pullForward.includes("id")) continue;
         if (values.length === 0) newData[id] = [];
         else {
           let field =
             values[0].date_time !== undefined ? "date_time" : "datestamp";
           if (id.endsWith("trend")) {
             field = "end_date";
-            debugger;
           }
-          console.log("\n\n\nid");
-          console.log(id);
-          console.log("values");
-          console.log(values);
           newData[id] = values.filter(d => d[field].startsWith(dtStr));
         }
       }
+
+      // pull forward certain values
+      pullForward.forEach(id => {
+        // group all data by place name
+        const byPlace = {};
+        allData[id].forEach(d => {
+          if (byPlace[d.place_name] === undefined) {
+            byPlace[d.place_name] = [d];
+          } else byPlace[d.place_name].push(d);
+        });
+
+        debugger;
+
+        // for each place
+        const field = "datestamp"; // TODO dynamically
+        for (const [place_name, values] of Object.entries(byPlace)) {
+          let match;
+          match = values.find(d => d[field].startsWith(dtStr));
+          if (match === undefined) {
+            // fill in missing values -- but probably should do this in API...
+          }
+        }
+        // assuming already sorted by date: find matching OR most recent obs
+        // convert to correct format
+      });
       setData(newData);
     }
   }, [date, allData]);

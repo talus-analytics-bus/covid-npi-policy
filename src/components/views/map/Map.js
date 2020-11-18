@@ -201,6 +201,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             fill,
             filters,
             geoHaveData,
+            setAppLoading: setLoading,
             overlays: (
               <>
                 <Drawer
@@ -506,16 +507,16 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     if (!initialized) getData();
   }, []);
 
-  // when date is changed, update `dates_in_effect` filter
-  useEffect(
-    function updateFilters() {
-      const newFilters = { ...filters };
-      const dateStr = date.format("YYYY-MM-DD");
-      newFilters.dates_in_effect = [dateStr, dateStr];
-      setFilters(newFilters);
-    },
-    [date]
-  );
+  // // when date is changed, update `dates_in_effect` filter
+  // useEffect(
+  //   function updateFilters() {
+  //     const newFilters = { ...filters };
+  //     const dateStr = date.format("YYYY-MM-DD");
+  //     newFilters.dates_in_effect = [dateStr, dateStr];
+  //     setFilters(newFilters);
+  //   },
+  //   [date]
+  // );
 
   // when map style changes, update default metrics selected
   useEffect(
