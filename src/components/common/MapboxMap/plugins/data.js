@@ -1191,7 +1191,7 @@ export const tooltipGetter = async ({
           plugins.fill !== "lockdown_level"
             ? filters.ph_measure_details || []
             : undefined,
-        dates_in_effect: filters.dates_in_effect,
+        dates_in_effect: [apiDate, apiDate],
       };
 
       if (mapId === "us") {
