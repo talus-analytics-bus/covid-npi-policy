@@ -49,6 +49,12 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
 
+  // is date slider playing?
+  const [playing, setPlaying] = useState(false);
+
+  // dragging the slider?
+  const [nowDragging, setNowDragging] = useState(false);
+
   // map circle scale linear? otherwise log
   const [linCircleScale, setLinCircleScale] = useState(true);
 
@@ -200,6 +206,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             circle,
             fill,
             filters,
+            dateSliderMoving: playing || nowDragging, // whether date slider is currently playing
             geoHaveData,
             setAppLoading: setLoading,
             overlays: (
@@ -476,6 +483,10 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                         "View policies and cases over the course of the outbreak",
                       date,
                       setDate,
+                      playing,
+                      setPlaying,
+                      nowDragging,
+                      setNowDragging,
                       float: true,
                       // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
                       ...defaults.minMaxDate,

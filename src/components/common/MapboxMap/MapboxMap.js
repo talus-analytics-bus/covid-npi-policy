@@ -56,6 +56,7 @@ const MapboxMap = ({
   geoHaveData,
   plugins,
   setAppLoading,
+  dateSliderMoving,
   linCircleScale, // `log` or `lin`
   ...props
 }) => {
@@ -314,30 +315,30 @@ const MapboxMap = ({
   const updateMapTooltip = async ({ map }) => {
     if (selectedFeature !== null) {
       setShowTooltip(false);
-      const newMapTooltip = (
-        <MapTooltip
-          {...{
-            ...(await tooltipGetter({
-              mapId: mapId,
-              d: selectedFeature,
-              include: [circle, "lockdown_level"],
-              // include: [circle, fill],
-              geoHaveData:
-                geoHaveData.includes(selectedFeature.properties.BRK_A3) ||
-                geoHaveData.includes(selectedFeature.properties.ADM0_A3),
-              // include: [circle, fill],
-              date,
-              map,
-              filters,
-              plugins,
-              callback: () => {
-                setShowTooltip(true);
-              },
-            })),
-          }}
-        />
-      );
-      setMapTooltip(newMapTooltip);
+      if (!dateSliderMoving) {
+        const newMapTooltip = (
+          <MapTooltip
+            {...{
+              ...(await tooltipGetter({
+                mapId: mapId,
+                d: selectedFeature,
+                include: [circle, "lockdown_level"],
+                geoHaveData:
+                  geoHaveData.includes(selectedFeature.properties.BRK_A3) ||
+                  geoHaveData.includes(selectedFeature.properties.ADM0_A3),
+                date,
+                map,
+                filters,
+                plugins,
+                callback: () => {
+                  setShowTooltip(true);
+                },
+              })),
+            }}
+          />
+        );
+        setMapTooltip(newMapTooltip);
+      }
     }
   };
 
@@ -350,6 +351,7 @@ const MapboxMap = ({
     getMapData({ date: initDate, filters: filtersForRequests, mapId });
   }, [JSON.stringify(filters), mapId]);
 
+  // update current slice of data from "all data" whenever the date changes
   useEffect(() => {
     if (allData !== null) {
       const newData = {};
@@ -376,6 +378,13 @@ const MapboxMap = ({
       updateMapTooltip({ map });
     }
   }, [selectedFeature, circle, fill]);
+
+  // close map tooltip if open when dateslider movement starts
+  useEffect(() => {
+    if (dateSliderMoving) {
+      setShowTooltip(false);
+    }
+  }, [dateSliderMoving]);
 
   // update log/lin scale selection for circles
   useEffect(() => {
@@ -547,8 +556,6 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
-        console.log("feature");
-        console.log(feature);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {
