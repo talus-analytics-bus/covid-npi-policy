@@ -1246,31 +1246,32 @@ export const tooltipGetter = async ({
   );
   const nPolicies = {
     total: 0,
-    local: 0,
-    state: 0,
-    country: 0,
+    // local: 0,
+    // state: 0,
+    // country: 0,
   };
   if (props.geoHaveData || mapId === "us") {
     const policies = await Policy({
       method: "post",
       filters: policyFilters,
       fields: ["id", "place"],
+      count: true,
     });
-
-    policies.data.forEach(d => {
-      nPolicies.total += 1;
-      switch (d.place.level) {
-        case "Local":
-          nPolicies.local += 1;
-          break;
-        case "State / Province":
-          nPolicies.state += 1;
-          break;
-        case "Country":
-          nPolicies.country += 1;
-          break;
-      }
-    });
+    nPolicies.total = policies.data[0].n;
+    // policies.data.forEach(d => {
+    //   nPolicies.total += 1;
+    //   switch (d.place.level) {
+    //     case "Local":
+    //       nPolicies.local += 1;
+    //       break;
+    //     case "State / Province":
+    //       nPolicies.state += 1;
+    //       break;
+    //     case "Country":
+    //       nPolicies.country += 1;
+    //       break;
+    //   }
+    // });
 
     tooltip.tooltipHeader.subtitle = (
       <>

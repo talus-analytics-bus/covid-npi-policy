@@ -99,6 +99,7 @@ export const Policy = async function({
   filters = null,
   by_category = null,
   ordering = [],
+  count = false,
 }) {
   // prepare params
   const params = new URLSearchParams();
@@ -108,6 +109,7 @@ export const Policy = async function({
   if (by_category !== null) params.append("by_category", by_category);
   params.append("page", page);
   params.append("pagesize", pagesize);
+  params.append("count", count);
 
   // prepare request
   let req;
