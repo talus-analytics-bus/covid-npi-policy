@@ -209,6 +209,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                     // content has translucent background
                     float: true,
 
+                    // custom caret?
+                    customCaret: true,
+
                     // closed by default
                     defaultClosed: true,
 
@@ -308,7 +311,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                       </React.Fragment>
                     ),
                     content: (
-                      <div>
+                      <>
                         {[
                           // fill metric radio toggle
                           fill !== null && (
@@ -463,7 +466,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             {/* )} */}
                           </div>,
                         ].map(d => d)}
-                      </div>
+                      </>
                     ),
                   }}
                 />

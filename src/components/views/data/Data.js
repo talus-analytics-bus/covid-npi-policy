@@ -469,6 +469,7 @@ const Data = ({
                               setFilters,
                               searchText,
                               setSearchText,
+                              alignBottom: true,
                             }}
                           ></FilterSet>
                         </>

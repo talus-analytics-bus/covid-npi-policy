@@ -99,7 +99,7 @@
   }
 }
 
-@media #{$phone} {
+@media #{$small-laptop} {
   .filterSet {
     margin: 0;
 
@@ -109,9 +109,9 @@
       width: 100%;
       flex-flow: column;
       margin: 0;
+      @include spaceItemsVert(20px);
       > div {
         width: 100%;
-        margin-top: 20px;
       }
     }
   }

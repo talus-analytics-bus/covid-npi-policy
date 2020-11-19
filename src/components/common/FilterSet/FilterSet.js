@@ -31,6 +31,7 @@ const FilterSet = ({
   searchText = null,
   setSearchText,
   children = null,
+  alignBottom = false,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -74,6 +75,7 @@ const FilterSet = ({
             setActiveFilter,
             withGrouping: v.withGrouping,
             params: v.params,
+            alignBottom,
             ...props,
           }}
         />

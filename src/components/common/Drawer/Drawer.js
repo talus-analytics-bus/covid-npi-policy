@@ -31,7 +31,7 @@ const Drawer = ({ label, content, ...props }) => {
           }}
         >
           {label}
-          {props.noCollapse !== true && (
+          {props.noCollapse !== true && props.customCaret !== true && (
             <button
               style={props.customToggle && { display: "none" }}
               className={classNames(styles.toggle, { [styles.flip]: !open })}

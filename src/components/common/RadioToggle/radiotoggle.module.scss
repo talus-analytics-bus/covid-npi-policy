@@ -9,10 +9,15 @@
     font-weight: bold;
     margin-bottom: 5px;
   }
-  form {
+  form:not(.asGrid) {
     display: flex;
     flex-flow: column;
     margin-left: 10px;
+  }
+  form.asGrid {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 0 10px;
   }
   span:last-child label {
     margin-bottom: 0;
