@@ -142,7 +142,8 @@ const MapboxMap = ({
 
     // if circle layers are being used, then order circles smallest to
     // biggest for optimal click-ability
-    const hasCircleLayers = mapSources[mapId].circle !== undefined;
+    const hasCircleLayers =
+      mapSources[mapId].circle !== undefined && circle !== null;
     if (hasCircleLayers) {
       // get data fields to bind data to geo feature
       const featureLinkField = mapSources[mapId].circle.circleLayers.find(
