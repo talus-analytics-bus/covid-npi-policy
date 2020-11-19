@@ -45,8 +45,12 @@ const ObservationQuery = async function({
     params["place_iso3"] = place_iso3;
   }
 
-  const res = await axios(`${API_URL}/observations`, {
+  const url = `${API_URL}/observations`;
+
+  const res = await axios({
+    url,
     params,
+    headers: { "If-Modified-Since": new Date().toUTCString() },
   });
 
   return res.data.data;
