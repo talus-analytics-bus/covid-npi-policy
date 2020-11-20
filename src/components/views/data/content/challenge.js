@@ -199,7 +199,12 @@ export const policyInfo = {
           let sum;
           if (hasSum)
             sum = <ShowMore text={row.summary_of_action} charLimit={200} />;
-          else sum = "Summary in progress";
+          else
+            sum = (
+              <i className={styles.unspecified} style={{ position: "static" }}>
+                Summary in progress
+              </i>
+            );
           if (hasPar || hasCit || hasNum || hasSum) {
             const jsx = (
               <p>
@@ -217,7 +222,8 @@ export const policyInfo = {
       },
       // {
       //   dataField: "government_order_upheld_or_enjoined",
-      //   header: "Upheld or enjoined?",
+      //   header: "Case status",
+      //   definition: "Procedural status of the case",
       //   onSort: (field, order) => {
       //     setOrdering([[field, order]]);
       //   },
@@ -252,7 +258,13 @@ export const policyInfo = {
             else value += "; case status unspecified";
           } else if (hasCaseStatus) {
             value = `Policy status unspecified: ${row.case_status}`;
-          } else return unspecified;
+          } else
+            return (
+              <i className={styles.unspecified} style={{ position: "static" }}>
+                Data collection in progress
+              </i>
+            );
+          // } else return unspecified;
           return value;
         },
       },
