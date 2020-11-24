@@ -49,11 +49,18 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
 
+  // is date slider playing?
+  const [playing, setPlaying] = useState(false);
+
+  // dragging the slider?
+  const [nowDragging, setNowDragging] = useState(false);
+
   // map circle scale linear? otherwise log
   const [linCircleScale, setLinCircleScale] = useState(true);
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
+  const [shownMapId, setShownMapId] = useState(null);
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
   const caseloadLastUpdated =
@@ -187,7 +194,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     // add the mapbox map component for the map to the array as long as it is
     // the currently enabled map
     maps.push(
-      k === mapId && (
+      k === shownMapId && (
         <MapboxMap
           {...{
             setInfoTooltipContent: props.setInfoTooltipContent,
@@ -196,10 +203,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             key: k,
             mapStyle: mapStyles[k],
             date,
+            initDate: caseloadLastUpdatedDate,
             circle,
             fill,
             filters,
+            dateSliderMoving: playing || nowDragging, // whether date slider is currently playing
             geoHaveData,
+            setAppLoading: setLoading,
             overlays: (
               <>
                 <Drawer
@@ -474,6 +484,10 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                         "View policies and cases over the course of the outbreak",
                       date,
                       setDate,
+                      playing,
+                      setPlaying,
+                      nowDragging,
+                      setNowDragging,
                       float: true,
                       // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
                       ...defaults.minMaxDate,
@@ -505,22 +519,23 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     if (!initialized) getData();
   }, []);
 
-  // when date is changed, update `dates_in_effect` filter
-  useEffect(
-    function updateFilters() {
-      const newFilters = { ...filters };
-      const dateStr = date.format("YYYY-MM-DD");
-      newFilters.dates_in_effect = [dateStr, dateStr];
-      setFilters(newFilters);
-    },
-    [date]
-  );
+  // // when date is changed, update `dates_in_effect` filter
+  // useEffect(
+  //   function updateFilters() {
+  //     const newFilters = { ...filters };
+  //     const dateStr = date.format("YYYY-MM-DD");
+  //     newFilters.dates_in_effect = [dateStr, dateStr];
+  //     setFilters(newFilters);
+  //   },
+  //   [date]
+  // );
 
   // when map style changes, update default metrics selected
   useEffect(
     function updateDefaultMetrics() {
       setCircle(defaults[mapId].circle);
       setFill(defaults[mapId].fill);
+      setShownMapId(mapId);
     },
     [mapId]
   );

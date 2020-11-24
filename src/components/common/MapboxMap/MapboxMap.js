@@ -46,6 +46,7 @@ const MapboxMap = ({
   mapId,
   mapStyle,
   date,
+  initDate,
   circle,
   fill,
   filters,
@@ -54,6 +55,8 @@ const MapboxMap = ({
   overlays,
   geoHaveData,
   plugins,
+  setAppLoading,
+  dateSliderMoving,
   linCircleScale, // `log` or `lin`
   ...props
 }) => {
@@ -66,6 +69,7 @@ const MapboxMap = ({
   const [loading, setLoading] = useState(true);
 
   // data to display in map -- reloaded whenever date or filter is changed
+  const [allData, setAllData] = useState(null);
   const [data, setData] = useState(null);
 
   // current viewport of map
@@ -138,6 +142,35 @@ const MapboxMap = ({
         0,
         1,
       ]);
+    }
+
+    // if circle layers are being used, then order circles smallest to
+    // biggest for optimal click-ability
+    const hasCircleLayers =
+      mapSources[mapId].circle !== undefined && circle !== null;
+    if (hasCircleLayers) {
+      // get data fields to bind data to geo feature
+      const featureLinkField = mapSources[mapId].circle.circleLayers.find(
+        d => d.id === circle
+      ).featureLinkField;
+      const promoteId = mapSources[mapId].circle.def.promoteId;
+
+      // get sort order of circles based on covid caseload metric
+      const sortOrderMetricId = circle;
+      if (sortOrderMetricId === undefined) return;
+      else {
+        const featureOrder = {};
+        data[sortOrderMetricId].forEach(d => {
+          featureOrder[d[featureLinkField]] = -d.value;
+        });
+
+        // update circle ordering
+        map.setLayoutProperty(
+          sortOrderMetricId + "-circle",
+          "circle-sort-key",
+          ["get", ["get", promoteId], ["literal", featureOrder]]
+        );
+      }
     }
   };
 
@@ -268,8 +301,10 @@ const MapboxMap = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = async dataArgs => {
+    setAppLoading(true);
     const newMapData = await dataGetter(dataArgs);
-    setData(newMapData);
+    setAppLoading(false);
+    setAllData(newMapData);
   };
 
   /**
@@ -281,46 +316,83 @@ const MapboxMap = ({
   const updateMapTooltip = async ({ map }) => {
     if (selectedFeature !== null) {
       setShowTooltip(false);
-      const newMapTooltip = (
-        <MapTooltip
-          {...{
-            ...(await tooltipGetter({
-              mapId: mapId,
-              d: selectedFeature,
-              include: [circle, "lockdown_level"],
-              // include: [circle, fill],
-              geoHaveData: geoHaveData.includes(
-                selectedFeature.properties.BRK_A3
-              ),
-              // include: [circle, fill],
-              date,
-              map,
-              filters,
-              plugins,
-              callback: () => {
-                setShowTooltip(true);
-              },
-            })),
-          }}
-        />
-      );
-      setMapTooltip(newMapTooltip);
+      if (!dateSliderMoving) {
+        const newMapTooltip = (
+          <MapTooltip
+            {...{
+              ...(await tooltipGetter({
+                mapId: mapId,
+                d: selectedFeature,
+                include: [circle, "lockdown_level"],
+                geoHaveData:
+                  geoHaveData.includes(selectedFeature.properties.BRK_A3) ||
+                  geoHaveData.includes(selectedFeature.properties.ADM0_A3),
+                date,
+                map,
+                filters,
+                plugins,
+                callback: () => {
+                  setShowTooltip(true);
+                },
+              })),
+            }}
+          />
+        );
+        setMapTooltip(newMapTooltip);
+      }
     }
   };
 
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    getMapData({ date, filters, mapId });
-  }, [filters, mapId]);
+    const filtersForRequests = { ...filters };
+    delete filtersForRequests.dates_in_effect;
+
+    getMapData({
+      date: initDate,
+      filters: filtersForRequests,
+      mapId,
+      metricIds: [circle, fill],
+    });
+  }, [circle, fill, JSON.stringify(filters)]);
+
+  // update current slice of data from "all data" whenever the date changes
+  useEffect(() => {
+    if (allData !== null) {
+      const newData = {};
+      const dtStr = date.format("YYYY-MM-DD");
+      for (const [id, values] of Object.entries(allData)) {
+        if (values.length === 0) newData[id] = [];
+        else {
+          let field =
+            values[0].date_time !== undefined ? "date_time" : "datestamp";
+          if (id.endsWith("trend")) {
+            field = "end_date";
+          }
+          newData[id] = values.filter(d => d[field].startsWith(dtStr));
+        }
+      }
+      setData(newData);
+    }
+  }, [date, allData]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
     if (mapRef.getMap !== undefined) {
       const map = mapRef.getMap();
+      map.circle = circle;
+      map.fill = fill;
       updateMapTooltip({ map });
     }
   }, [selectedFeature, circle, fill]);
+
+  // close map tooltip if open when dateslider movement starts
+  useEffect(() => {
+    if (dateSliderMoving) {
+      setShowTooltip(false);
+    }
+  }, [dateSliderMoving]);
 
   // update log/lin scale selection for circles
   useEffect(() => {
@@ -400,6 +472,9 @@ const MapboxMap = ({
             });
           } else return;
         });
+
+        // update sort order of circles, etc.
+        updateFillOrder({ map, f: null });
       }
     }
   }, [circle, fill, mapId]);
@@ -421,7 +496,7 @@ const MapboxMap = ({
           geoHaveData,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
-            bindFeatureStates({ map, mapId, data });
+            bindFeatureStates({ map, mapId, data, metricIds: [circle, fill] });
 
             // load layer images, if any, for pattern layers
             layerImages.forEach(({ asset, name }) => {
@@ -439,7 +514,14 @@ const MapboxMap = ({
       } else {
         // if map had already loaded, then just bind feature states using the
         // latest map data
-        bindFeatureStates({ map, mapId, data, selectedFeature });
+        bindFeatureStates({
+          map,
+          mapId,
+          data,
+          selectedFeature,
+          metricIds: [circle, fill],
+        });
+        updateFillOrder({ map, f: null });
         updateMapTooltip({ map });
       }
     }
@@ -644,7 +726,7 @@ const MapboxMap = ({
             }
 
             map.on("styledataloading", function() {
-              getMapData();
+              // getMapData();
             });
           }}
           doubleClickZoom={false} //remove 300ms delay on clicking

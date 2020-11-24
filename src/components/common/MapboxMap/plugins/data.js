@@ -47,7 +47,7 @@ const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
   // mapId: "global",
-  mapId: "us",
+  mapId: "global",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -187,6 +187,7 @@ export const mapMetrics = {
         metric_id: 74,
         temporal_resolution: "daily",
         spatial_resolution: "state",
+        fields: ["value", "date_time", "place_name"],
       },
       id: "74",
       featureLinkField: "place_name",
@@ -202,6 +203,7 @@ export const mapMetrics = {
         metric_id: 72,
         temporal_resolution: "daily",
         spatial_resolution: "state",
+        fields: ["value", "date_time", "place_name"],
       },
       id: "72",
       featureLinkField: "place_name",
@@ -276,7 +278,13 @@ export const mapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "country" };
+        return {
+          method: "post",
+          filters,
+          geo_res: "country",
+          start: "2020-10-10",
+          end: "2020-11-10",
+        };
       },
 
       // array of layer types for which this metric is used
@@ -323,8 +331,10 @@ export const mapMetrics = {
         metric_id: "77",
         temporal_resolution: "daily",
         spatial_resolution: "country",
+        fields: ["value", "date_time", "place_iso3"],
       },
       id: "77",
+      filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
       featureLinkField: "place_iso3",
       styleId: { fill: "metric-test", circle: "metric-test-transp-global" },
       trend: true,
@@ -337,8 +347,10 @@ export const mapMetrics = {
         metric_id: "75",
         temporal_resolution: "daily",
         spatial_resolution: "country",
+        fields: ["value", "date_time", "place_iso3"],
       },
       id: "75",
+      filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
       featureLinkField: "place_iso3",
       styleId: { fill: "metric-test", circle: "metric-test-solid-global" },
       trend: true,
@@ -880,19 +892,22 @@ export const metricMeta = {
  * @param  {[type]}   map     [description]
  * @return {Promise}          [description]
  */
-export const dataGetter = async ({ date, mapId, filters, map }) => {
+export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
   // get all metrics displayed in the current map
   const metrics = mapMetrics[mapId];
+  // const metrics = mapMetrics[mapId].filter(d => metricIds.includes(d.id));
 
   // define date parameters for API calls
   const dates = {
+    end_date: moment("2019-12-31").format("YYYY-MM-DD"),
+    // end_date: date.format("YYYY-MM-DD"),
     start_date: date.format("YYYY-MM-DD"),
-    end_date: date.format("YYYY-MM-DD"),
   };
 
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
   const queryDefs = {};
+  const queries = {};
   metrics.forEach(d => {
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
@@ -922,11 +937,14 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
   });
 
   // collate queries in object to be called by the `execute method below`
-  const queries = {};
   for (const [k, v] of Object.entries(queryDefs)) {
-    queries[k] = v.queryFunc({
-      ...v,
-    });
+    // if metric not in list of ids to fetch, set data as empty array
+    const fetchData = metricIds.includes(k);
+    if (fetchData)
+      queries[k] = v.queryFunc({
+        ...v,
+      });
+    else queries[k] = async () => [];
   }
 
   // execute queries in parallel
@@ -1001,6 +1019,29 @@ export const tooltipGetter = async ({
 
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
+
+  const apiDate = date.format("YYYY-MM-DD");
+
+  // get relevant policy data
+  const policyFilters = {
+    dates_in_effect: [apiDate, apiDate],
+
+    // if doing distancing level, only allow all social distancing
+    // policies to be returned
+    primary_ph_measure:
+      plugins.fill !== "lockdown_level"
+        ? filters.primary_ph_measure
+        : ["Social distancing"],
+  };
+  if (
+    plugins.fill !== "lockdown_level" &&
+    filters.ph_measure_details !== undefined &&
+    filters.ph_measure_details.length > 0
+  ) {
+    policyFilters.ph_measure_details = filters.ph_measure_details;
+  }
+  if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
+  else policyFilters.iso3 = [d.properties.ISO_A3];
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -1117,158 +1158,7 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-      const apiDate = date.format("YYYY-MM-DD");
 
-      // get relevant policy data
-      const policyFilters = {
-        dates_in_effect: [apiDate, apiDate],
-
-        // if doing distancing level, only allow all social distancing
-        // policies to be returned
-        primary_ph_measure:
-          plugins.fill !== "lockdown_level"
-            ? filters.primary_ph_measure
-            : ["Social distancing"],
-      };
-      if (
-        plugins.fill !== "lockdown_level" &&
-        filters.ph_measure_details !== undefined &&
-        filters.ph_measure_details.length > 0
-      ) {
-        policyFilters.ph_measure_details = filters.ph_measure_details;
-      }
-      if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
-      else policyFilters.iso3 = [d.properties.ISO_A3];
-
-      const policies = await Policy({
-        method: "post",
-        filters: policyFilters,
-        fields: ["id", "place"],
-      });
-
-      const nPolicies = {
-        total: 0,
-        local: 0,
-        state: 0,
-        country: 0,
-      };
-      policies.data.forEach(d => {
-        nPolicies.total += 1;
-        switch (d.place.level) {
-          case "Local":
-            nPolicies.local += 1;
-            break;
-          case "State / Province":
-            nPolicies.state += 1;
-            break;
-          case "Country":
-            nPolicies.country += 1;
-            break;
-        }
-      });
-
-      // define right content of header metric based on metric type
-      // add actions for bottom of tooltip
-      const filtersForStr = {
-        primary_ph_measure:
-          plugins.fill !== "lockdown_level"
-            ? filters.primary_ph_measure
-            : ["Social distancing"],
-        ph_measure_details:
-          plugins.fill !== "lockdown_level"
-            ? filters.ph_measure_details || []
-            : undefined,
-        dates_in_effect: filters.dates_in_effect,
-      };
-
-      if (mapId === "us") {
-        filtersForStr.country_name = ["United States of America (USA)"];
-        filtersForStr.area1 = [d.properties.state_name];
-      } else {
-        // find place match
-        const matchingPlace = plugins.places.find(
-          dd => dd.iso === d.properties.ISO_A3
-        );
-        if (matchingPlace) {
-          filtersForStr.country_name = [
-            `${matchingPlace.name} (${matchingPlace.iso})`,
-          ];
-        } else {
-          filtersForStr.country_name = [
-            `${d.properties.NAME} (${d.properties.ISO_A3})`,
-          ];
-        }
-      }
-      const filtersStr = JSON.stringify(filtersForStr);
-
-      // content for right side of header
-      const catFilters =
-        filters.ph_measure_details && filters.ph_measure_details.length > 0;
-      tooltip.tooltipHeaderRight = (
-        <>
-          {(props.geoHaveData || mapId === "us") && (
-            <>
-              <a
-                key={"view"}
-                target="_blank"
-                href={"/data?type=policy&filters_policy=" + filtersStr}
-              >
-                {
-                  <button>
-                    <svg version="1.1" x="0px" y="0px" viewBox="0 0 10.5 11.1">
-                      <path
-                        d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
-                        H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
-                      />
-                    </svg>
-                    view in data table
-                    {/* View {catFilters ? "filtered" : "all"} policies */}
-                    {/* <br /> ({comma(nPolicies.total)}) in effect */}
-                  </button>
-                }
-                {
-                  // Uncomment below to specify number of policies
-                  // <button>
-                  //   View {nPolicies.total === 1 ? "this" : `these`}{" "}
-                  //   {nPolicies.total === 1 ? "policy" : "policies"}
-                  // </button>
-                }
-              </a>
-              {mapId === "us" && (
-                <a
-                  key={"view"}
-                  target="_blank"
-                  href={"/model/#" + d.properties.state_abbrev.toUpperCase()}
-                >
-                  {
-                    <button>
-                      <svg x="0px" y="0px" viewBox="0 0 10.9 8.2">
-                        <path d="M10.9,7.1v1.1H0V7.1H10.9z M6.5,3.3H4.4v3.3h2.2V3.3z M9.8,0H7.6v6.5h2.2V0z M3.3,2.2H1.1v4.4h2.2 V2.2z" />
-                      </svg>
-                      view in model
-                    </button>
-                  }
-                </a>
-              )}
-            </>
-          )}
-          {/* <span> */}
-          {/*   as of <i>{formattedDate}</i> */}
-          {/* </span> */}
-        </>
-      );
-      if (props.geoHaveData || mapId === "us") {
-        tooltip.tooltipHeader.subtitle = (
-          <>
-            <span>
-              {comma(nPolicies.total)}{" "}
-              {nPolicies.total === 1 ? "policy" : "policies"} in effect
-            </span>
-            <br />
-            <span> as of {formattedDate}</span>
-          </>
-        );
-      }
       item.value = (
         <div
           className={infostyles.badge}
@@ -1279,77 +1169,198 @@ export const tooltipGetter = async ({
           {thisMetricMeta.value(v)}
         </div>
       );
-
-      // special -- add note if policy data not yet collected
-      let message;
-      if (state.lockdown_level === null && mapId === "us") {
-        if (nPolicies.total > 0) {
-          message = (
-            <i>
-              No {mapId === "us" ? "state" : "country"}-level distancing
-              <br />
-              level could be determined
-              <br />
-              from policies in effect
-            </i>
-          );
-        } else {
-          message = <i>No policies in effect</i>;
-        }
-
-        tooltip.tooltipMainContent.push({
-          customContent: (
-            <>
-              <div className={styles.label}>Distancing level</div>
-              <div style={{ color: "gray" }} className={styles.value}>
-                {message}
-              </div>
-            </>
-          ),
-        });
-      } else if (
-        (state.lockdown_level === null || props.geoHaveData === false) &&
-        mapId === "global"
-      ) {
-        let message;
-        if (props.geoHaveData === false) {
-          message = (
-            <i>
-              No policies yet available,
-              <br />
-              data collection in progress
-            </i>
-          );
-        } else if (state.lockdown_level === null && nPolicies.total > 0) {
-          message = (
-            <i>
-              No country-level distancing
-              <br />
-              level could be determined
-              <br />
-              from policies in effect
-            </i>
-          );
-        } else {
-          message = <i>No policies in effect</i>;
-        }
-        if (state.lockdown_level === null)
-          tooltip.tooltipMainContent.push({
-            customContent: (
-              <>
-                <div className={styles.label}>Distancing level</div>
-                <div style={{ color: "gray" }} className={styles.value}>
-                  {message}
-                </div>
-              </>
-            ),
-          });
-      }
-
-      tooltip.tooltipMainContent.reverse();
-      // tooltip.tooltipMainContent.push(item);
     }
   }
+  // define right content of header metric based on metric type
+  // add actions for bottom of tooltip
+  const filtersForStr = {
+    primary_ph_measure:
+      plugins.fill !== "lockdown_level"
+        ? filters.primary_ph_measure
+        : ["Social distancing"],
+    ph_measure_details:
+      plugins.fill !== "lockdown_level"
+        ? filters.ph_measure_details || []
+        : undefined,
+    dates_in_effect: [apiDate, apiDate],
+  };
+
+  if (mapId === "us") {
+    filtersForStr.country_name = ["United States of America (USA)"];
+    filtersForStr.area1 = [d.properties.state_name];
+  } else {
+    // find place match
+    const matchingPlace = plugins.places.find(
+      dd => dd.iso === d.properties.ISO_A3
+    );
+    if (matchingPlace) {
+      filtersForStr.country_name = [
+        `${matchingPlace.name} (${matchingPlace.iso})`,
+      ];
+    } else {
+      filtersForStr.country_name = [
+        `${d.properties.NAME} (${d.properties.ISO_A3})`,
+      ];
+    }
+  }
+  const filtersStr = JSON.stringify(filtersForStr);
+  // content for right side of header
+  tooltip.tooltipHeaderRight = (
+    <>
+      {(props.geoHaveData || mapId === "us") && (
+        <>
+          <a
+            key={"view"}
+            target="_blank"
+            href={"/data?type=policy&filters_policy=" + filtersStr}
+          >
+            {
+              <button>
+                <svg version="1.1" x="0px" y="0px" viewBox="0 0 10.5 11.1">
+                  <path
+                    d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
+                    H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
+                  />
+                </svg>
+                view in data table
+              </button>
+            }
+          </a>
+          {mapId === "us" && (
+            <a
+              key={"view"}
+              target="_blank"
+              href={"/model/#" + d.properties.state_abbrev.toUpperCase()}
+            >
+              {
+                <button>
+                  <svg x="0px" y="0px" viewBox="0 0 10.9 8.2">
+                    <path d="M10.9,7.1v1.1H0V7.1H10.9z M6.5,3.3H4.4v3.3h2.2V3.3z M9.8,0H7.6v6.5h2.2V0z M3.3,2.2H1.1v4.4h2.2 V2.2z" />
+                  </svg>
+                  view in model
+                </button>
+              }
+            </a>
+          )}
+        </>
+      )}
+      {/* <span> */}
+      {/*   as of <i>{formattedDate}</i> */}
+      {/* </span> */}
+    </>
+  );
+  const nPolicies = {
+    total: 0,
+    // local: 0,
+    // state: 0,
+    // country: 0,
+  };
+  if (props.geoHaveData || mapId === "us") {
+    const policies = await Policy({
+      method: "post",
+      filters: policyFilters,
+      fields: ["id", "place"],
+      count: true,
+    });
+    nPolicies.total = policies.data[0].n;
+    // policies.data.forEach(d => {
+    //   nPolicies.total += 1;
+    //   switch (d.place.level) {
+    //     case "Local":
+    //       nPolicies.local += 1;
+    //       break;
+    //     case "State / Province":
+    //       nPolicies.state += 1;
+    //       break;
+    //     case "Country":
+    //       nPolicies.country += 1;
+    //       break;
+    //   }
+    // });
+
+    tooltip.tooltipHeader.subtitle = (
+      <>
+        <span>
+          {comma(nPolicies.total)}{" "}
+          {nPolicies.total === 1 ? "policy" : "policies"} in effect
+        </span>
+        <br />
+        <span> as of {formattedDate}</span>
+      </>
+    );
+  }
+
+  // special -- add note if policy data not yet collected
+  let message;
+  if (state.lockdown_level === null && mapId === "us") {
+    if (nPolicies !== undefined && nPolicies.total > 0) {
+      message = (
+        <i>
+          No {mapId === "us" ? "state" : "country"}-level distancing
+          <br />
+          level could be determined
+          <br />
+          from policies in effect
+        </i>
+      );
+    } else {
+      message = <i>No policies in effect</i>;
+    }
+
+    tooltip.tooltipMainContent.push({
+      customContent: (
+        <>
+          <div className={styles.label}>Distancing level</div>
+          <div style={{ color: "gray" }} className={styles.value}>
+            {message}
+          </div>
+        </>
+      ),
+    });
+  } else if (
+    (state.lockdown_level === null || props.geoHaveData === false) &&
+    mapId === "global"
+  ) {
+    let message;
+    if (props.geoHaveData === false) {
+      message = (
+        <i>
+          No policies yet available,
+          <br />
+          data collection in progress
+        </i>
+      );
+    } else if (
+      state.lockdown_level === null &&
+      nPolicies !== undefined &&
+      nPolicies.total > 0
+    ) {
+      message = (
+        <i>
+          No country-level distancing
+          <br />
+          level could be determined
+          <br />
+          from policies in effect
+        </i>
+      );
+    } else {
+      message = <i>No policies in effect</i>;
+    }
+    if (state.lockdown_level === null)
+      tooltip.tooltipMainContent.push({
+        customContent: (
+          <>
+            <div className={styles.label}>Distancing level</div>
+            <div style={{ color: "gray" }} className={styles.value}>
+              {message}
+            </div>
+          </>
+        ),
+      });
+  }
+
+  tooltip.tooltipMainContent.reverse();
   if (callback) callback();
   return tooltip;
 };
