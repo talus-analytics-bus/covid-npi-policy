@@ -23,7 +23,7 @@ const PolicyRouter = props => {
 
   const [policyObject, setPolicyObject] = React.useState();
 
-  const [caseload, setCaseload] = React.useState();
+  // const [caseload, setCaseload] = React.useState();
 
   // Get category and subcategory for all policies
   React.useEffect(() => {

@@ -57,8 +57,6 @@ const ListPoliciesPage = props => {
     }
   };
 
-  // alert("render ListPoliciesPage");
-
   return (
     <section>
       {props.policyObject &&

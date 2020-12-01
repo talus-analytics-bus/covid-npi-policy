@@ -40,8 +40,9 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
 
   // load subcategories synchronously;
   // this is probably worse for high-speed connections
-  // but better for low-speed connections. The delay isn't
-  // really noticeable on high-speed connections so I'm
+  // compared to asynchronous loading but better for
+  // low-speed connections. The delay isn't really
+  // noticeable on high-speed connections so I'm
   // optimizing towards lower-speed connections here.
   loadPolicySubCategories({
     filters,
@@ -60,6 +61,9 @@ const loadPolicySubCategories = async ({ filters, stateSetter }) => {
     fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
 
+  // functional format of useEffect is used so we can
+  // update the object in-place, instead of re-creating
+  // it every time
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       extendObjectByPath({
