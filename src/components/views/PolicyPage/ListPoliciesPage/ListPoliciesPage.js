@@ -13,6 +13,7 @@ const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
 
   const loadDescriptionsByCategory = categoryName => {
+    console.log("loadDescriptionsByCategory");
     const categoryNeedsDescriptions =
       // if category is empty request it immediately
       // (this will build the categories too)
@@ -42,10 +43,9 @@ const ListPoliciesPage = props => {
 
   const loadDescriptionsBySubCategory = (categoryName, subcatName) => {
     const subCategoryNeedsDescriptions =
-      Object.entries(props.policyObject[categoryName])[1] === undefined
+      props.policyObject[categoryName] === undefined
         ? true
-        : Object.entries(props.policyObject[categoryName][subcatName])[1] ===
-          undefined;
+        : props.policyObject[categoryName][subcatName] === undefined;
 
     if (subCategoryNeedsDescriptions) {
       const filters = {
