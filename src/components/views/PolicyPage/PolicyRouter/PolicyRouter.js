@@ -60,21 +60,20 @@ const loadPolicySubCategories = async ({ filters, stateSetter }) => {
     fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
 
-  stateSetter(() => {
-    const categories = {};
+  stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       extendObjectByPath({
-        obj: categories,
+        obj: prev,
         path: [policy[CATEGORY_FIELD_NAME], policy[SUBCATEGORY_FIELD_NAME]],
         valueObj: {},
       });
     });
-    return categories;
+    return { ...prev };
   });
 };
 
-export const loadPolicyDetails = async ({ filters, stateSetter }) => {
-  console.log("loadPolicyDetails Called");
+export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
+  console.log("loadPolicyDescriptions Called");
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
@@ -89,11 +88,10 @@ export const loadPolicyDetails = async ({ filters, stateSetter }) => {
     ],
   });
 
-  stateSetter(() => {
-    const categories = {};
+  stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       extendObjectByPath({
-        obj: categories,
+        obj: prev,
         path: [
           policy[CATEGORY_FIELD_NAME],
           policy[SUBCATEGORY_FIELD_NAME],
@@ -106,7 +104,7 @@ export const loadPolicyDetails = async ({ filters, stateSetter }) => {
         },
       });
     });
-    return categories;
+    return { ...prev };
   });
 };
 

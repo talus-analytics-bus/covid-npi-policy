@@ -1,12 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { Policy } from "../../../misc/Queries";
-
 import {
-  extendObjectByPath,
+  loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,
-  SUBCATEGORY_FIELD_NAME,
 } from "../PolicyRouter/PolicyRouter";
 
 const ExpandSection = props => {
@@ -17,7 +14,7 @@ const ExpandSection = props => {
   const onClickHandler = e => {
     e.preventDefault();
     setRenderChildren(prev => !prev);
-    props.onOpen();
+    props.onOpen && props.onOpen();
   };
 
   return (
@@ -29,56 +26,62 @@ const ExpandSection = props => {
   );
 };
 
-const PolicyPage = props => {
+const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
 
-  console.log(props.policyObject);
+  const loadDescriptionsByCategory = categoryName => {
+    const categoryNeedsDescriptions =
+      // if category is empty request it immediately
+      // (this will build the categories too)
+      Object.entries(props.policyObject[categoryName])[1] === undefined
+        ? true
+        : // if the category exists, check if there is at least one
+          // description already in the first subcategory
+          Object.keys(
+            Object.entries(
+              Object.entries(props.policyObject[categoryName])[1]
+            )[1][1]
+          ).length === 0;
 
-  const loadPolicyDetails = (categoryName, subcatName) => {
-    const loadPolicySubCategories = async ({ filters, stateSetter }) => {
-      console.log("loadPolicySubCategories Called");
-      const policyResponse = await Policy({
-        method: "post",
-        filters: filters,
-        ordering: [["id", "desc"]],
-        fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
-      });
+    if (categoryNeedsDescriptions) {
+      const filters = {
+        iso3: [iso3],
+        [CATEGORY_FIELD_NAME]: [categoryName],
+      };
 
-      stateSetter(() => {
-        const categories = {};
-        policyResponse.data.forEach(policy => {
-          extendObjectByPath({
-            obj: categories,
-            path: [policy[CATEGORY_FIELD_NAME], policy[SUBCATEGORY_FIELD_NAME]],
-            valueObj: {},
-          });
-        });
-        return categories;
-      });
-    };
+      if (state !== "national") {
+        filters["area1"] = [state];
+      }
+
+      loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
+    }
   };
+
+  // alert("render ListPoliciesPage");
 
   return (
     <section>
       {props.policyObject &&
         Object.entries(props.policyObject).map(([categoryName, category]) => (
-          <ExpandSection key={categoryName}>
+          <ExpandSection
+            key={categoryName}
+            onOpen={() => loadDescriptionsByCategory(categoryName)}
+          >
             <h1>
-              {Object.keys(category).length} {categoryName}
+              {categoryName} {Object.keys(category).length}
             </h1>
             {Object.entries(category).map(([subcatName, subcat]) => (
-              <ExpandSection
-                key={subcatName}
-                onOpen={() => loadPolicyDetails(categoryName, subcatName)}
-              >
+              <ExpandSection key={subcatName}>
                 <h2>
-                  {Object.keys(subcat).length} {subcatName}
+                  {subcatName} {Object.keys(subcat).length}
                 </h2>
                 {Object.entries(subcat).map(([policyID, policy]) => (
-                  <ExpandSection key={policyID}>
+                  <div key={policyID}>
+                    {/* <ExpandSection key={policyID}> */}
                     <h3>{policyID}</h3>
                     <p>{policyID} policy details</p>
-                  </ExpandSection>
+                    {/* </ExpandSection> */}
+                  </div>
                 ))}
               </ExpandSection>
             ))}
@@ -88,4 +91,4 @@ const PolicyPage = props => {
   );
 };
 
-export default PolicyPage;
+export default ListPoliciesPage;
