@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import {
   loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,
+  SUBCATEGORY_FIELD_NAME,
 } from "../PolicyRouter/PolicyLoaders";
 
 import ExpandingSection from "./ExpandingSection/ExpandingSection";
@@ -39,6 +40,28 @@ const ListPoliciesPage = props => {
     }
   };
 
+  const loadDescriptionsBySubCategory = (categoryName, subcatName) => {
+    const subCategoryNeedsDescriptions =
+      Object.entries(props.policyObject[categoryName])[1] === undefined
+        ? true
+        : Object.entries(props.policyObject[categoryName][subcatName])[1] ===
+          undefined;
+
+    if (subCategoryNeedsDescriptions) {
+      const filters = {
+        iso3: [iso3],
+        [CATEGORY_FIELD_NAME]: [categoryName],
+        [SUBCATEGORY_FIELD_NAME]: [subcatName],
+      };
+
+      if (state !== "national") {
+        filters["area1"] = [state];
+      }
+
+      loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
+    }
+  };
+
   return (
     <section>
       {props.policyObject &&
@@ -51,7 +74,12 @@ const ListPoliciesPage = props => {
               {categoryName} {Object.keys(category).length}
             </h1>
             {Object.entries(category).map(([subcatName, subcat]) => (
-              <ExpandingSection key={subcatName}>
+              <ExpandingSection
+                key={subcatName}
+                onOpen={() =>
+                  loadDescriptionsBySubCategory(categoryName, subcatName)
+                }
+              >
                 <h2>
                   {subcatName} {Object.keys(subcat).length}
                 </h2>

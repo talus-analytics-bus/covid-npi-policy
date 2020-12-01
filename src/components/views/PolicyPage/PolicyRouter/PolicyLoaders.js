@@ -26,33 +26,36 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
     fields: ["id", CATEGORY_FIELD_NAME],
   });
 
-  stateSetter(() => {
-    const categories = {};
+  // functional format of useEffect using previous value
+  // so we can update the object in-place, instead of
+  // re-creating it and losing the other categories
+  // this makes it safe to run any of these loader
+  // functions in any order, improving responsiveness
+  stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       extendObjectByPath({
-        obj: categories,
+        obj: prev,
         path: [policy[CATEGORY_FIELD_NAME]],
         valueObj: {},
       });
     });
-    return categories;
+    return { ...prev };
   });
 
-  // load subcategories synchronously;
-  // this is probably worse for high-speed connections
-  // compared to asynchronous loading but better for
-  // low-speed connections. The delay isn't really
-  // noticeable on high-speed connections so I'm
-  // optimizing towards lower-speed connections here.
-  loadPolicySubCategories({
-    filters,
-    stateSetter: stateSetter,
-  });
+  // calling loadPolicySubCategories here would
+  // load subcategories synchronously; this is
+  // probably worse for high-speed connections
+  // compared to asynchronous loading but better
+  // for low-speed connections.
+
+  // Testing with live API server I found most of the
+  // delay was TTFB, not download time, so I switched
+  // back to running these asynchronously.
 };
 
 // Load subcategories; this request should run
 // immediately after the policy categories are loaded
-const loadPolicySubCategories = async ({ filters, stateSetter }) => {
+export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   console.log("loadPolicySubCategories Called");
   const policyResponse = await Policy({
     method: "post",
@@ -61,10 +64,11 @@ const loadPolicySubCategories = async ({ filters, stateSetter }) => {
     fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
 
-  // functional format of useEffect is used so we can
-  // update the object in-place, instead of re-creating
-  // it every time
+  // intentionally re-creating the object from scratch here in case
+  // the categories have not yet been loaded, so that getting categories
+  // and getting subcategories can safely be asynchronous
   stateSetter(prev => {
+    // const categoriesAndSubcategories = {};
     policyResponse.data.forEach(policy => {
       extendObjectByPath({
         obj: prev,
@@ -73,8 +77,6 @@ const loadPolicySubCategories = async ({ filters, stateSetter }) => {
       });
     });
 
-    // spread operator to create a shallow
-    // copy which will trigger re-render
     return { ...prev };
   });
 };
@@ -115,6 +117,9 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
         },
       });
     });
+
+    // spread operator to create a shallow
+    // copy which will trigger re-render
     return { ...prev };
   });
 };

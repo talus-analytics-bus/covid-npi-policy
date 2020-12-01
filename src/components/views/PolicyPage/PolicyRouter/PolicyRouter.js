@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 
 // import { Policy, Caseload } from "../../../misc/Queries";
 
-import { loadPolicyCategories } from "./PolicyLoaders.js";
+import {
+  loadPolicyCategories,
+  loadPolicySubCategories,
+} from "./PolicyLoaders.js";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -21,7 +24,7 @@ const PolicyRouter = props => {
 
   const { iso3, state, policyID } = useParams();
 
-  const [policyObject, setPolicyObject] = React.useState();
+  const [policyObject, setPolicyObject] = React.useState({});
 
   // const [caseload, setCaseload] = React.useState();
 
@@ -32,6 +35,10 @@ const PolicyRouter = props => {
       filters["area1"] = [state];
     }
     loadPolicyCategories({
+      filters,
+      stateSetter: setPolicyObject,
+    });
+    loadPolicySubCategories({
       filters,
       stateSetter: setPolicyObject,
     });
