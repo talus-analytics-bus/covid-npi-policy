@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import {
   loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,
-} from "../PolicyRouter/PolicyRouter";
+} from "../PolicyRouter/PolicyLoaders";
 
 const ExpandSection = props => {
   const [renderChildren, setRenderChildren] = React.useState(false);
