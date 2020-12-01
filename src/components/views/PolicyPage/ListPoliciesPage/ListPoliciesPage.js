@@ -14,18 +14,16 @@ const ListPoliciesPage = props => {
 
   const loadDescriptionsByCategory = categoryName => {
     console.log("loadDescriptionsByCategory");
+
     const categoryNeedsDescriptions =
       // if category is empty request it immediately
       // (this will build the categories too)
-      Object.entries(props.policyObject[categoryName])[1] === undefined
+      Object.entries(props.policyObject[categoryName])[0] === undefined
         ? true
         : // if the category exists, check if there is at least one
           // description already in the first subcategory
-          Object.keys(
-            Object.entries(
-              Object.entries(props.policyObject[categoryName])[1]
-            )[1][1]
-          ).length === 0;
+          Object.keys(Object.entries(props.policyObject[categoryName])[0][1])
+            .length === 0;
 
     if (categoryNeedsDescriptions) {
       const filters = {
