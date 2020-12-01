@@ -72,11 +72,17 @@ const loadPolicySubCategories = async ({ filters, stateSetter }) => {
         valueObj: {},
       });
     });
+
+    // spread operator to create a shallow
+    // copy which will trigger re-render
     return { ...prev };
   });
 };
 
 // Loading descriptions should happen when the policy category is expanded
+// This function will also create any needed subcategories as it goes, so
+// that it can short-cut the loadPolicySubCategories request if the user
+// selects a category before all subcategories are loaded.
 export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
   console.log("loadPolicyDescriptions Called");
   const policyResponse = await Policy({

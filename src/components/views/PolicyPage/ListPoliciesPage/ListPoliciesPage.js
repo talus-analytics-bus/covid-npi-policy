@@ -6,25 +6,7 @@ import {
   CATEGORY_FIELD_NAME,
 } from "../PolicyRouter/PolicyLoaders";
 
-const ExpandSection = props => {
-  const [renderChildren, setRenderChildren] = React.useState(false);
-
-  let children = React.Children.toArray(props.children);
-
-  const onClickHandler = e => {
-    e.preventDefault();
-    setRenderChildren(prev => !prev);
-    props.onOpen && props.onOpen();
-  };
-
-  return (
-    <div>
-      <button onClick={onClickHandler}>{children[0]}</button>
-      {renderChildren &&
-        (children.slice(1).length > 0 ? children.slice(1) : <p>Loading...</p>)}
-    </div>
-  );
-};
+import ExpandingSection from "./ExpandingSection/ExpandingSection";
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
@@ -61,7 +43,7 @@ const ListPoliciesPage = props => {
     <section>
       {props.policyObject &&
         Object.entries(props.policyObject).map(([categoryName, category]) => (
-          <ExpandSection
+          <ExpandingSection
             key={categoryName}
             onOpen={() => loadDescriptionsByCategory(categoryName)}
           >
@@ -69,21 +51,21 @@ const ListPoliciesPage = props => {
               {categoryName} {Object.keys(category).length}
             </h1>
             {Object.entries(category).map(([subcatName, subcat]) => (
-              <ExpandSection key={subcatName}>
+              <ExpandingSection key={subcatName}>
                 <h2>
                   {subcatName} {Object.keys(subcat).length}
                 </h2>
                 {Object.entries(subcat).map(([policyID, policy]) => (
                   <div key={policyID}>
-                    {/* <ExpandSection key={policyID}> */}
+                    {/* <ExpandingSection key={policyID}> */}
                     <h3>{policyID}</h3>
                     <p>{policyID} policy details</p>
-                    {/* </ExpandSection> */}
+                    {/* </ExpandingSection> */}
                   </div>
                 ))}
-              </ExpandSection>
+              </ExpandingSection>
             ))}
-          </ExpandSection>
+          </ExpandingSection>
         ))}
     </section>
   );
