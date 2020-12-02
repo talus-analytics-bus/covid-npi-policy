@@ -1,0 +1,167 @@
+.introSection {
+  display: flex;
+  margin-bottom: 2em;
+
+  .text {
+    flex-basis: 75%;
+    padding-right: 2rem;
+
+    h1 {
+      margin-top: 2rem;
+      // color: #29334b;
+      font-family: "rawline";
+    }
+
+    p {
+      margin-top: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .quickFacts {
+      display: flex;
+
+      div {
+        margin: 1rem;
+        margin-left: 0;
+        padding: 1rem;
+        border: 1px solid #d2e4f1;
+        border-radius: 3px;
+        background-color: #ecf3f8;
+        // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.0625);
+        text-align: center;
+      }
+    }
+  }
+
+  .miniMapHolder {
+    flex-basis: 25%;
+  }
+}
+
+.caseloadContainer {
+  margin-right: 3rem;
+  margin-top: 2rem;
+}
+
+.policyList {
+  margin-top: 10rem;
+
+  section {
+    padding: 2rem;
+    border: 1px solid #eee;
+    margin-bottom: 1rem;
+
+    > div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    h1,
+    h2 {
+      font-size: 1.2rem;
+      color: #1a305a;
+    }
+
+    h2 {
+      font-size: 1rem;
+      text-align: right;
+    }
+
+    a {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+.topLevelContainer {
+  padding: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 7.5px;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+
+  .topLevelHeader {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      background-color: #96d6db;
+      margin-right: 1em;
+    }
+
+    h1 {
+      font-family: "rawline";
+      font-size: 24px;
+      font-weight: 500;
+      text-transform: capitalize;
+      color: #29334b;
+    }
+  }
+
+  .categoryContainer {
+    position: relative;
+    margin-left: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+
+    &:before {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      left: -2.5px;
+      width: 5px;
+      border-radius: 2.5px;
+      background-color: #96d6db;
+      content: "";
+    }
+
+    .secondLevelHeader {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+
+      .markerDot {
+        width: 10px;
+        height: 10px;
+        border-radius: 20px;
+        background-color: #7fb0b4;
+        margin-right: 1em;
+        margin-top: 5px;
+      }
+
+      h2 {
+        font-family: "rawline";
+        font-size: 22px;
+        font-weight: 500;
+        text-transform: capitalize;
+        color: #29334b;
+      }
+    }
+
+    .secondLevelContainer {
+      position: relative;
+      margin-left: 5px;
+      padding-left: 5px;
+      // margin-top: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+
+      &:before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -2.5px;
+        width: 5px;
+        border-radius: 2.5px;
+        background-color: #7fb0b4;
+        content: "";
+      }
+    }
+  }
+}
