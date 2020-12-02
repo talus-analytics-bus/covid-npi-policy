@@ -1,0 +1,72 @@
+.policySummary {
+  position: relative;
+  font-size: 16px;
+  margin: 0.75em 0 0.75em 1em;
+  padding: 0.75em 0 0.75em 1em;
+  font-family: "rawline";
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    border-radius: 2.5px;
+    background-color: #4f8692;
+    content: "";
+  }
+
+  .metadata {
+    display: flex;
+    margin-bottom: 0.5em;
+
+    div {
+      padding-right: 2em;
+      min-width: 12em;
+    }
+
+    h1 {
+      color: #5f6678;
+      font-weight: 900;
+      font-size: 0.8em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-family: "rawline";
+      font-weight: 600;
+      font-size: 1.2em;
+      text-transform: none;
+    }
+
+    h1,
+    a {
+    }
+  }
+
+  p {
+    font-family: "rawline";
+    font-weight: 500;
+    line-height: 1.4;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+  }
+
+  a {
+    display: inline-block;
+    background-color: #4f8692;
+    color: white;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+    font-weight: 600;
+    letter-spacing: 0.0625em;
+    transition: 250ms ease;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #2892a9;
+    }
+  }
+}

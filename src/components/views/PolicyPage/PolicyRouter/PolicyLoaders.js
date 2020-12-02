@@ -96,6 +96,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
       CATEGORY_FIELD_NAME,
       SUBCATEGORY_FIELD_NAME,
       "desc",
+      "policy_name",
       "date_start_effective",
       "date_end_actual",
     ],
