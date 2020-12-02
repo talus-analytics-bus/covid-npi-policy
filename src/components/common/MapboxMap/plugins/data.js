@@ -51,7 +51,7 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "us",
+  mapId: "global",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -70,12 +70,16 @@ export const defaults = {
     // id of default circle metric
     circle: "74",
     // id of default fill metric
-    fill: "policy_status",
+    fill: "policy_status_counts",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points",
   },
   // defaults for additional maps...
-  global: { circle: "77", fill: "policy_status", priorLayer: "country-label" },
+  global: {
+    circle: "77",
+    fill: "policy_status_counts",
+    priorLayer: "country-label",
+  },
 };
 
 // constants
@@ -88,7 +92,7 @@ export const mapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatus,
+      queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
@@ -99,7 +103,7 @@ export const mapMetrics = {
       for: ["fill"],
 
       // unique ID of this metric
-      id: "policy_status",
+      id: "policy_status_counts",
 
       // data field with which to link metric to features;
       // features potentially linking to this metric must have an ID that
@@ -110,7 +114,7 @@ export const mapMetrics = {
       // style IDs to use for the metric for each layer type -- if none are
       // defined, then the metric's ID will be used to look up the appropriate
       // style.
-      styleId: { fill: "policy_status" },
+      styleId: { fill: "policy_status_counts" },
 
       // filter to control what features are returned for layers that are
       // displaying this metric
@@ -131,6 +135,52 @@ export const mapMetrics = {
         // pattern: true
       },
     },
+    // {
+    //   // functions that, when passed `params`, returns the data for the map
+    //   // for this metric
+    //   queryFunc: PolicyStatus,
+    //
+    //   // params that must be passed to `queryFunc` as object
+    //   params: ({ filters }) => {
+    //     return { method: "post", filters, geo_res: "state" };
+    //   },
+    //
+    //   // array of layer types for which this metric is used
+    //   for: ["fill"],
+    //
+    //   // unique ID of this metric
+    //   id: "policy_status",
+    //
+    //   // data field with which to link metric to features;
+    //   // features potentially linking to this metric must have an ID that
+    //   // matches the value for this key for the datum
+    //   featureLinkField: "place_name",
+    //
+    //   // OPTIONAL:
+    //   // style IDs to use for the metric for each layer type -- if none are
+    //   // defined, then the metric's ID will be used to look up the appropriate
+    //   // style.
+    //   styleId: { fill: "policy_status" },
+    //
+    //   // filter to control what features are returned for layers that are
+    //   // displaying this metric
+    //   filter: ["==", ["get", "type"], "state"],
+    //
+    //   // whether trend data should be retrieved for this metric
+    //   // NOTE: only applies to generalized metrics
+    //   trend: false,
+    //
+    //   // info about layers that use this metric
+    //   styleOptions: {
+    //     // whether layers that display this metric should be outlined
+    //     // NOTE: if true, an outline style must be defined in `./layers.js`
+    //     outline: true,
+    //
+    //     // whether layers that display this metric should have a pattern layers
+    //     // NOTE: if true, a pattern style must be defined in `./layers.js`
+    //     // pattern: true
+    //   },
+    // },
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
@@ -219,7 +269,7 @@ export const mapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatus,
+      queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
@@ -230,7 +280,7 @@ export const mapMetrics = {
       for: ["fill"],
 
       // unique ID of this metric
-      id: "policy_status",
+      id: "policy_status_counts",
 
       // data field with which to link metric to features;
       // features potentially linking to this metric must have an ID that
@@ -241,7 +291,7 @@ export const mapMetrics = {
       // style IDs to use for the metric for each layer type -- if none are
       // defined, then the metric's ID will be used to look up the appropriate
       // style.
-      styleId: { fill: "policy_status" },
+      styleId: { fill: "policy_status_counts" },
 
       // // filter to control what features are returned for layers that are
       // // displaying this metric
@@ -262,6 +312,52 @@ export const mapMetrics = {
         // pattern: true
       },
     },
+    // {
+    //   // functions that, when passed `params`, returns the data for the map
+    //   // for this metric
+    //   queryFunc: PolicyStatus,
+    //
+    //   // params that must be passed to `queryFunc` as object
+    //   params: ({ filters }) => {
+    //     return { method: "post", filters, geo_res: "country" };
+    //   },
+    //
+    //   // array of layer types for which this metric is used
+    //   for: ["fill"],
+    //
+    //   // unique ID of this metric
+    //   id: "policy_status",
+    //
+    //   // data field with which to link metric to features;
+    //   // features potentially linking to this metric must have an ID that
+    //   // matches the value for this key for the datum
+    //   featureLinkField: "place_name",
+    //
+    //   // OPTIONAL:
+    //   // style IDs to use for the metric for each layer type -- if none are
+    //   // defined, then the metric's ID will be used to look up the appropriate
+    //   // style.
+    //   styleId: { fill: "policy_status" },
+    //
+    //   // // filter to control what features are returned for layers that are
+    //   // // displaying this metric
+    //   // filter: ["==", ["get", "type"], "state"],
+    //
+    //   // whether trend data should be retrieved for this metric
+    //   // NOTE: only applies to generalized metrics
+    //   trend: false,
+    //
+    //   // info about layers that use this metric
+    //   styleOptions: {
+    //     // whether layers that display this metric should be outlined
+    //     // NOTE: if true, an outline style must be defined in `./layers.js`
+    //     outline: true,
+    //
+    //     // whether layers that display this metric should have a pattern layers
+    //     // NOTE: if true, a pattern style must be defined in `./layers.js`
+    //     // pattern: true
+    //   },
+    // },
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
@@ -609,7 +705,7 @@ export const metricMeta = {
       ),
     };
   },
-  policy_status: {
+  policy_status_counts: {
     metric_definition: (
       <span>
         {
@@ -624,13 +720,13 @@ export const metricMeta = {
                     }}
                     className={infostyles.rect}
                   >
-                    policy in effect
+                    policy in effect (new)
                   </div>
                 </td>
                 <td style={{ display: "none" }} />
                 <td>
-                  At least one policy in effect with the given category /
-                  subcategories on the specified date.
+                  TO REPLACE: At least one policy in effect with the given
+                  category / subcategories on the specified date.
                 </td>
               </tr>
             </tbody>
@@ -663,6 +759,60 @@ export const metricMeta = {
       },
     },
   },
+  // policy_status: {
+  //   metric_definition: (
+  //     <span>
+  //       {
+  //         <table className={infostyles.distancingLevelTable}>
+  //           <tbody>
+  //             <tr>
+  //               <td>
+  //                 <div
+  //                   style={{
+  //                     backgroundColor: "#66CAC4",
+  //                     marginRight: "20px",
+  //                   }}
+  //                   className={infostyles.rect}
+  //                 >
+  //                   policy in effect
+  //                 </div>
+  //               </td>
+  //               <td style={{ display: "none" }} />
+  //               <td>
+  //                 At least one policy in effect with the given category /
+  //                 subcategories on the specified date.
+  //               </td>
+  //             </tr>
+  //           </tbody>
+  //         </table>
+  //       }
+  //     </span>
+  //   ),
+  //   metric_displayname: "Policy status",
+  //   value: v => v,
+  //   unit: v => "",
+  //   legendInfo: {
+  //     fill: {
+  //       for: "basemap", // TODO dynamically
+  //       type: "quantized",
+  //       labelsInside: true,
+  //       domain: [
+  //         <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+  //           data not
+  //           <br />
+  //           available
+  //         </div>,
+  //         "no policy",
+  //         "policy in effect",
+  //       ],
+  //       // range: ["#eaeaea", "white", "#66CAC4"],
+  //       colorscale: d3
+  //         .scaleOrdinal()
+  //         .domain(["no policy", "policy in effect"])
+  //         .range(["#eaeaea", "white", "#66CAC4"]),
+  //     },
+  //   },
+  // },
   lockdown_level: {
     // last updated: 2020-06-24
     // MV via JK and GU
@@ -1012,6 +1162,7 @@ export const tooltipGetter = async ({
 
   // get relevant policy data
   const policyFilters = {
+    level: mapId === "us" ? ["State / Province"] : ["Country"],
     dates_in_effect: [apiDate, apiDate],
 
     // if doing distancing level, only allow all social distancing

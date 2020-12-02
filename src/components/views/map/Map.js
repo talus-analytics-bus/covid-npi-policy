@@ -341,7 +341,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                           // Filter set containing the filters specified in `filterDefs`
                           <FilterSet
                             {...{
-                              disabled: fill !== "policy_status",
+                              disabled:
+                                fill !== "policy_status" &&
+                                fill !== "policy_status_counts",
                               filterDefs,
                               filters,
                               setFilters,

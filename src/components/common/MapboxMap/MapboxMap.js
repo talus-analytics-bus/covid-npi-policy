@@ -15,6 +15,7 @@ import styles from "./mapboxmap.module.scss";
 // 3rd party packages
 import ReactMapGL, { NavigationControl, Popup } from "react-map-gl";
 import classNames from "classnames";
+import * as d3 from "d3/dist/d3.min";
 
 // local modules
 import { metricMeta, dataGetter, tooltipGetter } from "./plugins/data";
@@ -126,12 +127,16 @@ const MapboxMap = ({
   const updateFillOrder = ({ map, f = null }) => {
     // initialize the vertical order of shapes for certain metrics
     if (mapId === "global") {
-      map.setLayoutProperty("policy_status-fill-outline", "line-sort-key", [
-        "case",
-        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
-        0,
-        1,
-      ]);
+      map.setLayoutProperty(
+        "policy_status_counts-fill-outline",
+        "line-sort-key",
+        [
+          "case",
+          ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+          0,
+          1,
+        ]
+      );
       map.setLayoutProperty("lockdown_level-fill-outline", "line-sort-key", [
         "case",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
@@ -168,6 +173,23 @@ const MapboxMap = ({
         );
       }
     }
+  };
+
+  const updateFillStyles = ({ map }) => {
+    // if needed, update fill styles based on data
+    const toCheck = ["policy_status_counts"];
+    toCheck.forEach(key => {
+      if (data[key] !== undefined) {
+        const maxVal = d3.max(data[key], d => d.value);
+        const fillStylesFunc = layerStyles.fill[key];
+        const newFillColorStyle = fillStylesFunc(key, geoHaveData, maxVal);
+        map.setPaintProperty(
+          key + "-fill",
+          "fill-color",
+          newFillColorStyle["fill-color"]
+        );
+      }
+    });
   };
 
   const getFillLegendName = ({ filters, fill }) => {
@@ -473,6 +495,7 @@ const MapboxMap = ({
         // latest map data
         bindFeatureStates({ map, mapId, data, selectedFeature });
         updateFillOrder({ map, f: null });
+        updateFillStyles({ map });
         updateMapTooltip({ map });
       }
     }
@@ -652,6 +675,7 @@ const MapboxMap = ({
             const map = mapRef.getMap();
 
             updateFillOrder({ map, f: null });
+            updateFillStyles({ map });
             setLinLogCircleStyle();
 
             // if default fit bounds are specified, center the viewport on them
