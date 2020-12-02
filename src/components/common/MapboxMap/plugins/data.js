@@ -22,7 +22,12 @@ import { comma, isLightColor } from "../../../misc/Util";
 // queries
 import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
-import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
+import {
+  Policy,
+  PolicyStatus,
+  PolicyStatusCounts,
+  execute,
+} from "../../../misc/Queries";
 
 // assets and styles
 import dots from "./assets/images/dots.png";

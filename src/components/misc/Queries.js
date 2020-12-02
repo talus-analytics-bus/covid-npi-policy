@@ -295,6 +295,50 @@ export const PolicyStatus = async function({
 };
 
 /**
+ * Get policy status counts data from API.
+ */
+export const PolicyStatusCounts = async function({
+  method,
+  geo_res = "state",
+  fields = [],
+  filters = null,
+}) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    console.error("GET not yet mplemented for PolicyStatusCounts");
+    // req = await axios(`${API_URL}/get/policy_status_counts/${geo_res}`, {
+    //   params,
+    // });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+    req = await axios.post(
+      `${API_URL}/post/policy_status_counts/${geo_res}`,
+      { filters },
+      {
+        params,
+      }
+    );
+  } else {
+    console.error(
+      "Error: Method not implemented for `PolicyStatusCounts`: " + method
+    );
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
  * Get export data from API.
  */
 export const Export = async function({ method, filters = null, class_name }) {
