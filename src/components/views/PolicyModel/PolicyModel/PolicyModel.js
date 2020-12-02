@@ -117,9 +117,11 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
     setDomain([domainStartDate, domainEndDate]);
 
+    console.log(modelCurves);
+
     setCaseLoadAxis([
       0,
-      Math.max(...Object.values(modelCurves).map(state => state.yMax)),
+      Math.max(...Object.values(modelCurves).map(state => state.actuals_yMax)),
     ]);
   }, [
     // callbackModels,
@@ -131,6 +133,18 @@ const PolicyModel = ({ setLoading, setPage }) => {
     setDomain,
     setCaseLoadAxis,
   ]);
+
+  const [scaleTo, setScaleTo] = React.useState("actuals");
+  React.useEffect(() => {
+    if (curves && Object.values(curves).length > 0) {
+      setCaseLoadAxis([
+        0,
+        Math.max(
+          ...Object.values(curves).map(state => state[`${scaleTo}_yMax`])
+        ),
+      ]);
+    }
+  }, [curves, scaleTo]);
 
   const [dataDates, setDataDates] = React.useState();
 
@@ -427,6 +441,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   dataDates={dataDates}
                   contactPlotType={contactPlotType}
                   selectedCurves={selectedCurves}
+                  setScaleTo={setScaleTo}
+                  scaleTo={scaleTo}
                 />
               );
             } else {
