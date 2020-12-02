@@ -165,101 +165,100 @@ const State = props => {
               </Tippy>
             </p>
           </div>
-          <div className={styles.explanation}>
-            What if we had <br /> done nothing?
-            <label>
-              <input
-                type="checkbox"
-                checked={props.counterfactualSelected}
-                onChange={() =>
-                  props.setCounterfactualSelected(!props.counterfactualSelected)
-                }
-              />
-              {/* View cases without policies on graph */}
-              View the "What if" scenario on the graph
-            </label>
-          </div>
-          <div className={styles.cases}>
-            {formatModeled(props.curves.counterfactual_cases)}
-          </div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}>cumulative cases</p>
-            <p className={styles.date}>
-              as of{" "}
-              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
-              (modeled){" "}
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  <p className={styles.ipopup}>
-                    Total number of cumulative cases modeled on the assumption
-                    no policies had been put in to effect, rounded to indicate
-                    confidence.
-                  </p>
-                }
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <img
-                  className={styles.infoIcon}
-                  src={greenInfoIcon}
-                  alt="More information"
-                />
-              </Tippy>
-            </p>
-            <p className={styles.popPercent}>
-              {(props.curves.counterfactual_cases / props.curves.population) *
-                100 >=
-              0.5
-                ? (
-                    (props.curves.counterfactual_cases /
-                      props.curves.population) *
-                    100
-                  ).toFixed(0)
-                : (
-                    (props.curves.counterfactual_cases /
-                      props.curves.population) *
-                    100
-                  ).toFixed(1)}
-              % of total population
-            </p>
-          </div>
-          <div className={styles.cases}>
-            {formatModeled(props.curves.counterfactual_deaths)}
-          </div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}>cumulative deaths</p>
-            <p className={styles.date}>
-              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (modeled){" "}
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  <p className={styles.ipopup}>
-                    Research indicates that COVID patients will die within
-                    approximately 30 days of initial infection. Therefore, to
-                    align these deaths with the caseload, we report the number
-                    of cases as of today’s date and the anticipated deaths
-                    associated with those cases as of 30 days from today.
-                  </p>
-                }
-                maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <img
-                  className={styles.infoIcon}
-                  src={greenInfoIcon}
-                  alt="More information"
-                />
-              </Tippy>
-            </p>
-          </div>
+          {/* <div className={styles.explanation}> */}
+          {/*   What if we had <br /> done nothing? */}
+          {/*   <label> */}
+          {/*     <input */}
+          {/*       type="checkbox" */}
+          {/*       checked={props.counterfactualSelected} */}
+          {/*       onChange={() => */}
+          {/*         props.setCounterfactualSelected(!props.counterfactualSelected) */}
+          {/*       } */}
+          {/*     /> */}
+          {/*     View the "What if" scenario on the graph */}
+          {/*   </label> */}
+          {/* </div> */}
+          {/* <div className={styles.cases}> */}
+          {/*   {formatModeled(props.curves.counterfactual_cases)} */}
+          {/* </div> */}
+          {/* <div className={styles.casesLabel}> */}
+          {/*   <p className={styles.label}>cumulative cases</p> */}
+          {/*   <p className={styles.date}> */}
+          {/*     as of{" "} */}
+          {/*     {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "} */}
+          {/*     (modeled){" "} */}
+          {/*     <Tippy */}
+          {/*       interactive={true} */}
+          {/*       allowHTML={true} */}
+          {/*       content={ */}
+          {/*         <p className={styles.ipopup}> */}
+          {/*           Total number of cumulative cases modeled on the assumption */}
+          {/*           no policies had been put in to effect, rounded to indicate */}
+          {/*           confidence. */}
+          {/*         </p> */}
+          {/*       } */}
+          {/*       maxWidth={"30rem"} */}
+          {/*       theme={"light"} */}
+          {/*       placement={"bottom"} */}
+          {/*       offset={[-30, 10]} */}
+          {/*     > */}
+          {/*       <img */}
+          {/*         className={styles.infoIcon} */}
+          {/*         src={greenInfoIcon} */}
+          {/*         alt="More information" */}
+          {/*       /> */}
+          {/*     </Tippy> */}
+          {/*   </p> */}
+          {/*   <p className={styles.popPercent}> */}
+          {/*     {(props.curves.counterfactual_cases / props.curves.population) * */}
+          {/*       100 >= */}
+          {/*     0.5 */}
+          {/*       ? ( */}
+          {/*           (props.curves.counterfactual_cases / */}
+          {/*             props.curves.population) * */}
+          {/*           100 */}
+          {/*         ).toFixed(0) */}
+          {/*       : ( */}
+          {/*           (props.curves.counterfactual_cases / */}
+          {/*             props.curves.population) * */}
+          {/*           100 */}
+          {/*         ).toFixed(1)} */}
+          {/*     % of total population */}
+          {/*   </p> */}
+          {/* </div> */}
+          {/* <div className={styles.cases}> */}
+          {/*   {formatModeled(props.curves.counterfactual_deaths)} */}
+          {/* </div> */}
+          {/* <div className={styles.casesLabel}> */}
+          {/*   <p className={styles.label}>cumulative deaths</p> */}
+          {/*   <p className={styles.date}> */}
+          {/*     as of {props.dataDates && formatDate(props.curves.death_date)}{" "} */}
+          {/*     (modeled){" "} */}
+          {/*     <Tippy */}
+          {/*       interactive={true} */}
+          {/*       allowHTML={true} */}
+          {/*       content={ */}
+          {/*         <p className={styles.ipopup}> */}
+          {/*           Research indicates that COVID patients will die within */}
+          {/*           approximately 30 days of initial infection. Therefore, to */}
+          {/*           align these deaths with the caseload, we report the number */}
+          {/*           of cases as of today’s date and the anticipated deaths */}
+          {/*           associated with those cases as of 30 days from today. */}
+          {/*         </p> */}
+          {/*       } */}
+          {/*       maxWidth={"30rem"} */}
+          {/*       theme={"light"} */}
+          {/*       placement={"bottom"} */}
+          {/*       offset={[-30, 10]} */}
+          {/*     > */}
+          {/*       <img */}
+          {/*         className={styles.infoIcon} */}
+          {/*         src={greenInfoIcon} */}
+          {/*         alt="More information" */}
+          {/*       /> */}
+          {/*     </Tippy> */}
+          {/*   </p> */}
+          {/* </div> */}
         </div>
         {/* <div className={styles.stateName}> */}
         {/*   <h1> */}
