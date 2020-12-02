@@ -407,10 +407,10 @@ const State = props => {
             <span />
             <p>Modeled</p>
           </div>
-          <div className={styles.noPolicies}>
-            <span />
-            <p>"What if we had done nothing" scenario</p>
-          </div>
+          {/* <div className={styles.noPolicies}> */}
+          {/* <span /> */}
+          {/* <p>"What if we had done nothing" scenario</p> */}
+          {/* </div> */}
         </div>
         <button
           className={styles.resetState}
