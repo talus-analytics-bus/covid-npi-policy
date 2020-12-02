@@ -28,11 +28,10 @@
 .abovePlot {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .instruction {
-  margin-left: auto;
   display: inline-block;
   font-style: italic;
   display: flex;
