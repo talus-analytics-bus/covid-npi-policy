@@ -104,26 +104,6 @@ export const mapSources = {
 // define map styles to provide base layers for the maps
 // each specified style represents a different map instance
 export const mapStyles = {
-  // additional maps...
-  global: {
-    url: "mapbox://styles/nicoletalus/ckaofpis006y41ik5mr49kjnd",
-    value: "global",
-    name: "Countries",
-    tooltip: (
-      <span>
-        <b>Currently in development</b>: View country-level data for the world
-      </span>
-    ),
-    minZoom: 1.7246463935904246,
-    maxZoom: 6,
-
-    // default fit bounds -- the rectangle that should be optimally displayed
-    // in the viewport; the viewport will fly to this position
-    defaultFitBounds: [
-      [-177.44289170791797, 64.05440369592642],
-      [179.97107965372615, -54.77460938717267],
-    ],
-  },
   // map ID (each of these will be rendered as a separate map)
   us: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
@@ -150,5 +130,25 @@ export const mapStyles = {
 
     // optional: info tooltip to display for map in radio selections
     tooltip: "View state-level data for the United States only",
+  },
+  // additional maps...
+  global: {
+    url: "mapbox://styles/nicoletalus/ckaofpis006y41ik5mr49kjnd",
+    value: "global",
+    name: "Countries",
+    tooltip: (
+      <span>
+        <b>Currently in development</b>: View country-level data for the world
+      </span>
+    ),
+    minZoom: 1.7246463935904246,
+    maxZoom: 6,
+
+    // default fit bounds -- the rectangle that should be optimally displayed
+    // in the viewport; the viewport will fly to this position
+    defaultFitBounds: [
+      [-177.44289170791797, 64.05440369592642],
+      [179.97107965372615, -54.77460938717267],
+    ],
   },
 };
