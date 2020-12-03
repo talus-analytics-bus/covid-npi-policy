@@ -521,8 +521,6 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
-        console.log("feature");
-        console.log(feature);
 
         // deselect the currently selected feature
         if (selectedFeature !== null) {
