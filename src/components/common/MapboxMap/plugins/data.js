@@ -1238,8 +1238,11 @@ export const tooltipGetter = async ({
   ) {
     policyFilters.ph_measure_details = filters.ph_measure_details;
   }
-  if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
-  else policyFilters.iso3 = [d.properties.ISO_A3];
+  if (mapId === "us") {
+    policyFilters.area1 = [d.properties.state_name];
+    // add US to country name if in USA map
+    policyFilters.iso3 = ["USA"];
+  } else policyFilters.iso3 = [d.properties.ISO_A3];
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -1372,6 +1375,7 @@ export const tooltipGetter = async ({
   // define right content of header metric based on metric type
   // add actions for bottom of tooltip
   const filtersForStr = {
+    level: mapId === "us" ? ["State / Province"] : ["Country"],
     primary_ph_measure:
       plugins.fill !== "lockdown_level"
         ? filters.primary_ph_measure
