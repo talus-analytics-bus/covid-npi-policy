@@ -117,9 +117,29 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
     setDomain([domainStartDate, domainEndDate]);
 
+    console.log(modelCurves);
+
+    const defaultScaleTo = modelCurves
+      ? Object.values(modelCurves)
+          .map(state =>
+            state.interventions.map(inter => {
+              // console.log(inter.intervention_type);
+              return inter.intervention_type === "intervention";
+            })
+          )
+          .flat()
+          .some(el => el === true)
+        ? "model"
+        : "actuals"
+      : "actuals";
+
     setCaseLoadAxis([
       0,
-      Math.max(...Object.values(modelCurves).map(state => state.yMax)),
+      Math.max(
+        ...Object.values(modelCurves).map(
+          state => state[`${defaultScaleTo}_yMax`]
+        )
+      ),
     ]);
   }, [
     // callbackModels,
@@ -131,6 +151,36 @@ const PolicyModel = ({ setLoading, setPage }) => {
     setDomain,
     setCaseLoadAxis,
   ]);
+
+  const [scaleTo, setScaleTo] = React.useState("actuals");
+
+  React.useEffect(() => {
+    setScaleTo(
+      curves
+        ? Object.values(curves)
+            .map(state =>
+              state.interventions.map(
+                inter => inter.intervention_type === "intervention"
+              )
+            )
+            .flat()
+            .some(el => el === true)
+          ? "model"
+          : "actuals"
+        : "actuals"
+    );
+  }, [curves]);
+
+  React.useEffect(() => {
+    if (curves && Object.values(curves).length > 0) {
+      setCaseLoadAxis([
+        0,
+        Math.max(
+          ...Object.values(curves).map(state => state[`${scaleTo}_yMax`])
+        ),
+      ]);
+    }
+  }, [curves, scaleTo]);
 
   const [dataDates, setDataDates] = React.useState();
 
@@ -427,6 +477,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   dataDates={dataDates}
                   contactPlotType={contactPlotType}
                   selectedCurves={selectedCurves}
+                  setScaleTo={setScaleTo}
+                  scaleTo={scaleTo}
                 />
               );
             } else {

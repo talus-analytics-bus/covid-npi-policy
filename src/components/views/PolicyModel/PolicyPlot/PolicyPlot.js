@@ -437,6 +437,7 @@ const PolicyModel = props => {
         data={props.data}
       />
       <div className={styles.abovePlot}>
+        {/* {props.scaleTo === "model" && ( */}
         <p className={styles.instruction}>
           <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
             <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
@@ -450,6 +451,7 @@ const PolicyModel = props => {
           </svg>
           Use cursor on graph to set new policy
         </p>
+        {/* )} */}
         <label className={styles.legendLabel}>
           <Tippy
             content={
@@ -482,10 +484,10 @@ const PolicyModel = props => {
                   <span />
                   <p>Modeled</p>
                 </div>
-                <div className={styles.noPolicies}>
-                  <span />
-                  <p>"What if we had done nothing" scenario</p>
-                </div>
+                {/* <div className={styles.noPolicies}> */}
+                {/* <span /> */}
+                {/* <p>"What if we had done nothing" scenario</p> */}
+                {/* </div> */}
               </div>
             }
             allowHTML={true}
