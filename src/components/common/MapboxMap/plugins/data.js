@@ -44,14 +44,14 @@ import modelIcon from "../../../../assets/icons/modelIcon.svg";
 
 // utilities and local components
 import { isEmpty, percentize } from "../../../misc/Util";
-import { Table, ShowMore } from "../../../common";
-
+import { Table, ShowMore, PrimaryButton } from "../../../common";
+import { greenStepsScale } from "./layers";
 // define default parameters for MapboxMap
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "global",
+  mapId: "us",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -77,6 +77,7 @@ export const defaults = {
   // defaults for additional maps...
   global: {
     circle: "77",
+    // fill: "lockdown_level",
     fill: "policy_status_counts",
     priorLayer: "country-label",
   },
@@ -734,28 +735,67 @@ export const metricMeta = {
         }
       </span>
     ),
-    metric_displayname: "Policy status",
+    metric_displayname: "Relative policy count",
     value: v => v,
     unit: v => "",
     legendInfo: {
       fill: {
         for: "basemap", // TODO dynamically
         type: "quantized",
-        labelsInside: true,
+        labelsInside: false,
+        range: [
+          "#eaeaea",
+          "none",
+          greenStepsScale(20),
+          greenStepsScale(40),
+          greenStepsScale(60),
+          greenStepsScale(80),
+          greenStepsScale(100),
+        ],
+        borders: [null, "2px solid gray", null, null, null, null, null],
+        width: [null, null, 40, 40, 40, 40, 40],
+        entryStyles: [
+          undefined,
+          { marginLeft: 10 },
+          { marginLeft: 20, marginRight: 0 },
+          { marginRight: 0 },
+          { marginRight: 0 },
+          { marginRight: 0 },
+          { marginRight: 0 },
+        ],
+        labelStyles: [
+          undefined,
+          undefined,
+          { position: "absolute", top: 20 },
+          undefined,
+          undefined,
+          undefined,
+          { position: "absolute", top: 20 },
+        ],
         domain: [
           <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
             data not
             <br />
             available
           </div>,
-          "no policy",
-          "policy in effect",
+          <div
+            style={{
+              color: "#333",
+              fontSize: ".8rem",
+              lineHeight: 1.1,
+            }}
+          >
+            no country-level
+            <br />
+            policy in effect
+          </div>,
+          "fewest",
+          "",
+          "",
+          "",
+          "most",
         ],
-        // range: ["#eaeaea", "white", "#66CAC4"],
-        colorscale: d3
-          .scaleOrdinal()
-          .domain(["no policy", "policy in effect"])
-          .range(["#eaeaea", "white", "#66CAC4"]),
+        subLabels: [],
       },
     },
   },
@@ -955,14 +995,27 @@ export const metricMeta = {
         for: "basemap", // TODO dynamically
         type: "quantized",
         labelsInside: true,
-        range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
+        range: [
+          "#eaeaea",
+          "#ffffff",
+          "#2165a1",
+          "#549FE2",
+          "#86BFEB",
+          "#BBDAF5",
+          dots,
+        ],
+        borders: [null, "2px solid gray", null, null, null, null, null],
         domain: [
           <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
             data not
             <br />
             available
           </div>,
-          "no policy",
+          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            no active
+            <br />
+            restrictions
+          </div>,
           getCovidLocalMetricLink("lockdown"),
           getCovidLocalMetricLink("stay-at-home"),
           getCovidLocalMetricLink("safer-at-home"),
@@ -1107,6 +1160,7 @@ export const dataGetter = async ({ date, mapId, filters, map }) => {
  */
 export const tooltipGetter = async ({
   mapId,
+  setMapId,
   d,
   include,
   date,
@@ -1343,49 +1397,50 @@ export const tooltipGetter = async ({
     }
   }
   const filtersStr = JSON.stringify(filtersForStr);
+
+  // show "view state-level map" button?
+  const isUsaOnGlobalMap = mapId === "global" && d.properties.ISO_A3 === "USA";
+  const isUsaMap = mapId === "us";
+
   // content for right side of header
   tooltip.tooltipHeaderRight = (
     <>
       {(props.geoHaveData || mapId === "us") && (
-        <>
-          <a
-            key={"view"}
-            target="_blank"
-            href={"/data?type=policy&filters_policy=" + filtersStr}
-          >
-            {
-              <button>
-                <svg version="1.1" x="0px" y="0px" viewBox="0 0 10.5 11.1">
-                  <path
-                    d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
-                    H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
-                  />
-                </svg>
-                view in data table
-              </button>
-            }
-          </a>
-          {mapId === "us" && (
-            <a
-              key={"view"}
-              target="_blank"
-              href={"/model/#" + d.properties.state_abbrev.toUpperCase()}
-            >
-              {
-                <button>
-                  <svg x="0px" y="0px" viewBox="0 0 10.9 8.2">
-                    <path d="M10.9,7.1v1.1H0V7.1H10.9z M6.5,3.3H4.4v3.3h2.2V3.3z M9.8,0H7.6v6.5h2.2V0z M3.3,2.2H1.1v4.4h2.2 V2.2z" />
-                  </svg>
-                  view in model
-                </button>
-              }
-            </a>
+        <div className={styles.buttonsVertical}>
+          {isUsaOnGlobalMap && (
+            <PrimaryButton
+              {...{
+                key: "to_us",
+                onClick: () => setMapId("us"),
+                iconName: "zoom_in",
+                label: "view state-level map",
+              }}
+            />
           )}
-        </>
+          {mapId === "us" && (
+            <PrimaryButton
+              {...{
+                key: "to_model",
+                url: "/model/#" + d.properties.state_abbrev.toUpperCase(),
+                iconName: "bar_chart",
+                label: "view in model",
+                urlIsExternal: true,
+                isSecondary: false,
+              }}
+            />
+          )}
+          <PrimaryButton
+            {...{
+              key: "to_data",
+              url: "/data?type=policy&filters_policy=" + filtersStr,
+              iconName: "table_view",
+              label: "view in data table",
+              urlIsExternal: true,
+              isSecondary: isUsaOnGlobalMap || isUsaMap,
+            }}
+          />
+        </div>
       )}
-      {/* <span> */}
-      {/*   as of <i>{formattedDate}</i> */}
-      {/* </span> */}
     </>
   );
   const nPolicies = {

@@ -24,6 +24,7 @@ $white: #fff;
 $light-cyan: #d9edf8;
 
 // functional colors
+$dark-navy-blue-button: #213561;
 $dark-selected-blue: $dark-blue;
 $no-data-gray: #b3b3b3;
 
@@ -157,6 +158,11 @@ $border-radius: 5px;
   line-height: 1;
   position: relative;
   top: -2px;
+}
+
+@mixin noShadow() {
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
 // globals

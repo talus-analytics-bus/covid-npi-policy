@@ -213,20 +213,24 @@ const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
 const teal = "#66CAC4";
-const greenStepsScale = d3
+export const greenStepsScale = d3
   .scaleLinear()
   .domain([0, 100]) // TODO dynamically
   .range(["white", teal]);
 
 const getLinearColorBins = ({ nBins, scale, maxVal, key }) => {
-  scale.domain([0, maxVal]);
+  const range = scale.range();
+  const newScale = d3
+    .scaleLinear()
+    .domain([0, maxVal])
+    .range(range);
   const base = ["case"];
   for (let i = 0; i < nBins; i++) {
     const val = ((i + 1) * maxVal) / nBins;
     base.push(["<=", ["feature-state", key], val]);
-    base.push(scale(val));
+    base.push(newScale(val));
   }
-  base.push(scale(maxVal));
+  base.push(newScale(maxVal));
   return base;
 };
 

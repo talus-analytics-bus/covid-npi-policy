@@ -44,6 +44,7 @@ const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
  * @param  {[type]}  props        [description]
  */
 const MapboxMap = ({
+  setMapId,
   mapId,
   mapStyle,
   date,
@@ -201,16 +202,29 @@ const MapboxMap = ({
       nouns.singular = "Country";
     }
 
+    const isPolicyStatus = fill === "policy_status";
+    const isPolicyStatusCounts = fill === "policy_status_counts";
+
     if (isLockdownLevel) {
       return `Distancing level in ${nouns.singular.toLowerCase()} on ${date.format(
         "MMM D, YYYY"
       )}`;
-    } else {
+    } else if (isPolicyStatus) {
       const category = filters["primary_ph_measure"][0].toLowerCase();
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
         : undefined;
       const prefix = nouns.plural + " with at least one policy in effect for ";
+      const suffix = ` on ${date.format("MMM D, YYYY")}`;
+      if (subcategory !== undefined) {
+        return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
+      } else return prefix + category + suffix;
+    } else if (isPolicyStatusCounts) {
+      const category = filters["primary_ph_measure"][0].toLowerCase();
+      const subcategory = !isEmpty(filters["ph_measure_details"])
+        ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
+        : undefined;
+      const prefix = `Policies in effect at ${nouns.singular.toLowerCase()} level (relative count) for `;
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
         return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
@@ -337,6 +351,7 @@ const MapboxMap = ({
           {...{
             ...(await tooltipGetter({
               mapId: mapId,
+              setMapId,
               d: selectedFeature,
               include: [circle, "lockdown_level"],
               // include: [circle, fill],
@@ -756,7 +771,7 @@ const MapboxMap = ({
                     {...{
                       setInfoTooltipContent: props.setInfoTooltipContent,
                       className: "mapboxLegend",
-                      key: "basemap - quantized",
+                      key: "basemap - quantized - " + circle,
                       metric_definition: metricMeta[circle].metric_definition,
                       metric_displayname: (
                         <span>
@@ -776,7 +791,7 @@ const MapboxMap = ({
                     {...{
                       setInfoTooltipContent: props.setInfoTooltipContent,
                       className: "mapboxLegend",
-                      key: "bubble - linear",
+                      key: "bubble - linear - " + fill,
                       metric_definition: metricMeta[fill].metric_definition,
                       wideDefinition: metricMeta[fill].wideDefinition,
                       metric_displayname: (

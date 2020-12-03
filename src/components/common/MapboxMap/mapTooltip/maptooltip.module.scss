@@ -15,7 +15,6 @@
     font-family: "rawline", serif;
     border-radius: 8px 8px 0 0;
     display: flex;
-    align-items: center;
     justify-content: space-between;
     @include spaceItemsHoriz(50px);
 
@@ -46,51 +45,12 @@
     .tooltipHeaderRight {
       display: flex;
       flex-flow: column;
-      align-items: flex-end;
       text-align: right;
-      a {
-        button {
-          @include btn-primary();
-          color: white;
-          width: max-content;
-          white-space: nowrap;
-          font-family: "rawline", serif;
-          font-weight: bold;
-          padding: 5px 15px;
-          line-height: 1.2;
-          width: 12em;
-          text-align: left;
-
-          &:first-of-type {
-            margin-bottom: 0.5em;
-          }
-
-          svg {
-            width: 1em;
-            margin-right: 0.5em;
-            position: relative;
-            top: 0.125em;
-
-            path {
-              fill: #ffffff;
-            }
-          }
-
-          &:hover svg path {
-            fill: #344269;
-          }
-
-          img {
-            height: 1em;
-            margin-right: 0.5em;
-            margin-bottom: 0.125em;
-          }
-        }
-        + span {
-          color: $dark-blue;
-          font-size: 0.9rem;
-          margin-top: 2px;
-        }
+      .buttonsVertical {
+        display: flex;
+        flex-flow: column;
+        align-items: flex-end;
+        @include spaceItemsVert(10px);
       }
     }
   }

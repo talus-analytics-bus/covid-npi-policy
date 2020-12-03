@@ -192,6 +192,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
           {...{
             setInfoTooltipContent: props.setInfoTooltipContent,
             mapId: k,
+            setMapId,
             linCircleScale,
             key: k,
             mapStyle: mapStyles[k],
