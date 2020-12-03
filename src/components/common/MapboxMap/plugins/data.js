@@ -862,6 +862,17 @@ export const metricMeta = {
     // last updated: 2020-06-24
     // MV via JK and GU
     valueStyling: {
+      "No restrictions": {
+        label: "No active restrictions",
+        phase: "",
+        color: "#fff",
+        // icon: phase1,
+        def: (
+          <span>
+            No active social distancing policies with restrictions are in place
+          </span>
+        ),
+      },
       Lockdown: {
         label: "Lockdown",
         phase: "Phase I",
@@ -1217,6 +1228,10 @@ export const tooltipGetter = async ({
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
 
+  // if lockdown level is null, set it to "no restrictions"
+  const replaceNullData = props.geoHaveData || mapId === "us";
+  if (state.lockdown_level === null && replaceNullData)
+    state.lockdown_level = "No restrictions";
   const apiDate = date.format("YYYY-MM-DD");
 
   // get relevant policy data
@@ -1301,6 +1316,7 @@ export const tooltipGetter = async ({
 
       // define special tooltip items
       if (k === "lockdown_level") {
+        // if (v === "No restrictions") continue;
         const valueStyling = thisMetricMeta.valueStyling[v];
         const label = valueStyling.labelShort || valueStyling.label;
         item.value = (
@@ -1491,35 +1507,6 @@ export const tooltipGetter = async ({
         <span> as of {formattedDate}</span>
       </>
     );
-  }
-
-  // special -- add note if policy data not yet collected
-  let message;
-  if (state.lockdown_level === null && mapId === "us") {
-    if (nPolicies !== undefined && nPolicies.total > 0) {
-      message = (
-        <i>
-          No {mapId === "us" ? "state" : "country"}-level distancing
-          <br />
-          level could be determined
-          <br />
-          from policies in effect
-        </i>
-      );
-    } else {
-      message = <i>No policies in effect</i>;
-    }
-
-    tooltip.tooltipMainContent.push({
-      customContent: (
-        <>
-          <div className={styles.label}>Distancing level</div>
-          <div style={{ color: "gray" }} className={styles.value}>
-            {message}
-          </div>
-        </>
-      ),
-    });
   } else if (
     (state.lockdown_level === null || props.geoHaveData === false) &&
     mapId === "global"

@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { getDisplayNameFromPolicyName } from "../PolicyPlot";
 
 import styles from "./PastInterventionInfo.module.scss";
 import states from "../../PolicyModel/states.js";
@@ -32,6 +33,7 @@ const phaseNames = {
   Lockdown: "Phase I",
   "Unclear lockdown level": "",
   "Mixed distancing levels": "",
+  "No restrictions": "",
   "Stay-at-home": "Phase II",
   "Safer-at-home": "Phase III",
   "Stay at home": "Phase II",
@@ -44,6 +46,7 @@ const phaseIcons = {
   Lockdown: phase1,
   "Unclear lockdown level": mixed,
   "Mixed distancing levels": mixed,
+  "No restrictions": mixed,
   "Stay-at-home": phase2,
   "Safer-at-home": phase3,
   "Stay at home": phase2,
@@ -53,7 +56,14 @@ const phaseIcons = {
 };
 
 const PastInterventionInfo = props => {
+  // a proposed or implemented policy?
   const proposed = new Date(props.effectiveDate) > new Date();
+
+  // get display name for policy type
+  const displayName = getDisplayNameFromPolicyName({
+    policyName: props.pastInterventionProps.policyName,
+    proposed,
+  });
 
   const [policyCount, setPolicyCount] = React.useState();
 
@@ -147,14 +157,7 @@ const PastInterventionInfo = props => {
             alt={phaseNames[props.policyName] + " icon"}
           />
         )}
-        <h1 className={styles.title}>
-          {props.policyName}
-          <br />
-          {!proposed && props.policyName !== "Mixed distancing levels"
-            ? "policies implemented"
-            : ""}
-          {proposed && "policies proposed"}
-        </h1>
+        <h1 className={styles.title}>{displayName}</h1>
       </div>
       <div
         className={styles.policyIndicatorBar}

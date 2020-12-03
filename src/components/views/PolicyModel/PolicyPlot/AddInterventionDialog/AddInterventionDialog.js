@@ -4,6 +4,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 import infoIcon from "../../../../../assets/icons/info-blue.svg";
+import { getDisplayNameFromPolicyName } from "../PolicyPlot";
 
 import styles from "./AddInterventionDialog.module.scss";
 
@@ -36,6 +37,7 @@ const PastInterventionInfo = props => {
     0.19: "Safer-at-home",
     0.1375: "Stay-at-home",
     0.12: "Lockdown",
+    0.4: "No restrictions",
   };
 
   let latestIntervention = props.data.interventions
@@ -60,64 +62,72 @@ const PastInterventionInfo = props => {
     .slice(-1)[0] || { name: "Unclear lockdown level" };
 
   const policyOptions = Object.entries(policyNames).map(
-    ([optionRVal, name]) => (
-      <label
-        key={name}
-        className={
-          latestIntervention.name.split("_")[0] === name ? styles.disabled : ""
-        }
-
-        // style={{ color: props.interventionColors[name] }}
-      >
-        <input
-          type="radio"
-          name={name}
-          value={optionRVal}
-          checked={Number(rVal) === Number(optionRVal)}
-          onChange={e => setRVal(Number(e.target.value))}
-          disabled={latestIntervention.name.split("_")[0] === name}
-        />
-        {name}
-        <span
-          className={styles.policyDot}
-          style={{ background: props.interventionColors[name] }}
-        />
-        <Tippy
-          // interactive={true}
-          allowHTML={true}
-          content={
-            <section className={styles.policyExplanation}>
-              <div className={styles.row}>
-                <h1>{name}</h1>
-                <h2>
-                  (
-                  {
-                    metricMeta.lockdown_level.valueStyling[
-                      name.replace(/-/g, " ")
-                    ].phase
-                  }
-                  )
-                </h2>
-              </div>
-              {
-                metricMeta.lockdown_level.valueStyling[name.replace(/-/g, " ")]
-                  .def
-              }
-            </section>
+    ([optionRVal, dataName]) => {
+      const name = getDisplayNameFromPolicyName({
+        policyName: dataName,
+      }).replace("policies", "");
+      return (
+        <label
+          key={dataName}
+          className={
+            latestIntervention.name.split("_")[0] === dataName
+              ? styles.disabled
+              : ""
           }
-          maxWidth={"30rem"}
-          theme={"light"}
-          placement={"bottom"}
-          offset={[-30, 10]}
+
+          // style={{ color: props.interventionColors[name] }}
         >
-          <img
-            className={styles.infoIcon}
-            src={infoIcon}
-            alt="More information"
+          <input
+            type="radio"
+            name={dataName}
+            value={optionRVal}
+            checked={Number(rVal) === Number(optionRVal)}
+            onChange={e => setRVal(Number(e.target.value))}
+            disabled={latestIntervention.name.split("_")[0] === dataName}
           />
-        </Tippy>
-      </label>
-    )
+          {name}
+          <span
+            className={styles.policyDot}
+            style={{ background: props.interventionColors[dataName] }}
+          />
+          <Tippy
+            // interactive={true}
+            allowHTML={true}
+            content={
+              <section className={styles.policyExplanation}>
+                <div className={styles.row}>
+                  <h1>{name}</h1>
+                  <h2>
+                    (
+                    {
+                      metricMeta.lockdown_level.valueStyling[
+                        dataName.replace(/-/g, " ")
+                      ].phase
+                    }
+                    )
+                  </h2>
+                </div>
+                {
+                  metricMeta.lockdown_level.valueStyling[
+                    dataName.replace(/-/g, " ")
+                  ].def
+                }
+              </section>
+            }
+            maxWidth={"30rem"}
+            theme={"light"}
+            placement={"bottom"}
+            offset={[-30, 10]}
+          >
+            <img
+              className={styles.infoIcon}
+              src={infoIcon}
+              alt="More information"
+            />
+          </Tippy>
+        </label>
+      );
+    }
   );
 
   return (

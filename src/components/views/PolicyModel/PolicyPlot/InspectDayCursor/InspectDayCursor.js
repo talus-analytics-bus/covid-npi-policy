@@ -1,5 +1,6 @@
 import React from "react";
 import { VictoryPortal } from "victory";
+import { getDisplayNameFromPolicyName } from "../PolicyPlot";
 
 import styles from "./InspectDayCursor.module.scss";
 
@@ -142,6 +143,10 @@ const InspectDailyCursor = props => {
     }
   };
 
+  // get correct display name of policy type
+  const dataName = latestIntervention.name.split("_")[0];
+  const displayName = getDisplayNameFromPolicyName({ policyName: dataName });
+
   return (
     <VictoryPortal>
       <g>
@@ -191,9 +196,7 @@ const InspectDailyCursor = props => {
                           borderColor: latestInterColor,
                         }}
                       />
-                      <p style={{ color: latestInterColor }}>
-                        {latestIntervention.name.split("_")[0]} policies
-                      </p>
+                      <p style={{ color: latestInterColor }}>{displayName}</p>
                     </div>
                   </div>
                   <div className={styles.caseload}>
