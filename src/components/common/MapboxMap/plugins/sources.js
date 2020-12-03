@@ -138,7 +138,7 @@ export const mapStyles = {
     name: "Countries",
     tooltip: (
       <span>
-        <b>Currently in development</b>: View country-level data for the world
+        <b>Currently in development</b>: View national-level data for the world
       </span>
     ),
     minZoom: 1.7246463935904246,

@@ -742,7 +742,7 @@ export const metricMeta = {
     unit: v => "",
     legendInfo: {
       fill: mapId => {
-        const noun = mapId === "us" ? "state" : "country";
+        const noun = mapId === "us" ? "state" : "national";
         return {
           for: "basemap", // TODO dynamically
           type: "quantized",
@@ -1458,6 +1458,8 @@ export const tooltipGetter = async ({
     // state: 0,
     // country: 0,
   };
+  const noun = mapId === "us" ? "state" : "national";
+
   if (props.geoHaveData || mapId === "us") {
     const policies = await Policy({
       method: "post",
@@ -1484,7 +1486,7 @@ export const tooltipGetter = async ({
     tooltip.tooltipHeader.subtitle = (
       <>
         <span>
-          {comma(nPolicies.total)}{" "}
+          {comma(nPolicies.total)} {noun}-level{" "}
           {nPolicies.total === 1 ? "policy" : "policies"} in effect
         </span>
         <br />
@@ -1499,7 +1501,7 @@ export const tooltipGetter = async ({
     if (nPolicies !== undefined && nPolicies.total > 0) {
       message = (
         <i>
-          No {mapId === "us" ? "state" : "country"}-level distancing
+          No {noun}-level distancing
           <br />
           level could be determined
           <br />
@@ -1507,7 +1509,7 @@ export const tooltipGetter = async ({
         </i>
       );
     } else {
-      message = <i>No policies in effect</i>;
+      message = <i>No {noun}-level policies in effect</i>;
     }
 
     tooltip.tooltipMainContent.push({
