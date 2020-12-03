@@ -285,7 +285,9 @@ const MapboxMap = ({
       const prefix = `Policies in effect at ${nouns.singular.toLowerCase()} level (relative count) for `;
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
-        return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
+        return (
+          <ShowMore text={prefix + subcategory + suffix} charLimit={120} />
+        );
       } else return prefix + category + suffix;
     }
   };
