@@ -525,30 +525,32 @@ export const metricMeta = {
     // legend styling information
     legendInfo: {
       // when metric is used as a fill:
-      fill: {
-        // legend entry is for a basemap, or can be bubble
-        for: "basemap",
+      fill: () => {
+        return {
+          // legend entry is for a basemap, or can be bubble
+          for: "basemap",
 
-        // the type of legend entry, e.g., quantized, ordinal, continous
-        type: "quantized",
+          // the type of legend entry, e.g., quantized, ordinal, continous
+          type: "quantized",
 
-        // quantized legend `type` only: if true, labels go inside color rects,
-        // otherwise below them
-        labelsInside: true,
+          // quantized legend `type` only: if true, labels go inside color rects,
+          // otherwise below them
+          labelsInside: true,
 
-        // d3-esque color scale used to obtain legend labels and colors.
-        // must implement these instance methods: domain, range
-        colorscale: d3
-          .scaleOrdinal()
-          .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+          // d3-esque color scale used to obtain legend labels and colors.
+          // must implement these instance methods: domain, range
+          colorscale: d3
+            .scaleOrdinal()
+            .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
+            .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
 
-        // for non-quantized legend `type`: the labels that should be used for
-        // each `for` category
-        labels: {
-          bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" },
-        },
+          // for non-quantized legend `type`: the labels that should be used for
+          // each `for` category
+          labels: {
+            bubble: { min: "Low", max: "High" },
+            basemap: { min: "Minimal", max: "High" },
+          },
+        };
       },
       // additional layer legend information...
       circle: {
@@ -739,63 +741,66 @@ export const metricMeta = {
     value: v => v,
     unit: v => "",
     legendInfo: {
-      fill: {
-        for: "basemap", // TODO dynamically
-        type: "quantized",
-        labelsInside: false,
-        range: [
-          "#eaeaea",
-          "none",
-          greenStepsScale(20),
-          greenStepsScale(40),
-          greenStepsScale(60),
-          greenStepsScale(80),
-          greenStepsScale(100),
-        ],
-        borders: [null, "2px solid gray", null, null, null, null, null],
-        width: [null, null, 40, 40, 40, 40, 40],
-        entryStyles: [
-          undefined,
-          { marginLeft: 10 },
-          { marginLeft: 20, marginRight: 0 },
-          { marginRight: 0 },
-          { marginRight: 0 },
-          { marginRight: 0 },
-          { marginRight: 0 },
-        ],
-        labelStyles: [
-          undefined,
-          undefined,
-          { position: "absolute", top: 20 },
-          undefined,
-          undefined,
-          undefined,
-          { position: "absolute", top: 20 },
-        ],
-        domain: [
-          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            data not
-            <br />
-            available
-          </div>,
-          <div
-            style={{
-              color: "#333",
-              fontSize: ".8rem",
-              lineHeight: 1.1,
-            }}
-          >
-            no country-level
-            <br />
-            policy in effect
-          </div>,
-          "fewest",
-          "",
-          "",
-          "",
-          "most",
-        ],
-        subLabels: [],
+      fill: mapId => {
+        const noun = mapId === "us" ? "state" : "country";
+        return {
+          for: "basemap", // TODO dynamically
+          type: "quantized",
+          labelsInside: false,
+          range: [
+            "#eaeaea",
+            "none",
+            greenStepsScale(20),
+            greenStepsScale(40),
+            greenStepsScale(60),
+            greenStepsScale(80),
+            greenStepsScale(100),
+          ],
+          borders: [null, "2px solid gray", null, null, null, null, null],
+          width: [null, null, 40, 40, 40, 40, 40],
+          entryStyles: [
+            undefined,
+            { marginLeft: 10 },
+            { marginLeft: 20, marginRight: 0 },
+            { marginRight: 0 },
+            { marginRight: 0 },
+            { marginRight: 0 },
+            { marginRight: 0 },
+          ],
+          labelStyles: [
+            undefined,
+            undefined,
+            { position: "absolute", top: 20 },
+            undefined,
+            undefined,
+            undefined,
+            { position: "absolute", top: 20 },
+          ],
+          domain: [
+            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+              data not
+              <br />
+              available
+            </div>,
+            <div
+              style={{
+                color: "#333",
+                fontSize: ".8rem",
+                lineHeight: 1.1,
+              }}
+            >
+              no {noun}-level
+              <br />
+              policy in effect
+            </div>,
+            "fewest",
+            "",
+            "",
+            "",
+            "most",
+          ],
+          subLabels: [],
+        };
       },
     },
   },
@@ -920,10 +925,8 @@ export const metricMeta = {
     },
     wideDefinition: true,
     get metric_definition() {
-      const colorRange = this.legendInfo.fill.range.slice(
-        1,
-        this.legendInfo.fill.range.length
-      );
+      const fillInfo = this.legendInfo.fill();
+      const colorRange = fillInfo.range.slice(1, fillInfo.range.length);
       return (
         <div>
           <p className={infostyles.definitionHeader}>
@@ -991,75 +994,77 @@ export const metricMeta = {
     unit: v => "",
     // trendTimeframe: "over prior 24 hours",
     legendInfo: {
-      fill: {
-        for: "basemap", // TODO dynamically
-        type: "quantized",
-        labelsInside: true,
-        range: [
-          "#eaeaea",
-          "#ffffff",
-          "#2165a1",
-          "#549FE2",
-          "#86BFEB",
-          "#BBDAF5",
-          dots,
-        ],
-        borders: [null, "2px solid gray", null, null, null, null, null],
-        domain: [
-          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            data not
-            <br />
-            available
-          </div>,
-          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            no active
-            <br />
-            restrictions
-          </div>,
-          getCovidLocalMetricLink("lockdown"),
-          getCovidLocalMetricLink("stay-at-home"),
-          getCovidLocalMetricLink("safer-at-home"),
-          getCovidLocalMetricLink("new normal"),
-          "mixed",
-        ],
-        subLabels: [
-          <span style={{ visibility: "hidden" }}>x</span>,
-          <span style={{ visibility: "hidden" }}>x</span>,
-          getCovidLocalMetricLink("Phase I", "#661B3C", {
-            fontStyle: "italic",
-          }),
-          getCovidLocalMetricLink("Phase II", "#C1272D", {
-            fontStyle: "italic",
-          }),
-          getCovidLocalMetricLink("Phase III", "#D66B3E", {
-            fontStyle: "italic",
-          }),
-          getCovidLocalMetricLink("Phase IV", "#ECBD62", {
-            fontStyle: "italic",
-          }),
-          <span style={{ visibility: "hidden" }}>x</span>,
-        ],
-        colorscale: d3
-          .scaleOrdinal()
-          .domain([
-            "no policy",
-            "no policy data available",
-            getCovidLocalMetricLink("lockdown (phase I)"),
-            getCovidLocalMetricLink("stay-at-home (phase II)"),
-            getCovidLocalMetricLink("safer-at-home (phase III)"),
-            getCovidLocalMetricLink("new normal (phase IV)"),
-            "mixed",
-          ])
-          .range([
+      fill: () => {
+        return {
+          for: "basemap", // TODO dynamically
+          type: "quantized",
+          labelsInside: true,
+          range: [
             "#eaeaea",
-            "white",
+            "#ffffff",
             "#2165a1",
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
             dots,
-          ]), // TODO dynamically
-        // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
+          ],
+          borders: [null, "2px solid gray", null, null, null, null, null],
+          domain: [
+            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+              data not
+              <br />
+              available
+            </div>,
+            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+              no active
+              <br />
+              restrictions
+            </div>,
+            getCovidLocalMetricLink("lockdown"),
+            getCovidLocalMetricLink("stay-at-home"),
+            getCovidLocalMetricLink("safer-at-home"),
+            getCovidLocalMetricLink("new normal"),
+            "mixed",
+          ],
+          subLabels: [
+            <span style={{ visibility: "hidden" }}>x</span>,
+            <span style={{ visibility: "hidden" }}>x</span>,
+            getCovidLocalMetricLink("Phase I", "#661B3C", {
+              fontStyle: "italic",
+            }),
+            getCovidLocalMetricLink("Phase II", "#C1272D", {
+              fontStyle: "italic",
+            }),
+            getCovidLocalMetricLink("Phase III", "#D66B3E", {
+              fontStyle: "italic",
+            }),
+            getCovidLocalMetricLink("Phase IV", "#ECBD62", {
+              fontStyle: "italic",
+            }),
+            <span style={{ visibility: "hidden" }}>x</span>,
+          ],
+          colorscale: d3
+            .scaleOrdinal()
+            .domain([
+              "no policy",
+              "no policy data available",
+              getCovidLocalMetricLink("lockdown (phase I)"),
+              getCovidLocalMetricLink("stay-at-home (phase II)"),
+              getCovidLocalMetricLink("safer-at-home (phase III)"),
+              getCovidLocalMetricLink("new normal (phase IV)"),
+              "mixed",
+            ])
+            .range([
+              "#eaeaea",
+              "white",
+              "#2165a1",
+              "#549FE2",
+              "#86BFEB",
+              "#BBDAF5",
+              dots,
+            ]), // TODO dynamically
+          // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
+        };
       },
       // circle: {
       //   for: "bubble",
@@ -1351,12 +1356,12 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-
+      const fillInfo = metricMeta[k].legendInfo.fill();
       item.value = (
         <div
           className={infostyles.badge}
           style={{
-            backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v),
+            backgroundColor: fillInfo.colorscale(v),
           }}
         >
           {thisMetricMeta.value(v)}
