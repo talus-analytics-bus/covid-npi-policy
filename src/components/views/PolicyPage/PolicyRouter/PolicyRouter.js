@@ -3,11 +3,6 @@ import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
 // import { Policy, Caseload } from "../../../misc/Queries";
 
-import {
-  loadPolicyCategories,
-  loadPolicySubCategories,
-} from "./PolicyLoaders.js";
-
 import * as MiniMap from "../MiniMap/MiniMap";
 
 import PolicyPage from "../PolicyPage/PolicyPage";
