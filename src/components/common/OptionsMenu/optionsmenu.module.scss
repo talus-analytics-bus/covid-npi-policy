@@ -1,6 +1,6 @@
 @import "../../../assets/styles/vars.scss";
 
-$wrapperWidth: 21%; // width of options relative to avail space
+$wrapperWidth: 22%; // width of options relative to avail space
 :export {
   wrapperWidth: $wrapperWidth;
 }
@@ -66,6 +66,10 @@ $wrapperWidth: 21%; // width of options relative to avail space
     z-index: 5;
     width: 100%;
 
+    [class="ps__rail-y"] {
+      opacity: 0.6;
+    }
+
     .contentWrapper {
       position: absolute;
       top: 0;
@@ -76,39 +80,45 @@ $wrapperWidth: 21%; // width of options relative to avail space
 
       border-bottom: 1px solid #b3b3b3;
       border-right: 1px solid #b3b3b3;
+
       .content {
-        display: flex;
-        flex-flow: column;
-        max-height: 500px; // TODO elegantly
-        overflow: scroll;
-        // flex-flow: row wrap;
-        // align-items: flex-end;
+        > [class^="scrollbar-container"] {
+          max-height: 500px; // TODO elegantly
+          display: flex;
+          flex-flow: column;
+          overflow: scroll;
+          // flex-flow: row wrap;
+          // align-items: flex-end;
 
-        // padding-right: 60px;
-        @include spaceItemsVert(20px, false);
-        @include spaceItemsHoriz(30px);
+          // padding-right: 60px;
+          @include spaceItemsVert(20px, false);
+          @include spaceItemsHoriz(30px);
 
-        > div {
-          // max-width: 40%;
-          > select {
+          select {
             margin-top: 5px;
             cursor: pointer;
-            border-radius: 4px;
-            padding: 5px;
-            @include selectStyling();
-            border: 2px solid $no-data-gray;
-            max-width: 100%;
-          }
-        }
 
-        > div:last-child {
-          @media #{$phone} {
-            max-width: 50%;
-            margin-bottom: 0;
+            // margin-top: 5px;
+            // cursor: pointer;
+            // border-radius: 4px;
+            // padding: 5px;
+            // @include selectStyling();
+            // border: 2px solid $no-data-gray;
+            // max-width: 100%;
           }
-          @media #{$phone-narrow} {
-            max-width: 88%;
-            margin-bottom: 0;
+
+          > div:last-child {
+            @media #{$phone} {
+              max-width: 50%;
+              margin-bottom: 0;
+            }
+            @media #{$phone-narrow} {
+              max-width: 88%;
+              margin-bottom: 0;
+            }
+          }
+          input:checked + span {
+            color: #5473b6;
           }
         }
       }
@@ -163,7 +173,6 @@ $wrapperWidth: 21%; // width of options relative to avail space
     background-color: transparent;
     display: flex;
     align-items: center;
-    // height: 100%;
     width: 36px;
     button {
       height: min-content;
@@ -174,7 +183,7 @@ $wrapperWidth: 21%; // width of options relative to avail space
       border-left: none;
       i {
         transition: all 0.25s;
-        color: #386ea5;
+        color: $dark-navy-blue;
         font-size: 3rem;
         position: relative;
         top: 2px;

@@ -8,6 +8,8 @@ import React, { useState, useEffect, useRef } from "react";
 
 // 3rd party packages
 import classNames from "classnames";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 // styles and assets
 import styles, { wrapperWidth } from "./optionsmenu.module.scss";
@@ -88,7 +90,12 @@ const OptionsMenu = ({
           [styles.closedDesktop]: !openDesktop,
         })}
       >
-        <div className={styles.content}>{content}</div>
+        <div className={styles.content}>
+          {
+            // content
+          }
+          {<PerfectScrollbar>{content}</PerfectScrollbar>}
+        </div>
         <div
           className={classNames(styles.toggleDesktop, {
             [styles.closedDesktop]: !openDesktop,

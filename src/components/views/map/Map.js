@@ -274,6 +274,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                       allowDesktop: false,
                       defaultOpen: true,
                       content: [
+                        <div className={styles.mapOptionsTitle}>
+                          Map options
+                        </div>,
                         <RadioToggle
                           {...{
                             left: true,
