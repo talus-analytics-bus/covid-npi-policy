@@ -76,7 +76,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // dynamic map title
   const getMapTitle = ({ fill, circle, mapId }) => {
-    let prefix;
+    const level = mapId === "us" ? "state" : "national";
     let title = "";
     if (fill !== null) {
       title += metricMeta[fill].metric_displayname;
@@ -84,7 +84,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     if (circle !== null) {
       title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
     }
-    return title; // TODO dynamically
+    return title + ` at ${level} level`;
   };
   const [mapTitle, setMapTitle] = useState("");
 
