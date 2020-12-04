@@ -47,6 +47,18 @@
       }
     }
   }
+  .circleToggle {
+    input,
+    select {
+      margin-left: 10px;
+    }
+    select {
+      width: max-content;
+    }
+    > div > label {
+      font-weight: unset;
+    }
+  }
   .mapBanner {
     display: flex;
     align-items: center;

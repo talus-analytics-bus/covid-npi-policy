@@ -10,7 +10,7 @@ import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 
 // styles and assets
-import styles from "./optionsmenu.module.scss";
+import styles, { wrapperWidth } from "./optionsmenu.module.scss";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 /**
@@ -32,7 +32,6 @@ const OptionsMenu = ({
   ...props
 }) => {
   // CONSTANTS // -----------------------------------------------------------//
-  const maxScreenWidth = "20%";
 
   // STATE // ---------------------------------------------------------------//
   // reference to edge of component where toggle button is, to track width of
@@ -56,7 +55,7 @@ const OptionsMenu = ({
       // setComponentStyle({ left: "-33%" });
       // setWrapperStyle({ left: "33%" });
     } else {
-      setComponentStyle({ left: "-" + maxScreenWidth });
+      setComponentStyle({ left: "-" + wrapperWidth });
       // setComponentStyle({ left: `calc(-100% + ${buttonWidth})` });
       // setWrapperStyle({ left: `-${buttonWidth}` });
     }

@@ -572,7 +572,7 @@ export const metricMeta = {
   get "72"() {
     return {
       ...this["74"],
-      metric_displayname: "Cumulative caseload (up to date selected)",
+      metric_displayname: "Cumulative caseload",
       metric_definition: (
         <span>
           The total cumulative number of COVID-19 cases (confirmed and probable)

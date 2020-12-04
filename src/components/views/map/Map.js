@@ -340,7 +340,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             />,
 
                             // circle metric radio toggle
-                            <div>
+                            <div className={styles.circleToggle}>
                               <label>COVID caseload</label>
                               <div
                                 onChange={e => {

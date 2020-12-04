@@ -1,5 +1,9 @@
 @import "../../../assets/styles/vars.scss";
 
+$wrapperWidth: 21%; // width of options relative to avail space
+:export {
+  wrapperWidth: $wrapperWidth;
+}
 // Show menu as fully expanded in desktop mode, if allowed
 @media not #{$phone} {
   .style {
@@ -54,7 +58,6 @@
   }
 
   // Main styling for menu in mobile mode and others
-  $wrapperWidth: 20%; // width of options relative to avail space
   .style {
     display: flex;
     font-size: 1rem;
@@ -99,8 +102,6 @@
         }
 
         > div:last-child {
-          // max-width: 23%;
-          margin-bottom: 20px;
           @media #{$phone} {
             max-width: 50%;
             margin-bottom: 0;
