@@ -711,30 +711,8 @@ export const metricMeta = {
   policy_status_counts: {
     metric_definition: (
       <span>
-        {
-          <table className={infostyles.distancingLevelTable}>
-            <tbody>
-              <tr>
-                <td>
-                  <div
-                    style={{
-                      backgroundColor: "#66CAC4",
-                      marginRight: "20px",
-                    }}
-                    className={infostyles.rect}
-                  >
-                    policy in effect (new)
-                  </div>
-                </td>
-                <td style={{ display: "none" }} />
-                <td>
-                  TO REPLACE: At least one policy in effect with the given
-                  category / subcategories on the specified date.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        }
+        The number of policies in effect with the given category / subcategories
+        in the location on the specified date.
       </span>
     ),
     metric_displayname: "Relative policy count",
