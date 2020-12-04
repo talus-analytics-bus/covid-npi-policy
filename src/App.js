@@ -268,7 +268,7 @@ const App = () => {
                 {
                   // policy page
                   <Route
-                    path="/policies/:iso3/:state/:policyID?"
+                    path="/policies/:iso3/:state"
                     render={() => {
                       return (
                         <PolicyRouter

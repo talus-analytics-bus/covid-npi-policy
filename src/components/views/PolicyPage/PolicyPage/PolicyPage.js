@@ -1,8 +1,12 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const PolicyPage = props => {
   const { iso3, state, policyID } = useParams();
+  const location = useLocation();
+
+  console.log(props);
+  console.log(location);
 
   return (
     <p>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
 // import { Policy, Caseload } from "../../../misc/Queries";
 
@@ -22,7 +22,9 @@ const PolicyRouter = props => {
     setLoading(false);
   }, [setLoading, setPage]);
 
-  const { iso3, state, policyID } = useParams();
+  const match = useRouteMatch();
+
+  const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
 
@@ -47,11 +49,14 @@ const PolicyRouter = props => {
   console.log("render router");
   return (
     <MiniMap.Provider scope={state !== "national" ? "USA" : "world"}>
-      {policyID ? (
-        <PolicyPage />
-      ) : (
-        <ListPoliciesPage {...{ policyObject, setPolicyObject }} />
-      )}
+      <Switch>
+        <Route path={`${match.url}/:policyID`}>
+          <PolicyPage {...{ policyObject, setPolicyObject }} />
+        </Route>
+        <Route path={match.path}>
+          <ListPoliciesPage {...{ policyObject, setPolicyObject }} />
+        </Route>
+      </Switch>
     </MiniMap.Provider>
   );
 };
