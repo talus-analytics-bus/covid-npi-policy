@@ -125,7 +125,7 @@ const MapboxMap = ({
     }
   };
 
-  const updateFeatureOrder = ({ map, f = null }) => {
+  const updateFillOrder = ({ map, f = null }) => {
     // initialize the vertical order of shapes for certain metrics
     if (mapId === "global") {
       const hasFillLayers = mapSources[mapId].fill !== undefined;
@@ -528,7 +528,7 @@ const MapboxMap = ({
         });
 
         // update sort order of circles, etc.
-        updateFeatureOrder({ map, f: null });
+        updateFillOrder({ map, f: null });
       }
     }
   }, [circle, fill, mapId]);
