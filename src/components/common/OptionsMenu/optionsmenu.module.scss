@@ -1,0 +1,190 @@
+@import "../../../assets/styles/vars.scss";
+
+// Show menu as fully expanded in desktop mode, if allowed
+@media not #{$phone} {
+  .style {
+    &.allowDesktop {
+      &,
+      > * {
+        left: unset !important;
+      }
+      .edge {
+        left: unset;
+        right: unset;
+        display: none;
+      }
+      // position: absolute;
+      right: 0;
+      margin-left: auto;
+      .contentWrapper {
+        display: flex;
+        flex-flow: column;
+        border: 1px solid #b3b3b3;
+        border-top: none;
+        width: max-content;
+        margin-right: 20px;
+        .content {
+          flex-flow: column;
+          width: max-content;
+          padding-right: unset;
+          align-items: unset;
+          > div,
+          > div:last-child {
+            max-width: unset;
+          }
+          > div:last-child {
+            margin-bottom: 0;
+          }
+          .toggleDesktop {
+            z-index: 0;
+            position: absolute;
+            bottom: -23px;
+            width: 100%;
+            left: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            @media #{$phone} {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Main styling for menu in mobile mode and others
+  $wrapperWidth: 20%; // width of options relative to avail space
+  .style {
+    display: flex;
+    font-size: 1rem;
+    position: relative;
+    transition: all 0.5s;
+    z-index: 5;
+    width: 100%;
+
+    .contentWrapper {
+      position: absolute;
+      top: 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: left 0.5s;
+      padding: 10px;
+      width: $wrapperWidth; // TODO minmax
+
+      border-bottom: 1px solid #b3b3b3;
+      border-right: 1px solid #b3b3b3;
+      .content {
+        display: flex;
+        flex-flow: column;
+        max-height: 500px; // TODO elegantly
+        overflow: scroll;
+        // flex-flow: row wrap;
+        // align-items: flex-end;
+
+        // padding-right: 60px;
+        @include spaceItemsVert(20px, false);
+        @include spaceItemsHoriz(30px);
+
+        > div {
+          // max-width: 40%;
+          > select {
+            margin-top: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 5px;
+            @include selectStyling();
+            border: 2px solid $no-data-gray;
+            max-width: 100%;
+          }
+        }
+
+        > div:last-child {
+          // max-width: 23%;
+          margin-bottom: 20px;
+          @media #{$phone} {
+            max-width: 50%;
+            margin-bottom: 0;
+          }
+          @media #{$phone-narrow} {
+            max-width: 88%;
+            margin-bottom: 0;
+          }
+        }
+      }
+      .toggleDesktop {
+        display: none;
+      }
+      button {
+        height: 22px;
+        font-size: 14px;
+        position: relative;
+        border-radius: 0 0 4px 4px;
+        outline: none;
+        border: 1px solid #b3b3b3;
+        border-top: none;
+        background-color: white;
+        color: gray;
+      }
+      i {
+        font-size: 0.9rem;
+        transform: rotate(90deg);
+        top: 2px;
+        position: relative;
+        color: #a4a4a4;
+        margin-left: 5px;
+        transition: 0.5s transform;
+        &.flipped {
+          transform: rotate(270deg);
+          transition: 0.5s transform;
+          // top: 0;
+        }
+      }
+    }
+    &.closed {
+      transition: left 0.5s;
+    }
+    @media #{$not-phone} {
+      &:not(.closedDesktop) {
+        top: 0%;
+        transition: all 0.5s ease;
+      }
+      &.closedDesktop {
+        top: -100%;
+        transition: all 0.5s ease;
+      }
+    }
+  }
+  .edge {
+    position: absolute;
+    left: $wrapperWidth;
+    top: 0;
+    transition: all 0.5s;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    // height: 100%;
+    width: 36px;
+    button {
+      height: min-content;
+      padding: 0;
+      background-color: white;
+      border: 1px solid #bcbcbd;
+      border-top: none;
+      border-left: none;
+      i {
+        transition: all 0.25s;
+        color: #386ea5;
+        font-size: 3rem;
+        position: relative;
+        top: 2px;
+        margin: 0 -7px;
+      }
+
+      &.flip {
+        i {
+          transform: scaleX(-1);
+        }
+      }
+    }
+  }
+}

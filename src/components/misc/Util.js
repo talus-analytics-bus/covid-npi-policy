@@ -224,4 +224,9 @@ export const isLightColor = color => {
   return hsp > 127.5;
 };
 
+// Return init lower case version of input string
+export const getInitLower = str => {
+  return str.charAt(0).toLowerCase() + str.slice(1, str.length);
+};
+
 export default Util;

@@ -177,7 +177,6 @@ const MapboxMap = ({
         else {
           const featureOrder = {};
           data[sortOrderMetricId].forEach(d => {
-            console.log(d.value);
             const hasBorder =
               d.value === "No restrictions" ||
               d.value === null ||

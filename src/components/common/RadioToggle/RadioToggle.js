@@ -18,7 +18,8 @@ const RadioToggle = ({
   ...props
 }) => {
   // display radios as sets of columns?
-  const showRadiosAsCols = choices.length > 6;
+  const showRadiosAsCols = false;
+  // const showRadiosAsCols = choices.length > 6;
 
   /**
    * When radio button changes, set current choice equal to its value.

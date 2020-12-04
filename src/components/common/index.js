@@ -14,6 +14,7 @@ import FloatMenu from "./FloatMenu/FloatMenu.js";
 import Drawer from "./Drawer/Drawer.js";
 import AccessibilityNote from "./AccessibilityNote/AccessibilityNote.js";
 import PrimaryButton from "./PrimaryButton/PrimaryButton.js";
+import OptionsMenu from "./OptionsMenu/OptionsMenu.js";
 export {
   Selectpicker,
   CheckboxSet,
@@ -31,4 +32,5 @@ export {
   Drawer,
   AccessibilityNote,
   PrimaryButton,
+  OptionsMenu,
 };

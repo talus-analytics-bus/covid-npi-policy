@@ -21,7 +21,7 @@ import {
   metricMeta,
 } from "../../common/MapboxMap/plugins/data";
 import { mapStyles } from "../../common/MapboxMap/plugins/sources";
-
+import { getInitLower } from "../../misc/Util";
 // queries
 import {
   OptionSet,
@@ -41,6 +41,7 @@ import {
   DateSlider,
   FilterSet,
   InfoTooltip,
+  OptionsMenu,
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
@@ -72,6 +73,20 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // name of metric to use as circle by default
   const [circle, setCircle] = useState(defaults[mapId].circle);
+
+  // dynamic map title
+  const getMapTitle = ({ fill, circle, mapId }) => {
+    let prefix;
+    let title = "";
+    if (fill !== null) {
+      title += metricMeta[fill].metric_displayname;
+    }
+    if (circle !== null) {
+      title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
+    }
+    return title; // TODO dynamically
+  };
+  const [mapTitle, setMapTitle] = useState("");
 
   // list of ISO3 codes of countries for which distancing levels are available
   const [geoHaveData, setGeoHaveData] = useState(null);
@@ -203,42 +218,66 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             geoHaveData,
             overlays: (
               <>
-                <Drawer
-                  {...{
-                    className: drawer,
-                    // if true, drawer floats at top of parent container and
-                    // content has translucent background
-                    float: true,
-
-                    // custom caret?
-                    customCaret: true,
-
-                    // closed by default
-                    defaultClosed: true,
-
-                    // if true, hides default toggle button
-                    customToggle: true,
-
-                    // header of drawer (JSX)
-                    label: (
-                      <React.Fragment>
-                        {
-                          // Header
+                <div className={styles.mapBanner}>
+                  <div className={styles.title}>{mapTitle}</div>
+                  <div className={styles.dates}>
+                    <div className={styles.primary}>
+                      Data for {date.format("MMM D, YYYY")}
+                    </div>
+                    <div className={styles.secondary}>
+                      Data last updated on{" "}
+                      {moment(lastUpdatedDateOverall).format("MMM D, YYYY")}
+                      <InfoTooltip
+                        place={"left"}
+                        text={
+                          <div>
+                            {versions
+                              .filter(d => {
+                                if (
+                                  d.type ===
+                                    "COVID-19 caseload data (countries)" &&
+                                  mapId === "us"
+                                ) {
+                                  return false;
+                                } else if (
+                                  d.type === "COVID-19 caseload data" &&
+                                  mapId === "global"
+                                ) {
+                                  return false;
+                                } else return true;
+                              })
+                              .map(d => (
+                                <p key={d.type}>
+                                  <b>{d.type}</b> last updated on{" "}
+                                  {moment(d.date).format("MMM D, YYYY")}
+                                  {d.last_datum_date !== null && (
+                                    <span>
+                                      {" "}
+                                      with data available through{" "}
+                                      {moment(d.last_datum_date).format(
+                                        "MMM D, YYYY"
+                                      )}
+                                    </span>
+                                  )}
+                                </p>
+                              ))}
+                          </div>
                         }
-                        <div className={styles.labelContainer}>
-                          <h1>Map options</h1>
-                          <button className={styles.toggle}>
-                            <i className={"material-icons"}>expand_less</i>
-                          </button>
-                        </div>
-
-                        {
-                          // Toggle between the possible maps
-                        }
+                        setInfoTooltipContent={props.setInfoTooltipContent}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {
+                  <OptionsMenu
+                    {...{
+                      allowDesktop: false,
+                      defaultOpen: true,
+                      content: [
                         <RadioToggle
                           {...{
                             left: true,
-                            horizontal: true,
+                            horizontal: false,
                             setInfoTooltipContent: props.setInfoTooltipContent,
                             choices: Object.values(mapStyles).map(
                               ({ value, name, tooltip }) => {
@@ -254,225 +293,152 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             callback: setMapId,
                             label: "Geographic resolution",
                           }}
-                        />
-                        {
-                          // Display active date
-                        }
-                        <div className={styles.dates}>
-                          <div className={styles.primary}>
-                            Data for {date.format("MMM D, YYYY")}
-                          </div>
-                          <div className={styles.secondary}>
-                            Data last updated on{" "}
-                            {moment(lastUpdatedDateOverall).format(
-                              "MMM D, YYYY"
-                            )}
-                            <InfoTooltip
-                              place={"left"}
-                              text={
-                                <div>
-                                  {versions
-                                    .filter(d => {
-                                      if (
-                                        d.type ===
-                                          "COVID-19 caseload data (countries)" &&
-                                        mapId === "us"
-                                      ) {
-                                        return false;
-                                      } else if (
-                                        d.type === "COVID-19 caseload data" &&
-                                        mapId === "global"
-                                      ) {
-                                        return false;
-                                      } else return true;
-                                    })
-                                    .map(d => (
-                                      <p key={d.type}>
-                                        <b>{d.type}</b> last updated on{" "}
-                                        {moment(d.date).format("MMM D, YYYY")}
-                                        {d.last_datum_date !== null && (
-                                          <span>
-                                            {" "}
-                                            with data available through{" "}
-                                            {moment(d.last_datum_date).format(
-                                              "MMM D, YYYY"
-                                            )}
-                                          </span>
-                                        )}
-                                      </p>
-                                    ))}
-                                </div>
-                              }
-                              setInfoTooltipContent={
-                                props.setInfoTooltipContent
-                              }
-                            />
-                          </div>
-                        </div>
-                      </React.Fragment>
-                    ),
-                    content: (
-                      <>
-                        {[
-                          // fill metric radio toggle
-                          fill !== null && (
-                            <RadioToggle
+                        />,
+                        <>
+                          {[
+                            // fill metric radio toggle
+                            fill !== null && (
+                              <RadioToggle
+                                {...{
+                                  // TODO define choices based on current mapType
+                                  setInfoTooltipContent:
+                                    props.setInfoTooltipContent,
+                                  choices: mapMetrics[mapId]
+                                    .filter(d => d.for.includes("fill"))
+                                    .map(d => {
+                                      return {
+                                        value: d.id,
+                                        name:
+                                          metricMeta[d.id].metric_displayname,
+                                        wideTooltip: d.id === "lockdown_level",
+                                        tooltip:
+                                          metricMeta[d.id].metric_definition,
+                                      };
+                                    }),
+                                  curVal: fill,
+                                  callback: setFill,
+                                  label: viewLabel,
+                                  key: "DataType",
+                                }}
+                              />
+                            ),
+                            // Filter set containing the filters specified in `filterDefs`
+                            <FilterSet
                               {...{
-                                // TODO define choices based on current mapType
-                                setInfoTooltipContent:
-                                  props.setInfoTooltipContent,
-                                choices: mapMetrics[mapId]
-                                  .filter(d => d.for.includes("fill"))
-                                  .map(d => {
-                                    return {
-                                      value: d.id,
-                                      name: metricMeta[d.id].metric_displayname,
-                                      wideTooltip: d.id === "lockdown_level",
-                                      tooltip:
-                                        metricMeta[d.id].metric_definition,
-                                    };
-                                  }),
-                                curVal: fill,
-                                callback: setFill,
-                                label: viewLabel,
-                                key: "DataType",
+                                disabled:
+                                  fill !== "policy_status" &&
+                                  fill !== "policy_status_counts",
+                                filterDefs,
+                                filters,
+                                setFilters,
+                                // if true, the selected filters bay will show
+                                // TODO style selected filters bay
+                                showSelectedFilters: false,
+                                vertical: true,
+                                key: "FilterSet",
                               }}
-                            />
-                          ),
-                          // Filter set containing the filters specified in `filterDefs`
-                          <FilterSet
-                            {...{
-                              disabled:
-                                fill !== "policy_status" &&
-                                fill !== "policy_status_counts",
-                              filterDefs,
-                              filters,
-                              setFilters,
-                              // if true, the selected filters bay will show
-                              // TODO style selected filters bay
-                              showSelectedFilters: false,
-                              key: "FilterSet",
-                            }}
-                          />,
-                          <div key={"divider"} className={styles.divider} />,
+                            />,
 
-                          // circle metric radio toggle
-                          <div className={styles.rightControls}>
-                            <label>COVID caseload</label>
-                            <div
-                              onChange={e => {
-                                setCircle(
-                                  e.target.value === "show"
-                                    ? defaults[mapId].circle
-                                    : null
-                                );
-                              }}
-                            >
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="show"
-                                  name="casecount"
-                                  defaultChecked
-                                />{" "}
-                                Show
-                              </label>
-                              <br />
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="hide"
-                                  name="casecount"
-                                />{" "}
-                                Hide
-                              </label>
-                            </div>
+                            // circle metric radio toggle
+                            <div>
+                              <label>COVID caseload</label>
+                              <div
+                                onChange={e => {
+                                  setCircle(
+                                    e.target.value === "show"
+                                      ? defaults[mapId].circle
+                                      : null
+                                  );
+                                }}
+                              >
+                                <label>
+                                  <input
+                                    type="radio"
+                                    value="show"
+                                    name="casecount"
+                                    defaultChecked
+                                  />{" "}
+                                  Show
+                                </label>
+                                <br />
+                                <label>
+                                  <input
+                                    type="radio"
+                                    value="hide"
+                                    name="casecount"
+                                  />{" "}
+                                  Hide
+                                </label>
+                              </div>
 
-                            {circle !== null && (
-                              <>
-                                <div className={styles.selectTooltipHolder}>
+                              {circle !== null && (
+                                <>
+                                  <div className={styles.selectTooltipHolder}>
+                                    <select
+                                      onChange={e => {
+                                        setCircle(e.target.value);
+                                      }}
+                                    >
+                                      {mapMetrics[mapId]
+                                        .filter(d => d.for.includes("circle"))
+                                        .map(d => (
+                                          <option
+                                            key={d.id}
+                                            value={d.id}
+                                            selected={
+                                              circle.toString() ===
+                                              d.id.toString()
+                                            }
+                                          >
+                                            {
+                                              metricMeta[d.id]
+                                                .metric_displayname
+                                            }
+                                          </option>
+                                        ))}
+                                    </select>
+                                    <InfoTooltip
+                                      text={
+                                        metricMeta[circle].metric_definition
+                                      }
+                                      setInfoTooltipContent={
+                                        props.setInfoTooltipContent
+                                      }
+                                      place={"left"}
+                                    />
+                                  </div>
+
                                   <select
                                     onChange={e => {
-                                      setCircle(e.target.value);
+                                      setLinCircleScale(
+                                        e.target.value === "linear"
+                                          ? true
+                                          : false
+                                      );
                                     }}
                                   >
-                                    {mapMetrics[mapId]
-                                      .filter(d => d.for.includes("circle"))
-                                      .map(d => (
-                                        <option
-                                          key={d.id}
-                                          value={d.id}
-                                          selected={
-                                            circle.toString() ===
-                                            d.id.toString()
-                                          }
-                                        >
-                                          {metricMeta[d.id].metric_displayname}
-                                        </option>
-                                      ))}
+                                    <option
+                                      value="linear"
+                                      selected={linCircleScale}
+                                    >
+                                      Linear scale
+                                    </option>
+                                    <option
+                                      value="log"
+                                      selected={!linCircleScale}
+                                    >
+                                      Log scale
+                                    </option>
                                   </select>
-                                  <InfoTooltip
-                                    text={metricMeta[circle].metric_definition}
-                                    setInfoTooltipContent={
-                                      props.setInfoTooltipContent
-                                    }
-                                    place={"left"}
-                                  />
-                                </div>
-
-                                <select
-                                  onChange={e => {
-                                    setLinCircleScale(
-                                      e.target.value === "linear" ? true : false
-                                    );
-                                  }}
-                                >
-                                  <option
-                                    value="linear"
-                                    selected={linCircleScale}
-                                  >
-                                    Linear scale
-                                  </option>
-                                  <option
-                                    value="log"
-                                    selected={!linCircleScale}
-                                  >
-                                    Log scale
-                                  </option>
-                                </select>
-                              </>
-                            )}
-
-                            {/* {circle !== null && ( */}
-                            {/*   <RadioToggle */}
-                            {/*     {...{ */}
-                            {/*       // TODO define choices based on current mapType */}
-                            {/*       setInfoTooltipContent: */}
-                            {/*         props.setInfoTooltipContent, */}
-                            {/*       choices: mapMetrics[mapId] */}
-                            {/*         .filter(d => d.for.includes("circle")) */}
-                            {/*         .map(d => { */}
-                            {/*           return { */}
-                            {/*             value: d.id, */}
-                            {/*             name: */}
-                            {/*               metricMeta[d.id].metric_displayname, */}
-                            {/*             tooltip: */}
-                            {/*               metricMeta[d.id].metric_definition, */}
-                            {/*           }; */}
-                            {/*         }), */}
-                            {/*       curVal: circle, */}
-                            {/*       callback: setCircle, */}
-                            {/*       label: "", */}
-                            {/*       key: "RadioToggle1", */}
-                            {/*     }} */}
-                            {/*   /> */}
-                            {/* )} */}
-                          </div>,
-                        ].map(d => d)}
-                      </>
-                    ),
-                  }}
-                />
+                                </>
+                              )}
+                            </div>,
+                          ].map(d => d)}
+                        </>,
+                      ],
+                    }}
+                  />
+                }
                 {
                   <DateSlider
                     {...{
@@ -529,6 +495,14 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       setFill(defaults[mapId].fill);
     },
     [mapId]
+  );
+
+  // when map data selection changes, update dynamic title
+  useEffect(
+    function updateDynamicMapTitle() {
+      setMapTitle(getMapTitle({ fill, circle, mapId }));
+    },
+    [circle, fill, mapId]
   );
 
   // JSX // -----------------------------------------------------------------//
