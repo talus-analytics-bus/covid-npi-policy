@@ -267,21 +267,9 @@ const App = () => {
                 {/* } */}
                 {
                   // policy page
-                  <Route
-                    path="/policies/:iso3/:state"
-                    render={() => {
-                      return (
-                        <PolicyRouter
-                          {...{
-                            setPage,
-                            setLoading,
-                            // policyPageCaseload,
-                            // setPolicyPageCaseload,
-                          }}
-                        />
-                      );
-                    }}
-                  />
+                  <Route path="/policies/:iso3/:state">
+                    <PolicyRouter {...{ setPage, setLoading }} />
+                  </Route>
                 }
               </div>
             </React.Fragment>

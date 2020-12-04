@@ -23,28 +23,11 @@ const PolicyRouter = props => {
   }, [setLoading, setPage]);
 
   const match = useRouteMatch();
-
-  const { iso3, state } = useParams();
+  const { state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
 
   // const [caseload, setCaseload] = React.useState();
-
-  // Get category and subcategory for all policies
-  React.useEffect(() => {
-    const filters = { iso3: [iso3] };
-    if (state !== "national") {
-      filters["area1"] = [state];
-    }
-    loadPolicyCategories({
-      filters,
-      stateSetter: setPolicyObject,
-    });
-    loadPolicySubCategories({
-      filters,
-      stateSetter: setPolicyObject,
-    });
-  }, [iso3, state]);
 
   console.log("render router");
   return (

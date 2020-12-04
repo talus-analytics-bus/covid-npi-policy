@@ -2,6 +2,8 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import {
+  loadPolicyCategories,
+  loadPolicySubCategories,
   loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,
   SUBCATEGORY_FIELD_NAME,
@@ -16,6 +18,27 @@ import styles from "./ListPoliciesPage.module.scss";
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
+
+  // unpacking this so the hook dependency
+  // will work correctly
+  const { setPolicyObject } = props;
+
+  // Get category and subcategory
+  // for all policies when component mounts
+  React.useEffect(() => {
+    const filters = { iso3: [iso3] };
+    if (state !== "national") {
+      filters["area1"] = [state];
+    }
+    loadPolicyCategories({
+      filters,
+      stateSetter: setPolicyObject,
+    });
+    loadPolicySubCategories({
+      filters,
+      stateSetter: setPolicyObject,
+    });
+  }, [iso3, state, setPolicyObject]);
 
   const loadDescriptionsByCategory = categoryName => {
     console.log("loadDescriptionsByCategory");
