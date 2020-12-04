@@ -48,7 +48,6 @@ const Data = ({
       ? [["date_of_complaint", "desc"]]
       : [["date_start_effective", "desc"]]
   );
-  const [searchText, setSearchText] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
@@ -77,6 +76,10 @@ const Data = ({
   };
   const initFilters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState(initFilters);
+
+  const [searchText, setSearchText] = useState(
+    initFilters._text !== undefined ? initFilters._text[0] : null
+  );
 
   // min and max dates for date range pickers dynamically determined by data
   const [minMaxStartDate, setMinMaxStartDate] = useState({
@@ -193,13 +196,6 @@ const Data = ({
       newFilterDefs.forEach(d => {
         for (const [k, v] of Object.entries(d)) {
           if (!k.startsWith("date")) d[k].items = optionsets[k];
-          // if (k === "dates_in_effect") {
-          //   // set min/max date range for daterange filters
-          //   d[k].minMaxDate = {
-          //     min: newMinMaxStartDate.min,
-          //     max: undefined,
-          //   };
-          // }
         }
       });
       setFilterDefs(newFilterDefs);
@@ -233,7 +229,6 @@ const Data = ({
     setColumns(null);
     setData(null);
     setFilterDefs(null);
-    setSearchText(null);
     setOrdering(
       docType === "challenge"
         ? [["date_of_complaint", "desc"]]
@@ -263,6 +258,7 @@ const Data = ({
 
     const newFilters = getFiltersFromUrlParams();
     setFilters(newFilters);
+    setSearchText(newFilters._text !== undefined ? newFilters._text[0] : null);
 
     // update entity info and get data
     setEntityInfo(newEntityInfo);
@@ -313,11 +309,14 @@ const Data = ({
       if (curUrlFilterParamsPlan !== null)
         newState.filters_plan = curUrlFilterParamsPlan;
 
-      if (isEmpty(filters)) {
+      if (isEmpty(filters) && searchText === null) {
         // clear filters for current doc type and update window history
         newState[filtersUrlParamKey] = "";
       } else {
-        newState[filtersUrlParamKey] = JSON.stringify(filters);
+        newState[filtersUrlParamKey] = JSON.stringify({
+          ...filters,
+          _text: [searchText],
+        });
       }
       const newUrlParams = new URLSearchParams();
       for (const [k, v] of Object.entries(newState)) {
@@ -391,19 +390,32 @@ const Data = ({
             {...{
               title: <h2>Search and Filter</h2>,
               label: DownloadBtn({
-                render: counts,
-                class_name: "all_static",
-                filters: {},
+                render: table,
+                class_name: [nouns.s, "secondary"],
+                classNameForApi: nouns.s,
+                buttonLoading,
+                setButtonLoading,
                 searchText,
-                disabled: false,
+                filters,
+                disabled: data && data.length === 0,
                 message: (
-                  <>
-                    <span>Download all data</span>
-                    <span>
-                      {comma(counts["Policy"])} policies and{" "}
-                      {comma(counts["Plan"])} plans
-                    </span>
-                  </>
+                  <span>
+                    {data && data.length === 0 && (
+                      <>No {nouns.p.toLowerCase()} found</>
+                    )}
+                    {data && data.length > 0 && (
+                      <>
+                        Download complete metadata
+                        <br />
+                        for{" "}
+                        {isEmpty(filters) &&
+                        (searchText === null || searchText === "")
+                          ? "all"
+                          : "filtered"}{" "}
+                        {nouns.p.toLowerCase()} ({comma(numInstances)})
+                      </>
+                    )}
+                  </span>
                 ),
               }),
               noCollapse: false,
@@ -457,39 +469,9 @@ const Data = ({
                               setFilters,
                               searchText,
                               setSearchText,
+                              alignBottom: true,
                             }}
-                          >
-                            {DownloadBtn({
-                              render: table,
-                              class_name: nouns.s,
-                              buttonLoading,
-                              setButtonLoading,
-                              searchText,
-                              filters,
-                              disabled: data && data.length === 0,
-                              message: (
-                                <>
-                                  <span>
-                                    {data && data.length === 0 && (
-                                      <>No {nouns.p.toLowerCase()} found</>
-                                    )}
-                                    {data && data.length > 0 && (
-                                      <>
-                                        Download{" "}
-                                        {isEmpty(filters) &&
-                                        (searchText === null ||
-                                          searchText === "")
-                                          ? "all"
-                                          : "filtered"}{" "}
-                                        {nouns.p.toLowerCase()} (
-                                        {comma(numInstances)})
-                                      </>
-                                    )}
-                                  </span>
-                                </>
-                              ),
-                            })}
-                          </FilterSet>
+                          ></FilterSet>
                         </>
                       )}
                     </>
@@ -507,27 +489,32 @@ const Data = ({
   );
 };
 
-const DownloadBtn = ({
-  render,
-  message,
-  class_name,
+export const DownloadBtn = ({
+  render = true,
+  message = "Download",
+  class_name = [],
+  classNameForApi,
   filters,
   disabled,
   searchText,
   buttonLoading = false,
   setButtonLoading = () => "",
 }) => {
+  // define custom class names
+  const thisClassNames = {
+    [styles.loading]: buttonLoading || disabled,
+  };
+  class_name.forEach(d => {
+    thisClassNames[styles[d]] = true;
+  });
   // flag for whether the download button should say loading or not
   return (
     render && (
       <button
-        className={classNames(styles.downloadBtn, {
-          [styles.loading]: buttonLoading || disabled,
-          [styles[class_name]]: true,
-        })}
+        className={classNames(styles.downloadBtn, thisClassNames)}
         onClick={e => {
           e.stopPropagation();
-          if (class_name === "all_static") {
+          if (class_name[0] === "all_static") {
             window.location.assign(
               "https://gida.ghscosting.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
             );
@@ -540,7 +527,7 @@ const DownloadBtn = ({
                 ...filters,
                 _text: searchText !== null ? [searchText] : [],
               },
-              class_name,
+              class_name: classNameForApi,
             }).then(d => setButtonLoading(false));
           }
         }}

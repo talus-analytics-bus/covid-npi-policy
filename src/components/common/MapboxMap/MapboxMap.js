@@ -15,6 +15,7 @@ import styles from "./mapboxmap.module.scss";
 // 3rd party packages
 import ReactMapGL, { NavigationControl, Popup } from "react-map-gl";
 import classNames from "classnames";
+import * as d3 from "d3/dist/d3.min";
 
 // local modules
 import { metricMeta, dataGetter, tooltipGetter } from "./plugins/data";
@@ -43,6 +44,7 @@ const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
  * @param  {[type]}  props        [description]
  */
 const MapboxMap = ({
+  setMapId,
   mapId,
   mapStyle,
   date,
@@ -175,7 +177,10 @@ const MapboxMap = ({
         else {
           const featureOrder = {};
           data[sortOrderMetricId].forEach(d => {
-            const hasBorder = d.value === "No restrictions" || d.value === null;
+            const hasBorder =
+              d.value === "No restrictions" ||
+              d.value === null ||
+              d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
 
@@ -183,7 +188,16 @@ const MapboxMap = ({
           map.setLayoutProperty(
             sortOrderMetricId + "-fill-outline",
             "line-sort-key",
-            ["get", ["get", promoteId], ["literal", featureOrder]]
+            [
+              "case",
+              [
+                "!=",
+                ["get", ["get", promoteId], ["literal", featureOrder]],
+                null,
+              ],
+              ["get", ["get", promoteId], ["literal", featureOrder]],
+              3,
+            ]
           );
         }
       }
@@ -191,7 +205,8 @@ const MapboxMap = ({
 
     // if circle layers are being used, then order circles smallest to
     // biggest for optimal click-ability
-    const hasCircleLayers = mapSources[mapId].circle !== undefined;
+    const hasCircleLayers =
+      mapSources[mapId].circle !== undefined && circle !== null;
     if (hasCircleLayers) {
       // get data fields to bind data to geo feature
       const featureLinkField = mapSources[mapId].circle.circleLayers.find(
@@ -218,20 +233,41 @@ const MapboxMap = ({
     }
   };
 
+  const updateFillStyles = ({ map }) => {
+    // if needed, update fill styles based on data
+    const toCheck = ["policy_status_counts"];
+    toCheck.forEach(key => {
+      if (data[key] !== undefined) {
+        const maxVal = d3.max(data[key], d => d.value);
+        const fillStylesFunc = layerStyles.fill[key];
+        const newFillColorStyle = fillStylesFunc(key, geoHaveData, maxVal);
+        map.setPaintProperty(
+          key + "-fill",
+          "fill-color",
+          newFillColorStyle["fill-color"]
+        );
+      }
+    });
+  };
+
   const getFillLegendName = ({ filters, fill }) => {
     const isLockdownLevel = fill === "lockdown_level";
 
-    const nouns = { plural: "States", singular: "State" };
+    const nouns = { plural: "States", singular: "State", level: "state" };
     if (mapId === "global") {
       nouns.plural = "Countries";
       nouns.singular = "Country";
+      nouns.level = "national";
     }
+
+    const isPolicyStatus = fill === "policy_status";
+    const isPolicyStatusCounts = fill === "policy_status_counts";
 
     if (isLockdownLevel) {
       return `Distancing level in ${nouns.singular.toLowerCase()} on ${date.format(
         "MMM D, YYYY"
       )}`;
-    } else {
+    } else if (isPolicyStatus) {
       const category = filters["primary_ph_measure"][0].toLowerCase();
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
@@ -240,6 +276,18 @@ const MapboxMap = ({
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
         return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
+      } else return prefix + category + suffix;
+    } else if (isPolicyStatusCounts) {
+      const category = filters["primary_ph_measure"][0].toLowerCase();
+      const subcategory = !isEmpty(filters["ph_measure_details"])
+        ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
+        : undefined;
+      const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
+      const suffix = ` on ${date.format("MMM D, YYYY")}`;
+      if (subcategory !== undefined) {
+        return (
+          <ShowMore text={prefix + subcategory + suffix} charLimit={120} />
+        );
       } else return prefix + category + suffix;
     }
   };
@@ -363,6 +411,7 @@ const MapboxMap = ({
           {...{
             ...(await tooltipGetter({
               mapId: mapId,
+              setMapId,
               d: selectedFeature,
               include: [circle, "lockdown_level"],
               // include: [circle, fill],
@@ -520,7 +569,8 @@ const MapboxMap = ({
         // if map had already loaded, then just bind feature states using the
         // latest map data
         bindFeatureStates({ map, mapId, data, selectedFeature });
-        updateFeatureOrder({ map, f: null });
+        updateFillOrder({ map, f: null });
+        updateFillStyles({ map });
         updateMapTooltip({ map });
       }
     }
@@ -699,7 +749,8 @@ const MapboxMap = ({
             // whenever the map style, i.e., the type of map, is changed
             const map = mapRef.getMap();
 
-            updateFeatureOrder({ map, f: null });
+            updateFillOrder({ map, f: null });
+            updateFillStyles({ map });
             setLinLogCircleStyle();
 
             // if default fit bounds are specified, center the viewport on them
@@ -780,7 +831,7 @@ const MapboxMap = ({
                     {...{
                       setInfoTooltipContent: props.setInfoTooltipContent,
                       className: "mapboxLegend",
-                      key: "basemap - quantized",
+                      key: "basemap - quantized - " + circle,
                       metric_definition: metricMeta[circle].metric_definition,
                       metric_displayname: (
                         <span>
@@ -800,13 +851,13 @@ const MapboxMap = ({
                     {...{
                       setInfoTooltipContent: props.setInfoTooltipContent,
                       className: "mapboxLegend",
-                      key: "bubble - linear",
+                      key: "bubble - linear - " + fill,
                       metric_definition: metricMeta[fill].metric_definition,
                       wideDefinition: metricMeta[fill].wideDefinition,
                       metric_displayname: (
                         <span>{getFillLegendName({ filters, fill })}</span>
                       ),
-                      ...metricMeta[fill].legendInfo.fill,
+                      ...metricMeta[fill].legendInfo.fill(mapId),
                     }}
                   />
                 )}

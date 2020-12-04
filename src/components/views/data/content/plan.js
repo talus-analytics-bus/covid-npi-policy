@@ -76,7 +76,7 @@ export const planInfo = {
       { dataField: "primary_loc", header: "Org. location", sort: true },
       {
         dataField: "name_and_desc",
-        header: "Policy name and description",
+        header: "Plan name and description",
         defCharLimit: 1000,
         sort: true,
         formatter: (cell, row) => {
@@ -92,7 +92,7 @@ export const planInfo = {
       },
       {
         dataField: "file",
-        header: "Link",
+        header: "PDF / Link",
         formatter: (row, cell) => {
           if (cell.file === undefined) return "";
           const icons = cell.file.map((d, i) => {
@@ -146,7 +146,7 @@ export const planInfo = {
       // TODO move static data processing into initial declaration
       // of `newColumns`
       if (d.dataField === "file") {
-        d.definition = "PDF download of or external link to plan";
+        d.definition = "";
         return;
       }
 
@@ -158,7 +158,7 @@ export const planInfo = {
 
       // use only the first sentence of the definition
       if (d.dataField !== "authority_name")
-        d.definition = d.definition.split(".")[0] + ".";
+        d.definition = d.definition.split(".")[0];
 
       // special cases
       // TODO move static data processing into initial declaration

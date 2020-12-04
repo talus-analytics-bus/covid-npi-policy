@@ -192,6 +192,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
           {...{
             setInfoTooltipContent: props.setInfoTooltipContent,
             mapId: k,
+            setMapId,
             linCircleScale,
             key: k,
             mapStyle: mapStyles[k],
@@ -208,6 +209,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                     // if true, drawer floats at top of parent container and
                     // content has translucent background
                     float: true,
+
+                    // custom caret?
+                    customCaret: true,
 
                     // closed by default
                     defaultClosed: true,
@@ -308,7 +312,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                       </React.Fragment>
                     ),
                     content: (
-                      <div>
+                      <>
                         {[
                           // fill metric radio toggle
                           fill !== null && (
@@ -338,7 +342,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                           // Filter set containing the filters specified in `filterDefs`
                           <FilterSet
                             {...{
-                              disabled: fill !== "policy_status",
+                              disabled:
+                                fill !== "policy_status" &&
+                                fill !== "policy_status_counts",
                               filterDefs,
                               filters,
                               setFilters,
@@ -463,7 +469,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             {/* )} */}
                           </div>,
                         ].map(d => d)}
-                      </div>
+                      </>
                     ),
                   }}
                 />

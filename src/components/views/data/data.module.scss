@@ -35,58 +35,6 @@
     margin-top: unset !important;
   }
 
-  // TODO move to a component
-  .downloadBtn {
-    background-color: $dark-blue;
-    font-size: 1.41rem;
-    font-family: "Rawline", serif;
-    color: white;
-    padding: 10px 15px;
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    border: none;
-    border-radius: 4px;
-    z-index: 1;
-    position: relative;
-    margin-left: auto;
-    @media #{$phone} {
-      visibility: hidden;
-      div {
-        font-size: 1rem;
-        span:last-child {
-          display: none;
-        }
-      }
-      img {
-        height: 30px;
-      }
-    }
-
-    &:hover {
-      background-color: darken($dark-blue, 10%);
-    }
-    &:active {
-      @include boxShadow();
-    }
-    &.loading {
-      opacity: 0.75;
-      pointer-events: none;
-    }
-
-    img {
-      margin-right: 20px;
-    }
-    div {
-      font-weight: 300;
-      line-height: 1;
-      text-align: left;
-      span:last-child {
-        font-size: 1rem;
-        font-weight: 200;
-      }
-    }
-  }
   // table styles
   .linkIcons {
     display: flex;
@@ -179,53 +127,6 @@
     }
   }
 
-  // data download buttons
-  button {
-    &.all,
-    &.all_static,
-    &.Court_Challenge,
-    &.Policy,
-    &.Plan {
-      img {
-        height: 30px;
-        margin-right: 10px;
-      }
-      span:first-child {
-        font-size: 1rem;
-        font-weight: 500;
-        + span {
-          margin-top: 3px;
-        }
-      }
-      div {
-        display: flex;
-        // align-items: center;
-        flex-flow: column;
-        justify-content: center;
-      }
-    }
-
-    // master download button
-    &.all_static,
-    &.all {
-      &,
-      &:hover {
-        background-color: transparent;
-        color: $dark-navy-blue;
-      }
-      &:active {
-        color: black;
-        background-color: darken($light-blue-3, 5%);
-      }
-    }
-
-    // entity-specific download buttons
-    &.Policy,
-    &.Plan {
-      padding: 10px;
-    }
-  }
-
   // responsiveness
   // TODO move to separate file
   @media #{$phone} {
@@ -241,6 +142,111 @@
   @media #{$phone} {
     h1 {
       margin-top: 0 !important;
+    }
+  }
+}
+
+// TODO move to a component
+.downloadBtn {
+  background-color: $dark-blue;
+  font-size: 1.41rem;
+  font-family: "Rawline", serif;
+  color: white;
+  padding: 5px 10px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  border: none;
+  border-radius: 4px;
+  z-index: 1;
+  position: relative;
+  margin: 5px 0 5px auto;
+  min-height: 58px;
+
+  // data download buttons
+  &.all,
+  &.all_static,
+  &.secondary,
+  &.Court_Challenge,
+  &.Policy,
+  &.Plan {
+    img {
+      height: 30px;
+      margin-right: 10px;
+    }
+    span:first-child {
+      font-size: 1rem;
+      font-weight: 500;
+      + span {
+        margin-top: 3px;
+      }
+    }
+    div {
+      display: flex;
+      // align-items: center;
+      flex-flow: column;
+      justify-content: center;
+    }
+  }
+
+  // master download button
+  &.secondary,
+  &.all_static,
+  &.all {
+    &,
+    &:hover {
+      background-color: transparent;
+      color: $dark-navy-blue;
+    }
+    &:active {
+      color: black;
+      background-color: darken($light-blue-3, 5%);
+    }
+  }
+
+  // entity-specific download buttons
+  &.Policy,
+  &.Plan {
+    padding: 10px;
+  }
+
+  span {
+    line-height: 1.5;
+  }
+  @media #{$phone} {
+    display: none;
+    div {
+      font-size: 1rem;
+      span:last-child {
+        display: none;
+      }
+    }
+    img {
+      height: 30px;
+    }
+  }
+
+  &:hover {
+    background-color: darken($dark-blue, 10%);
+  }
+  &:active {
+    @include boxShadow();
+  }
+  &.loading {
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  img {
+    margin-right: 20px;
+  }
+  div {
+    font-weight: 300;
+    line-height: 1;
+    text-align: left;
+    span:last-child {
+      font-size: 1rem;
+      font-weight: 200;
     }
   }
 }

@@ -113,7 +113,7 @@ export const mapStyles = {
     value: "us",
 
     // name of map displayed to user
-    name: "US only",
+    name: "US states",
 
     // min zoom
     minZoom: 3.5,
@@ -131,15 +131,14 @@ export const mapStyles = {
     // optional: info tooltip to display for map in radio selections
     tooltip: "View state-level data for the United States only",
   },
-
   // additional maps...
   global: {
     url: "mapbox://styles/nicoletalus/ckaofpis006y41ik5mr49kjnd",
     value: "global",
-    name: "Global",
+    name: "Countries",
     tooltip: (
       <span>
-        <b>Currently in development</b>: View country-level data for the world
+        <b>Currently in development</b>: View national-level data for the world
       </span>
     ),
     minZoom: 1.7246463935904246,

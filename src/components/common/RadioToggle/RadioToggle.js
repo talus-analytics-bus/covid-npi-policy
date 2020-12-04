@@ -17,6 +17,9 @@ const RadioToggle = ({
   className,
   ...props
 }) => {
+  // display radios as sets of columns?
+  const showRadiosAsCols = choices.length > 6;
+
   /**
    * When radio button changes, set current choice equal to its value.
    * @method onChange
@@ -40,7 +43,7 @@ const RadioToggle = ({
     return (
       <div
         className={classNames(styles.radioToggle, {
-          [styles.disabled]: props.disabled === true
+          [styles.disabled]: props.disabled === true,
         })}
       >
         <div className={classNames(className !== undefined ? className : "")}>
@@ -65,12 +68,12 @@ const RadioToggle = ({
             [styles.disabled]: props.disabled === true,
             [styles.horizontal]: props.horizontal === true,
             [styles.right]: props.right === true,
-            [styles.left]: props.left === true
+            [styles.left]: props.left === true,
           }
         )}
       >
         <div role="label">{label}</div>
-        <form>
+        <form className={classNames({ [styles.asGrid]: showRadiosAsCols })}>
           {choices.map(c => (
             <span key={c.value}>
               {onClick(
@@ -80,7 +83,7 @@ const RadioToggle = ({
                     color:
                       curVal.toString() === c.value.toString()
                         ? darkSelectedBlue
-                        : ""
+                        : "",
                   }}
                   disabled={
                     props.disabled === true || c.disabled === true

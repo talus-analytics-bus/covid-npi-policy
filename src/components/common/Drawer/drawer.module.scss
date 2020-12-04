@@ -1,117 +1,62 @@
 @import "../../../assets/styles/vars.scss";
 .style {
-  // border: $border;
-  $padding: 20px;
-  // width: max-content;
   width: 100%;
-
-  > div {
+  .header {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
     background-color: white;
+    background-color: #c4cacf;
+    color: $dark-blue;
+    cursor: pointer;
+    @include spaceItemsHoriz(20px);
+    div,
+    label {
+      margin-bottom: 0;
+    }
   }
-
   &.float {
-    // @include sticky(118px);
     position: absolute;
     top: 0;
     z-index: 3;
     .content {
       background-color: rgba(255, 255, 255, 0.95);
-    }
-    .content {
       position: absolute;
       width: 100%;
-    }
-  }
-  &:not(.open) {
-    button {
-      i {
-        transform: rotate(180deg);
+      > div:first-child {
+        margin-right: 50px;
       }
     }
   }
-
-  .header {
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 15px;
-    @media #{$phone} {
-      padding: 15px;
-    }
-    text-transform: uppercase;
-    background-color: #c4cacf;
-    color: $dark-blue;
-
-    @include spaceItemsHoriz(50px);
-    &:not(.noCollapse) {
-      &,
-      * {
-        cursor: pointer;
-      }
-    }
-
-    & + .content {
-      // border-top: $border;
-    }
-    button.toggle {
-      &.absolute {
-        position: absolute;
-        right: 5px;
-      }
-      background: none;
-      border: none;
-      padding: 0;
-      z-index: 0;
-      i {
-        font-size: 3rem;
-        position: relative;
-        vertical-align: middle;
-        line-height: 0;
-      }
-      &.flip {
-        transform: rotate(180deg);
-      }
-    }
-
-    // e.g., "Download all/filtered data"
-    .action {
-      .primary {
-        font-family: "rawline", serif;
-        background-color: $blue;
-        color: white;
-      }
+  &.open {
+    .content {
+      display: flex;
+      border-bottom: 1px solid #b3b3b3;
     }
   }
   .content {
-    padding: $padding;
-    font-size: 1rem;
-    background-color: $light-gray-2;
-    z-index: 3;
-    @include spaceItemsVert(20px);
-    &.hidden {
-      // visibility: hidden;
+    padding: 20px;
+  }
+  .closer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: transparent;
+    z-index: 2;
+  }
+  &.hidden {
+    display: none;
+    height: 0;
+    padding: 0 20px;
+  }
+  &:not(.open) {
+    .content {
       display: none;
-      height: 0;
-      padding: 0 $padding;
     }
-
-    select {
-      display: block;
+    i {
+      transform: rotate(180deg);
     }
   }
 }
-
-.closer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: transparent;
-  z-index: 2;
-}
-
-@import "./plugins.module.scss";

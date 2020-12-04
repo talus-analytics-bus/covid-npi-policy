@@ -16,7 +16,7 @@ export const Search = ({ onChangeFunc = val => {}, searchText, ...props }) => {
   useEffect(() => {
     if (searchText === null) {
       searchRef.current.value = "";
-    }
+    } else searchRef.current.value = searchText;
   }, [searchText]);
   return (
     <div className={styles.search}>

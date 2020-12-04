@@ -24,6 +24,7 @@ $white: #fff;
 $light-cyan: #d9edf8;
 
 // functional colors
+$dark-navy-blue-button: #213561;
 $dark-selected-blue: $dark-blue;
 $no-data-gray: #b3b3b3;
 
@@ -159,7 +160,13 @@ $border-radius: 5px;
   top: -2px;
 }
 
+@mixin noShadow() {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
 // globals
+$small-laptop: "screen and (max-width : 1220px)";
 $phone: "screen and (max-width : 812px)";
 $phone-narrow: "screen and (max-width : 500px)";
 $max-width: 1300px;
