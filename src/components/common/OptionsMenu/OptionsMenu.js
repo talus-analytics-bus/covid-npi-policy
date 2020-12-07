@@ -60,7 +60,7 @@ const OptionsMenu = ({
   const toggleOpen = () => {
     const buttonWidth = edgeRef.current.clientWidth.toString() + "px";
     if (open) {
-      setComponentStyle({ [sideKey]: "0" });
+      setComponentStyle({ [sideKey]: "-1px" });
     } else {
       setComponentStyle({ [sideKey]: "-" + wrapperWidth });
     }
