@@ -10,6 +10,9 @@ import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 
 // the policy router manages shared data among
 // policy pages to prevent repeat requests
+// and it sets up the minimap provider since
+// all maps within this set of routes will
+// share the same scope
 const PolicyRouter = props => {
   const [setPage, setLoading] = [props.setPage, props.setLoading];
   React.useEffect(() => {
@@ -21,10 +24,13 @@ const PolicyRouter = props => {
   const { state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
+  const openSections = React.useState({ firstLevel: [], secondLevel: [] });
+  const policyListScrollPos = React.useState(0);
 
   // const [caseload, setCaseload] = React.useState();
 
   console.log("render router");
+  // console.log(policyObject);
   return (
     <MiniMap.Provider scope={state !== "national" ? "USA" : "world"}>
       <Switch>
@@ -32,7 +38,14 @@ const PolicyRouter = props => {
           <PolicyPage {...{ policyObject, setPolicyObject }} />
         </Route>
         <Route path={match.path}>
-          <ListPoliciesPage {...{ policyObject, setPolicyObject }} />
+          <ListPoliciesPage
+            {...{
+              policyObject,
+              setPolicyObject,
+              openSections,
+              policyListScrollPos,
+            }}
+          />
         </Route>
       </Switch>
     </MiniMap.Provider>

@@ -3,14 +3,18 @@ import React from "react";
 import styles from "./ExpandingSection.module.scss";
 
 const ExpandingSection = props => {
-  const [renderChildren, setRenderChildren] = React.useState(false);
+  const [renderChildren, setRenderChildren] = React.useState(
+    props.open || false
+  );
 
   let children = React.Children.toArray(props.children);
 
   const onClickHandler = e => {
     e.preventDefault();
     setRenderChildren(prev => !prev);
-    props.onOpen && props.onOpen();
+
+    if (props.open) props.onClose && props.onClose();
+    else props.onOpen && props.onOpen();
   };
 
   return (

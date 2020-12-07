@@ -67,6 +67,8 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   // intentionally re-creating the object from scratch here in case
   // the categories have not yet been loaded, so that getting categories
   // and getting subcategories can safely be asynchronous
+  // With more efficient API endpoints I think this request
+  // will probably totally replace the loadPoliciesCategories request.
   stateSetter(prev => {
     // const categoriesAndSubcategories = {};
     policyResponse.data.forEach(policy => {
@@ -115,6 +117,8 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
           desc: policy.desc,
           date_start_effective: policy.date_start_effective,
           date_end_actual: policy.date_end_actual,
+          [CATEGORY_FIELD_NAME]: policy[CATEGORY_FIELD_NAME],
+          [SUBCATEGORY_FIELD_NAME]: policy[SUBCATEGORY_FIELD_NAME],
         },
       });
     });

@@ -10,7 +10,8 @@ import {
 } from "../PolicyRouter/PolicyLoaders";
 
 import ExpandingSection from "./ExpandingSection/ExpandingSection";
-import PolicySummary from "./PolicySummary/PolicySummary";
+import PolicySummary from "../PolicySummary/PolicySummary";
+import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -39,6 +40,13 @@ const ListPoliciesPage = props => {
       stateSetter: setPolicyObject,
     });
   }, [iso3, state, setPolicyObject]);
+
+  const [openSections, setOpenSections] = props.openSections;
+  const [scrollPos, setScrollPos] = props.policyListScrollPos;
+
+  React.useLayoutEffect(() => {
+    window.scroll(0, scrollPos);
+  }, [scrollPos]);
 
   const loadDescriptionsByCategory = categoryName => {
     console.log("loadDescriptionsByCategory");
@@ -88,7 +96,9 @@ const ListPoliciesPage = props => {
     }
   };
 
-  console.log(props.policyObject);
+  // console.log(props.policyObject);
+  // console.log(openSections);
+  // console.log(scrollPos);
 
   return (
     <article>
@@ -144,10 +154,26 @@ const ListPoliciesPage = props => {
           Object.entries(props.policyObject).map(([categoryName, category]) => (
             <div className={styles.topLevelContainer} key={categoryName}>
               <ExpandingSection
-                onOpen={() => loadDescriptionsByCategory(categoryName)}
+                open={openSections.firstLevel.includes(categoryName)}
+                onOpen={() => {
+                  loadDescriptionsByCategory(categoryName);
+                  setOpenSections(prev => ({
+                    ...prev,
+                    firstLevel: [...prev.firstLevel, categoryName],
+                  }));
+                }}
+                onClose={() => {
+                  setOpenSections(prev => ({
+                    ...prev,
+                    firstLevel: prev.firstLevel.filter(
+                      name => name !== categoryName
+                    ),
+                  }));
+                }}
               >
                 <div className={styles.topLevelHeader}>
-                  <div className={styles.icon} />
+                  {/* <div className={styles.icon} /> */}
+                  <PolicyCategoryIcon category={categoryName} />
                   <h1>
                     {categoryName}
                     {/* {Object.keys(category).length} */}
@@ -157,9 +183,22 @@ const ListPoliciesPage = props => {
                   {Object.entries(category).map(([subcatName, subcat]) => (
                     <ExpandingSection
                       key={subcatName}
-                      onOpen={() =>
-                        loadDescriptionsBySubCategory(categoryName, subcatName)
-                      }
+                      open={openSections.secondLevel.includes(subcatName)}
+                      onOpen={() => {
+                        loadDescriptionsBySubCategory(categoryName, subcatName);
+                        setOpenSections(prev => ({
+                          ...prev,
+                          secondLevel: [...prev.secondLevel, subcatName],
+                        }));
+                      }}
+                      onClose={() => {
+                        setOpenSections(prev => ({
+                          ...prev,
+                          secondLevel: prev.secondLevel.filter(
+                            name => name !== subcatName
+                          ),
+                        }));
+                      }}
                     >
                       <div className={styles.secondLevelHeader}>
                         <div className={styles.markerDot} />
@@ -171,9 +210,11 @@ const ListPoliciesPage = props => {
                       <div className={styles.secondLevelContainer}>
                         {Object.entries(subcat).map(([policyID, policy]) => (
                           <PolicySummary
+                            location={{ iso3, state }}
                             key={policyID}
                             id={policyID.replace("ID", "")}
                             policy={policy}
+                            setScrollPos={setScrollPos}
                           />
                         ))}
                       </div>
