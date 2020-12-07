@@ -69,6 +69,7 @@
   .noPolicies,
   .lockdown,
   .safer,
+  .no,
   .stay,
   .normal,
   .proposed,
@@ -106,6 +107,11 @@
   .safer {
     span {
       background-color: #d66b3e;
+    }
+  }
+  .no {
+    span {
+      background-color: gray;
     }
   }
   .normal {

@@ -45,6 +45,7 @@ const interventionColors = {
   "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
+  "No restrictions": "gray",
   "Stay-at-home": "#C1272D",
   "Safer-at-home": "#D66B3E",
   "Stay at home": "#C1272D",
@@ -456,6 +457,10 @@ const PolicyModel = props => {
           <Tippy
             content={
               <div className={styles.legend}>
+                <div className={styles.no}>
+                  <span />
+                  <p>No active restrictions</p>
+                </div>
                 <div className={styles.lockdown}>
                   <span />
                   <p>Lockdown policies</p>
@@ -870,6 +875,26 @@ const PolicyModel = props => {
       {/* /> */}
     </section>
   );
+};
+
+/**
+ * Return the policy name to display, given its data value
+ * @method PastInterventionInfo
+ * @param  {[type]}             props [description]
+ */
+export const getDisplayNameFromPolicyName = ({ policyName, proposed }) => {
+  let displayName = policyName;
+  if (policyName === "No restrictions") {
+    displayName = "No active restrictions";
+  } else {
+    displayName += " policies";
+  }
+  if (proposed === undefined) {
+    return displayName;
+  } else if (proposed) {
+    displayName += " proposed";
+  } else displayName += " implemented";
+  return displayName;
 };
 
 export default PolicyModel;
