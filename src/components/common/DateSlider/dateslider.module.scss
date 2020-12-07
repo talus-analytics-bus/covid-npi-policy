@@ -21,9 +21,9 @@
     }
     button.toggle {
       top: 2px;
-      right: 2px;
+      left: 2px;
       bottom: unset;
-      left: unset;
+      right: unset;
       border-width: 1px;
       border-radius: 4px;
       width: max-content;
@@ -191,10 +191,10 @@
   &.float {
     position: absolute;
     z-index: 1;
-    right: 0;
+    left: 0;
     background-color: rgba(255, 255, 255, 0.95);
     padding: 15px;
     border: 1px solid #b3b3b3;
-    border-width: 0 0 1px 1px;
+    border-width: 0 1px 1px 0;
   }
 }
