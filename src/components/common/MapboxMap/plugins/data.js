@@ -1001,9 +1001,9 @@ export const metricMeta = {
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
-            "#ffffff",
+            "#e9f3fc",
           ],
-          borders: [null, null, null, null, null, "2px solid gray"],
+          // borders: [null, null, null, null, null, "2px solid gray"],
           domain: [
             <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
               data not
@@ -1048,7 +1048,7 @@ export const metricMeta = {
               "#549FE2",
               "#86BFEB",
               "#BBDAF5",
-              "white",
+              "#e9f3fc",
             ]), // TODO dynamically
         };
       },
