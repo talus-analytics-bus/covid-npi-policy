@@ -291,6 +291,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             left: true,
                             horizontal: false,
                             setInfoTooltipContent: props.setInfoTooltipContent,
+                            tooltipPlace: "top",
                             choices: Object.values(mapStyles).map(
                               ({ value, name, tooltip }) => {
                                 return {
@@ -315,6 +316,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                   // TODO define choices based on current mapType
                                   setInfoTooltipContent:
                                     props.setInfoTooltipContent,
+                                  tooltipPlace: "left",
                                   choices: mapMetrics[mapId]
                                     .filter(d => d.for.includes("fill"))
                                     .map(d => {
