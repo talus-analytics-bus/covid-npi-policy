@@ -253,10 +253,11 @@ const MapboxMap = ({
   const getFillLegendName = ({ filters, fill }) => {
     const isLockdownLevel = fill === "lockdown_level";
 
-    const nouns = { plural: "States", singular: "State" };
+    const nouns = { plural: "States", singular: "State", level: "state" };
     if (mapId === "global") {
       nouns.plural = "Countries";
       nouns.singular = "Country";
+      nouns.level = "national";
     }
 
     const isPolicyStatus = fill === "policy_status";
@@ -281,10 +282,12 @@ const MapboxMap = ({
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
         : undefined;
-      const prefix = `Policies in effect at ${nouns.singular.toLowerCase()} level (relative count) for `;
+      const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
-        return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
+        return (
+          <ShowMore text={prefix + subcategory + suffix} charLimit={120} />
+        );
       } else return prefix + category + suffix;
     }
   };

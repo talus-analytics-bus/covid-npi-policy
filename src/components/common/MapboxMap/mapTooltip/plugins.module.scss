@@ -15,15 +15,15 @@
 
     img {
       height: 40px;
-      + div {
-        font-size: 1.33rem;
-        font-weight: bold;
-        font-family: "rawline", serif;
-        max-width: 100px;
-        line-height: 1;
-        position: relative;
-        top: -2px;
-      }
+    }
+    div {
+      font-size: 1.33rem;
+      font-weight: bold;
+      font-family: "rawline", serif;
+      max-width: 100px;
+      line-height: 1;
+      position: relative;
+      top: -2px;
     }
   }
   .footer {

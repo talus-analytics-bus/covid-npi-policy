@@ -30,14 +30,14 @@ import {
 } from "../../../misc/Queries";
 
 // assets and styles
-import dots from "./assets/images/dots.png";
+// import dots from "./assets/images/dots.png";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
 import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
 import phase4 from "./assets/icons/phase-4.png";
-import mixed from "./assets/icons/phase-mixed.png";
+// import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 import dataTableIcon from "../../../../assets/icons/dataTableIcon.svg";
 import modelIcon from "../../../../assets/icons/modelIcon.svg";
@@ -62,7 +62,6 @@ export const defaults = {
   minMaxDate: {
     minDate: "2020-01-21",
     maxDate: yesterday.format("YYYY-MM-DD"),
-    // maxDate: "2021-03-01"
   },
 
   // defaults for map with ID `us`
@@ -542,7 +541,8 @@ export const metricMeta = {
           colorscale: d3
             .scaleOrdinal()
             .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-            .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+            .range(["#eaeaea", "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+          // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
 
           // for non-quantized legend `type`: the labels that should be used for
           // each `for` category
@@ -711,30 +711,8 @@ export const metricMeta = {
   policy_status_counts: {
     metric_definition: (
       <span>
-        {
-          <table className={infostyles.distancingLevelTable}>
-            <tbody>
-              <tr>
-                <td>
-                  <div
-                    style={{
-                      backgroundColor: "#66CAC4",
-                      marginRight: "20px",
-                    }}
-                    className={infostyles.rect}
-                  >
-                    policy in effect (new)
-                  </div>
-                </td>
-                <td style={{ display: "none" }} />
-                <td>
-                  TO REPLACE: At least one policy in effect with the given
-                  category / subcategories on the specified date.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        }
+        The number of policies in effect with the given category / subcategories
+        in the location on the specified date.
       </span>
     ),
     metric_displayname: "Relative policy count",
@@ -742,7 +720,7 @@ export const metricMeta = {
     unit: v => "",
     legendInfo: {
       fill: mapId => {
-        const noun = mapId === "us" ? "state" : "country";
+        const noun = mapId === "us" ? "state" : "national";
         return {
           for: "basemap", // TODO dynamically
           type: "quantized",
@@ -862,17 +840,18 @@ export const metricMeta = {
     // last updated: 2020-06-24
     // MV via JK and GU
     valueStyling: {
-      "No restrictions": {
-        label: "No active restrictions",
-        phase: "",
-        color: "#fff",
-        // icon: phase1,
-        def: (
-          <span>
-            No active social distancing policies with restrictions are in place
-          </span>
-        ),
-      },
+      // "No restrictions": {
+      //   label: "No active restrictions",
+      //   phase: "",
+      //   color: "#fff",
+      //   bordered: true,
+      //   // icon: phase1,
+      //   def: (
+      //     <span>
+      //       No active social distancing policies with restrictions are in place
+      //     </span>
+      //   ),
+      // },
       Lockdown: {
         label: "Lockdown",
         phase: "Phase I",
@@ -909,29 +888,27 @@ export const metricMeta = {
           </span>
         ),
       },
+      // TODO update this value
       "New normal": {
-        label: "New normal",
+        label: "Partially open",
         phase: "Phase IV",
         color: "#a8c4dc",
         icon: phase4,
         def: (
           <span>
             A majority of public restrictions on mass gatherings and
-            non-essential businesses are lifted or expired, with some
-            encouraging of safeguards such as face coverings.
+            non-essential businesses are lifted or expired, with some policies
+            in place on private sector reopening, use of face coverings or
+            adaptation and mitigation measures like enhanced cleaning protocols.
           </span>
         ),
       },
-      "Mixed distancing levels": {
-        label: "Mixed distancing levels",
-        labelShort: "Mixed",
-        color: "#a8c4dc",
-        icon: mixed,
-        def: (
-          <span>
-            Any combination of the above levels simultaneously in effect.
-          </span>
-        ),
+      Open: {
+        label: "Open",
+        color: "#fff",
+        bordered: true,
+        border: "2px solid gray",
+        def: <span>No active restrictions are in place</span>,
       },
     },
     wideDefinition: true,
@@ -958,7 +935,7 @@ export const metricMeta = {
                     <td>
                       <div
                         style={
-                          i !== colorRange.length - 1
+                          !d.bordered
                             ? {
                                 backgroundColor: colorRange[i],
                                 color: isLightColor(colorRange[i])
@@ -969,8 +946,8 @@ export const metricMeta = {
                                 backgroundImage: `url("${colorRange[i]}")`,
                                 backgroundPosition: "center",
                                 padding: "3px 10px",
-                                border: "2px solid #BBDAF5",
-                                color: "black",
+                                border: d.border,
+                                color: "#333",
                               }
                         }
                         className={infostyles.rect}
@@ -1012,33 +989,26 @@ export const metricMeta = {
           labelsInside: true,
           range: [
             "#eaeaea",
-            "#ffffff",
             "#2165a1",
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
-            dots,
+            "#ffffff",
           ],
-          borders: [null, "2px solid gray", null, null, null, null, null],
+          borders: [null, null, null, null, null, "2px solid gray"],
           domain: [
             <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
               data not
               <br />
               available
             </div>,
-            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-              no active
-              <br />
-              restrictions
-            </div>,
             getCovidLocalMetricLink("lockdown"),
             getCovidLocalMetricLink("stay-at-home"),
             getCovidLocalMetricLink("safer-at-home"),
-            getCovidLocalMetricLink("new normal"),
-            "mixed",
+            getCovidLocalMetricLink("partially open"),
+            <div style={{ lineHeight: 1.1 }}>open</div>,
           ],
           subLabels: [
-            <span style={{ visibility: "hidden" }}>x</span>,
             <span style={{ visibility: "hidden" }}>x</span>,
             getCovidLocalMetricLink("Phase I", "#661B3C", {
               fontStyle: "italic",
@@ -1058,23 +1028,20 @@ export const metricMeta = {
             .scaleOrdinal()
             .domain([
               "no policy",
-              "no policy data available",
               getCovidLocalMetricLink("lockdown (phase I)"),
               getCovidLocalMetricLink("stay-at-home (phase II)"),
               getCovidLocalMetricLink("safer-at-home (phase III)"),
-              getCovidLocalMetricLink("new normal (phase IV)"),
-              "mixed",
+              getCovidLocalMetricLink("partially open (phase IV)"),
+              "no policy data available",
             ])
             .range([
               "#eaeaea",
-              "white",
               "#2165a1",
               "#549FE2",
               "#86BFEB",
               "#BBDAF5",
-              dots,
+              "white",
             ]), // TODO dynamically
-          // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
         };
       },
       // circle: {
@@ -1231,7 +1198,8 @@ export const tooltipGetter = async ({
   // if lockdown level is null, set it to "no restrictions"
   const replaceNullData = props.geoHaveData || mapId === "us";
   if (state.lockdown_level === null && replaceNullData)
-    state.lockdown_level = "No restrictions";
+    state.lockdown_level = "Open";
+
   const apiDate = date.format("YYYY-MM-DD");
 
   // get relevant policy data
@@ -1322,7 +1290,7 @@ export const tooltipGetter = async ({
         item.value = (
           <div className={styles[k]}>
             <div className={styles.icon}>
-              <img src={valueStyling.icon} />
+              {valueStyling.icon && <img src={valueStyling.icon} />}
               <div>{label}</div>
             </div>
             <div className={styles.footer}>
@@ -1474,6 +1442,8 @@ export const tooltipGetter = async ({
     // state: 0,
     // country: 0,
   };
+  const noun = mapId === "us" ? "state" : "national";
+
   if (props.geoHaveData || mapId === "us") {
     const policies = await Policy({
       method: "post",
@@ -1500,13 +1470,42 @@ export const tooltipGetter = async ({
     tooltip.tooltipHeader.subtitle = (
       <>
         <span>
-          {comma(nPolicies.total)}{" "}
+          {comma(nPolicies.total)} {noun}-level{" "}
           {nPolicies.total === 1 ? "policy" : "policies"} in effect
         </span>
         <br />
         <span> as of {formattedDate}</span>
       </>
     );
+  }
+
+  // special -- add note if policy data not yet collected
+  let message;
+  if (state.lockdown_level === null && mapId === "us") {
+    if (nPolicies !== undefined && nPolicies.total > 0) {
+      message = (
+        <i>
+          No {noun}-level distancing
+          <br />
+          level could be determined
+          <br />
+          from policies in effect
+        </i>
+      );
+    } else {
+      message = <i>No {noun}-level policies in effect</i>;
+    }
+
+    tooltip.tooltipMainContent.push({
+      customContent: (
+        <>
+          <div className={styles.label}>Distancing level</div>
+          <div style={{ color: "gray" }} className={styles.value}>
+            {message}
+          </div>
+        </>
+      ),
+    });
   } else if (
     (state.lockdown_level === null || props.geoHaveData === false) &&
     mapId === "global"
