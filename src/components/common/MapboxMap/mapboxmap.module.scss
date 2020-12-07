@@ -128,7 +128,7 @@
   [class*="mapboxgl-ctrl-icon"] {
     margin: 0;
     background-color: white !important;
-    border-radius: 9999px !important;
+    border-radius: 50% !important;
     margin-bottom: 5px;
     height: $icon-size;
     width: $icon-size;
@@ -152,7 +152,7 @@
     }
 
     &:hover {
-      background-color: darken(white, 5%);
+      background-color: darken(white, 5%) !important;
     }
 
     &:active {
