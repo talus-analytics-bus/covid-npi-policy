@@ -544,8 +544,8 @@ const PolicyModel = props => {
         content={
           props.contactPlotType === "pctChange" ? (
             <p className={styles.ipopup}>
-              Estimated percentage reduction in contacts due to policies
-              implemented, relative to baseline contact rate.
+              Estimated percentage of baseline contact rate given policies
+              implemented.
             </p>
           ) : (
             <p className={styles.ipopup}>
