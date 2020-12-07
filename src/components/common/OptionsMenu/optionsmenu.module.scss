@@ -1,6 +1,7 @@
 @import "../../../assets/styles/vars.scss";
 
-$wrapperWidth: 22%; // width of options relative to avail space
+$wrapperWidth: 350px; // width of options relative to avail space
+// $wrapperWidth: 22%; // width of options relative to avail space
 :export {
   wrapperWidth: $wrapperWidth;
 }
@@ -91,7 +92,7 @@ $wrapperWidth: 22%; // width of options relative to avail space
           overflow: scroll;
 
           @include spaceItemsVert(20px, false);
-          @include spaceItemsHoriz(30px);
+          // @include spaceItemsHoriz(30px);
 
           select {
             margin-top: 5px;
