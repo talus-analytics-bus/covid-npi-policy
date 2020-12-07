@@ -853,6 +853,17 @@ export const metricMeta = {
       //     </span>
       //   ),
       // },
+      "No policy": {
+        label: "No policy",
+        color: "#fff",
+        bordered: true,
+        border: "2px solid gray",
+        def: (
+          <span>
+            No policies are in place for social distancing or face masks.
+          </span>
+        ),
+      },
       Lockdown: {
         label: "Lockdown",
         phase: "Phase I",
@@ -906,10 +917,8 @@ export const metricMeta = {
       },
       Open: {
         label: "Open",
-        color: "#fff",
-        bordered: true,
-        border: "2px solid gray",
-        def: <span>No active restrictions are in place</span>,
+        color: "#e9f3fc",
+        def: <span>No active restrictions are in place.</span>,
       },
       // TODO elegantly
       get "No restrictions"() {
@@ -997,19 +1006,30 @@ export const metricMeta = {
           labelsInside: true,
           range: [
             "#eaeaea",
+            "#ffffff",
             "#2165a1",
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
             "#e9f3fc",
           ],
-          // borders: [null, null, null, null, null, "2px solid gray"],
+          entryStyles: [
+            null,
+            { marginRight: 20 },
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          borders: [null, "2px solid gray", null, null, null, null, null],
           domain: [
             <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
               data not
               <br />
               available
             </div>,
+            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>no policy</div>,
             getCovidLocalMetricLink("lockdown"),
             getCovidLocalMetricLink("stay-at-home"),
             getCovidLocalMetricLink("safer-at-home"),
@@ -1035,15 +1055,17 @@ export const metricMeta = {
           colorscale: d3
             .scaleOrdinal()
             .domain([
+              "no data",
               "no policy",
               getCovidLocalMetricLink("lockdown (phase I)"),
               getCovidLocalMetricLink("stay-at-home (phase II)"),
               getCovidLocalMetricLink("safer-at-home (phase III)"),
               getCovidLocalMetricLink("partially open (phase IV)"),
-              "no policy data available",
+              "open",
             ])
             .range([
               "#eaeaea",
+              "#ffffff",
               "#2165a1",
               "#549FE2",
               "#86BFEB",
@@ -1204,7 +1226,8 @@ export const tooltipGetter = async ({
   const state = map.getFeatureState(d);
 
   // if lockdown level is null, set it to "no restrictions"
-  const replaceNullData = props.geoHaveData || mapId === "us";
+  const replaceNullData = false;
+  // const replaceNullData = props.geoHaveData || mapId === "us";
   if (state.lockdown_level === null && replaceNullData)
     state.lockdown_level = "Open";
 
