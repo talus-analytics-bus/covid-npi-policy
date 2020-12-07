@@ -30,10 +30,18 @@ const OptionsMenu = ({
   // true if the open should be open by default in mobile mode, false otherwise
   defaultOpen = true,
 
+  // true if menu should float on right side of screen, false if left side
+  right = true,
+
   // additional properties, if any
   ...props
 }) => {
   // CONSTANTS // -----------------------------------------------------------//
+  // default chevron direction for open/close toggle button
+  const chevron = right ? "chevron_right" : "chevron_left";
+
+  // CSS styling attribute relevent for floating to one side of screen
+  const sideKey = right ? "right" : "left";
 
   // STATE // ---------------------------------------------------------------//
   // reference to edge of component where toggle button is, to track width of
@@ -44,8 +52,7 @@ const OptionsMenu = ({
   const [open, setOpen] = useState(defaultOpen);
   const [openDesktop, setOpenDesktop] = useState(true);
 
-  // dynamic styling for open/close animation affecting the wrapper and the
-  // entire component
+  // dynamic styling for open/close sliding animation
   const [componentStyle, setComponentStyle] = useState({});
   const [wrapperStyle, setWrapperStyle] = useState({});
 
@@ -53,13 +60,9 @@ const OptionsMenu = ({
   const toggleOpen = () => {
     const buttonWidth = edgeRef.current.clientWidth.toString() + "px";
     if (open) {
-      setComponentStyle({ left: "0" });
-      // setComponentStyle({ left: "-33%" });
-      // setWrapperStyle({ left: "33%" });
+      setComponentStyle({ [sideKey]: "0" });
     } else {
-      setComponentStyle({ left: "-" + wrapperWidth });
-      // setComponentStyle({ left: `calc(-100% + ${buttonWidth})` });
-      // setWrapperStyle({ left: `-${buttonWidth}` });
+      setComponentStyle({ [sideKey]: "-" + wrapperWidth });
     }
   };
 
@@ -76,6 +79,7 @@ const OptionsMenu = ({
       className={classNames(styles.style, props.className, {
         [styles.float]: props.float === true,
         [styles.open]: open,
+        [styles.right]: right,
         [styles.allowDesktop]: allowDesktop !== false,
       })}
       style={componentStyle}
@@ -125,7 +129,7 @@ const OptionsMenu = ({
         className={styles.edge}
       >
         <button className={classNames(styles.toggle, { [styles.flip]: !open })}>
-          <i className={"material-icons"}>chevron_left</i>
+          <i className={"material-icons"}>{chevron}</i>
         </button>
       </div>
     </div>

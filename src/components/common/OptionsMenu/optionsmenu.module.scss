@@ -70,6 +70,8 @@ $wrapperWidth: 22%; // width of options relative to avail space
       opacity: 0.6;
     }
 
+    // border for edges of content wrapper that are not touching viewport edge
+    $border: 1px solid #b3b3b3;
     .contentWrapper {
       position: absolute;
       top: 0;
@@ -78,8 +80,8 @@ $wrapperWidth: 22%; // width of options relative to avail space
       padding: 10px;
       width: $wrapperWidth; // TODO minmax
 
-      border-bottom: 1px solid #b3b3b3;
-      border-right: 1px solid #b3b3b3;
+      border-bottom: $border;
+      border-right: $border;
 
       .content {
         > [class^="scrollbar-container"] {
@@ -87,24 +89,13 @@ $wrapperWidth: 22%; // width of options relative to avail space
           display: flex;
           flex-flow: column;
           overflow: scroll;
-          // flex-flow: row wrap;
-          // align-items: flex-end;
 
-          // padding-right: 60px;
           @include spaceItemsVert(20px, false);
           @include spaceItemsHoriz(30px);
 
           select {
             margin-top: 5px;
             cursor: pointer;
-
-            // margin-top: 5px;
-            // cursor: pointer;
-            // border-radius: 4px;
-            // padding: 5px;
-            // @include selectStyling();
-            // border: 2px solid $no-data-gray;
-            // max-width: 100%;
           }
 
           > div:last-child {
@@ -147,8 +138,15 @@ $wrapperWidth: 22%; // width of options relative to avail space
         &.flipped {
           transform: rotate(270deg);
           transition: 0.5s transform;
-          // top: 0;
         }
+      }
+    }
+    &.right {
+      .contentWrapper {
+        right: 0;
+        border-bottom: $border;
+        border-left: $border;
+        border-right: none;
       }
     }
     &.closed {
@@ -165,6 +163,7 @@ $wrapperWidth: 22%; // width of options relative to avail space
       }
     }
   }
+
   .edge {
     position: absolute;
     left: $wrapperWidth;
@@ -178,7 +177,7 @@ $wrapperWidth: 22%; // width of options relative to avail space
       height: min-content;
       padding: 0;
       background-color: white;
-      border: 1px solid #bcbcbd;
+      border: $border;
       border-top: none;
       border-left: none;
       i {
@@ -187,13 +186,25 @@ $wrapperWidth: 22%; // width of options relative to avail space
         font-size: 3rem;
         position: relative;
         top: 2px;
-        margin: 0 -7px;
+        margin: 0 -6px;
       }
 
       &.flip {
         i {
           transform: scaleX(-1);
         }
+      }
+    }
+  }
+
+  // right mode - menu hovers on right side of screen
+  &.right {
+    .edge {
+      left: unset;
+      right: $wrapperWidth;
+      button {
+        border-left: $border;
+        border-right: none;
       }
     }
   }
