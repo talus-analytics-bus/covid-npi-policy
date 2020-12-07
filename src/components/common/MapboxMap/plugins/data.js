@@ -69,7 +69,8 @@ export const defaults = {
     // id of default circle metric
     circle: "74",
     // id of default fill metric
-    fill: "policy_status_counts",
+    fill: "lockdown_level",
+    // fill: "policy_status_counts",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points",
   },
@@ -1015,22 +1016,22 @@ export const metricMeta = {
             getCovidLocalMetricLink("partially open"),
             <div style={{ lineHeight: 1.1 }}>open</div>,
           ],
-          subLabels: [
-            <span style={{ visibility: "hidden" }}>x</span>,
-            getCovidLocalMetricLink("Phase I", "#661B3C", {
-              fontStyle: "italic",
-            }),
-            getCovidLocalMetricLink("Phase II", "#C1272D", {
-              fontStyle: "italic",
-            }),
-            getCovidLocalMetricLink("Phase III", "#D66B3E", {
-              fontStyle: "italic",
-            }),
-            getCovidLocalMetricLink("Phase IV", "#ECBD62", {
-              fontStyle: "italic",
-            }),
-            <span style={{ visibility: "hidden" }}>x</span>,
-          ],
+          // subLabels: [
+          //   <span style={{ visibility: "hidden" }}>x</span>,
+          //   getCovidLocalMetricLink("Phase I", "#661B3C", {
+          //     fontStyle: "italic",
+          //   }),
+          //   getCovidLocalMetricLink("Phase II", "#C1272D", {
+          //     fontStyle: "italic",
+          //   }),
+          //   getCovidLocalMetricLink("Phase III", "#D66B3E", {
+          //     fontStyle: "italic",
+          //   }),
+          //   getCovidLocalMetricLink("Phase IV", "#ECBD62", {
+          //     fontStyle: "italic",
+          //   }),
+          //   <span style={{ visibility: "hidden" }}>x</span>,
+          // ],
           colorscale: d3
             .scaleOrdinal()
             .domain([
