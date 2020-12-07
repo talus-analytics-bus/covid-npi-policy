@@ -62,7 +62,8 @@ const OptionsMenu = ({
 
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   const toggleOpen = () => {
-    const buttonWidth = edgeRef.current.clientWidth.toString() + "px";
+    // const buttonWidth = edgeRef.current.clientWidth.toString() + "px";
+    // const totalButtonMargin = 5;
     if (open) {
       setComponentStyle({ [sideKey]: "-1px" });
     } else {

@@ -278,9 +278,15 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                       defaultOpen: true,
                       toggleText: open =>
                         open ? (
-                          <span>hide options{arrow}</span>
+                          <span>
+                            <span>hide options</span>
+                            {arrow}
+                          </span>
                         ) : (
-                          <span>show options{arrow}</span>
+                          <span>
+                            <span>show options</span>
+                            {arrow}
+                          </span>
                         ),
                       content: [
                         <div className={styles.mapOptionsTitle}>
