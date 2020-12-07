@@ -910,6 +910,13 @@ export const metricMeta = {
         border: "2px solid gray",
         def: <span>No active restrictions are in place</span>,
       },
+      // TODO elegantly
+      get "No restrictions"() {
+        return this["Open"];
+      },
+      get "Partially open"() {
+        return this["New normal"];
+      },
     },
     wideDefinition: true,
     get metric_definition() {

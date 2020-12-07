@@ -33,11 +33,13 @@ const PastInterventionInfo = props => {
   const [interDate, setInterDate] = React.useState(props.position.date);
 
   const policyNames = {
-    0.285: "New normal",
+    0.4: "Open", // TODO update
+    0.285: "Partially open", // TODO confirm
+    // 0.285: "New normal",
     0.19: "Safer-at-home",
     0.1375: "Stay-at-home",
     0.12: "Lockdown",
-    0.4: "No restrictions",
+    // 0.4: "No restrictions",
   };
 
   let latestIntervention = props.data.interventions
@@ -60,7 +62,6 @@ const PastInterventionInfo = props => {
         Date.parse(props.position.date)
     )
     .slice(-1)[0] || { name: "Unclear lockdown level" };
-
   const policyOptions = Object.entries(policyNames).map(
     ([optionRVal, dataName]) => {
       const name = getDisplayNameFromPolicyName({
