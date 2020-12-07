@@ -802,7 +802,11 @@ const MapboxMap = ({
           {
             // map legend
           }
-          <div className={styles.legend}>
+          <div
+            className={classNames(styles.legend, {
+              [styles.show]: showLegend,
+            })}
+          >
             <button
               onClick={e => {
                 // toggle legend show / hide on button click
@@ -820,8 +824,8 @@ const MapboxMap = ({
                 play_arrow
               </i>
             </button>
-            {showLegend && (
-              <div className={styles.entries}>
+            {true && (
+              <div className={classNames(styles.entries, {})}>
                 {
                   // fill legend entry
                   // note: legend entries are listed in reverse order
