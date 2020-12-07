@@ -239,8 +239,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
               <div className={styles.text}>
                 <h2>Visualize</h2>
                 <p>
-                  When policies were implemented in each state relative to
-                  caseload and fatalities
+                  Policy status in each state relative to active cases and
+                  fatalities
                 </p>
               </div>
             </div>
@@ -248,7 +248,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               <img src={ampLogo} alt="COVID AMP Logo" />
               <div className={styles.text}>
                 <h2>Predict</h2>
-                <p>How future policies will impact caseload</p>
+                <p>How future policies will impact active cases</p>
               </div>
             </div>
             <div className={styles.show}>
@@ -309,7 +309,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setSelectedCurves([e.target.value, "R effective"]);
                 }}
               >
-                <option value="infected_a">Caseload</option>
+                <option value="infected_a">Active Cases</option>
                 {/* <option value="infected_b">Hospitalized</option> */}
                 {/* <option value="infected_c">ICU</option> */}
                 <option value="dead">Deaths</option>

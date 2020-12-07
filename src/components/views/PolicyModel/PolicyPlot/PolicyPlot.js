@@ -70,7 +70,7 @@ const phaseNames = {
 };
 
 const labelNames = {
-  infected_a: "Caseload",
+  infected_a: "Active Cases",
   infected_b: "Hospitalized",
   infected_c: "ICU",
   dead: "Deaths",
@@ -529,7 +529,7 @@ const PolicyModel = props => {
             position: "absolute",
             height: "2.5%",
             top: {
-              infected_a: "50%",
+              infected_a: "47.8%",
               infected_b: "48%",
               infected_c: "53.5%",
               dead: "51.5%",
