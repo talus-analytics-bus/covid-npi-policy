@@ -49,9 +49,8 @@
     position: absolute;
 
     bottom: 0px;
-    left: 0px;
+    right: 0px;
     top: unset;
-    right: unset;
 
     margin-top: 0;
     height: 15px;
@@ -61,9 +60,9 @@
     background-color: white;
 
     border: 1px solid #b3b3b3;
-    border-width: 1px 1px 0 0;
+    border-width: 1px 0 0 1px;
     color: darken(#b3b3b3, 10%);
-    border-radius: 0 4px 0 4px;
+    border-radius: 4px 0 0 0;
     &:hover {
       background-color: darken(white, 5%);
     }
