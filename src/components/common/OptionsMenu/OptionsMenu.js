@@ -33,11 +33,15 @@ const OptionsMenu = ({
   // true if menu should float on right side of screen, false if left side
   right = true,
 
+  // if defined, function that returns text to show on toggle button
+  toggleText = null,
+
   // additional properties, if any
   ...props
 }) => {
   // CONSTANTS // -----------------------------------------------------------//
   // default chevron direction for open/close toggle button
+  const useToggleText = typeof toggleText === "function";
   const chevron = right ? "chevron_right" : "chevron_left";
 
   // CSS styling attribute relevent for floating to one side of screen
@@ -128,8 +132,14 @@ const OptionsMenu = ({
         }}
         className={styles.edge}
       >
-        <button className={classNames(styles.toggle, { [styles.flip]: !open })}>
-          <i className={"material-icons"}>{chevron}</i>
+        <button
+          className={classNames(styles.toggle, {
+            [styles.flip]: !open,
+            [styles.text]: useToggleText,
+          })}
+        >
+          {useToggleText && <div>{toggleText(open)}</div>}
+          {!useToggleText && <i className={"material-icons"}>{chevron}</i>}
         </button>
       </div>
     </div>

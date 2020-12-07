@@ -195,6 +195,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     } else return true;
   })[0].date;
 
+  // define arrow icon for open/close toggle icons in map overlays
+  const arrow = <i className={"material-icons"}>play_arrow</i>;
+
   // collate mapbox component for the currently enabled maps
   // for each map defined in `mapStyles` (see ./plugins/sources.js):
   const maps = [];
@@ -273,6 +276,12 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                     {...{
                       allowDesktop: false,
                       defaultOpen: true,
+                      toggleText: open =>
+                        open ? (
+                          <span>hide options{arrow}</span>
+                        ) : (
+                          <span>show options{arrow}</span>
+                        ),
                       content: [
                         <div className={styles.mapOptionsTitle}>
                           Map options
