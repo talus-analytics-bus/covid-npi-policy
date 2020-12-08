@@ -28,6 +28,10 @@ const DateSlider = ({
   label,
   date,
   setDate,
+  playing,
+  setPlaying,
+  nowDragging,
+  setNowDragging,
   minDate,
   maxDate,
   float = false,
@@ -41,7 +45,6 @@ const DateSlider = ({
   const [show, setShow] = useState(true);
 
   // define playing state
-  const [playing, setPlaying] = useState(false);
   const [playTimeouts, setPlayTimeouts] = useState([]);
 
   // define min/max slider values (moment objects)
@@ -98,7 +101,7 @@ const DateSlider = ({
   const Handle = Slider.Handle;
   const handle = propsHandle => {
     const { value, dragging, index, ...restProps } = propsHandle;
-
+    setNowDragging(dragging);
     const unit = (height - 3) / 3;
 
     const grooveYs = [0, 1, 2].map((d, i) => unit / 2 + unit * i);
@@ -156,9 +159,10 @@ const DateSlider = ({
     // event that triggers the slider movement
     let i = 0;
     let cur;
+    const stepSize = 1;
     const newPlayTimeouts = [];
     while (prev < sliderMaxValue) {
-      cur = Math.min(prev + 7, sliderMaxValue);
+      cur = Math.min(prev + stepSize, sliderMaxValue);
       prev = cur;
       const timeoutPrev = prev;
 
@@ -170,7 +174,7 @@ const DateSlider = ({
           // update dates, etc.
           handleSliderChange(timeoutPrev);
           setCurSliderVal(timeoutPrev);
-        }, 2000 * i)
+        }, 50 * i)
       );
       i = i + 1;
     }
@@ -314,7 +318,7 @@ const DateSlider = ({
             </i>
           }
           {// Show play button if not playing, pause button otherwise
-          !playing ? (
+          nowDragging || !playing ? (
             <i onClick={handlePlay} className={classNames("material-icons")}>
               play_arrow
             </i>

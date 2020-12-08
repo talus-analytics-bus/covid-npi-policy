@@ -1,0 +1,62 @@
+.main {
+  font-family: "rawline";
+
+  .titleHeader {
+    border-bottom: 2px solid #000;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-family: "rawline";
+      font-size: 1.8rem;
+      color: #274051;
+      // width: 40rem;
+    }
+  }
+
+  .metadata {
+    display: flex;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+
+    .leftCol {
+      flex-basis: 30%;
+
+      h2 {
+        margin-top: 1rem;
+        text-transform: uppercase;
+        color: #5f6678;
+        font-weight: 700;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #274051;
+      }
+
+      h3 {
+        margin-top: 0.5rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 1rem;
+        color: #5f6678;
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      .cols {
+        display: flex;
+
+        .col {
+          flex-basis: 50%;
+        }
+      }
+    }
+
+    .rightCol {
+      width: 100%;
+      margin-top: 1.2rem;
+    }
+  }
+}

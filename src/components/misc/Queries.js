@@ -141,6 +141,68 @@ export const Policy = async function({
   } else return false;
 };
 
+/**
+ * Get policy list from API.
+ */
+export const PolicyList = async function({
+  method,
+  page = 1,
+  pagesize = 1000000,
+  fields = [],
+  filters = null,
+  by_category = null,
+  ordering = [],
+}) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+  if (by_category !== null) params.append("by_category", by_category);
+  params.append("page", page);
+  params.append("pagesize", pagesize);
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/get/policy_number`, {
+      params,
+    });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+
+    const filtersNoUndefined = {};
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value[0] !== undefined) {
+        filtersNoUndefined[key] = value;
+      }
+    });
+
+    console.log({ filters, ordering });
+    console.log({ filtersNoUndefined, ordering });
+    req = await axios.post(
+      `${API_URL}/post/policy_number`,
+      { filters: filtersNoUndefined, ordering },
+      {
+        params,
+      }
+    );
+  } else {
+    console.log("Error: Method not implemented for `Policy`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) {
+    if (isEmpty(filters)) {
+      allPolicies = res.data;
+    }
+    return res.data;
+  } else return false;
+};
+
 // let allChallenges = null;
 
 /**
@@ -261,11 +323,26 @@ export const PolicyStatus = async function({
   geo_res = "state",
   fields = [],
   filters = null,
+  start_date = null,
+  end_date = null,
 }) {
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
+  });
+
+  // if checking lockdown levels then do not include start and end date params
+  const includeDates =
+    filters["lockdown_level"] === undefined ||
+    filters["lockdown_level"][0] !== "lockdown_level";
+
+  const paramsToCheck = [[end_date, "start"]];
+  if (includeDates) {
+    paramsToCheck.push([start_date, "end"]);
+  }
+  paramsToCheck.forEach(([v, k]) => {
+    if (v !== null) params.append(k, v);
   });
 
   // prepare request

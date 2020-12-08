@@ -2,3 +2,5 @@ node_modules/
 bin/
 sh/
 build/
+
+*.DS_STORE

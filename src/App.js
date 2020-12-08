@@ -1,6 +1,6 @@
 // standard modules
 import React, { useState, useEffect } from "react";
-import { Route, Redirect, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
@@ -18,7 +18,11 @@ import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
+// import PolicyPage from "./components/views/PolicyPage/PolicyPage/PolicyPage";
+// import ListPoliciesPage from "./components/views/PolicyPage/ListPoliciesPage/ListPoliciesPage";
 import Landing from "./components/views/landing/Landing";
+
+import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
 
 // queries
 import { Version, Count, execute } from "./components/misc/Queries";
@@ -35,6 +39,8 @@ const App = () => {
   const [infoTooltipContent, setInfoTooltipContent] = useState(null);
   const [versions, setVersions] = useState(null);
   const [counts, setCounts] = useState(null);
+
+  const [policyPageCaseload, setPolicyPageCaseload] = useState({});
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -240,6 +246,30 @@ const App = () => {
                       return <PolicyModel {...{ setPage, setLoading }} />;
                     }}
                   />
+                }
+                {/* { */}
+                {/*   // policy page */}
+                {/*   <Route */}
+                {/*     path="/policy" */}
+                {/*     render={() => { */}
+                {/*       return ( */}
+                {/*         <PolicyPage */}
+                {/*           {...{ */}
+                {/*             setPage, */}
+                {/*             setLoading, */}
+                {/*             policyPageCaseload, */}
+                {/*             setPolicyPageCaseload, */}
+                {/*           }} */}
+                {/*         /> */}
+                {/*       ); */}
+                {/*     }} */}
+                {/*   /> */}
+                {/* } */}
+                {
+                  // policy page
+                  <Route path="/policies/:iso3/:state">
+                    <PolicyRouter {...{ setPage, setLoading }} />
+                  </Route>
                 }
               </div>
             </React.Fragment>
