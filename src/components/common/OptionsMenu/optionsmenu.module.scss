@@ -70,6 +70,9 @@ $wrapperWidth: 350px; // width of options relative to avail space
     [class="ps__rail-y"] {
       opacity: 0.6;
     }
+    [class="ps__rail-x"] {
+      display: none;
+    }
 
     // border for edges of content wrapper that are not touching viewport edge
     $border: 1px solid #b3b3b3;
@@ -80,10 +83,8 @@ $wrapperWidth: 350px; // width of options relative to avail space
       transition: left 0.5s;
       padding: 10px;
       width: $wrapperWidth; // TODO minmax
-
       border-bottom: $border;
       border-right: $border;
-
       z-index: 1;
 
       .content {
@@ -91,14 +92,31 @@ $wrapperWidth: 350px; // width of options relative to avail space
           max-height: 500px; // TODO elegantly
           display: flex;
           flex-flow: column;
-          overflow: scroll;
 
           @include spaceItemsVert(20px, false);
-          // @include spaceItemsHoriz(30px);
+
+          // all label styling
+          [role="label"],
+          label {
+            font-weight: 600;
+          }
+
+          // first-level label styling
+          // TODO legibly
+          >,
+          > * > {
+            [role="label"],
+            label {
+              font-size: 1.1rem;
+              font-family: "rawline";
+            }
+          }
 
           select {
             margin-top: 5px;
             cursor: pointer;
+            @include selectStyling();
+            font-weight: 600;
           }
 
           > div:last-child {
@@ -111,8 +129,16 @@ $wrapperWidth: 350px; // width of options relative to avail space
               margin-bottom: 0;
             }
           }
-          input:checked + span {
-            color: #5473b6;
+          input {
+            + span {
+              color: $dark-navy-blue;
+            }
+            &:checked + span {
+              font-weight: 600;
+            }
+            &:not(:checked) + span {
+              font-weight: normal;
+            }
           }
         }
       }
