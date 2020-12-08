@@ -117,7 +117,7 @@ const circleStyles = {
           return getLog10Scale({
             minSize: 5,
             zeroSize: 5,
-            maxValue: 1e7,
+            maxValue: 1e9,
             featurePropertyKey: key,
           });
       },
