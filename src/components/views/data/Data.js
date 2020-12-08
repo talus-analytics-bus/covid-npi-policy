@@ -416,10 +416,10 @@ const Data = ({
                     )}
                     {data && data.length > 0 && (
                       <>
-                        Download complete metadata
+                        Download complete data for
                         <br />
-                        for {!hasFilters ? "all" : "filtered"}{" "}
-                        {nouns.p.toLowerCase()} ({comma(numInstances)})
+                        {!hasFilters ? "all" : "filtered"}{" "}
+                        {nouns.p.toLowerCase()} ({comma(numInstances)}) as Excel
                       </>
                     )}
                   </span>
