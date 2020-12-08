@@ -93,7 +93,7 @@ $wrapperWidth: 350px; // width of options relative to avail space
           display: flex;
           flex-flow: column;
 
-          @include spaceItemsVert(20px, false);
+          @include spaceItemsVert(20px, true);
 
           // all label styling
           [role="label"],
