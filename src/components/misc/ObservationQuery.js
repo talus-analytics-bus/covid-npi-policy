@@ -15,7 +15,11 @@ const ObservationQuery = async function({
   start_date,
   end_date,
   country,
-  spatial_resolution = "country"
+  spatial_resolution = "country",
+  place_id,
+  place_name,
+  place_iso3,
+  fields,
 }) {
   // if (metric_id === -9999) {
   //   // DEBUG DATA
@@ -51,16 +55,24 @@ const ObservationQuery = async function({
 
   var params = {
     metric_id: metric_id,
-    temporal_resolution: temporal_resolution,
-    spatial_resolution: spatial_resolution
+    temporal_resolution: temporal_resolution,    
+    spatial_resolution: spatial_resolution,
   };
 
   // Send start and end dates if they are provided, otherwise do not send.
   if (end_date !== undefined) params.start = end_date;
   if (start_date !== undefined) params.end = start_date;
+  if (fields !== undefined) params.fields = fields.join(",");
 
   if (country !== "all") {
     params["place_id"] = country;
+  }
+  if (place_id !== undefined) {
+    params["place_id"] = place_id;
+  } else if (place_name !== undefined) {
+    params["place_name"] = place_name;
+  } else if (place_iso3 !== undefined) {
+    params["place_iso3"] = place_iso3;
   }
 
   const res = await axios(`${API_URL}/observations`, {
