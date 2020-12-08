@@ -37,7 +37,8 @@ const ObservationQuery = async function({
 
   if (country !== "all") {
     params["place_id"] = country;
-  } else if (place_id !== undefined) {
+  }
+  if (place_id !== undefined) {
     params["place_id"] = place_id;
   } else if (place_name !== undefined) {
     params["place_name"] = place_name;
