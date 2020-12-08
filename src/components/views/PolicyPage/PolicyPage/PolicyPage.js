@@ -1,7 +1,10 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import { Policy } from "../../../misc/Queries";
+import {
+  loadFullPolicy,
+  loadPolicyDescriptions,
+} from "../PolicyRouter/PolicyLoaders";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -23,6 +26,8 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  const { policyObject, setPolicyObject } = props;
+
   const policyObjectPath = Object.values(location.state);
 
   console.log([iso3, state, policyID]);
@@ -33,15 +38,45 @@ const PolicyPage = props => {
   // console.log(policyObjectPath);
 
   const relatedPolicies =
-    props.policyObject &&
-    props.policyObject[location.state[CATEGORY_FIELD_NAME]] &&
-    props.policyObject[location.state[CATEGORY_FIELD_NAME]][
+    policyObject &&
+    policyObject[location.state[CATEGORY_FIELD_NAME]] &&
+    policyObject[location.state[CATEGORY_FIELD_NAME]][
       location.state[SUBCATEGORY_FIELD_NAME]
     ];
 
   // console.log(relatedPolicies);
 
   const policy = relatedPolicies && relatedPolicies[`ID${policyID}`];
+
+  React.useEffect(() => {
+    loadFullPolicy({
+      stateSetter: setPolicyObject,
+      filters: {
+        id: [Number(policyID)],
+      },
+    });
+  }, [policyID, setPolicyObject]);
+
+  React.useEffect(() => {
+    console.log("related policies check");
+    console.log(policy);
+    console.log(relatedPolicies);
+    // if (policy && Object.keys(relatedPolicies).length <= 1) {
+    //   console.log("get related policies");
+    //   const filters = {
+    //     iso3: [iso3],
+    //     [CATEGORY_FIELD_NAME]: [policy[CATEGORY_FIELD_NAME]],
+    //     [SUBCATEGORY_FIELD_NAME]: [policy[SUBCATEGORY_FIELD_NAME]],
+    //   };
+    //   if (state !== "national") {
+    //     filters["area1"] = [state];
+    //   }
+    //   loadPolicyDescriptions({
+    //     stateSetter: setPolicyObject,
+    //     filters: filters,
+    //   });
+    // }
+  }, [relatedPolicies, iso3, state, policy, setPolicyObject]);
 
   // console.log(policy);
 
@@ -82,7 +117,8 @@ const PolicyPage = props => {
           <p>{policy && policy.desc}</p>
 
           <h2>Published in</h2>
-          <p>[Document name from API]{policy && policy.policy_law_name}</p>
+          <p>{policy && policy.policy_name}</p>
+          <button>EXPLORE SOURCE</button>
         </div>
         <div className={styles.col}>
           <h2>Effective Area</h2>

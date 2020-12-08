@@ -39,6 +39,9 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
         valueObj: {},
       });
     });
+
+    // spread operator to create a shallow
+    // copy which will trigger re-render
     return { ...prev };
   });
 
@@ -117,14 +120,53 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
           desc: policy.desc,
           date_start_effective: policy.date_start_effective,
           date_end_actual: policy.date_end_actual,
+          policy_name: policy.policy_name,
           [CATEGORY_FIELD_NAME]: policy[CATEGORY_FIELD_NAME],
           [SUBCATEGORY_FIELD_NAME]: policy[SUBCATEGORY_FIELD_NAME],
         },
       });
     });
 
-    // spread operator to create a shallow
-    // copy which will trigger re-render
+    return { ...prev };
+  });
+};
+
+export const loadFullPolicy = async ({ filters, stateSetter }) => {
+  const policyResponse = await Policy({
+    method: "post",
+    filters: filters,
+    ordering: [["id", "desc"]],
+    fields: [
+      "id",
+      CATEGORY_FIELD_NAME,
+      SUBCATEGORY_FIELD_NAME,
+      "desc",
+      "policy_name",
+      "date_start_effective",
+      "date_end_actual",
+    ],
+  });
+
+  stateSetter(prev => {
+    policyResponse.data.forEach(policy => {
+      extendObjectByPath({
+        obj: prev,
+        path: [
+          policy[CATEGORY_FIELD_NAME],
+          policy[SUBCATEGORY_FIELD_NAME],
+          `ID${policy.id}`,
+        ],
+        valueObj: {
+          desc: policy.desc,
+          date_start_effective: policy.date_start_effective,
+          date_end_actual: policy.date_end_actual,
+          policy_name: policy.policy_name,
+          [CATEGORY_FIELD_NAME]: policy[CATEGORY_FIELD_NAME],
+          [SUBCATEGORY_FIELD_NAME]: policy[SUBCATEGORY_FIELD_NAME],
+        },
+      });
+    });
+
     return { ...prev };
   });
 };
