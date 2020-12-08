@@ -485,7 +485,7 @@ export const metricMeta = {
     ),
 
     // metric name displayed on front-end
-    metric_displayname: "New COVID-19 cases in past 7 days",
+    metric_displayname: "New cases in past 7 days",
 
     // Optional: Short name for metric where needed
     shortName: (
@@ -572,7 +572,7 @@ export const metricMeta = {
   get "72"() {
     return {
       ...this["74"],
-      metric_displayname: "Cumulative caseload",
+      metric_displayname: "Cumulative cases",
       metric_definition: (
         <span>
           The total cumulative number of COVID-19 cases (confirmed and probable)
