@@ -516,11 +516,11 @@ export const Caseload = async ({
     if (isState) {
       if (windowSizeDays === 7) {
         return 74;
-      } else return 0; // TODO
+      } else if (windowSizeDays === 1) return 73;
     } else {
       if (windowSizeDays === 7) {
         return 77;
-      } else return 0; // TODO
+      } else if (windowSizeDays === 1) return 76;
     }
   };
   const isState = stateName !== undefined || stateId !== undefined;
