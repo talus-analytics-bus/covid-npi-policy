@@ -22,32 +22,36 @@ import { comma, isLightColor } from "../../../misc/Util";
 // queries
 import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
-import { Policy, PolicyStatus, execute } from "../../../misc/Queries";
+import {
+  Policy,
+  PolicyStatus,
+  PolicyStatusCounts,
+  execute,
+} from "../../../misc/Queries";
 
 // assets and styles
-import dots from "./assets/images/dots.png";
+// import dots from "./assets/images/dots.png";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
 import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
 import phase4 from "./assets/icons/phase-4.png";
-import mixed from "./assets/icons/phase-mixed.png";
+// import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 import dataTableIcon from "../../../../assets/icons/dataTableIcon.svg";
 import modelIcon from "../../../../assets/icons/modelIcon.svg";
 
 // utilities and local components
 import { isEmpty, percentize } from "../../../misc/Util";
-import { Table, ShowMore } from "../../../common";
-
+import { Table, ShowMore, PrimaryButton } from "../../../common";
+import { greenStepsScale } from "./layers";
 // define default parameters for MapboxMap
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  // mapId: "global",
-  mapId: "global",
+  mapId: "us",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -58,7 +62,6 @@ export const defaults = {
   minMaxDate: {
     minDate: "2020-01-21",
     maxDate: yesterday.format("YYYY-MM-DD"),
-    // maxDate: "2021-03-01"
   },
 
   // defaults for map with ID `us`
@@ -66,12 +69,17 @@ export const defaults = {
     // id of default circle metric
     circle: "74",
     // id of default fill metric
-    fill: "lockdown_level",
+    fill: "policy_status_counts",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points",
   },
   // defaults for additional maps...
-  global: { circle: "77", fill: "lockdown_level", priorLayer: "country-label" },
+  global: {
+    circle: "77",
+    // fill: "lockdown_level",
+    fill: "policy_status_counts",
+    priorLayer: "country-label",
+  },
 };
 
 // constants
@@ -81,6 +89,98 @@ const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 export const mapMetrics = {
   // map ID of map in which metrics are used
   us: [
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatusCounts,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        return { method: "post", filters, geo_res: "state" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status_counts",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status_counts" },
+
+      // filter to control what features are returned for layers that are
+      // displaying this metric
+      filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      },
+    },
+    // {
+    //   // functions that, when passed `params`, returns the data for the map
+    //   // for this metric
+    //   queryFunc: PolicyStatus,
+    //
+    //   // params that must be passed to `queryFunc` as object
+    //   params: ({ filters }) => {
+    //     return { method: "post", filters, geo_res: "state" };
+    //   },
+    //
+    //   // array of layer types for which this metric is used
+    //   for: ["fill"],
+    //
+    //   // unique ID of this metric
+    //   id: "policy_status",
+    //
+    //   // data field with which to link metric to features;
+    //   // features potentially linking to this metric must have an ID that
+    //   // matches the value for this key for the datum
+    //   featureLinkField: "place_name",
+    //
+    //   // OPTIONAL:
+    //   // style IDs to use for the metric for each layer type -- if none are
+    //   // defined, then the metric's ID will be used to look up the appropriate
+    //   // style.
+    //   styleId: { fill: "policy_status" },
+    //
+    //   // filter to control what features are returned for layers that are
+    //   // displaying this metric
+    //   filter: ["==", ["get", "type"], "state"],
+    //
+    //   // whether trend data should be retrieved for this metric
+    //   // NOTE: only applies to generalized metrics
+    //   trend: false,
+    //
+    //   // info about layers that use this metric
+    //   styleOptions: {
+    //     // whether layers that display this metric should be outlined
+    //     // NOTE: if true, an outline style must be defined in `./layers.js`
+    //     outline: true,
+    //
+    //     // whether layers that display this metric should have a pattern layers
+    //     // NOTE: if true, a pattern style must be defined in `./layers.js`
+    //     // pattern: true
+    //   },
+    // },
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
@@ -134,53 +234,6 @@ export const mapMetrics = {
       },
     },
     {
-      // functions that, when passed `params`, returns the data for the map
-      // for this metric
-      queryFunc: PolicyStatus,
-
-      // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "state" };
-      },
-
-      // array of layer types for which this metric is used
-      for: ["fill"],
-
-      // unique ID of this metric
-      id: "policy_status",
-
-      // data field with which to link metric to features;
-      // features potentially linking to this metric must have an ID that
-      // matches the value for this key for the datum
-      featureLinkField: "place_name",
-
-      // OPTIONAL:
-      // style IDs to use for the metric for each layer type -- if none are
-      // defined, then the metric's ID will be used to look up the appropriate
-      // style.
-      styleId: { fill: "policy_status" },
-
-      // filter to control what features are returned for layers that are
-      // displaying this metric
-      filter: ["==", ["get", "type"], "state"],
-
-      // whether trend data should be retrieved for this metric
-      // NOTE: only applies to generalized metrics
-      trend: false,
-
-      // info about layers that use this metric
-      styleOptions: {
-        // whether layers that display this metric should be outlined
-        // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true,
-
-        // whether layers that display this metric should have a pattern layers
-        // NOTE: if true, a pattern style must be defined in `./layers.js`
-        // pattern: true
-      },
-    },
-
-    {
       queryFunc: ObservationQuery,
       for: ["circle"],
       params: {
@@ -214,6 +267,98 @@ export const mapMetrics = {
     },
   ],
   global: [
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatusCounts,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters }) => {
+        return { method: "post", filters, geo_res: "country" };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status_counts",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status_counts" },
+
+      // // filter to control what features are returned for layers that are
+      // // displaying this metric
+      // filter: ["==", ["get", "type"], "state"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      },
+    },
+    // {
+    //   // functions that, when passed `params`, returns the data for the map
+    //   // for this metric
+    //   queryFunc: PolicyStatus,
+    //
+    //   // params that must be passed to `queryFunc` as object
+    //   params: ({ filters }) => {
+    //     return { method: "post", filters, geo_res: "country" };
+    //   },
+    //
+    //   // array of layer types for which this metric is used
+    //   for: ["fill"],
+    //
+    //   // unique ID of this metric
+    //   id: "policy_status",
+    //
+    //   // data field with which to link metric to features;
+    //   // features potentially linking to this metric must have an ID that
+    //   // matches the value for this key for the datum
+    //   featureLinkField: "place_name",
+    //
+    //   // OPTIONAL:
+    //   // style IDs to use for the metric for each layer type -- if none are
+    //   // defined, then the metric's ID will be used to look up the appropriate
+    //   // style.
+    //   styleId: { fill: "policy_status" },
+    //
+    //   // // filter to control what features are returned for layers that are
+    //   // // displaying this metric
+    //   // filter: ["==", ["get", "type"], "state"],
+    //
+    //   // whether trend data should be retrieved for this metric
+    //   // NOTE: only applies to generalized metrics
+    //   trend: false,
+    //
+    //   // info about layers that use this metric
+    //   styleOptions: {
+    //     // whether layers that display this metric should be outlined
+    //     // NOTE: if true, an outline style must be defined in `./layers.js`
+    //     outline: true,
+    //
+    //     // whether layers that display this metric should have a pattern layers
+    //     // NOTE: if true, a pattern style must be defined in `./layers.js`
+    //     // pattern: true
+    //   },
+    // },
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
@@ -269,58 +414,6 @@ export const mapMetrics = {
         // whether layers that display this metric should have a pattern layers
         // NOTE: if true, a pattern style must be defined in `./layers.js`
         pattern: true,
-      },
-    },
-    {
-      // functions that, when passed `params`, returns the data for the map
-      // for this metric
-      queryFunc: PolicyStatus,
-
-      // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return {
-          method: "post",
-          filters,
-          geo_res: "country",
-          start: "2020-10-10",
-          end: "2020-11-10",
-        };
-      },
-
-      // array of layer types for which this metric is used
-      for: ["fill"],
-
-      // unique ID of this metric
-      id: "policy_status",
-
-      // data field with which to link metric to features;
-      // features potentially linking to this metric must have an ID that
-      // matches the value for this key for the datum
-      featureLinkField: "place_name",
-
-      // OPTIONAL:
-      // style IDs to use for the metric for each layer type -- if none are
-      // defined, then the metric's ID will be used to look up the appropriate
-      // style.
-      styleId: { fill: "policy_status" },
-
-      // // filter to control what features are returned for layers that are
-      // // displaying this metric
-      // filter: ["==", ["get", "type"], "state"],
-
-      // whether trend data should be retrieved for this metric
-      // NOTE: only applies to generalized metrics
-      trend: false,
-
-      // info about layers that use this metric
-      styleOptions: {
-        // whether layers that display this metric should be outlined
-        // NOTE: if true, an outline style must be defined in `./layers.js`
-        outline: true,
-
-        // whether layers that display this metric should have a pattern layers
-        // NOTE: if true, a pattern style must be defined in `./layers.js`
-        // pattern: true
       },
     },
 
@@ -434,30 +527,33 @@ export const metricMeta = {
     // legend styling information
     legendInfo: {
       // when metric is used as a fill:
-      fill: {
-        // legend entry is for a basemap, or can be bubble
-        for: "basemap",
+      fill: () => {
+        return {
+          // legend entry is for a basemap, or can be bubble
+          for: "basemap",
 
-        // the type of legend entry, e.g., quantized, ordinal, continous
-        type: "quantized",
+          // the type of legend entry, e.g., quantized, ordinal, continous
+          type: "quantized",
 
-        // quantized legend `type` only: if true, labels go inside color rects,
-        // otherwise below them
-        labelsInside: true,
+          // quantized legend `type` only: if true, labels go inside color rects,
+          // otherwise below them
+          labelsInside: true,
 
-        // d3-esque color scale used to obtain legend labels and colors.
-        // must implement these instance methods: domain, range
-        colorscale: d3
-          .scaleOrdinal()
-          .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-          .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+          // d3-esque color scale used to obtain legend labels and colors.
+          // must implement these instance methods: domain, range
+          colorscale: d3
+            .scaleOrdinal()
+            .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
+            .range(["#eaeaea", "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+          // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
 
-        // for non-quantized legend `type`: the labels that should be used for
-        // each `for` category
-        labels: {
-          bubble: { min: "Low", max: "High" },
-          basemap: { min: "Minimal", max: "High" },
-        },
+          // for non-quantized legend `type`: the labels that should be used for
+          // each `for` category
+          labels: {
+            bubble: { min: "Low", max: "High" },
+            basemap: { min: "Minimal", max: "High" },
+          },
+        };
       },
       // additional layer legend information...
       circle: {
@@ -479,7 +575,7 @@ export const metricMeta = {
   get "72"() {
     return {
       ...this["74"],
-      metric_displayname: "Cumulative caseload (up to date selected)",
+      metric_displayname: "Cumulative caseload",
       metric_definition: (
         <span>
           The total cumulative number of COVID-19 cases (confirmed and probable)
@@ -615,64 +711,150 @@ export const metricMeta = {
       ),
     };
   },
-  policy_status: {
+  policy_status_counts: {
     metric_definition: (
       <span>
-        {
-          <table className={infostyles.distancingLevelTable}>
-            <tbody>
-              <tr>
-                <td>
-                  <div
-                    style={{
-                      backgroundColor: "#66CAC4",
-                      marginRight: "20px",
-                    }}
-                    className={infostyles.rect}
-                  >
-                    policy in effect
-                  </div>
-                </td>
-                <td style={{ display: "none" }} />
-                <td>
-                  At least one policy in effect with the given category /
-                  subcategories on the specified date.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        }
+        The number of policies in effect with the given category / subcategories
+        in the location on the specified date.
       </span>
     ),
-    metric_displayname: "Policy status",
+    metric_displayname: "Relative policy count",
     value: v => v,
     unit: v => "",
     legendInfo: {
-      fill: {
-        for: "basemap", // TODO dynamically
-        type: "quantized",
-        labelsInside: true,
-        domain: [
-          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            data not
-            <br />
-            available
-          </div>,
-          "no policy",
-          "policy in effect",
-        ],
-        // range: ["#eaeaea", "white", "#66CAC4"],
-        colorscale: d3
-          .scaleOrdinal()
-          .domain(["no policy", "policy in effect"])
-          .range(["#eaeaea", "white", "#66CAC4"]),
+      fill: mapId => {
+        const noun = mapId === "us" ? "state" : "national";
+        return {
+          for: "basemap", // TODO dynamically
+          type: "quantized",
+          labelsInside: false,
+          range: [
+            "#eaeaea",
+            "none",
+            greenStepsScale(20),
+            greenStepsScale(40),
+            greenStepsScale(60),
+            greenStepsScale(80),
+            greenStepsScale(100),
+          ],
+          borders: [null, "2px solid gray", null, null, null, null, null],
+          width: [null, null, 40, 40, 40, 40, 40],
+          entryStyles: [
+            undefined,
+            { marginLeft: 10 },
+            { marginLeft: 20, marginRight: 0 },
+            { marginRight: 0 },
+            { marginRight: 0 },
+            { marginRight: 0 },
+            { marginRight: 0 },
+          ],
+          labelStyles: [
+            undefined,
+            undefined,
+            { position: "absolute", top: 20 },
+            undefined,
+            undefined,
+            undefined,
+            { position: "absolute", top: 20 },
+          ],
+          domain: [
+            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+              data not
+              <br />
+              available
+            </div>,
+            <div
+              style={{
+                color: "#333",
+                fontSize: ".8rem",
+                lineHeight: 1.1,
+              }}
+            >
+              no {noun}-level
+              <br />
+              policy in effect
+            </div>,
+            "fewest",
+            "",
+            "",
+            "",
+            "most",
+          ],
+          subLabels: [],
+        };
       },
     },
   },
+  // policy_status: {
+  //   metric_definition: (
+  //     <span>
+  //       {
+  //         <table className={infostyles.distancingLevelTable}>
+  //           <tbody>
+  //             <tr>
+  //               <td>
+  //                 <div
+  //                   style={{
+  //                     backgroundColor: "#66CAC4",
+  //                     marginRight: "20px",
+  //                   }}
+  //                   className={infostyles.rect}
+  //                 >
+  //                   policy in effect
+  //                 </div>
+  //               </td>
+  //               <td style={{ display: "none" }} />
+  //               <td>
+  //                 At least one policy in effect with the given category /
+  //                 subcategories on the specified date.
+  //               </td>
+  //             </tr>
+  //           </tbody>
+  //         </table>
+  //       }
+  //     </span>
+  //   ),
+  //   metric_displayname: "Policy status",
+  //   value: v => v,
+  //   unit: v => "",
+  //   legendInfo: {
+  //     fill: {
+  //       for: "basemap", // TODO dynamically
+  //       type: "quantized",
+  //       labelsInside: true,
+  //       domain: [
+  //         <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+  //           data not
+  //           <br />
+  //           available
+  //         </div>,
+  //         "no policy",
+  //         "policy in effect",
+  //       ],
+  //       // range: ["#eaeaea", "white", "#66CAC4"],
+  //       colorscale: d3
+  //         .scaleOrdinal()
+  //         .domain(["no policy", "policy in effect"])
+  //         .range(["#eaeaea", "white", "#66CAC4"]),
+  //     },
+  //   },
+  // },
   lockdown_level: {
     // last updated: 2020-06-24
     // MV via JK and GU
     valueStyling: {
+      // "No restrictions": {
+      //   label: "No active restrictions",
+      //   phase: "",
+      //   color: "#fff",
+      //   bordered: true,
+      //   // icon: phase1,
+      //   def: (
+      //     <span>
+      //       No active social distancing policies with restrictions are in place
+      //     </span>
+      //   ),
+      // },
       Lockdown: {
         label: "Lockdown",
         phase: "Phase I",
@@ -709,37 +891,40 @@ export const metricMeta = {
           </span>
         ),
       },
+      // TODO update this value
       "New normal": {
-        label: "New normal",
+        label: "Partially open",
         phase: "Phase IV",
         color: "#a8c4dc",
         icon: phase4,
         def: (
           <span>
             A majority of public restrictions on mass gatherings and
-            non-essential businesses are lifted or expired, with some
-            encouraging of safeguards such as face coverings.
+            non-essential businesses are lifted or expired, with some policies
+            in place on private sector reopening, use of face coverings or
+            adaptation and mitigation measures like enhanced cleaning protocols.
           </span>
         ),
       },
-      "Mixed distancing levels": {
-        label: "Mixed distancing levels",
-        labelShort: "Mixed",
-        color: "#a8c4dc",
-        icon: mixed,
-        def: (
-          <span>
-            Any combination of the above levels simultaneously in effect.
-          </span>
-        ),
+      Open: {
+        label: "Open",
+        color: "#fff",
+        bordered: true,
+        border: "2px solid gray",
+        def: <span>No active restrictions are in place</span>,
+      },
+      // TODO elegantly
+      get "No restrictions"() {
+        return this["Open"];
+      },
+      get "Partially open"() {
+        return this["New normal"];
       },
     },
     wideDefinition: true,
     get metric_definition() {
-      const colorRange = this.legendInfo.fill.range.slice(
-        1,
-        this.legendInfo.fill.range.length
-      );
+      const fillInfo = this.legendInfo.fill();
+      const colorRange = fillInfo.range.slice(1, fillInfo.range.length);
       return (
         <div>
           <p className={infostyles.definitionHeader}>
@@ -760,7 +945,7 @@ export const metricMeta = {
                     <td>
                       <div
                         style={
-                          i !== colorRange.length - 1
+                          !d.bordered
                             ? {
                                 backgroundColor: colorRange[i],
                                 color: isLightColor(colorRange[i])
@@ -771,8 +956,8 @@ export const metricMeta = {
                                 backgroundImage: `url("${colorRange[i]}")`,
                                 backgroundPosition: "center",
                                 padding: "3px 10px",
-                                border: "2px solid #BBDAF5",
-                                color: "black",
+                                border: d.border,
+                                color: "#333",
                               }
                         }
                         className={infostyles.rect}
@@ -807,62 +992,67 @@ export const metricMeta = {
     unit: v => "",
     // trendTimeframe: "over prior 24 hours",
     legendInfo: {
-      fill: {
-        for: "basemap", // TODO dynamically
-        type: "quantized",
-        labelsInside: true,
-        range: ["#eaeaea", "#2165a1", "#549FE2", "#86BFEB", "#BBDAF5", dots],
-        domain: [
-          <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-            data not
-            <br />
-            available
-          </div>,
-          "no policy",
-          getCovidLocalMetricLink("lockdown"),
-          getCovidLocalMetricLink("stay-at-home"),
-          getCovidLocalMetricLink("safer-at-home"),
-          getCovidLocalMetricLink("new normal"),
-          "mixed",
-        ],
-        subLabels: [
-          <span style={{ visibility: "hidden" }}>x</span>,
-          <span style={{ visibility: "hidden" }}>x</span>,
-          getCovidLocalMetricLink("Phase I", "#661B3C", {
-            fontStyle: "italic",
-          }),
-          getCovidLocalMetricLink("Phase II", "#C1272D", {
-            fontStyle: "italic",
-          }),
-          getCovidLocalMetricLink("Phase III", "#D66B3E", {
-            fontStyle: "italic",
-          }),
-          getCovidLocalMetricLink("Phase IV", "#ECBD62", {
-            fontStyle: "italic",
-          }),
-          <span style={{ visibility: "hidden" }}>x</span>,
-        ],
-        colorscale: d3
-          .scaleOrdinal()
-          .domain([
-            "no policy",
-            "no policy data available",
-            getCovidLocalMetricLink("lockdown (phase I)"),
-            getCovidLocalMetricLink("stay-at-home (phase II)"),
-            getCovidLocalMetricLink("safer-at-home (phase III)"),
-            getCovidLocalMetricLink("new normal (phase IV)"),
-            "mixed",
-          ])
-          .range([
+      fill: () => {
+        return {
+          for: "basemap", // TODO dynamically
+          type: "quantized",
+          labelsInside: true,
+          range: [
             "#eaeaea",
-            "white",
             "#2165a1",
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
-            dots,
-          ]), // TODO dynamically
-        // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]) // TODO dynamically
+            "#ffffff",
+          ],
+          borders: [null, null, null, null, null, "2px solid gray"],
+          domain: [
+            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+              data not
+              <br />
+              available
+            </div>,
+            getCovidLocalMetricLink("lockdown"),
+            getCovidLocalMetricLink("stay-at-home"),
+            getCovidLocalMetricLink("safer-at-home"),
+            getCovidLocalMetricLink("partially open"),
+            <div style={{ lineHeight: 1.1 }}>open</div>,
+          ],
+          subLabels: [
+            <span style={{ visibility: "hidden" }}>x</span>,
+            getCovidLocalMetricLink("Phase I", "#661B3C", {
+              fontStyle: "italic",
+            }),
+            getCovidLocalMetricLink("Phase II", "#C1272D", {
+              fontStyle: "italic",
+            }),
+            getCovidLocalMetricLink("Phase III", "#D66B3E", {
+              fontStyle: "italic",
+            }),
+            getCovidLocalMetricLink("Phase IV", "#ECBD62", {
+              fontStyle: "italic",
+            }),
+            <span style={{ visibility: "hidden" }}>x</span>,
+          ],
+          colorscale: d3
+            .scaleOrdinal()
+            .domain([
+              "no policy",
+              getCovidLocalMetricLink("lockdown (phase I)"),
+              getCovidLocalMetricLink("stay-at-home (phase II)"),
+              getCovidLocalMetricLink("safer-at-home (phase III)"),
+              getCovidLocalMetricLink("partially open (phase IV)"),
+              "no policy data available",
+            ])
+            .range([
+              "#eaeaea",
+              "#2165a1",
+              "#549FE2",
+              "#86BFEB",
+              "#BBDAF5",
+              "white",
+            ]), // TODO dynamically
+        };
       },
       // circle: {
       //   for: "bubble",
@@ -969,6 +1159,7 @@ export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
  */
 export const tooltipGetter = async ({
   mapId,
+  setMapId,
   d,
   include,
   date,
@@ -1020,10 +1211,16 @@ export const tooltipGetter = async ({
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
 
+  // if lockdown level is null, set it to "no restrictions"
+  const replaceNullData = props.geoHaveData || mapId === "us";
+  if (state.lockdown_level === null && replaceNullData)
+    state.lockdown_level = "Open";
+
   const apiDate = date.format("YYYY-MM-DD");
 
   // get relevant policy data
   const policyFilters = {
+    level: mapId === "us" ? ["State / Province"] : ["Country"],
     dates_in_effect: [apiDate, apiDate],
 
     // if doing distancing level, only allow all social distancing
@@ -1040,8 +1237,11 @@ export const tooltipGetter = async ({
   ) {
     policyFilters.ph_measure_details = filters.ph_measure_details;
   }
-  if (mapId === "us") policyFilters.area1 = [d.properties.state_name];
-  else policyFilters.iso3 = [d.properties.ISO_A3];
+  if (mapId === "us") {
+    policyFilters.area1 = [d.properties.state_name];
+    // add US to country name if in USA map
+    policyFilters.iso3 = ["USA"];
+  } else policyFilters.iso3 = [d.properties.ISO_A3];
 
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
@@ -1100,12 +1300,13 @@ export const tooltipGetter = async ({
 
       // define special tooltip items
       if (k === "lockdown_level") {
+        // if (v === "No restrictions") continue;
         const valueStyling = thisMetricMeta.valueStyling[v];
         const label = valueStyling.labelShort || valueStyling.label;
         item.value = (
           <div className={styles[k]}>
             <div className={styles.icon}>
-              <img src={valueStyling.icon} />
+              {valueStyling.icon && <img src={valueStyling.icon} />}
               <div>{label}</div>
             </div>
             <div className={styles.footer}>
@@ -1159,11 +1360,12 @@ export const tooltipGetter = async ({
 
       // SPECIAL METRICS // -------------------------------------------------//
 
+      const fillInfo = metricMeta[k].legendInfo.fill();
       item.value = (
         <div
           className={infostyles.badge}
           style={{
-            backgroundColor: metricMeta[k].legendInfo.fill.colorscale(v),
+            backgroundColor: fillInfo.colorscale(v),
           }}
         >
           {thisMetricMeta.value(v)}
@@ -1174,6 +1376,7 @@ export const tooltipGetter = async ({
   // define right content of header metric based on metric type
   // add actions for bottom of tooltip
   const filtersForStr = {
+    level: mapId === "us" ? ["State / Province"] : ["Country"],
     primary_ph_measure:
       plugins.fill !== "lockdown_level"
         ? filters.primary_ph_measure
@@ -1204,49 +1407,50 @@ export const tooltipGetter = async ({
     }
   }
   const filtersStr = JSON.stringify(filtersForStr);
+
+  // show "view state-level map" button?
+  const isUsaOnGlobalMap = mapId === "global" && d.properties.ISO_A3 === "USA";
+  const isUsaMap = mapId === "us";
+
   // content for right side of header
   tooltip.tooltipHeaderRight = (
     <>
       {(props.geoHaveData || mapId === "us") && (
-        <>
-          <a
-            key={"view"}
-            target="_blank"
-            href={"/data?type=policy&filters_policy=" + filtersStr}
-          >
-            {
-              <button>
-                <svg version="1.1" x="0px" y="0px" viewBox="0 0 10.5 11.1">
-                  <path
-                    d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
-                    H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
-                  />
-                </svg>
-                view in data table
-              </button>
-            }
-          </a>
-          {mapId === "us" && (
-            <a
-              key={"view"}
-              target="_blank"
-              href={"/model/#" + d.properties.state_abbrev.toUpperCase()}
-            >
-              {
-                <button>
-                  <svg x="0px" y="0px" viewBox="0 0 10.9 8.2">
-                    <path d="M10.9,7.1v1.1H0V7.1H10.9z M6.5,3.3H4.4v3.3h2.2V3.3z M9.8,0H7.6v6.5h2.2V0z M3.3,2.2H1.1v4.4h2.2 V2.2z" />
-                  </svg>
-                  view in model
-                </button>
-              }
-            </a>
+        <div className={styles.buttonsVertical}>
+          {isUsaOnGlobalMap && (
+            <PrimaryButton
+              {...{
+                key: "to_us",
+                onClick: () => setMapId("us"),
+                iconName: "zoom_in",
+                label: "view state-level map",
+              }}
+            />
           )}
-        </>
+          {mapId === "us" && (
+            <PrimaryButton
+              {...{
+                key: "to_model",
+                url: "/model/#" + d.properties.state_abbrev.toUpperCase(),
+                iconName: "bar_chart",
+                label: "view in model",
+                urlIsExternal: true,
+                isSecondary: false,
+              }}
+            />
+          )}
+          <PrimaryButton
+            {...{
+              key: "to_data",
+              url: "/data?type=policy&filters_policy=" + filtersStr,
+              iconName: "table_view",
+              label: "view in data table",
+              urlIsExternal: true,
+              isSecondary: isUsaOnGlobalMap || isUsaMap,
+            }}
+          />
+        </div>
       )}
-      {/* <span> */}
-      {/*   as of <i>{formattedDate}</i> */}
-      {/* </span> */}
     </>
   );
   const nPolicies = {
@@ -1255,6 +1459,8 @@ export const tooltipGetter = async ({
     // state: 0,
     // country: 0,
   };
+  const noun = mapId === "us" ? "state" : "national";
+
   if (props.geoHaveData || mapId === "us") {
     const policies = await Policy({
       method: "post",
@@ -1281,7 +1487,7 @@ export const tooltipGetter = async ({
     tooltip.tooltipHeader.subtitle = (
       <>
         <span>
-          {comma(nPolicies.total)}{" "}
+          {comma(nPolicies.total)} {noun}-level{" "}
           {nPolicies.total === 1 ? "policy" : "policies"} in effect
         </span>
         <br />
@@ -1296,7 +1502,7 @@ export const tooltipGetter = async ({
     if (nPolicies !== undefined && nPolicies.total > 0) {
       message = (
         <i>
-          No {mapId === "us" ? "state" : "country"}-level distancing
+          No {noun}-level distancing
           <br />
           level could be determined
           <br />
@@ -1304,7 +1510,7 @@ export const tooltipGetter = async ({
         </i>
       );
     } else {
-      message = <i>No policies in effect</i>;
+      message = <i>No {noun}-level policies in effect</i>;
     }
 
     tooltip.tooltipMainContent.push({

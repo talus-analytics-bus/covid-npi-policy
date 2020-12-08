@@ -45,12 +45,15 @@ const interventionColors = {
   "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
+  "No restrictions": "gray",
   "Stay-at-home": "#C1272D",
   "Safer-at-home": "#D66B3E",
   "Stay at home": "#C1272D",
   "Safer at home": "#D66B3E",
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
+  "Partially open": "#ECBD62",
+  Open: "#f4ddaf",
 };
 
 const phaseNames = {
@@ -63,10 +66,11 @@ const phaseNames = {
   "Safer at home": "Phase III",
   "New open": "Phase IV",
   "New normal": "Phase IV",
+  Open: "Phase IV",
 };
 
 const labelNames = {
-  infected_a: "Caseload",
+  infected_a: "Active Cases",
   infected_b: "Hospitalized",
   infected_c: "ICU",
   dead: "Deaths",
@@ -279,7 +283,6 @@ const PolicyModel = props => {
       }
     }
   );
-
   const interventionLines = props.data.interventions.map(intervention => (
     <VictoryLine
       key={intervention.name + intervention.intervention_start_date}
@@ -437,6 +440,7 @@ const PolicyModel = props => {
         data={props.data}
       />
       <div className={styles.abovePlot}>
+        {/* {props.scaleTo === "model" && ( */}
         <p className={styles.instruction}>
           <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
             <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
@@ -450,6 +454,7 @@ const PolicyModel = props => {
           </svg>
           Use cursor on graph to set new policy
         </p>
+        {/* )} */}
         <label className={styles.legendLabel}>
           <Tippy
             content={
@@ -466,9 +471,13 @@ const PolicyModel = props => {
                   <span />
                   <p>Safer-at-home policies</p>
                 </div>
-                <div className={styles.normal}>
+                <div className={styles.partial}>
                   <span />
-                  <p>New normal policies</p>
+                  <p>Partially open policies</p>
+                </div>
+                <div className={styles.open}>
+                  <span />
+                  <p>Open policies</p>
                 </div>
                 <div className={styles.proposed}>
                   <span />
@@ -482,10 +491,10 @@ const PolicyModel = props => {
                   <span />
                   <p>Modeled</p>
                 </div>
-                <div className={styles.noPolicies}>
-                  <span />
-                  <p>"What if we had done nothing" scenario</p>
-                </div>
+                {/* <div className={styles.noPolicies}> */}
+                {/* <span /> */}
+                {/* <p>"What if we had done nothing" scenario</p> */}
+                {/* </div> */}
               </div>
             }
             allowHTML={true}
@@ -520,7 +529,7 @@ const PolicyModel = props => {
             position: "absolute",
             height: "2.5%",
             top: {
-              infected_a: "50%",
+              infected_a: "47.8%",
               infected_b: "48%",
               infected_c: "53.5%",
               dead: "51.5%",
@@ -535,8 +544,8 @@ const PolicyModel = props => {
         content={
           props.contactPlotType === "pctChange" ? (
             <p className={styles.ipopup}>
-              Estimated percentage reduction in contacts due to policies
-              implemented, relative to baseline contact rate.
+              Estimated percentage of baseline contact rate given policies
+              implemented.
             </p>
           ) : (
             <p className={styles.ipopup}>
@@ -868,6 +877,28 @@ const PolicyModel = props => {
       {/* /> */}
     </section>
   );
+};
+
+/**
+ * Return the policy name to display, given its data value
+ * @method PastInterventionInfo
+ * @param  {[type]}             props [description]
+ */
+export const getDisplayNameFromPolicyName = ({ policyName, proposed }) => {
+  let displayName = policyName;
+  if (policyName === "No restrictions") {
+    displayName = "No active restrictions";
+  } else if (policyName === "New normal") {
+    displayName = "Partially open policies";
+  } else {
+    displayName += " policies";
+  }
+  if (proposed === undefined) {
+    return displayName;
+  } else if (proposed) {
+    displayName += " proposed";
+  } else displayName += " implemented";
+  return displayName;
 };
 
 export default PolicyModel;

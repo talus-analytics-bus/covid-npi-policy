@@ -212,6 +212,27 @@ const noDataColor = "#eaeaea";
 const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
+const teal = "#66CAC4";
+export const greenStepsScale = d3
+  .scaleLinear()
+  .domain([0, 100]) // TODO dynamically
+  .range(["white", teal]);
+
+const getLinearColorBins = ({ nBins, scale, maxVal, key }) => {
+  const range = scale.range();
+  const newScale = d3
+    .scaleLinear()
+    .domain([0, maxVal])
+    .range(range);
+  const base = ["case"];
+  for (let i = 0; i < nBins; i++) {
+    const val = ((i + 1) * maxVal) / nBins;
+    base.push(["<=", ["feature-state", key], val]);
+    base.push(newScale(val));
+  }
+  base.push(newScale(maxVal));
+  return base;
+};
 
 // similar for fill styles
 const fillStyles = {
@@ -228,6 +249,52 @@ const fillStyles = {
         negBorder,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataBorder,
+        "#ffffff",
+      ],
+      "line-width": [
+        "case",
+        ["==", ["feature-state", "clicked"], true],
+        2,
+        ["==", ["feature-state", "hovered"], true],
+        2,
+        1,
+      ],
+    };
+  },
+
+  policy_status_counts: (key, geoHaveData, maxVal = 1) => {
+    return {
+      "fill-color": [
+        "case",
+        ["!=", ["feature-state", key], null],
+        getLinearColorBins({
+          nBins: 5,
+          scale: greenStepsScale,
+          maxVal,
+          key,
+        }),
+        ["==", ["has", "state_name"], true],
+        negColor,
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        noDataColor,
+        ["==", ["feature-state", key], null],
+        negColor,
+        negColor,
+      ],
+    };
+  },
+  "policy_status_counts-outline": (key, geoHaveData) => {
+    return {
+      "line-color": [
+        "case",
+        ["!=", ["feature-state", key], null],
+        "#ffffff",
+        ["==", ["has", "state_name"], true], // all states are reporting data
+        negBorder,
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        noDataBorder,
+        ["==", ["feature-state", key], null],
+        negBorder,
         "#ffffff",
       ],
       "line-width": [

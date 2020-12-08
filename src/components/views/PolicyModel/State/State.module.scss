@@ -59,16 +59,20 @@
       margin-bottom: 1rem;
 
       grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 4rem 1fr 1fr 1fr 1fr;
+      grid-template-rows: 4rem 1fr 1fr;
+      // grid-template-rows: 4rem 1fr 1fr 1fr 1fr;
 
       @media (min-width: 1250px) {
         grid-template-columns: 23rem min-content 15rem min-content 16rem;
-        grid-template-rows: 4rem 1fr 1fr;
+        // grid-template-rows: 4rem 1fr 1fr;
+        grid-template-rows: 4rem 1fr;
       }
 
       @media (min-width: 1500px) {
         grid-template-columns: auto 23rem min-content 15rem min-content 16rem;
-        grid-template-rows: 1fr 1fr;
+        // grid-template-rows: 1fr 1fr;
+        grid-template-rows: 1fr;
+        margin-bottom: 1.5rem;
       }
 
       > div {
@@ -482,15 +486,20 @@
 .bottomRow {
   display: flex;
 
+  select {
+    margin-left: auto;
+    margin-right: 0.5rem;
+    color: #333;
+  }
+
   button {
     background: none;
     border: none;
     background-color: #fff;
-    border-radius: 0.5em;
+    border-radius: 5px;
     border: 1px solid #999;
     color: #333;
     padding: 0.5em 0.75em;
-    margin-left: auto;
   }
 }
 

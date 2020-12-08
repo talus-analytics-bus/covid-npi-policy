@@ -237,6 +237,7 @@ const Filter = ({
       <div
         className={classNames(styles.filter, {
           [styles.disabled]: disabled || noItems,
+          [styles.alignBottom]: props.alignBottom === true,
         })}
       >
         <div className={styles.label}>{label}</div>

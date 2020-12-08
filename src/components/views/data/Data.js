@@ -469,6 +469,7 @@ const Data = ({
                               setFilters,
                               searchText,
                               setSearchText,
+                              alignBottom: true,
                             }}
                           ></FilterSet>
                         </>
@@ -513,7 +514,7 @@ export const DownloadBtn = ({
         className={classNames(styles.downloadBtn, thisClassNames)}
         onClick={e => {
           e.stopPropagation();
-          if (class_name === "all_static") {
+          if (class_name[0] === "all_static") {
             window.location.assign(
               "https://gida.ghscosting.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
             );

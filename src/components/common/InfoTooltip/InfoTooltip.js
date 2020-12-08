@@ -43,7 +43,7 @@ const InfoTooltip = ({ id, text, place, ...props }) => {
           className={styles.infoTooltipContainer}
           type="light"
           effect="float"
-          place="bottom"
+          place={place}
           delayHide={250}
           clickable={true}
           getContent={() => dataHtml}

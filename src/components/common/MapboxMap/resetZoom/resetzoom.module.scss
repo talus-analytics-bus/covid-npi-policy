@@ -1,4 +1,4 @@
-$border-radius: 4px;
+$border-radius: 50%;
 
 .mapOverlay {
   position: absolute;
@@ -6,8 +6,9 @@ $border-radius: 4px;
 }
 
 .resetButton {
-  left: 55px;
-  bottom: 55px;
+  $icon-size: 40px;
+  left: 5px;
+  bottom: 100px;
   position: absolute;
 
   > button {
@@ -21,10 +22,12 @@ $border-radius: 4px;
     border-radius: $border-radius !important;
     cursor: pointer;
     opacity: 1;
-
-    padding: 5px 10px;
+    height: $icon-size;
+    width: $icon-size;
+    padding: 5px;
     margin: 0;
 
+    color: #878787;
     background-color: white;
 
     &:hover {
@@ -32,6 +35,11 @@ $border-radius: 4px;
     }
     &:active {
       background-color: darken(white, 15%);
+    }
+
+    i {
+      position: relative;
+      top: 1px;
     }
   }
 }

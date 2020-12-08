@@ -129,13 +129,13 @@ $grey-highlight: #eee;
       }
 
       label {
-        flex-direction: row;
-        align-items: center;
         font-weight: 400;
         margin-top: 0.25rem;
         color: #333333;
         width: 12em;
-        display: flex;
+        display: grid;
+        grid-template-columns: 20px 100% auto auto;
+        align-items: center;
       }
 
       .disabled {
@@ -146,8 +146,11 @@ $grey-highlight: #eee;
       .policyDot {
         width: 1em;
         height: 1em;
-        border-radius: 1em;
-        margin-left: auto;
+        border-radius: 50%;
+      }
+      img,
+      .policyDot {
+        justify-self: end;
       }
     }
 

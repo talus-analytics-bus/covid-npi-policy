@@ -31,6 +31,8 @@ const FilterSet = ({
   searchText = null,
   setSearchText,
   children = null,
+  alignBottom = false,
+  vertical = false,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -74,6 +76,7 @@ const FilterSet = ({
             setActiveFilter,
             withGrouping: v.withGrouping,
             params: v.params,
+            alignBottom,
             ...props,
           }}
         />
@@ -192,6 +195,7 @@ const FilterSet = ({
       <div
         className={classNames(styles.filterSet, {
           [styles.disabled]: disabled,
+          [styles.vertical]: vertical,
         })}
       >
         {filterGroups.map(d => (

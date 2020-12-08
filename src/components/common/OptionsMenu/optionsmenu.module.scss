@@ -1,0 +1,247 @@
+@import "../../../assets/styles/vars.scss";
+
+$wrapperWidth: 350px; // width of options relative to avail space
+// $wrapperWidth: 22%; // width of options relative to avail space
+:export {
+  wrapperWidth: $wrapperWidth;
+}
+// Show menu as fully expanded in desktop mode, if allowed
+@media not #{$phone} {
+  .style {
+    &.allowDesktop {
+      &,
+      > * {
+        left: unset !important;
+      }
+      .edge {
+        left: unset;
+        right: unset;
+        display: none;
+      }
+      // position: absolute;
+      right: 0;
+      margin-left: auto;
+      .contentWrapper {
+        display: flex;
+        flex-flow: column;
+        border: 1px solid #b3b3b3;
+        border-top: none;
+        width: max-content;
+        margin-right: 20px;
+        .content {
+          flex-flow: column;
+          width: max-content;
+          padding-right: unset;
+          align-items: unset;
+          > div,
+          > div:last-child {
+            max-width: unset;
+          }
+          > div:last-child {
+            margin-bottom: 0;
+          }
+          .toggleDesktop {
+            z-index: 0;
+            position: absolute;
+            bottom: -23px;
+            width: 100%;
+            left: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            @media #{$phone} {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Main styling for menu in mobile mode and others
+  .style {
+    display: flex;
+    font-size: 1rem;
+    position: relative;
+    transition: all 0.5s;
+    z-index: 5;
+    width: 100%;
+
+    [class="ps__rail-y"] {
+      opacity: 0.6;
+    }
+
+    // border for edges of content wrapper that are not touching viewport edge
+    $border: 1px solid #b3b3b3;
+    .contentWrapper {
+      position: absolute;
+      top: 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: left 0.5s;
+      padding: 10px;
+      width: $wrapperWidth; // TODO minmax
+
+      border-bottom: $border;
+      border-right: $border;
+
+      z-index: 1;
+
+      .content {
+        > [class^="scrollbar-container"] {
+          max-height: 500px; // TODO elegantly
+          display: flex;
+          flex-flow: column;
+          overflow: scroll;
+
+          @include spaceItemsVert(20px, false);
+          // @include spaceItemsHoriz(30px);
+
+          select {
+            margin-top: 5px;
+            cursor: pointer;
+          }
+
+          > div:last-child {
+            @media #{$phone} {
+              max-width: 50%;
+              margin-bottom: 0;
+            }
+            @media #{$phone-narrow} {
+              max-width: 88%;
+              margin-bottom: 0;
+            }
+          }
+          input:checked + span {
+            color: #5473b6;
+          }
+        }
+      }
+      .toggleDesktop {
+        display: none;
+      }
+      button {
+        height: 22px;
+        font-size: 14px;
+        position: relative;
+        border-radius: 0 0 4px 4px;
+        outline: none;
+        border: 1px solid #b3b3b3;
+        border-top: none;
+        background-color: white;
+        color: gray;
+      }
+      i {
+        font-size: 0.9rem;
+        transform: rotate(90deg);
+        top: 2px;
+        position: relative;
+        color: #a4a4a4;
+        margin-left: 5px;
+        transition: 0.5s transform;
+        &.flipped {
+          transform: rotate(270deg);
+          transition: 0.5s transform;
+        }
+      }
+    }
+    &.right {
+      .contentWrapper {
+        right: 1px;
+        border-bottom: $border;
+        border-left: $border;
+      }
+    }
+    &.closed {
+      transition: left 0.5s;
+    }
+    @media #{$not-phone} {
+      &:not(.closedDesktop) {
+        top: 0%;
+        transition: all 0.5s ease;
+      }
+      &.closedDesktop {
+        top: -100%;
+        transition: all 0.5s ease;
+      }
+    }
+  }
+
+  .edge {
+    position: absolute;
+    left: $wrapperWidth;
+    top: 0;
+    transition: all 0.5s;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    z-index: 0;
+    button {
+      height: min-content;
+      padding: 0;
+      background-color: white;
+      border: $border;
+      border-top: none;
+      border-left: none;
+      i {
+        transition: all 0.25s;
+        color: $dark-navy-blue;
+        font-size: 3rem;
+        position: relative;
+        top: 2px;
+        margin: 0 -7px;
+      }
+
+      &.flip {
+        > i {
+          transform: scaleX(-1);
+        }
+        &.text i {
+          transform: scaleY(-1) rotate(90deg);
+          transform-origin: center;
+          transition: 0.5s transform;
+        }
+      }
+      &.text {
+        position: relative;
+        border-radius: 4px 0 0 0;
+        outline: none;
+        border: 1px solid #b3b3b3;
+        border-bottom: none;
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 10px 5px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        transform: rotate(270deg);
+        transform-origin: top right;
+        // TODO elegantly position and size below
+        top: 0;
+        left: -37px;
+        height: 37px;
+
+        i {
+          font-size: 0.9rem;
+          top: 2px;
+          position: relative;
+          color: #a4a4a4;
+          margin: 0 2px 0 4px;
+          transition: 0.5s transform;
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+  // right mode - menu hovers on right side of screen
+  &.right {
+    .edge {
+      left: unset;
+      right: $wrapperWidth;
+      // right: calc(#{$wrapperWidth} + 13px);
+      button {
+        border-left: $border;
+        border-right: none;
+      }
+    }
+  }
+}

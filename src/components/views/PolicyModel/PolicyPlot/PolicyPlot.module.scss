@@ -28,11 +28,10 @@
 .abovePlot {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .instruction {
-  margin-left: auto;
   display: inline-block;
   font-style: italic;
   display: flex;
@@ -70,8 +69,10 @@
   .noPolicies,
   .lockdown,
   .safer,
+  .no,
+  .open,
   .stay,
-  .normal,
+  .partial,
   .proposed,
   .actuals,
   .modeled {
@@ -109,9 +110,19 @@
       background-color: #d66b3e;
     }
   }
-  .normal {
+  .no {
+    span {
+      background-color: gray;
+    }
+  }
+  .partial {
     span {
       background-color: #ecbd62;
+    }
+  }
+  .open {
+    span {
+      background-color: #f4ddaf;
     }
   }
   .proposed {

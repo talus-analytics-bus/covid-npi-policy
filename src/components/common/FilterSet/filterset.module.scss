@@ -4,11 +4,21 @@
 .filterSet {
   display: flex;
   flex-flow: wrap;
-  @include spaceItemsHoriz(5rem);
+  &.vertical {
+    > .filterGroup {
+      @include spaceItemsVert(10px);
+      flex-flow: column;
+    }
+  }
+  &:not(.vertical) {
+    @include spaceItemsHoriz(5rem);
+    .filterGroup {
+      @include spaceItemsHoriz(50px);
+    }
+  }
   margin-top: 0 !important;
   .filterGroup {
     display: flex;
-    @include spaceItemsHoriz(50px);
 
     &.dropdowns {
       margin-top: 20px;
@@ -20,8 +30,9 @@
     }
   }
   &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
+    display: none;
+    // opacity: 0.5;
+    // pointer-events: none;
   }
 }
 .selectedFilters {
@@ -99,7 +110,7 @@
   }
 }
 
-@media #{$phone} {
+@media #{$small-laptop} {
   .filterSet {
     margin: 0;
 
@@ -109,9 +120,9 @@
       width: 100%;
       flex-flow: column;
       margin: 0;
+      @include spaceItemsVert(20px);
       > div {
         width: 100%;
-        margin-top: 20px;
       }
     }
   }

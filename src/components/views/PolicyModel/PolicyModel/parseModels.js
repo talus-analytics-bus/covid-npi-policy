@@ -6,10 +6,10 @@
 // {
 //   'state': {
 //     dateRange: {min: min, max: max},
-//     yMax: 1235,
+//    [`${source}_yMax`]: 1235,
 //     curves: {
 //       'curve name': {
-//         yMax: 12345,
+//        [`${source}_yMax`]: 12345,
 //         actuals: [{x: x, y: y}],
 //         model: [{x: x, y: y}],
 //       },
@@ -85,20 +85,23 @@ export default function parseModelCurves(
     curves[state].curves["pctChange"] = {};
     curves[state].curves.pctChange["actuals"] = [];
     curves[state].curves.pctChange["model"] = [];
-    curves[state].curves.pctChange["yMax"] = 0;
+    curves[state].curves.pctChange[`actuals_yMax`] = 0;
+    curves[state].curves.pctChange[`model_yMax`] = 0;
 
     Object.keys(trimmedData[0]).forEach(column => {
       if (selectedCurves.includes(column)) {
         curves[state].curves[column] = {};
         curves[state].curves[column]["actuals"] = [];
         curves[state].curves[column]["model"] = [];
-        curves[state].curves[column]["yMax"] = 0;
+        curves[state].curves[column][`actuals_yMax`] = 0;
+        curves[state].curves[column][`model_yMax`] = 0;
 
         if (counterfactualSelected) {
           curves[state].curves["CF_" + column] = {};
           curves[state].curves["CF_" + column]["actuals"] = [];
           curves[state].curves["CF_" + column]["model"] = [];
-          curves[state].curves["CF_" + column]["yMax"] = 0;
+          curves[state].curves["CF_" + column][`actuals_yMax`] = 0;
+          curves[state].curves["CF_" + column][`model_yMax`] = 0;
         }
       }
     });
@@ -162,20 +165,22 @@ export default function parseModelCurves(
 
           // Add Counterfactual curves with CF prefix
           if (counterfactualSelected) {
-            curves[state].curves["CF_" + column].yMax = counterfactualRun[index]
+            curves[state].curves["CF_" + column][
+              `${source}_yMax`
+            ] = counterfactualRun[index]
               ? counterfactualRun[index][column]
                 ? counterfactualRun[index][column] >
-                  curves[state].curves["CF_" + column].yMax
+                  curves[state].curves["CF_" + column][`${source}_yMax`]
                   ? counterfactualRun[index][column]
-                  : curves[state].curves["CF_" + column].yMax
+                  : curves[state].curves["CF_" + column][`${source}_yMax`]
                 : 0
-              : curves[state].curves["CF_" + column].yMax;
+              : curves[state].curves["CF_" + column][`${source}_yMax`];
           }
 
-          // doing yMax as we go because we're already looping anyway
-          curves[state].curves[column].yMax =
-            curves[state].curves[column].yMax > value
-              ? curves[state].curves[column].yMax
+          // doing[`${source}_yMax`] as we go because we're already looping anyway
+          curves[state].curves[column][`${source}_yMax`] =
+            curves[state].curves[column][`${source}_yMax`] > value
+              ? curves[state].curves[column][`${source}_yMax`]
               : value;
         }
       });
@@ -186,11 +191,15 @@ export default function parseModelCurves(
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 
-    // yMax for the state
-    const peaks = Object.entries(curves[state].curves).map(
-      ([curve, points]) => points.yMax
+    //[`${source}_yMax`] for the state
+    const actualsPeaks = Object.entries(curves[state].curves).map(
+      ([curve, points]) => points[`${"actuals"}_yMax`]
     );
-    curves[state].yMax = Math.max(...peaks);
+    const modelPeaks = Object.entries(curves[state].curves).map(
+      ([curve, points]) => points[`${"model"}_yMax`]
+    );
+    curves[state][`actuals_yMax`] = Math.max(...actualsPeaks);
+    curves[state][`model_yMax`] = Math.max(...modelPeaks);
   });
 
   // console.log(curves);
