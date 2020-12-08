@@ -543,7 +543,6 @@ export const metricMeta = {
             .scaleOrdinal()
             .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
             .range(["#eaeaea", "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
-          // .range(["#eaeaea", dots, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
 
           // for non-quantized legend `type`: the labels that should be used for
           // each `for` category
@@ -1225,11 +1224,8 @@ export const tooltipGetter = async ({
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
 
-  // if lockdown level is null, set it to "no restrictions"
-  const replaceNullData = false;
-  // const replaceNullData = props.geoHaveData || mapId === "us";
-  if (state.lockdown_level === null && replaceNullData)
-    state.lockdown_level = "Open";
+  // if lockdown level is "No policy", then change lockdown level to null
+  if (state.lockdown_level === "No policy") state.lockdown_level = null;
 
   const apiDate = date.format("YYYY-MM-DD");
 
@@ -1511,6 +1507,7 @@ export const tooltipGetter = async ({
   }
 
   // special -- add note if policy data not yet collected
+  // TODO rewrite the block below for clarity
   let message;
   if (state.lockdown_level === null && mapId === "us") {
     if (nPolicies !== undefined && nPolicies.total > 0) {
@@ -1557,7 +1554,7 @@ export const tooltipGetter = async ({
     ) {
       message = (
         <i>
-          No country-level distancing
+          No national-level distancing
           <br />
           level could be determined
           <br />
@@ -1565,7 +1562,7 @@ export const tooltipGetter = async ({
         </i>
       );
     } else {
-      message = <i>No policies in effect</i>;
+      message = <i>No {noun}-level policies in effect</i>;
     }
     if (state.lockdown_level === null)
       tooltip.tooltipMainContent.push({
