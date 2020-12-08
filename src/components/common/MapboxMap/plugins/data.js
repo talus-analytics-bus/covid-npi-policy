@@ -1286,6 +1286,8 @@ export const tooltipGetter = async ({
       if (k === "lockdown_level") {
         // if (v === "No restrictions") continue;
         const valueStyling = thisMetricMeta.valueStyling[v];
+        if (valueStyling === undefined)
+          throw "Missing value styling for value: " + v;
         const label = valueStyling.labelShort || valueStyling.label;
         item.value = (
           <div className={styles[k]}>
