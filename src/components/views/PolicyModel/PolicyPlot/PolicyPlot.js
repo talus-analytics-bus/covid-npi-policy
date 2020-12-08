@@ -52,6 +52,8 @@ const interventionColors = {
   "Safer at home": "#D66B3E",
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
+  "Partially open": "#ECBD62",
+  Open: "#f4ddaf",
 };
 
 const phaseNames = {
@@ -64,10 +66,11 @@ const phaseNames = {
   "Safer at home": "Phase III",
   "New open": "Phase IV",
   "New normal": "Phase IV",
+  Open: "Phase IV",
 };
 
 const labelNames = {
-  infected_a: "Caseload",
+  infected_a: "Active Cases",
   infected_b: "Hospitalized",
   infected_c: "ICU",
   dead: "Deaths",
@@ -280,7 +283,6 @@ const PolicyModel = props => {
       }
     }
   );
-
   const interventionLines = props.data.interventions.map(intervention => (
     <VictoryLine
       key={intervention.name + intervention.intervention_start_date}
@@ -457,10 +459,6 @@ const PolicyModel = props => {
           <Tippy
             content={
               <div className={styles.legend}>
-                <div className={styles.no}>
-                  <span />
-                  <p>No active restrictions</p>
-                </div>
                 <div className={styles.lockdown}>
                   <span />
                   <p>Lockdown policies</p>
@@ -473,9 +471,13 @@ const PolicyModel = props => {
                   <span />
                   <p>Safer-at-home policies</p>
                 </div>
-                <div className={styles.normal}>
+                <div className={styles.partial}>
                   <span />
-                  <p>New normal policies</p>
+                  <p>Partially open policies</p>
+                </div>
+                <div className={styles.open}>
+                  <span />
+                  <p>Open policies</p>
                 </div>
                 <div className={styles.proposed}>
                   <span />
@@ -527,7 +529,7 @@ const PolicyModel = props => {
             position: "absolute",
             height: "2.5%",
             top: {
-              infected_a: "50%",
+              infected_a: "47.8%",
               infected_b: "48%",
               infected_c: "53.5%",
               dead: "51.5%",
@@ -542,8 +544,8 @@ const PolicyModel = props => {
         content={
           props.contactPlotType === "pctChange" ? (
             <p className={styles.ipopup}>
-              Estimated percentage reduction in contacts due to policies
-              implemented, relative to baseline contact rate.
+              Estimated percentage of baseline contact rate given policies
+              implemented.
             </p>
           ) : (
             <p className={styles.ipopup}>
@@ -886,6 +888,8 @@ export const getDisplayNameFromPolicyName = ({ policyName, proposed }) => {
   let displayName = policyName;
   if (policyName === "No restrictions") {
     displayName = "No active restrictions";
+  } else if (policyName === "New normal") {
+    displayName = "Partially open policies";
   } else {
     displayName += " policies";
   }

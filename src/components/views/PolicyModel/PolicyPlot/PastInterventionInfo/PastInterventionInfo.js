@@ -57,7 +57,8 @@ const phaseIcons = {
 
 const PastInterventionInfo = props => {
   // a proposed or implemented policy?
-  const proposed = new Date(props.effectiveDate) > new Date();
+  const proposed =
+    new Date(props.pastInterventionProps.effectiveDate) > new Date();
 
   // get display name for policy type
   const displayName = getDisplayNameFromPolicyName({
@@ -164,7 +165,7 @@ const PastInterventionInfo = props => {
         style={{ background: props.interventionColors[props.policyName] }}
       />
       <div className={styles.content}>
-        {proposed && <p>Proposal Date: {formatDate(props.effectiveDate)}</p>}
+        {proposed && <p>Proposal date: {formatDate(props.effectiveDate)}</p>}
         {!proposed && (
           <p className={styles.policyCount}>
             {policyCount} {policyCount > 1 ? "policies" : "policy"} in effect

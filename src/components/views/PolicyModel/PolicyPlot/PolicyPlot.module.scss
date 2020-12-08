@@ -70,8 +70,9 @@
   .lockdown,
   .safer,
   .no,
+  .open,
   .stay,
-  .normal,
+  .partial,
   .proposed,
   .actuals,
   .modeled {
@@ -114,9 +115,14 @@
       background-color: gray;
     }
   }
-  .normal {
+  .partial {
     span {
       background-color: #ecbd62;
+    }
+  }
+  .open {
+    span {
+      background-color: #f4ddaf;
     }
   }
   .proposed {

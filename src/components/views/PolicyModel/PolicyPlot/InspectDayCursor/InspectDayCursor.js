@@ -145,8 +145,11 @@ const InspectDailyCursor = props => {
 
   // get correct display name of policy type
   const dataName = latestIntervention.name.split("_")[0];
-  const displayName = getDisplayNameFromPolicyName({ policyName: dataName });
-
+  const proposed = new Date(props.datum.x) > new Date();
+  const displayName = getDisplayNameFromPolicyName({
+    policyName: dataName,
+    proposed,
+  });
   return (
     <VictoryPortal>
       <g>

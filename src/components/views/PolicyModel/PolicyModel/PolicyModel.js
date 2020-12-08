@@ -239,8 +239,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
               <div className={styles.text}>
                 <h2>Visualize</h2>
                 <p>
-                  When policies were implemented in each state relative to
-                  caseload and fatalities
+                  Policy status in each state relative to active cases and
+                  fatalities
                 </p>
               </div>
             </div>
@@ -248,7 +248,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               <img src={ampLogo} alt="COVID AMP Logo" />
               <div className={styles.text}>
                 <h2>Predict</h2>
-                <p>How future policies will impact caseload</p>
+                <p>How future policies will impact active cases</p>
               </div>
             </div>
             <div className={styles.show}>
@@ -309,9 +309,9 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setSelectedCurves([e.target.value, "R effective"]);
                 }}
               >
-                <option value="infected_a">Caseload</option>
-                <option value="infected_b">Hospitalized</option>
-                <option value="infected_c">ICU</option>
+                <option value="infected_a">Active Cases</option>
+                {/* <option value="infected_b">Hospitalized</option> */}
+                {/* <option value="infected_c">ICU</option> */}
                 <option value="dead">Deaths</option>
               </select>
               <Tippy
@@ -340,48 +340,48 @@ const PolicyModel = ({ setLoading, setPage }) => {
               </Tippy>
             </label>
 
-            <label>
-              Reduction in contacts
-              <select
-                onChange={e => setContactPlotType(e.target.value)}
-                style={{ width: "13rem" }}
-              >
-                <option value="pctChange">% reduction</option>
-                <option value="R effective">Effective R value</option>
-              </select>
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  contactPlotType === "pctChange" ? (
-                    <p className={styles.ipopup}>
-                      Estimated percentage reduction in contacts due to policies
-                      implemented, relative to baseline contact rate.
-                    </p>
-                  ) : (
-                    <p className={styles.ipopup}>
-                      Estimated average number of people each infectious person
-                      is expected to infect.
-                    </p>
-                  )
-                }
-                // maxWidth={"30rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <img
-                  className={styles.infoIcon}
-                  src={infoIcon}
-                  alt="More information"
-                  style={{
-                    position: "absolute",
-                    top: "2.75rem",
-                    right: "2.5rem",
-                  }}
-                />
-              </Tippy>
-            </label>
+            {/* <label> */}
+            {/*   Reduction in contacts */}
+            {/*   <select */}
+            {/*     onChange={e => setContactPlotType(e.target.value)} */}
+            {/*     style={{ width: "13rem" }} */}
+            {/*   > */}
+            {/*     <option value="pctChange">% reduction</option> */}
+            {/*     <option value="R effective">Effective R value</option> */}
+            {/*   </select> */}
+            {/*   <Tippy */}
+            {/*     interactive={true} */}
+            {/*     allowHTML={true} */}
+            {/*     content={ */}
+            {/*       contactPlotType === "pctChange" ? ( */}
+            {/*         <p className={styles.ipopup}> */}
+            {/*           Estimated percentage reduction in contacts due to policies */}
+            {/*           implemented, relative to baseline contact rate. */}
+            {/*         </p> */}
+            {/*       ) : ( */}
+            {/*         <p className={styles.ipopup}> */}
+            {/*           Estimated average number of people each infectious person */}
+            {/*           is expected to infect. */}
+            {/*         </p> */}
+            {/*       ) */}
+            {/*     } */}
+            {/*     // maxWidth={"30rem"} */}
+            {/*     theme={"light"} */}
+            {/*     placement={"bottom"} */}
+            {/*     offset={[-30, 10]} */}
+            {/*   > */}
+            {/*     <img */}
+            {/*       className={styles.infoIcon} */}
+            {/*       src={infoIcon} */}
+            {/*       alt="More information" */}
+            {/*       style={{ */}
+            {/*         position: "absolute", */}
+            {/*         top: "2.75rem", */}
+            {/*         right: "2.5rem", */}
+            {/*       }} */}
+            {/*     /> */}
+            {/*   </Tippy> */}
+            {/* </label> */}
           </div>
           <div className={styles.navigator}>
             {/* {console.log("\npolicymodel zoomDateRange")} */}

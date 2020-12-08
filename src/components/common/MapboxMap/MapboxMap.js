@@ -264,7 +264,7 @@ const MapboxMap = ({
     const isPolicyStatusCounts = fill === "policy_status_counts";
 
     if (isLockdownLevel) {
-      return `Distancing level in ${nouns.singular.toLowerCase()} on ${date.format(
+      return `Distancing level at ${nouns.level.toLowerCase()} level on ${date.format(
         "MMM D, YYYY"
       )}`;
     } else if (isPolicyStatus) {
