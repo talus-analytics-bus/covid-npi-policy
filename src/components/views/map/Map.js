@@ -76,15 +76,30 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // dynamic map title
   const getMapTitle = ({ fill, circle, mapId }) => {
-    const level = mapId === "us" ? "state" : "national";
     let title = "";
-    if (fill !== null) {
-      title += metricMeta[fill].metric_displayname;
+    const useAltTitles = true;
+    if (useAltTitles) {
+      title = "COVID-19";
+      if (fill === "lockdown_level") {
+        title += " distancing levels";
+      } else if (fill === "policy_status_counts") {
+        title += " mitigation policies";
+      }
+      if (circle !== null) {
+        title += " and cases";
+      }
+      return title;
+    } else {
+      const level = mapId === "us" ? "state" : "national";
+      if (fill !== null) {
+        title += metricMeta[fill].metric_displayname;
+      }
+      if (circle !== null) {
+        title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
+      }
+      return title;
+      // return title + ` at ${level} level`;
     }
-    if (circle !== null) {
-      title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
-    }
-    return title + ` at ${level} level`;
   };
   const [mapTitle, setMapTitle] = useState("");
 
@@ -343,21 +358,25 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                               />
                             ),
                             // Filter set containing the filters specified in `filterDefs`
-                            <FilterSet
-                              {...{
-                                disabled:
-                                  fill !== "policy_status" &&
-                                  fill !== "policy_status_counts",
-                                filterDefs,
-                                filters,
-                                setFilters,
-                                // if true, the selected filters bay will show
-                                // TODO style selected filters bay
-                                showSelectedFilters: false,
-                                vertical: true,
-                                key: "FilterSet",
-                              }}
-                            />,
+                            <>
+                              {(fill === "policy_status" ||
+                                fill === "policy_status_counts") && (
+                                <div className={styles.indented}>
+                                  <FilterSet
+                                    {...{
+                                      filterDefs,
+                                      filters,
+                                      setFilters,
+                                      // if true, the selected filters bay will show
+                                      // TODO style selected filters bay
+                                      showSelectedFilters: false,
+                                      vertical: true,
+                                      key: "FilterSet",
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </>,
 
                             // circle metric radio toggle
                             <div className={styles.circleToggle}>
