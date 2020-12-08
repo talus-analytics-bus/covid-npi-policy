@@ -13,6 +13,8 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
+import { Caseload } from "../../../misc/Queries.js";
+
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";
 import LoadingState from "../LoadingState/LoadingState";
@@ -35,7 +37,7 @@ const covidCountHoverText = {
 };
 
 const PolicyModel = ({ setLoading, setPage }) => {
-  const [activeTab] = useState("interventions");
+  const [activeTab, setActiveTab] = useState("interventions");
 
   // use selected states to load the required models
   const [selectedStates, setSelectedStates] = useState([
@@ -49,7 +51,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     "infected_a",
     // 'infected_b',
     // 'infected_c',
-    // 'dead',
+    // "dead",
     "R effective",
     "pctChange",
   ]);
@@ -88,6 +90,33 @@ const PolicyModel = ({ setLoading, setPage }) => {
     );
 
     // console.log(modelCurves)
+
+    const caseloadData = await Caseload({
+      // countryIso3: "BRA",
+      stateName: "Alabama",
+      windowSizeDays: 7,
+    });
+
+    const caseloadPoints = caseloadData.map(day => ({
+      x: new Date(day.date_time),
+      y: day.value,
+    }));
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    modelCurves["AL"].curves["caseload"] = {
+      actuals: caseloadPoints,
+      modeled: [
+        { x: yesterday, y: 2000 },
+        { x: new Date(), y: 2000 },
+      ],
+      actuals_yMax: 43986.25,
+      model_yMax: 235394.403108779,
+    };
+
+    console.log(modelCurves);
+
     setCurves(modelCurves);
 
     // set up axes
@@ -116,8 +145,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
     domainEndDate.setMonth(domainEndDate.getMonth() + 1);
 
     setDomain([domainStartDate, domainEndDate]);
-
-    console.log(modelCurves);
 
     const defaultScaleTo = modelCurves
       ? Object.values(modelCurves)
@@ -471,6 +498,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   allCurves={curves}
                   domain={domain}
                   activeTab={activeTab}
+                  setActiveTab={setActiveTab}
                   counterfactualSelected={counterfactualSelected}
                   setCounterfactualSelected={setCounterfactualSelected}
                   resetState={resetState}

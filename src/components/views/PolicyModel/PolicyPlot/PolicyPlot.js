@@ -30,9 +30,9 @@ import styles from "./PolicyPlot.module.scss";
 const plotColors = [
   // '#00a79d',
   "#14477A",
-  "#14477A",
   "#6C92AB",
   "#aeaeae",
+  "#14477A",
   "#00447c",
   "#aeaeae",
   "#7a4500",
@@ -440,7 +440,16 @@ const PolicyModel = props => {
         data={props.data}
       />
       <div className={styles.abovePlot}>
-        {/* {props.scaleTo === "model" && ( */}
+        <select
+          style={{ width: "13rem" }}
+          value={props.activeTab}
+          onChange={e => {
+            props.setActiveTab(e.target.value);
+          }}
+        >
+          <option value="interventions">Show Model</option>
+          <option value="caseload">Show Caseload</option>
+        </select>
         <p className={styles.instruction}>
           <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
             <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
@@ -454,7 +463,6 @@ const PolicyModel = props => {
           </svg>
           Use cursor on graph to set new policy
         </p>
-        {/* )} */}
         <label className={styles.legendLabel}>
           <Tippy
             content={
