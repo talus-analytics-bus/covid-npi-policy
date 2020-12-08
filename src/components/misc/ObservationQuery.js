@@ -14,48 +14,17 @@ const ObservationQuery = async function({
   temporal_resolution,
   start_date,
   end_date,
-  country,
   spatial_resolution = "country",
   place_id,
   place_name,
   place_iso3,
   fields,
 }) {
-  // if (metric_id === -9999) {
-  //   // DEBUG DATA
-  //   const debugRandomValues = [];
-  //   let n = 1;
-  //   while (n < 51) {
-  //     debugRandomValues.push({
-  //       id: n,
-  //       value: Math.random() * 100
-  //     });
-  //     n++;
-  //     // const test = {
-  //     //   data_source: "Notional data",
-  //     //   date_time: "2020-01-01 00:00:00 +00",
-  //     //   definition:
-  //     //   "N/A",
-  //     //   metric: "test_metric",
-  //     //   observation_id: 123594,
-  //     //   place_fips: null,
-  //     //   place_id: 7,
-  //     //   place_iso: "AD",
-  //     //   place_name: "Andorra",
-  //     //   stale_flag: true,
-  //     //   updated_at: "Tue, 18 Feb 2020 00:00:00 GMT",
-  //     //   value: 0
-  //     // };
-  //   }
-  //   return debugRandomValues;
-  // }
   end_date = typeof end_date !== "undefined" ? end_date : start_date;
-
-  country = typeof country !== "undefined" ? country : "all";
 
   var params = {
     metric_id: metric_id,
-    temporal_resolution: temporal_resolution,    
+    temporal_resolution: temporal_resolution,
     spatial_resolution: spatial_resolution,
   };
 
@@ -64,9 +33,6 @@ const ObservationQuery = async function({
   if (start_date !== undefined) params.end = start_date;
   if (fields !== undefined) params.fields = fields.join(",");
 
-  if (country !== "all") {
-    params["place_id"] = country;
-  }
   if (place_id !== undefined) {
     params["place_id"] = place_id;
   } else if (place_name !== undefined) {
@@ -75,8 +41,12 @@ const ObservationQuery = async function({
     params["place_iso3"] = place_iso3;
   }
 
-  const res = await axios(`${API_URL}/observations`, {
-    params
+  const url = `${API_URL}/observations`;
+
+  const res = await axios({
+    url,
+    params,
+    headers: { "If-Modified-Since": new Date().toUTCString() },
   });
 
   return res.data.data;
