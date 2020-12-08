@@ -81,6 +81,8 @@ $border-radius: 5px;
     linear-gradient(to bottom, #ffffff 0%, #e4e4e4 100%);
   background-repeat: no-repeat;
   background-position: right, 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 @mixin spaceItemsHoriz($size) {
