@@ -37,7 +37,7 @@ const covidCountHoverText = {
 };
 
 const PolicyModel = ({ setLoading, setPage }) => {
-  const [activeTab, setActiveTab] = useState("interventions");
+  const [activeTab, setActiveTab] = useState("caseload");
 
   // use selected states to load the required models
   const [selectedStates, setSelectedStates] = useState([
@@ -80,6 +80,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
   // )
 
   const setup = React.useCallback(async () => {
+    console.log("setup");
+    console.log("interventions");
     const loadedModels = await loadModels(selectedStates);
 
     // get curves, max, min from models
@@ -89,35 +91,46 @@ const PolicyModel = ({ setLoading, setPage }) => {
       counterfactualSelected
     );
 
-    // console.log(modelCurves)
+    if (activeTab === "caseload") {
+      console.log("Caseload");
 
-    const caseloadData = await Caseload({
-      // countryIso3: "BRA",
-      stateName: "Alabama",
-      windowSizeDays: 7,
-    });
+      const caseloadData = await Caseload({
+        countryIso3: "USA",
+        stateName: "Alabama",
+        windowSizeDays: 7,
+      });
 
-    const caseloadPoints = caseloadData.map(day => ({
-      x: new Date(day.date_time),
-      y: day.value,
-    }));
+      const caseloadPoints = caseloadData.map(day => ({
+        x: new Date(day.date_time),
+        y: day.value,
+      }));
 
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+      modelCurves["AL"].curves["caseload"] = {
+        actuals: caseloadPoints,
+        modeled: [],
+      };
 
-    modelCurves["AL"].curves["caseload"] = {
-      actuals: caseloadPoints,
-      modeled: [
-        { x: yesterday, y: 2000 },
-        { x: new Date(), y: 2000 },
-      ],
-      actuals_yMax: 43986.25,
-      model_yMax: 235394.403108779,
-    };
+      const caseloadData2 = await Caseload({
+        countryIso3: "USA",
+        stateName: "Alabama",
+        windowSizeDays: 1,
+      });
+
+      const caseloadPoints2 = caseloadData2.map(day => ({
+        x: new Date(day.date_time),
+        y: day.value,
+      }));
+
+      modelCurves["AL"].curves["caseload2"] = {
+        actuals: caseloadPoints2,
+        modeled: [],
+      };
+
+      console.log(modelCurves);
+    }
+    setCurves({ ...modelCurves });
 
     console.log(modelCurves);
-
-    setCurves(modelCurves);
 
     // set up axes
     const dates = Object.values(modelCurves)
@@ -129,8 +142,15 @@ const PolicyModel = ({ setLoading, setPage }) => {
         return 0;
       });
 
-    const zoomStartDate = new Date(dates[0].toISOString());
-    const zoomEndDate = new Date(dates.slice(-1)[0].toISOString());
+    const zoomStartDate =
+      activeTab === "interventions"
+        ? new Date()
+        : new Date(dates[0].toISOString());
+
+    const zoomEndDate =
+      activeTab === "interventions"
+        ? new Date(dates.slice(-1)[0].toISOString())
+        : new Date();
 
     zoomStartDate.setDate(zoomStartDate.getDate() - 10);
 
@@ -146,19 +166,21 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
     setDomain([domainStartDate, domainEndDate]);
 
-    const defaultScaleTo = modelCurves
-      ? Object.values(modelCurves)
-          .map(state =>
-            state.interventions.map(inter => {
-              // console.log(inter.intervention_type);
-              return inter.intervention_type === "intervention";
-            })
-          )
-          .flat()
-          .some(el => el === true)
-        ? "model"
-        : "actuals"
-      : "actuals";
+    // const defaultScaleTo = modelCurves
+    //   ? Object.values(modelCurves)
+    //       .map(state =>
+    //         state.interventions.map(inter => {
+    //           // console.log(inter.intervention_type);
+    //           return inter.intervention_type === "intervention";
+    //         })
+    //       )
+    //       .flat()
+    //       .some(el => el === true)
+    //     ? "model"
+    //     : "actuals"
+    //   : "actuals";
+
+    const defaultScaleTo = activeTab === "caseload" ? "actuals" : "model";
 
     setCaseLoadAxis([
       0,
@@ -170,6 +192,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     ]);
   }, [
     // callbackModels,
+    activeTab,
     selectedStates,
     selectedCurves,
     counterfactualSelected,

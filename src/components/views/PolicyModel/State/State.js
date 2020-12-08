@@ -391,6 +391,7 @@ const State = props => {
           data={props.curves}
           domain={props.domain}
           activeTab={props.activeTab}
+          setActiveTab={props.setActiveTab}
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
           contactPlotType={props.contactPlotType}

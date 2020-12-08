@@ -598,128 +598,130 @@ const PolicyModel = props => {
       {/*     /> */}
       {/*   </linearGradient> */}
       {/* </svg> */}
-      <VictoryChart
-        padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
-        // domainPadding={5}
-        responsive={true}
-        width={500}
-        height={40}
-        // height={
-        //   (windowSize.height / windowSize.width) * 500 * percentProportion > 25
-        //     ? (windowSize.height / windowSize.width) * 500 * percentProportion
-        //     : 25
-        // }
-        // style={{ height: percentProportion * 100 + "%" }}
-        scale={{ x: "time" }}
-        containerComponent={
-          <VictoryZoomContainer
-            className={styles.pct}
-            allowZoom={false}
-            allowPan={false}
-            zoomDimension="x"
-            zoomDomain={{ x: props.zoomDateRange }}
-            // onZoomDomainChange={domain => {
-            //   props.setZoomDateRange(domain.x);
-            // }}
-          />
-        }
-      >
-        {/* <VictoryLabel */}
-        {/*   text="R Effective" */}
-        {/*   x={4.5} */}
-        {/*   y={4} */}
-        {/*   style={{ */}
-        {/*     fontSize: 6, */}
-        {/*     fontWeight: 700, */}
-        {/*     fontFamily: "Rawline", */}
-        {/*     fill: "#6d6d6d", */}
-        {/*   }} */}
-        {/* /> */}
-        <VictoryAxis
-          dependentAxis
-          tickValues={
-            props.contactPlotType === "pctChange" ? [0, 50, 100] : [0, 1, 2]
+      {props.activeTab === "interventions" && (
+        <VictoryChart
+          padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
+          // domainPadding={5}
+          responsive={true}
+          width={500}
+          height={40}
+          // height={
+          //   (windowSize.height / windowSize.width) * 500 * percentProportion > 25
+          //     ? (windowSize.height / windowSize.width) * 500 * percentProportion
+          //     : 25
+          // }
+          // style={{ height: percentProportion * 100 + "%" }}
+          scale={{ x: "time" }}
+          containerComponent={
+            <VictoryZoomContainer
+              className={styles.pct}
+              allowZoom={false}
+              allowPan={false}
+              zoomDimension="x"
+              zoomDomain={{ x: props.zoomDateRange }}
+              // onZoomDomainChange={domain => {
+              //   props.setZoomDateRange(domain.x);
+              // }}
+            />
           }
-          tickFormat={tick =>
-            props.contactPlotType === "pctChange" ? tick + "%" : tick
-          }
-          offsetX={50}
-          crossAxis={false}
-          label={
-            props.contactPlotType === "pctChange"
-              ? "% of normal\ncontact rate"
-              : "R Effective\n"
-          }
-          axisLabelComponent={
-            <VictoryLabel
-              dy={0}
-              style={{
+        >
+          {/* <VictoryLabel */}
+          {/*   text="R Effective" */}
+          {/*   x={4.5} */}
+          {/*   y={4} */}
+          {/*   style={{ */}
+          {/*     fontSize: 6, */}
+          {/*     fontWeight: 700, */}
+          {/*     fontFamily: "Rawline", */}
+          {/*     fill: "#6d6d6d", */}
+          {/*   }} */}
+          {/* /> */}
+          <VictoryAxis
+            dependentAxis
+            tickValues={
+              props.contactPlotType === "pctChange" ? [0, 50, 100] : [0, 1, 2]
+            }
+            tickFormat={tick =>
+              props.contactPlotType === "pctChange" ? tick + "%" : tick
+            }
+            offsetX={50}
+            crossAxis={false}
+            label={
+              props.contactPlotType === "pctChange"
+                ? "% of normal\ncontact rate"
+                : "R Effective\n"
+            }
+            axisLabelComponent={
+              <VictoryLabel
+                dy={0}
+                style={{
+                  fill: "#6d6d6d",
+                  fontFamily: "Rawline",
+                  fontWeight: "500",
+                  fontSize: 5,
+                  textAnchor: "middle",
+                }}
+              />
+            }
+            style={{
+              grid: {
+                stroke: "#aaaaaa",
+                strokeWidth: 1,
+              },
+              axis: { stroke: "#fff", strokeWidth: 0 },
+              ticks: { strokeWidth: 0 },
+              tickLabels: {
                 fill: "#6d6d6d",
                 fontFamily: "Rawline",
                 fontWeight: "500",
                 fontSize: 5,
-                textAnchor: "middle",
-              }}
-            />
-          }
-          style={{
-            grid: {
-              stroke: "#aaaaaa",
-              strokeWidth: 1,
-            },
-            axis: { stroke: "#fff", strokeWidth: 0 },
-            ticks: { strokeWidth: 0 },
-            tickLabels: {
-              fill: "#6d6d6d",
-              fontFamily: "Rawline",
-              fontWeight: "500",
-              fontSize: 5,
-              textAnchor:
-                props.contactPlotType === "pctChange" ? "end" : "middle",
-            },
-          }}
-        />
-        <VictoryArea
-          style={{
-            data: { stroke: "#14477A", strokeWidth: 0.75, fill: "#14477Abb" },
-          }}
-          data={props.data.curves[props.contactPlotType].actuals}
-          interpolation={"stepAfter"}
-        />
-        <VictoryArea
-          style={{
-            data: {
-              stroke: "#14477A",
-              strokeWidth: 0.75,
-              strokeDasharray: 2,
-              fill: "#5C87B3BB",
-            },
-          }}
-          data={props.data.curves[props.contactPlotType].model}
-          interpolation={"stepAfter"}
-        />
-        <VictoryLine
-          labelComponent={
-            <VictoryPortal>
-              <LineExtension />
-            </VictoryPortal>
-          }
-          labels={[`TODAY`]}
-          style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
-          data={[
-            { x: new Date(), y: 0 },
-            { x: new Date(), y: 3 },
-          ]}
-        />
-        {pctChangeInterventionLines}
-      </VictoryChart>
+                textAnchor:
+                  props.contactPlotType === "pctChange" ? "end" : "middle",
+              },
+            }}
+          />
+          {/* <VictoryArea */}
+          {/*   style={{ */}
+          {/*     data: { stroke: "#14477A", strokeWidth: 0.75, fill: "#14477Abb" }, */}
+          {/*   }} */}
+          {/*   data={props.data.curves[props.contactPlotType].actuals} */}
+          {/*   interpolation={"stepAfter"} */}
+          {/* /> */}
+          <VictoryArea
+            style={{
+              data: {
+                stroke: "#14477A",
+                strokeWidth: 0.75,
+                strokeDasharray: 2,
+                fill: "#5C87B3BB",
+              },
+            }}
+            data={props.data.curves[props.contactPlotType].model}
+            interpolation={"stepAfter"}
+          />
+          <VictoryLine
+            labelComponent={
+              <VictoryPortal>
+                <LineExtension />
+              </VictoryPortal>
+            }
+            labels={[`TODAY`]}
+            style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
+            data={[
+              { x: new Date(), y: 0 },
+              { x: new Date(), y: 3 },
+            ]}
+          />
+          {pctChangeInterventionLines}
+        </VictoryChart>
+      )}
       <VictoryChart
         // animate={{ duration: 1000 }}
         padding={{ top: 6, bottom: 20, left: 50, right: 10 }}
         // domainPadding={5}
         responsive={true}
         width={500}
-        height={150}
+        height={props.activeTab === "interventions" ? 150 : 200}
         events={
           props.activeTab === "interventions"
             ? [
@@ -766,8 +768,7 @@ const PolicyModel = props => {
           <VictoryZoomCursorContainer
             className={styles.chart}
             cursorLabelComponent={
-              (props.activeTab === "interventions") &
-              (pastInterventionProps.policyName === "") ? (
+              pastInterventionProps.policyName === "" ? (
                 <InspectDayCursor
                   showInfo={!addIntDialogState.show}
                   data={props.data}
@@ -775,6 +776,7 @@ const PolicyModel = props => {
                   state={props.selectedState}
                   labelNames={labelNames}
                   contactPlotType={props.contactPlotType}
+                  activeTab={props.activeTab}
                 />
               ) : (
                 // <AddInterventionCursor showLabel={!addIntDialogState.show} />
@@ -860,9 +862,9 @@ const PolicyModel = props => {
           }}
         />
 
-        {actualsLines}
+        {props.activeTab === "caseload" && actualsLines}
         {counterfactualArea}
-        {modelLines}
+        {props.activeTab === "interventions" && modelLines}
         {interventionLines}
         {interventionPoints}
         {/* Today marker */}
