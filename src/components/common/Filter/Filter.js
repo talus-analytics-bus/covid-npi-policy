@@ -240,7 +240,9 @@ const Filter = ({
           [styles.alignBottom]: props.alignBottom === true,
         })}
       >
-        <div className={styles.label}>{label}</div>
+        <div role={"label"} className={styles.label}>
+          {label}
+        </div>
         <div className={styles.input}>
           <div
             role="filterButton"
