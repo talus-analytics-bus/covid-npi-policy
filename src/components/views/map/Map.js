@@ -378,7 +378,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                     name="casecount"
                                     defaultChecked
                                   />{" "}
-                                  Show
+                                  <span>Show</span>
                                 </label>
                                 <br />
                                 <label>
@@ -387,7 +387,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                     value="hide"
                                     name="casecount"
                                   />{" "}
-                                  Hide
+                                  <span>Hide</span>
                                 </label>
                               </div>
 
