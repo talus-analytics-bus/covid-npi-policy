@@ -428,12 +428,26 @@ export const Caseload = async ({
   stateId, // place_id for state, e.g., 264
   stateName, // name for state, e.g., Alabama
   fields = ["date_time", "value"], // fields to return, return all if empty
+  windowSizeDays = 7, // size of window over which to aggregate cases; only
+  // 1 and 7 are currently supported
 }) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
+
+  const getMetricId = ({ isState, windowSizeDays }) => {
+    if (isState) {
+      if (windowSizeDays === 7) {
+        return 74;
+      } else if (windowSizeDays === 1) return 73;
+    } else {
+      if (windowSizeDays === 7) {
+        return 77;
+      } else if (windowSizeDays === 1) return 76;
+    }
+  };
   const isState = stateName !== undefined || stateId !== undefined;
-  const metric_id = isState ? 74 : 77;
+  const metric_id = getMetricId({ isState, windowSizeDays });
 
   // define spatial resolution based on same
   const spatial_resolution = isState ? "state" : "country";
