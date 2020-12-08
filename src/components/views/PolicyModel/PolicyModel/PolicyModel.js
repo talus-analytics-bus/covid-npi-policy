@@ -95,7 +95,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
       console.log("Caseload");
 
       const caseloadData = await Caseload({
-        countryIso3: "USA",
+        // countryIso3: "USA",
         stateName: "Alabama",
         windowSizeDays: 7,
       });
@@ -111,7 +111,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
       };
 
       const caseloadData2 = await Caseload({
-        countryIso3: "USA",
+        // countryIso3: "USA",
         stateName: "Alabama",
         windowSizeDays: 1,
       });
