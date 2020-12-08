@@ -5,7 +5,13 @@ import axios from "axios";
 
 // common components
 import Search from "../../common/Table/content/Search/Search";
-import { FilterSet, Table, RadioToggle, ShowMore } from "../../common";
+import {
+  FilterSet,
+  Table,
+  RadioToggle,
+  ShowMore,
+  PrimaryButton,
+} from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
 import {
   Metadata,
@@ -19,7 +25,6 @@ import { isEmpty, comma } from "../../misc/Util.js";
 // styles and assets
 import styles from "./data.module.scss";
 import classNames from "classnames";
-import downloadSvg from "../../../assets/icons/download.svg";
 
 // constants
 import policyInfo from "./content/policy";
@@ -365,6 +370,12 @@ const Data = ({
 
   const table = getTable({ docType });
 
+  // have any filters or search text been applied?
+  const hasFilters = !(
+    isEmpty(filters) &&
+    (searchText === null || searchText === "")
+  );
+
   return (
     <div className={styles.data}>
       <div className={styles.header}>
@@ -392,7 +403,7 @@ const Data = ({
               label: DownloadBtn({
                 render: table,
                 class_name: [nouns.s, "secondary"],
-                classNameForApi: nouns.s,
+                classNameForApi: hasFilters ? nouns.s : "all_static",
                 buttonLoading,
                 setButtonLoading,
                 searchText,
@@ -407,11 +418,7 @@ const Data = ({
                       <>
                         Download complete metadata
                         <br />
-                        for{" "}
-                        {isEmpty(filters) &&
-                        (searchText === null || searchText === "")
-                          ? "all"
-                          : "filtered"}{" "}
+                        for {!hasFilters ? "all" : "filtered"}{" "}
                         {nouns.p.toLowerCase()} ({comma(numInstances)})
                       </>
                     )}
@@ -510,8 +517,23 @@ export const DownloadBtn = ({
   // flag for whether the download button should say loading or not
   return (
     render && (
-      <button
-        className={classNames(styles.downloadBtn, thisClassNames)}
+      <PrimaryButton
+        iconName={"get_app"}
+        label={
+          <div>
+            {!buttonLoading && render && message}
+            {buttonLoading && (
+              <>
+                <span>
+                  Downloading data,
+                  <br />
+                  please wait...
+                </span>
+              </>
+            )}
+          </div>
+        }
+        customClassNames={[styles.downloadBtn, ...Object.keys(thisClassNames)]}
         onClick={e => {
           e.stopPropagation();
           if (class_name[0] === "all_static") {
@@ -531,17 +553,7 @@ export const DownloadBtn = ({
             }).then(d => setButtonLoading(false));
           }
         }}
-      >
-        <img src={downloadSvg} />
-        <div>
-          {!buttonLoading && render && message}
-          {buttonLoading && (
-            <>
-              <span>Downloading data, please wait...</span>
-            </>
-          )}
-        </div>
-      </button>
+      />
     )
   );
 };

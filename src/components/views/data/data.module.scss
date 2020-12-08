@@ -6,7 +6,6 @@
     h1 {
       margin-top: 0.5em;
       margin-bottom: 0.5em;
-      // max-width: 30rem; // break lines after "policy"
     }
   }
   .columnText {
@@ -148,20 +147,7 @@
 
 // TODO move to a component
 .downloadBtn {
-  background-color: $dark-blue;
-  font-size: 1.41rem;
-  font-family: "Rawline", serif;
-  color: white;
-  padding: 5px 10px;
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  border: none;
-  border-radius: 4px;
-  z-index: 1;
-  position: relative;
-  margin: 5px 0 5px auto;
-  min-height: 58px;
+  margin-left: auto;
 
   // data download buttons
   &.all,
@@ -189,64 +175,68 @@
     }
   }
 
-  // master download button
-  &.secondary,
-  &.all_static,
-  &.all {
-    &,
-    &:hover {
-      background-color: transparent;
-      color: $dark-navy-blue;
-    }
-    &:active {
-      color: black;
-      background-color: darken($light-blue-3, 5%);
-    }
-  }
-
-  // entity-specific download buttons
-  &.Policy,
-  &.Plan {
-    padding: 10px;
-  }
-
-  span {
-    line-height: 1.5;
-  }
-  @media #{$phone} {
-    display: none;
-    div {
-      font-size: 1rem;
-      span:last-child {
-        display: none;
-      }
-    }
-    img {
-      height: 30px;
-    }
-  }
-
-  &:hover {
-    background-color: darken($dark-blue, 10%);
-  }
-  &:active {
-    @include boxShadow();
-  }
-  &.loading {
-    opacity: 0.75;
-    pointer-events: none;
-  }
-
-  img {
-    margin-right: 20px;
-  }
-  div {
-    font-weight: 300;
-    line-height: 1;
+  button {
     text-align: left;
-    span:last-child {
-      font-size: 1rem;
-      font-weight: 200;
-    }
   }
+
+  // // master download button
+  // &.secondary,
+  // &.all_static,
+  // &.all {
+  //   &,
+  //   &:hover {
+  //     background-color: transparent;
+  //     color: $dark-navy-blue;
+  //   }
+  //   &:active {
+  //     color: black;
+  //     background-color: darken($light-blue-3, 5%);
+  //   }
+  // }
+
+  // // entity-specific download buttons
+  // &.Policy,
+  // &.Plan {
+  //   padding: 10px;
+  // }
+  //
+  // span {
+  //   line-height: 1.5;
+  // }
+  // @media #{$phone} {
+  //   display: none;
+  //   div {
+  //     font-size: 1rem;
+  //     span:last-child {
+  //       display: none;
+  //     }
+  //   }
+  //   img {
+  //     height: 30px;
+  //   }
+  // }
+  //
+  // &:hover {
+  //   background-color: darken($dark-blue, 10%);
+  // }
+  // &:active {
+  //   @include boxShadow();
+  // }
+  // &.loading {
+  //   opacity: 0.75;
+  //   pointer-events: none;
+  // }
+  //
+  // img {
+  //   margin-right: 20px;
+  // }
+  // div {
+  //   font-weight: 300;
+  //   line-height: 1;
+  //   text-align: left;
+  //   span:last-child {
+  //     font-size: 1rem;
+  //     font-weight: 200;
+  //   }
+  // }
 }
