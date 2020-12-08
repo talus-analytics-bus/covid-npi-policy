@@ -1,4 +1,14 @@
+@import "../../../../assets/styles/vars.scss";
 .documentation {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    .downloads {
+      @include spaceItemsHoriz(10px);
+      display: flex;
+    }
+  }
   section.endnotes {
     font-size: 1rem;
     > p {

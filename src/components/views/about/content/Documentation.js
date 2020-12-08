@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import styles from "./documentation.module.scss";
+import { PrimaryButton } from "../../../common";
 
 // assets
 import modelPng from "./../../../../assets/images/model.png";
@@ -27,7 +28,35 @@ const Documentation = ({ ...props }) => {
   // PAGE JSX // ------------------------------------------------------------//
   return (
     <div className={styles.documentation}>
-      <h2>Overview</h2>
+      <div className={styles.header}>
+        <h2>Overview</h2>
+        <div className={styles.downloads}>
+          <PrimaryButton
+            {...{
+              label: "Download data dictionary as Excel",
+              iconName: "get_app",
+              isSmall: true,
+              isSecondary: true,
+              url:
+                process.env.PUBLIC_URL +
+                "/export/COVID AMP data dictionary.xlsx",
+              urlIsExternal: true,
+            }}
+          />
+          <PrimaryButton
+            {...{
+              label: "Download documentation as PDF",
+              iconName: "get_app",
+              isSmall: true,
+              isSecondary: true,
+              url:
+                process.env.PUBLIC_URL +
+                "/export/COVID AMP documentation 071620.pdf",
+              urlIsExternal: true,
+            }}
+          />
+        </div>
+      </div>
       <p>
         The COVID Analysis and Mapping of Policies (AMP) is part of the
         COVID-Local suite of free resources developed for local decision-makers.
@@ -924,7 +953,10 @@ const Documentation = ({ ...props }) => {
               <p>Infection fatality rate (IFR)</p>
             </td>
             <td>
-              <p>Fraction of all infections (including asymptomatic) resulting in death</p>
+              <p>
+                Fraction of all infections (including asymptomatic) resulting in
+                death
+              </p>
             </td>
             <td>
               <p>
@@ -1122,7 +1154,8 @@ const Documentation = ({ ...props }) => {
             viii
           </a>{" "}
           <p>
-            CDC COVID-19 Pandemic Planning Scenarios. Scenario 5: Current Best Estimate"{" "}
+            CDC COVID-19 Pandemic Planning Scenarios. Scenario 5: Current Best
+            Estimate"{" "}
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -1135,9 +1168,10 @@ const Documentation = ({ ...props }) => {
               target="_blank"
               rel="noopener noreferrer"
               href="https://www.medrxiv.org/content/10.1101/2020.05.03.20089854v4"
-              >
-            Meyerowitz-Katz, G., & Merone, L. (2020). A systematic review and
-            meta-analysis of published research data on COVID-19 infection-fatality rates. <i>medRxiv</i>.
+            >
+              Meyerowitz-Katz, G., & Merone, L. (2020). A systematic review and
+              meta-analysis of published research data on COVID-19
+              infection-fatality rates. <i>medRxiv</i>.
             </a>
           </p>
         </p>
