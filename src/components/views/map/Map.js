@@ -428,28 +428,32 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                     />
                                   </div>
 
-                                  <select
-                                    onChange={e => {
-                                      setLinCircleScale(
-                                        e.target.value === "linear"
-                                          ? true
-                                          : false
-                                      );
-                                    }}
-                                  >
-                                    <option
-                                      value="linear"
-                                      selected={linCircleScale}
-                                    >
-                                      Linear scale
-                                    </option>
-                                    <option
-                                      value="log"
-                                      selected={!linCircleScale}
-                                    >
-                                      Log scale
-                                    </option>
-                                  </select>
+                                  {
+                                    // // lin or log scale toggle
+                                    // // currently disabled
+                                    // <select
+                                    //   onChange={e => {
+                                    //     setLinCircleScale(
+                                    //       e.target.value === "linear"
+                                    //         ? true
+                                    //         : false
+                                    //     );
+                                    //   }}
+                                    // >
+                                    //   <option
+                                    //     value="linear"
+                                    //     selected={linCircleScale}
+                                    //   >
+                                    //     Linear scale
+                                    //   </option>
+                                    //   <option
+                                    //     value="log"
+                                    //     selected={!linCircleScale}
+                                    //   >
+                                    //     Log scale
+                                    //   </option>
+                                    // </select>
+                                  }
                                 </>
                               )}
                             </div>,
