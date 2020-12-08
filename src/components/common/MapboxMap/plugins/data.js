@@ -51,7 +51,7 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "us",
+  mapId: "global",
 
   // default date for map to start on
   // date: "2020-06-18",
