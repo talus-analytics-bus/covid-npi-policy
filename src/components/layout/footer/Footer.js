@@ -68,7 +68,7 @@ const Footer = ({ page, versions }) => {
             .{" "}
             {lastUpdatedDatePolicy && (
               <span>
-                COVID caseload data last updated{" "}
+                COVID-19 case data last updated{" "}
                 {new moment(lastUpdatedDateCaseload).format("MMM D, YYYY")}
                 {lastUpdatedCaseload.last_datum_date !== null && (
                   <span>

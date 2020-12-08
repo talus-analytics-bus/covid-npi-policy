@@ -274,7 +274,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
           {/*   <p> */}
           {/*     {dataDates && ( */}
           {/*       <> */}
-          {/*         Caseload data as of{" "} */}
+          {/*         Case data as of{" "} */}
           {/*         <strong>{dataDates.last_data_update}</strong> */}
           {/*       </> */}
           {/*     )} */}

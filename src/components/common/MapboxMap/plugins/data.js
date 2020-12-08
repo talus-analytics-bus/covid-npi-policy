@@ -491,7 +491,7 @@ export const metricMeta = {
     // Optional: Short name for metric where needed
     shortName: (
       <>
-        <div>Caseload</div>
+        <div>Cases</div>
         <div
           style={{
             fontFamily: "'rawline', serif",
@@ -501,7 +501,7 @@ export const metricMeta = {
             lineHeight: "1.1",
           }}
         >
-          confirmed & probable cases
+          confirmed & probable
         </div>
       </>
     ),
@@ -598,7 +598,7 @@ export const metricMeta = {
       // Optional: Short name for metric where needed
       shortName: (
         <>
-          <div>Caseload</div>
+          <div>Cases</div>
           <div
             style={{
               fontFamily: "'rawline', serif",
@@ -608,7 +608,7 @@ export const metricMeta = {
               lineHeight: "1.1",
             }}
           >
-            confirmed & probable cases
+            confirmed & probable
           </div>
         </>
       ),
@@ -653,7 +653,7 @@ export const metricMeta = {
       // Optional: Short name for metric where needed
       shortName: (
         <>
-          <div>Caseload</div>
+          <div>Cases</div>
           <div
             style={{
               fontFamily: "'rawline', serif",
@@ -675,7 +675,7 @@ export const metricMeta = {
       // Optional: Short name for metric where needed
       shortName: (
         <>
-          <div>Caseload</div>
+          <div>Cases</div>
           <div
             style={{
               fontFamily: "'rawline', serif",

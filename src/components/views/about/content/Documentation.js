@@ -417,7 +417,7 @@ const Documentation = ({ ...props }) => {
         effect related specifically to private sector closures, school closures,
         mass gatherings, and others.
       </p>
-      <h3>COVID caseload data</h3>
+      <h3>COVID-19 case data</h3>
       <h4>US map and social distancing policy model</h4>
       <p>
         US state-level COVID-19 caseload data, new cases in the last 7 days and
@@ -475,7 +475,7 @@ const Documentation = ({ ...props }) => {
       </p>
       <p>
         For past dates, cases are sourced from confirmed and probable cases (see
-        &lsquo;COVID caseload data&rsquo; above) data from March 1 to the most
+        &lsquo;COVID-19 case data&rsquo; above) data from March 1 to the most
         recent data update. Because case data is cumulative, we calculate
         &ldquo;active&rdquo; cases by assuming patients recover 13 days after
         their case is confirmed by testing and deriving deaths from those cases.
