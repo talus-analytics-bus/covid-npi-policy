@@ -912,6 +912,7 @@ export const metricMeta = {
         return {
           for: "basemap", // TODO dynamically
           type: "quantized",
+          layout: "grid",
           labelsInside: true,
           range: [
             "#eaeaea",
@@ -922,9 +923,10 @@ export const metricMeta = {
             "#BBDAF5",
             "#e9f3fc",
           ],
+          gridTemplateColumns: "auto repeat(5, 1fr)",
           entryStyles: [
             // null,
-            { marginRight: 20 },
+            { width: "auto", marginRight: 20, rectStyles: { width: "auto" } },
             null,
             null,
             null,
