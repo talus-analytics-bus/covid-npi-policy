@@ -27,8 +27,18 @@
 
 .abovePlot {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+
+  select {
+    padding: 9px;
+    padding-right: 50px;
+    margin-left: 1rem;
+    font-size: 1rem;
+  }
 }
 
 .instruction {
@@ -47,14 +57,11 @@
 
 .legendLabel {
   display: inline-block;
-  margin-left: 2rem;
-  margin-right: 2rem;
-  position: relative;
-  top: 1rem;
-  width: min-content;
+  margin-left: 1rem;
+  font-size: 16px;
 
   h4 {
-    padding: 0.5rem 1rem;
+    padding: 9px 15px;
     background-color: #fff;
     border: 1px solid #aaa;
     border-radius: 0.25rem;
