@@ -213,7 +213,7 @@ const Documentation = ({ ...props }) => {
         <a target="_blank" href="https://covid-local.org">
           https://covid-local.org
         </a>{" "}
-        and
+        and{" "}
         <a target="_blank" href="https://covidamp.org">
           https://covidamp.org
         </a>
