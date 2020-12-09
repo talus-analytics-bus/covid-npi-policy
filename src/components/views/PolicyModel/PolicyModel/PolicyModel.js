@@ -13,6 +13,8 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
+import { Caseload, Deaths } from "../../../misc/Queries.js";
+
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";
 import LoadingState from "../LoadingState/LoadingState";
@@ -26,16 +28,32 @@ import infoIcon from "../../../../assets/icons/info-blue.svg";
 import ampLogo from "../../../../assets/images/ampLogo.svg";
 
 const covidCountHoverText = {
-  infected_a: "Number of individuals with an active COVID-19 infection by day",
-  infected_b:
-    "Number of individuals currently hospitalized for COVID-19 infection by day",
-  infected_c:
-    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-  dead: "Cumulative deaths from COVID-19 by day",
+  caseload: {
+    infected_a:
+      "Number of new cases per day, as reported by the New York Times",
+    dead: "Number of new deaths per day, as reported by the New York Times",
+  },
+  interventions: {
+    infected_a:
+      "Number of individuals with an active COVID-19 infection by day",
+    infected_b:
+      "Number of individuals currently hospitalized for COVID-19 infection by day",
+    infected_c:
+      "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+    dead: "Cumulative deaths from COVID-19 by day",
+  },
+};
+
+const rollingAverage = (series, windowSize) => {
+  const padded = [...Array(windowSize).fill(0), ...series];
+  return series.map((day, index) => {
+    const w = padded.slice(index + 1, index + windowSize + 1);
+    return w.reduce((acc, curr) => acc + curr, 0) / w.length;
+  });
 };
 
 const PolicyModel = ({ setLoading, setPage }) => {
-  const [activeTab] = useState("interventions");
+  const [activeTab, setActiveTab] = useState("caseload");
 
   // use selected states to load the required models
   const [selectedStates, setSelectedStates] = useState([
@@ -49,7 +67,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     "infected_a",
     // 'infected_b',
     // 'infected_c',
-    // 'dead',
+    // "dead",
     "R effective",
     "pctChange",
   ]);
@@ -78,6 +96,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
   // )
 
   const setup = React.useCallback(async () => {
+    console.log("setup");
+    console.log("interventions");
     const loadedModels = await loadModels(selectedStates);
 
     // get curves, max, min from models
@@ -87,8 +107,65 @@ const PolicyModel = ({ setLoading, setPage }) => {
       counterfactualSelected
     );
 
-    // console.log(modelCurves)
-    setCurves(modelCurves);
+    if (activeTab === "caseload") {
+      console.log("Caseload");
+
+      const stateFullName = states.find(
+        state => state.abbr === selectedStates[0]
+      ).name;
+
+      const caseloadData =
+        selectedCurves[0] === "infected_a"
+          ? await Caseload({
+              stateName: stateFullName,
+              windowSizeDays: 1,
+            })
+          : await Deaths({
+              stateName: stateFullName,
+              windowSizeDays: 1,
+            });
+
+      const caseloadPoints = caseloadData.map(day => ({
+        x: new Date(day.date_time),
+        // ignoring negative new cases and deaths
+        y: Math.max(day.value, 0),
+      }));
+
+      const averageValues = rollingAverage(
+        caseloadPoints.map(p => p.y),
+        7
+      );
+      const averagePoints = averageValues.map((p, i) => ({
+        x: caseloadPoints[i].x,
+        y: p,
+      }));
+
+      const seriesMax = Math.max(...caseloadPoints.map(p => p.y));
+
+      if (selectedCurves[0] === "infected_a") {
+        modelCurves[selectedStates[0]].curves["infected_a"] = {
+          ...modelCurves[selectedStates[0]].curves["infected_a"],
+          actuals: caseloadPoints,
+          actuals_yMax: seriesMax,
+          average: averagePoints,
+        };
+      } else {
+        modelCurves[selectedStates[0]].curves["dead"] = {
+          ...modelCurves[selectedStates[0]].curves["dead"],
+          actuals: caseloadPoints,
+          actuals_yMax: seriesMax,
+          average: averagePoints,
+        };
+      }
+
+      modelCurves[selectedStates[0]]["actuals_yMax"] = seriesMax;
+
+      console.log(modelCurves);
+    }
+
+    setCurves({ ...modelCurves });
+
+    console.log(modelCurves);
 
     // set up axes
     const dates = Object.values(modelCurves)
@@ -100,8 +177,15 @@ const PolicyModel = ({ setLoading, setPage }) => {
         return 0;
       });
 
-    const zoomStartDate = new Date(dates[0].toISOString());
-    const zoomEndDate = new Date(dates.slice(-1)[0].toISOString());
+    const zoomStartDate =
+      activeTab === "interventions"
+        ? new Date()
+        : new Date(dates[0].toISOString());
+
+    const zoomEndDate =
+      activeTab === "interventions"
+        ? new Date(dates.slice(-1)[0].toISOString())
+        : new Date();
 
     zoomStartDate.setDate(zoomStartDate.getDate() - 10);
 
@@ -117,21 +201,21 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
     setDomain([domainStartDate, domainEndDate]);
 
-    console.log(modelCurves);
+    // const defaultScaleTo = modelCurves
+    //   ? Object.values(modelCurves)
+    //       .map(state =>
+    //         state.interventions.map(inter => {
+    //           // console.log(inter.intervention_type);
+    //           return inter.intervention_type === "intervention";
+    //         })
+    //       )
+    //       .flat()
+    //       .some(el => el === true)
+    //     ? "model"
+    //     : "actuals"
+    //   : "actuals";
 
-    const defaultScaleTo = modelCurves
-      ? Object.values(modelCurves)
-          .map(state =>
-            state.interventions.map(inter => {
-              // console.log(inter.intervention_type);
-              return inter.intervention_type === "intervention";
-            })
-          )
-          .flat()
-          .some(el => el === true)
-        ? "model"
-        : "actuals"
-      : "actuals";
+    const defaultScaleTo = activeTab === "caseload" ? "actuals" : "model";
 
     setCaseLoadAxis([
       0,
@@ -143,6 +227,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
     ]);
   }, [
     // callbackModels,
+    activeTab,
     selectedStates,
     selectedCurves,
     counterfactualSelected,
@@ -239,7 +324,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               <div className={styles.text}>
                 <h2>Visualize</h2>
                 <p>
-                  Policy status in each state relative to active cases and
+                  Policy status in each state relative to daily cases and
                   fatalities
                 </p>
               </div>
@@ -309,7 +394,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setSelectedCurves([e.target.value, "R effective"]);
                 }}
               >
-                <option value="infected_a">Active Cases</option>
+                <option value="infected_a">
+                  {
+                    { caseload: "Daily Cases", interventions: "Active Cases" }[
+                      activeTab
+                    ]
+                  }
+                </option>
                 {/* <option value="infected_b">Hospitalized</option> */}
                 {/* <option value="infected_c">ICU</option> */}
                 <option value="dead">Deaths</option>
@@ -319,7 +410,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 allowHTML={true}
                 content={
                   <p className={styles.ipopup}>
-                    {covidCountHoverText[selectedCurves[0]]}
+                    {covidCountHoverText[activeTab][selectedCurves[0]]}
                   </p>
                 }
                 maxWidth={"30rem"}
@@ -471,6 +562,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   allCurves={curves}
                   domain={domain}
                   activeTab={activeTab}
+                  setActiveTab={setActiveTab}
                   counterfactualSelected={counterfactualSelected}
                   setCounterfactualSelected={setCounterfactualSelected}
                   resetState={resetState}

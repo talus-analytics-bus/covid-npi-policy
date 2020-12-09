@@ -391,6 +391,7 @@ const State = props => {
           data={props.curves}
           domain={props.domain}
           activeTab={props.activeTab}
+          setActiveTab={props.setActiveTab}
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
           contactPlotType={props.contactPlotType}
@@ -400,38 +401,53 @@ const State = props => {
       </div>
       <div className={styles.bottomRow}>
         <div className={styles.miniLegend}>
-          <div className={styles.actuals}>
-            <span />
-            <p>Actuals</p>
-          </div>
-          <div className={styles.modeled}>
-            <span />
-            <p>Modeled</p>
-          </div>
+          {props.activeTab === "caseload" && (
+            <div className={styles.daily}>
+              <span />
+              <p>
+                Daily New{" "}
+                {props.selectedCurves[0] === "infected_a" ? "Cases" : "Deaths"}
+              </p>
+            </div>
+          )}
+          {props.activeTab === "caseload" && (
+            <div className={styles.actuals}>
+              <span />
+              <p>7-Day Average</p>
+            </div>
+          )}
+          {props.activeTab === "interventions" && (
+            <div className={styles.modeled}>
+              <span />
+              <p>Modeled</p>
+            </div>
+          )}
           {/* <div className={styles.noPolicies}> */}
           {/* <span /> */}
           {/* <p>"What if we had done nothing" scenario</p> */}
           {/* </div> */}
         </div>
-        <select
-          style={{ width: "13rem" }}
-          value={props.scaleTo}
-          onChange={e => {
-            props.setScaleTo(e.target.value);
-          }}
-        >
-          <option value="model">Scale to fit model</option>
-          <option value="actuals">Scale to fit actuals</option>
-        </select>
-        <button
-          className={styles.resetState}
-          onClick={e => {
-            e.preventDefault();
-            props.resetState(props.selectedState);
-          }}
-        >
-          Reset policies
-        </button>
+        {/* <select */}
+        {/*   style={{ width: "13rem" }} */}
+        {/*   value={props.scaleTo} */}
+        {/*   onChange={e => { */}
+        {/*     props.setScaleTo(e.target.value); */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <option value="model">Scale to fit model</option> */}
+        {/*   <option value="actuals">Scale to fit actuals</option> */}
+        {/* </select> */}
+        {props.activeTab === "interventions" && (
+          <button
+            className={styles.resetState}
+            onClick={e => {
+              e.preventDefault();
+              props.resetState(props.selectedState);
+            }}
+          >
+            Reset policies
+          </button>
+        )}
       </div>
     </section>
   );
