@@ -103,9 +103,12 @@ const InspectDailyCursor = props => {
     checkSameDay(point.x, popupDate)
   );
 
-  let actualCases;
+  let actualCases, averageCases;
   if (modeledCases === undefined) {
     actualCases = props.data.curves[yAxis].actuals.find(point =>
+      checkSameDay(point.x, popupDate)
+    );
+    averageCases = props.data.curves[yAxis].average.find(point =>
       checkSameDay(point.x, popupDate)
     );
   }
@@ -119,7 +122,15 @@ const InspectDailyCursor = props => {
       default:
         return (
           <>
-            current COVID-19 <br /> patients today
+            {props.activeTab === "interventions" ? (
+              <>
+                current COVID-19 <br /> patients today
+              </>
+            ) : (
+              <>
+                new COVID-19 <br /> cases today
+              </>
+            )}
           </>
         );
       case "Hospitalized":
@@ -137,7 +148,15 @@ const InspectDailyCursor = props => {
       case "Deaths":
         return (
           <>
-            cumulative COVID-19 <br /> deaths today
+            {props.activeTab === "interventions" ? (
+              <>
+                cumulative COVID-19 <br /> deaths today
+              </>
+            ) : (
+              <>
+                new COVID-19 <br /> deat today
+              </>
+            )}
           </>
         );
     }
@@ -159,7 +178,7 @@ const InspectDailyCursor = props => {
             <g
               transform={`translate(${props.x + xOffset} ,${Math.min(
                 props.y + yOffset,
-                40
+                props.activeTab === "interventions" ? 40 : 90
               )})`}
             >
               {/* This rectangle visualizes the SVG area of the foreignobject for debugging */}
@@ -224,50 +243,76 @@ const InspectDailyCursor = props => {
                             : formatModeled(modeledCases.y)}
                         </p>
                         <p className={styles.label}>
-                          {getPopupLabelName(props.labelNames[yAxis])}
-                        </p>
-                      </div>
-                      <div className={styles.reduction}>
-                        <h2>
-                          {props.contactPlotType === "pctChange" ? (
-                            <>
-                              Reduction <br /> in contacts
-                            </>
-                          ) : (
-                            <>
-                              Effective R <br /> value
-                            </>
-                          )}
-                        </h2>
-                      </div>
-                      <div className={styles.reductionContent}>
-                        <p className={styles.number}>
-                          {props.contactPlotType === "pctChange"
-                            ? Math.round(100 - contactRate.y)
-                            : contactRate.y}
-                          {props.contactPlotType === "pctChange" ? "%" : ""}
-                        </p>
-                        <p className={styles.label}>
-                          {props.contactPlotType === "pctChange" ? (
-                            <>
-                              estimated contact reduction <br /> with policies
-                              in effect
-                            </>
-                          ) : (
-                            <>
-                              estimated effective R <br /> with policies in
-                              effect
-                            </>
+                          {getPopupLabelName(
+                            props.labelNames[props.activeTab][yAxis]
                           )}
                         </p>
                       </div>
+                      {props.activeTab === "interventions" ? (
+                        <>
+                          <div className={styles.reduction}>
+                            <h2>
+                              {props.contactPlotType === "pctChange" ? (
+                                <>
+                                  Reduction <br /> in contacts
+                                </>
+                              ) : (
+                                <>
+                                  Effective R <br /> value
+                                </>
+                              )}
+                            </h2>
+                          </div>
+                          <div className={styles.reductionContent}>
+                            <p className={styles.number}>
+                              {props.contactPlotType === "pctChange"
+                                ? Math.round(100 - contactRate.y)
+                                : contactRate.y}
+                              {props.contactPlotType === "pctChange" ? "%" : ""}
+                            </p>
+                            <p className={styles.label}>
+                              {props.contactPlotType === "pctChange" ? (
+                                <>
+                                  estimated contact reduction <br /> with
+                                  policies in effect
+                                </>
+                              ) : (
+                                <>
+                                  estimated effective R <br /> with policies in
+                                  effect
+                                </>
+                              )}
+                            </p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className={styles.reduction}>
+                            <h2>
+                              7-Day <br /> Average
+                            </h2>
+                          </div>
+                          <div className={styles.reductionContent}>
+                            <p className={styles.number}>
+                              {formatActuals(averageCases.y)}
+                            </p>
+                            <p className={styles.label}>
+                              Seven-Day average Cases
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </section>
                 </foreignObject>
               )}
             </g>
             <path
-              d={`M ${props.x - 5} -31 L ${props.x - 5} 130`}
+              d={`M ${props.x - 5} ${
+                props.activeTab === "interventions" ? -31 : 6
+              } L ${props.x - 5} ${
+                props.activeTab === "interventions" ? 130 : 180
+              }`}
               style={{
                 // stroke: popupDate > new Date() ? "#8D64DD" : "#8D64DD",
                 stroke: latestInterColor,
