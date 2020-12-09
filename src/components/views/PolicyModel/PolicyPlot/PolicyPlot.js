@@ -79,7 +79,7 @@ const labelNames = {
     infected_a: "Active Cases",
     infected_b: "Hospitalized",
     infected_c: "ICU",
-    dead: "Deaths",
+    dead: "Cumulative Deaths",
   },
 };
 
@@ -606,7 +606,7 @@ const PolicyModel = props => {
                 infected_a: "47.8%",
                 infected_b: "48.5%",
                 infected_c: "53.5%",
-                dead: "51.5%",
+                dead: "45%",
               },
             }[props.activeTab][props.selectedCurves[0]],
             left: "2.2%",
