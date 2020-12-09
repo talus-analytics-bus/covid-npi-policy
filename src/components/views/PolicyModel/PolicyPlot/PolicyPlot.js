@@ -604,12 +604,12 @@ const PolicyModel = props => {
               },
               interventions: {
                 infected_a: "47.8%",
-                infected_b: "48%",
+                infected_b: "48.5%",
                 infected_c: "53.5%",
                 dead: "51.5%",
               },
             }[props.activeTab][props.selectedCurves[0]],
-            left: "2.1%",
+            left: "2.2%",
           }}
         />
       </Tippy>
@@ -642,7 +642,7 @@ const PolicyModel = props => {
             style={{
               position: "absolute",
               height: "2.5%",
-              top: "10.5%",
+              top: "12.5%",
               left: "2.7%",
             }}
           />
