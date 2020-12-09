@@ -9,7 +9,8 @@ import modelPng from "./../../../../assets/images/model.png";
 
 const Documentation = ({ ...props }) => {
   // UTILITY FUNCTIONS // ---------------------------------------------------//
-  // handle scrollTo for when endnote anchors are clicked
+  // handle scrollTo for when endnote anchors are clicked. Clicking an endnote
+  // ref takes you to endnotes, and vice versa
   const onClick = e => {
     const headerOffset = 190; // TODO get from SCSS
     let el;
@@ -102,6 +103,8 @@ const Documentation = ({ ...props }) => {
     </>,
   ];
 
+  // create JSX from endnote text, adding the roman numerals, linking to
+  // endnote references in main text, etc.
   const endnoteJsx = endnoteText.map((d, i) => {
     const idx = i + 1;
     return (
