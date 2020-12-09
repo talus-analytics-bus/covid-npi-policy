@@ -324,7 +324,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               <div className={styles.text}>
                 <h2>Visualize</h2>
                 <p>
-                  Policy status in each state relative to active cases and
+                  Policy status in each state relative to daily cases and
                   fatalities
                 </p>
               </div>
