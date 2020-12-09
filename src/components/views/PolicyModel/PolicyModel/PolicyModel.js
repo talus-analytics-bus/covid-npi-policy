@@ -110,26 +110,22 @@ const PolicyModel = ({ setLoading, setPage }) => {
     if (activeTab === "caseload") {
       console.log("Caseload");
 
-      // const caseloadData = await Caseload({
-      //   stateName: "Maryland",
-      //   windowSizeDays: 1,
-      // });
-
-      const caseloadData = await Deaths({
-        // countryIso3: "USA",
-        stateName: "Maryland",
-        windowSizeDays: 1,
-      });
+      const caseloadData =
+        selectedCurves[0] === "infected_a"
+          ? await Caseload({
+              stateName: "Maryland",
+              windowSizeDays: 1,
+            })
+          : await Deaths({
+              // countryIso3: "USA",
+              stateName: "Maryland",
+              windowSizeDays: 1,
+            });
 
       const caseloadPoints = caseloadData.map(day => ({
         x: new Date(day.date_time),
         y: day.value,
       }));
-      //
-      //       modelCurves["MD"].curves["caseload"] = {
-      //         actuals: caseloadPoints,
-      //         modeled: [],
-      //       };
 
       const averageValues = rollingAverage(
         caseloadPoints.map(p => p.y),
@@ -140,38 +136,29 @@ const PolicyModel = ({ setLoading, setPage }) => {
         y: p,
       }));
 
-      modelCurves[selectedStates[0]].curves["infected_a"] = {
-        ...modelCurves[selectedStates[0]].curves["infected_a"],
-        actuals: caseloadPoints,
-        average: averagePoints,
-      };
+      const seriesMax = Math.max(...caseloadPoints.map(p => p.y));
 
-      //       const mdReverse = md.reverse();
-      //
-      //       const MDaverageValues = rollingAverage(
-      //         mdReverse.map(p => p.y),
-      //         7
-      //       );
-      //       const MDaveragePoints = MDaverageValues.map((p, i) => ({
-      //         x: mdReverse[i].x,
-      //         y: p,
-      //       }));
-      //
-      //       modelCurves[selectedStates[0]].curves["maryland"] = {
-      //         ...modelCurves[selectedStates[0]].curves["maryland"],
-      //         actuals: mdReverse,
-      //         average: MDaveragePoints,
-      //       };
+      if (selectedCurves[0] === "infected_a") {
+        modelCurves[selectedStates[0]].curves["infected_a"] = {
+          ...modelCurves[selectedStates[0]].curves["infected_a"],
+          actuals: caseloadPoints,
+          actuals_yMax: seriesMax,
+          average: averagePoints,
+        };
+      } else {
+        modelCurves[selectedStates[0]].curves["dead"] = {
+          ...modelCurves[selectedStates[0]].curves["dead"],
+          actuals: caseloadPoints,
+          actuals_yMax: seriesMax,
+          average: averagePoints,
+        };
+      }
 
-      modelCurves[selectedStates[0]]["actuals_yMax"] = Math.max(
-        ...caseloadPoints.map(p => p.y)
-      );
+      modelCurves[selectedStates[0]]["actuals_yMax"] = seriesMax;
 
       console.log(modelCurves);
     }
-    console.log(
-      modelCurves[selectedStates[0]].curves["infected_a"].actuals_yMax
-    );
+
     setCurves({ ...modelCurves });
 
     console.log(modelCurves);
