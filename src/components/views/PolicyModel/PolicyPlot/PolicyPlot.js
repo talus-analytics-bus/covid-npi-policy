@@ -54,7 +54,7 @@ const interventionColors = {
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
   "Partially open": "#ECBD62",
-  Open: "#f4ddaf",
+  Open: "#7F7F7F",
 };
 
 const phaseNames = {
@@ -979,6 +979,7 @@ export const getDisplayNameFromPolicyName = ({ policyName, proposed }) => {
   } else if (proposed) {
     displayName += " proposed";
   } else displayName += " implemented";
+  if (policyName === "Open") displayName = policyName;
   return displayName;
 };
 

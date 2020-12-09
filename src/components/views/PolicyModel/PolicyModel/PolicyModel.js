@@ -127,7 +127,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
       const caseloadPoints = caseloadData.map(day => ({
         x: new Date(day.date_time),
-        y: day.value,
+        // ignoring negative new cases and deaths
+        y: Math.max(day.value, 0),
       }));
 
       const averageValues = rollingAverage(

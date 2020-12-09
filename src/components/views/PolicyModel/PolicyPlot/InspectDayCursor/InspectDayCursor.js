@@ -61,7 +61,7 @@ const InspectDailyCursor = props => {
       inter =>
         Date.parse(inter.intervention_start_date) < Date.parse(props.datum.x)
     )
-    .slice(-1)[0] || { name: "Unclear lockdown level" };
+    .slice(-1)[0] || { name: "Open" };
 
   // latestIntervention =
   //   latestIntervention !== undefined
