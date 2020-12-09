@@ -259,23 +259,34 @@ const Legend = ({ ...props }) => {
         <div className={styles.content}>
           <div className={styles.entry}>
             <div
-              className={styles.quantized}
+              className={classNames(styles.quantized, {
+                [styles.grid]: props.layout === "grid",
+              })}
               style={{
-                gridTemplateColumns: `repeat(${range.length}, 1fr)`,
+                gridTemplateColumns:
+                  props.gridTemplateColumns || `repeat(${range.length}, 1fr)`,
               }}
             >
               {styleEntries.map((d, i) => {
                 const entryStyles =
-                  props.entryStyles !== undefined ? props.entryStyles[i] : {};
+                  props.entryStyles !== undefined
+                    ? props.entryStyles[i] || {}
+                    : {};
                 const labelStyles =
-                  props.labelStyles !== undefined ? props.labelStyles[i] : {};
+                  props.labelStyles !== undefined
+                    ? props.labelStyles[i] || {}
+                    : {};
+                const rectStyles =
+                  entryStyles.rectStyles !== undefined
+                    ? entryStyles.rectStyles
+                    : {};
                 return (
                   <div style={entryStyles} className={styles.rectGroup} key={i}>
                     <div
                       className={classNames(styles.rect, {
                         [styles.labelsInside]: labelsInside,
                       })}
-                      style={d}
+                      style={{ ...d, ...rectStyles }}
                     >
                       {labelsInside && (
                         <div className={styles.label}>{labels[i]}</div>

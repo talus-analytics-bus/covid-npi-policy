@@ -760,17 +760,17 @@ export const metricMeta = {
       //     </span>
       //   ),
       // },
-      "No policy": {
-        label: "No policy",
-        color: "#fff",
-        bordered: true,
-        border: "2px solid gray",
-        def: (
-          <span>
-            No policies are in place for social distancing or face masks.
-          </span>
-        ),
-      },
+      // "No policy": {
+      //   label: "No policy",
+      //   color: "#fff",
+      //   bordered: true,
+      //   border: "2px solid gray",
+      //   def: (
+      //     <span>
+      //       No policies are in place for social distancing or face masks.
+      //     </span>
+      //   ),
+      // },
       Lockdown: {
         label: "Lockdown",
         phase: "Phase I",
@@ -912,33 +912,36 @@ export const metricMeta = {
         return {
           for: "basemap", // TODO dynamically
           type: "quantized",
+          layout: "grid",
           labelsInside: true,
           range: [
             "#eaeaea",
-            "#ffffff",
+            // "#ffffff",
             "#2165a1",
             "#549FE2",
             "#86BFEB",
             "#BBDAF5",
             "#e9f3fc",
           ],
+          gridTemplateColumns: "auto repeat(5, 1fr)",
           entryStyles: [
-            null,
-            { marginRight: 20 },
+            // null,
+            { width: "auto", marginRight: 20, rectStyles: { width: "auto" } },
             null,
             null,
             null,
             null,
             null,
           ],
-          borders: [null, "2px solid gray", null, null, null, null, null],
+          borders: [null, null, null, null, null, null],
+          // borders: [null, "2px solid gray", null, null, null, null, null],
           domain: [
             <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
               data not
               <br />
               available
             </div>,
-            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>no policy</div>,
+            // <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>no policy</div>,
             getCovidLocalMetricLink("lockdown"),
             getCovidLocalMetricLink("stay-at-home"),
             getCovidLocalMetricLink("safer-at-home"),
@@ -965,7 +968,7 @@ export const metricMeta = {
             .scaleOrdinal()
             .domain([
               "no data",
-              "no policy",
+              // "no policy",
               getCovidLocalMetricLink("lockdown (phase I)"),
               getCovidLocalMetricLink("stay-at-home (phase II)"),
               getCovidLocalMetricLink("safer-at-home (phase III)"),
@@ -974,7 +977,7 @@ export const metricMeta = {
             ])
             .range([
               "#eaeaea",
-              "#ffffff",
+              // "#ffffff",
               "#2165a1",
               "#549FE2",
               "#86BFEB",
@@ -1134,8 +1137,10 @@ export const tooltipGetter = async ({
   // get the current feature state (the feature to be tooltipped)
   const state = map.getFeatureState(d);
 
-  // if lockdown level is "No policy", then change lockdown level to null
-  if (state.lockdown_level === "No policy") state.lockdown_level = null;
+  // if lockdown level is null, set to "Open"
+  const replaceNullsWithOpen =
+    state.lockdown_level === null && (props.geoHaveData || mapId === "us");
+  if (replaceNullsWithOpen) state.lockdown_level = "Open";
 
   const apiDate = date.format("YYYY-MM-DD");
 
