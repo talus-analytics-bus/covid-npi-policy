@@ -9,6 +9,11 @@
       display: flex;
     }
   }
+
+  // nested ordered lists are lowercase letters
+  ol > li > ol {
+    list-style: lower-alpha;
+  }
   section.endnotes {
     font-size: 1rem;
     > p {
@@ -34,7 +39,8 @@
   }
 
   [data-type*="ref"],
-  [data-type*="endnote"] {
+  [data-type*="endnote"],
+  [name^="_ednref"] {
     vertical-align: super;
     font-size: 0.9rem;
     cursor: pointer;
@@ -45,7 +51,8 @@
     }
   }
 
-  .figureCaption {
+  .figureCaption,
+  img + p {
     font-size: 1rem;
   }
 
