@@ -414,16 +414,16 @@ const State = props => {
           {/* <p>"What if we had done nothing" scenario</p> */}
           {/* </div> */}
         </div>
-        <select
-          style={{ width: "13rem" }}
-          value={props.scaleTo}
-          onChange={e => {
-            props.setScaleTo(e.target.value);
-          }}
-        >
-          <option value="model">Scale to fit model</option>
-          <option value="actuals">Scale to fit actuals</option>
-        </select>
+        {/* <select */}
+        {/*   style={{ width: "13rem" }} */}
+        {/*   value={props.scaleTo} */}
+        {/*   onChange={e => { */}
+        {/*     props.setScaleTo(e.target.value); */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <option value="model">Scale to fit model</option> */}
+        {/*   <option value="actuals">Scale to fit actuals</option> */}
+        {/* </select> */}
         <button
           className={styles.resetState}
           onClick={e => {
