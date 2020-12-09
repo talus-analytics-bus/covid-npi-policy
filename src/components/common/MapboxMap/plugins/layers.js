@@ -16,13 +16,13 @@ import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
 // import { geoHaveData } from "../MapboxMap";
 
 // assets
-import dots from "./assets/images/dots.png";
+// import dots from "./assets/images/dots.png";
 
 // constants
 // define default pattern style used below
 const defaultPatternStyle = key => {
   return {
-    "fill-pattern": "dots",
+    // "fill-pattern": "dots",
     "fill-opacity": [
       "case",
       ["==", ["feature-state", key], null],
@@ -376,17 +376,17 @@ const fillStyles = {
       ],
     };
   },
-  "lockdown_level-pattern": key => {
-    return {
-      "fill-pattern": "dots",
-      "fill-opacity": [
-        "case",
-        ["==", ["feature-state", key], "Mixed distancing levels"],
-        1,
-        0,
-      ],
-    };
-  },
+  // "lockdown_level-pattern": key => {
+  //   return {
+  //     "fill-pattern": "dots",
+  //     "fill-opacity": [
+  //       "case",
+  //       ["==", ["feature-state", key], "Mixed distancing levels"],
+  //       1,
+  //       0,
+  //     ],
+  //   };
+  // },
   "lockdown_level-outline": (key, geoHaveData) => {
     return {
       "line-color": [
@@ -433,8 +433,8 @@ export const layerStyles = {
 
 // define images used by layers -- if none, then provide empty array
 export const layerImages = [
-  {
-    name: "dots",
-    asset: dots,
-  },
+  // {
+  //   name: "dots",
+  //   asset: dots,
+  // },
 ];

@@ -137,9 +137,9 @@ export const mapMetrics = {
         // NOTE: if true, an outline style must be defined in `./layers.js`
         outline: true,
 
-        // whether layers that display this metric should have a pattern layers
-        // NOTE: if true, a pattern style must be defined in `./layers.js`
-        pattern: true,
+        // // whether layers that display this metric should have a pattern layers
+        // // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true,
       },
     },
     {
@@ -202,7 +202,8 @@ export const mapMetrics = {
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
-      styleOptions: { outline: true, pattern: true },
+      styleOptions: { outline: true },
+      // styleOptions: { outline: true, pattern: true },
     },
     {
       queryFunc: ObservationQuery,
@@ -217,7 +218,8 @@ export const mapMetrics = {
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "state"],
       trend: true,
-      styleOptions: { outline: true, pattern: true },
+      styleOptions: { outline: true },
+      // styleOptions: { outline: true, pattern: true },
     },
   ],
   global: [
@@ -273,9 +275,9 @@ export const mapMetrics = {
         // NOTE: if true, an outline style must be defined in `./layers.js`
         outline: true,
 
-        // whether layers that display this metric should have a pattern layers
-        // NOTE: if true, a pattern style must be defined in `./layers.js`
-        pattern: true,
+        // // whether layers that display this metric should have a pattern layers
+        // // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true,
       },
     },
     {
