@@ -118,19 +118,17 @@ const InspectDailyCursor = props => {
   // {props.labelNames[yAxis]} COVID-19 <br /> patients today
   const getPopupLabelName = yAxisLabelName => {
     switch (yAxisLabelName) {
-      case "Caseload":
+      case "Active Cases":
       default:
         return (
           <>
-            {props.activeTab === "interventions" ? (
-              <>
-                current COVID-19 <br /> patients today
-              </>
-            ) : (
-              <>
-                new COVID-19 <br /> cases today
-              </>
-            )}
+            current COVID-19 <br /> patients today (modeled)
+          </>
+        );
+      case "Daily Cases":
+        return (
+          <>
+            new COVID-19 <br /> cases today
           </>
         );
       case "Hospitalized":
@@ -145,18 +143,16 @@ const InspectDailyCursor = props => {
             hospitalized COVID-19 <br /> patients in ICU today
           </>
         );
-      case "Deaths":
+      case "Cumulative Deaths":
         return (
           <>
-            {props.activeTab === "interventions" ? (
-              <>
-                cumulative COVID-19 <br /> deaths today
-              </>
-            ) : (
-              <>
-                new COVID-19 <br /> deat today
-              </>
-            )}
+            cumulative COVID-19 <br /> deaths today (modeled)
+          </>
+        );
+      case "Daily Deaths":
+        return (
+          <>
+            new COVID-19 <br /> deaths today
           </>
         );
     }
@@ -229,12 +225,7 @@ const InspectDailyCursor = props => {
                         </div>
                       </div>
                       <div className={styles.caseload}>
-                        <h2>
-                          {props.labelNames[yAxis]}{" "}
-                          {modeledCases === undefined
-                            ? "(actual)"
-                            : "(modeled)"}
-                        </h2>
+                        <h2>{props.labelNames[props.activeTab][yAxis]} </h2>
                       </div>
                       <div className={styles.caseloadContent}>
                         <p className={styles.number}>
@@ -289,7 +280,7 @@ const InspectDailyCursor = props => {
                         <>
                           <div className={styles.reduction}>
                             <h2>
-                              7-Day <br /> Average
+                              7-day <br /> average
                             </h2>
                           </div>
                           <div className={styles.reductionContent}>
@@ -297,7 +288,7 @@ const InspectDailyCursor = props => {
                               {formatActuals(averageCases.y)}
                             </p>
                             <p className={styles.label}>
-                              Seven-Day average Cases
+                              seven-day average cases
                             </p>
                           </div>
                         </>
