@@ -424,15 +424,17 @@ const State = props => {
         {/*   <option value="model">Scale to fit model</option> */}
         {/*   <option value="actuals">Scale to fit actuals</option> */}
         {/* </select> */}
-        <button
-          className={styles.resetState}
-          onClick={e => {
-            e.preventDefault();
-            props.resetState(props.selectedState);
-          }}
-        >
-          Reset policies
-        </button>
+        {props.activeTab === "interventions" && (
+          <button
+            className={styles.resetState}
+            onClick={e => {
+              e.preventDefault();
+              props.resetState(props.selectedState);
+            }}
+          >
+            Reset policies
+          </button>
+        )}
       </div>
     </section>
   );
