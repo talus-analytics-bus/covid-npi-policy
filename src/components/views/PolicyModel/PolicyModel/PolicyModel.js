@@ -110,15 +110,18 @@ const PolicyModel = ({ setLoading, setPage }) => {
     if (activeTab === "caseload") {
       console.log("Caseload");
 
+      const stateFullName = states.find(
+        state => state.abbr === selectedStates[0]
+      ).name;
+
       const caseloadData =
         selectedCurves[0] === "infected_a"
           ? await Caseload({
-              stateName: "Maryland",
+              stateName: stateFullName,
               windowSizeDays: 1,
             })
           : await Deaths({
-              // countryIso3: "USA",
-              stateName: "Maryland",
+              stateName: stateFullName,
               windowSizeDays: 1,
             });
 
