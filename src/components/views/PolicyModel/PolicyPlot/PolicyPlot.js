@@ -935,8 +935,8 @@ const PolicyModel = props => {
         {props.activeTab === "caseload" && averageLines}
         {counterfactualArea}
         {props.activeTab === "interventions" && modelLines}
-        {/* {interventionLines} */}
-        {/* {interventionPoints} */}
+        {interventionLines}
+        {interventionPoints}
         {/* Today marker */}
 
         <VictoryLine
