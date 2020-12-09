@@ -9,6 +9,7 @@ import {
   VictoryLabel,
   createContainer,
   LineSegment,
+  VictoryBar,
   VictoryPortal,
 } from "victory";
 
@@ -212,16 +213,59 @@ const PolicyModel = props => {
   }, [props.caseLoadAxis]);
 
   // The actuals lines of the plot
-  const actualsLines = Object.entries(props.data.curves).map(
+  // const actualsLines = Object.entries(props.data.curves).map(
+  //   ([curveName, data], index) => {
+  //     if (!["R effective", "pctChange"].includes(curveName)) {
+  //       return (
+  //         <VictoryLine
+  //           key={curveName}
+  //           style={{
+  //             data: { stroke: plotColors[index], strokeWidth: 0.75 },
+  //           }}
+  //           data={data.actuals}
+  //           // interpolation={'monotoneX'}
+  //         />
+  //       );
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  // );
+
+  const actualsBars = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
       if (!["R effective", "pctChange"].includes(curveName)) {
+        return (
+          <VictoryBar
+            key={curveName}
+            style={{
+              data: {
+                fill: {
+                  maryland: "rgba(240,0,0,.5)",
+                  infected_a: "rgba(0,240,0,.5)",
+                }[curveName],
+              },
+            }}
+            data={data.actuals}
+            // interpolation={'monotoneX'}
+          />
+        );
+      } else {
+        return false;
+      }
+    }
+  );
+
+  const averageLines = Object.entries(props.data.curves).map(
+    ([curveName, data], index) => {
+      if (!["R effective", "pctChange"].includes(curveName) && data.average) {
         return (
           <VictoryLine
             key={curveName}
             style={{
               data: { stroke: plotColors[index], strokeWidth: 0.75 },
             }}
-            data={data.actuals}
+            data={data.average}
             // interpolation={'monotoneX'}
           />
         );
@@ -862,11 +906,13 @@ const PolicyModel = props => {
           }}
         />
 
-        {props.activeTab === "caseload" && actualsLines}
+        {/* {props.activeTab === "caseload" && actualsLines} */}
+        {props.activeTab === "caseload" && actualsBars}
+        {props.activeTab === "caseload" && averageLines}
         {counterfactualArea}
         {props.activeTab === "interventions" && modelLines}
-        {interventionLines}
-        {interventionPoints}
+        {/* {interventionLines} */}
+        {/* {interventionPoints} */}
         {/* Today marker */}
 
         <VictoryLine
