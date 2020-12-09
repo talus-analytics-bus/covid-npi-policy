@@ -13,7 +13,7 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
-import { Caseload, Deaths } from "../../../misc/Queries.js";
+import { Caseload } from "../../../misc/Queries.js";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";
@@ -106,11 +106,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
         stateName: "Maryland",
         windowSizeDays: 1,
       });
-      const deathsData = await Deaths({
-        // countryIso3: "USA",
-        stateName: "Alabama",
-        windowSizeDays: 7,
-      });
 
       const caseloadPoints = caseloadData.map(day => ({
         x: new Date(day.date_time),
@@ -130,16 +125,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
         x: caseloadPoints[i].x,
         y: p,
       }));
-      const caseloadData2 = await Caseload({
-        // countryIso3: "USA",
-        stateName: "Alabama",
-        windowSizeDays: 1,
-      });
-      const deathsData2 = await Deaths({
-        // countryIso3: "USA",
-        stateName: "Alabama",
-        windowSizeDays: 1,
-      });
 
       const md = [
         { y: new Date("2020-12-07"), x: 19 },
