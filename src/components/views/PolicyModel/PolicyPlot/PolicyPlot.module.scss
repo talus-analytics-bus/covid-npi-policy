@@ -85,7 +85,8 @@
   .partial,
   .proposed,
   .actuals,
-  .modeled {
+  .modeled,
+  .daily {
     display: grid;
     grid-auto-flow: column;
     align-items: center;
@@ -143,7 +144,7 @@
   .actuals {
     span {
       height: 0;
-      border: 2px solid #183344;
+      border: 2px solid #7490a9;
     }
   }
   .modeled {
@@ -157,6 +158,39 @@
     span {
       background-color: #bcd3ce;
       border-radius: 3px;
+    }
+  }
+  .daily {
+    span {
+      position: relative;
+      margin-left: 10px;
+      margin-right: 16px;
+      height: 12px;
+      transform: scaleY(-1);
+      border-radius: 0;
+
+      &,
+      &:before,
+      &:after {
+        width: 5px;
+        background-color: #adadad;
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        content: "";
+      }
+
+      &:before {
+        left: -7px;
+        height: 7px;
+      }
+
+      &:after {
+        right: -7px;
+        height: 15px;
+      }
     }
   }
 }

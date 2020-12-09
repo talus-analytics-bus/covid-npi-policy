@@ -552,14 +552,29 @@ const PolicyModel = props => {
                   <span />
                   <p>Proposed</p>
                 </div>
-                <div className={styles.actuals}>
-                  <span />
-                  <p>Actuals</p>
-                </div>
-                <div className={styles.modeled}>
-                  <span />
-                  <p>Modeled</p>
-                </div>
+                {props.activeTab === "caseload" && (
+                  <div className={styles.daily}>
+                    <span />
+                    <p>
+                      Daily New{" "}
+                      {props.selectedCurves[0] === "infected_a"
+                        ? "Cases"
+                        : "Deaths"}
+                    </p>
+                  </div>
+                )}
+                {props.activeTab === "caseload" && (
+                  <div className={styles.actuals}>
+                    <span />
+                    <p>7-Day Average</p>
+                  </div>
+                )}
+                {props.activeTab === "interventions" && (
+                  <div className={styles.modeled}>
+                    <span />
+                    <p>Modeled</p>
+                  </div>
+                )}
                 {/* <div className={styles.noPolicies}> */}
                 {/* <span /> */}
                 {/* <p>"What if we had done nothing" scenario</p> */}
