@@ -415,12 +415,7 @@ const Data = ({
                       <>No {nouns.p.toLowerCase()} found</>
                     )}
                     {data && data.length > 0 && (
-                      <>
-                        Download complete data for
-                        <br />
-                        {!hasFilters ? "all" : "filtered"}{" "}
-                        {nouns.p.toLowerCase()} ({comma(numInstances)}) as Excel
-                      </>
+                      <>Download {!hasFilters ? "" : "filtered"} data (.xlsx)</>
                     )}
                   </span>
                 ),
@@ -524,11 +519,7 @@ export const DownloadBtn = ({
             {!buttonLoading && render && message}
             {buttonLoading && (
               <>
-                <span>
-                  Downloading data,
-                  <br />
-                  please wait...
-                </span>
+                <span>Downloading, please wait...</span>
               </>
             )}
           </div>
