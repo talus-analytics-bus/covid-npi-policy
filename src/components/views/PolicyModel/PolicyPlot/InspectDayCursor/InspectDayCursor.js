@@ -285,10 +285,11 @@ const InspectDailyCursor = props => {
                           </div>
                           <div className={styles.reductionContent}>
                             <p className={styles.number}>
-                              {formatActuals(averageCases.y)}
+                              {averageCases && formatActuals(averageCases.y)}
                             </p>
                             <p className={styles.label}>
-                              seven-day average cases
+                              seven-day average{" "}
+                              {yAxis === "infected_a" ? "cases" : "deaths"}
                             </p>
                           </div>
                         </>
