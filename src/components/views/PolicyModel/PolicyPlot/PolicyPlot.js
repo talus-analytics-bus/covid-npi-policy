@@ -600,6 +600,7 @@ const PolicyModel = props => {
             top: {
               caseload: {
                 infected_a: "40%",
+                dead: "40%",
               },
               interventions: {
                 infected_a: "47.8%",
