@@ -28,12 +28,20 @@ import infoIcon from "../../../../assets/icons/info-blue.svg";
 import ampLogo from "../../../../assets/images/ampLogo.svg";
 
 const covidCountHoverText = {
-  infected_a: "Number of individuals with an active COVID-19 infection by day",
-  infected_b:
-    "Number of individuals currently hospitalized for COVID-19 infection by day",
-  infected_c:
-    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-  dead: "Cumulative deaths from COVID-19 by day",
+  caseload: {
+    infected_a:
+      "Number of new cases per day, as reported by the New York Times",
+    dead: "Number of new deaths per day, as reported by the New York Times",
+  },
+  interventions: {
+    infected_a:
+      "Number of individuals with an active COVID-19 infection by day",
+    infected_b:
+      "Number of individuals currently hospitalized for COVID-19 infection by day",
+    infected_c:
+      "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+    dead: "Cumulative deaths from COVID-19 by day",
+  },
 };
 
 const rollingAverage = (series, windowSize) => {
@@ -395,7 +403,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   setSelectedCurves([e.target.value, "R effective"]);
                 }}
               >
-                <option value="infected_a">Active Cases</option>
+                <option value="infected_a">
+                  {
+                    { caseload: "Daily Cases", interventions: "Active Cases" }[
+                      activeTab
+                    ]
+                  }
+                </option>
                 {/* <option value="infected_b">Hospitalized</option> */}
                 {/* <option value="infected_c">ICU</option> */}
                 <option value="dead">Deaths</option>
@@ -405,7 +419,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 allowHTML={true}
                 content={
                   <p className={styles.ipopup}>
-                    {covidCountHoverText[selectedCurves[0]]}
+                    {covidCountHoverText[activeTab][selectedCurves[0]]}
                   </p>
                 }
                 maxWidth={"30rem"}
