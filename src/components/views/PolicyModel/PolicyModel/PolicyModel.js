@@ -13,7 +13,7 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
-import { Caseload } from "../../../misc/Queries.js";
+import { Caseload, Deaths } from "../../../misc/Queries.js";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";
@@ -102,7 +102,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
     if (activeTab === "caseload") {
       console.log("Caseload");
 
-      const caseloadData = await Caseload({
+      // const caseloadData = await Caseload({
+      //   stateName: "Maryland",
+      //   windowSizeDays: 1,
+      // });
+
+      const caseloadData = await Deaths({
+        // countryIso3: "USA",
         stateName: "Maryland",
         windowSizeDays: 1,
       });
@@ -111,11 +117,11 @@ const PolicyModel = ({ setLoading, setPage }) => {
         x: new Date(day.date_time),
         y: day.value,
       }));
-
-      modelCurves["MD"].curves["caseload"] = {
-        actuals: caseloadPoints,
-        modeled: [],
-      };
+      //
+      //       modelCurves["MD"].curves["caseload"] = {
+      //         actuals: caseloadPoints,
+      //         modeled: [],
+      //       };
 
       const averageValues = rollingAverage(
         caseloadPoints.map(p => p.y),

@@ -240,10 +240,11 @@ const PolicyModel = props => {
             key={curveName}
             style={{
               data: {
-                fill: {
-                  maryland: "rgba(240,0,0,.5)",
-                  infected_a: "rgba(0,240,0,.5)",
-                }[curveName],
+                fill: "#ddd",
+                // {
+                //   maryland: "rgba(240,0,0,.5)",
+                //   infected_a: "rgba(0,240,0,.5)",
+                // }[curveName],
               },
             }}
             data={data.actuals}
