@@ -71,19 +71,33 @@ const phaseNames = {
 };
 
 const labelNames = {
-  infected_a: "Active Cases",
-  infected_b: "Hospitalized",
-  infected_c: "ICU",
-  dead: "Deaths",
+  caseload: {
+    infected_a: "Daily Cases",
+    dead: "Daily Deaths",
+  },
+  interventions: {
+    infected_a: "Active Cases",
+    infected_b: "Hospitalized",
+    infected_c: "ICU",
+    dead: "Deaths",
+  },
 };
 
 const covidCountHoverText = {
-  infected_a: "Number of individuals with an active COVID-19 infection by day",
-  infected_b:
-    "Number of individuals currently hospitalized for COVID-19 infection by day",
-  infected_c:
-    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-  dead: "Cumulative deaths from COVID-19 by day",
+  caseload: {
+    infected_a:
+      "Number of new cases per day, as reported by the New York Times",
+    dead: "Number of new deaths per day, as reported by the New York Times",
+  },
+  interventions: {
+    infected_a:
+      "Number of individuals with an active COVID-19 infection by day",
+    infected_b:
+      "Number of individuals currently hospitalized for COVID-19 infection by day",
+    infected_c:
+      "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+    dead: "Cumulative deaths from COVID-19 by day",
+  },
 };
 
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
@@ -568,7 +582,7 @@ const PolicyModel = props => {
         allowHTML={true}
         content={
           <p className={styles.ipopup}>
-            {covidCountHoverText[props.selectedCurves[0]]}
+            {covidCountHoverText[props.activeTab][props.selectedCurves[0]]}
           </p>
         }
         maxWidth={"30rem"}
@@ -584,48 +598,55 @@ const PolicyModel = props => {
             position: "absolute",
             height: "2.5%",
             top: {
-              infected_a: "47.8%",
-              infected_b: "48%",
-              infected_c: "53.5%",
-              dead: "51.5%",
-            }[props.selectedCurves[0]],
+              caseload: {
+                infected_a: "40%",
+              },
+              interventions: {
+                infected_a: "47.8%",
+                infected_b: "48%",
+                infected_c: "53.5%",
+                dead: "51.5%",
+              },
+            }[props.activeTab][props.selectedCurves[0]],
             left: "2.1%",
           }}
         />
       </Tippy>
-      <Tippy
-        interactive={true}
-        allowHTML={true}
-        content={
-          props.contactPlotType === "pctChange" ? (
-            <p className={styles.ipopup}>
-              Estimated percentage of baseline contact rate given policies
-              implemented.
-            </p>
-          ) : (
-            <p className={styles.ipopup}>
-              Estimated average number of people each infectious person is
-              expected to infect.
-            </p>
-          )
-        }
-        // maxWidth={"30rem"}
-        theme={"light"}
-        placement={"bottom"}
-        offset={[-30, 10]}
-      >
-        <img
-          className={styles.infoIcon}
-          src={infoIcon}
-          alt="More information"
-          style={{
-            position: "absolute",
-            height: "2.5%",
-            top: "10.5%",
-            left: "2.7%",
-          }}
-        />
-      </Tippy>
+      {props.activeTab === "interventions" && (
+        <Tippy
+          interactive={true}
+          allowHTML={true}
+          content={
+            props.contactPlotType === "pctChange" ? (
+              <p className={styles.ipopup}>
+                Estimated percentage of baseline contact rate given policies
+                implemented.
+              </p>
+            ) : (
+              <p className={styles.ipopup}>
+                Estimated average number of people each infectious person is
+                expected to infect.
+              </p>
+            )
+          }
+          // maxWidth={"30rem"}
+          theme={"light"}
+          placement={"bottom"}
+          offset={[-30, 10]}
+        >
+          <img
+            className={styles.infoIcon}
+            src={infoIcon}
+            alt="More information"
+            style={{
+              position: "absolute",
+              height: "2.5%",
+              top: "10.5%",
+              left: "2.7%",
+            }}
+          />
+        </Tippy>
+      )}
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
@@ -865,7 +886,7 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          label={labelNames[props.selectedCurves[0]] + "\n"}
+          label={labelNames[props.activeTab][props.selectedCurves[0]] + "\n"}
           // props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
           // }
           tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
