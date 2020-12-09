@@ -156,7 +156,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           </Link>
         ))}
         {DownloadBtn({
-          message: <span>Download complete dataset as Excel</span>,
+          message: <span>Download data (.xls)</span>,
           class_name: ["all_static"],
           classNameForApi: "all_static",
         })}

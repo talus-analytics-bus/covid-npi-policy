@@ -33,7 +33,7 @@ const Documentation = ({ ...props }) => {
         <div className={styles.downloads}>
           <PrimaryButton
             {...{
-              label: "Download data dictionary as Excel",
+              label: "Download data dictionary (.xls)",
               iconName: "get_app",
               isSmall: true,
               isSecondary: true,
@@ -45,7 +45,7 @@ const Documentation = ({ ...props }) => {
           />
           <PrimaryButton
             {...{
-              label: "Download documentation as PDF",
+              label: "Download documentation (.pdf)",
               iconName: "get_app",
               isSmall: true,
               isSecondary: true,
