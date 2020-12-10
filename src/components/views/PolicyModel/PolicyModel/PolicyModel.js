@@ -388,6 +388,48 @@ const PolicyModel = ({ setLoading, setPage }) => {
               </select>
             </label>
             <label>
+              Choose view
+              <div
+                className={styles.radio}
+                onChange={e => setActiveTab(e.target.value)}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    value="caseload"
+                    defaultChecked={activeTab === "caseload"}
+                    name="view-mode"
+                  />
+                  Current and historical data
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="interventions"
+                    defaultChecked={activeTab === "interventions"}
+                    name="view-mode"
+                  />
+                  Model
+                </label>
+              </div>
+            </label>
+            {/* <label> */}
+            {/*   Show COVID count by */}
+            {/*   <div */}
+            {/*     className={styles.radio} */}
+            {/*     onChange={e => setActiveTab(e.target.value)} */}
+            {/*   > */}
+            {/*     <label> */}
+            {/*       <input type="radio" value="infected_a" name="covid-count" /> */}
+            {/*       Current and historical data */}
+            {/*     </label> */}
+            {/*     <label> */}
+            {/*       <input type="radio" value="dead" name="covid-count" /> */}
+            {/*        */}
+            {/*     </label> */}
+            {/*   </div> */}
+            {/* </label> */}
+            <label>
               Show COVID count by
               <select
                 style={{ width: "13rem" }}
@@ -405,7 +447,14 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 </option>
                 {/* <option value="infected_b">Hospitalized</option> */}
                 {/* <option value="infected_c">ICU</option> */}
-                <option value="dead">Deaths</option>
+                <option value="dead">
+                  {
+                    {
+                      caseload: "Daily deaths",
+                      interventions: "Cumulative deaths",
+                    }[activeTab]
+                  }
+                </option>
               </select>
               <Tippy
                 interactive={true}

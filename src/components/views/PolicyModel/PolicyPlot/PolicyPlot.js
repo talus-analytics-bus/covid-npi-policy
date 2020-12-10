@@ -499,7 +499,8 @@ const PolicyModel = props => {
         data={props.data}
       />
       <div className={styles.abovePlot}>
-        <p className={styles.instruction}>
+        {props.activeTab === "interventions"
+            && <p className={styles.instruction}>
           <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
             <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
             <path
@@ -510,20 +511,9 @@ const PolicyModel = props => {
   c0-6.1-4.9-11-11-11s-11,4.9-11,11s4.9,11,11,11S23.6,18.7,23.6,12.6z"
             />
           </svg>
-          {props.activeTab === "interventions"
-            ? "Use cursor on graph to set new policy"
-            : "Switch to model view to add interventions"}
-        </p>
-        <select
-          style={{ width: "13rem" }}
-          value={props.activeTab}
-          onChange={e => {
-            props.setActiveTab(e.target.value);
-          }}
-        >
-          <option value="caseload">Caseload View</option>
-          <option value="interventions">Model View</option>
-        </select>
+           Use cursor on graph to set new policy
+            {/* Switch to model view to add interventions */}
+        </p>} 
         <label className={styles.legendLabel}>
           <Tippy
             content={

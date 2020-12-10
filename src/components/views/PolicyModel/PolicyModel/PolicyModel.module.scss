@@ -169,6 +169,15 @@
           color: #333;
         }
       }
+
+      .radio {
+        margin-top: 0.45em;
+
+        label {
+          flex-direction: row;
+          align-items: baseline;
+        }
+      }
     }
     .navigator {
       // min-width: 50rem;
