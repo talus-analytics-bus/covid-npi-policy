@@ -195,11 +195,16 @@ const PolicyModel = ({ setLoading, setPage }) => {
     // using new Date() to create a separate date object
     setZoomDateRange([zoomStartDate, zoomEndDate]);
 
-    const domainStartDate = new Date(dates[0].toISOString());
-    const domainEndDate = new Date(dates.slice(-1)[0].toISOString());
+    const domainStartDate =
+      activeTab === "caseload" ? new Date(dates[0].toISOString()) : new Date();
 
-    domainStartDate.setMonth(domainStartDate.getMonth() - 1);
-    domainEndDate.setMonth(domainEndDate.getMonth() + 1);
+    const domainEndDate =
+      activeTab === "caseload"
+        ? new Date()
+        : new Date(dates.slice(-1)[0].toISOString());
+
+    domainStartDate.setDate(domainStartDate.getDate() - 30);
+    domainEndDate.setDate(domainEndDate.getDate() + 20);
 
     setDomain([domainStartDate, domainEndDate]);
 
@@ -535,6 +540,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 setZoomDateRange={setZoomDateRange}
                 domain={domain}
                 caseLoadAxis={caseLoadAxis}
+                activeTab={activeTab}
               />
             )}
           </div>
