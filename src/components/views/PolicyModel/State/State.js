@@ -441,11 +441,14 @@ const State = props => {
         {/*   <option value="actuals">Scale to fit actuals</option> */}
         {/* </select> */}
         {props.activeTab === "caseload" ? (
-          <p className={styles.source}>
+          <a
+            href="https://github.com/nytimes/covid-19-data"
+            className={styles.source}
+          >
             Source for daily new{" "}
             {props.selectedCurves[0] === "infected_a" ? "cases" : "deaths"}: New
             York Times
-          </p>
+          </a>
         ) : (
           <a href="/about/doc" className={styles.source}>
             View documentation for sources
