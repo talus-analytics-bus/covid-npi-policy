@@ -145,11 +145,14 @@ const State = props => {
                 allowHTML={true}
                 content={
                   <p className={styles.ipopup}>
-                    Research indicates that COVID patients will die within
-                    approximately 30 days of initial infection. Therefore, to
-                    align these deaths with the caseload, we report the number
-                    of cases as of today’s date and the anticipated deaths
-                    associated with those cases as of 30 days from today.
+                    Total number of cumulative confirmed and probable deaths as
+                    of{" "}
+                    {props.dataDates &&
+                      formatDate(props.dataDates.last_data_update)}
+                    . Source:{" "}
+                    <a href={"https://github.com/nytimes/covid-19-data"}>
+                      New York Times{" "}
+                    </a>
                   </p>
                 }
                 maxWidth={"30rem"}
@@ -439,7 +442,9 @@ const State = props => {
         {/* </select> */}
         {props.activeTab === "caseload" ? (
           <p className={styles.source}>
-            Daily new cases source: New York Times
+            Source for daily new{" "}
+            {props.selectedCurves[0] === "infected_a" ? "cases" : "deaths"}: New
+            York Times
           </p>
         ) : (
           <a href="/about/doc" className={styles.source}>
