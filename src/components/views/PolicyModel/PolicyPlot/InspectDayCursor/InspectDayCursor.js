@@ -169,7 +169,8 @@ const InspectDailyCursor = props => {
   });
   return (
     <>
-      {(props.activeTab === "caseload" && popupDate < new Date()) ||
+      {(props.activeTab === "caseload" &&
+        popupDate < props.data.curves[yAxis].actuals_end) ||
       (props.activeTab === "interventions" && popupDate > new Date()) ? (
         <VictoryPortal>
           <g>

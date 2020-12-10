@@ -148,6 +148,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
           actuals: caseloadPoints,
           actuals_yMax: seriesMax,
           average: averagePoints,
+          actuals_end: caseloadPoints.slice(-1)[0].x,
         };
       } else {
         modelCurves[selectedStates[0]].curves["dead"] = {
@@ -155,6 +156,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
           actuals: caseloadPoints,
           actuals_yMax: seriesMax,
           average: averagePoints,
+          actuals_end: caseloadPoints.slice(-1)[0].x,
         };
       }
 
