@@ -5,20 +5,24 @@ import { getDisplayNameFromPolicyName } from "../PolicyPlot";
 import styles from "./InspectDayCursor.module.scss";
 
 const checkSameDay = (date1, date2) => {
-  return (
-    date1.toLocaleString("default", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      timeZone: "UTC",
-    }) ===
-    date2.toLocaleString("default", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      timeZone: "UTC",
-    })
-  );
+  // const date1timestamp = Math.floor(date1.getTime() / 1000 / 60 / 60 / 24);
+  const date1timestamp = Math.floor(date1.getTime() / 86400000);
+  const date2timestamp = Math.floor(date2.getTime() / 86400000);
+  return date1timestamp === date2timestamp;
+  // return (
+  //   date1.toLocaleString("default", {
+  //     month: "short",
+  //     day: "numeric",
+  //     year: "numeric",
+  //     timeZone: "UTC",
+  //   }) ===
+  //   date2.toLocaleString("default", {
+  //     month: "short",
+  //     day: "numeric",
+  //     year: "numeric",
+  //     timeZone: "UTC",
+  //   })
+  // );
   // return (
   //   date1.getFullYear() === date2.getFullYear() &&
   //   date1.getMonth() === date2.getMonth() &&
