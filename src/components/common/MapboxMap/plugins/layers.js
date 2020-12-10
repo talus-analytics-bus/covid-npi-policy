@@ -211,25 +211,32 @@ const noDataColor = "#eaeaea";
 const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
+const lightTeal = "#e0f4f3";
 const teal = "#66CAC4";
+// const medTeal = "#41beb6";
+const darkTeal = "#349891";
 export const greenStepsScale = d3
   .scaleLinear()
-  .domain([0, 100]) // TODO dynamically
-  .range(["white", teal]);
+  .domain([0, 1]) // TODO dynamically
+  .range([lightTeal, darkTeal]);
 
-const getLinearColorBins = ({ nBins, scale, maxVal, key }) => {
+const getLinearColorBins = ({ nBins, scale, maxVal, minVal, key }) => {
   const range = scale.range();
   const newScale = d3
     .scaleLinear()
-    .domain([0, maxVal])
+    .domain([0, 1])
     .range(range);
   const base = ["case"];
-  for (let i = 0; i < nBins; i++) {
-    const val = ((i + 1) * maxVal) / nBins;
+  const capVal = maxVal - minVal;
+  const nRules = nBins - 1;
+  const binStep = 1 / (nBins - 1);
+  for (let i = 0; i < nRules; i++) {
+    const val = ((i + 1) * capVal) / (nBins + 1) + minVal;
     base.push(["<=", ["feature-state", key], val]);
-    base.push(newScale(val));
+    base.push(newScale(i * binStep));
   }
-  base.push(newScale(maxVal));
+  // add max color
+  base.push(newScale(1));
   return base;
 };
 
@@ -261,7 +268,7 @@ const fillStyles = {
     };
   },
 
-  policy_status_counts: (key, geoHaveData, maxVal = 1) => {
+  policy_status_counts: (key, geoHaveData, maxVal = 1, minVal = 0) => {
     return {
       "fill-color": [
         "case",
@@ -270,6 +277,7 @@ const fillStyles = {
           nBins: 5,
           scale: greenStepsScale,
           maxVal,
+          minVal,
           key,
         }),
         ["==", ["has", "state_name"], true],
