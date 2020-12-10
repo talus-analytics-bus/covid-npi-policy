@@ -108,9 +108,11 @@ const InspectDailyCursor = props => {
     actualCases = props.data.curves[yAxis].actuals.find(point =>
       checkSameDay(point.x, popupDate)
     );
-    averageCases = props.data.curves[yAxis].average.find(point =>
-      checkSameDay(point.x, popupDate)
-    );
+    averageCases =
+      props.data.curves[yAxis].average &&
+      props.data.curves[yAxis].average.find(point =>
+        checkSameDay(point.x, popupDate)
+      );
   }
 
   // get popup's y-axis metric label based on the currently selected
