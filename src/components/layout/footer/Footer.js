@@ -12,13 +12,11 @@ import moment from "moment";
 const Footer = ({ page, versions }) => {
   // get last updated date
   const lastUpdatedPolicy = versions.find(d => d.type === "Policy data");
-  const lastUpdatedCaseload = versions.find(
-    d => d.type === "COVID-19 caseload data"
-  );
+  const lastUpdatedCases = versions.find(d => d.type === "COVID-19 case data");
   const lastUpdatedDatePolicy =
     lastUpdatedPolicy !== undefined ? lastUpdatedPolicy.date : null;
-  const lastUpdatedDateCaseload =
-    lastUpdatedCaseload !== undefined ? lastUpdatedCaseload.date : null;
+  const lastUpdatedDateCases =
+    lastUpdatedCases !== undefined ? lastUpdatedCases.date : null;
 
   // define footer images and links
   const images = [
@@ -69,12 +67,12 @@ const Footer = ({ page, versions }) => {
             {lastUpdatedDatePolicy && (
               <span>
                 COVID-19 case data last updated{" "}
-                {new moment(lastUpdatedDateCaseload).format("MMM D, YYYY")}
-                {lastUpdatedCaseload.last_datum_date !== null && (
+                {new moment(lastUpdatedDateCases).format("MMM D, YYYY")}
+                {lastUpdatedCases.last_datum_date !== null && (
                   <span>
                     {" "}
                     with data available through{" "}
-                    {moment(lastUpdatedCaseload.last_datum_date).format(
+                    {moment(lastUpdatedCases.last_datum_date).format(
                       "MMM D, YYYY"
                     )}
                   </span>

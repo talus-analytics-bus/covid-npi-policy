@@ -57,15 +57,15 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   const [mapId, setMapId] = useState(defaults.mapId);
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
-  const caseloadLastUpdated =
+  const casesLastUpdated =
     mapId === "us"
-      ? versions.find(d => d.type === "COVID-19 caseload data")
-      : versions.find(d => d.type === "COVID-19 caseload data (countries)");
-  const caseloadLastUpdatedDate = caseloadLastUpdated
-    ? moment(caseloadLastUpdated.last_datum_date)
+      ? versions.find(d => d.type === "COVID-19 case data")
+      : versions.find(d => d.type === "COVID-19 case data (countries)");
+  const casesLastUpdatedDate = casesLastUpdated
+    ? moment(casesLastUpdated.last_datum_date)
     : moment();
-  defaults.minMaxDate.maxDate = caseloadLastUpdatedDate;
-  const [date, setDate] = useState(caseloadLastUpdatedDate);
+  defaults.minMaxDate.maxDate = casesLastUpdatedDate;
+  const [date, setDate] = useState(casesLastUpdatedDate);
   // const [date, setDate] = useState(new moment(defaults.date));
 
   // name of metric to use as fill by default
@@ -203,9 +203,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // last updated date of overall data
   const lastUpdatedDateOverall = versions.filter(d => {
-    if (d.type === "COVID-19 caseload data (countries)" && mapId === "us") {
+    if (d.type === "COVID-19 case data (countries)" && mapId === "us") {
       return false;
-    } else if (d.type === "COVID-19 caseload data" && mapId === "global") {
+    } else if (d.type === "COVID-19 case data" && mapId === "global") {
       return false;
     } else return true;
   })[0].date;
@@ -252,13 +252,12 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             {versions
                               .filter(d => {
                                 if (
-                                  d.type ===
-                                    "COVID-19 caseload data (countries)" &&
+                                  d.type === "COVID-19 case data (countries)" &&
                                   mapId === "us"
                                 ) {
                                   return false;
                                 } else if (
-                                  d.type === "COVID-19 caseload data" &&
+                                  d.type === "COVID-19 case data" &&
                                   mapId === "global"
                                 ) {
                                   return false;
