@@ -6,10 +6,24 @@ import styles from "./InspectDayCursor.module.scss";
 
 const checkSameDay = (date1, date2) => {
   return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
+    date1.toLocaleString("default", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    }) ===
+    date2.toLocaleString("default", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    })
   );
+  // return (
+  //   date1.getFullYear() === date2.getFullYear() &&
+  //   date1.getMonth() === date2.getMonth() &&
+  //   date1.getDate() === date2.getDate()
+  // );
 };
 
 const formatModeled = number => {
@@ -40,6 +54,7 @@ const InspectDailyCursor = props => {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 
   let latestIntervention = props.data.interventions
