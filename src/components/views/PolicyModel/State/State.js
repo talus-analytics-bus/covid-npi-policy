@@ -443,6 +443,7 @@ const State = props => {
         {props.activeTab === "caseload" ? (
           <a
             href="https://github.com/nytimes/covid-19-data"
+            target="_blank"
             className={styles.source}
           >
             Source for daily new{" "}
