@@ -35,12 +35,11 @@ const formatActuals = number =>
 const InspectDailyCursor = props => {
   const [xOffset, yOffset] = [500 - props.x < 140 ? 4.75 : -4.75, 0];
 
-  const popupDate = new Date(props.datum.x);
+  const popupDate = props.datum.x;
   const dateString = popupDate.toLocaleString("default", {
     month: "short",
     day: "numeric",
     year: "numeric",
-    timeZone: "UTC",
   });
 
   let latestIntervention = props.data.interventions
