@@ -61,8 +61,8 @@
         margin-bottom: -2px;
         .rectGroup {
           display: flex;
-          flex-flow: column;
           text-align: center;
+          flex-flow: column;
           position: relative;
           align-items: center;
           .rect {
@@ -78,6 +78,15 @@
               .label {
                 margin: 0 auto;
               }
+            }
+          }
+        }
+
+        &.grid {
+          display: grid;
+          .rectGroup {
+            .rect {
+              width: 100%;
             }
           }
         }

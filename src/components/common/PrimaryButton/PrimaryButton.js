@@ -42,6 +42,9 @@ export const PrimaryButton = ({
 
   // if true: disabled class applied
   disabled = false,
+
+  // additional class names to apply, if any
+  customClassNames = [],
 }) => {
   const icon =
     iconName !== null ? <i className={"material-icons"}>{iconName}</i> : null;
@@ -80,12 +83,13 @@ export const PrimaryButton = ({
   }
 
   // JSX // ---------------------------------------------------------------- //
+  const wrapperClasses = { [styles.disabled]: disabled };
+  customClassNames.forEach(name => {
+    wrapperClasses[name] = true;
+  });
+
   return (
-    <div
-      className={classNames(styles.wrapper, { [styles.disabled]: disabled })}
-    >
-      {button}
-    </div>
+    <div className={classNames(styles.wrapper, wrapperClasses)}>{button}</div>
   );
 };
 

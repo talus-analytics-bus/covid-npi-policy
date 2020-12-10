@@ -54,7 +54,7 @@ const interventionColors = {
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
   "Partially open": "#ECBD62",
-  Open: "#7F7F7F",
+  Open: "#f4ddaf",
 };
 
 const phaseNames = {
@@ -72,14 +72,14 @@ const phaseNames = {
 
 const labelNames = {
   caseload: {
-    infected_a: "Daily Cases",
-    dead: "Daily Deaths",
+    infected_a: "Daily cases",
+    dead: "Daily deaths",
   },
   interventions: {
-    infected_a: "Active Cases",
+    infected_a: "Active cases",
     infected_b: "Hospitalized",
     infected_c: "ICU",
-    dead: "Cumulative Deaths",
+    dead: "Cumulative deaths",
   },
 };
 
@@ -546,17 +546,17 @@ const PolicyModel = props => {
                   <div className={styles.daily}>
                     <span />
                     <p>
-                      Daily New{" "}
+                      Daily new{" "}
                       {props.selectedCurves[0] === "infected_a"
-                        ? "Cases"
-                        : "Deaths"}
+                        ? "cases"
+                        : "deaths"}
                     </p>
                   </div>
                 )}
                 {props.activeTab === "caseload" && (
                   <div className={styles.actuals}>
                     <span />
-                    <p>7-Day Average</p>
+                    <p>7-day average</p>
                   </div>
                 )}
                 {props.activeTab === "interventions" && (
