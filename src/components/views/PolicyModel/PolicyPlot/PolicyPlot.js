@@ -54,7 +54,7 @@ const interventionColors = {
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
   "Partially open": "#ECBD62",
-  Open: "#7F7F7F",
+  Open: "#f4ddaf",
 };
 
 const phaseNames = {
