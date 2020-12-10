@@ -72,14 +72,14 @@ const phaseNames = {
 
 const labelNames = {
   caseload: {
-    infected_a: "Daily Cases",
-    dead: "Daily Deaths",
+    infected_a: "Daily cases",
+    dead: "Daily deaths",
   },
   interventions: {
-    infected_a: "Active Cases",
+    infected_a: "Active cases",
     infected_b: "Hospitalized",
     infected_c: "ICU",
-    dead: "Cumulative Deaths",
+    dead: "Cumulative deaths",
   },
 };
 
@@ -521,8 +521,8 @@ const PolicyModel = props => {
             props.setActiveTab(e.target.value);
           }}
         >
-          <option value="caseload">Caseload View</option>
-          <option value="interventions">Model View</option>
+          <option value="caseload">Caseload view</option>
+          <option value="interventions">Model view</option>
         </select>
         <label className={styles.legendLabel}>
           <Tippy
@@ -556,17 +556,17 @@ const PolicyModel = props => {
                   <div className={styles.daily}>
                     <span />
                     <p>
-                      Daily New{" "}
+                      Daily new{" "}
                       {props.selectedCurves[0] === "infected_a"
-                        ? "Cases"
-                        : "Deaths"}
+                        ? "cases"
+                        : "deaths"}
                     </p>
                   </div>
                 )}
                 {props.activeTab === "caseload" && (
                   <div className={styles.actuals}>
                     <span />
-                    <p>7-Day Average</p>
+                    <p>7-day average</p>
                   </div>
                 )}
                 {props.activeTab === "interventions" && (

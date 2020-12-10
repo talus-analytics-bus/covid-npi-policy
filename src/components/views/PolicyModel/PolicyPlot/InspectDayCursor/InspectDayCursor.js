@@ -134,14 +134,14 @@ const InspectDailyCursor = props => {
   // {props.labelNames[yAxis]} COVID-19 <br /> patients today
   const getPopupLabelName = yAxisLabelName => {
     switch (yAxisLabelName) {
-      case "Active Cases":
+      case "Active cases":
       default:
         return (
           <>
             current COVID-19 <br /> patients today (modeled)
           </>
         );
-      case "Daily Cases":
+      case "Daily cases":
         return (
           <>
             new COVID-19 <br /> cases today
@@ -305,7 +305,7 @@ const InspectDailyCursor = props => {
                               {averageCases && formatActuals(averageCases.y)}
                             </p>
                             <p className={styles.label}>
-                              seven-day average{" "}
+                              7-day average{" "}
                               {yAxis === "infected_a" ? "cases" : "deaths"}
                             </p>
                           </div>

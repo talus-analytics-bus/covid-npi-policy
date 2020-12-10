@@ -405,15 +405,15 @@ const State = props => {
             <div className={styles.daily}>
               <span />
               <p>
-                Daily New{" "}
-                {props.selectedCurves[0] === "infected_a" ? "Cases" : "Deaths"}
+                Daily new{" "}
+                {props.selectedCurves[0] === "infected_a" ? "cases" : "deaths"}
               </p>
             </div>
           )}
           {props.activeTab === "caseload" && (
             <div className={styles.actuals}>
               <span />
-              <p>7-Day Average</p>
+              <p>7-day average</p>
             </div>
           )}
           {props.activeTab === "interventions" && (

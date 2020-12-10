@@ -402,7 +402,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
               >
                 <option value="infected_a">
                   {
-                    { caseload: "Daily Cases", interventions: "Active Cases" }[
+                    { caseload: "Daily cases", interventions: "Active cases" }[
                       activeTab
                     ]
                   }
