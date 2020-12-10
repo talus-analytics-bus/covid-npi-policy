@@ -138,8 +138,8 @@ const State = props => {
           <div className={styles.casesLabel}>
             <p className={styles.label}>cumulative deaths</p>
             <p className={styles.date}>
-              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (projected){" "}
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
               <Tippy
                 interactive={true}
                 allowHTML={true}

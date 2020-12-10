@@ -55,7 +55,7 @@ export default function parseModelCurves(
         // only return currently supported intervention types
         return (inter.name !== "do_nothing") & (inter.name !== "mobility_drop");
       }),
-      deaths: model.deaths,
+      deaths: model.actual_deaths,
       death_date: model.death_date,
       cases: model.cases,
       date: model.date,
