@@ -232,8 +232,8 @@ const InspectDailyCursor = props => {
                       <div className={styles.caseloadContent}>
                         <p className={styles.number}>
                           {modeledCases === undefined
-                            ? formatActuals(actualCases.y)
-                            : formatModeled(modeledCases.y)}
+                            ? actualCases && formatActuals(actualCases.y)
+                            : modeledCases && formatModeled(modeledCases.y)}
                         </p>
                         <p className={styles.label}>
                           {getPopupLabelName(
