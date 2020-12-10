@@ -96,8 +96,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
   // )
 
   const setup = React.useCallback(async () => {
-    console.log("setup");
-    console.log("interventions");
     const loadedModels = await loadModels(selectedStates);
 
     // get curves, max, min from models
@@ -108,8 +106,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
     );
 
     if (activeTab === "caseload") {
-      console.log("Caseload");
-
       const stateFullName = states.find(
         state => state.abbr === selectedStates[0]
       ).name;
@@ -161,13 +157,9 @@ const PolicyModel = ({ setLoading, setPage }) => {
       }
 
       modelCurves[selectedStates[0]]["actuals_yMax"] = seriesMax;
-
-      console.log(modelCurves);
     }
 
     setCurves({ ...modelCurves });
-
-    console.log(modelCurves);
 
     // set up axes
     const dates = Object.values(modelCurves)

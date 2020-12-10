@@ -68,8 +68,6 @@ export default function parseModelCurves(
       model.results.filter(run => Object.keys(run)[0] !== run).slice(-1)[0].run
     );
 
-    console.log(modelRun);
-
     const counterfactualRun = parseModelString(
       model.results
         .filter(run => Object.keys(run)[0] !== run)
@@ -189,10 +187,7 @@ export default function parseModelCurves(
     });
 
     // date range for the state
-    console.log(model.results.run);
     const dates = modelRun.map(day => day.date);
-    console.log(dates);
-    console.log(dates.slice(-1)[0]);
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 
