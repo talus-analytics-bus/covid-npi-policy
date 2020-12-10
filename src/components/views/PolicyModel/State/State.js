@@ -133,7 +133,8 @@ const State = props => {
             </p>
           </div>
           <div className={styles.cases}>
-            {formatActuals(props.curves.deaths)}
+            {props.curves.actual_deaths &&
+              formatActuals(props.curves.actual_deaths)}
           </div>
           <div className={styles.casesLabel}>
             <p className={styles.label}>cumulative deaths</p>
