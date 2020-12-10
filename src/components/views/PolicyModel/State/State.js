@@ -437,6 +437,15 @@ const State = props => {
         {/*   <option value="model">Scale to fit model</option> */}
         {/*   <option value="actuals">Scale to fit actuals</option> */}
         {/* </select> */}
+        {props.activeTab === "caseload" ? (
+          <p className={styles.source}>
+            Daily new cases source: New York Times
+          </p>
+        ) : (
+          <a href="/about/doc" className={styles.source}>
+            View documentation for sources
+          </a>
+        )}
         {props.activeTab === "interventions" && (
           <button
             className={styles.resetState}

@@ -485,6 +485,7 @@
 
 .bottomRow {
   display: flex;
+  align-items: baseline;
 
   // select {
   //   margin-left: auto;
@@ -501,6 +502,11 @@
     border: 1px solid #999;
     color: #333;
     padding: 0.5em 0.75em;
+  }
+
+  .source {
+    font-style: italic;
+    margin-left: auto;
   }
 }
 
