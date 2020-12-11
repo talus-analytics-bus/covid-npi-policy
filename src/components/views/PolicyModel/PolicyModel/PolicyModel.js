@@ -53,6 +53,10 @@ const rollingAverage = (series, windowSize) => {
 };
 
 const PolicyModel = ({ setLoading, setPage }) => {
+  React.useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [activeTab, setActiveTab] = useState("caseload");
 
   // use selected states to load the required models
