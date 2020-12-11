@@ -18,7 +18,12 @@
       type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"
     />
-
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700"
+    />
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/fonts.css" />
     <meta
       name="google-site-verification"
       content="1iNEpDS7KqIrs9fNeG3cAcTJ2zlWIj12zdUy7Z6rNQ4"
@@ -35,16 +40,15 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"
     />
-    <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
-    />
-
     <!-- all material icons, npm package doesn't include outlined etc. -->
     <link
       href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
       rel="stylesheet"
+    />
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
     />
 
     <!--
@@ -101,17 +105,17 @@
       window.cookieconsent.initialise({
         palette: {
           popup: {
-            background: "#d4d4d4"
+            background: "#d4d4d4",
           },
           button: {
-            background: "#0f234b"
-          }
+            background: "#0f234b",
+          },
         },
         position: "bottom-right",
         type: "opt-in",
         content: {
           message:
-            "COVID AMP uses cookies to ensure you get the best experience possible. COVID AMP is optimized for desktop browsers."
+            "COVID AMP uses cookies to ensure you get the best experience possible. COVID AMP is optimized for desktop browsers.",
         },
         // https://developers.google.com/analytics/devguides/collection/analyticsjs/user-opt-out
         onInitialise: function(status) {
@@ -148,7 +152,7 @@
             // enable cookies
             setupGA(true);
           }
-        }
+        },
       });
     </script>
   </body>
