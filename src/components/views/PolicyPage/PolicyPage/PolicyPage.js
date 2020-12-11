@@ -22,7 +22,7 @@ const PolicyPage = props => {
   const [iso3, state, policyID] = location.pathname.split("/").slice(-3);
 
   // Always want this page to scroll to the top
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
