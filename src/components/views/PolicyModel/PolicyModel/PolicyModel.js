@@ -434,7 +434,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
             <label>
               Show COVID count by
               <select
-                style={{ width: "13rem" }}
+                style={{ width: "15rem" }}
                 value={selectedCurves[0]}
                 onChange={e => {
                   setSelectedCurves([e.target.value, "R effective"]);

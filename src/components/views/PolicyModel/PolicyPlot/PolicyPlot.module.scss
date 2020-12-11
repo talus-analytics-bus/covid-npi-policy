@@ -72,8 +72,9 @@
   }
 }
 
-.legend {
-  width: 14rem;
+.legend,
+.proposedLegend {
+  max-width: 22rem;
   padding: 0.25rem;
 
   .noPolicies,
@@ -191,6 +192,64 @@
         right: -7px;
         height: 15px;
       }
+    }
+  }
+}
+
+.proposedLegend {
+  .noPolicies,
+  .lockdown,
+  .safer,
+  .no,
+  .open,
+  .stay,
+  .partial,
+  .proposed,
+  .actuals,
+  .modeled {
+    span {
+      background-color: #fff;
+    }
+  }
+  .lockdown {
+    span {
+      border: 3px solid #661b3c;
+    }
+  }
+  .stay {
+    span {
+      border: 3px solid #c1272d;
+    }
+  }
+  .safer {
+    span {
+      border: 3px solid #d66b3e;
+    }
+  }
+  .no {
+    span {
+      border: 3px solid gray;
+    }
+  }
+  .partial {
+    span {
+      border: 3px solid #ecbd62;
+    }
+  }
+  .open {
+    span {
+      border: 3px solid #f4ddaf;
+    }
+  }
+  .proposed {
+    span {
+      border: 3px solid #661b3c;
+    }
+  }
+  .actuals {
+    span {
+      height: 4px;
+      background-color: #7490a9;
     }
   }
 }

@@ -423,7 +423,12 @@ const State = props => {
           {props.activeTab === "interventions" && (
             <div className={styles.modeled}>
               <span />
-              <p>Modeled</p>
+              <p>
+                Modeled{" "}
+                {props.selectedCurves[0] === "infected_a"
+                  ? "active cases"
+                  : "cumulative deaths"}
+              </p>
             </div>
           )}
           {/* <div className={styles.noPolicies}> */}
