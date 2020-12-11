@@ -485,14 +485,16 @@
 
 .bottomRow {
   display: flex;
+  align-items: baseline;
 
-  select {
-    margin-left: auto;
-    margin-right: 0.5rem;
-    color: #333;
-  }
+  // select {
+  //   margin-left: auto;
+  //   margin-right: 0.5rem;
+  //   color: #333;
+  // }
 
   button {
+    margin-left: auto;
     background: none;
     border: none;
     background-color: #fff;
@@ -500,6 +502,11 @@
     border: 1px solid #999;
     color: #333;
     padding: 0.5em 0.75em;
+  }
+
+  .source {
+    font-style: italic;
+    margin-left: auto;
   }
 }
 
@@ -515,7 +522,8 @@
   .normal,
   .proposed,
   .actuals,
-  .modeled {
+  .modeled,
+  .daily {
     display: flex;
     align-items: center;
     font-size: 1.1rem;
@@ -558,8 +566,8 @@
   }
   .actuals {
     span {
-      height: 0;
-      border: 2px solid #183344;
+      height: 4px;
+      background-color: #183344;
     }
   }
   .modeled {
@@ -574,6 +582,39 @@
       background-color: #a4d3c3;
       border: 1px solid #8ab8ae;
       border-radius: 3px;
+    }
+  }
+  .daily {
+    span {
+      position: relative;
+      margin-left: 7px;
+      margin-right: 14px;
+      height: 15px;
+      transform: scaleY(-1);
+      border-radius: 0;
+
+      &,
+      &:before,
+      &:after {
+        width: 5px;
+        background-color: #183344;
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        content: "";
+      }
+
+      &:before {
+        left: -7px;
+        height: 7px;
+      }
+
+      &:after {
+        right: -7px;
+        height: 18px;
+      }
     }
   }
 }

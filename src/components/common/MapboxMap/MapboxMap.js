@@ -243,8 +243,14 @@ const MapboxMap = ({
     toCheck.forEach(key => {
       if (data[key] !== undefined) {
         const maxVal = d3.max(data[key], d => d.value);
+        const minVal = d3.min(data[key], d => d.value);
         const fillStylesFunc = layerStyles.fill[key];
-        const newFillColorStyle = fillStylesFunc(key, geoHaveData, maxVal);
+        const newFillColorStyle = fillStylesFunc(
+          key,
+          geoHaveData,
+          maxVal,
+          minVal
+        );
         map.setPaintProperty(
           key + "-fill",
           "fill-color",

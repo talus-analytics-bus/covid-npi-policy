@@ -3,6 +3,7 @@ import {
   VictoryChart,
   VictoryLine,
   VictoryArea,
+  VictoryBar,
   VictoryBrushContainer,
   VictoryAxis,
 } from "victory";
@@ -18,10 +19,11 @@ const NavigatorPlot = props => {
     ([curveName, data], index) => {
       if (!["R effective", "pctChange"].includes(curveName)) {
         return (
-          <VictoryLine
+          <VictoryBar
             key={curveName}
+            barWidth={0.5}
             style={{
-              data: { stroke: plotColors[index], strokeWidth: 1 },
+              data: { fill: plotColors[index], strokeWidth: 0 },
             }}
             data={data.actuals}
             // interpolation={'monotoneX'}
@@ -111,8 +113,9 @@ const NavigatorPlot = props => {
             }}
           />
 
-          {actualsLines}
-          {modelLines}
+          {props.activeTab === "caseload" && actualsLines}
+          {props.activeTab === "interventions" && modelLines}
+          {/* {modelLines} */}
 
           <VictoryArea
             style={{

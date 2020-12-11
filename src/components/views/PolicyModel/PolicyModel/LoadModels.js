@@ -12,7 +12,7 @@ const LIFESPAN = 3 * 60 * 60 * 1000;
 // If the model versions do not match, drop the entire
 // localStorage. This lets us clear all client caching
 // if we push an incompatible update.
-const MODEL_VERSION = "3";
+const MODEL_VERSION = "4";
 //
 // const API_URL = 'http://192.168.1.33:8000/'
 // const API_URL = 'http://localhost:8000/'
@@ -43,7 +43,7 @@ const reconstructInterventions = (model, runData) => {
   runData["dateRequested"] = new Date(model.dateRequested);
   runData["cases"] = model.cases;
   runData["counterfactual_cases"] = model.counterfactual_cases;
-  runData["deaths"] = model.deaths;
+  runData["actual_deaths"] = model.actual_deaths;
   runData["death_date"] = model.death_date;
   runData["counterfactual_deaths"] = model.counterfactual_deaths;
   runData["population"] = model.population;
@@ -212,7 +212,7 @@ export const loadModels = async states => {
     })
   );
 
-  // console.log(models);
+  console.log(models);
   return models;
 };
 

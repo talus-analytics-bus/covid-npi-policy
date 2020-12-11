@@ -55,7 +55,7 @@ export default function parseModelCurves(
         // only return currently supported intervention types
         return (inter.name !== "do_nothing") & (inter.name !== "mobility_drop");
       }),
-      deaths: model.deaths,
+      actual_deaths: model.actual_deaths,
       death_date: model.death_date,
       cases: model.cases,
       date: model.date,
@@ -187,7 +187,7 @@ export default function parseModelCurves(
     });
 
     // date range for the state
-    const dates = model.results.run.map(day => day.date);
+    const dates = modelRun.map(day => day.date);
     curves[state].dateRange.push(dates.slice(0, 1)[0]);
     curves[state].dateRange.push(dates.slice(-1)[0]);
 

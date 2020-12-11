@@ -133,23 +133,27 @@ const State = props => {
             </p>
           </div>
           <div className={styles.cases}>
-            {formatActuals(props.curves.deaths)}
+            {props.curves.actual_deaths &&
+              formatActuals(props.curves.actual_deaths)}
           </div>
           <div className={styles.casesLabel}>
             <p className={styles.label}>cumulative deaths</p>
             <p className={styles.date}>
-              as of {props.dataDates && formatDate(props.curves.death_date)}{" "}
-              (projected){" "}
+              as of{" "}
+              {props.dataDates && formatDate(props.dataDates.last_data_update)}{" "}
               <Tippy
                 interactive={true}
                 allowHTML={true}
                 content={
                   <p className={styles.ipopup}>
-                    Research indicates that COVID patients will die within
-                    approximately 30 days of initial infection. Therefore, to
-                    align these deaths with the caseload, we report the number
-                    of cases as of today’s date and the anticipated deaths
-                    associated with those cases as of 30 days from today.
+                    Total number of cumulative confirmed and probable deaths as
+                    of{" "}
+                    {props.dataDates &&
+                      formatDate(props.dataDates.last_data_update)}
+                    . Source:{" "}
+                    <a href={"https://github.com/nytimes/covid-19-data"}>
+                      New York Times{" "}
+                    </a>
                   </p>
                 }
                 maxWidth={"30rem"}
@@ -391,6 +395,7 @@ const State = props => {
           data={props.curves}
           domain={props.domain}
           activeTab={props.activeTab}
+          setActiveTab={props.setActiveTab}
           counterfactualSelected={props.counterfactualSelected}
           addIntervention={props.addIntervention}
           contactPlotType={props.contactPlotType}
@@ -400,38 +405,68 @@ const State = props => {
       </div>
       <div className={styles.bottomRow}>
         <div className={styles.miniLegend}>
-          <div className={styles.actuals}>
-            <span />
-            <p>Actuals</p>
-          </div>
-          <div className={styles.modeled}>
-            <span />
-            <p>Modeled</p>
-          </div>
+          {props.activeTab === "caseload" && (
+            <div className={styles.daily}>
+              <span />
+              <p>
+                Daily new{" "}
+                {props.selectedCurves[0] === "infected_a" ? "cases" : "deaths"}
+              </p>
+            </div>
+          )}
+          {props.activeTab === "caseload" && (
+            <div className={styles.actuals}>
+              <span />
+              <p>7-day average</p>
+            </div>
+          )}
+          {props.activeTab === "interventions" && (
+            <div className={styles.modeled}>
+              <span />
+              <p>Modeled</p>
+            </div>
+          )}
           {/* <div className={styles.noPolicies}> */}
           {/* <span /> */}
           {/* <p>"What if we had done nothing" scenario</p> */}
           {/* </div> */}
         </div>
-        <select
-          style={{ width: "13rem" }}
-          value={props.scaleTo}
-          onChange={e => {
-            props.setScaleTo(e.target.value);
-          }}
-        >
-          <option value="model">Scale to fit model</option>
-          <option value="actuals">Scale to fit actuals</option>
-        </select>
-        <button
-          className={styles.resetState}
-          onClick={e => {
-            e.preventDefault();
-            props.resetState(props.selectedState);
-          }}
-        >
-          Reset policies
-        </button>
+        {/* <select */}
+        {/*   style={{ width: "13rem" }} */}
+        {/*   value={props.scaleTo} */}
+        {/*   onChange={e => { */}
+        {/*     props.setScaleTo(e.target.value); */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <option value="model">Scale to fit model</option> */}
+        {/*   <option value="actuals">Scale to fit actuals</option> */}
+        {/* </select> */}
+        {props.activeTab === "caseload" ? (
+          <a
+            href="https://github.com/nytimes/covid-19-data"
+            target="_blank"
+            className={styles.source}
+          >
+            Source for daily new{" "}
+            {props.selectedCurves[0] === "infected_a" ? "cases" : "deaths"}: New
+            York Times
+          </a>
+        ) : (
+          <a href="/about/doc" className={styles.source}>
+            View documentation for sources
+          </a>
+        )}
+        {props.activeTab === "interventions" && (
+          <button
+            className={styles.resetState}
+            onClick={e => {
+              e.preventDefault();
+              props.resetState(props.selectedState);
+            }}
+          >
+            Reset policies
+          </button>
+        )}
       </div>
     </section>
   );

@@ -14,7 +14,6 @@ const ObservationQuery = async function({
   temporal_resolution,
   start_date,
   end_date,
-  country,
   spatial_resolution = "country",
   place_id,
   place_name,
@@ -22,7 +21,6 @@ const ObservationQuery = async function({
   fields,
 }) {
   end_date = typeof end_date !== "undefined" ? end_date : start_date;
-  country = typeof country !== "undefined" ? country : "all";
 
   var params = {
     metric_id: metric_id,
@@ -35,8 +33,12 @@ const ObservationQuery = async function({
   if (start_date !== undefined) params.end = start_date;
   if (fields !== undefined) params.fields = fields.join(",");
 
-  if (country !== "all") {
-    params["place_id"] = country;
+  if (place_id !== undefined) {
+    params["place_id"] = place_id;
+  } else if (place_name !== undefined) {
+    params["place_name"] = place_name;
+  } else if (place_iso3 !== undefined) {
+    params["place_iso3"] = place_iso3;
   }
   if (place_id !== undefined) {
     params["place_id"] = place_id;
@@ -45,6 +47,8 @@ const ObservationQuery = async function({
   } else if (place_iso3 !== undefined) {
     params["place_iso3"] = place_iso3;
   }
+
+  const url = `${API_URL}/observations`;
 
   const url = `${API_URL}/observations`;
 

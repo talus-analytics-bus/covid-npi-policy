@@ -16,13 +16,13 @@ import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
 // import { geoHaveData } from "../MapboxMap";
 
 // assets
-import dots from "./assets/images/dots.png";
+// import dots from "./assets/images/dots.png";
 
 // constants
 // define default pattern style used below
 const defaultPatternStyle = key => {
   return {
-    "fill-pattern": "dots",
+    // "fill-pattern": "dots",
     "fill-opacity": [
       "case",
       ["==", ["feature-state", key], null],
@@ -211,25 +211,32 @@ const noDataColor = "#eaeaea";
 const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
+const lightTeal = "#e0f4f3";
 const teal = "#66CAC4";
+// const medTeal = "#41beb6";
+const darkTeal = "#349891";
 export const greenStepsScale = d3
   .scaleLinear()
-  .domain([0, 100]) // TODO dynamically
-  .range(["white", teal]);
+  .domain([0, 1]) // TODO dynamically
+  .range([lightTeal, darkTeal]);
 
-const getLinearColorBins = ({ nBins, scale, maxVal, key }) => {
+const getLinearColorBins = ({ nBins, scale, maxVal, minVal, key }) => {
   const range = scale.range();
   const newScale = d3
     .scaleLinear()
-    .domain([0, maxVal])
+    .domain([0, 1])
     .range(range);
   const base = ["case"];
-  for (let i = 0; i < nBins; i++) {
-    const val = ((i + 1) * maxVal) / nBins;
+  const capVal = maxVal - minVal;
+  const nRules = nBins - 1;
+  const binStep = 1 / (nBins - 1);
+  for (let i = 0; i < nRules; i++) {
+    const val = ((i + 1) * capVal) / (nBins + 1) + minVal;
     base.push(["<=", ["feature-state", key], val]);
-    base.push(newScale(val));
+    base.push(newScale(i * binStep));
   }
-  base.push(newScale(maxVal));
+  // add max color
+  base.push(newScale(1));
   return base;
 };
 
@@ -261,7 +268,7 @@ const fillStyles = {
     };
   },
 
-  policy_status_counts: (key, geoHaveData, maxVal = 1) => {
+  policy_status_counts: (key, geoHaveData, maxVal = 1, minVal = 0) => {
     return {
       "fill-color": [
         "case",
@@ -270,6 +277,7 @@ const fillStyles = {
           nBins: 5,
           scale: greenStepsScale,
           maxVal,
+          minVal,
           key,
         }),
         ["==", ["has", "state_name"], true],
@@ -367,26 +375,26 @@ const fillStyles = {
         ["==", ["feature-state", key], "Lockdown"],
         "#2165a1",
         ["==", ["has", "state_name"], true],
-        "#ffffff",
+        "#e9f3fc",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataColor,
         ["==", ["feature-state", key], null],
-        "#ffffff",
+        "#e9f3fc",
         negColor,
       ],
     };
   },
-  "lockdown_level-pattern": key => {
-    return {
-      "fill-pattern": "dots",
-      "fill-opacity": [
-        "case",
-        ["==", ["feature-state", key], "Mixed distancing levels"],
-        1,
-        0,
-      ],
-    };
-  },
+  // "lockdown_level-pattern": key => {
+  //   return {
+  //     "fill-pattern": "dots",
+  //     "fill-opacity": [
+  //       "case",
+  //       ["==", ["feature-state", key], "Mixed distancing levels"],
+  //       1,
+  //       0,
+  //     ],
+  //   };
+  // },
   "lockdown_level-outline": (key, geoHaveData) => {
     return {
       "line-color": [
@@ -406,11 +414,11 @@ const fillStyles = {
         ["==", ["feature-state", key], "Lockdown"],
         "white",
         ["==", ["has", "state_name"], true],
-        negBorder,
+        "white",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataBorder,
         ["==", ["feature-state", key], null],
-        negBorder,
+        "white",
         negBorder,
       ],
       "line-width": [
@@ -433,8 +441,8 @@ export const layerStyles = {
 
 // define images used by layers -- if none, then provide empty array
 export const layerImages = [
-  {
-    name: "dots",
-    asset: dots,
-  },
+  // {
+  //   name: "dots",
+  //   asset: dots,
+  // },
 ];
