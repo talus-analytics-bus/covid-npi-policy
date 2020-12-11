@@ -11,7 +11,7 @@ import { getInputLabel } from "../Filter/Filter.js";
 import { ShowMore } from "../";
 
 // misc
-import { isEmpty } from "../../misc/Util";
+import { isEmpty, comma } from "../../misc/Util";
 
 // assets and styles
 import styles from "./filterset.module.scss";
@@ -33,6 +33,8 @@ const FilterSet = ({
   children = null,
   alignBottom = false,
   vertical = false,
+  numInstances = null,
+  instanceNouns = null,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -143,7 +145,18 @@ const FilterSet = ({
           <div className={styles.filterIcon}>
             <div style={{ backgroundImage: `url(${funnelSvg})` }} />
           </div>
-          <span>Selected filters</span>
+          <span>
+            Selected filters{" "}
+            {numInstances !== null && instanceNouns !== null && (
+              <span>
+                ({comma(numInstances)}{" "}
+                {numInstances !== 1
+                  ? instanceNouns.p.toLowerCase()
+                  : instanceNouns.s.toLowerCase().replace("_", " ")}
+                )
+              </span>
+            )}
+          </span>
         </div>
 
         <div className={styles.badges}>
