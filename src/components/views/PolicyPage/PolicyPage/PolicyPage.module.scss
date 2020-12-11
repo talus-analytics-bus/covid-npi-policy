@@ -13,12 +13,12 @@
     }
 
     .row {
-      align-items: center;
+      align-items: flex-start;
     }
   }
 
   h2 {
-    margin-top: 1em;
+    margin-top: 1.5em;
     margin-bottom: 0.25em;
     font-family: "rawline";
     font-size: 16px;
@@ -30,14 +30,18 @@
     flex-direction: row;
     margin-bottom: 1em;
 
-    .col {
-      margin-right: 4em;
+    .col:first-of-type {
+      margin-right: 8em;
     }
   }
 
   .miniMapHolder {
-    flex-basis: 25%;
-    width: 300px;
+    flex-basis: 35%;
+    min-width: 400px;
+    // width: 300px;
+    padding-left: 10%;
+    margin-top: 5%;
+    text-align: right;
   }
 }
 
@@ -52,17 +56,20 @@
 
 .metadata {
   display: flex;
+  justify-content: space-between;
   // margin-left: 2rem;
   // margin-right: 2rem;
   margin-bottom: 2rem;
 
   .leftCol,
   .rightCol {
-    flex-basis: 40%;
-    margin-right: 5%;
+    flex-basis: 45%;
+    // &:first-of-type {
+    // margin-right: 5%;
+    // }
 
     h2 {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       text-transform: uppercase;
       color: #5f6678;
       font-weight: 700;

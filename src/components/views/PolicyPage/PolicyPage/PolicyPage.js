@@ -16,6 +16,25 @@ import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./PolicyPage.module.scss";
+//
+// const getFirstKeyPathFromObject = obj => {
+//   if (Object.keys(obj).length >= 1) {
+//     console.log(obj);
+//     const nextKey = Object.keys(obj)[0];
+//     console.log(nextKey);
+//     const nextObj = { ...obj[Object.keys(obj)] };
+//     console.log(nextObj);
+//
+//     if (!nextObj) {
+//       return [nextKey];
+//     }
+//   }
+//
+//   console.log("empty object");
+//   console.log(Object.keys(obj));
+//
+//   // return [nextKey, ...getFirstKeyPathFromObject(nextObj)].flat();
+// };
 
 const PolicyPage = props => {
   const location = useLocation();
@@ -28,9 +47,16 @@ const PolicyPage = props => {
 
   const { policyObject, setPolicyObject } = props;
 
-  const policyObjectPath = Object.values(location.state);
+  // console.log("calling getFirstKeyPathFromObject");
+  // console.log(policyObject);
+  // console.log(getFirstKeyPathFromObject(policyObject));
 
-  console.log([iso3, state, policyID]);
+  const policyObjectPath = location.state && Object.values(location.state);
+  // : getFirstKeyPathFromObject(policyObject);
+
+  // console.log(policyObjectPath);
+  //
+  // console.log([iso3, state, policyID]);
   // console.log(location.pathname.split("/").slice(-3));
 
   // console.log(props.policyObject);
@@ -39,6 +65,7 @@ const PolicyPage = props => {
 
   const relatedPolicies =
     policyObject &&
+    policyObjectPath &&
     policyObject[location.state[CATEGORY_FIELD_NAME]] &&
     policyObject[location.state[CATEGORY_FIELD_NAME]][
       location.state[SUBCATEGORY_FIELD_NAME]
@@ -58,9 +85,9 @@ const PolicyPage = props => {
   }, [policyID, setPolicyObject]);
 
   React.useEffect(() => {
-    console.log("related policies check");
-    console.log(policy);
-    console.log(relatedPolicies);
+    // console.log("related policies check");
+    // console.log(policy);
+    // console.log(relatedPolicies);
     // if (policy && Object.keys(relatedPolicies).length <= 1) {
     //   console.log("get related policies");
     //   const filters = {
@@ -80,25 +107,33 @@ const PolicyPage = props => {
 
   // console.log(policy);
 
+  const policyPlace =
+    policy && policy.auth_entity && policy.auth_entity[0].place;
+
+  // console.log(policyPlace);
+  // console.log(policyObject);
+
   return (
     <article className={styles.policyPage}>
       <Link to={`/policies/${iso3}/${state}/`}>
         {"<"} return to full list of {state.toLowerCase()} policies
       </Link>
-      <header>
-        <div className={styles.row}>
-          <PolicyCategoryIcon
-            category={policyObjectPath && policyObjectPath[0]}
-          />
-          <h1>
-            {state === "national" ? iso3 : state}{" "}
-            {policy && `${policyObjectPath[0]}: ${policyObjectPath[1]}`}
-            {/* ({policy && policyID}) */}
-          </h1>
-        </div>
-      </header>
       <div className={styles.row}>
         <div className={styles.col}>
+          <div className={styles.row}>
+            <header>
+              <div className={styles.row}>
+                <PolicyCategoryIcon
+                  category={policyObjectPath && policyObjectPath[0]}
+                />
+                <h1>
+                  {state === "national" ? iso3 : state}{" "}
+                  {policy && `${policyObjectPath[0]}: ${policyObjectPath[1]}`}
+                  {/* ({policy && policyID}) */}
+                </h1>
+              </div>
+            </header>
+          </div>
           <div className={styles.row}>
             <div className={styles.col}>
               <h2>Effective from</h2>
@@ -111,7 +146,7 @@ const PolicyPage = props => {
           </div>
 
           <h2>Target</h2>
-          <p>{policy && policy.target}</p>
+          <p>{policy && policy.subtarget}</p>
 
           <h2>Description</h2>
           <p>{policy && policy.desc}</p>
@@ -136,26 +171,31 @@ const PolicyPage = props => {
         <div className={styles.leftCol}>
           <h2>Authority</h2>
           <h3>Office</h3>
-          <p>[office]</p>
+          <p>{policy && policy.auth_entity && policy.auth_entity[0].office}</p>
           <h3>Official</h3>
-          <p>[official]</p>
+          <p>
+            {policy && policy.auth_entity && policy.auth_entity[0].official}
+          </p>
         </div>
         <div className={styles.rightCol}>
           <h2>Government</h2>
-          <p>[gov]</p>
-          {true && (
+          <p>
+            {policyPlace &&
+              (policyPlace.level === "Local"
+                ? policyPlace.area2
+                : policyPlace.area1)}
+          </p>
+          {iso3 === "USA" && (
             <>
               <h2>State Structure</h2>
               <div className={styles.cols}>
                 <div className={styles.col}>
                   <h3>Home Rule</h3>
-                  <p>[rules]</p>
-                  {/* <p>{auth_entity && auth_entity.place.home_rule}</p> */}
+                  <p>{policyPlace && policyPlace.home_rule}</p>
                 </div>
                 <div className={styles.col}>
                   <h3>Dillon's Rule</h3>
-                  {/* <p>{auth_entity && auth_entity.place.dillons_rule}</p> */}
-                  <p>[rules]</p>
+                  <p>{policyPlace && policyPlace.dillons_rule}</p>
                 </div>
               </div>
             </>
@@ -177,7 +217,10 @@ const PolicyPage = props => {
           Object.entries(relatedPolicies).map(
             ([relatedPolicyID, relatedPolicy]) =>
               relatedPolicyID.replace("ID", "") !== policyID && (
-                <div className={styles.policySummaryWidth}>
+                <div
+                  key={relatedPolicyID}
+                  className={styles.policySummaryWidth}
+                >
                   <PolicySummary
                     location={{ iso3, state }}
                     key={relatedPolicyID}

@@ -18,8 +18,6 @@ const PolicySummary = props => {
         .join(" ") + "..."
     : props.policy.desc;
 
-  console.log(props.policy);
-
   return (
     <section className={styles.policySummary}>
       <div className={styles.metadata}>
