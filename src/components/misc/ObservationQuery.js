@@ -50,8 +50,6 @@ const ObservationQuery = async function({
 
   const url = `${API_URL}/observations`;
 
-  const url = `${API_URL}/observations`;
-
   const res = await axios({
     url,
     params,
