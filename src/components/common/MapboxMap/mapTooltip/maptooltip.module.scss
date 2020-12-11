@@ -189,8 +189,14 @@
   border-radius: 8px !important;
   padding: 0 !important;
   margin: 0;
+
+  // map popups 75% of default size
+  transform: scale(0.75);
 }
 
+[class*="mapboxgl-popup-anchor-bottom"] > [class*="mapboxgl-popup-content"] {
+  transform-origin: bottom;
+}
 [class*="mapboxgl-popup-anchor-bottom"],
 [class*="mapboxgl-popup-anchor-bottom-left"],
 [class*="mapboxgl-popup-anchor-bottom-right"] {
@@ -199,14 +205,43 @@
     top: -3px;
   }
 }
-[class*="mapboxgl-popup-anchor-left"] [class*="mapboxgl-popup-tip"] {
-  position: relative;
-  left: 3px;
+[class*="mapboxgl-popup-anchor-left"] {
+  > [class*="mapboxgl-popup-content"] {
+    transform-origin: left;
+  }
+  [class*="mapboxgl-popup-tip"] {
+    position: relative;
+    left: 3px;
+  }
 }
-[class*="mapboxgl-popup-anchor-right"] [class*="mapboxgl-popup-tip"] {
-  position: relative;
-  right: 3px;
+[class*="mapboxgl-popup-anchor-right"] {
+  > [class*="mapboxgl-popup-content"] {
+    transform-origin: right;
+  }
+
+  [class*="mapboxgl-popup-tip"] {
+    position: relative;
+    right: 3px;
+  }
 }
+[class*="mapboxgl-popup-anchor-top"] > [class*="mapboxgl-popup-content"] {
+  transform-origin: top;
+}
+[class*="mapboxgl-popup-anchor-top-left"] > [class*="mapboxgl-popup-content"] {
+  transform-origin: top left;
+}
+[class*="mapboxgl-popup-anchor-top-right"] > [class*="mapboxgl-popup-content"] {
+  transform-origin: top right;
+}
+[class*="mapboxgl-popup-anchor-bottom-left"]
+  > [class*="mapboxgl-popup-content"] {
+  transform-origin: bottom left;
+}
+[class*="mapboxgl-popup-anchor-bottom-right"]
+  > [class*="mapboxgl-popup-content"] {
+  transform-origin: bottom right;
+}
+
 [class*="mapboxgl-popup-anchor-top"],
 [class*="mapboxgl-popup-anchor-top-right"],
 [class*="mapboxgl-popup-anchor-top-left"] {

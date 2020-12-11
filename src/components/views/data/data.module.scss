@@ -149,6 +149,10 @@
 .downloadBtn {
   margin-left: auto;
 
+  .primaryText {
+    font-weight: 600;
+  }
+
   // data download buttons
   &.all,
   &.all_static,
@@ -162,7 +166,6 @@
     }
     span:first-child {
       font-size: 1rem;
-      font-weight: 500;
       + span {
         margin-top: 3px;
       }

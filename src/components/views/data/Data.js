@@ -415,7 +415,16 @@ const Data = ({
                       <>No {nouns.p.toLowerCase()} found</>
                     )}
                     {data && data.length > 0 && (
-                      <>Download {!hasFilters ? "" : "filtered"} data (.xlsx)</>
+                      <>
+                        <span className={styles.primaryText}>
+                          Download {!hasFilters ? "all" : "filtered"} data
+                        </span>
+                        <br />({comma(numInstances)}{" "}
+                        {numInstances !== 1
+                          ? nouns.p.toLowerCase()
+                          : nouns.s.toLowerCase().replace("_", " ")}
+                        , .xlsx)
+                      </>
                     )}
                   </span>
                 ),
@@ -472,6 +481,8 @@ const Data = ({
                               searchText,
                               setSearchText,
                               alignBottom: true,
+                              numInstances,
+                              instanceNouns: nouns,
                             }}
                           ></FilterSet>
                         </>
