@@ -416,7 +416,9 @@ const Data = ({
                     )}
                     {data && data.length > 0 && (
                       <>
-                        Download {!hasFilters ? "all" : "filtered"} data
+                        <span className={styles.primaryText}>
+                          Download {!hasFilters ? "all" : "filtered"} data
+                        </span>
                         <br />({comma(numInstances)}{" "}
                         {numInstances !== 1
                           ? nouns.p.toLowerCase()
@@ -479,6 +481,8 @@ const Data = ({
                               searchText,
                               setSearchText,
                               alignBottom: true,
+                              numInstances,
+                              instanceNouns: nouns,
                             }}
                           ></FilterSet>
                         </>
