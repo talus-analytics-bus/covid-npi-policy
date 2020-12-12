@@ -54,7 +54,7 @@ const interventionColors = {
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
   "Partially open": "#ECBD62",
-  Open: "#7F7F7F",
+  Open: "#f4ddaf",
 };
 
 const phaseNames = {
@@ -72,14 +72,14 @@ const phaseNames = {
 
 const labelNames = {
   caseload: {
-    infected_a: "Daily Cases",
-    dead: "Daily Deaths",
+    infected_a: "Daily cases",
+    dead: "Daily deaths",
   },
   interventions: {
-    infected_a: "Active Cases",
+    infected_a: "Active cases",
     infected_b: "Hospitalized",
     infected_c: "ICU",
-    dead: "Cumulative Deaths",
+    dead: "Cumulative deaths",
   },
 };
 
