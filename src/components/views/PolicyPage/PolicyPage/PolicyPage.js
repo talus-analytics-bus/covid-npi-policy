@@ -16,25 +16,24 @@ import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./PolicyPage.module.scss";
-//
-// const getFirstKeyPathFromObject = obj => {
-//   if (Object.keys(obj).length >= 1) {
-//     console.log(obj);
-//     const nextKey = Object.keys(obj)[0];
-//     console.log(nextKey);
-//     const nextObj = { ...obj[Object.keys(obj)] };
-//     console.log(nextObj);
-//
-//     if (!nextObj) {
-//       return [nextKey];
-//     }
-//   }
-//
-//   console.log("empty object");
-//   console.log(Object.keys(obj));
-//
-//   // return [nextKey, ...getFirstKeyPathFromObject(nextObj)].flat();
-// };
+
+const getFirstKeyPathFromObject = obj => {
+  if (!obj) return undefined;
+  if (Object.keys(obj).length >= 1) {
+    const nextKey = Object.keys(obj)[0];
+    const nextObj = { ...obj[Object.keys(obj)] };
+
+    if (nextKey.startsWith("ID")) return [nextKey];
+    return [nextKey, ...getFirstKeyPathFromObject(nextObj)].flat();
+  }
+};
+
+const getObjectByPath = ({ obj, path }) => {
+  if (!obj) return undefined;
+  if (!path) return undefined;
+  if (path.length === 1) return obj[path[0]];
+  return getObjectByPath({ obj: obj[path[0]], path: path.slice(1) });
+};
 
 const PolicyPage = props => {
   const location = useLocation();
@@ -47,11 +46,20 @@ const PolicyPage = props => {
 
   const { policyObject, setPolicyObject } = props;
 
-  // console.log("calling getFirstKeyPathFromObject");
-  // console.log(policyObject);
-  // console.log(getFirstKeyPathFromObject(policyObject));
+  const policyObjectPath = location.state
+    ? Object.values(location.state)
+    : getFirstKeyPathFromObject(policyObject);
 
-  const policyObjectPath = location.state && Object.values(location.state);
+  console.log(policyObject);
+  console.log(policyObjectPath);
+  console.log(
+    policyObject &&
+      policyObjectPath &&
+      getObjectByPath({ obj: policyObject, path: policyObjectPath })
+  );
+
+  const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
+
   // : getFirstKeyPathFromObject(policyObject);
 
   // console.log(policyObjectPath);
@@ -63,17 +71,19 @@ const PolicyPage = props => {
   // console.log(location);
   // console.log(policyObjectPath);
 
-  const relatedPolicies =
-    policyObject &&
-    policyObjectPath &&
-    policyObject[location.state[CATEGORY_FIELD_NAME]] &&
-    policyObject[location.state[CATEGORY_FIELD_NAME]][
-      location.state[SUBCATEGORY_FIELD_NAME]
-    ];
+  // const relatedPolicies =
+  //   policyObject &&
+  //   policyObjectPath &&
+  //   policyObject[policyObjectPath[0]] &&
+  //   policyObject[policyObjectPath[0]][policyObjectPath[1]];
+
+  let relatedPolicies;
 
   // console.log(relatedPolicies);
 
-  const policy = relatedPolicies && relatedPolicies[`ID${policyID}`];
+  // const policy = relatedPolicies && relatedPolicies[`ID${policyID}`];
+
+  console.log(policy);
 
   React.useEffect(() => {
     loadFullPolicy({
