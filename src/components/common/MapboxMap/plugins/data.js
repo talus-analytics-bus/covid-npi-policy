@@ -660,7 +660,7 @@ export const metricMeta = {
             undefined,
             { position: "absolute", top: 20 },
             undefined,
-            undefined,
+            { position: "absolute", top: 20 },
             undefined,
             { position: "absolute", top: 20 },
           ],
@@ -683,7 +683,7 @@ export const metricMeta = {
             </div>,
             "fewest",
             "",
-            "",
+            "some",
             "",
             "most",
           ],
@@ -1091,6 +1091,7 @@ export const tooltipGetter = async ({
   d,
   include,
   date,
+  data,
   map,
   filters,
   plugins,
@@ -1413,11 +1414,34 @@ export const tooltipGetter = async ({
     //   }
     // });
 
+    // determine qualitative label to use for relative policy count
+    const useQual = true;
+    const maxVal = d3.max(data.policy_status_counts, d => d.value);
+    const minVal = d3.min(data.policy_status_counts, d => d.value);
+    const diff = maxVal - minVal;
+    const binSize = diff / 5;
+    const breakpoints = [1, 2, 3, 4].map(d => {
+      return binSize * d + minVal;
+    });
+    const labels = ["Fewest", "Some", "Some", "Some", "Most"];
+    const qualValScale = d3
+      .scaleThreshold()
+      .domain(breakpoints)
+      .range(labels);
+    const getQualVal = v => {
+      if (v === 0) return "No";
+      else return qualValScale(v);
+    };
+    const value = useQual
+      ? getQualVal(nPolicies.total)
+      : comma(nPolicies.total);
+
+    // define tooltip subtitle including policy count
     tooltip.tooltipHeader.subtitle = (
       <>
         <span>
-          {comma(nPolicies.total)} {noun}-level{" "}
-          {nPolicies.total === 1 ? "policy" : "policies"} in effect
+          {value} {noun}-level{" "}
+          {nPolicies.total === 1 && !useQual ? "policy" : "policies"} in effect
         </span>
         <br />
         <span> as of {formattedDate}</span>

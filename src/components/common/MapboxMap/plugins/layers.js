@@ -221,23 +221,44 @@ export const greenStepsScale = d3
   .range([lightTeal, darkTeal]);
 
 const getLinearColorBins = ({ nBins, scale, maxVal, minVal, key }) => {
-  const range = scale.range();
-  const newScale = d3
+  const diff = maxVal - minVal;
+  const binSize = diff / 5;
+  const breakpoints = [1, 2, 3, 4].map(d => {
+    return binSize * d + minVal;
+  });
+  const colors = scale.range();
+  const newColorScale = d3
     .scaleLinear()
     .domain([0, 1])
-    .range(range);
-  const base = ["case"];
-  const capVal = maxVal - minVal;
-  const nRules = nBins - 1;
-  const binStep = 1 / (nBins - 1);
-  for (let i = 0; i < nRules; i++) {
-    const val = ((i + 1) * capVal) / (nBins + 1) + minVal;
-    base.push(["<=", ["feature-state", key], val]);
-    base.push(newScale(i * binStep));
-  }
-  // add max color
-  base.push(newScale(1));
+    .range(colors);
+
+  // const base = ["case"];
+  const base = ["case", ["==", ["feature-state", key], 0], "#ffffff"];
+  breakpoints.forEach((v, i) => {
+    base.push(["<=", ["feature-state", key], v]);
+    base.push(newColorScale(i * 0.25));
+  });
+  base.push(newColorScale(1));
   return base;
+
+  // OLD VERSION BELOW
+  // const range = scale.range();
+  // const newScale = d3
+  //   .scaleLinear()
+  //   .domain([0, 1])
+  //   .range(range);
+  // const base = ["case"];
+  // const capVal = maxVal - minVal;
+  // const nRules = nBins - 1;
+  // const binStep = 1 / (nBins - 1);
+  // for (let i = 0; i < nRules; i++) {
+  //   const val = ((i + 1) * capVal) / (nBins + 1) + minVal;
+  //   base.push(["<=", ["feature-state", key], val]);
+  //   base.push(newScale(i * binStep));
+  // }
+  // // add max color
+  // base.push(newScale(1));
+  // return base;
 };
 
 // similar for fill styles

@@ -427,6 +427,7 @@ const MapboxMap = ({
               // include: [circle, fill],
               date,
               map,
+              data,
               filters,
               plugins,
               callback: () => {
@@ -660,7 +661,6 @@ const MapboxMap = ({
       // allow no interaction until map loaded
       if (!map.loaded()) return;
       else {
-        console.log(e.lngLat);
         // if the cursor is not hovering on the map itself, unhover
         // all features
         const cursorOnMap = e.target.classList.contains("overlays");
