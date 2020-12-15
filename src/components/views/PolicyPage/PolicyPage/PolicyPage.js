@@ -23,25 +23,13 @@ const PolicyPage = props => {
   const { policyObject, setPolicyObject } = props;
 
   const policyObjectPath = location.state
-    ? Object.values(location.state)
+    ? [...Object.values(location.state), "ID" + policyID]
     : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
   console.log(policyObject);
   console.log(policyObjectPath);
-  console.log(getObjectByPath({ obj: policyObject, path: policyObjectPath }));
 
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
-
-  // : getFirstKeyPathFromObject(policyObject);
-
-  // console.log(policyObjectPath);
-  //
-  // console.log([iso3, state, policyID]);
-  // console.log(location.pathname.split("/").slice(-3));
-
-  // console.log(props.policyObject);
-  // console.log(location);
-  // console.log(policyObjectPath);
 
   // const relatedPolicies =
   //   policyObject &&
@@ -50,10 +38,6 @@ const PolicyPage = props => {
   //   policyObject[policyObjectPath[0]][policyObjectPath[1]];
 
   let relatedPolicies;
-
-  // console.log(relatedPolicies);
-
-  // const policy = relatedPolicies && relatedPolicies[`ID${policyID}`];
 
   console.log(policy);
 
@@ -87,13 +71,8 @@ const PolicyPage = props => {
     // }
   }, [relatedPolicies, iso3, state, policy, setPolicyObject]);
 
-  // console.log(policy);
-
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
-
-  // console.log(policyPlace);
-  // console.log(policyObject);
 
   return (
     <article className={styles.policyPage}>
