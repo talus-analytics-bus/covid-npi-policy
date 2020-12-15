@@ -1,39 +1,15 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import {
-  loadFullPolicy,
-  loadPolicyDescriptions,
-} from "../PolicyRouter/PolicyLoaders";
+import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 
-import {
-  CATEGORY_FIELD_NAME,
-  SUBCATEGORY_FIELD_NAME,
-} from "../PolicyRouter/PolicyLoaders";
+import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./PolicyPage.module.scss";
-
-const getFirstKeyPathFromObject = obj => {
-  if (!obj) return undefined;
-  if (Object.keys(obj).length >= 1) {
-    const nextKey = Object.keys(obj)[0];
-    const nextObj = { ...obj[Object.keys(obj)] };
-
-    if (nextKey.startsWith("ID")) return [nextKey];
-    return [nextKey, ...getFirstKeyPathFromObject(nextObj)].flat();
-  }
-};
-
-const getObjectByPath = ({ obj, path }) => {
-  if (!obj) return undefined;
-  if (!path) return undefined;
-  if (path.length === 1) return obj[path[0]];
-  return getObjectByPath({ obj: obj[path[0]], path: path.slice(1) });
-};
 
 const PolicyPage = props => {
   const location = useLocation();
@@ -48,15 +24,11 @@ const PolicyPage = props => {
 
   const policyObjectPath = location.state
     ? Object.values(location.state)
-    : getFirstKeyPathFromObject(policyObject);
+    : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
   console.log(policyObject);
   console.log(policyObjectPath);
-  console.log(
-    policyObject &&
-      policyObjectPath &&
-      getObjectByPath({ obj: policyObject, path: policyObjectPath })
-  );
+  console.log(getObjectByPath({ obj: policyObject, path: policyObjectPath }));
 
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
 

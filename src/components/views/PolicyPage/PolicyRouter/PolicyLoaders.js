@@ -1,20 +1,8 @@
 import { Policy } from "../../../misc/Queries";
+import { extendObjectByPath } from "../objectPathTools";
 
 export const CATEGORY_FIELD_NAME = "primary_ph_measure";
 export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
-
-// recursively climb down through object according
-// to an array of keys (the "path"), setting the lowest
-// level of that object to the value, and creating any
-// new nested objects needed to fulfill the path
-const extendObjectByPath = ({ obj, path, valueObj }) => {
-  if (path.length === 1) {
-    obj[path[0]] = { ...obj[path[0]], ...valueObj };
-  } else {
-    obj[path[0]] = obj[path[0]] || {};
-    extendObjectByPath({ obj: obj[path[0]], path: path.slice(1), valueObj });
-  }
-};
 
 // Top-Level policy categories
 export const loadPolicyCategories = async ({ filters, stateSetter }) => {
