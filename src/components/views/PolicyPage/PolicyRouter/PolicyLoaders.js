@@ -51,7 +51,7 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["id", "desc"]],
+    ordering: [["date_start_effective", "asc"]],
     fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
 
@@ -83,7 +83,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["id", "desc"]],
+    ordering: [["date_start_effective", "asc"]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,
@@ -123,7 +123,7 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["id", "desc"]],
+    ordering: [["date_start_effective", "asc"]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,
