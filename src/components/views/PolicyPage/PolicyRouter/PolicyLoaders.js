@@ -10,7 +10,7 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["id", "desc"]],
+    ordering: [["date_start_effective", "asc"]],
     fields: ["id", CATEGORY_FIELD_NAME],
   });
 
