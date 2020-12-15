@@ -79,7 +79,11 @@ const ListPoliciesPage = props => {
     const subCategoryNeedsDescriptions =
       props.policyObject[categoryName] === undefined
         ? true
-        : props.policyObject[categoryName][subcatName] === undefined;
+        : props.policyObject[categoryName][subcatName] === undefined ||
+          Object.keys(props.policyObject[categoryName][subcatName]).length ===
+            0;
+
+    console.log(props.policyObject[categoryName][subcatName]);
 
     if (subCategoryNeedsDescriptions) {
       const filters = {
