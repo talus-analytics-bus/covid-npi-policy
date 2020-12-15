@@ -250,7 +250,7 @@ const InspectDailyCursor = props => {
                       </div>
                       <div className={styles.caseloadContent}>
                         <p className={styles.number}>
-                          {modeledCases === undefined
+                          {props.activeTab === "caseload"
                             ? actualCases && formatActuals(actualCases.y)
                             : modeledCases && formatModeled(modeledCases.y)}
                         </p>
