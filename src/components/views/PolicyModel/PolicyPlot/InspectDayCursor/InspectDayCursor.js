@@ -122,7 +122,7 @@ const InspectDailyCursor = props => {
   );
 
   let actualCases, averageCases;
-  if (modeledCases === undefined) {
+  if (props.activeTab === "caseload") {
     actualCases = props.data.curves[yAxis].actuals.find(point =>
       checkSameDay(point.x, popupDate)
     );
@@ -185,6 +185,7 @@ const InspectDailyCursor = props => {
     policyName: dataName,
     proposed,
   });
+
   return (
     <>
       {(props.activeTab === "caseload" &&
