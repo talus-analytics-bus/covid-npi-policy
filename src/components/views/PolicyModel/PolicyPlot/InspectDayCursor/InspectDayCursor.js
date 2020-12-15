@@ -30,6 +30,13 @@ const checkSameDay = (date1, date2) => {
   // );
 };
 
+const checkBeforeDay = (date1, date2) => {
+  // const date1timestamp = Math.floor(date1.getTime() / 1000 / 60 / 60 / 24);
+  const date1timestamp = Math.floor(date1.getTime() / 86400000);
+  const date2timestamp = Math.floor(date2.getTime() / 86400000);
+  return date1timestamp <= date2timestamp;
+};
+
 const formatModeled = number => {
   const integer = parseInt(number);
   if (integer <= 10) {
@@ -189,7 +196,7 @@ const InspectDailyCursor = props => {
   return (
     <>
       {(props.activeTab === "caseload" &&
-        popupDate <= props.data.curves[yAxis].actuals_end) ||
+        checkBeforeDay(popupDate, props.data.curves[yAxis].actuals_end)) ||
       (props.activeTab === "interventions" && popupDate > new Date()) ? (
         <VictoryPortal>
           <g>

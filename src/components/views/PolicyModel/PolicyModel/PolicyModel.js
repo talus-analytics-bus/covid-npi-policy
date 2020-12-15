@@ -127,7 +127,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
       const caseloadPoints = caseloadData.map(day => ({
         // convert dates to ISO format before parsing
-        x: new Date(day.date_time.split(" ")[0]),
+        x: new Date(day.date_time.replace(" ", "T").replace(" +00", "")),
         // ignoring negative new cases and deaths
         y: Math.max(day.value, 0),
       }));
