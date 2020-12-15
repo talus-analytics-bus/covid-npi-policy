@@ -83,8 +83,6 @@ const ListPoliciesPage = props => {
           Object.keys(props.policyObject[categoryName][subcatName]).length ===
             0;
 
-    console.log(props.policyObject[categoryName][subcatName]);
-
     if (subCategoryNeedsDescriptions) {
       const filters = {
         iso3: [iso3],
