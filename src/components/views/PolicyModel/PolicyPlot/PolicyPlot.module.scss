@@ -27,12 +27,23 @@
 
 .abovePlot {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+
+  select {
+    padding: 9px;
+    padding-right: 50px;
+    margin-left: 1rem;
+    font-size: 1rem;
+    color: #333;
+    font-family: "Open Sans";
+  }
 }
 
 .instruction {
-  margin-left: auto;
   display: inline-block;
   font-style: italic;
   display: flex;
@@ -48,33 +59,35 @@
 
 .legendLabel {
   display: inline-block;
-  margin-left: 2rem;
-  margin-right: 2rem;
-  position: relative;
-  top: 1rem;
-  width: min-content;
+  margin-left: 1rem;
+  font-size: 16px;
 
   h4 {
-    padding: 0.5rem 1rem;
+    padding: 9px 15px;
     background-color: #fff;
     border: 1px solid #aaa;
     border-radius: 0.25rem;
     color: #333;
+    font-family: "Open Sans";
   }
 }
 
-.legend {
-  width: 14rem;
+.legend,
+.proposedLegend {
+  max-width: 22rem;
   padding: 0.25rem;
 
   .noPolicies,
   .lockdown,
   .safer,
+  .no,
+  .open,
   .stay,
-  .normal,
+  .partial,
   .proposed,
   .actuals,
-  .modeled {
+  .modeled,
+  .daily {
     display: grid;
     grid-auto-flow: column;
     align-items: center;
@@ -109,9 +122,19 @@
       background-color: #d66b3e;
     }
   }
-  .normal {
+  .no {
+    span {
+      background-color: gray;
+    }
+  }
+  .partial {
     span {
       background-color: #ecbd62;
+    }
+  }
+  .open {
+    span {
+      background-color: #f4ddaf;
     }
   }
   .proposed {
@@ -121,8 +144,8 @@
   }
   .actuals {
     span {
-      height: 0;
-      border: 2px solid #183344;
+      height: 4px;
+      background-color: #7490a9;
     }
   }
   .modeled {
@@ -136,6 +159,97 @@
     span {
       background-color: #bcd3ce;
       border-radius: 3px;
+    }
+  }
+  .daily {
+    span {
+      position: relative;
+      margin-left: 10px;
+      margin-right: 16px;
+      height: 12px;
+      transform: scaleY(-1);
+      border-radius: 0;
+
+      &,
+      &:before,
+      &:after {
+        width: 5px;
+        background-color: #adadad;
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        content: "";
+      }
+
+      &:before {
+        left: -7px;
+        height: 7px;
+      }
+
+      &:after {
+        right: -7px;
+        height: 15px;
+      }
+    }
+  }
+}
+
+.proposedLegend {
+  .noPolicies,
+  .lockdown,
+  .safer,
+  .no,
+  .open,
+  .stay,
+  .partial,
+  .proposed,
+  .actuals,
+  .modeled {
+    span {
+      background-color: #fff;
+    }
+  }
+  .lockdown {
+    span {
+      border: 3px solid #661b3c;
+    }
+  }
+  .stay {
+    span {
+      border: 3px solid #c1272d;
+    }
+  }
+  .safer {
+    span {
+      border: 3px solid #d66b3e;
+    }
+  }
+  .no {
+    span {
+      border: 3px solid gray;
+    }
+  }
+  .partial {
+    span {
+      border: 3px solid #ecbd62;
+    }
+  }
+  .open {
+    span {
+      border: 3px solid #f4ddaf;
+    }
+  }
+  .proposed {
+    span {
+      border: 3px solid #661b3c;
+    }
+  }
+  .actuals {
+    span {
+      height: 4px;
+      background-color: #7490a9;
     }
   }
 }

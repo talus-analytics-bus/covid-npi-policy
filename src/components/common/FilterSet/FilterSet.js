@@ -11,7 +11,7 @@ import { getInputLabel } from "../Filter/Filter.js";
 import { ShowMore } from "../";
 
 // misc
-import { isEmpty } from "../../misc/Util";
+import { isEmpty, comma } from "../../misc/Util";
 
 // assets and styles
 import styles from "./filterset.module.scss";
@@ -31,6 +31,10 @@ const FilterSet = ({
   searchText = null,
   setSearchText,
   children = null,
+  alignBottom = false,
+  vertical = false,
+  numInstances = null,
+  instanceNouns = null,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -53,7 +57,6 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
-
       filterGroupComponents.push(
         <Filter
           {...{
@@ -74,6 +77,7 @@ const FilterSet = ({
             setActiveFilter,
             withGrouping: v.withGrouping,
             params: v.params,
+            alignBottom,
             ...props,
           }}
         />
@@ -140,7 +144,18 @@ const FilterSet = ({
           <div className={styles.filterIcon}>
             <div style={{ backgroundImage: `url(${funnelSvg})` }} />
           </div>
-          <span>Selected filters</span>
+          <span>
+            Selected filters{" "}
+            {numInstances !== null && instanceNouns !== null && (
+              <span>
+                ({comma(numInstances)}{" "}
+                {numInstances !== 1
+                  ? instanceNouns.p.toLowerCase()
+                  : instanceNouns.s.toLowerCase().replace("_", " ")}
+                )
+              </span>
+            )}
+          </span>
         </div>
 
         <div className={styles.badges}>
@@ -192,6 +207,7 @@ const FilterSet = ({
       <div
         className={classNames(styles.filterSet, {
           [styles.disabled]: disabled,
+          [styles.vertical]: vertical,
         })}
       >
         {filterGroups.map(d => (

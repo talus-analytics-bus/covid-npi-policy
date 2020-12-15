@@ -25,6 +25,8 @@ const not_available = (
 );
 const API_URL = process.env.REACT_APP_API_URL;
 
+const undefinedValues = [null, undefined, ""];
+
 /**
  * Define all info needed in the Data page to fetch and show policies.
  * @type {Object}
@@ -119,36 +121,29 @@ export const policyInfo = {
       {
         dataField: "jurisdiction",
         header: "Jurisdiction",
+        definition: "Location and court",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
         sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
+        get sortValue() {
+          return this.formatter;
+        },
+        formatter: (cell, row) => {
+          let value = "";
+          // list jurisdiction and/or court, as available
+          const hasJuris = !undefinedValues.includes(row.jurisdiction);
+          const hasCourt = !undefinedValues.includes(row.court);
+
+          if (hasJuris) {
+            value = row.jurisdiction;
+            if (hasCourt) value += `, ${row.court}`;
+          } else if (hasCourt) value = row.court;
+          else value = unspecified;
+          return value;
         },
       },
-      // {
-      //   dataField: "parties",
-      //   header: "Parties or citation",
-      //   onSort: (field, order) => {
-      //     setOrdering([[field, order]]);
-      //   },
-      //   sort: true,
-      //   sortValue: (cell, row) => {
-      //     if (row.place !== undefined)
-      //       return row.place.map(d => d.level).join("; ");
-      //     else return "zzz";
-      //   },
-      //   formatter: (cell, row) => {
-      //     if (row.parties !== "") {
-      //       return `${row.parties}`;
-      //     } else {
-      //       return `${row.legal_citation}`;
-      //     }
-      //   },
-      // },
+
       {
         dataField: "policy_or_law_name",
         header: "Policy or law name",
@@ -170,44 +165,113 @@ export const policyInfo = {
       },
       {
         dataField: "parties_or_citation_and_summary_of_action",
-        header: "Parties or citation and summary of action",
+        header: "Case details",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
+        definition: "Parties, citation & summary of action",
         sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
+        get sortValue() {
+          return this.formatter;
         },
         formatter: (cell, row) => {
-          console.log(cell);
-          if (cell !== "") {
-            return <ShowMore text={cell} charLimit={200} />;
-          } else {
-            return not_available;
-          }
+          const hasPar = !undefinedValues.includes(row.parties);
+          const hasCit = !undefinedValues.includes(row.legal_citation);
+          const hasNum = !undefinedValues.includes(row.case_number);
+          const hasSum = !undefinedValues.includes(row.summary_of_action);
+
+          // get parties
+          let parties;
+          if (hasPar)
+            parties = <i style={{ position: "static" }}>{row.parties}</i>;
+          else
+            parties = (
+              <i style={{ position: "static" }}>Parties in progress; </i>
+            );
+
+          // get citation or number
+          let citOrNum;
+          if (hasCit) citOrNum = row.legal_citation;
+          else if (hasNum) citOrNum = row.case_number;
+          else citOrNum = "Citation in progress";
+
+          // get summary
+          let sum;
+          if (hasSum)
+            sum = <ShowMore text={row.summary_of_action} charLimit={200} />;
+          else
+            sum = (
+              <i className={styles.unspecified} style={{ position: "static" }}>
+                Summary in progress
+              </i>
+            );
+          if (hasPar || hasCit || hasNum || hasSum) {
+            const jsx = (
+              <p>
+                <b>
+                  {parties}&nbsp;
+                  {citOrNum}
+                </b>
+                <br />
+                {sum}
+              </p>
+            );
+            return jsx;
+          } else return unspecified;
         },
       },
+      // {
+      //   dataField: "government_order_upheld_or_enjoined",
+      //   header: "Case status",
+      //   definition: "Procedural status of the case",
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   sort: true,
+      //   sortValue: (cell, row) => {
+      //     if (row.place !== undefined)
+      //       return row.place.map(d => d.level).join("; ");
+      //     else return "zzz";
+      //   },
+      //   formatter: (cell, row) => {
+      //     return cell !== "" ? cell : "Pending";
+      //   },
+      // },
       {
         dataField: "government_order_upheld_or_enjoined",
-        header: "Upheld or enjoined?",
+        header: "Policy and case status",
+        definition: "Challenged policy status and procedural status of case",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
         sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
+        get sortValue() {
+          return this.formatter;
         },
         formatter: (cell, row) => {
-          return cell !== "" ? cell : "Pending";
+          const hasPolicyStatus = !undefinedValues.includes(row.policy_status);
+          const hasCaseStatus = !undefinedValues.includes(row.case_status);
+          let value = "";
+          if (hasPolicyStatus) {
+            value = row.policy_status;
+            if (hasCaseStatus) value += `: ${row.case_status}`;
+            else value += "; case status unspecified";
+          } else if (hasCaseStatus) {
+            value = `Policy status unspecified: ${row.case_status}`;
+          } else
+            return (
+              <i className={styles.unspecified} style={{ position: "static" }}>
+                Data collection in progress
+              </i>
+            );
+          // } else return unspecified;
+          return value;
         },
       },
       {
         dataField: "data_source_for_complaint",
         header: "Sources",
+        definition: "Link to primary sources",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
@@ -254,16 +318,16 @@ export const policyInfo = {
           }
         },
       },
-      {
-        dataField: "date_of_complaint",
-        header: "Date of complaint",
-        sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        formatter: v =>
-          v !== null ? moment(v).format("MMM D, YYYY") : not_available,
-      },
+      // {
+      //   dataField: "date_of_complaint",
+      //   header: "Date of complaint",
+      //   sort: true,
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   formatter: v =>
+      //     v !== null ? moment(v).format("MMM D, YYYY") : not_available,
+      // },
       // {
       //   dataField: "date_of_decision",
       //   header: "Date of Decision",
@@ -293,18 +357,20 @@ export const policyInfo = {
       const keyTmp = d.defKey || d.dataField;
       const key = keyTmp.includes(".") ? keyTmp : "court_challenge." + keyTmp;
 
-      d.definition = "";
-      if (metadata[key] !== undefined) {
-        if (
-          metadata[key].tooltip !== "" &&
-          metadata[key].tooltip !== undefined
-        ) {
-          d.definition = metadata[key].tooltip;
-        } else if (
-          metadata[key].definition !== "" &&
-          metadata[key].definition !== undefined
-        ) {
-          d.definition = metadata[key].definition;
+      if (d.definition === undefined) {
+        d.definition = "";
+        if (metadata[key] !== undefined) {
+          if (
+            metadata[key].tooltip !== "" &&
+            metadata[key].tooltip !== undefined
+          ) {
+            d.definition = metadata[key].tooltip;
+          } else if (
+            metadata[key].definition !== "" &&
+            metadata[key].definition !== undefined
+          ) {
+            d.definition = metadata[key].definition;
+          }
         }
       }
 
@@ -318,20 +384,6 @@ export const policyInfo = {
       if (d.dataField === "name_and_desc") {
         d.definition =
           "The name and a written description of the policy or law and who it impacts.";
-      }
-      if (d.dataField === "policy_or_law_name") {
-        d.definition = "Policies at issue in the challenge.";
-      }
-      if (d.dataField === "data_source_for_complaint") {
-        d.definition =
-          "External links to primary data sources for complaints or decisions, if available.";
-      }
-      if (d.dataField === "parties_or_citation_and_summary_of_action") {
-        d.definition =
-          "Persons directly involved with legal proceeding and main components of the legal challenge.";
-      }
-      if (d.dataField === "data_source_for_complaint") {
-        d.definition = "Link to primary data source.";
       }
     });
 
@@ -365,7 +417,11 @@ export const policyInfo = {
         "data_source_for_complaint",
         "data_source_for_decision",
         "holding",
-        "parties_or_citation_and_summary_of_action",
+        "legal_citation",
+        "summary_of_action",
+        "parties",
+        "policy_status",
+        "case_status",
       ],
     });
   },

@@ -147,6 +147,7 @@
 
   .controlRow {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 1.5rem;
@@ -167,6 +168,15 @@
         select {
           margin-top: 0.5rem;
           color: #333;
+        }
+      }
+
+      .radio {
+        margin-top: 0.45em;
+
+        label {
+          flex-direction: row;
+          align-items: baseline;
         }
       }
     }

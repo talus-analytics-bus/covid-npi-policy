@@ -1,0 +1,100 @@
+@import "../../../assets/styles/vars.scss";
+.wrapper {
+  width: max-content;
+  a {
+    &:hover,
+    &:active,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+  .button {
+    color: white;
+    &:not(.link) {
+      @include btn-primary();
+    }
+    padding: 5px 10px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+
+    i {
+      position: relative;
+      margin-right: 5px;
+      left: -3px;
+    }
+
+    // secondary buttons have different and less emphasizing styling
+    &.secondary {
+      background: white;
+      color: $dark-navy-blue-button;
+      border-color: $dark-navy-blue-button;
+      &:hover {
+        background-color: lighten($light-gray, 3%);
+      }
+    }
+
+    // smaller size
+    &.small {
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      i {
+        font-size: 1.25rem;
+      }
+    }
+
+    // link buttons look like simple hyperlinks
+    &.link {
+      background: none;
+      border: none;
+      margin: 0;
+      padding: 0;
+      color: $blue;
+      text-align: left;
+      &:hover {
+        text-decoration: underline;
+      }
+      &:active,
+      &:focus {
+        color: darken($light-blue, 10%);
+      }
+    }
+
+    // icon buttons just consist of the icon itself
+    &.icon {
+      // TODO
+      border: none;
+      background: none;
+      color: $blue;
+      padding: 0;
+      i {
+        margin-right: 0;
+        font-size: 2.5rem;
+        // @media #{$breakpoint-one} {
+        //   font-size: 2rem;
+        // }
+        // @media #{$phone-narrow} {
+        //   font-size: 1.7rem;
+        // }
+        position: relative;
+        top: -2px;
+      }
+      &:hover,
+      &:active,
+      &:focus {
+        background: none;
+        @include noShadow();
+      }
+    }
+  }
+
+  // disabled: gray out text
+  // TODO full styling for buttons, only link is done so far
+  &.disabled {
+    button.button.link {
+      color: gray;
+      pointer-events: none;
+    }
+  }
+}

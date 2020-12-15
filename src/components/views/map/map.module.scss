@@ -5,75 +5,83 @@
   position: relative;
   > :last-child {
     width: 100% !important;
-    $drawer-header-height: 70px;
+    $drawer-header-height: 50px;
     height: calc(100% - #{$drawer-header-height}) !important;
   }
 
-  .dark {
-    &[role="filterButton"] {
-      background-color: $light-gray-2;
-      @include btn-secondary();
-      border-radius: 4px;
-      border: 2px solid lightgray;
-    }
+  h1 {
+    color: black;
+    font-size: 1.7rem;
+    font-family: "rawline", serif;
+    font-weight: 600;
+    text-transform: none;
+    margin-right: 10px;
   }
-  .drawer > div:first-child {
-    * {
-      text-transform: none;
-      align-items: center;
-      margin-bottom: 0;
-    }
-
-    input + span {
-      font-size: 0.9rem;
-    }
-
-    h1 {
-      color: black;
-      font-size: 1.7rem;
-      font-family: "rawline", serif;
-      font-weight: 600;
-    }
-    > div:first-child {
-      font-family: "Open Sans SemiBold", sans-serif;
-    }
+  .mapOptionsTitle {
+    font-size: 1.4rem;
+    font-family: "rawline", serif;
+    font-weight: 600;
   }
   .drawer {
     position: relative;
-    .labelContainer {
-      background-color: #7e99b6;
-      position: absolute;
-      margin: auto 0;
-      height: 100%;
-      left: 0;
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      h1 {
-        position: relative;
-      }
-      button.toggle {
-        background: none;
-        border: none;
-        padding: 0;
-        z-index: 0;
-        position: relative;
-        right: -10px;
+    .divider {
+      border-left: 1px solid #b3b3b3;
+      margin: 0 20px;
+    }
+  }
 
-        i {
-          font-size: 3rem;
-          position: relative;
-          vertical-align: middle;
-          line-height: 0;
-        }
-        &.flip {
-          transform: rotate(180deg);
-        }
+  .labelContainer {
+    background-color: #7e99b6;
+    margin: auto 0;
+    height: 100%;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    button.toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      z-index: 0;
+      i {
+        font-size: 3rem;
+        position: relative;
+        vertical-align: middle;
+        line-height: 0;
       }
     }
-    .dates {
+  }
+  .circleToggle {
+    input,
+    select {
+      margin-left: 10px;
+    }
+    select {
+      width: max-content;
+    }
+    > div > label {
+      font-weight: unset;
+    }
+  }
+  .mapBanner {
+    display: flex;
+    align-items: center;
+    background-color: #d3d7da;
+    padding: 10px;
+    height: 50px;
+
+    .title {
       font-family: "rawline", serif;
-      margin-right: 20px;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .dates {
+      margin-left: auto;
+      font-family: "rawline", serif;
+      display: flex;
+      @include spaceItemsHoriz(10px);
+      align-items: center;
       .primary {
         font-size: 1rem;
         font-weight: bold;
@@ -85,32 +93,24 @@
       }
     }
   }
-  .drawer > div:last-child {
-    > div {
-      display: flex;
-      flex-flow: row;
-      @include spaceItemsHoriz(50px);
+  .rightControls {
+    div > label {
+      font-weight: normal;
     }
-    border-bottom: 1px solid #b3b3b3;
+    select {
+      background: linear-gradient(to bottom, white, #e4e4e4);
+      border-radius: 3px;
+      border: 2px solid #d3d3d3;
+      padding: 0.25em 0.5em;
+      margin-top: 0.5em;
+      display: inline-block;
+    }
+  }
+
+  // indented filters
+  .indented {
+    padding-left: 13px;
+    margin-left: 15px;
+    border-left: 1px solid lightgray;
   }
 }
-
-.rightControls {
-  .selectTooltipHolder {
-    display: flex;
-    align-items: center;
-  }
-  > div > label {
-    font-weight: normal;
-  }
-  select {
-    background: linear-gradient(to bottom, white, #e4e4e4);
-    border-radius: 3px;
-    border: 2px solid #d3d3d3;
-    padding: 0.25em 0.5em;
-    margin-top: 0.5em;
-    display: inline-block;
-  }
-}
-
-@import "./plugins.module.scss";

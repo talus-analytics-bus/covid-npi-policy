@@ -24,6 +24,7 @@ $white: #fff;
 $light-cyan: #d9edf8;
 
 // functional colors
+$dark-navy-blue-button: #213561;
 $dark-selected-blue: $dark-blue;
 $no-data-gray: #b3b3b3;
 
@@ -45,11 +46,45 @@ $border-radius: 5px;
 // }
 
 // MIXINS
-@mixin spaceItemsVert($size) {
-  > :not(:first-child) {
-    margin-top: $size;
+@mixin spaceItemsVert($size, $top: true, $padding: false) {
+  @if $padding {
+    @if $top {
+      > :not(:first-child) {
+        padding-top: $size;
+      }
+    } @else {
+      > :not(:last-child) {
+        padding-bottom: $size;
+      }
+    }
+  } @else {
+    @if $top {
+      > :not(:first-child) {
+        margin-top: $size;
+      }
+    } @else {
+      > :not(:last-child) {
+        margin-bottom: $size;
+      }
+    }
   }
 }
+
+@mixin selectStyling() {
+  // for styling select lists
+  // custom caret appearance with gradient included
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 9px 40px 9px 9px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 216 216'%3E%3Cpath fill='%23fff' fill-opacity='0' d='M0 0h216v216H0z'/%3E%3Cpath fill='%2358595b' d='M72 92.25h72l-36 40.5z'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, #ffffff 0%, #e4e4e4 100%);
+  background-repeat: no-repeat;
+  background-position: right, 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 @mixin spaceItemsHoriz($size) {
   > :not(:last-child) {
     margin-right: $size;
@@ -159,7 +194,15 @@ $border-radius: 5px;
   top: -2px;
 }
 
+@mixin noShadow() {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
 // globals
-$phone: "screen and (max-width : 812px)";
-$phone-narrow: "screen and (max-width : 500px)";
+$small-laptop: "screen and (max-width : 1220px)";
+$breakpoint-one: "screen and (max-width: 1150px)";
+$phone: "screen and (max-width: 812px)";
+$phone-narrow: "screen and (max-width: 500px)";
+$not-phone: "screen and (min-width: 813px)";
 $max-width: 1300px;

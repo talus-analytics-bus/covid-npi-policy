@@ -9,6 +9,7 @@ import {
   VictoryLabel,
   createContainer,
   LineSegment,
+  VictoryBar,
   VictoryPortal,
 } from "victory";
 
@@ -30,9 +31,9 @@ import styles from "./PolicyPlot.module.scss";
 const plotColors = [
   // '#00a79d',
   "#14477A",
-  "#14477A",
   "#6C92AB",
   "#aeaeae",
+  "#14477A",
   "#00447c",
   "#aeaeae",
   "#7a4500",
@@ -45,12 +46,15 @@ const interventionColors = {
   "mobility policies implemented": "#7F7F7F",
   "Unclear lockdown level": "#7F7F7F",
   "Mixed distancing levels": "#7F7F7F",
+  "No restrictions": "gray",
   "Stay-at-home": "#C1272D",
   "Safer-at-home": "#D66B3E",
   "Stay at home": "#C1272D",
   "Safer at home": "#D66B3E",
   "New open": "#ECBD62",
   "New normal": "#ECBD62",
+  "Partially open": "#ECBD62",
+  Open: "#f4ddaf",
 };
 
 const phaseNames = {
@@ -63,22 +67,37 @@ const phaseNames = {
   "Safer at home": "Phase III",
   "New open": "Phase IV",
   "New normal": "Phase IV",
+  Open: "Phase IV",
 };
 
 const labelNames = {
-  infected_a: "Caseload",
-  infected_b: "Hospitalized",
-  infected_c: "ICU",
-  dead: "Deaths",
+  caseload: {
+    infected_a: "Daily cases",
+    dead: "Daily deaths",
+  },
+  interventions: {
+    infected_a: "Active cases",
+    infected_b: "Hospitalized",
+    infected_c: "ICU",
+    dead: "Cumulative deaths",
+  },
 };
 
 const covidCountHoverText = {
-  infected_a: "Number of individuals with an active COVID-19 infection by day",
-  infected_b:
-    "Number of individuals currently hospitalized for COVID-19 infection by day",
-  infected_c:
-    "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
-  dead: "Cumulative deaths from COVID-19 by day",
+  caseload: {
+    infected_a:
+      "Number of new cases per day, as reported by the New York Times",
+    dead: "Number of new deaths per day, as reported by the New York Times",
+  },
+  interventions: {
+    infected_a:
+      "Number of individuals with an active COVID-19 infection by day",
+    infected_b:
+      "Number of individuals currently hospitalized for COVID-19 infection by day",
+    infected_c:
+      "Number of individuals currently hospitalized and in intensive care unit (ICU) for COVID-19 infection by day",
+    dead: "Cumulative deaths from COVID-19 by day",
+  },
 };
 
 const VictoryZoomCursorContainer = createContainer("zoom", "cursor");
@@ -208,16 +227,60 @@ const PolicyModel = props => {
   }, [props.caseLoadAxis]);
 
   // The actuals lines of the plot
-  const actualsLines = Object.entries(props.data.curves).map(
+  // const actualsLines = Object.entries(props.data.curves).map(
+  //   ([curveName, data], index) => {
+  //     if (!["R effective", "pctChange"].includes(curveName)) {
+  //       return (
+  //         <VictoryLine
+  //           key={curveName}
+  //           style={{
+  //             data: { stroke: plotColors[index], strokeWidth: 0.75 },
+  //           }}
+  //           data={data.actuals}
+  //           // interpolation={'monotoneX'}
+  //         />
+  //       );
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  // );
+
+  const actualsBars = Object.entries(props.data.curves).map(
     ([curveName, data], index) => {
       if (!["R effective", "pctChange"].includes(curveName)) {
+        return (
+          <VictoryBar
+            key={curveName}
+            style={{
+              data: {
+                fill: "#dadada",
+                // {
+                //   maryland: "rgba(240,0,0,.5)",
+                //   infected_a: "rgba(0,240,0,.5)",
+                // }[curveName],
+              },
+            }}
+            data={data.actuals}
+            // interpolation={'monotoneX'}
+          />
+        );
+      } else {
+        return false;
+      }
+    }
+  );
+
+  const averageLines = Object.entries(props.data.curves).map(
+    ([curveName, data], index) => {
+      if (!["R effective", "pctChange"].includes(curveName) && data.average) {
         return (
           <VictoryLine
             key={curveName}
             style={{
               data: { stroke: plotColors[index], strokeWidth: 0.75 },
             }}
-            data={data.actuals}
+            data={data.average}
             // interpolation={'monotoneX'}
           />
         );
@@ -279,7 +342,6 @@ const PolicyModel = props => {
       }
     }
   );
-
   const interventionLines = props.data.interventions.map(intervention => (
     <VictoryLine
       key={intervention.name + intervention.intervention_start_date}
@@ -437,51 +499,99 @@ const PolicyModel = props => {
         data={props.data}
       />
       <div className={styles.abovePlot}>
-        <p className={styles.instruction}>
-          <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
-            <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
-            <path
-              style={{ fill: "#8D64DD" }}
-              d="M20.8,12.2v0.9c0,0.5-0.4,0.9-0.9,0.9h-6v6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9v-6h-6
+        {props.activeTab === "interventions" && (
+          <p className={styles.instruction}>
+            <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
+              <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
+              <path
+                style={{ fill: "#8D64DD" }}
+                d="M20.8,12.2v0.9c0,0.5-0.4,0.9-0.9,0.9h-6v6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9v-6h-6
   c-0.5,0-0.9-0.4-0.9-0.9v-0.9c0-0.5,0.4-0.9,0.9-0.9h6v-6c0-0.5,0.4-0.9,0.9-0.9H13c0.5,0,0.9,0.4,0.9,0.9v6h6
   C20.4,11.3,20.8,11.7,20.8,12.2z M21.6,21.6c-4.9,4.9-13,4.9-17.9,0s-4.9-13,0-17.9s13-4.9,17.9,0S26.5,16.7,21.6,21.6z M23.6,12.6
   c0-6.1-4.9-11-11-11s-11,4.9-11,11s4.9,11,11,11S23.6,18.7,23.6,12.6z"
-            />
-          </svg>
-          Use cursor on graph to set new policy
-        </p>
+              />
+            </svg>
+            Use cursor on graph to set new policy
+            {/* Switch to model view to add interventions */}
+          </p>
+        )}
         <label className={styles.legendLabel}>
           <Tippy
             content={
-              <div className={styles.legend}>
+              <div
+                className={
+                  props.activeTab === "caseload"
+                    ? styles.legend
+                    : styles.proposedLegend
+                }
+              >
                 <div className={styles.lockdown}>
                   <span />
-                  <p>Lockdown policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"} Lockdown
+                    policies
+                  </p>
                 </div>
                 <div className={styles.stay}>
                   <span />
-                  <p>Stay-at-home policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"}{" "}
+                    Stay-at-home policies
+                  </p>
                 </div>
                 <div className={styles.safer}>
                   <span />
-                  <p>Safer-at-home policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"}{" "}
+                    Safer-at-home policies
+                  </p>
                 </div>
-                <div className={styles.normal}>
+                <div className={styles.partial}>
                   <span />
-                  <p>New normal policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"}{" "}
+                    Partially open policies
+                  </p>
                 </div>
-                <div className={styles.proposed}>
+                <div className={styles.open}>
                   <span />
-                  <p>Proposed</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"} Open
+                    policies
+                  </p>
                 </div>
-                <div className={styles.actuals}>
-                  <span />
-                  <p>Actuals</p>
-                </div>
-                <div className={styles.modeled}>
-                  <span />
-                  <p>Modeled</p>
-                </div>
+                {/* <div className={styles.proposed}> */}
+                {/*   <span /> */}
+                {/*   <p>Proposed</p> */}
+                {/* </div> */}
+                {props.activeTab === "caseload" && (
+                  <div className={styles.daily}>
+                    <span />
+                    <p>
+                      Daily New{" "}
+                      {props.selectedCurves[0] === "infected_a"
+                        ? "Cases"
+                        : "Deaths"}
+                    </p>
+                  </div>
+                )}
+                {props.activeTab === "caseload" && (
+                  <div className={styles.actuals}>
+                    <span />
+                    <p>7-Day Average</p>
+                  </div>
+                )}
+                {props.activeTab === "interventions" && (
+                  <div className={styles.modeled}>
+                    <span />
+                    <p>
+                      Modeled{" "}
+                      {props.selectedCurves[0] === "infected_a"
+                        ? "active cases"
+                        : "cumulative deaths"}
+                    </p>
+                  </div>
+                )}
                 {/* <div className={styles.noPolicies}> */}
                 {/* <span /> */}
                 {/* <p>"What if we had done nothing" scenario</p> */}
@@ -504,7 +614,7 @@ const PolicyModel = props => {
         allowHTML={true}
         content={
           <p className={styles.ipopup}>
-            {covidCountHoverText[props.selectedCurves[0]]}
+            {covidCountHoverText[props.activeTab][props.selectedCurves[0]]}
           </p>
         }
         maxWidth={"30rem"}
@@ -520,48 +630,56 @@ const PolicyModel = props => {
             position: "absolute",
             height: "2.5%",
             top: {
-              infected_a: "50%",
-              infected_b: "48%",
-              infected_c: "53.5%",
-              dead: "51.5%",
-            }[props.selectedCurves[0]],
-            left: "2.1%",
+              caseload: {
+                infected_a: "40%",
+                dead: "40%",
+              },
+              interventions: {
+                infected_a: "47.8%",
+                infected_b: "48.5%",
+                infected_c: "53.5%",
+                dead: "45%",
+              },
+            }[props.activeTab][props.selectedCurves[0]],
+            left: "2.2%",
           }}
         />
       </Tippy>
-      <Tippy
-        interactive={true}
-        allowHTML={true}
-        content={
-          props.contactPlotType === "pctChange" ? (
-            <p className={styles.ipopup}>
-              Estimated percentage reduction in contacts due to policies
-              implemented, relative to baseline contact rate.
-            </p>
-          ) : (
-            <p className={styles.ipopup}>
-              Estimated average number of people each infectious person is
-              expected to infect.
-            </p>
-          )
-        }
-        // maxWidth={"30rem"}
-        theme={"light"}
-        placement={"bottom"}
-        offset={[-30, 10]}
-      >
-        <img
-          className={styles.infoIcon}
-          src={infoIcon}
-          alt="More information"
-          style={{
-            position: "absolute",
-            height: "2.5%",
-            top: "10.5%",
-            left: "2.7%",
-          }}
-        />
-      </Tippy>
+      {props.activeTab === "interventions" && (
+        <Tippy
+          interactive={true}
+          allowHTML={true}
+          content={
+            props.contactPlotType === "pctChange" ? (
+              <p className={styles.ipopup}>
+                Estimated percentage of baseline contact rate given policies
+                implemented.
+              </p>
+            ) : (
+              <p className={styles.ipopup}>
+                Estimated average number of people each infectious person is
+                expected to infect.
+              </p>
+            )
+          }
+          // maxWidth={"30rem"}
+          theme={"light"}
+          placement={"bottom"}
+          offset={[-30, 10]}
+        >
+          <img
+            className={styles.infoIcon}
+            src={infoIcon}
+            alt="More information"
+            style={{
+              position: "absolute",
+              height: "2.5%",
+              top: "12.5%",
+              left: "2.7%",
+            }}
+          />
+        </Tippy>
+      )}
       {/* <svg style={{ height: 0 }}> */}
       {/*   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"> */}
       {/*     <stop offset="0%" style={{ stopColor: '#00447c', stopOpacity: 1 }} /> */}
@@ -581,128 +699,130 @@ const PolicyModel = props => {
       {/*     /> */}
       {/*   </linearGradient> */}
       {/* </svg> */}
-      <VictoryChart
-        padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
-        // domainPadding={5}
-        responsive={true}
-        width={500}
-        height={40}
-        // height={
-        //   (windowSize.height / windowSize.width) * 500 * percentProportion > 25
-        //     ? (windowSize.height / windowSize.width) * 500 * percentProportion
-        //     : 25
-        // }
-        // style={{ height: percentProportion * 100 + "%" }}
-        scale={{ x: "time" }}
-        containerComponent={
-          <VictoryZoomContainer
-            className={styles.pct}
-            allowZoom={false}
-            allowPan={false}
-            zoomDimension="x"
-            zoomDomain={{ x: props.zoomDateRange }}
-            // onZoomDomainChange={domain => {
-            //   props.setZoomDateRange(domain.x);
-            // }}
-          />
-        }
-      >
-        {/* <VictoryLabel */}
-        {/*   text="R Effective" */}
-        {/*   x={4.5} */}
-        {/*   y={4} */}
-        {/*   style={{ */}
-        {/*     fontSize: 6, */}
-        {/*     fontWeight: 700, */}
-        {/*     fontFamily: "Rawline", */}
-        {/*     fill: "#6d6d6d", */}
-        {/*   }} */}
-        {/* /> */}
-        <VictoryAxis
-          dependentAxis
-          tickValues={
-            props.contactPlotType === "pctChange" ? [0, 50, 100] : [0, 1, 2]
+      {props.activeTab === "interventions" && (
+        <VictoryChart
+          padding={{ top: 11, bottom: 2, left: 50, right: 10 }}
+          // domainPadding={5}
+          responsive={true}
+          width={500}
+          height={40}
+          // height={
+          //   (windowSize.height / windowSize.width) * 500 * percentProportion > 25
+          //     ? (windowSize.height / windowSize.width) * 500 * percentProportion
+          //     : 25
+          // }
+          // style={{ height: percentProportion * 100 + "%" }}
+          scale={{ x: "time" }}
+          containerComponent={
+            <VictoryZoomContainer
+              className={styles.pct}
+              allowZoom={false}
+              allowPan={false}
+              zoomDimension="x"
+              zoomDomain={{ x: props.zoomDateRange }}
+              // onZoomDomainChange={domain => {
+              //   props.setZoomDateRange(domain.x);
+              // }}
+            />
           }
-          tickFormat={tick =>
-            props.contactPlotType === "pctChange" ? tick + "%" : tick
-          }
-          offsetX={50}
-          crossAxis={false}
-          label={
-            props.contactPlotType === "pctChange"
-              ? "% of normal\ncontact rate"
-              : "R Effective\n"
-          }
-          axisLabelComponent={
-            <VictoryLabel
-              dy={0}
-              style={{
+        >
+          {/* <VictoryLabel */}
+          {/*   text="R Effective" */}
+          {/*   x={4.5} */}
+          {/*   y={4} */}
+          {/*   style={{ */}
+          {/*     fontSize: 6, */}
+          {/*     fontWeight: 700, */}
+          {/*     fontFamily: "Rawline", */}
+          {/*     fill: "#6d6d6d", */}
+          {/*   }} */}
+          {/* /> */}
+          <VictoryAxis
+            dependentAxis
+            tickValues={
+              props.contactPlotType === "pctChange" ? [0, 50, 100] : [0, 1, 2]
+            }
+            tickFormat={tick =>
+              props.contactPlotType === "pctChange" ? tick + "%" : tick
+            }
+            offsetX={50}
+            crossAxis={false}
+            label={
+              props.contactPlotType === "pctChange"
+                ? "% of normal\ncontact rate"
+                : "R Effective\n"
+            }
+            axisLabelComponent={
+              <VictoryLabel
+                dy={0}
+                style={{
+                  fill: "#6d6d6d",
+                  fontFamily: "Rawline",
+                  fontWeight: "500",
+                  fontSize: 5,
+                  textAnchor: "middle",
+                }}
+              />
+            }
+            style={{
+              grid: {
+                stroke: "#aaaaaa",
+                strokeWidth: 1,
+              },
+              axis: { stroke: "#fff", strokeWidth: 0 },
+              ticks: { strokeWidth: 0 },
+              tickLabels: {
                 fill: "#6d6d6d",
                 fontFamily: "Rawline",
                 fontWeight: "500",
                 fontSize: 5,
-                textAnchor: "middle",
-              }}
-            />
-          }
-          style={{
-            grid: {
-              stroke: "#aaaaaa",
-              strokeWidth: 1,
-            },
-            axis: { stroke: "#fff", strokeWidth: 0 },
-            ticks: { strokeWidth: 0 },
-            tickLabels: {
-              fill: "#6d6d6d",
-              fontFamily: "Rawline",
-              fontWeight: "500",
-              fontSize: 5,
-              textAnchor:
-                props.contactPlotType === "pctChange" ? "end" : "middle",
-            },
-          }}
-        />
-        <VictoryArea
-          style={{
-            data: { stroke: "#14477A", strokeWidth: 0.75, fill: "#14477Abb" },
-          }}
-          data={props.data.curves[props.contactPlotType].actuals}
-          interpolation={"stepAfter"}
-        />
-        <VictoryArea
-          style={{
-            data: {
-              stroke: "#14477A",
-              strokeWidth: 0.75,
-              strokeDasharray: 2,
-              fill: "#5C87B3BB",
-            },
-          }}
-          data={props.data.curves[props.contactPlotType].model}
-          interpolation={"stepAfter"}
-        />
-        <VictoryLine
-          labelComponent={
-            <VictoryPortal>
-              <LineExtension />
-            </VictoryPortal>
-          }
-          labels={[`TODAY`]}
-          style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
-          data={[
-            { x: new Date(), y: 0 },
-            { x: new Date(), y: 3 },
-          ]}
-        />
-        {pctChangeInterventionLines}
-      </VictoryChart>
+                textAnchor:
+                  props.contactPlotType === "pctChange" ? "end" : "middle",
+              },
+            }}
+          />
+          {/* <VictoryArea */}
+          {/*   style={{ */}
+          {/*     data: { stroke: "#14477A", strokeWidth: 0.75, fill: "#14477Abb" }, */}
+          {/*   }} */}
+          {/*   data={props.data.curves[props.contactPlotType].actuals} */}
+          {/*   interpolation={"stepAfter"} */}
+          {/* /> */}
+          <VictoryArea
+            style={{
+              data: {
+                stroke: "#14477A",
+                strokeWidth: 0.75,
+                strokeDasharray: 2,
+                fill: "#5C87B3BB",
+              },
+            }}
+            data={props.data.curves[props.contactPlotType].model}
+            interpolation={"stepAfter"}
+          />
+          <VictoryLine
+            labelComponent={
+              <VictoryPortal>
+                <LineExtension />
+              </VictoryPortal>
+            }
+            labels={[`TODAY`]}
+            style={{ data: { stroke: "#7FC6FA", strokeWidth: 1.5 } }}
+            data={[
+              { x: new Date(), y: 0 },
+              { x: new Date(), y: 3 },
+            ]}
+          />
+          {pctChangeInterventionLines}
+        </VictoryChart>
+      )}
       <VictoryChart
         // animate={{ duration: 1000 }}
         padding={{ top: 6, bottom: 20, left: 50, right: 10 }}
         // domainPadding={5}
         responsive={true}
         width={500}
-        height={150}
+        height={props.activeTab === "interventions" ? 150 : 200}
         events={
           props.activeTab === "interventions"
             ? [
@@ -749,8 +869,7 @@ const PolicyModel = props => {
           <VictoryZoomCursorContainer
             className={styles.chart}
             cursorLabelComponent={
-              (props.activeTab === "interventions") &
-              (pastInterventionProps.policyName === "") ? (
+              pastInterventionProps.policyName === "" ? (
                 <InspectDayCursor
                   showInfo={!addIntDialogState.show}
                   data={props.data}
@@ -758,6 +877,7 @@ const PolicyModel = props => {
                   state={props.selectedState}
                   labelNames={labelNames}
                   contactPlotType={props.contactPlotType}
+                  activeTab={props.activeTab}
                 />
               ) : (
                 // <AddInterventionCursor showLabel={!addIntDialogState.show} />
@@ -799,7 +919,7 @@ const PolicyModel = props => {
         {/* /> */}
         <VictoryAxis
           dependentAxis
-          label={labelNames[props.selectedCurves[0]] + "\n"}
+          label={labelNames[props.activeTab][props.selectedCurves[0]] + "\n"}
           // props.contactPlotType === "pctChange" ? "caseload\n" : "Caseload"
           // }
           tickFormat={tick => (tick >= 1000 ? tick / 1000 + "K" : tick)}
@@ -843,9 +963,11 @@ const PolicyModel = props => {
           }}
         />
 
-        {actualsLines}
+        {/* {props.activeTab === "caseload" && actualsLines} */}
+        {props.activeTab === "caseload" && actualsBars}
+        {props.activeTab === "caseload" && averageLines}
         {counterfactualArea}
-        {modelLines}
+        {props.activeTab === "interventions" && modelLines}
         {interventionLines}
         {interventionPoints}
         {/* Today marker */}
@@ -868,6 +990,29 @@ const PolicyModel = props => {
       {/* /> */}
     </section>
   );
+};
+
+/**
+ * Return the policy name to display, given its data value
+ * @method PastInterventionInfo
+ * @param  {[type]}             props [description]
+ */
+export const getDisplayNameFromPolicyName = ({ policyName, proposed }) => {
+  let displayName = policyName;
+  if (policyName === "No restrictions") {
+    displayName = "No active restrictions";
+  } else if (policyName === "New normal") {
+    displayName = "Partially open policies";
+  } else {
+    displayName += " policies";
+  }
+  if (proposed === undefined) {
+    return displayName;
+  } else if (proposed) {
+    displayName += " proposed";
+  } else displayName += " implemented";
+  if (policyName === "Open") displayName = policyName;
+  return displayName;
 };
 
 export default PolicyModel;

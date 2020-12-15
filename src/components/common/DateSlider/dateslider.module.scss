@@ -21,9 +21,9 @@
     }
     button.toggle {
       top: 2px;
-      right: 2px;
+      left: 2px;
       bottom: unset;
-      left: unset;
+      right: unset;
       border-width: 1px;
       border-radius: 4px;
       width: max-content;
@@ -49,21 +49,20 @@
     position: absolute;
 
     bottom: 0px;
-    left: 0px;
+    right: 0px;
     top: unset;
-    right: unset;
 
     margin-top: 0;
     height: 15px;
     min-width: 5px;
     padding: 0;
     line-height: 0;
-    background-color: transparent;
+    background-color: white;
 
     border: 1px solid #b3b3b3;
-    border-width: 1px 1px 0 0;
+    border-width: 1px 0 0 1px;
     color: darken(#b3b3b3, 10%);
-    border-radius: 0 4px 0 4px;
+    border-radius: 4px 0 0 0;
     &:hover {
       background-color: darken(white, 5%);
     }
@@ -191,10 +190,10 @@
   &.float {
     position: absolute;
     z-index: 1;
-    right: 0;
+    left: 0;
     background-color: rgba(255, 255, 255, 0.95);
     padding: 15px;
     border: 1px solid #b3b3b3;
-    border-width: 0 0 1px 1px;
+    border-width: 0 1px 1px 0;
   }
 }

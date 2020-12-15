@@ -16,7 +16,7 @@
   .content {
     display: flex;
     @include spaceItemsHoriz(30px);
-    justify-content: center;
+    // justify-content: center;
     .entry {
       display: flex;
       flex-flow: column;
@@ -61,8 +61,10 @@
         margin-bottom: -2px;
         .rectGroup {
           display: flex;
-          flex-flow: column;
           text-align: center;
+          flex-flow: column;
+          position: relative;
+          align-items: center;
           .rect {
             width: 3 * $height;
             margin-bottom: 2px;
@@ -72,9 +74,19 @@
               padding: 5px 10px;
               display: flex;
               align-items: center;
+              text-align: center;
               .label {
-                margin: unset;
+                margin: 0 auto;
               }
+            }
+          }
+        }
+
+        &.grid {
+          display: grid;
+          .rectGroup {
+            .rect {
+              width: 100%;
             }
           }
         }

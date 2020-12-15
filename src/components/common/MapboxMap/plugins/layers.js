@@ -16,13 +16,13 @@ import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
 // import { geoHaveData } from "../MapboxMap";
 
 // assets
-import dots from "./assets/images/dots.png";
+// import dots from "./assets/images/dots.png";
 
 // constants
 // define default pattern style used below
 const defaultPatternStyle = key => {
   return {
-    "fill-pattern": "dots",
+    // "fill-pattern": "dots",
     "fill-opacity": [
       "case",
       ["==", ["feature-state", key], null],
@@ -69,7 +69,7 @@ const circleStyles = {
           return getLinearScale({
             minSize: 1,
             zeroSize: 1,
-            maxValue: 8e4,
+            maxValue: 150e3,
             maxSize: 15,
             featurePropertyKey: key,
           });
@@ -109,7 +109,7 @@ const circleStyles = {
           return getLinearScale({
             minSize: 5,
             zeroSize: 5,
-            maxValue: 5e5,
+            maxValue: 1.3e6,
             // maxSize: 20,
             featurePropertyKey: key,
           });
@@ -117,7 +117,7 @@ const circleStyles = {
           return getLog10Scale({
             minSize: 5,
             zeroSize: 5,
-            maxValue: 1e7,
+            maxValue: 1e9,
             featurePropertyKey: key,
           });
       },
@@ -151,8 +151,7 @@ const circleStyles = {
           return getLinearScale({
             minSize: 5,
             zeroSize: 5,
-            maxValue: 3e6,
-            // maxSize: 20,
+            maxValue: 15e6,
             featurePropertyKey: key,
           });
         else
@@ -191,7 +190,7 @@ const circleStyles = {
           return getLinearScale({
             minSize: 1,
             zeroSize: 1,
-            maxValue: 4e5,
+            maxValue: 1.5e6,
             maxSize: 15,
             featurePropertyKey: key,
           });
@@ -212,6 +211,55 @@ const noDataColor = "#eaeaea";
 const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
+const lightTeal = "#e0f4f3";
+const teal = "#66CAC4";
+// const medTeal = "#41beb6";
+const darkTeal = "#349891";
+export const greenStepsScale = d3
+  .scaleLinear()
+  .domain([0, 1]) // TODO dynamically
+  .range([lightTeal, darkTeal]);
+
+const getLinearColorBins = ({ nBins, scale, maxVal, minVal, key }) => {
+  const diff = maxVal - minVal;
+  const binSize = diff / 5;
+  const breakpoints = [1, 2, 3, 4].map(d => {
+    return binSize * d + minVal;
+  });
+  const colors = scale.range();
+  const newColorScale = d3
+    .scaleLinear()
+    .domain([0, 1])
+    .range(colors);
+
+  // const base = ["case"];
+  const base = ["case", ["==", ["feature-state", key], 0], "#ffffff"];
+  breakpoints.forEach((v, i) => {
+    base.push(["<=", ["feature-state", key], v]);
+    base.push(newColorScale(i * 0.25));
+  });
+  base.push(newColorScale(1));
+  return base;
+
+  // OLD VERSION BELOW
+  // const range = scale.range();
+  // const newScale = d3
+  //   .scaleLinear()
+  //   .domain([0, 1])
+  //   .range(range);
+  // const base = ["case"];
+  // const capVal = maxVal - minVal;
+  // const nRules = nBins - 1;
+  // const binStep = 1 / (nBins - 1);
+  // for (let i = 0; i < nRules; i++) {
+  //   const val = ((i + 1) * capVal) / (nBins + 1) + minVal;
+  //   base.push(["<=", ["feature-state", key], val]);
+  //   base.push(newScale(i * binStep));
+  // }
+  // // add max color
+  // base.push(newScale(1));
+  // return base;
+};
 
 // similar for fill styles
 const fillStyles = {
@@ -228,6 +276,53 @@ const fillStyles = {
         negBorder,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataBorder,
+        "#ffffff",
+      ],
+      "line-width": [
+        "case",
+        ["==", ["feature-state", "clicked"], true],
+        2,
+        ["==", ["feature-state", "hovered"], true],
+        2,
+        1,
+      ],
+    };
+  },
+
+  policy_status_counts: (key, geoHaveData, maxVal = 1, minVal = 0) => {
+    return {
+      "fill-color": [
+        "case",
+        ["!=", ["feature-state", key], null],
+        getLinearColorBins({
+          nBins: 5,
+          scale: greenStepsScale,
+          maxVal,
+          minVal,
+          key,
+        }),
+        ["==", ["has", "state_name"], true],
+        negColor,
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        noDataColor,
+        ["==", ["feature-state", key], null],
+        negColor,
+        negColor,
+      ],
+    };
+  },
+  "policy_status_counts-outline": (key, geoHaveData) => {
+    return {
+      "line-color": [
+        "case",
+        ["!=", ["feature-state", key], null],
+        "#ffffff",
+        ["==", ["has", "state_name"], true], // all states are reporting data
+        negBorder,
+        ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
+        noDataBorder,
+        ["==", ["feature-state", key], null],
+        negBorder,
         "#ffffff",
       ],
       "line-width": [
@@ -288,6 +383,10 @@ const fillStyles = {
         "case",
         ["==", ["feature-state", key], "Mixed distancing levels"],
         "transparent",
+        ["==", ["feature-state", key], "Open"],
+        "#e9f3fc",
+        ["==", ["feature-state", key], "Partially open"],
+        "#BBDAF5",
         ["==", ["feature-state", key], "New normal"],
         "#BBDAF5",
         ["==", ["feature-state", key], "Safer at home"],
@@ -297,31 +396,35 @@ const fillStyles = {
         ["==", ["feature-state", key], "Lockdown"],
         "#2165a1",
         ["==", ["has", "state_name"], true],
-        negColor,
+        "#e9f3fc",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataColor,
         ["==", ["feature-state", key], null],
-        negColor,
+        "#e9f3fc",
         negColor,
       ],
     };
   },
-  "lockdown_level-pattern": key => {
-    return {
-      "fill-pattern": "dots",
-      "fill-opacity": [
-        "case",
-        ["==", ["feature-state", key], "Mixed distancing levels"],
-        1,
-        0,
-      ],
-    };
-  },
+  // "lockdown_level-pattern": key => {
+  //   return {
+  //     "fill-pattern": "dots",
+  //     "fill-opacity": [
+  //       "case",
+  //       ["==", ["feature-state", key], "Mixed distancing levels"],
+  //       1,
+  //       0,
+  //     ],
+  //   };
+  // },
   "lockdown_level-outline": (key, geoHaveData) => {
     return {
       "line-color": [
         "case",
         ["==", ["feature-state", key], "Mixed distancing levels"],
+        "white",
+        ["==", ["feature-state", key], "Open"],
+        "white",
+        ["==", ["feature-state", key], "Partially open"],
         "white",
         ["==", ["feature-state", key], "New normal"],
         "white",
@@ -332,11 +435,11 @@ const fillStyles = {
         ["==", ["feature-state", key], "Lockdown"],
         "white",
         ["==", ["has", "state_name"], true],
-        negBorder,
+        "white",
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataBorder,
         ["==", ["feature-state", key], null],
-        negBorder,
+        "white",
         negBorder,
       ],
       "line-width": [
@@ -359,8 +462,8 @@ export const layerStyles = {
 
 // define images used by layers -- if none, then provide empty array
 export const layerImages = [
-  {
-    name: "dots",
-    asset: dots,
-  },
+  // {
+  //   name: "dots",
+  //   asset: dots,
+  // },
 ];

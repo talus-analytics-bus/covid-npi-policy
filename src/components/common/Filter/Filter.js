@@ -54,8 +54,28 @@ const Filter = ({
     (filters[primary] === undefined || filters[primary].length === 0);
   const noItems = items && items.length === 0;
   const disabled = primaryFiltersOff;
+
+  // sort items so selected items are first
+  const sortedItems = items !== undefined ? [...items] : [];
+  if (initSelectedItems.length > 0 && props.radio !== true) {
+    const selectedIds = initSelectedItems.map(d => d.id);
+    sortedItems.sort(function selectedFirst(a, b) {
+      if (selectedIds.includes(a.id)) {
+        if (selectedIds.includes(b.id)) {
+          if (a.label > b.label) return 1;
+          else return -1;
+        } else return -1;
+      } else if (selectedIds.includes(b.id)) {
+        if (selectedIds.includes(a.id)) {
+          if (b.label > a.label) return -1;
+          else return 1;
+        } else return 1;
+      }
+      return 0;
+    });
+  }
   const [filterState, setFilterState] = useState({
-    items,
+    sortedItems,
     selectedItems: initSelectedItems,
   });
   const [showRangeSelection, setShowRangeSelection] = useState(false);
@@ -74,28 +94,7 @@ const Filter = ({
   ];
   const [dateRangeState, setDateRangeState] = useState(initDateRangeState);
 
-  // // when master filter list is updated by the "clear" button or by closing
-  // // a badge, then update this filter's selected values to match
-  // useEffect(() => {
-  //   if (isEmpty(filters)) {
-  //     setFilterState({ ...filterState, selectedItems: [] });
-  //     if (dateRange) {
-  //       setDateRangeState(initDateRangeState);
-  //     }
-  //   } else {
-  //     if (filters[field] !== undefined) {
-  //       const curFilters = filterState.selectedItems;
-  //       const newFilters = curFilters.filter(
-  //         d => filters[field].includes(d.value) || filters[field].includes(d)
-  //       );
-  //       setFilterState({ ...filterState, selectedItems: newFilters });
-  //     } else {
-  //       setFilterState({ ...filterState, selectedItems: [] });
-  //     }
-  //   }
-  // }, [filters]);
-
-  const nMax = items !== undefined ? items.length : 0;
+  const nMax = sortedItems !== undefined ? sortedItems.length : 0;
   const nCur = filterState.selectedItems.length;
 
   // define element ID for menu
@@ -220,26 +219,30 @@ const Filter = ({
       }
     }
   }, [dateRangeState]);
-  const showSelectAll = items && items.length > 4;
+  const showSelectAll = sortedItems && sortedItems.length > 4;
   let responsiveHeight = 0;
-  if (items !== undefined) {
-    const hasGroup = items.length > 0 && items[0].group !== undefined;
-    let nEntries = items.length;
+  if (sortedItems !== undefined) {
+    const hasGroup =
+      sortedItems.length > 0 && sortedItems[0].group !== undefined;
+    let nEntries = sortedItems.length;
     if (showSelectAll) nEntries++;
     if (hasGroup) {
-      const nGroups = [...new Set(items.map(d => d.group))].length;
+      const nGroups = [...new Set(sortedItems.map(d => d.group))].length;
       nEntries += nGroups;
     }
-    responsiveHeight = items && nEntries < 5 ? nEntries * 42 : 7 * 42;
+    responsiveHeight = sortedItems && nEntries < 5 ? nEntries * 42 : 7 * 42;
   }
   if (props.radio !== true) {
     return (
       <div
         className={classNames(styles.filter, {
           [styles.disabled]: disabled || noItems,
+          [styles.alignBottom]: props.alignBottom === true,
         })}
       >
-        <div className={styles.label}>{label}</div>
+        <div role={"label"} className={styles.label}>
+          {label}
+        </div>
         <div className={styles.input}>
           <div
             role="filterButton"
@@ -260,7 +263,7 @@ const Filter = ({
               <span className={styles.field}>
                 {getInputLabel({
                   dateRange,
-                  items,
+                  items: sortedItems,
                   nMax,
                   dateRangeState,
                   selectedItems: filterState.selectedItems,
@@ -300,7 +303,7 @@ const Filter = ({
             {!dateRange && (
               <MultiSelect
                 wrapperClassName={styles.filterMenuWrapper}
-                items={items}
+                items={sortedItems}
                 withGrouping={withGrouping}
                 selectedItems={filterState.selectedItems}
                 showSelectedItems={false}
@@ -354,13 +357,13 @@ const Filter = ({
       <RadioToggle
         {...{
           className,
-          choices: items,
+          choices: sortedItems,
           curVal:
             isEmpty(filters) || isEmpty(filters[field])
               ? defaultRadioValue
               : filters[field],
           callback: v => {
-            const vItem = items.find(d => d.value === v);
+            const vItem = sortedItems.find(d => d.value === v);
             setFilterState({
               ...filterState,
               selectedItems: [vItem],

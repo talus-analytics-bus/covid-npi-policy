@@ -166,6 +166,7 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
                     layout: {
                       visibility:
                         defaults[mapId].fill === layer.id ? "visible" : "none",
+                      // "line-sort-key": 0,
                     },
                   },
                   // insert this layer just behind the `priorLayer`

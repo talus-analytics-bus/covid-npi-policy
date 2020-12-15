@@ -222,9 +222,11 @@ const Legend = ({ ...props }) => {
         </div>
       );
     } else if (typeAndElement.startsWith("quantized")) {
-      const range = colorscale.range();
+      const range =
+        props.range !== undefined ? props.range : colorscale.range();
       const domain =
         props.domain !== undefined ? props.domain : colorscale.domain();
+      const borders = props.borders !== undefined ? props.borders : null;
       // TODO allow non-pct labels
       const labelsInside = props.labelsInside === true; // TODO dynamically as prop
       const labels = domain.map(d => {
@@ -235,14 +237,15 @@ const Legend = ({ ...props }) => {
 
       const subLabels = props.subLabels || null;
       // prep style entries
-      const styleEntries = range.map(d => {
-        if (d.startsWith("#"))
+      const styleEntries = range.map((d, i) => {
+        if (!d.startsWith("data:image")) {
           return {
+            width: props.width !== undefined ? props.width[i] : undefined,
+            border: borders !== null ? borders[i] : undefined,
             backgroundColor: d,
             color: isLightColor(d) ? "#333" : "white",
           };
-        else {
-          // TODO generalize the custom styles in this
+        } else {
           return {
             backgroundImage: `url("${d}")`,
             backgroundPosition: "center",
@@ -256,33 +259,52 @@ const Legend = ({ ...props }) => {
         <div className={styles.content}>
           <div className={styles.entry}>
             <div
-              className={styles.quantized}
+              className={classNames(styles.quantized, {
+                [styles.grid]: props.layout === "grid",
+              })}
               style={{
-                gridTemplateColumns: `repeat(${range.length}, 1fr)`,
+                gridTemplateColumns:
+                  props.gridTemplateColumns || `repeat(${range.length}, 1fr)`,
               }}
             >
-              {styleEntries.map((d, i) => (
-                <div className={styles.rectGroup} key={i}>
-                  <div
-                    className={classNames(styles.rect, {
-                      [styles.labelsInside]: labelsInside,
-                    })}
-                    style={d}
-                  >
-                    {labelsInside && (
-                      <div className={styles.label}>{labels[i]}</div>
+              {styleEntries.map((d, i) => {
+                const entryStyles =
+                  props.entryStyles !== undefined
+                    ? props.entryStyles[i] || {}
+                    : {};
+                const labelStyles =
+                  props.labelStyles !== undefined
+                    ? props.labelStyles[i] || {}
+                    : {};
+                const rectStyles =
+                  entryStyles.rectStyles !== undefined
+                    ? entryStyles.rectStyles
+                    : {};
+                return (
+                  <div style={entryStyles} className={styles.rectGroup} key={i}>
+                    <div
+                      className={classNames(styles.rect, {
+                        [styles.labelsInside]: labelsInside,
+                      })}
+                      style={{ ...d, ...rectStyles }}
+                    >
+                      {labelsInside && (
+                        <div className={styles.label}>{labels[i]}</div>
+                      )}
+                    </div>
+                    {!labelsInside && (
+                      <div style={labelStyles} className={styles.label}>
+                        {labels[i]}
+                      </div>
+                    )}
+                    {subLabels && (
+                      <a onClick={() => {}} className={styles.label}>
+                        {subLabels[i]}
+                      </a>
                     )}
                   </div>
-                  {!labelsInside && (
-                    <div className={styles.label}>{labels[i]}</div>
-                  )}
-                  {subLabels && (
-                    <a onClick={() => {}} className={styles.label}>
-                      {subLabels[i]}
-                    </a>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

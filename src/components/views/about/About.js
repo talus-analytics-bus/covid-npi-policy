@@ -80,33 +80,6 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
       content: (
         <div>
           <div>
-            <div className={styles.downloads}>
-              <a
-                className={classNames(styles.download, styles.mini)}
-                href={
-                  process.env.PUBLIC_URL +
-                  "/export/COVID AMP data dictionary.xlsx"
-                }
-              >
-                <button>
-                  <i className={"material-icons"}>get_app</i>Download data
-                  dictionary as Excel
-                </button>
-              </a>
-              <a
-                className={classNames(styles.download, styles.mini)}
-                target="_blank"
-                href={
-                  process.env.PUBLIC_URL +
-                  "/export/COVID AMP documentation 071620.pdf"
-                }
-              >
-                <button>
-                  <i className={"material-icons"}>get_app</i>Download
-                  documentation as PDF
-                </button>
-              </a>
-            </div>
             <Documentation />
           </div>
         </div>
@@ -183,7 +156,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           </Link>
         ))}
         {DownloadBtn({
-          message: <span>Download complete metadata</span>,
+          message: <span>Download data (.xls)</span>,
           class_name: ["all_static"],
           classNameForApi: "all_static",
         })}
