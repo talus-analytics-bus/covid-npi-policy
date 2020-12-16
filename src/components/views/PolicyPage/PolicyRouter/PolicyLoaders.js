@@ -10,7 +10,7 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "asc"]],
+    ordering: [["date_start_effective", "desc"]],
     fields: ["id", CATEGORY_FIELD_NAME],
   });
 
@@ -38,17 +38,6 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
           count: policyCounts[policy[CATEGORY_FIELD_NAME]].count,
         },
       });
-
-      // console.log(policy[CATEGORY_FIELD_NAME]);
-      // console.log(prev[policy[CATEGORY_FIELD_NAME]].metadata.count);
-
-      // extendObjectByPath({
-      //   obj: prev,
-      //   path: [policy[CATEGORY_FIELD_NAME], "metadata"],
-      //   valueObj: {
-      //     count: policyCounts[policy[CATEGORY_FIELD_NAME]].count,
-      //   },
-      // });
     });
 
     // spread operator to create a shallow
@@ -75,7 +64,7 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "asc"]],
+    ordering: [["date_start_effective", "desc"]],
     fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
 
@@ -132,7 +121,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "asc"]],
+    ordering: [["date_start_effective", "desc"]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,
@@ -175,7 +164,7 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "asc"]],
+    ordering: [["date_start_effective", "desc"]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,

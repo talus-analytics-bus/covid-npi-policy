@@ -103,10 +103,6 @@ const ListPoliciesPage = props => {
     }
   };
 
-  // console.log(policyObject);
-  // console.log(openSections);
-  // console.log(scrollPos);
-
   return (
     <article>
       <section className={styles.introSection}>
