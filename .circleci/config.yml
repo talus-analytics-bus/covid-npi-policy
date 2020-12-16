@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/repo
 
     docker:
-      - image: circleci/node:10.14.2-stretch
+      - image: cimg/node:15.4.0
 
     steps:
       - checkout
