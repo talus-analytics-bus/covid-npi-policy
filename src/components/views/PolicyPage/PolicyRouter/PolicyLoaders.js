@@ -130,6 +130,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
       "policy_name",
       "date_start_effective",
       "date_end_actual",
+      "subtarget",
     ],
   });
 
@@ -148,6 +149,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
           desc: policy.desc,
           date_start_effective: policy.date_start_effective,
           date_end_actual: policy.date_end_actual,
+          subtarget: policy.subtarget,
           policy_name: policy.policy_name,
           [CATEGORY_FIELD_NAME]: policy[CATEGORY_FIELD_NAME],
           [SUBCATEGORY_FIELD_NAME]: policy[SUBCATEGORY_FIELD_NAME],
