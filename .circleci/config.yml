@@ -92,4 +92,5 @@ workflows:
           filters:
             branches:
               only:
+                - dev
                 - dev-not-whole-timeseries
