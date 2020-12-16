@@ -179,7 +179,7 @@ const ListPoliciesPage = props => {
                   <PolicyCategoryIcon category={categoryName} />
                   <ExpandMarker
                     arrowColor={"#29334B"}
-                    backgroundColor={"#aaaaaa"}
+                    backgroundColor={"#ffffff"}
                     open={openSections.firstLevel.includes(categoryName)}
                   />
                   <h1>
