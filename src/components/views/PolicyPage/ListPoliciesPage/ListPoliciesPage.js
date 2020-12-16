@@ -10,6 +10,7 @@ import {
 } from "../PolicyRouter/PolicyLoaders";
 
 import ExpandingSection from "./ExpandingSection/ExpandingSection";
+import ExpandMarker from "./ExpandMarker/ExpandMarker";
 import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
@@ -176,6 +177,11 @@ const ListPoliciesPage = props => {
               >
                 <div className={styles.topLevelHeader}>
                   <PolicyCategoryIcon category={categoryName} />
+                  <ExpandMarker
+                    arrowColor={"#29334B"}
+                    backgroundColor={"#aaaaaa"}
+                    open={openSections.firstLevel.includes(categoryName)}
+                  />
                   <h1>
                     {categoryName} <span>({category.count})</span>
                   </h1>
@@ -207,6 +213,11 @@ const ListPoliciesPage = props => {
                       >
                         <div className={styles.secondLevelHeader}>
                           <div className={styles.markerDot} />
+                          <ExpandMarker
+                            arrowColor={"#ffffff"}
+                            backgroundColor={"#7fb0b4"}
+                            open={openSections.secondLevel.includes(subcatName)}
+                          />
                           <h2>
                             {subcatName} <span>({subcat.count})</span>
                           </h2>
