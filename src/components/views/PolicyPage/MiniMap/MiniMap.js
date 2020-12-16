@@ -48,8 +48,6 @@ export const Provider = props => {
       axios.get("/maps/countries.json").then(response => {
         const topology = response.data;
 
-        console.log(topology);
-
         setFeatures({
           countries: feature(topology, topology.objects.countries_v13c_limited)
             .features,
@@ -131,8 +129,6 @@ export const SVG = props => {
     const country = featureContextConsumer.features.countries.find(
       country => country.properties.ADM0_A3 === props.country
     );
-
-    console.log(country);
 
     if (country === undefined) {
       return <></>;
