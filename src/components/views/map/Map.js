@@ -237,7 +237,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             key: k,
             mapStyle: mapStyles[k],
             date,
-            initDate: caseloadLastUpdatedDate,
+            initDate: casesLastUpdatedDate,
             circle,
             fill,
             filters,
