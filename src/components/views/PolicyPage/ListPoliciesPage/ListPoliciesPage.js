@@ -29,7 +29,7 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-    if (Object.keys(policyObject).length === 0) {
+    if (Object.keys(policyObject).length < 2) {
       const filters = { iso3: [iso3] };
       if (state !== "national") {
         filters["area1"] = [state];
@@ -179,11 +179,9 @@ const ListPoliciesPage = props => {
                 }}
               >
                 <div className={styles.topLevelHeader}>
-                  {/* <div className={styles.icon} /> */}
                   <PolicyCategoryIcon category={categoryName} />
                   <h1>
                     {categoryName} ({category.count})
-                    {/* {Object.keys(category).length} */}
                   </h1>
                 </div>
                 <div className={styles.categoryContainer}>
@@ -215,7 +213,6 @@ const ListPoliciesPage = props => {
                           <div className={styles.markerDot} />
                           <h2>
                             {subcatName} ({subcat.count})
-                            {/* {Object.keys(subcat).length} */}
                           </h2>
                         </div>
                         <div className={styles.secondLevelContainer}>
