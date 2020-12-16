@@ -19,19 +19,43 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
   // re-creating it and losing the other categories
   // this makes it safe to run any of these loader
   // functions in any order, improving responsiveness
+
+  const policyCounts = {};
+
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
+      if (policyCounts[policy[CATEGORY_FIELD_NAME]])
+        policyCounts[policy[CATEGORY_FIELD_NAME]].count += 1;
+      else policyCounts[policy[CATEGORY_FIELD_NAME]] = { count: 1 };
+
       extendObjectByPath({
         obj: prev,
         path: [policy[CATEGORY_FIELD_NAME]],
-        valueObj: {},
+        valueObj: {
+          children: prev[policy[CATEGORY_FIELD_NAME]]
+            ? prev[policy[CATEGORY_FIELD_NAME]].children
+            : {},
+          count: policyCounts[policy[CATEGORY_FIELD_NAME]].count,
+        },
       });
+
+      // console.log(policy[CATEGORY_FIELD_NAME]);
+      // console.log(prev[policy[CATEGORY_FIELD_NAME]].metadata.count);
+
+      // extendObjectByPath({
+      //   obj: prev,
+      //   path: [policy[CATEGORY_FIELD_NAME], "metadata"],
+      //   valueObj: {
+      //     count: policyCounts[policy[CATEGORY_FIELD_NAME]].count,
+      //   },
+      // });
     });
 
     // spread operator to create a shallow
     // copy which will trigger re-render
     return { ...prev };
   });
+  console.log("loadPolicyCategories Done");
 
   // calling loadPolicySubCategories here would
   // load subcategories synchronously; this is
@@ -60,18 +84,43 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   // and getting subcategories can safely be asynchronous
   // With more efficient API endpoints I think this request
   // will probably totally replace the loadPoliciesCategories request.
+  const policyCounts = {};
+
   stateSetter(prev => {
     // const categoriesAndSubcategories = {};
     policyResponse.data.forEach(policy => {
+      if (policyCounts[policy[CATEGORY_FIELD_NAME]])
+        policyCounts[policy[CATEGORY_FIELD_NAME]][
+          policy[SUBCATEGORY_FIELD_NAME]
+        ] =
+          policyCounts[policy[CATEGORY_FIELD_NAME]][
+            policy[SUBCATEGORY_FIELD_NAME]
+          ] + 1 || 1;
+      else
+        policyCounts[policy[CATEGORY_FIELD_NAME]] = {
+          [policy[SUBCATEGORY_FIELD_NAME]]: 1,
+        };
+
       extendObjectByPath({
         obj: prev,
-        path: [policy[CATEGORY_FIELD_NAME], policy[SUBCATEGORY_FIELD_NAME]],
-        valueObj: {},
+        path: [
+          policy[CATEGORY_FIELD_NAME],
+          "children",
+          policy[SUBCATEGORY_FIELD_NAME],
+        ],
+        valueObj: {
+          children: {},
+          count:
+            policyCounts[policy[CATEGORY_FIELD_NAME]][
+              policy[SUBCATEGORY_FIELD_NAME]
+            ],
+        },
       });
     });
 
     return { ...prev };
   });
+  console.log("loadPolicySubCategories Done");
 };
 
 // Loading descriptions should happen when the policy category is expanded
@@ -101,7 +150,9 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
         obj: prev,
         path: [
           policy[CATEGORY_FIELD_NAME],
+          "children",
           policy[SUBCATEGORY_FIELD_NAME],
+          "children",
           `ID${policy.id}`,
         ],
         valueObj: {
@@ -117,6 +168,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
 
     return { ...prev };
   });
+  console.log("loadPolicyDescriptions Done");
 };
 
 export const loadFullPolicy = async ({ filters, stateSetter }) => {
@@ -143,7 +195,9 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
         obj: prev,
         path: [
           policy[CATEGORY_FIELD_NAME],
+          "children",
           policy[SUBCATEGORY_FIELD_NAME],
+          "children",
           `ID${policy.id}`,
         ],
         valueObj: {

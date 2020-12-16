@@ -23,7 +23,13 @@ const PolicyPage = props => {
   const { policyObject, setPolicyObject } = props;
 
   const policyObjectPath = location.state
-    ? [...Object.values(location.state), "ID" + policyID]
+    ? [
+        Object.values(location.state)[0],
+        "children",
+        Object.values(location.state)[1],
+        "children",
+        "ID" + policyID,
+      ]
     : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
   console.log(policyObject);
@@ -89,7 +95,7 @@ const PolicyPage = props => {
                 />
                 <h1>
                   {state === "national" ? iso3 : state}{" "}
-                  {policy && `${policyObjectPath[0]}: ${policyObjectPath[1]}`}
+                  {policy && `${policyObjectPath[0]}: ${policyObjectPath[2]}`}
                   {/* ({policy && policyID}) */}
                 </h1>
               </div>

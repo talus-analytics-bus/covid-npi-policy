@@ -22,24 +22,28 @@ const ListPoliciesPage = props => {
 
   // unpacking this so the hook dependency
   // will work correctly
-  const { setPolicyObject } = props;
+  const { policyObject, setPolicyObject } = props;
 
   // Get category and subcategory
   // for all policies when component mounts
   React.useEffect(() => {
-    const filters = { iso3: [iso3] };
-    if (state !== "national") {
-      filters["area1"] = [state];
+    // don't re-request if policies are already
+    // loaded like when the user navigates backwards
+    if (Object.keys(policyObject).length === 0) {
+      const filters = { iso3: [iso3] };
+      if (state !== "national") {
+        filters["area1"] = [state];
+      }
+      loadPolicyCategories({
+        filters,
+        stateSetter: setPolicyObject,
+      });
+      loadPolicySubCategories({
+        filters,
+        stateSetter: setPolicyObject,
+      });
     }
-    loadPolicyCategories({
-      filters,
-      stateSetter: setPolicyObject,
-    });
-    loadPolicySubCategories({
-      filters,
-      stateSetter: setPolicyObject,
-    });
-  }, [iso3, state, setPolicyObject]);
+  }, [iso3, state, policyObject, setPolicyObject]);
 
   const [openSections, setOpenSections] = props.openSections;
   const [scrollPos, setScrollPos] = props.policyListScrollPos;
@@ -49,19 +53,19 @@ const ListPoliciesPage = props => {
   }, [scrollPos]);
 
   const loadDescriptionsByCategory = categoryName => {
-    console.log("loadDescriptionsByCategory");
-
     const categoryNeedsDescriptions =
       // if category is empty request it immediately
       // (this will build the categories too)
-      Object.entries(props.policyObject[categoryName])[0] === undefined
+      Object.entries(policyObject[categoryName].children)[0] === undefined
         ? true
         : // if the category exists, check if there is at least one
           // description already in the first subcategory
-          Object.keys(Object.entries(props.policyObject[categoryName])[0][1])
-            .length === 0;
+          Object.keys(
+            Object.entries(policyObject[categoryName].children)[0][1].children
+          ).length === 0;
 
     if (categoryNeedsDescriptions) {
+      console.log("loadDescriptionsByCategory");
       const filters = {
         iso3: [iso3],
         [CATEGORY_FIELD_NAME]: [categoryName],
@@ -77,13 +81,14 @@ const ListPoliciesPage = props => {
 
   const loadDescriptionsBySubCategory = (categoryName, subcatName) => {
     const subCategoryNeedsDescriptions =
-      props.policyObject[categoryName] === undefined
+      policyObject[categoryName] === undefined
         ? true
-        : props.policyObject[categoryName][subcatName] === undefined ||
-          Object.keys(props.policyObject[categoryName][subcatName]).length ===
-            0;
+        : policyObject[categoryName].children[subcatName] === undefined ||
+          Object.keys(policyObject[categoryName].children[subcatName].children)
+            .length === 0;
 
     if (subCategoryNeedsDescriptions) {
+      console.log("loadDescriptionsBySubCategory");
       const filters = {
         iso3: [iso3],
         [CATEGORY_FIELD_NAME]: [categoryName],
@@ -98,7 +103,7 @@ const ListPoliciesPage = props => {
     }
   };
 
-  // console.log(props.policyObject);
+  // console.log(policyObject);
   // console.log(openSections);
   // console.log(scrollPos);
 
@@ -131,12 +136,12 @@ const ListPoliciesPage = props => {
             for the past {`two months`}, based on analysis of {12345} measures
             from {12345} {state ? "state and county" : "national"} policies
             covering{" "}
-            {Object.keys(props.policyObject)
+            {Object.keys(policyObject)
               .map(pm => pm.toLowerCase())
               .slice(0, -1)
               .join(", ")}
             , and{" "}
-            {Object.keys(props.policyObject)
+            {Object.keys(policyObject)
               .slice(-1)
               .join("")
               .toLowerCase()}
@@ -152,8 +157,8 @@ const ListPoliciesPage = props => {
         </div>
       </section>
       <section>
-        {props.policyObject &&
-          Object.entries(props.policyObject).map(([categoryName, category]) => (
+        {policyObject &&
+          Object.entries(policyObject).map(([categoryName, category]) => (
             <div className={styles.topLevelContainer} key={categoryName}>
               <ExpandingSection
                 open={openSections.firstLevel.includes(categoryName)}
@@ -177,51 +182,58 @@ const ListPoliciesPage = props => {
                   {/* <div className={styles.icon} /> */}
                   <PolicyCategoryIcon category={categoryName} />
                   <h1>
-                    {categoryName}
+                    {categoryName} ({category.count})
                     {/* {Object.keys(category).length} */}
                   </h1>
                 </div>
                 <div className={styles.categoryContainer}>
-                  {Object.entries(category).map(([subcatName, subcat]) => (
-                    <ExpandingSection
-                      key={subcatName}
-                      open={openSections.secondLevel.includes(subcatName)}
-                      onOpen={() => {
-                        loadDescriptionsBySubCategory(categoryName, subcatName);
-                        setOpenSections(prev => ({
-                          ...prev,
-                          secondLevel: [...prev.secondLevel, subcatName],
-                        }));
-                      }}
-                      onClose={() => {
-                        setOpenSections(prev => ({
-                          ...prev,
-                          secondLevel: prev.secondLevel.filter(
-                            name => name !== subcatName
-                          ),
-                        }));
-                      }}
-                    >
-                      <div className={styles.secondLevelHeader}>
-                        <div className={styles.markerDot} />
-                        <h2>
-                          {subcatName}
-                          {/* {Object.keys(subcat).length} */}
-                        </h2>
-                      </div>
-                      <div className={styles.secondLevelContainer}>
-                        {Object.entries(subcat).map(([policyID, policy]) => (
-                          <PolicySummary
-                            location={{ iso3, state }}
-                            key={policyID}
-                            id={policyID.replace("ID", "")}
-                            policy={policy}
-                            setScrollPos={setScrollPos}
-                          />
-                        ))}
-                      </div>
-                    </ExpandingSection>
-                  ))}
+                  {Object.entries(category.children).map(
+                    ([subcatName, subcat]) => (
+                      <ExpandingSection
+                        key={subcatName}
+                        open={openSections.secondLevel.includes(subcatName)}
+                        onOpen={() => {
+                          loadDescriptionsBySubCategory(
+                            categoryName,
+                            subcatName
+                          );
+                          setOpenSections(prev => ({
+                            ...prev,
+                            secondLevel: [...prev.secondLevel, subcatName],
+                          }));
+                        }}
+                        onClose={() => {
+                          setOpenSections(prev => ({
+                            ...prev,
+                            secondLevel: prev.secondLevel.filter(
+                              name => name !== subcatName
+                            ),
+                          }));
+                        }}
+                      >
+                        <div className={styles.secondLevelHeader}>
+                          <div className={styles.markerDot} />
+                          <h2>
+                            {subcatName} ({subcat.count})
+                            {/* {Object.keys(subcat).length} */}
+                          </h2>
+                        </div>
+                        <div className={styles.secondLevelContainer}>
+                          {Object.entries(subcat.children).map(
+                            ([policyID, policy]) => (
+                              <PolicySummary
+                                location={{ iso3, state }}
+                                key={policyID}
+                                id={policyID.replace("ID", "")}
+                                policy={policy}
+                                setScrollPos={setScrollPos}
+                              />
+                            )
+                          )}
+                        </div>
+                      </ExpandingSection>
+                    )
+                  )}
                 </div>
               </ExpandingSection>
             </div>
