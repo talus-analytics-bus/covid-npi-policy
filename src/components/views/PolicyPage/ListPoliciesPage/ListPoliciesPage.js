@@ -152,7 +152,7 @@ const ListPoliciesPage = props => {
           />
         </div>
       </section>
-      <section>
+      <section className={styles.policyList}>
         {policyObject &&
           Object.entries(policyObject).map(([categoryName, category]) => (
             <div className={styles.topLevelContainer} key={categoryName}>
@@ -177,7 +177,7 @@ const ListPoliciesPage = props => {
                 <div className={styles.topLevelHeader}>
                   <PolicyCategoryIcon category={categoryName} />
                   <h1>
-                    {categoryName} ({category.count})
+                    {categoryName} <span>({category.count})</span>
                   </h1>
                 </div>
                 <div className={styles.categoryContainer}>
@@ -208,7 +208,7 @@ const ListPoliciesPage = props => {
                         <div className={styles.secondLevelHeader}>
                           <div className={styles.markerDot} />
                           <h2>
-                            {subcatName} ({subcat.count})
+                            {subcatName} <span>({subcat.count})</span>
                           </h2>
                         </div>
                         <div className={styles.secondLevelContainer}>
