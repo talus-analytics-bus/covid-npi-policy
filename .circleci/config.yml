@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/repo
 
     docker:
-      - image: cimg/node:14.15.2-stretch
+      - image: cimg/node:10.22.0
 
     steps:
       - checkout
