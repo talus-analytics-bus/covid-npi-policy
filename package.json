@@ -26,6 +26,7 @@
     "react-bootstrap-table2-paginator": "^2.0.8",
     "react-bootstrap-table2-toolkit": "^2.1.2",
     "react-browser-detection": "^1.2.1",
+    "react-color": "^2.19.3",
     "react-date-range": "^1.0.3",
     "react-dom": "^16.8.6",
     "react-map-gl": "^5.2.6",
