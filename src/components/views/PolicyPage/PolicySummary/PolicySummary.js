@@ -59,9 +59,13 @@ const PolicySummary = props => {
               : "Active"}
           </h2>
         </div>
+        {/* <div> */}
+        {/*   <h1>Policy Target</h1> */}
+        {/*   <h2>{props.policy.subtarget}</h2> */}
+        {/* </div> */}
         <div>
-          <h1>Policy Target</h1>
-          <h2>{props.policy.subtarget}</h2>
+          <h1>Published in</h1>
+          <h2>{titleExcerpt}</h2>
         </div>
       </div>
       <p>{description}</p>
@@ -78,7 +82,7 @@ const PolicySummary = props => {
       >
         Policy Details
       </div>
-      <span>Published in {titleExcerpt}</span>
+      {/* <span>Published in {titleExcerpt}</span> */}
     </Link>
   );
 };
