@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/repo
 
     docker:
-      - image: cimg/node:10.22.0
+      - image: cimg/node:lts-stretch
 
     steps:
       - checkout
