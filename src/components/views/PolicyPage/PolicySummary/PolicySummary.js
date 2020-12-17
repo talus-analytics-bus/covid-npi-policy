@@ -8,11 +8,15 @@ import {
 
 import styles from "./PolicySummary.module.scss";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 const formatDate = date => {
   if (!date) return undefined;
-  return date.toLocaleString("default", {
-    month: "short",
+  return date.toLocaleString("en-de", {
     day: "numeric",
+    month: "short",
     year: "numeric",
     // timeZone: "UTC",
   });
@@ -30,8 +34,8 @@ const PolicySummary = props => {
 
   const titleWords = props.policy.policy_name.split(" ");
   const titleExcerpt =
-    titleWords.length > 12
-      ? titleWords.slice(0, 12).join(" ") + "..."
+    titleWords.length > 10
+      ? titleWords.slice(0, 10).join(" ") + "..."
       : titleWords.join(" ");
 
   return (
@@ -65,7 +69,19 @@ const PolicySummary = props => {
         {/* </div> */}
         <div>
           <h1>Published in</h1>
-          <h2>{titleExcerpt}</h2>
+          <Tippy
+            interactive={true}
+            allowHTML={true}
+            content={
+              <p className={styles.ipopup}>{props.policy.policy_name}</p>
+            }
+            maxWidth={"30rem"}
+            theme={"light"}
+            placement={"top"}
+            offset={[-30, 10]}
+          >
+            <h2>{titleExcerpt}</h2>
+          </Tippy>
         </div>
       </div>
       <p>{description}</p>

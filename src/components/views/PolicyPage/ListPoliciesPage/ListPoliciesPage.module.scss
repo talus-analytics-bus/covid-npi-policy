@@ -114,7 +114,8 @@
       font-family: "rawline";
       font-size: 24px;
       font-weight: 600;
-      text-transform: capitalize;
+      // text-transform: capitalize;
+      text-transform: none;
       color: #29334b;
 
       span {
@@ -152,7 +153,8 @@
         font-family: "rawline";
         font-size: 22px;
         font-weight: 500;
-        text-transform: capitalize;
+        // text-transform: capitalize;
+        text-transform: none;
         color: #29334b;
         margin-left: 15px;
 
