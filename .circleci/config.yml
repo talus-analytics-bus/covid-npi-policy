@@ -53,7 +53,7 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq update
-            sudo pip3 install awsebcli --upgrade
+            sudo pip install awsebcli --upgrade
 
       - aws-cli/install
       - aws-cli/configure
