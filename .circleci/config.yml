@@ -61,19 +61,15 @@ jobs:
       - aws-cli/configure
 
       - run:
-          name: Build
+          name: Yarn Install
           command: yarn install --network-timeout 1000000
 
       - run:
-          name: Add env vars
-          command: export REACT_APP_API_URL="https://test.covidamp.org/"; export REACT_APP_COVID_LOCAL_URL="https://test.covid-local.org/"
-
-      - run:
-          name: Deploy
+          name: Set ENV Vars, Build, & Deploy
           command: yarn run deploy-test
 
       - run:
-          name: Invalidate cache
+          name: Invalidate Cache
           command: |
             aws cloudfront create-invalidation \
             --distribution-id EZNCMFWHVEZLU \
