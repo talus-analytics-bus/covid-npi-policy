@@ -93,3 +93,4 @@ workflows:
             branches:
               only:
                 - dev-not-whole-timeseries
+                - dev
