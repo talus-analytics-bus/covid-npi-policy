@@ -18,6 +18,25 @@ import * as MiniMap from "../MiniMap/MiniMap";
 
 import styles from "./ListPoliciesPage.module.scss";
 
+const articles = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|v.?|vs.?|via)$/;
+
+let capitalizeLetter = (word, index) => {
+  if (/[a-z, A-Z]/.test(word.charAt(index))) {
+    return (
+      word.slice(0, index) +
+      word.charAt(index).toUpperCase() +
+      word.slice(index + 1, word.length)
+    );
+  }
+  return capitalizeLetter(word, index + 1);
+};
+
+let titleCase = string =>
+  string
+    .split(" ")
+    .map(word => (articles.test(word) ? word : capitalizeLetter(word, 0)))
+    .join(" ");
+
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
 
@@ -183,7 +202,7 @@ const ListPoliciesPage = props => {
                     open={openSections.firstLevel.includes(categoryName)}
                   />
                   <h1>
-                    {categoryName} <span>({category.count})</span>
+                    {titleCase(categoryName)} <span>({category.count})</span>
                   </h1>
                 </div>
                 <div className={styles.categoryContainer}>
@@ -219,7 +238,8 @@ const ListPoliciesPage = props => {
                             open={openSections.secondLevel.includes(subcatName)}
                           />
                           <h2>
-                            {subcatName} <span>({subcat.count})</span>
+                            {titleCase(subcatName)}{" "}
+                            <span>({subcat.count})</span>
                           </h2>
                         </div>
                         <div className={styles.secondLevelContainer}>
