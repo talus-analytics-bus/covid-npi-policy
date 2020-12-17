@@ -5,8 +5,6 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
-import { SketchPicker } from "react-color";
-
 import loadModels, {
   requestIntervention,
   clearState,
@@ -374,10 +372,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
         </div>
         <div className={styles.controlRow}>
           <div className={styles.selectControls}>
-            <label>
-              color
-              <SketchPicker />
-            </label>
             <label>
               Choose state
               <select
