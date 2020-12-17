@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/repo
 
     docker:
-      - image: cimg/node:10.22.0
+      - image: cimg/node:14.15.2
 
     steps:
       - checkout
@@ -62,7 +62,7 @@ jobs:
 
       - run:
           name: Build
-          command: rm yarn.lock; yarn install --network-timeout 1000000
+          command: yarn install --network-timeout 1000000
 
       - run:
           name: Add env vars
