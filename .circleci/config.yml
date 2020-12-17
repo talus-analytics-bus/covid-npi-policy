@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/repo
 
     docker:
-      - image: cimg/3.8.6-node
+      - image: cimg/python:3.8.6-node
 
     steps:
       - checkout
@@ -53,8 +53,6 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq update
-            sudo apt-get install python3-pip python3-dev g++ build-essential
-            sudo pip3 install --upgrade setuptools pytz
             sudo pip3 install awsebcli --upgrade
 
       - aws-cli/install
