@@ -403,7 +403,7 @@ const Data = ({
               label: DownloadBtn({
                 render: table,
                 class_name: [nouns.s, "secondary"],
-                classNameForApi: hasFilters ? nouns.s : "all_static",
+                classNameForApi: hasFilters ? nouns.s : "All_data",
                 buttonLoading,
                 setButtonLoading,
                 searchText,
@@ -538,7 +538,7 @@ export const DownloadBtn = ({
         customClassNames={[styles.downloadBtn, ...Object.keys(thisClassNames)]}
         onClick={e => {
           e.stopPropagation();
-          if (class_name[0] === "all_static") {
+          if (class_name[0] === "All_data") {
             window.location.assign(
               "https://gida.ghscosting.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
             );

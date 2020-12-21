@@ -157,8 +157,8 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
         ))}
         {DownloadBtn({
           message: <span>Download data (.xls)</span>,
-          class_name: ["all_static"],
-          classNameForApi: "all_static",
+          class_name: ["All_data"],
+          classNameForApi: "All_data",
         })}
       </div>
       {tabs.map(
