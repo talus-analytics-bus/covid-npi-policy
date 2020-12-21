@@ -43,7 +43,7 @@ jobs:
     working_directory: ~/repo
 
     docker:
-      - image: cimg/python:3.8.6-node
+      - image: cimg/node:lts
 
     steps:
       - checkout
@@ -53,25 +53,23 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq update
-            pip install awsebcli --upgrade
+            sudo apt-get install python3-pip python3-dev g++ build-essential
+            sudo pip3 install --upgrade setuptools pytz
+            sudo pip3 install awsebcli --upgrade
 
       - aws-cli/install
       - aws-cli/configure
 
       - run:
-          name: Build
-          command: rm yarn.lock; yarn install --network-timeout 1000000
+          name: Yarn Install
+          command: yarn install --network-timeout 1000000
 
       - run:
-          name: Add env vars
-          command: export REACT_APP_API_URL="https://test.covidamp.org/"; export REACT_APP_COVID_LOCAL_URL="https://test.covid-local.org/"
-
-      - run:
-          name: Deploy
+          name: Set ENV Vars, Build, & Deploy
           command: yarn run deploy-test
 
       - run:
-          name: Invalidate cache
+          name: Invalidate Cache
           command: |
             aws cloudfront create-invalidation \
             --distribution-id EZNCMFWHVEZLU \
@@ -90,5 +88,5 @@ workflows:
           filters:
             branches:
               only:
-                - dev
                 - dev-not-whole-timeseries
+                - dev

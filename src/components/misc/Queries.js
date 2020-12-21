@@ -261,11 +261,26 @@ export const PolicyStatus = async function({
   geo_res = "state",
   fields = [],
   filters = null,
+  start_date = null,
+  end_date = null,
 }) {
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
+  });
+
+  // if checking lockdown levels then do not include start and end date params
+  const includeDates =
+    filters["lockdown_level"] === undefined ||
+    filters["lockdown_level"][0] !== "lockdown_level";
+
+  const paramsToCheck = [[end_date, "start"]];
+  if (includeDates) {
+    paramsToCheck.push([start_date, "end"]);
+  }
+  paramsToCheck.forEach(([v, k]) => {
+    if (v !== null) params.append(k, v);
   });
 
   // prepare request
