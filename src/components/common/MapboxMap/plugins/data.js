@@ -212,7 +212,6 @@ export const mapMetrics = {
         metric_id: 72,
         temporal_resolution: "daily",
         spatial_resolution: "state",
-        fields: ["value", "date_time", "place_name"],
       },
       id: "72",
       featureLinkField: "place_name",
@@ -288,13 +287,7 @@ export const mapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        return {
-          method: "post",
-          filters,
-          geo_res: "country",
-          start: "2020-10-10",
-          end: "2020-11-10",
-        };
+        return { method: "post", filters, geo_res: "country" };
       },
 
       // array of layer types for which this metric is used
@@ -341,7 +334,6 @@ export const mapMetrics = {
         metric_id: "77",
         temporal_resolution: "daily",
         spatial_resolution: "country",
-        fields: ["value", "date_time", "place_iso3"],
       },
       id: "77",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
@@ -357,7 +349,6 @@ export const mapMetrics = {
         metric_id: "75",
         temporal_resolution: "daily",
         spatial_resolution: "country",
-        fields: ["value", "date_time", "place_iso3"],
       },
       id: "75",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
@@ -1025,22 +1016,19 @@ export const metricMeta = {
  * @param  {[type]}   map     [description]
  * @return {Promise}          [description]
  */
-export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
+export const dataGetter = async ({ date, mapId, filters, map }) => {
   // get all metrics displayed in the current map
   const metrics = mapMetrics[mapId];
-  // const metrics = mapMetrics[mapId].filter(d => metricIds.includes(d.id));
 
   // define date parameters for API calls
   const dates = {
-    end_date: moment("2019-12-31").format("YYYY-MM-DD"),
-    // end_date: date.format("YYYY-MM-DD"),
     start_date: date.format("YYYY-MM-DD"),
+    end_date: date.format("YYYY-MM-DD"),
   };
 
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
   const queryDefs = {};
-  const queries = {};
   metrics.forEach(d => {
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
@@ -1070,14 +1058,11 @@ export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
   });
 
   // collate queries in object to be called by the `execute method below`
+  const queries = {};
   for (const [k, v] of Object.entries(queryDefs)) {
-    // if metric not in list of ids to fetch, set data as empty array
-    const fetchData = metricIds.includes(k);
-    if (fetchData)
-      queries[k] = v.queryFunc({
-        ...v,
-      });
-    else queries[k] = async () => [];
+    queries[k] = v.queryFunc({
+      ...v,
+    });
   }
 
   // execute queries in parallel

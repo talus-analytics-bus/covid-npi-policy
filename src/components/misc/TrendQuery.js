@@ -15,7 +15,7 @@ const TrendQuery = async function({ metric_id, end, lag = 1, place = "all" }) {
   var params = {
     metric_id: metric_id,
     end: end,
-    lag: lag,
+    lag: lag
   };
 
   if (place !== "all") {
@@ -23,7 +23,7 @@ const TrendQuery = async function({ metric_id, end, lag = 1, place = "all" }) {
   }
 
   const res = await axios(`${API_URL}/trend`, {
-    params,
+    params
   });
 
   return res.data.data;

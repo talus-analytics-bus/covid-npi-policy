@@ -48,7 +48,6 @@ const MapboxMap = ({
   mapId,
   mapStyle,
   date,
-  initDate,
   circle,
   fill,
   filters,
@@ -57,8 +56,6 @@ const MapboxMap = ({
   overlays,
   geoHaveData,
   plugins,
-  setAppLoading,
-  dateSliderMoving,
   linCircleScale, // `log` or `lin`
   ...props
 }) => {
@@ -71,7 +68,6 @@ const MapboxMap = ({
   const [loading, setLoading] = useState(true);
 
   // data to display in map -- reloaded whenever date or filter is changed
-  const [allData, setAllData] = useState(null);
   const [data, setData] = useState(null);
 
   // current viewport of map
@@ -403,10 +399,8 @@ const MapboxMap = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = async dataArgs => {
-    setAppLoading(true);
     const newMapData = await dataGetter(dataArgs);
-    setAppLoading(false);
-    setAllData(newMapData);
+    setData(newMapData);
   };
 
   /**
@@ -450,53 +444,16 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    const filtersForRequests = { ...filters };
-    delete filtersForRequests.dates_in_effect;
-
-    getMapData({
-      date: initDate,
-      filters: filtersForRequests,
-      mapId,
-      metricIds: [circle, fill],
-    });
-  }, [circle, fill, JSON.stringify(filters)]);
-
-  // update current slice of data from "all data" whenever the date changes
-  useEffect(() => {
-    if (allData !== null) {
-      const newData = {};
-      const dtStr = date.format("YYYY-MM-DD");
-      for (const [id, values] of Object.entries(allData)) {
-        if (values.length === 0) newData[id] = [];
-        else {
-          let field =
-            values[0].date_time !== undefined ? "date_time" : "datestamp";
-          if (id.endsWith("trend")) {
-            field = "end_date";
-          }
-          newData[id] = values.filter(d => d[field].startsWith(dtStr));
-        }
-      }
-      setData(newData);
-    }
-  }, [date, allData]);
+    getMapData({ date, filters, mapId });
+  }, [filters, mapId]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
     if (mapRef.getMap !== undefined) {
       const map = mapRef.getMap();
-      map.circle = circle;
-      map.fill = fill;
       updateMapTooltip({ map });
     }
   }, [selectedFeature, circle, fill]);
-
-  // close map tooltip if open when dateslider movement starts
-  useEffect(() => {
-    if (dateSliderMoving) {
-      setShowTooltip(false);
-    }
-  }, [dateSliderMoving]);
 
   // update log/lin scale selection for circles
   useEffect(() => {
@@ -600,7 +557,7 @@ const MapboxMap = ({
           geoHaveData,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
-            bindFeatureStates({ map, mapId, data, metricIds: [circle, fill] });
+            bindFeatureStates({ map, mapId, data });
 
             // load layer images, if any, for pattern layers
             layerImages.forEach(({ asset, name }) => {
@@ -618,13 +575,7 @@ const MapboxMap = ({
       } else {
         // if map had already loaded, then just bind feature states using the
         // latest map data
-        bindFeatureStates({
-          map,
-          mapId,
-          data,
-          selectedFeature,
-          metricIds: [circle, fill],
-        });
+        bindFeatureStates({ map, mapId, data, selectedFeature });
         updateFillOrder({ map, f: null });
         updateFillStyles({ map });
         updateMapTooltip({ map });
@@ -832,7 +783,7 @@ const MapboxMap = ({
             }
 
             map.on("styledataloading", function() {
-              // getMapData();
+              getMapData();
             });
           }}
           doubleClickZoom={false} //remove 300ms delay on clicking
