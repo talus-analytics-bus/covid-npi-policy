@@ -24,7 +24,7 @@ import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
 import {
   Policy,
-  PolicyStatus,
+  DistancingLevel,
   PolicyStatusCounts,
   execute,
 } from "../../../misc/Queries";
@@ -93,17 +93,15 @@ export const mapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatus,
+      queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        const lockdownFilters = {
-          ...filters,
-          lockdown_level: ["lockdown_level"],
+        return {
+          method: "get",
+          geo_res: "state",
+          date: filters.dates_in_effect[0],
         };
-        // delete lockdownFilters.primary_ph_measure;
-        delete lockdownFilters.ph_measure_details;
-        return { method: "post", filters: lockdownFilters, geo_res: "state" };
       },
 
       // array of layer types for which this metric is used
@@ -226,21 +224,14 @@ export const mapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatus,
+      queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        const lockdownFilters = {
-          ...filters,
-          lockdown_level: ["lockdown_level"],
-        };
-        // delete lockdownFilters.primary_ph_measure;
-        delete lockdownFilters.ph_measure_details;
         return {
-          method: "post",
-          filters: lockdownFilters,
-          iso3: "all",
+          method: "get",
           geo_res: "country",
+          date: filters.dates_in_effect[0],
         };
       },
 
