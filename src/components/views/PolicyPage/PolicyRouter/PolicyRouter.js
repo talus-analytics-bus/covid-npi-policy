@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
-// import { Policy, Caseload } from "../../../misc/Queries";
+import { Caseload } from "../../../misc/Queries";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -21,13 +21,33 @@ const PolicyRouter = props => {
   }, [setLoading, setPage]);
 
   const match = useRouteMatch();
-  const { state } = useParams();
+  const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
   const openSections = React.useState({ firstLevel: [], secondLevel: [] });
   const policyListScrollPos = React.useState(0);
 
-  // const [caseload, setCaseload] = React.useState();
+  const [caseload, setCaseload] = React.useState();
+
+  React.useEffect(() => {
+    const getCaseload = async () => {
+      console.log(`Get Caseload`);
+      const response = await Caseload({
+        countryIso3: iso3,
+        stateName: state === "national" ? undefined : state,
+        windowSizeDays: 1,
+      });
+
+      setCaseload(
+        response.map(point => ({
+          date: new Date(point.date_time),
+          value: point.value,
+        }))
+      );
+    };
+
+    getCaseload();
+  }, [iso3, state]);
 
   console.log("render router");
   // console.log(policyObject);
@@ -35,7 +55,7 @@ const PolicyRouter = props => {
     <MiniMap.Provider scope={state !== "national" ? "USA" : "world"}>
       <Switch>
         <Route path={`${match.url}/:policyID`}>
-          <PolicyPage {...{ policyObject, setPolicyObject }} />
+          <PolicyPage {...{ policyObject, setPolicyObject, caseload }} />
         </Route>
         <Route path={match.path}>
           <ListPoliciesPage
@@ -44,6 +64,7 @@ const PolicyRouter = props => {
               setPolicyObject,
               openSections,
               policyListScrollPos,
+              caseload,
             }}
           />
         </Route>
