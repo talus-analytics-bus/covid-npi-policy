@@ -171,3 +171,7 @@ export const SVG = props => {
     </div>
   );
 };
+
+// eslint-disable-next-line
+import * as MiniMap from "./MiniMap";
+export { MiniMap };

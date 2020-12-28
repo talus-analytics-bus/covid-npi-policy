@@ -13,8 +13,9 @@ import ExpandingSection from "./ExpandingSection/ExpandingSection";
 import ExpandMarker from "./ExpandMarker/ExpandMarker";
 import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
+import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 
-import * as MiniMap from "../MiniMap/MiniMap";
+import { MiniMap } from "../MiniMap/MiniMap";
 
 import styles from "./ListPoliciesPage.module.scss";
 
