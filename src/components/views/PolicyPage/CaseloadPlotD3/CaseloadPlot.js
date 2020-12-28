@@ -4,67 +4,71 @@ import { scaleTime, scaleLinear, line } from "d3";
 import styles from "./CaseloadPlot.module.scss";
 
 const CaseloadPlot = props => {
-  const dim = {};
+  // set up dimensions and layout
+  const [dim] = React.useState(() => {
+    const dim = {};
 
-  dim.width = 500;
-  dim.height = 150;
+    dim.width = 500;
+    dim.height = 150;
 
-  dim.paddingTop = 5;
-  dim.paddingRight = 5;
-  dim.paddingLeft = 5;
-  dim.paddingBottom = 5;
+    dim.paddingTop = 5;
+    dim.paddingRight = 5;
+    dim.paddingLeft = 5;
+    dim.paddingBottom = 5;
 
-  dim.yLabelWidth = 30;
-  dim.yLabelPadding = 5;
+    dim.yLabelWidth = 30;
+    dim.yLabelPadding = 5;
 
-  dim.xLabelHeight = 10;
-  dim.xLabelPadding = 5;
+    dim.xLabelHeight = 10;
+    dim.xLabelPadding = 5;
 
-  dim.yAxis = {
-    height:
-      dim.height -
-      dim.paddingTop -
-      dim.paddingBottom -
-      dim.xLabelHeight -
-      dim.xLabelPadding,
-  };
+    dim.yAxis = {
+      height:
+        dim.height -
+        dim.paddingTop -
+        dim.paddingBottom -
+        dim.xLabelHeight -
+        dim.xLabelPadding,
+    };
 
-  dim.origin = {
-    x: dim.yLabelWidth + dim.yLabelPadding,
-    y: dim.yAxis.height + dim.paddingTop,
-  };
+    dim.origin = {
+      x: dim.yLabelWidth + dim.yLabelPadding,
+      y: dim.yAxis.height + dim.paddingTop,
+    };
 
-  dim.yAxis.start = { x: dim.origin.x, y: dim.paddingTop };
-  dim.yAxis.end = { x: dim.origin.x, y: dim.origin.y };
+    dim.yAxis.start = { x: dim.origin.x, y: dim.paddingTop };
+    dim.yAxis.end = { x: dim.origin.x, y: dim.origin.y };
 
-  dim.xAxis = {
-    length: dim.width - dim.yLabelPadding - dim.yLabelWidth - dim.paddingRight,
-  };
+    dim.xAxis = {
+      length:
+        dim.width - dim.yLabelPadding - dim.yLabelWidth - dim.paddingRight,
+    };
 
-  dim.xAxis.start = { x: dim.origin.x, y: dim.origin.y };
+    dim.xAxis.start = { x: dim.origin.x, y: dim.origin.y };
+    dim.xAxis.end = {
+      x: dim.origin.x + dim.xAxis.length,
+      y: dim.origin.y,
+    };
 
-  dim.xAxis.end = {
-    x: dim.origin.x + dim.xAxis.length,
-    y: dim.origin.y,
-  };
+    return dim;
+  });
 
-  const scale = { x: undefined, y: undefined };
+  // set up scales
+  const { caseload } = props;
+  const [scale, setScale] = React.useState({ x: undefined, y: undefined });
 
-  scale.x =
-    props.caseload &&
-    scaleTime()
-      .domain([props.caseload[0].date, props.caseload.slice(-1)[0].date])
-      .range([dim.xAxis.start.x, dim.xAxis.end.x]);
-
-  scale.x =
-    props.caseload &&
-    scaleTime()
-      .domain([props.caseload[0].date, props.caseload.slice(-1)[0].date])
-      .range([dim.xAxis.start.x, dim.xAxis.end.x]);
-
-  // const scale = { x: scaleTime()
-  //   .domain([dateRange.start, dateRange.end])
-  //   .range([xMargin, xWidth]) }
+  React.useEffect(() => {
+    console.count("caseload useEffect");
+    if (caseload)
+      setScale({
+        x: scaleTime()
+          .domain([caseload[0].date, caseload.slice(-1)[0].date])
+          .range([dim.xAxis.start.x, dim.xAxis.end.x]),
+        y: scaleLinear()
+          .domain([caseload[0].date, caseload.slice(-1)[0].date])
+          .range([dim.yAxis.start.y, dim.yAxis.end.y]),
+      });
+  }, [caseload, dim.xAxis, dim.yAxis]);
 
   console.log("scales");
   console.log(scale);
@@ -81,12 +85,14 @@ const CaseloadPlot = props => {
         width={dim.width - dim.paddingLeft - dim.paddingRight}
         height={dim.height - dim.paddingTop - dim.paddingBottom}
       />
+      {/* Y-Axis */}
       <line
         x1={dim.yAxis.start.x}
         y1={dim.yAxis.start.y}
         x2={dim.yAxis.end.x}
         y2={dim.yAxis.end.y}
       />
+      {/*X-Axis */}
       <line
         x1={dim.xAxis.start.x}
         y1={dim.xAxis.start.y}
