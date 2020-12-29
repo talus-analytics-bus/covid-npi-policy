@@ -1,104 +1,201 @@
 import React from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 
+import Axes from "./Axes/Axes";
+
 import styles from "./CaseloadPlot.module.scss";
 
+const rollingAverage = (series, windowSize) => {
+  const padded = [...Array(windowSize).fill(0), ...series];
+  return series.map((day, index) => {
+    const w = padded.slice(index + 1, index + windowSize + 1);
+    return w.reduce((acc, curr) => acc + curr, 0) / w.length;
+  });
+};
+
+// simple function to add a svg text element to an svg,
+// measure its dimensions, remove it, and return the bbox
+const textBBox = ({ svg, string, font, fontSize }) => {
+  // namespace is required to create an SVG <text> node
+  // instead of an HTML text node
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svgText = document.createElementNS(svgNS, "text");
+  svgText.style = `font-family: ${font}; font-size: ${fontSize}`;
+
+  const textNode = document.createTextNode(string);
+  svgText.appendChild(textNode);
+
+  // adding it to the passed SVG means we can
+  // inherit width and height settings, instead
+  // of making an SVG from scratch
+  svg.appendChild(svgText);
+
+  const bbox = svgText.getBBox().width;
+
+  // clean up the SVG
+  svg.removeChild(svgText);
+
+  return bbox;
+};
+
 const CaseloadPlot = props => {
-  // set up dimensions and layout
-  const [dim] = React.useState(() => {
-    const dim = {};
+  const { caseload } = props;
 
-    dim.width = 500;
-    dim.height = 150;
+  // layout constants
+  const [constDim, setConstDim] = React.useState({
+    width: 800,
+    height: 150,
 
-    dim.paddingTop = 5;
-    dim.paddingRight = 5;
-    dim.paddingLeft = 5;
-    dim.paddingBottom = 5;
+    paddingTop: 5,
+    paddingRight: 2,
+    paddingLeft: 0,
+    paddingBottom: 5,
 
-    dim.yLabelWidth = 30;
-    dim.yLabelPadding = 5;
+    // yLabelWidth will be changed
+    // once it is calculated based
+    // on the actual labels to be
+    // rendered.
+    yLabelWidth: 20,
+    yLabelPadding: 5,
+    yLabelFontSize: 8,
 
-    dim.xLabelHeight = 10;
-    dim.xLabelPadding = 5;
-
-    dim.yAxis = {
-      height:
-        dim.height -
-        dim.paddingTop -
-        dim.paddingBottom -
-        dim.xLabelHeight -
-        dim.xLabelPadding,
-    };
-
-    dim.origin = {
-      x: dim.yLabelWidth + dim.yLabelPadding,
-      y: dim.yAxis.height + dim.paddingTop,
-    };
-
-    dim.yAxis.start = { x: dim.origin.x, y: dim.paddingTop };
-    dim.yAxis.end = { x: dim.origin.x, y: dim.origin.y };
-
-    dim.xAxis = {
-      length:
-        dim.width - dim.yLabelPadding - dim.yLabelWidth - dim.paddingRight,
-    };
-
-    dim.xAxis.start = { x: dim.origin.x, y: dim.origin.y };
-    dim.xAxis.end = {
-      x: dim.origin.x + dim.xAxis.length,
-      y: dim.origin.y,
-    };
-
-    return dim;
+    xLabelFontSize: 8,
+    xLabelPadding: 5,
   });
 
-  // set up scales
-  const { caseload } = props;
-  const [scale, setScale] = React.useState({ x: undefined, y: undefined });
+  // calculate derived layout dimensions
+  // and reference points
+  const dim = { ...constDim };
 
-  React.useEffect(() => {
-    console.count("caseload useEffect");
-    if (caseload)
-      setScale({
+  dim.xLabelHeight = dim.xLabelFontSize;
+
+  dim.yAxis = {
+    height:
+      dim.height -
+      dim.paddingTop -
+      dim.paddingBottom -
+      dim.xLabelHeight -
+      dim.xLabelPadding,
+  };
+
+  dim.origin = {
+    x: dim.paddingLeft + dim.yLabelWidth + dim.yLabelPadding,
+    y: dim.yAxis.height + dim.paddingTop,
+  };
+
+  dim.yAxis.start = { x: dim.origin.x, y: dim.paddingTop };
+  dim.yAxis.end = { x: dim.origin.x, y: dim.origin.y };
+
+  dim.xAxis = {
+    length:
+      dim.width -
+      dim.yLabelPadding -
+      dim.yLabelWidth -
+      dim.paddingLeft -
+      dim.paddingRight,
+  };
+
+  dim.xAxis.start = { x: dim.origin.x, y: dim.origin.y };
+  dim.xAxis.end = {
+    x: dim.origin.x + dim.xAxis.length,
+    y: dim.origin.y,
+  };
+
+  // make sure the gap between lines is always 40% of the line
+  // width, to adjust for plots with different numbers of days
+  const inlineStyles = {
+    dailyLines: {
+      strokeWidth: caseload ? (dim.xAxis.length / caseload.length) * 0.6 : 1.5,
+    },
+  };
+
+  const caseloadMax = React.useMemo(
+    () => caseload && Math.max(...caseload.map(day => day.value)),
+    [caseload]
+  );
+
+  const scale = React.useMemo(
+    () =>
+      caseloadMax && {
         x: scaleTime()
           .domain([caseload[0].date, caseload.slice(-1)[0].date])
           .range([dim.xAxis.start.x, dim.xAxis.end.x]),
         y: scaleLinear()
-          .domain([caseload[0].date, caseload.slice(-1)[0].date])
-          .range([dim.yAxis.start.y, dim.yAxis.end.y]),
-      });
-  }, [caseload, dim.xAxis, dim.yAxis]);
+          .domain([0, caseloadMax])
+          .range([dim.yAxis.end.y, dim.yAxis.start.y]),
+      },
+    [caseload, caseloadMax, dim.yAxis, dim.xAxis]
+  );
 
-  console.log("scales");
-  console.log(scale);
+  const svgElement = React.useRef();
+
+  // set the proper label width by measuring the length
+  // of a string of zeros the same length as the highest
+  // daily casload value in the SVG, and then removing
+  // it before the render cycle.
+  React.useEffect(() => {
+    if (caseload && svgElement.current) {
+      setConstDim(prev => ({
+        ...prev,
+        yLabelWidth: textBBox({
+          svg: svgElement.current,
+          string: String(caseloadMax).replace(/[0-9]/g, "0"),
+          font: "rawline",
+          fontSize: dim.yLabelFontSize,
+        }),
+      }));
+    }
+  }, [caseload, dim.yLabelFontSize, caseloadMax]);
+
+  let averageLinePath;
+  if (caseload && scale) {
+    const rollingAverageValues = rollingAverage(
+      caseload.map(day => day.value),
+      7
+    );
+
+    const pathGenerator = line()
+      .x(point => scale.x(point.date))
+      .y(point => scale.y(point.value));
+
+    const pointsArray = caseload.map((day, index) => ({
+      date: day.date,
+      value: rollingAverageValues[index],
+    }));
+
+    averageLinePath = pathGenerator(pointsArray);
+  }
 
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
       xmlns="http://www.w3.org/2000/svg"
       className={styles.svg}
+      ref={svgElement}
     >
-      <rect
-        x={dim.paddingLeft}
-        y={dim.paddingRight}
-        width={dim.width - dim.paddingLeft - dim.paddingRight}
-        height={dim.height - dim.paddingTop - dim.paddingBottom}
-      />
-      {/* Y-Axis */}
-      <line
-        x1={dim.yAxis.start.x}
-        y1={dim.yAxis.start.y}
-        x2={dim.yAxis.end.x}
-        y2={dim.yAxis.end.y}
-      />
-      {/*X-Axis */}
-      <line
-        x1={dim.xAxis.start.x}
-        y1={dim.xAxis.start.y}
-        x2={dim.xAxis.end.x}
-        y2={dim.xAxis.end.y}
-      />
+      {/* Visualize padding zone for testing */}
+      {/* <rect */}
+      {/*   x={dim.paddingLeft} */}
+      {/*   y={dim.paddingTop} */}
+      {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
+      {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
+      {/* /> */}
+      <Axes dim={dim} scale={scale} />
+      <g className={styles.dailyLines}>
+        {caseload &&
+          scale &&
+          caseload.map(day => (
+            <line
+              style={inlineStyles.dailyLines}
+              key={day.date}
+              x1={scale.x(day.date)}
+              y1={dim.origin.y}
+              x2={scale.x(day.date)}
+              y2={scale.y(day.value)}
+            />
+          ))}
+      </g>
+      <path d={averageLinePath} className={styles.averageLine} />
     </svg>
   );
 };
