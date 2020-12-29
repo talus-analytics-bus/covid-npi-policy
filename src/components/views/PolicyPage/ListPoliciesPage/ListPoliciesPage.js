@@ -174,7 +174,6 @@ const ListPoliciesPage = props => {
         </div>
       </section>
       <section className={styles.caseloadPlot}>
-        caseloadPlot
         <CaseloadPlot caseload={props.caseload} />
       </section>
       <section className={styles.policyList}>
