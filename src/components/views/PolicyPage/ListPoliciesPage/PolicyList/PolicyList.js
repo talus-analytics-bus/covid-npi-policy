@@ -96,12 +96,11 @@ const PolicyList = props => {
     }
   };
 
-  const renderList = (path, obj, children) => (
+  const renderExpandingSection = (path, obj, children) => (
     <ExpandingSection
       key={path}
       open={obj.open}
       onOpen={() => {
-        // console.log(path);
         console.log(`clicked list section ${path.slice(-1)[0]}`);
         loadDescriptionsBySubCategory(path[0], path[2]);
         props.setPolicyObject(prev => {
@@ -139,7 +138,7 @@ const PolicyList = props => {
     </ExpandingSection>
   );
 
-  const renderLast = (path, obj) => (
+  const renderPolicySummary = (path, obj) => (
     <PolicySummary
       location={{
         iso3: props.location.iso3,
@@ -203,10 +202,10 @@ const PolicyList = props => {
                   // starting path
                   path={[categoryName]}
                   // the function to render keys up to n-1
-                  renderList={renderList}
+                  renderCategory={renderExpandingSection}
                   // the function to render the object whose
                   // key matches the idPattern
-                  renderNth={renderLast}
+                  renderItem={renderPolicySummary}
                 />
 
                 {/* {Object.entries(category.children).map( */}

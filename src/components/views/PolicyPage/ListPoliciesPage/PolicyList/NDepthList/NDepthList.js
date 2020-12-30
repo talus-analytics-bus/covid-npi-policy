@@ -9,12 +9,12 @@
 //   idPattern={/^ID/}
 //
 //   // the component to render keys up to n-1
-//   renderList={(key, object, children) =>
+//   renderCategory={(key, object, children) =>
 //     <li>{props.children}</li>
 //   }
 //
 //   // the component to render the object at n depth
-//   renderNth={(key, object) =>
+//   renderItem={(key, object) =>
 //     <p>{props.children}</p>
 //     }
 //   />
@@ -27,12 +27,12 @@ const NDepthList = props => {
 
     if (entries[0][0].match(props.idPattern)) {
       return entries.map(([key, val]) =>
-        props.renderNth([...path, "children", key], val)
+        props.renderItem([...path, "children", key], val)
       );
     }
 
     return entries.map(([key, value]) =>
-      props.renderList(
+      props.renderCategory(
         [...path, "children", key],
         value,
         listToBottom([...path, "children", key], value)
