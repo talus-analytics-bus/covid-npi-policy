@@ -68,8 +68,6 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
     fields: ["id", "auth_entity", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
 
-  console.log(policyResponse);
-
   // intentionally re-creating the object from scratch here in case
   // the categories have not yet been loaded, so that getting categories
   // and getting subcategories can safely be asynchronous
@@ -92,8 +90,6 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
           [policy[SUBCATEGORY_FIELD_NAME]]: 1,
         };
 
-      console.log(policyCounts);
-
       extendObjectByPath({
         obj: prev,
         path: [
@@ -112,8 +108,6 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
         },
       });
     });
-
-    console.log(prev);
 
     return { ...prev };
   });
