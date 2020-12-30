@@ -2,6 +2,9 @@
 //   // object whose keys we want to enumerate
 //   obj={obj}
 //
+//   // starting path
+//   path={path}
+//
 //   // the pattern which will match keys at n depth
 //   idPattern={/^ID/}
 //
@@ -18,22 +21,26 @@
 
 const NDepthList = props => {
   const listToBottom = (path, obj) => {
-    const entries = Object.entries(obj);
+    const entries = Object.entries(obj.children);
+
+    if (entries.length === 0) return [];
 
     if (entries[0][0].match(props.idPattern)) {
-      return entries.map(([key, val]) => props.renderNth([...path, key], val));
+      return entries.map(([key, val]) =>
+        props.renderNth([...path, "children", key], val)
+      );
     }
 
     return entries.map(([key, value]) =>
       props.renderList(
-        [...path, key],
+        [...path, "children", key],
         value,
-        listToBottom([...path, key], value)
+        listToBottom([...path, "children", key], value)
       )
     );
   };
 
-  return listToBottom(props.obj);
+  return listToBottom(props.path, props.obj);
 };
 
 export default NDepthList;
