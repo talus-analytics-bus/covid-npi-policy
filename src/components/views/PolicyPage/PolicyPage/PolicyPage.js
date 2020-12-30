@@ -36,8 +36,6 @@ const PolicyPage = props => {
 
   let relatedPolicies;
 
-  console.log(policy);
-
   React.useEffect(() => {
     loadFullPolicy({
       stateSetter: setPolicyObject,

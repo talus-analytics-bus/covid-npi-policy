@@ -65,8 +65,10 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
     method: "post",
     filters: filters,
     ordering: [["date_start_effective", "desc"]],
-    fields: ["id", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
+    fields: ["id", "auth_entity", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
   });
+
+  console.log(policyResponse);
 
   // intentionally re-creating the object from scratch here in case
   // the categories have not yet been loaded, so that getting categories
@@ -90,10 +92,14 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
           [policy[SUBCATEGORY_FIELD_NAME]]: 1,
         };
 
+      console.log(policyCounts);
+
       extendObjectByPath({
         obj: prev,
         path: [
           policy[CATEGORY_FIELD_NAME],
+          "children",
+          policy.auth_entity[0].place.level,
           "children",
           policy[SUBCATEGORY_FIELD_NAME],
         ],
@@ -106,6 +112,8 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
         },
       });
     });
+
+    console.log(prev);
 
     return { ...prev };
   });
@@ -130,6 +138,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
       "policy_name",
       "date_start_effective",
       "date_end_actual",
+      "auth_entity",
     ],
   });
 
@@ -139,6 +148,8 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
         obj: prev,
         path: [
           policy[CATEGORY_FIELD_NAME],
+          "children",
+          policy.auth_entity[0].place.level,
           "children",
           policy[SUBCATEGORY_FIELD_NAME],
           "children",
@@ -184,6 +195,8 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
         obj: prev,
         path: [
           policy[CATEGORY_FIELD_NAME],
+          "children",
+          policy.auth_entity[0].place.level,
           "children",
           policy[SUBCATEGORY_FIELD_NAME],
           "children",

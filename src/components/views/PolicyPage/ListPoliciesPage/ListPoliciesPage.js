@@ -22,6 +22,8 @@ import styles from "./ListPoliciesPage.module.scss";
 const articles = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|v.?|vs.?|via)$/;
 
 let capitalizeLetter = (word, index) => {
+  console.log(word);
+  if ((word = "/")) return "/";
   if (/[a-z, A-Z]/.test(word.charAt(index))) {
     return (
       word.slice(0, index) +
@@ -32,11 +34,10 @@ let capitalizeLetter = (word, index) => {
   return capitalizeLetter(word, index + 1);
 };
 
-let titleCase = string =>
-  string
-    .split(" ")
-    .map(word => (articles.test(word) ? word : capitalizeLetter(word, 0)))
-    .join(" ");
+let titleCase = string => string;
+// .split(" ")
+// .map(word => (articles.test(word) ? word : capitalizeLetter(word, 0)))
+// .join(" ");
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
@@ -239,7 +240,7 @@ const ListPoliciesPage = props => {
                           <ExpandMarker
                             arrowColor={"#ffffff"}
                             backgroundColor={"#7fb0b4"}
-                            open={openSections.secondLevel.includes(subcatName)}
+                            open={openSections.thirdLevel.includes(subcatName)}
                           />
                           <h2>
                             {titleCase(subcatName)}{" "}
@@ -248,14 +249,62 @@ const ListPoliciesPage = props => {
                         </div>
                         <div className={styles.secondLevelContainer}>
                           {Object.entries(subcat.children).map(
-                            ([policyID, policy]) => (
-                              <PolicySummary
-                                location={{ iso3, state }}
-                                key={policyID}
-                                id={policyID.replace("ID", "")}
-                                policy={policy}
-                                setScrollPos={setScrollPos}
-                              />
+                            ([subcatName, subcat]) => (
+                              <ExpandingSection
+                                key={subcatName}
+                                open={openSections.thirdLevel.includes(
+                                  subcatName
+                                )}
+                                onOpen={() => {
+                                  loadDescriptionsBySubCategory(
+                                    categoryName,
+                                    subcatName
+                                  );
+                                  setOpenSections(prev => ({
+                                    ...prev,
+                                    thirdLevel: [
+                                      ...prev.thirdLevel,
+                                      subcatName,
+                                    ],
+                                  }));
+                                }}
+                                onClose={() => {
+                                  setOpenSections(prev => ({
+                                    ...prev,
+                                    thirdLevel: prev.thirdLevel.filter(
+                                      name => name !== subcatName
+                                    ),
+                                  }));
+                                }}
+                              >
+                                <div className={styles.secondLevelHeader}>
+                                  <div className={styles.markerDot} />
+                                  <ExpandMarker
+                                    arrowColor={"#ffffff"}
+                                    backgroundColor={"#7fb0b4"}
+                                    open={openSections.thirdLevel.includes(
+                                      subcatName
+                                    )}
+                                  />
+                                  <h2>
+                                    {titleCase(subcatName)}{" "}
+                                    <span>({subcat.count})</span>
+                                  </h2>
+                                </div>
+                                <div className={styles.secondLevelContainer}>
+                                  {Object.entries(subcat.children).map(
+                                    ([policyID, policy]) => (
+                                      <PolicySummary
+                                        location={{ iso3, state }}
+                                        key={policyID}
+                                        id={policyID.replace("ID", "")}
+                                        policy={policy}
+                                        setScrollPos={setScrollPos}
+                                      />
+                                    )
+                                  )}
+                                </div>
+                              </ExpandingSection>
                             )
                           )}
                         </div>

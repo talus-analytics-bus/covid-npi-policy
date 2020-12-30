@@ -24,7 +24,11 @@ const PolicyRouter = props => {
   const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
-  const openSections = React.useState({ firstLevel: [], secondLevel: [] });
+  const openSections = React.useState({
+    firstLevel: [],
+    secondLevel: [],
+    thirdLevel: [],
+  });
   const policyListScrollPos = React.useState(0);
 
   const [caseload, setCaseload] = React.useState();
