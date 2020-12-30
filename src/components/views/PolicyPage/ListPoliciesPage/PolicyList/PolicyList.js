@@ -20,7 +20,6 @@ import styles from "./PolicyList.module.scss";
 const articles = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|v.?|vs.?|via)$/;
 
 let capitalizeLetter = (word, index) => {
-  if (word === "/") return "/";
   if (/[a-z, A-Z]/.test(word.charAt(index))) {
     return (
       word.slice(0, index) +
@@ -28,13 +27,15 @@ let capitalizeLetter = (word, index) => {
       word.slice(index + 1, word.length)
     );
   }
+  if (index + 1 > word.length) return word;
   return capitalizeLetter(word, index + 1);
 };
 
-let titleCase = string => string;
-// .split(" ")
-// .map(word => (articles.test(word) ? word : capitalizeLetter(word, 0)))
-// .join(" ");
+let titleCase = string =>
+  string
+    .split(" ")
+    .map(word => (articles.test(word) ? word : capitalizeLetter(word, 0)))
+    .join(" ");
 
 const PolicyList = props => {
   const loadDescriptionsByCategory = categoryName => {
