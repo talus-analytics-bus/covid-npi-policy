@@ -43,10 +43,6 @@ const Axes = props => {
     }
   }, [scale, dim.yAxis.start.y]);
 
-  // console.count("render axes");
-  // console.log(scale);
-  // console.log(dim.yLabelWidth);
-
   return (
     <g id="axes">
       <g id="y-axis">
