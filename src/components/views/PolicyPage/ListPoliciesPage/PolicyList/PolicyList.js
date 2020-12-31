@@ -76,8 +76,6 @@ const PolicyList = props => {
             props.policyObject[categoryName].children[subcatName].children
           ).length === 0;
 
-    console.log(subCategoryNeedsDescriptions);
-
     if (!subCategoryNeedsDescriptions) {
       console.log("loadDescriptionsBySubCategory");
       const filters = {
