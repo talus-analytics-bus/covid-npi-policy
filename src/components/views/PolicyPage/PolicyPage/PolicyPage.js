@@ -6,7 +6,7 @@ import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 
 import * as MiniMap from "../MiniMap/MiniMap";
-import PolicySummary from "../PolicySummary/PolicySummary";
+// import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./PolicyPage.module.scss";
@@ -167,26 +167,26 @@ const PolicyPage = props => {
           </p>
         ))}
       <h3>Related policies</h3>
-      <div className={styles.relatedScroller}>
-        {relatedPolicies &&
-          Object.entries(relatedPolicies).map(
-            ([relatedPolicyID, relatedPolicy]) =>
-              relatedPolicyID.replace("ID", "") !== policyID && (
-                <div
-                  key={relatedPolicyID}
-                  className={styles.policySummaryWidth}
-                >
-                  <PolicySummary
-                    location={{ iso3, state }}
-                    key={relatedPolicyID}
-                    id={relatedPolicyID.replace("ID", "")}
-                    policy={relatedPolicy}
-                    wordLimit={15}
-                  />
-                </div>
-              )
-          )}
-      </div>
+      {/* <div className={styles.relatedScroller}> */}
+      {/*   {relatedPolicies && */}
+      {/*     Object.entries(relatedPolicies).map( */}
+      {/*       ([relatedPolicyID, relatedPolicy]) => */}
+      {/*         relatedPolicyID.replace("ID", "") !== policyID && ( */}
+      {/*           <div */}
+      {/*             key={relatedPolicyID} */}
+      {/*             className={styles.policySummaryWidth} */}
+      {/*           > */}
+      {/*             <PolicySummary */}
+      {/*               location={{ iso3, state }} */}
+      {/*               key={relatedPolicyID} */}
+      {/*               id={relatedPolicyID.replace("ID", "")} */}
+      {/*               policy={relatedPolicy} */}
+      {/*               wordLimit={15} */}
+      {/*             /> */}
+      {/*           </div> */}
+      {/*         ) */}
+      {/*     )} */}
+      {/* </div> */}
     </article>
   );
 };
