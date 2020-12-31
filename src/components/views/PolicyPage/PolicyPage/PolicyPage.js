@@ -6,7 +6,7 @@ import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 
 import * as MiniMap from "../MiniMap/MiniMap";
-// import PolicySummary from "../PolicySummary/PolicySummary";
+import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./PolicyPage.module.scss";
@@ -45,26 +45,26 @@ const PolicyPage = props => {
     });
   }, [policyID, setPolicyObject]);
 
-  React.useEffect(() => {
-    // console.log("related policies check");
-    // console.log(policy);
-    // console.log(relatedPolicies);
-    // if (policy && Object.keys(relatedPolicies).length <= 1) {
-    //   console.log("get related policies");
-    //   const filters = {
-    //     iso3: [iso3],
-    //     [CATEGORY_FIELD_NAME]: [policy[CATEGORY_FIELD_NAME]],
-    //     [SUBCATEGORY_FIELD_NAME]: [policy[SUBCATEGORY_FIELD_NAME]],
-    //   };
-    //   if (state !== "national") {
-    //     filters["area1"] = [state];
-    //   }
-    //   loadPolicyDescriptions({
-    //     stateSetter: setPolicyObject,
-    //     filters: filters,
-    //   });
-    // }
-  }, [relatedPolicies, iso3, state, policy, setPolicyObject]);
+  // React.useEffect(() => {
+  //   // console.log("related policies check");
+  //   // console.log(policy);
+  //   // console.log(relatedPolicies);
+  //   // if (policy && Object.keys(relatedPolicies).length <= 1) {
+  //   //   console.log("get related policies");
+  //   //   const filters = {
+  //   //     iso3: [iso3],
+  //   //     [CATEGORY_FIELD_NAME]: [policy[CATEGORY_FIELD_NAME]],
+  //   //     [SUBCATEGORY_FIELD_NAME]: [policy[SUBCATEGORY_FIELD_NAME]],
+  //   //   };
+  //   //   if (state !== "national") {
+  //   //     filters["area1"] = [state];
+  //   //   }
+  //   //   loadPolicyDescriptions({
+  //   //     stateSetter: setPolicyObject,
+  //   //     filters: filters,
+  //   //   });
+  //   // }
+  // }, [relatedPolicies, iso3, state, policy, setPolicyObject]);
 
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
@@ -167,26 +167,26 @@ const PolicyPage = props => {
           </p>
         ))}
       <h3>Related policies</h3>
-      {/* <div className={styles.relatedScroller}> */}
-      {/*   {relatedPolicies && */}
-      {/*     Object.entries(relatedPolicies).map( */}
-      {/*       ([relatedPolicyID, relatedPolicy]) => */}
-      {/*         relatedPolicyID.replace("ID", "") !== policyID && ( */}
-      {/*           <div */}
-      {/*             key={relatedPolicyID} */}
-      {/*             className={styles.policySummaryWidth} */}
-      {/*           > */}
-      {/*             <PolicySummary */}
-      {/*               location={{ iso3, state }} */}
-      {/*               key={relatedPolicyID} */}
-      {/*               id={relatedPolicyID.replace("ID", "")} */}
-      {/*               policy={relatedPolicy} */}
-      {/*               wordLimit={15} */}
-      {/*             /> */}
-      {/*           </div> */}
-      {/*         ) */}
-      {/*     )} */}
-      {/* </div> */}
+      <div className={styles.relatedScroller}>
+        {relatedPolicies &&
+          Object.entries(relatedPolicies).map(
+            ([relatedPolicyID, relatedPolicy]) =>
+              relatedPolicyID.replace("ID", "") !== policyID && (
+                <div
+                  key={relatedPolicyID}
+                  className={styles.policySummaryWidth}
+                >
+                  <PolicySummary
+                    location={{ iso3, state }}
+                    key={relatedPolicyID}
+                    id={relatedPolicyID.replace("ID", "")}
+                    policy={relatedPolicy}
+                    wordLimit={15}
+                  />
+                </div>
+              )
+          )}
+      </div>
     </article>
   );
 };

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {
   CATEGORY_FIELD_NAME,
   SUBCATEGORY_FIELD_NAME,
-} from "../../../PolicyRouter/PolicyLoaders";
+} from "../PolicyRouter/PolicyLoaders";
 
 import styles from "./PolicySummary.module.scss";
 

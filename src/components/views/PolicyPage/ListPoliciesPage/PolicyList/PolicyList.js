@@ -10,8 +10,8 @@ import { extendObjectByPath } from "../../objectPathTools";
 
 import ExpandingSection from "./ExpandingSection/ExpandingSection";
 import ExpandMarker from "./ExpandMarker/ExpandMarker";
-import PolicySummary from "./PolicySummary/PolicySummary";
-import PolicyCategoryIcon from "./PolicyCategoryIcon/PolicyCategoryIcon";
+import PolicySummary from "../../PolicySummary/PolicySummary";
+import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import NDepthList from "./NDepthList/NDepthList";
 
