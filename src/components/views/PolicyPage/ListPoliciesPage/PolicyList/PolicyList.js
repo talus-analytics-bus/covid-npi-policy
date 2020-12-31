@@ -3,7 +3,7 @@ import React from "react";
 import {
   loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,
-  SUBCATEGORY_FIELD_NAME,
+  // SUBCATEGORY_FIELD_NAME,
 } from "../../PolicyRouter/PolicyLoaders";
 
 import { extendObjectByPath } from "../../objectPathTools";
@@ -90,8 +90,6 @@ const PolicyList = props => {
         filters["area1"] = [props.location.state];
       }
 
-      console.log(filters);
-
       loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
     }
   };
@@ -150,8 +148,6 @@ const PolicyList = props => {
       setScrollPos={props.setScrollPos}
     />
   );
-
-  // console.log(props.policyObject);
 
   return (
     <section className={styles.policyList}>
