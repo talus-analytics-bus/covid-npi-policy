@@ -140,11 +140,11 @@ const PolicyList = props => {
 
   const renderPolicySummary = (path, obj) => (
     <PolicySummary
+      key={path}
       location={{
         iso3: props.location.iso3,
         state: props.location.state,
       }}
-      key={path.slice(-1)[0]}
       id={path.slice(-1)[0].replace("ID", "")}
       policy={obj}
       setScrollPos={props.setScrollPos}
@@ -207,112 +207,6 @@ const PolicyList = props => {
                   // key matches the idPattern
                   renderItem={renderPolicySummary}
                 />
-
-                {/* {Object.entries(category.children).map( */}
-                {/*   ([subcatName, subcat]) => ( */}
-                {/*     <ExpandingSection */}
-                {/*       key={subcatName} */}
-                {/*       open={subcat.open} */}
-                {/*       onOpen={() => { */}
-                {/*         loadDescriptionsBySubCategory(categoryName, subcatName); */}
-                {/*         props.setPolicyObject(prev => { */}
-                {/*           extendObjectByPath({ */}
-                {/*             obj: prev, */}
-                {/*             path: [categoryName, "children", subcatName], */}
-                {/*             valueObj: { open: true }, */}
-                {/*           }); */}
-                {/*           return { ...prev }; */}
-                {/*         }); */}
-                {/*       }} */}
-                {/*       onClose={() => { */}
-                {/*         props.setPolicyObject(prev => { */}
-                {/*           extendObjectByPath({ */}
-                {/*             obj: prev, */}
-                {/*             path: [categoryName, "children", subcatName], */}
-                {/*             valueObj: { open: false }, */}
-                {/*           }); */}
-                {/*           return { ...prev }; */}
-                {/*         }); */}
-                {/*       }} */}
-                {/*     > */}
-                {/*       <div className={styles.secondLevelHeader}> */}
-                {/*         <div className={styles.markerDot} /> */}
-                {/*         <ExpandMarker */}
-                {/*           arrowColor={"#ffffff"} */}
-                {/*           backgroundColor={"#7fb0b4"} */}
-                {/*           // open={openSections.thirdLevel.includes(subcatName)} */}
-                {/*         /> */}
-                {/*         <h2> */}
-                {/*           {titleCase(subcatName)} <span>({subcat.count})</span> */}
-                {/*         </h2> */}
-                {/*       </div> */}
-                {/*       <div className={styles.secondLevelContainer}> */}
-                {/*         {Object.entries(subcat.children).map( */}
-                {/*           ([subcatName, subcat]) => ( */}
-                {/*             <ExpandingSection */}
-                {/*               key={subcatName} */}
-                {/*               // open={openSections.thirdLevel.includes( */}
-                {/*               //   subcatName */}
-                {/*               // )} */}
-                {/*               onOpen={() => { */}
-                {/*                 loadDescriptionsBySubCategory( */}
-                {/*                   categoryName, */}
-                {/*                   subcatName */}
-                {/*                 ); */}
-                {/*                 // setOpenSections(prev => ({ */}
-                {/*                 //   ...prev, */}
-                {/*                 //   thirdLevel: [ */}
-                {/*                 //     ...prev.thirdLevel, */}
-                {/*                 //     subcatName, */}
-                {/*                 //   ], */}
-                {/*                 // })); */}
-                {/*               }} */}
-                {/*               // onClose={() => { */}
-                {/*               //   setOpenSections(prev => ({ */}
-                {/*               //     ...prev, */}
-                {/*               //     thirdLevel: prev.thirdLevel.filter( */}
-                {/*               //       name => name !== subcatName */}
-                {/*               //     ), */}
-                {/*               //   })); */}
-                {/*               // }} */}
-                {/*             > */}
-                {/*               <div className={styles.secondLevelHeader}> */}
-                {/*                 <div className={styles.markerDot} /> */}
-                {/*                 <ExpandMarker */}
-                {/*                   arrowColor={"#ffffff"} */}
-                {/*                   backgroundColor={"#7fb0b4"} */}
-                {/*                   // open={openSections.thirdLevel.includes( */}
-                {/*                   //   subcatName */}
-                {/*                   // )} */}
-                {/*                 /> */}
-                {/*                 <h2> */}
-                {/*                   {titleCase(subcatName)}{" "} */}
-                {/*                   <span>({subcat.count})</span> */}
-                {/*                 </h2> */}
-                {/*               </div> */}
-                {/*               <div className={styles.secondLevelContainer}> */}
-                {/*                 {Object.entries(subcat.children).map( */}
-                {/*                   ([policyID, policy]) => ( */}
-                {/*                     <PolicySummary */}
-                {/*                       location={{ */}
-                {/*                         iso3: props.location.iso3, */}
-                {/*                         state: props.location.state, */}
-                {/*                       }} */}
-                {/*                       key={policyID} */}
-                {/*                       id={policyID.replace("ID", "")} */}
-                {/*                       policy={policy} */}
-                {/*                       setScrollPos={props.setScrollPos} */}
-                {/*                     /> */}
-                {/*                   ) */}
-                {/*                 )} */}
-                {/*               </div> */}
-                {/*             </ExpandingSection> */}
-                {/*           ) */}
-                {/*         )} */}
-                {/*       </div> */}
-                {/*     </ExpandingSection> */}
-                {/*   ) */}
-                {/* )} */}
               </div>
             </ExpandingSection>
           </div>

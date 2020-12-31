@@ -26,8 +26,8 @@ const NDepthList = props => {
     if (entries.length === 0) return [];
 
     if (entries[0][0].match(props.idPattern)) {
-      return entries.map(([key, val]) =>
-        props.renderItem([...path, "children", key], val)
+      return entries.map(([key, value]) =>
+        props.renderItem([...path, "children", key], value)
       );
     }
 
