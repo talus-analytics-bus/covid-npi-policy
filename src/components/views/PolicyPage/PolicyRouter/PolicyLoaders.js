@@ -47,7 +47,6 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
           children: prev[policy[CATEGORY_FIELD_NAME]]
             ? prev[policy[CATEGORY_FIELD_NAME]].children
             : {},
-          count: policyCounts[policy[CATEGORY_FIELD_NAME]].count,
         },
       });
     });
