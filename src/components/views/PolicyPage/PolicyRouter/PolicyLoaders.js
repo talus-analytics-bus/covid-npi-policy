@@ -20,14 +20,8 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
   // this makes it safe to run any of these loader
   // functions in any order, improving responsiveness
 
-  const policyCounts = {};
-
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
-      if (policyCounts[policy[CATEGORY_FIELD_NAME]])
-        policyCounts[policy[CATEGORY_FIELD_NAME]].count += 1;
-      else policyCounts[policy[CATEGORY_FIELD_NAME]] = { count: 1 };
-
       extendObjectByPath({
         obj: prev,
         path: [policy[CATEGORY_FIELD_NAME]],
@@ -84,7 +78,6 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   // and getting subcategories can safely be asynchronous
   // With more efficient API endpoints I think this request
   // will probably totally replace the loadPoliciesCategories request.
-  // const policyCounts = {};
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
