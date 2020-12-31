@@ -37,3 +37,10 @@ export const extendObjectByPath = ({ obj, path, valueObj }) => {
     extendObjectByPath({ obj: obj[path[0]], path: path.slice(1), valueObj });
   }
 };
+
+// return true or false if the path
+// leads to an object which is not empty
+export const pathHasChildren = ({ obj, path }) => {
+  if (path.length === 0) return Object.values(obj).length > 0;
+  return pathHasChildren({ obj: obj[path[0]], path: path.slice(1) });
+};
