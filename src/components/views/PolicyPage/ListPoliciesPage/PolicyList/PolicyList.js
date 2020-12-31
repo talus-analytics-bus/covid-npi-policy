@@ -130,6 +130,7 @@ const PolicyList = props => {
           {titleCase(path.slice(-1)[0])} <span>({obj.count})</span>
         </h2>
       </div>
+      {console.log(children)}
       <div className={styles.secondLevelContainer}>{children}</div>
     </ExpandingSection>
   );
@@ -147,6 +148,7 @@ const PolicyList = props => {
     />
   );
 
+  console.log(props.policyObject);
   return (
     <section className={styles.policyList}>
       {props.policyObject &&

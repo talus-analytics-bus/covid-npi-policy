@@ -38,9 +38,17 @@ export const extendObjectByPath = ({ obj, path, valueObj }) => {
   }
 };
 
+// return true or false if the path exists
+export const pathExists = ({ obj, path }) => {
+  if (path.length === 0) return true;
+  if (!obj) return false;
+  return pathExists({ obj: obj[path[0]], path: path.slice(1) });
+};
+
 // return true or false if the path
 // leads to an object which is not empty
-export const pathHasChildren = ({ obj, path }) => {
+export const objectAtPathHasValues = ({ obj, path }) => {
+  if (!obj) return false;
   if (path.length === 0) return Object.values(obj).length > 0;
-  return pathHasChildren({ obj: obj[path[0]], path: path.slice(1) });
+  return objectAtPathHasValues({ obj: obj[path[0]], path: path.slice(1) });
 };

@@ -81,20 +81,26 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
-      const path = [
+      let path = [
         policy[CATEGORY_FIELD_NAME],
         "children",
         policy.auth_entity[0].place.level,
         "children",
-        policy.auth_entity[0].office,
-        "children",
-        policy.auth_entity[0].official,
-        "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
+      if (policy.auth_entity[0].place.level === "Local") {
+        path = [
+          ...path,
+          "children",
+          policy.auth_entity[0].place.loc.split(",")[0],
+        ];
+      }
+
+      // generate counts only for levels past the top level
+      // since the top level is counted by the other loader
       path.forEach((step, index) => {
-        if (step !== "children") {
+        if (index !== 0 && step !== "children") {
           const stepPath = [...path.slice(0, index + 1)];
           extendObjectByPath({
             obj: prev,
@@ -146,21 +152,27 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
+      let path = [
+        policy[CATEGORY_FIELD_NAME],
+        "children",
+        policy.auth_entity[0].place.level,
+        "children",
+        policy[SUBCATEGORY_FIELD_NAME],
+      ];
+
+      if (policy.auth_entity[0].place.level === "Local") {
+        path = [
+          ...path,
+          "children",
+          policy.auth_entity[0].place.loc.split(",")[0],
+        ];
+      }
+
+      path = [...path, "children", `ID${policy.id}`];
+
       extendObjectByPath({
         obj: prev,
-        path: [
-          policy[CATEGORY_FIELD_NAME],
-          "children",
-          policy.auth_entity[0].place.level,
-          "children",
-          policy.auth_entity[0].office,
-          "children",
-          policy.auth_entity[0].official,
-          "children",
-          policy[SUBCATEGORY_FIELD_NAME],
-          "children",
-          `ID${policy.id}`,
-        ],
+        path: path,
         valueObj: {
           desc: policy.desc,
           date_start_effective: policy.date_start_effective,
@@ -168,6 +180,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
           policy_name: policy.policy_name,
           [CATEGORY_FIELD_NAME]: policy[CATEGORY_FIELD_NAME],
           [SUBCATEGORY_FIELD_NAME]: policy[SUBCATEGORY_FIELD_NAME],
+          auth_entity: policy.auth_entity,
         },
       });
     });
@@ -197,21 +210,27 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
+      let path = [
+        policy[CATEGORY_FIELD_NAME],
+        "children",
+        policy.auth_entity[0].place.level,
+        "children",
+        policy[SUBCATEGORY_FIELD_NAME],
+      ];
+
+      if (policy.auth_entity[0].place.level === "Local") {
+        path = [
+          ...path,
+          "children",
+          policy.auth_entity[0].place.loc.split(",")[0],
+        ];
+      }
+
+      path = [...path, "children", `ID${policy.id}`];
+
       extendObjectByPath({
         obj: prev,
-        path: [
-          policy[CATEGORY_FIELD_NAME],
-          "children",
-          policy.auth_entity[0].place.level,
-          "children",
-          policy.auth_entity[0].office,
-          "children",
-          policy.auth_entity[0].official,
-          "children",
-          policy[SUBCATEGORY_FIELD_NAME],
-          "children",
-          `ID${policy.id}`,
-        ],
+        path: path,
         valueObj: {
           desc: policy.desc,
           date_start_effective: policy.date_start_effective,
