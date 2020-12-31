@@ -1,5 +1,5 @@
 import { Policy } from "../../../misc/Queries";
-import { extendObjectByPath } from "../objectPathTools";
+import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 
 export const CATEGORY_FIELD_NAME = "primary_ph_measure";
 export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
@@ -27,6 +27,18 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
       if (policyCounts[policy[CATEGORY_FIELD_NAME]])
         policyCounts[policy[CATEGORY_FIELD_NAME]].count += 1;
       else policyCounts[policy[CATEGORY_FIELD_NAME]] = { count: 1 };
+
+      extendObjectByPath({
+        obj: prev,
+        path: [policy[CATEGORY_FIELD_NAME]],
+        valueObj: {
+          count:
+            getObjectByPath({
+              obj: prev,
+              path: [policy[CATEGORY_FIELD_NAME], "count"],
+            }) + 1 || 1,
+        },
+      });
 
       extendObjectByPath({
         obj: prev,
@@ -73,42 +85,42 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   // and getting subcategories can safely be asynchronous
   // With more efficient API endpoints I think this request
   // will probably totally replace the loadPoliciesCategories request.
-  const policyCounts = {};
+  // const policyCounts = {};
 
   stateSetter(prev => {
-    // const categoriesAndSubcategories = {};
     policyResponse.data.forEach(policy => {
-      if (policyCounts[policy[CATEGORY_FIELD_NAME]])
-        policyCounts[policy[CATEGORY_FIELD_NAME]][
-          policy[SUBCATEGORY_FIELD_NAME]
-        ] =
-          policyCounts[policy[CATEGORY_FIELD_NAME]][
-            policy[SUBCATEGORY_FIELD_NAME]
-          ] + 1 || 1;
-      else
-        policyCounts[policy[CATEGORY_FIELD_NAME]] = {
-          [policy[SUBCATEGORY_FIELD_NAME]]: 1,
-        };
+      const path = [
+        policy[CATEGORY_FIELD_NAME],
+        "children",
+        policy.auth_entity[0].place.level,
+        "children",
+        policy.auth_entity[0].office,
+        "children",
+        policy.auth_entity[0].official,
+        "children",
+        policy[SUBCATEGORY_FIELD_NAME],
+      ];
+
+      path.forEach((step, index) => {
+        if (step !== "children") {
+          const stepPath = [...path.slice(0, index + 1)];
+          extendObjectByPath({
+            obj: prev,
+            path: stepPath,
+            valueObj: {
+              count:
+                getObjectByPath({ obj: prev, path: [...stepPath, "count"] }) +
+                  1 || 1,
+            },
+          });
+        }
+      });
 
       extendObjectByPath({
         obj: prev,
-        path: [
-          policy[CATEGORY_FIELD_NAME],
-          "children",
-          policy.auth_entity[0].place.level,
-          "children",
-          // policy.auth_entity[0].office,
-          // "children",
-          // policy.auth_entity[0].official,
-          // "children",
-          policy[SUBCATEGORY_FIELD_NAME],
-        ],
+        path: path,
         valueObj: {
           children: {},
-          count:
-            policyCounts[policy[CATEGORY_FIELD_NAME]][
-              policy[SUBCATEGORY_FIELD_NAME]
-            ],
         },
       });
     });
@@ -149,10 +161,10 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
           "children",
           policy.auth_entity[0].place.level,
           "children",
-          // policy.auth_entity[0].office,
-          // "children",
-          // policy.auth_entity[0].official,
-          // "children",
+          policy.auth_entity[0].office,
+          "children",
+          policy.auth_entity[0].official,
+          "children",
           policy[SUBCATEGORY_FIELD_NAME],
           "children",
           `ID${policy.id}`,
@@ -200,10 +212,10 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
           "children",
           policy.auth_entity[0].place.level,
           "children",
-          // policy.auth_entity[0].office,
-          // "children",
-          // policy.auth_entity[0].official,
-          // "children",
+          policy.auth_entity[0].office,
+          "children",
+          policy.auth_entity[0].official,
+          "children",
           policy[SUBCATEGORY_FIELD_NAME],
           "children",
           `ID${policy.id}`,
