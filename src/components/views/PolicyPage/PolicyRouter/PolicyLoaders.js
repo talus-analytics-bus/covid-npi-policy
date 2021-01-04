@@ -4,6 +4,9 @@ import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 export const CATEGORY_FIELD_NAME = "primary_ph_measure";
 export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
 
+const checkPolicyActive = policy =>
+  policy.date_end_actual ? new Date(policy.date_end_actual) > new Date() : true;
+
 // Top-Level policy categories
 export const loadPolicyCategories = async ({ filters, stateSetter }) => {
   console.log("loadPolicyCategories Called");
@@ -11,7 +14,7 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
     method: "post",
     filters: filters,
     ordering: [["date_start_effective", "desc"]],
-    fields: ["id", CATEGORY_FIELD_NAME],
+    fields: ["id", CATEGORY_FIELD_NAME, "date_end_actual"],
   });
 
   // functional format of useEffect using previous value
@@ -22,6 +25,8 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
+      const active = checkPolicyActive(policy) ? 1 : 0;
+
       extendObjectByPath({
         obj: prev,
         path: [policy[CATEGORY_FIELD_NAME]],
@@ -31,6 +36,11 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
               obj: prev,
               path: [policy[CATEGORY_FIELD_NAME], "count"],
             }) + 1 || 1,
+          active:
+            getObjectByPath({
+              obj: prev,
+              path: [policy[CATEGORY_FIELD_NAME], "active"],
+            }) + active || active,
         },
       });
 
@@ -70,7 +80,13 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
     method: "post",
     filters: filters,
     ordering: [["date_start_effective", "desc"]],
-    fields: ["id", "auth_entity", CATEGORY_FIELD_NAME, SUBCATEGORY_FIELD_NAME],
+    fields: [
+      "id",
+      "auth_entity",
+      CATEGORY_FIELD_NAME,
+      SUBCATEGORY_FIELD_NAME,
+      "date_end_actual",
+    ],
   });
 
   // intentionally re-creating the object from scratch here in case
@@ -97,6 +113,8 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
         ];
       }
 
+      const active = checkPolicyActive(policy) ? 1 : 0;
+
       // generate counts only for levels past the top level
       // since the top level is counted by the other loader
       path.forEach((step, index) => {
@@ -109,6 +127,11 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
               count:
                 getObjectByPath({ obj: prev, path: [...stepPath, "count"] }) +
                   1 || 1,
+              active:
+                getObjectByPath({
+                  obj: prev,
+                  path: [...stepPath, "active"],
+                }) + active || active,
             },
           });
         }

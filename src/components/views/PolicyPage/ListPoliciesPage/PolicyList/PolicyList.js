@@ -97,7 +97,6 @@ const PolicyList = props => {
       key={path}
       open={obj.open}
       onOpen={() => {
-        console.log(`clicked list section ${path.slice(-1)[0]}`);
         loadDescriptionsBySubCategory(path[0], path[2]);
         props.setPolicyObject(prev => {
           extendObjectByPath({
@@ -127,10 +126,12 @@ const PolicyList = props => {
           open={obj.open}
         />
         <h2>
-          {titleCase(path.slice(-1)[0])} <span>({obj.count})</span>
+          {titleCase(path.slice(-1)[0])}{" "}
+          <span>
+            (total: {obj.count}, active: {obj.active})
+          </span>
         </h2>
       </div>
-      {console.log(children)}
       <div className={styles.secondLevelContainer}>{children}</div>
     </ExpandingSection>
   );
@@ -148,7 +149,6 @@ const PolicyList = props => {
     />
   );
 
-  console.log(props.policyObject);
   return (
     <section className={styles.policyList}>
       {props.policyObject &&
@@ -186,7 +186,10 @@ const PolicyList = props => {
                   open={category.open}
                 />
                 <h1>
-                  {titleCase(categoryName)} <span>({category.count})</span>
+                  {titleCase(categoryName)}{" "}
+                  <span>
+                    (total: {category.count}, active: {category.active})
+                  </span>
                 </h1>
               </div>
               <div className={styles.categoryContainer}>
