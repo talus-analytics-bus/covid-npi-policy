@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -23,7 +23,8 @@ const formatDate = date => {
 };
 
 const PolicySummary = props => {
-  const { iso3, state } = props.location;
+  const location = useLocation();
+  const [iso3, state] = location.pathname.split("/").slice(-2);
 
   const description = props.wordLimit
     ? props.policy.desc

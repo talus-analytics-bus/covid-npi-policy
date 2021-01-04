@@ -59,7 +59,7 @@ const PolicyList = props => {
         [CATEGORY_FIELD_NAME]: [categoryName],
       };
 
-      if (props.location.state !== "national") {
+      if (state !== "national") {
         filters["area1"] = [state];
       }
 
@@ -131,10 +131,6 @@ const PolicyList = props => {
                   renderItem={(path, obj) => (
                     <PolicySummary
                       key={path}
-                      location={{
-                        iso3: props.location.iso3,
-                        state: props.location.state,
-                      }}
                       id={path.slice(-1)[0].replace("ID", "")}
                       policy={obj}
                       setScrollPos={props.setScrollPos}
