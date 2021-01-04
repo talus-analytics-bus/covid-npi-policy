@@ -1,0 +1,45 @@
+.categoryHeader {
+  padding: 13px;
+  padding-top: 8px;
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+
+  h2 {
+    font-family: "rawline";
+    font-size: 22px;
+    font-weight: 500;
+    // text-transform: capitalize;
+    text-transform: none;
+    color: #29334b;
+    margin-left: 15px;
+
+    span {
+      font-weight: 200;
+    }
+  }
+}
+
+.categoryContainer {
+  position: relative;
+  margin-left: 18px;
+  padding-left: 15px;
+  // margin-top: 10px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  // can't use margin here
+  // because the expanding box
+  // doesn't know about it
+  // margin-bottom: 15px;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -2.5px;
+    width: 5px;
+    border-radius: 2.5px;
+    background-color: #7fb0b4;
+    content: "";
+  }
+}

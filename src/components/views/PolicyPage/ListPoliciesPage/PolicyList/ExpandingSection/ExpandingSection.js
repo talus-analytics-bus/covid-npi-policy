@@ -96,9 +96,7 @@ const ExpandingSection = props => {
     else props.onOpen && props.onOpen();
   };
 
-  const childElements =
-    renderChildren &&
-    (children.slice(1).length > 0 ? children.slice(1) : <p>Loading...</p>);
+  const childElements = renderChildren && children.slice(1);
 
   return (
     <div>

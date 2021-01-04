@@ -8,21 +8,27 @@ export const getObjectByPath = ({ obj, path }) => {
 
 // get the first valid path from the object,
 // up until you hit a key that matches the
-// idPattern regex
+// idPattern regex or run out of nested objects
+// in which case return the path up until undefined
 export const getFirstPathFromObject = ({ obj, idPattern }) => {
   if (!obj) return undefined;
-  if (Object.keys(obj).length >= 1) {
-    const nextKey = Object.keys(obj)[0];
+
+  const keys = Object.keys(obj);
+
+  if (keys.length >= 1) {
+    const nextKey = keys.includes("children") ? "children" : keys[0];
 
     if (idPattern.test(nextKey)) return [nextKey];
     return [
       nextKey,
-      ...getFirstPathFromObject({
-        obj: { ...obj[Object.keys(obj)] },
-        idPattern,
-      }),
+      ...[
+        getFirstPathFromObject({
+          obj: { ...obj[nextKey] },
+          idPattern,
+        }) || undefined,
+      ],
     ].flat();
-  }
+  } else return undefined;
 };
 
 // recursively climb down through object according
