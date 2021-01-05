@@ -47,9 +47,13 @@ export const titleCase = string =>
 const PolicyList = props => {
   const location = useLocation();
 
-  const { policyObject, setPolicyObject, setScrollPos } = React.useContext(
-    policyContext
-  );
+  const {
+    policyObject,
+    setPolicyObject,
+    policyListScrollPos,
+  } = React.useContext(policyContext);
+
+  const [, setScrollPos] = policyListScrollPos;
 
   const loadDescriptionsByCategory = (obj, categoryName) => {
     const firstPath = getFirstPathFromObject({
