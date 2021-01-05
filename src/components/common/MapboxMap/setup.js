@@ -359,16 +359,9 @@ export const addSources = (map, mapId) => {
  * @param  {[type]}          selectedFeature [description]
  * @return {[type]}                          [description]
  */
-export const bindFeatureStates = ({
-  map,
-  mapId,
-  data,
-  selectedFeature,
-  metricIds,
-}) => {
+export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
   const sources = mapSources[mapId];
   const curMapMetrics = mapMetrics[mapId];
-  // const curMapMetrics = mapMetrics[mapId].filter(d => metricIds.includes(d.id));
   bindFeatureStatesForSource({
     map,
     mvmNew: mapSources[mapId],

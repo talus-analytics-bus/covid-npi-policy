@@ -170,7 +170,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
         .map(d => {
           return d.entity_name + "." + d.field;
         }),
-      entity_name: "Policy",
+      class_name: "Policy",
     });
     queries.countriesWithDistancingLevels = CountriesWithDistancingLevels();
 

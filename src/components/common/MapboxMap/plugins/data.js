@@ -24,7 +24,7 @@ import ObservationQuery from "../../../misc/ObservationQuery.js";
 import TrendQuery from "../../../misc/TrendQuery.js";
 import {
   Policy,
-  PolicyStatus,
+  DistancingLevel,
   PolicyStatusCounts,
   execute,
 } from "../../../misc/Queries";
@@ -93,17 +93,15 @@ export const mapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatus,
+      queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        const lockdownFilters = {
-          ...filters,
-          lockdown_level: ["lockdown_level"],
+        return {
+          method: "get",
+          geo_res: "state",
+          date: filters.dates_in_effect[0],
         };
-        // delete lockdownFilters.primary_ph_measure;
-        delete lockdownFilters.ph_measure_details;
-        return { method: "post", filters: lockdownFilters, geo_res: "state" };
       },
 
       // array of layer types for which this metric is used
@@ -195,7 +193,7 @@ export const mapMetrics = {
         metric_id: 74,
         temporal_resolution: "daily",
         spatial_resolution: "state",
-        fields: ["value", "date_time", "place_name"],
+        fields: ["value", "date_time", "place_name", "place_id"],
       },
       id: "74",
       featureLinkField: "place_name",
@@ -212,7 +210,6 @@ export const mapMetrics = {
         metric_id: 72,
         temporal_resolution: "daily",
         spatial_resolution: "state",
-        fields: ["value", "date_time", "place_name"],
       },
       id: "72",
       featureLinkField: "place_name",
@@ -227,21 +224,14 @@ export const mapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatus,
+      queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
       params: ({ filters }) => {
-        const lockdownFilters = {
-          ...filters,
-          lockdown_level: ["lockdown_level"],
-        };
-        // delete lockdownFilters.primary_ph_measure;
-        delete lockdownFilters.ph_measure_details;
         return {
-          method: "post",
-          filters: lockdownFilters,
-          iso3: "all",
+          method: "get",
           geo_res: "country",
+          date: filters.dates_in_effect[0],
         };
       },
 
@@ -335,7 +325,6 @@ export const mapMetrics = {
         metric_id: "77",
         temporal_resolution: "daily",
         spatial_resolution: "country",
-        fields: ["value", "date_time", "place_iso3"],
       },
       id: "77",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
@@ -351,7 +340,6 @@ export const mapMetrics = {
         metric_id: "75",
         temporal_resolution: "daily",
         spatial_resolution: "country",
-        fields: ["value", "date_time", "place_iso3"],
       },
       id: "75",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
@@ -663,7 +651,7 @@ export const metricMeta = {
             undefined,
             { position: "absolute", top: 20 },
             undefined,
-            undefined,
+            { position: "absolute", top: 20 },
             undefined,
             { position: "absolute", top: 20 },
           ],
@@ -686,7 +674,7 @@ export const metricMeta = {
             </div>,
             "fewest",
             "",
-            "",
+            "some",
             "",
             "most",
           ],
@@ -1019,22 +1007,19 @@ export const metricMeta = {
  * @param  {[type]}   map     [description]
  * @return {Promise}          [description]
  */
-export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
+export const dataGetter = async ({ date, mapId, filters, map }) => {
   // get all metrics displayed in the current map
   const metrics = mapMetrics[mapId];
-  // const metrics = mapMetrics[mapId].filter(d => metricIds.includes(d.id));
 
   // define date parameters for API calls
   const dates = {
-    end_date: moment("2019-12-31").format("YYYY-MM-DD"),
-    // end_date: date.format("YYYY-MM-DD"),
     start_date: date.format("YYYY-MM-DD"),
+    end_date: date.format("YYYY-MM-DD"),
   };
 
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
   const queryDefs = {};
-  const queries = {};
   metrics.forEach(d => {
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
@@ -1064,14 +1049,11 @@ export const dataGetter = async ({ date, mapId, filters, map, metricIds }) => {
   });
 
   // collate queries in object to be called by the `execute method below`
+  const queries = {};
   for (const [k, v] of Object.entries(queryDefs)) {
-    // if metric not in list of ids to fetch, set data as empty array
-    const fetchData = metricIds.includes(k);
-    if (fetchData)
-      queries[k] = v.queryFunc({
-        ...v,
-      });
-    else queries[k] = async () => [];
+    queries[k] = v.queryFunc({
+      ...v,
+    });
   }
 
   // execute queries in parallel
@@ -1100,6 +1082,7 @@ export const tooltipGetter = async ({
   d,
   include,
   date,
+  data,
   map,
   filters,
   plugins,
@@ -1298,7 +1281,6 @@ export const tooltipGetter = async ({
       tooltip.tooltipMainContent.push(item);
 
       // SPECIAL METRICS // -------------------------------------------------//
-
       const fillInfo = metricMeta[k].legendInfo.fill();
       item.value = (
         <div
@@ -1423,11 +1405,34 @@ export const tooltipGetter = async ({
     //   }
     // });
 
+    // determine qualitative label to use for relative policy count
+    const useQual = true;
+    const maxVal = d3.max(data.policy_status_counts, d => d.value);
+    const minVal = d3.min(data.policy_status_counts, d => d.value);
+    const diff = maxVal - minVal;
+    const binSize = diff / 5;
+    const breakpoints = [1, 2, 3, 4].map(d => {
+      return binSize * d + minVal;
+    });
+    const labels = ["Fewest", "Some", "Some", "Some", "Most"];
+    const qualValScale = d3
+      .scaleThreshold()
+      .domain(breakpoints)
+      .range(labels);
+    const getQualVal = v => {
+      if (v === 0) return "No";
+      else return qualValScale(v);
+    };
+    const value = useQual
+      ? getQualVal(nPolicies.total)
+      : comma(nPolicies.total);
+
+    // define tooltip subtitle including policy count
     tooltip.tooltipHeader.subtitle = (
       <>
         <span>
-          {comma(nPolicies.total)} {noun}-level{" "}
-          {nPolicies.total === 1 ? "policy" : "policies"} in effect
+          {value} {noun}-level{" "}
+          {nPolicies.total === 1 && !useQual ? "policy" : "policies"} in effect
         </span>
         <br />
         <span> as of {formattedDate}</span>

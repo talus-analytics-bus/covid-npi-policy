@@ -53,6 +53,10 @@ const rollingAverage = (series, windowSize) => {
 };
 
 const PolicyModel = ({ setLoading, setPage }) => {
+  React.useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [activeTab, setActiveTab] = useState("caseload");
 
   // use selected states to load the required models
@@ -123,7 +127,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
       const caseloadPoints = caseloadData.map(day => ({
         // convert dates to ISO format before parsing
-        x: new Date(day.date_time.split(" ")[0]),
+        x: new Date(day.date_time.replace(" ", "T").replace(" +00", "")),
         // ignoring negative new cases and deaths
         y: Math.max(day.value, 0),
       }));
@@ -430,7 +434,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
             <label>
               Show COVID count by
               <select
-                style={{ width: "13rem" }}
+                style={{ width: "15rem" }}
                 value={selectedCurves[0]}
                 onChange={e => {
                   setSelectedCurves([e.target.value, "R effective"]);

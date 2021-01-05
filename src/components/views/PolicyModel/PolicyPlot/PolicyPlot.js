@@ -499,70 +499,97 @@ const PolicyModel = props => {
         data={props.data}
       />
       <div className={styles.abovePlot}>
-        {props.activeTab === "interventions"
-            && <p className={styles.instruction}>
-          <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
-            <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
-            <path
-              style={{ fill: "#8D64DD" }}
-              d="M20.8,12.2v0.9c0,0.5-0.4,0.9-0.9,0.9h-6v6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9v-6h-6
+        {props.activeTab === "interventions" && (
+          <p className={styles.instruction}>
+            <svg x="0px" y="0px" viewBox="0 0 25.2 25.2">
+              <circle style={{ fill: "#FFFFFF" }} cx="12.6" cy="12.6" r="12" />
+              <path
+                style={{ fill: "#8D64DD" }}
+                d="M20.8,12.2v0.9c0,0.5-0.4,0.9-0.9,0.9h-6v6c0,0.5-0.4,0.9-0.9,0.9h-0.9c-0.5,0-0.9-0.4-0.9-0.9v-6h-6
   c-0.5,0-0.9-0.4-0.9-0.9v-0.9c0-0.5,0.4-0.9,0.9-0.9h6v-6c0-0.5,0.4-0.9,0.9-0.9H13c0.5,0,0.9,0.4,0.9,0.9v6h6
   C20.4,11.3,20.8,11.7,20.8,12.2z M21.6,21.6c-4.9,4.9-13,4.9-17.9,0s-4.9-13,0-17.9s13-4.9,17.9,0S26.5,16.7,21.6,21.6z M23.6,12.6
   c0-6.1-4.9-11-11-11s-11,4.9-11,11s4.9,11,11,11S23.6,18.7,23.6,12.6z"
-            />
-          </svg>
-           Use cursor on graph to set new policy
+              />
+            </svg>
+            Use cursor on graph to set new policy
             {/* Switch to model view to add interventions */}
-        </p>} 
+          </p>
+        )}
         <label className={styles.legendLabel}>
           <Tippy
             content={
-              <div className={styles.legend}>
+              <div
+                className={
+                  props.activeTab === "caseload"
+                    ? styles.legend
+                    : styles.proposedLegend
+                }
+              >
                 <div className={styles.lockdown}>
                   <span />
-                  <p>Lockdown policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"} Lockdown
+                    policies
+                  </p>
                 </div>
                 <div className={styles.stay}>
                   <span />
-                  <p>Stay-at-home policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"}{" "}
+                    Stay-at-home policies
+                  </p>
                 </div>
                 <div className={styles.safer}>
                   <span />
-                  <p>Safer-at-home policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"}{" "}
+                    Safer-at-home policies
+                  </p>
                 </div>
                 <div className={styles.partial}>
                   <span />
-                  <p>Partially open policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"}{" "}
+                    Partially open policies
+                  </p>
                 </div>
                 <div className={styles.open}>
                   <span />
-                  <p>Open policies</p>
+                  <p>
+                    {props.activeTab === "interventions" && "Proposed"} Open
+                    policies
+                  </p>
                 </div>
-                <div className={styles.proposed}>
-                  <span />
-                  <p>Proposed</p>
-                </div>
+                {/* <div className={styles.proposed}> */}
+                {/*   <span /> */}
+                {/*   <p>Proposed</p> */}
+                {/* </div> */}
                 {props.activeTab === "caseload" && (
                   <div className={styles.daily}>
                     <span />
                     <p>
-                      Daily new{" "}
+                      Daily New{" "}
                       {props.selectedCurves[0] === "infected_a"
-                        ? "cases"
-                        : "deaths"}
+                        ? "Cases"
+                        : "Deaths"}
                     </p>
                   </div>
                 )}
                 {props.activeTab === "caseload" && (
                   <div className={styles.actuals}>
                     <span />
-                    <p>7-day average</p>
+                    <p>7-Day Average</p>
                   </div>
                 )}
                 {props.activeTab === "interventions" && (
                   <div className={styles.modeled}>
                     <span />
-                    <p>Modeled</p>
+                    <p>
+                      Modeled{" "}
+                      {props.selectedCurves[0] === "infected_a"
+                        ? "active cases"
+                        : "cumulative deaths"}
+                    </p>
                   </div>
                 )}
                 {/* <div className={styles.noPolicies}> */}

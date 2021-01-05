@@ -57,7 +57,6 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
-
       filterGroupComponents.push(
         <Filter
           {...{

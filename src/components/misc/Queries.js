@@ -316,54 +316,37 @@ export const Plan = async function({
 };
 
 /**
- * Get policy status data from API.
+ * Get distancing level data from API.
  */
-export const PolicyStatus = async function({
+export const DistancingLevel = async function({
   method,
   geo_res = "state",
   fields = [],
   filters = null,
-  start_date = null,
-  end_date = null,
+  date,
 }) {
   // prepare params
   const params = new URLSearchParams();
-  fields.forEach(d => {
-    params.append("fields", d);
-  });
-
-  // if checking lockdown levels then do not include start and end date params
-  const includeDates =
-    filters["lockdown_level"] === undefined ||
-    filters["lockdown_level"][0] !== "lockdown_level";
-
-  const paramsToCheck = [[end_date, "start"]];
-  if (includeDates) {
-    paramsToCheck.push([start_date, "end"]);
-  }
-  paramsToCheck.forEach(([v, k]) => {
-    if (v !== null) params.append(k, v);
+  const toAdd = [
+    ["geo_res", geo_res],
+    ["date", date],
+    ["all_dates", false],
+    ["deltas_only", false],
+  ];
+  toAdd.forEach(([key, value]) => {
+    if (value !== undefined) params.append(key, value);
   });
 
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/policy_status/${geo_res}`, {
+    req = await axios(`${API_URL}/get/distancing_levels`, {
       params,
     });
-  } else if (method === "post") {
-    if (filters === null) {
-      console.log("Error: `filters` is required for method POST.");
-    }
-    req = await axios.post(
-      `${API_URL}/post/policy_status/${geo_res}`,
-      { filters },
-      {
-        params,
-      }
-    );
   } else {
-    console.log("Error: Method not implemented for `PolicyStatus`: " + method);
+    console.error(
+      "Error: Method not implemented for `DistancingLevel`: " + method
+    );
     return false;
   }
   const res = await req;

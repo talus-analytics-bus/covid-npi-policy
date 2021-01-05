@@ -40,13 +40,6 @@ const ObservationQuery = async function({
   } else if (place_iso3 !== undefined) {
     params["place_iso3"] = place_iso3;
   }
-  if (place_id !== undefined) {
-    params["place_id"] = place_id;
-  } else if (place_name !== undefined) {
-    params["place_name"] = place_name;
-  } else if (place_iso3 !== undefined) {
-    params["place_iso3"] = place_iso3;
-  }
 
   const url = `${API_URL}/observations`;
 

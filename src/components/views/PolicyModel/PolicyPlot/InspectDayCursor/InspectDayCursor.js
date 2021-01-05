@@ -30,6 +30,13 @@ const checkSameDay = (date1, date2) => {
   // );
 };
 
+const checkBeforeDay = (date1, date2) => {
+  // const date1timestamp = Math.floor(date1.getTime() / 1000 / 60 / 60 / 24);
+  const date1timestamp = Math.floor(date1.getTime() / 86400000);
+  const date2timestamp = Math.floor(date2.getTime() / 86400000);
+  return date1timestamp <= date2timestamp;
+};
+
 const formatModeled = number => {
   const integer = parseInt(number);
   if (integer <= 10) {
@@ -122,7 +129,7 @@ const InspectDailyCursor = props => {
   );
 
   let actualCases, averageCases;
-  if (modeledCases === undefined) {
+  if (props.activeTab === "caseload") {
     actualCases = props.data.curves[yAxis].actuals.find(point =>
       checkSameDay(point.x, popupDate)
     );
@@ -185,10 +192,11 @@ const InspectDailyCursor = props => {
     policyName: dataName,
     proposed,
   });
+
   return (
     <>
       {(props.activeTab === "caseload" &&
-        popupDate < props.data.curves[yAxis].actuals_end) ||
+        checkBeforeDay(popupDate, props.data.curves[yAxis].actuals_end)) ||
       (props.activeTab === "interventions" && popupDate > new Date()) ? (
         <VictoryPortal>
           <g>
@@ -250,7 +258,7 @@ const InspectDailyCursor = props => {
                       </div>
                       <div className={styles.caseloadContent}>
                         <p className={styles.number}>
-                          {modeledCases === undefined
+                          {props.activeTab === "caseload"
                             ? actualCases && formatActuals(actualCases.y)
                             : modeledCases && formatModeled(modeledCases.y)}
                         </p>
