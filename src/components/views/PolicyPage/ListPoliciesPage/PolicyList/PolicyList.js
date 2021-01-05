@@ -62,7 +62,10 @@ const PolicyList = props => {
     });
 
     if (firstPath.slice(-1)[0] === undefined) {
-      const [iso3, state] = location.pathname.split("/").slice(-2);
+      const [iso3, state] = location.pathname
+        .replace(/\/$/, "")
+        .split("/")
+        .slice(-2);
 
       const filters = {
         iso3: [iso3],

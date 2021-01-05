@@ -17,8 +17,12 @@ const ListPoliciesPage = props => {
   }, [setLoading, setPage]);
 
   const location = useLocation();
-  const [iso3] = React.useState(location.pathname.split("/")[2]);
-  const [state] = React.useState(location.pathname.split("/")[3]);
+  const [iso3] = React.useState(
+    location.pathname.replace(/\/$/, "").split("/")[2]
+  );
+  const [state] = React.useState(
+    location.pathname.replace(/\/$/, "").split("/")[3]
+  );
 
   const [policyList, setPolicyList] = React.useState();
 

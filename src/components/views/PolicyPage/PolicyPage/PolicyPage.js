@@ -15,7 +15,10 @@ import styles from "./PolicyPage.module.scss";
 
 const PolicyPage = props => {
   const location = useLocation();
-  const [iso3, state, policyID] = location.pathname.split("/").slice(-3);
+  const [iso3, state, policyID] = location.pathname
+    .replace(/\/$/, "")
+    .split("/")
+    .slice(-3);
 
   // Always want this page to scroll to the top
   React.useLayoutEffect(() => {
