@@ -83,85 +83,109 @@ export const SVG = props => {
   // screen size will be set with CSS
   const width = 500;
   const height = 500;
-  // const country = props.country || "USA";
+  // const country = propsCountry || "USA";
 
-  let paths = null;
+  // let paths = null;
 
   // TODO: combine these if statements
-  if (featureContextConsumer.features.counties) {
-    const state = featureContextConsumer.features.states.find(
-      state => state.properties.name === props.state
-    );
-    const fips = state.id;
 
-    const selectedCounties = featureContextConsumer.features.counties.filter(
-      county => county.id.startsWith(fips)
-    );
+  const {
+    counties: propsCounties,
+    country: propsCountry,
+    state: propsState,
+  } = props;
 
-    const projection = geoAlbersUsa().fitSize([width, height], {
-      type: "FeatureCollection",
-      features: selectedCounties,
-    });
+  let paths = React.useMemo(() => {
+    let paths;
 
-    paths = selectedCounties.map((geometry, index) => {
-      const path = geoPath().projection(projection)(geometry);
-      return (
-        <path
-          key={index}
-          fill={
-            props.counties.includes(geometry.properties.name) ||
-            props.counties[0] === "Unspecified"
-              ? "#C1272D"
-              : "#CCCCCC"
-          }
-          stroke={
-            props.counties.includes(geometry.properties.name) ||
-            props.counties[0] === "Unspecified"
-              ? "#661417"
-              : "#707070"
-          }
-          d={path}
-        />
+    if (featureContextConsumer.features.counties) {
+      console.count("create paths");
+      const state = featureContextConsumer.features.states.find(
+        state => state.properties.name === propsState
       );
-    });
-  }
+      const fips = state.id;
 
-  if (featureContextConsumer.features.countries) {
-    const country = featureContextConsumer.features.countries.find(
-      country => country.properties.ADM0_A3 === props.country
-    );
+      const selectedCounties = featureContextConsumer.features.counties.filter(
+        county => county.id.startsWith(fips)
+      );
 
-    if (country === undefined) {
-      return <></>;
+      const projection = geoAlbersUsa().fitSize([width, height], {
+        type: "FeatureCollection",
+        features: selectedCounties,
+      });
+
+      paths = selectedCounties.map((geometry, index) => {
+        const path = geoPath().projection(projection)(geometry);
+        return (
+          <path
+            key={index}
+            fill={
+              propsCounties.includes(geometry.properties.name) ||
+              propsCounties[0] === "Unspecified"
+                ? "#C1272D"
+                : "#CCCCCC"
+            }
+            stroke={
+              propsCounties.includes(geometry.properties.name) ||
+              propsCounties[0] === "Unspecified"
+                ? "#661417"
+                : "#707070"
+            }
+            d={path}
+          />
+        );
+      });
     }
 
-    const projection = geoMercator().fitSize([width, height], {
-      type: "FeatureCollection",
-      features: [country],
-    });
-    // .rotate(geoCentroid(country).map((x, i) => (i === 1 ? -23 : x * -1)));
-
-    paths = featureContextConsumer.features.countries.map((geometry, index) => {
-      const path = geoPath().projection(projection)(geometry);
-      return (
-        <path
-          key={index}
-          fill={
-            geometry.properties.ADM0_A3 === props.country
-              ? "#C1272D"
-              : "#CCCCCC"
-          }
-          stroke={"#707070"}
-          d={path}
-        />
+    if (featureContextConsumer.features.countries) {
+      console.count("create paths");
+      const country = featureContextConsumer.features.countries.find(
+        country => country.properties.ADM0_A3 === propsCountry
       );
-    });
-  }
+
+      if (country === undefined) {
+        return <></>;
+      }
+
+      const projection = geoMercator().fitSize([width, height], {
+        type: "FeatureCollection",
+        features: [country],
+      });
+      // .rotate(geoCentroid(country).map((x, i) => (i === 1 ? -23 : x * -1)));
+
+      paths = featureContextConsumer.features.countries.map(
+        (geometry, index) => {
+          const path = geoPath().projection(projection)(geometry);
+          return (
+            <path
+              key={index}
+              fill={
+                geometry.properties.ADM0_A3 === propsCountry
+                  ? "#C1272D"
+                  : "#CCCCCC"
+              }
+              stroke={"#707070"}
+              d={path}
+            />
+          );
+        }
+      );
+    }
+    return paths;
+  }, [
+    // featureContextConsumer.features.counties,
+    // featureContextConsumer.features.countries,
+    // featureContextConsumer.features.states,
+    propsCounties,
+    propsCountry,
+    propsState,
+    featureContextConsumer.features,
+  ]);
 
   // console.count("render minmap SVG");
   return (
     <div className={styles.container}>
-      {props.country && paths === null ? (
+      {propsCountry && paths === null ? (
         <div className={styles.placeholder}>
           <em>loading map...</em>
         </div>

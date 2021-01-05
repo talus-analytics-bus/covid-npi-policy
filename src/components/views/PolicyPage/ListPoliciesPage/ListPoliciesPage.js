@@ -51,6 +51,10 @@ const ListPoliciesPage = props => {
     window.scroll(0, scrollPos);
   }, [scrollPos]);
 
+  // if this array is re-created it will make the minimap
+  // re-render so we only want to create it when this component mounts
+  const miniMapCounties = React.useRef(["Unspecified"]);
+
   return (
     <article>
       <section className={styles.introSection}>
@@ -96,7 +100,7 @@ const ListPoliciesPage = props => {
           <MiniMap.SVG
             country={iso3}
             state={state}
-            counties={["Unspecified"]}
+            counties={miniMapCounties.current}
           />
         </div>
       </section>
