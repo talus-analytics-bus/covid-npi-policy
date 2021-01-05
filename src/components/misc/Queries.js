@@ -257,16 +257,27 @@ export const Plan = async function({
  * Get distancing level data from API.
  */
 export const DistancingLevel = async function({
-  method,
-  geo_res = "state",
+  method = "get",
+  geo_res,
+  iso3,
+  state_name,
+  deltas_only = false,
+  all_dates = true,
   fields = [],
   filters = null,
   date,
+  // method,
+  // geo_res = "state",
+  // fields = [],
+  // filters = null,
+  // date,
 }) {
   // prepare params
   const params = new URLSearchParams();
   const toAdd = [
     ["geo_res", geo_res],
+    ["iso3", iso3],
+    ["state_name", state_name],
     ["date", date],
     ["all_dates", false],
     ["deltas_only", false],
