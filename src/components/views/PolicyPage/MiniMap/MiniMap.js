@@ -99,7 +99,7 @@ export const SVG = props => {
     let paths;
 
     if (featureContextConsumer.features.counties) {
-      console.count("create paths");
+      // console.count("create paths");
       const state = featureContextConsumer.features.states.find(
         state => state.properties.name === propsState
       );
@@ -138,7 +138,7 @@ export const SVG = props => {
     }
 
     if (featureContextConsumer.features.countries) {
-      console.count("create paths");
+      // console.count("create paths");
       const country = featureContextConsumer.features.countries.find(
         country => country.properties.ADM0_A3 === propsCountry
       );
