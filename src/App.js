@@ -40,8 +40,6 @@ const App = () => {
   const [versions, setVersions] = useState(null);
   const [counts, setCounts] = useState(null);
 
-  const [policyPageCaseload, setPolicyPageCaseload] = useState({});
-
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
   // detected browser
