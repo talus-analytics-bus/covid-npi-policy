@@ -65,7 +65,7 @@ const PolicyPage = props => {
 
   return (
     <article className={styles.policyPage}>
-      <Link to={`/policies/${iso3}/${state}/`}>
+      <Link to={`/policies/${iso3}/${state}`}>
         {"<"} return to full list of {state.toLowerCase()} policies
       </Link>
       <div className={styles.row}>
