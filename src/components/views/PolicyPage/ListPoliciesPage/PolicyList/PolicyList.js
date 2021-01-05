@@ -53,16 +53,12 @@ const PolicyList = props => {
 
     if (firstPath.slice(-1)[0] === undefined) {
       const [iso3, state] = location.pathname.split("/").slice(-2);
-      console.log(location.pathname.split("/"));
 
       const filters = {
         iso3: [iso3],
         [CATEGORY_FIELD_NAME]: [categoryName],
+        ...(state !== "national" && { area1: [state] }),
       };
-
-      if (state !== "national") {
-        filters["area1"] = [state];
-      }
 
       loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
     }

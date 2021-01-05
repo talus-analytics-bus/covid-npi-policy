@@ -35,11 +35,8 @@ const PolicyCategory = props => {
         iso3: [iso3],
         [CATEGORY_FIELD_NAME]: [path[0]],
         level: [path[2]],
+        ...(state !== "national" && { area1: [state] }),
       };
-
-      if (state !== "national") {
-        filters["area1"] = [state];
-      }
 
       loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
     }
@@ -89,7 +86,7 @@ const PolicyCategory = props => {
         {children.length > 0 ? (
           children
         ) : (
-          <p style={{ paddingLeft: 30 }}>{console.log(props.obj)}Loading...</p>
+          <p style={{ paddingLeft: 30 }}>Loading...</p>
         )}
       </div>
     </ExpandingSection>
