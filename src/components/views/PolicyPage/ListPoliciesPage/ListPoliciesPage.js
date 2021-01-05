@@ -11,17 +11,21 @@ import PolicyList from "./PolicyList/PolicyList";
 
 import { MiniMap } from "../MiniMap/MiniMap";
 
+import { policyContext } from "../PolicyRouter/PolicyRouter";
+
 import styles from "./ListPoliciesPage.module.scss";
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
 
+  const policyContextConsumer = React.useContext(policyContext);
+
   // unpacking this so the hook dependency
   // will work correctly
-  const { policyObject, setPolicyObject } = props;
+  const { policyObject, setPolicyObject } = policyContextConsumer;
 
   // Get category and subcategory
-  // for all policies when component mounts
+  // for all policies when component mountsa
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
@@ -41,7 +45,7 @@ const ListPoliciesPage = props => {
     }
   }, [iso3, state, policyObject, setPolicyObject]);
 
-  const [scrollPos, setScrollPos] = props.policyListScrollPos;
+  const [scrollPos] = policyContextConsumer.policyListScrollPos;
 
   React.useLayoutEffect(() => {
     window.scroll(0, scrollPos);
@@ -97,14 +101,9 @@ const ListPoliciesPage = props => {
         </div>
       </section>
       <section className={styles.caseloadPlot}>
-        <CaseloadPlot caseload={props.caseload} />
+        <CaseloadPlot />
       </section>
-      <PolicyList
-        setPolicyObject={setPolicyObject}
-        policyObject={policyObject}
-        location={{ iso3, state }}
-        setScrollPos={setScrollPos}
-      />
+      <PolicyList />
     </article>
   );
 };

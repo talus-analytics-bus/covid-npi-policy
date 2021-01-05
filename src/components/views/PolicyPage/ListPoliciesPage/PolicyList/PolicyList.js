@@ -20,6 +20,8 @@ import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import NDepthList from "./NDepthList/NDepthList";
 
+import { policyContext } from "../../PolicyRouter/PolicyRouter";
+
 import styles from "./PolicyList.module.scss";
 
 const articles = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|v.?|vs.?|via)$/;
@@ -45,6 +47,10 @@ export const titleCase = string =>
 const PolicyList = props => {
   const location = useLocation();
 
+  const { policyObject, setPolicyObject, setScrollPos } = React.useContext(
+    policyContext
+  );
+
   const loadDescriptionsByCategory = (obj, categoryName) => {
     const firstPath = getFirstPathFromObject({
       obj: obj,
@@ -60,20 +66,20 @@ const PolicyList = props => {
         ...(state !== "national" && { area1: [state] }),
       };
 
-      loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
+      loadPolicyDescriptions({ filters, stateSetter: setPolicyObject });
     }
   };
 
   return (
     <section className={styles.policyList}>
-      {props.policyObject &&
-        Object.entries(props.policyObject).map(([categoryName, category]) => (
+      {policyObject &&
+        Object.entries(policyObject).map(([categoryName, category]) => (
           <div className={styles.topLevelContainer} key={categoryName}>
             <ExpandingSection
               open={category.open}
               onOpen={() => {
                 loadDescriptionsByCategory(category, categoryName);
-                props.setPolicyObject(prev => {
+                setPolicyObject(prev => {
                   extendObjectByPath({
                     obj: prev,
                     path: [categoryName],
@@ -83,7 +89,7 @@ const PolicyList = props => {
                 });
               }}
               onClose={() => {
-                props.setPolicyObject(prev => {
+                setPolicyObject(prev => {
                   extendObjectByPath({
                     obj: prev,
                     path: [categoryName],
@@ -122,8 +128,7 @@ const PolicyList = props => {
                   renderCategory={(path, obj, children) => (
                     <PolicyCategory
                       key={path}
-                      {...{ path, obj, children }}
-                      setPolicyObject={props.setPolicyObject}
+                      {...{ path, obj, children, setPolicyObject }}
                     />
                   )}
                   // the function to render the object whose
@@ -133,7 +138,7 @@ const PolicyList = props => {
                       key={path}
                       path={path}
                       policy={obj}
-                      setScrollPos={props.setScrollPos}
+                      setScrollPos={setScrollPos}
                       wordLimit={50}
                     />
                   )}

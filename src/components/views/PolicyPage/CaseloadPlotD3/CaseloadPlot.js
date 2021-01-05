@@ -3,6 +3,8 @@ import { scaleTime, scaleLinear, line } from "d3";
 
 import Axes from "./Axes/Axes";
 
+import { policyContext } from "../PolicyRouter/PolicyRouter";
+
 import styles from "./CaseloadPlot.module.scss";
 
 const rollingAverage = (series, windowSize) => {
@@ -39,7 +41,9 @@ const textBBox = ({ svg, string, font, fontSize }) => {
 };
 
 const CaseloadPlot = props => {
-  const { caseload } = props;
+  const policyContextConsumer = React.useContext(policyContext);
+
+  const { caseload } = policyContextConsumer;
 
   // layout constants
   const [constDim, setConstDim] = React.useState({

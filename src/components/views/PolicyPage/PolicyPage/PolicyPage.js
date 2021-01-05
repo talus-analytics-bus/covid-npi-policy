@@ -9,6 +9,8 @@ import * as MiniMap from "../MiniMap/MiniMap";
 import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
+import { policyContext } from "../PolicyRouter/PolicyRouter";
+
 import styles from "./PolicyPage.module.scss";
 
 const PolicyPage = props => {
@@ -20,7 +22,7 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const { policyObject, setPolicyObject } = props;
+  const { policyObject, setPolicyObject } = React.useContext(policyContext);
 
   const policyObjectPath = location.state
     ? location.state.path
@@ -89,7 +91,7 @@ const PolicyPage = props => {
               <p>{policy && policy.date_start_effective}</p>
             </div>
             <div className={styles.col}>
-              <h2>Ended</h2>
+              {/* <h2>Ended</h2> */}
               <p>{(policy && policy.date_end_actual) || "Active"}</p>
             </div>
           </div>

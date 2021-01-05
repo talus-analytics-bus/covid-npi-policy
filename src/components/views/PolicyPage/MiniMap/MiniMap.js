@@ -22,6 +22,7 @@ import styles from "./MiniMap.module.scss";
 const featureContext = React.createContext();
 
 export const Provider = props => {
+  const { scope } = props;
   const [features, setFeatures] = React.useState({
     countries: null,
     states: null,
@@ -55,13 +56,13 @@ export const Provider = props => {
       });
     };
 
-    if (props.scope === "USA") {
+    if (scope === "USA") {
       getUSTopology();
     }
-    if (props.scope === "world") {
+    if (scope === "world") {
       getWorldTopology();
     }
-  }, [props.scope]);
+  }, [scope]);
 
   return (
     <featureContext.Provider value={featureContextValue}>
@@ -157,6 +158,7 @@ export const SVG = props => {
     });
   }
 
+  // console.count("render minmap SVG");
   return (
     <div className={styles.container}>
       {props.country && paths === null ? (

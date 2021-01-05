@@ -13,6 +13,9 @@ import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 // and it sets up the minimap provider since
 // all maps within this set of routes will
 // share the same scope
+
+export const policyContext = React.createContext();
+
 const PolicyRouter = props => {
   const [setPage, setLoading] = [props.setPage, props.setLoading];
   React.useEffect(() => {
@@ -27,6 +30,13 @@ const PolicyRouter = props => {
   const policyListScrollPos = React.useState(0);
 
   const [caseload, setCaseload] = React.useState();
+
+  const policyContextValue = {
+    policyObject,
+    setPolicyObject,
+    caseload,
+    policyListScrollPos,
+  };
 
   React.useEffect(() => {
     const getCaseload = async () => {
@@ -48,25 +58,22 @@ const PolicyRouter = props => {
     getCaseload();
   }, [iso3, state]);
 
+  const miniMapScope = state !== "national" ? "USA" : "world";
+
   console.log("render router");
-  // console.log(policyObject);
+
   return (
-    <MiniMap.Provider scope={state !== "national" ? "USA" : "world"}>
-      <Switch>
-        <Route path={`${match.url}/:policyID`}>
-          <PolicyPage {...{ policyObject, setPolicyObject, caseload }} />
-        </Route>
-        <Route path={match.path}>
-          <ListPoliciesPage
-            {...{
-              policyObject,
-              setPolicyObject,
-              policyListScrollPos,
-              caseload,
-            }}
-          />
-        </Route>
-      </Switch>
+    <MiniMap.Provider scope={miniMapScope}>
+      <policyContext.Provider value={policyContextValue}>
+        <Switch>
+          <Route path={`${match.url}/:policyID`}>
+            <PolicyPage />
+          </Route>
+          <Route path={match.path}>
+            <ListPoliciesPage />
+          </Route>
+        </Switch>
+      </policyContext.Provider>
     </MiniMap.Provider>
   );
 };
