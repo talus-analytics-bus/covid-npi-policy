@@ -23,13 +23,7 @@ const PolicyPage = props => {
   const { policyObject, setPolicyObject } = props;
 
   const policyObjectPath = location.state
-    ? [
-        Object.values(location.state)[0],
-        "children",
-        Object.values(location.state)[1],
-        "children",
-        "ID" + policyID,
-      ]
+    ? location.state.path
     : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });

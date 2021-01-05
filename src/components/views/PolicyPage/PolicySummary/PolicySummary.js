@@ -1,11 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import {
-  CATEGORY_FIELD_NAME,
-  SUBCATEGORY_FIELD_NAME,
-} from "../PolicyRouter/PolicyLoaders";
-
 import styles from "./PolicySummary.module.scss";
 
 import Tippy from "@tippyjs/react";
@@ -47,10 +42,7 @@ const PolicySummary = props => {
       onClick={() => props.setScrollPos && props.setScrollPos(window.scrollY)}
       to={{
         pathname: `/policies/${iso3}/${state}/${idNumber}`,
-        state: {
-          [CATEGORY_FIELD_NAME]: props.policy[CATEGORY_FIELD_NAME],
-          [SUBCATEGORY_FIELD_NAME]: props.policy[SUBCATEGORY_FIELD_NAME],
-        },
+        state: { path: props.path },
       }}
     >
       <div className={styles.metadata}>
