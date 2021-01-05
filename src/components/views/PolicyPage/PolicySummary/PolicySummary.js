@@ -39,12 +39,14 @@ const PolicySummary = props => {
       ? titleWords.slice(0, 10).join(" ") + "..."
       : titleWords.join(" ");
 
+  const idNumber = props.path.slice(-1)[0].replace("ID", "");
+
   return (
     <Link
       className={styles.policySummary}
       onClick={() => props.setScrollPos && props.setScrollPos(window.scrollY)}
       to={{
-        pathname: `/policies/${iso3}/${state}/${props.id}`,
+        pathname: `/policies/${iso3}/${state}/${idNumber}`,
         state: {
           [CATEGORY_FIELD_NAME]: props.policy[CATEGORY_FIELD_NAME],
           [SUBCATEGORY_FIELD_NAME]: props.policy[SUBCATEGORY_FIELD_NAME],

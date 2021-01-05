@@ -131,7 +131,7 @@ const PolicyList = props => {
                   renderItem={(path, obj) => (
                     <PolicySummary
                       key={path}
-                      id={path.slice(-1)[0].replace("ID", "")}
+                      path={path}
                       policy={obj}
                       setScrollPos={props.setScrollPos}
                     />
