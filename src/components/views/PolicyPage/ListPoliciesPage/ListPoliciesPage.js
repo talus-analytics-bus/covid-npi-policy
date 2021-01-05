@@ -22,7 +22,7 @@ const ListPoliciesPage = props => {
 
   // unpacking this so the hook dependency
   // will work correctly
-  const { policyObject, setPolicyObject } = policyContextConsumer;
+  const { policyObject, setPolicyObject, policyStatus } = policyContextConsumer;
 
   // Get category and subcategory
   // for all policies when component mountsa
@@ -55,6 +55,16 @@ const ListPoliciesPage = props => {
   // re-render so we only want to create it when this component mounts
   const miniMapCounties = React.useRef(["Unspecified"]);
 
+  const policyCount = Object.values(policyObject).reduce(
+    (acc, cur) => ({
+      count: cur.count + acc.count,
+      active: cur.active + acc.active,
+    }),
+    { count: 0, active: 0 }
+  );
+
+  console.log(policyStatus);
+
   return (
     <article>
       <section className={styles.introSection}>
@@ -62,13 +72,13 @@ const ListPoliciesPage = props => {
           <h1>{state !== "national" ? state : iso3} COVID-19 Policies</h1>
           <div className={styles.quickFacts}>
             <div className={styles.policies}>
-              {12345}
+              {policyCount.count}
               <br /> Policies
             </div>
             <div className={styles.status}>
-              New Normal
+              {policyCount.active}
               <br />
-              Policy Status
+              Active policies
             </div>
             <div className={styles.status}>
               {12345}

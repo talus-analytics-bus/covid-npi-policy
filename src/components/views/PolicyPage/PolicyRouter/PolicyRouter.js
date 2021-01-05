@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
-import { Caseload } from "../../../misc/Queries";
+import { Caseload, PolicyStatus } from "../../../misc/Queries";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -30,11 +30,13 @@ const PolicyRouter = props => {
   const policyListScrollPos = React.useState(0);
 
   const [caseload, setCaseload] = React.useState();
+  const [policyStatus, setPolicyStatus] = React.useState();
 
   const policyContextValue = {
     policyObject,
     setPolicyObject,
     caseload,
+    policyStatus,
     policyListScrollPos,
   };
 
@@ -56,6 +58,27 @@ const PolicyRouter = props => {
     };
 
     getCaseload();
+
+    const getPolicyStatus = async () => {
+      console.log(`Get PolicyStatus`);
+      const response = await PolicyStatus({
+        countryIso3: iso3,
+        geo_res: state === "national" ? "national" : "state",
+        filters: { lockdown_level: ["lockdown_level"] },
+        fields: { deltas_only: true },
+      });
+
+      console.log(response);
+
+      setPolicyStatus(
+        response.map(point => ({
+          date: new Date(point.date_time),
+          value: point.value,
+        }))
+      );
+    };
+
+    getPolicyStatus();
   }, [iso3, state]);
 
   const miniMapScope = state !== "national" ? "USA" : "world";
