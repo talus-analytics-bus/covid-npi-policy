@@ -7,6 +7,8 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
+const TITLE_WORD_LIMIT = 10;
+
 const formatDate = date => {
   if (!date) return undefined;
   return date.toLocaleString("en-de", {
@@ -21,18 +23,20 @@ const PolicySummary = props => {
   const location = useLocation();
   const [iso3, state] = location.pathname.split("/").slice(-2);
 
-  const description = props.wordLimit
-    ? props.policy.desc
-        .split(" ")
-        .slice(0, props.wordLimit)
-        .join(" ") + "..."
+  const descriptionWords = props.policy.desc.split(" ");
+
+  const truncateDescription =
+    props.wordLimit && descriptionWords.length > props.wordLimit;
+
+  const description = truncateDescription
+    ? descriptionWords.slice(0, props.wordLimit).join(" ") + "..."
     : props.policy.desc;
 
   const titleWords = props.policy.policy_name.split(" ");
-  const titleExcerpt =
-    titleWords.length > 10
-      ? titleWords.slice(0, 10).join(" ") + "..."
-      : titleWords.join(" ");
+  const truncateTitle = titleWords.length > TITLE_WORD_LIMIT;
+  const title = truncateTitle
+    ? titleWords.slice(0, TITLE_WORD_LIMIT).join(" ") + "..."
+    : titleWords.join(" ");
 
   const idNumber = props.path.slice(-1)[0].replace("ID", "");
 
@@ -58,42 +62,31 @@ const PolicySummary = props => {
               : "Active"}
           </h2>
         </div>
-        {/* <div> */}
-        {/*   <h1>Policy Target</h1> */}
-        {/*   <h2>{props.policy.subtarget}</h2> */}
-        {/* </div> */}
         <div>
           <h1>Published in</h1>
-          <Tippy
-            interactive={true}
-            allowHTML={true}
-            content={
-              <p className={styles.ipopup}>{props.policy.policy_name}</p>
-            }
-            maxWidth={"30rem"}
-            theme={"light"}
-            placement={"top"}
-            offset={[-30, 10]}
-          >
-            <h2>{titleExcerpt}</h2>
-          </Tippy>
+          {truncateTitle ? (
+            <Tippy
+              interactive={true}
+              allowHTML={true}
+              content={
+                <p className={styles.ipopup}>{props.policy.policy_name}</p>
+              }
+              maxWidth={"40rem"}
+              theme={"light"}
+              placement={"bottom"}
+              offset={[-30, 10]}
+            >
+              <h2>{title}</h2>
+            </Tippy>
+          ) : (
+            <h2>{title}</h2>
+          )}
         </div>
       </div>
-      <p>{description}</p>
-      <div
-        className={styles.policyButton}
-        // onClick={() => props.setScrollPos && props.setScrollPos(window.scrollY)}
-        // to={{
-        //   pathname: `/policies/${iso3}/${state}/${props.id}`,
-        //   state: {
-        //     [CATEGORY_FIELD_NAME]: props.policy[CATEGORY_FIELD_NAME],
-        //     [SUBCATEGORY_FIELD_NAME]: props.policy[SUBCATEGORY_FIELD_NAME],
-        //   },
-        // }}
-      >
-        Policy Details
-      </div>
-      {/* <span>Published in {titleExcerpt}</span> */}
+      <p>
+        {description} {truncateDescription && <span>read more</span>}
+      </p>
+      <div className={styles.policyButton}>Policy Details</div>
     </Link>
   );
 };

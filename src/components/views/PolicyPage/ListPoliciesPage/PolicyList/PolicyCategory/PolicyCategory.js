@@ -89,7 +89,7 @@ const PolicyCategory = props => {
         {children.length > 0 ? (
           children
         ) : (
-          <p style={{ paddingLeft: 30 }}>Loading...</p>
+          <p style={{ paddingLeft: 30 }}>{console.log(props.obj)}Loading...</p>
         )}
       </div>
     </ExpandingSection>

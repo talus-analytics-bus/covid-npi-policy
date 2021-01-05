@@ -173,6 +173,8 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
     ],
   });
 
+  console.log(filters);
+
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       let path = [
@@ -210,6 +212,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
 
     return { ...prev };
   });
+  console.log(policyResponse);
   console.log("loadPolicyDescriptions Done");
 };
 

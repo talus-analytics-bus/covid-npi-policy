@@ -80,6 +80,13 @@
     margin-top: 1em;
     margin-bottom: 1em;
     color: #29334b;
+
+    span {
+      margin-left: 0;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .policyButton {
@@ -103,5 +110,7 @@
 
 .ipopup {
   font-weight: 400;
-  font-style: italic;
+  font-style: normal;
+  // padding: 15px;
+  padding: 5px 15px;
 }

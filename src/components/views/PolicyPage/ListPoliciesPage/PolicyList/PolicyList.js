@@ -53,6 +53,7 @@ const PolicyList = props => {
 
     if (firstPath.slice(-1)[0] === undefined) {
       const [iso3, state] = location.pathname.split("/").slice(-2);
+      console.log(location.pathname.split("/"));
 
       const filters = {
         iso3: [iso3],
@@ -111,7 +112,6 @@ const PolicyList = props => {
                 </h1>
               </div>
               <div className={styles.categoryContainer}>
-                {console.log(category)}
                 {!category.children && (
                   <p style={{ paddingLeft: 38 }}>Loading...</p>
                 )}
@@ -138,6 +138,7 @@ const PolicyList = props => {
                       path={path}
                       policy={obj}
                       setScrollPos={props.setScrollPos}
+                      wordLimit={50}
                     />
                   )}
                 />
