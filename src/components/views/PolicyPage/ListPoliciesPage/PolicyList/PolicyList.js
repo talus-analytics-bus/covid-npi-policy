@@ -111,6 +111,10 @@ const PolicyList = props => {
                 </h1>
               </div>
               <div className={styles.categoryContainer}>
+                {console.log(category)}
+                {!category.children && (
+                  <p style={{ paddingLeft: 38 }}>Loading...</p>
+                )}
                 <NDepthList
                   // object whose keys we want to enumerate
                   obj={category}

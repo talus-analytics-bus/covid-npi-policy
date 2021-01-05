@@ -21,7 +21,7 @@
 
 const NDepthList = props => {
   const listToBottom = (path, obj) => {
-    // if (!obj.open) return [];
+    if (!obj.children) return [];
     const entries = Object.entries(obj.children);
 
     if (entries.length === 0) return [];
