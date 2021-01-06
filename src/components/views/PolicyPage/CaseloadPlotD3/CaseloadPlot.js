@@ -189,18 +189,17 @@ const CaseloadPlot = props => {
         {caseload &&
           scale &&
           caseload.map(day => (
-            <>
+            <React.Fragment key={day.date}>
               {day.value >= 0 && (
                 <line
                   style={inlineStyles.dailyLines}
-                  key={day.date}
                   x1={scale.x(day.date)}
                   y1={dim.origin.y}
                   x2={scale.x(day.date)}
                   y2={scale.y(day.value)}
                 />
               )}
-            </>
+            </React.Fragment>
           ))}
       </g>
       <path d={averageLinePath} className={styles.averageLine} />
