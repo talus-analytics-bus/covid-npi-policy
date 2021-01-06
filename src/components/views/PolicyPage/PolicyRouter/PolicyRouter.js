@@ -1,7 +1,8 @@
 import React from "react";
+import axios from "axios";
 import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
-import { Caseload, PolicyStatus } from "../../../misc/Queries";
+import { Caseload, DistancingLevel } from "../../../misc/Queries";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -58,24 +59,37 @@ const PolicyRouter = props => {
     };
 
     getCaseload();
+    // geo_res: state === "national" ? "national" : "state",
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
-      const response = await PolicyStatus({
-        countryIso3: iso3,
-        geo_res: state === "national" ? "national" : "state",
-        filters: { lockdown_level: ["lockdown_level"] },
-        fields: { deltas_only: true },
-      });
+      //
+      //       const response = await DistancingLevel({
+      //         // method: "get",
+      //         iso3: "USA",
+      //         geo_res: "state",
+      //         state_name: "California",
+      //         deltas_only: true,
+      //         all_dates: true,
+      //       });
 
-      console.log(response);
-
-      setPolicyStatus(
-        response.map(point => ({
-          date: new Date(point.date_time),
-          value: point.value,
-        }))
+      const testreq = await axios(
+        `http://api-test.covidamp.org/get/distancing_levels`,
+        {
+          params: {
+            iso3,
+            geo_res: state === "national" ? "country" : "state",
+            ...(state !== "national" && { state_name: state }),
+            deltas_only: true,
+            all_dates: true,
+          },
+        }
       );
+
+      // console.log(response);
+      // console.log(testreq);
+
+      setPolicyStatus(testreq.data.data);
     };
 
     getPolicyStatus();
