@@ -40,7 +40,7 @@ const PolicyRouter = props => {
     policyStatus: "initial",
   });
 
-  const [locationName] = React.useState(iso3 === "national" ? state : iso3);
+  const [locationName] = React.useState(state !== "national" ? state : iso3);
 
   const policyContextValue = {
     policyObject,
