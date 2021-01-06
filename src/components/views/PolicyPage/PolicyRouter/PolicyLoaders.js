@@ -124,11 +124,11 @@ export const loadPolicySubCategories = async ({
           policy[SUBCATEGORY_FIELD_NAME],
         ];
 
+        const place = policy.auth_entity[0].place;
+
         if (
-          (filters.iso3[0] === "USA" &&
-            policy.auth_entity[0].place.level === "Local") ||
-          (filters.iso3[0] !== "USA" &&
-            policy.auth_entity[0].place.level === "State / Province")
+          (place.iso3 === "USA" && place.level === "Local") ||
+          (place.iso3 !== "USA" && place.level === "State / Province")
         ) {
           path = [
             ...path,
@@ -208,11 +208,11 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
+      const place = policy.auth_entity[0].place;
+
       if (
-        (filters.iso3[0] === "USA" &&
-          policy.auth_entity[0].place.level === "Local") ||
-        (filters.iso3[0] !== "USA" &&
-          policy.auth_entity[0].place.level === "State / Province")
+        (place.iso3 === "USA" && place.level === "Local") ||
+        (place.iso3 !== "USA" && place.level === "State / Province")
       ) {
         path = [
           ...path,
@@ -271,11 +271,11 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
+      const place = policy.auth_entity[0].place;
+
       if (
-        (filters.iso3[0] === "USA" &&
-          policy.auth_entity[0].place.level === "Local") ||
-        (filters.iso3[0] !== "USA" &&
-          policy.auth_entity[0].place.level === "State / Province")
+        (place.iso3 === "USA" && place.level === "Local") ||
+        (place.iso3 !== "USA" && place.level === "State / Province")
       ) {
         path = [
           ...path,
