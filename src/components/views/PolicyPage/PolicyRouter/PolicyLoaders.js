@@ -127,8 +127,8 @@ export const loadPolicySubCategories = async ({
         const place = policy.auth_entity[0].place;
 
         if (
-          (place.iso3 === "USA" && place.level === "Local") ||
-          (place.iso3 !== "USA" && place.level === "State / Province")
+          (filters.iso3[0] === "USA" && place.level === "Local") ||
+          (filters.iso3[0] !== "USA" && place.level === "State / Province")
         ) {
           path = [
             ...path,
@@ -211,8 +211,8 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
       const place = policy.auth_entity[0].place;
 
       if (
-        (place.iso3 === "USA" && place.level === "Local") ||
-        (place.iso3 !== "USA" && place.level === "State / Province")
+        (filters.iso3[0] === "USA" && place.level === "Local") ||
+        (filters.iso3[0] !== "USA" && place.level === "State / Province")
       ) {
         path = [
           ...path,
@@ -274,8 +274,8 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
       const place = policy.auth_entity[0].place;
 
       if (
-        (place.iso3 === "USA" && place.level === "Local") ||
-        (place.iso3 !== "USA" && place.level === "State / Province")
+        (filters.iso3[0] === "USA" && place.level === "Local") ||
+        (filters.iso3[0] !== "USA" && place.level === "State / Province")
       ) {
         path = [
           ...path,

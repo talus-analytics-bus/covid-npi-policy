@@ -40,9 +40,10 @@ const PolicyPage = props => {
       stateSetter: setPolicyObject,
       filters: {
         id: [Number(policyID)],
+        iso3,
       },
     });
-  }, [policyID, setPolicyObject]);
+  }, [policyID, iso3, setPolicyObject]);
 
   // React.useEffect(() => {
   //   // console.log("related policies check");
