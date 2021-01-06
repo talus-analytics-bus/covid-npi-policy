@@ -22,10 +22,15 @@ const ListPoliciesPage = props => {
 
   // unpacking this so the hook dependency
   // will work correctly
-  const { policyObject, setPolicyObject, policyStatus } = policyContextConsumer;
+  const {
+    policyObject,
+    setPolicyObject,
+    policyStatus,
+    caseload,
+  } = policyContextConsumer;
 
   // Get category and subcategory
-  // for all policies when component mountsa
+  // for all policies when component mounts
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
@@ -75,6 +80,20 @@ const ListPoliciesPage = props => {
 
   const policyStatusName = policyStatus && policyStatus[0].value.toLowerCase();
 
+  const sevenDaySum =
+    caseload && caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
+
+  const lastSevenDaySum =
+    caseload &&
+    caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
+
+  const sevenDayChangePCT = Math.round(
+    ((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100
+  );
+
+  console.log(sevenDaySum);
+  console.log(lastSevenDaySum);
+
   return (
     <article>
       <section className={styles.introSection}>
@@ -82,21 +101,17 @@ const ListPoliciesPage = props => {
           <h1>{state !== "national" ? state : iso3} COVID-19 Policies</h1>
           <div className={styles.quickFacts}>
             <div className={styles.policies}>
-              {policyCount.count}
-              <br /> Policies
+              {policyCount.count} Total Policies
             </div>
             <div className={styles.status}>
-              {policyCount.active}
-              <br />
-              Active policies
+              {policyCount.active} Active policies
             </div>
             <div className={styles.status}>
-              {12345}
-              <br /> 7-Day Cases
+              {sevenDaySum} New Cases in Past 7 Days
             </div>
             <div className={styles.status}>
-              {12345}% higher than
-              <br /> previous week
+              {Math.abs(sevenDayChangePCT)}%{" "}
+              {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7 Days
             </div>
           </div>
           <p>
