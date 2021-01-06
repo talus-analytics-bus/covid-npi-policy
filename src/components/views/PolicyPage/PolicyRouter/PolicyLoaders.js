@@ -113,6 +113,7 @@ export const loadPolicySubCategories = async ({
     setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
     setStatus(prev => ({ ...prev, policies: "loaded" }));
+
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
         let path = [
@@ -123,7 +124,12 @@ export const loadPolicySubCategories = async ({
           policy[SUBCATEGORY_FIELD_NAME],
         ];
 
-        if (policy.auth_entity[0].place.level === "Local") {
+        if (
+          (filters.iso3[0] === "USA" &&
+            policy.auth_entity[0].place.level === "Local") ||
+          (filters.iso3[0] !== "USA" &&
+            policy.auth_entity[0].place.level === "State / Province")
+        ) {
           path = [
             ...path,
             "children",
@@ -203,9 +209,10 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
       ];
 
       if (
-        ["Local", "State / Province"].includes(
-          policy.auth_entity[0].place.level
-        )
+        (filters.iso3[0] === "USA" &&
+          policy.auth_entity[0].place.level === "Local") ||
+        (filters.iso3[0] !== "USA" &&
+          policy.auth_entity[0].place.level === "State / Province")
       ) {
         path = [
           ...path,
@@ -264,7 +271,12 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
-      if (policy.auth_entity[0].place.level === "Local") {
+      if (
+        (filters.iso3[0] === "USA" &&
+          policy.auth_entity[0].place.level === "Local") ||
+        (filters.iso3[0] !== "USA" &&
+          policy.auth_entity[0].place.level === "State / Province")
+      ) {
         path = [
           ...path,
           "children",

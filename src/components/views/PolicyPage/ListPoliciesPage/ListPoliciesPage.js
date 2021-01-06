@@ -36,13 +36,15 @@ const ListPoliciesPage = props => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
 
-    if (status.policies !== "loaded" && status.policies !== "error") {
+    if (status.policies === "initial") {
       const filters = { iso3: [iso3] };
       if (state !== "national") {
         filters["area1"] = [state];
       }
 
       console.log("request policy list");
+
+      setStatus(prev => ({ ...prev, policies: "loading" }));
 
       loadPolicyCategories({
         filters,

@@ -35,9 +35,9 @@ const PolicyRouter = props => {
   const [caseload, setCaseload] = React.useState();
   const [policyStatus, setPolicyStatus] = React.useState();
   const [status, setStatus] = React.useState({
-    policies: "loading",
-    caseload: "loading",
-    policyStatus: "loading",
+    policies: "initial",
+    caseload: "initial",
+    policyStatus: "initial",
   });
 
   const policyContextValue = {
@@ -53,6 +53,8 @@ const PolicyRouter = props => {
   React.useEffect(() => {
     const getCaseload = async () => {
       console.log(`Get Caseload`);
+      setStatus(prev => ({ ...prev, caseload: "loading" }));
+
       const response = await Caseload({
         countryIso3: iso3,
         stateName: state === "national" ? undefined : state,
@@ -73,10 +75,11 @@ const PolicyRouter = props => {
       }
     };
 
-    getCaseload();
+    if (status.caseload === "initial") getCaseload();
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
+      setStatus(prev => ({ ...prev, policyStatus: "loading" }));
 
       // helper function doesn't work just yet
       // const response = await DistancingLevel({
@@ -107,8 +110,8 @@ const PolicyRouter = props => {
       }
     };
 
-    getPolicyStatus();
-  }, [iso3, state]);
+    if (status.policyStatus === "initial") getPolicyStatus();
+  }, [iso3, state, status]);
 
   const miniMapScope = state !== "national" ? "USA" : "world";
 
