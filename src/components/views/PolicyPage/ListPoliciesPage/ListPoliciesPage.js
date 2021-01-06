@@ -177,8 +177,10 @@ const ListPoliciesPage = props => {
             <p>
               {status.policyStatus === "loaded" && (
                 <>
-                  {locationName} has been in a {policyStatusName} policy status
-                  since {policyStatusDate}, based on analysis of{" "}
+                  {locationName} has been in{" "}
+                  {/[aeiou]/.test(policyStatusName[0]) ? "an " : "a "}
+                  {policyStatusName} policy status since {policyStatusDate},
+                  based on analysis of{" "}
                 </>
               )}
               {(status.policyStatus === "error" ||
