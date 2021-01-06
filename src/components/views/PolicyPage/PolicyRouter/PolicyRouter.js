@@ -40,6 +40,8 @@ const PolicyRouter = props => {
     policyStatus: "initial",
   });
 
+  const [locationName] = React.useState(iso3 === "national" ? state : iso3);
+
   const policyContextValue = {
     policyObject,
     setPolicyObject,
@@ -48,6 +50,7 @@ const PolicyRouter = props => {
     policyListScrollPos,
     status,
     setStatus,
+    locationName,
   };
 
   React.useEffect(() => {

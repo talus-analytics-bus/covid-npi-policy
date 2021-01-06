@@ -2,46 +2,6 @@
   display: flex;
   margin-bottom: 2em;
 
-  .text {
-    flex-basis: 75%;
-    padding-right: 2rem;
-
-    h1 {
-      margin-top: 2rem;
-      color: #29334b;
-      font-family: "rawline";
-      text-transform: none;
-    }
-
-    p {
-      margin-top: 2rem;
-      font-size: 1.3rem;
-    }
-
-    .quickFacts {
-      display: flex;
-      flex-wrap: wrap;
-      // padding-top: 1rem;
-
-      &:first-of-type {
-        margin-top: 2rem;
-      }
-
-      div {
-        // margin: 1rem;
-        margin-top: 1rem;
-        margin-left: 0;
-        // padding: 1rem;
-        // border: 1px solid #d2e4f1;
-        border-radius: 3px;
-        // background-color: #ecf3f8;
-        // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.0625);
-        text-align: center;
-        margin-right: 3rem;
-      }
-    }
-  }
-
   .miniMapHolder {
     flex-basis: 25%;
   }
