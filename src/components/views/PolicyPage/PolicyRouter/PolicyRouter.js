@@ -65,6 +65,8 @@ const PolicyRouter = props => {
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
+
+      // helper function doesn't work just yet
       // const response = await DistancingLevel({
       //   // method: "get",
       //   iso3: "USA",

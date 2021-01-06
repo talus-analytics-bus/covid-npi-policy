@@ -65,6 +65,16 @@ const ListPoliciesPage = props => {
 
   console.log(policyStatus);
 
+  const policyStatusDate =
+    policyStatus &&
+    new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+  const policyStatusName = policyStatus && policyStatus[0].value.toLowerCase();
+
   return (
     <article>
       <section className={styles.introSection}>
@@ -90,10 +100,11 @@ const ListPoliciesPage = props => {
             </div>
           </div>
           <p>
-            {state ? state : iso3} has been in a {`New Normal`} policy status
-            for the past {`two months`}, based on analysis of {12345} measures
-            from {12345} {state ? "state and county" : "national"} policies
-            covering{" "}
+            {state !== "national" ? state : iso3} has been in a{" "}
+            {policyStatusName} policy status since {policyStatusDate}, based on
+            analysis of {policyCount.active} active{" "}
+            {state !== "national" ? "state and county" : "national and local"}{" "}
+            policies covering{" "}
             {Object.keys(policyObject)
               .map(pm => pm.toLowerCase())
               .slice(0, -1)
