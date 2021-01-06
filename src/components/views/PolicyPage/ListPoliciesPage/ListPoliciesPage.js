@@ -68,7 +68,7 @@ const ListPoliciesPage = props => {
     { count: 0, active: 0 }
   );
 
-  console.log(policyStatus);
+  // console.log(policyStatus);
 
   const policyStatusDate =
     policyStatus &&
@@ -91,8 +91,8 @@ const ListPoliciesPage = props => {
     ((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100
   );
 
-  console.log(sevenDaySum);
-  console.log(lastSevenDaySum);
+  // console.log(sevenDaySum);
+  // console.log(lastSevenDaySum);
 
   return (
     <article>

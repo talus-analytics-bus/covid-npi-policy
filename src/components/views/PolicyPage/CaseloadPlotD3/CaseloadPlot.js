@@ -189,14 +189,18 @@ const CaseloadPlot = props => {
         {caseload &&
           scale &&
           caseload.map(day => (
-            <line
-              style={inlineStyles.dailyLines}
-              key={day.date}
-              x1={scale.x(day.date)}
-              y1={dim.origin.y}
-              x2={scale.x(day.date)}
-              y2={scale.y(day.value)}
-            />
+            <>
+              {day.value >= 0 && (
+                <line
+                  style={inlineStyles.dailyLines}
+                  key={day.date}
+                  x1={scale.x(day.date)}
+                  y1={dim.origin.y}
+                  x2={scale.x(day.date)}
+                  y2={scale.y(day.value)}
+                />
+              )}
+            </>
           ))}
       </g>
       <path d={averageLinePath} className={styles.averageLine} />
