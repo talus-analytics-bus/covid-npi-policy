@@ -9,6 +9,8 @@ import * as MiniMap from "../MiniMap/MiniMap";
 import PolicyPage from "../PolicyPage/PolicyPage";
 import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 // the policy router manages shared data among
 // policy pages to prevent repeat requests
 // and it sets up the minimap provider since
@@ -63,31 +65,24 @@ const PolicyRouter = props => {
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
-      //
-      //       const response = await DistancingLevel({
-      //         // method: "get",
-      //         iso3: "USA",
-      //         geo_res: "state",
-      //         state_name: "California",
-      //         deltas_only: true,
-      //         all_dates: true,
-      //       });
+      // const response = await DistancingLevel({
+      //   // method: "get",
+      //   iso3: "USA",
+      //   geo_res: "state",
+      //   state_name: "California",
+      //   deltas_only: true,
+      //   all_dates: true,
+      // });
 
-      const testreq = await axios(
-        `http://api-test.covidamp.org/get/distancing_levels`,
-        {
-          params: {
-            iso3,
-            geo_res: state === "national" ? "country" : "state",
-            ...(state !== "national" && { state_name: state }),
-            deltas_only: true,
-            all_dates: true,
-          },
-        }
-      );
-
-      // console.log(response);
-      // console.log(testreq);
+      const testreq = await axios(`${API_URL}/get/distancing_levels`, {
+        params: {
+          iso3,
+          geo_res: state === "national" ? "country" : "state",
+          ...(state !== "national" && { state_name: state }),
+          deltas_only: true,
+          all_dates: true,
+        },
+      });
 
       setPolicyStatus(testreq.data.data);
     };
