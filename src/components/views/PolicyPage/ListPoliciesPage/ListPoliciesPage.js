@@ -20,8 +20,6 @@ const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
 
   const policyContextConsumer = React.useContext(policyContext);
-  // unpacking this so the hook dependency
-  // will work correctly
   const {
     policyObject,
     setPolicyObject,
@@ -35,14 +33,11 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-
     if (status.policies === "initial") {
-      const filters = { iso3: [iso3] };
-      if (state !== "national") {
-        filters["area1"] = [state];
-      }
-
-      console.log("request policy list");
+      const filters = {
+        iso3: [iso3],
+        ...(state !== "national" && { area1: [state] }),
+      };
 
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
