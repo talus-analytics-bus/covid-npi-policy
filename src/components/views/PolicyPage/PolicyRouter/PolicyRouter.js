@@ -34,7 +34,11 @@ const PolicyRouter = props => {
 
   const [caseload, setCaseload] = React.useState();
   const [policyStatus, setPolicyStatus] = React.useState();
-  const [error, setError] = React.useState({});
+  const [status, setStatus] = React.useState({
+    policies: "loading",
+    caseload: "loading",
+    policyStatus: "loading",
+  });
 
   const policyContextValue = {
     policyObject,
@@ -42,8 +46,8 @@ const PolicyRouter = props => {
     caseload,
     policyStatus,
     policyListScrollPos,
-    error,
-    setError,
+    status,
+    setStatus,
   };
 
   React.useEffect(() => {
@@ -55,12 +59,18 @@ const PolicyRouter = props => {
         windowSizeDays: 1,
       });
 
-      setCaseload(
-        response.map(point => ({
-          date: new Date(point.date_time),
-          value: point.value,
-        }))
-      );
+      if (response.length > 10000) {
+        setStatus(prev => ({ ...prev, caseload: "error" }));
+      } else {
+        setCaseload(
+          response.map(point => ({
+            date: new Date(point.date_time),
+            value: point.value,
+          }))
+        );
+
+        setStatus(prev => ({ ...prev, caseload: "loaded" }));
+      }
     };
 
     getCaseload();
@@ -88,7 +98,13 @@ const PolicyRouter = props => {
         },
       });
 
-      setPolicyStatus(testreq.data.data);
+      if (testreq.data.data.length === 0) {
+        console.log("set policyStatus Error");
+        setStatus(prev => ({ ...prev, policyStatus: "error" }));
+      } else {
+        setPolicyStatus(testreq.data.data);
+        setStatus(prev => ({ ...prev, policyStatus: "loaded" }));
+      }
     };
 
     getPolicyStatus();

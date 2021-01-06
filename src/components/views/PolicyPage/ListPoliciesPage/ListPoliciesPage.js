@@ -26,8 +26,8 @@ const ListPoliciesPage = props => {
     setPolicyObject,
     policyStatus,
     caseload,
-    error,
-    setError,
+    status,
+    setStatus,
   } = policyContextConsumer;
 
   // Get category and subcategory
@@ -36,7 +36,7 @@ const ListPoliciesPage = props => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
 
-    if (!error.policies && Object.keys(policyObject).length < 2) {
+    if (status.policies !== "loaded" && status.policies !== "error") {
       const filters = { iso3: [iso3] };
       if (state !== "national") {
         filters["area1"] = [state];
@@ -47,15 +47,15 @@ const ListPoliciesPage = props => {
       loadPolicyCategories({
         filters,
         stateSetter: setPolicyObject,
-        setError,
+        setStatus,
       });
       loadPolicySubCategories({
         filters,
         stateSetter: setPolicyObject,
-        setError,
+        setStatus,
       });
     }
-  }, [iso3, state, policyObject, setPolicyObject, error, setError]);
+  }, [iso3, state, policyObject, setPolicyObject, status, setStatus]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
 
@@ -75,10 +75,8 @@ const ListPoliciesPage = props => {
     { count: 0, active: 0 }
   );
 
-  console.log(policyStatus);
   const policyStatusDate =
-    policyStatus &&
-    policyStatus[0] &&
+    status.policyStatus === "loaded" &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
       day: "numeric",
       month: "short",
@@ -86,20 +84,34 @@ const ListPoliciesPage = props => {
     });
 
   const policyStatusName =
-    policyStatusDate && policyStatus[0].value.toLowerCase();
+    status.policyStatus === "loaded" && policyStatus[0].value.toLowerCase();
 
   const sevenDaySum =
-    caseload && caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
+    status.caseload === "loaded" &&
+    caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
 
   const lastSevenDaySum =
-    caseload &&
+    status.caseload === "loaded" &&
     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
 
-  const sevenDayChangePCT = Math.round(
-    ((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100
-  );
+  const sevenDayChangePCT =
+    status.policies === "loaded" &&
+    Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const locationName = state !== "national" ? state : iso3;
+
+  const policyCategoriesText =
+    Object.keys(policyObject) === 1
+      ? Object.keys(policyObject).join("")
+      : Object.keys(policyObject)
+          .map(pm => pm.toLowerCase())
+          .slice(0, -1)
+          .join(", ") +
+        " and " +
+        Object.keys(policyObject)
+          .slice(-1)
+          .join("")
+          .toLowerCase();
 
   return (
     <article>
@@ -107,11 +119,17 @@ const ListPoliciesPage = props => {
         <div className={styles.text}>
           <h1>{state !== "national" ? state : iso3} COVID-19 Policies</h1>
           <div className={styles.quickFacts}>
-            {error.policies ? (
+            {status.policies === "loading" && (
+              <div className={styles.policies}>
+                Loading policies for {locationName}
+              </div>
+            )}
+            {status.policies === "error" && (
               <div className={styles.policies}>
                 No Policies Found in {locationName}
               </div>
-            ) : (
+            )}
+            {status.policies === "loaded" && (
               <>
                 <div className={styles.policies}>
                   <strong>{policyCount.count}</strong> Total Policies
@@ -123,35 +141,56 @@ const ListPoliciesPage = props => {
             )}
           </div>
           <div className={styles.quickFacts}>
-            <div className={styles.status}>
-              <strong>{sevenDaySum}</strong> New Cases in Past 7 Days
-            </div>
-            <div className={styles.status}>
-              <strong>{Math.abs(sevenDayChangePCT)}% </strong>
-              {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7 Days
-            </div>
+            {status.caseload === "loading" && (
+              <div className={styles.policies}>
+                Loading casload for {locationName}
+              </div>
+            )}
+            {status.caseload === "error" && (
+              <div className={styles.policies}>
+                No Caseload Found in {locationName}
+              </div>
+            )}
+            {status.caseload === "loaded" && (
+              <>
+                <div className={styles.status}>
+                  <strong>{sevenDaySum}</strong> New Cases in Past 7 Days
+                </div>
+                <div className={styles.status}>
+                  <strong>{Math.abs(sevenDayChangePCT)}% </strong>
+                  {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7
+                  Days
+                </div>
+              </>
+            )}
           </div>
-          {error.policies ? (
+          {status.policies === "error" && (
             <p>
               COVID-AMP is not currently tracking any policies in {locationName}
               . More policies are being added all the time, check back soon!
             </p>
-          ) : (
+          )}
+          {status.policies === "loading" && (
+            <p>Loading policies for {locationName}</p>
+          )}
+          {status.policies === "loaded" && (
             <p>
-              {locationName} has been in a {policyStatusName} policy status
-              since {policyStatusDate}, based on analysis of{" "}
+              {status.policyStatus === "loaded" && (
+                <>
+                  {locationName} has been in a {policyStatusName} policy status
+                  since {policyStatusDate}, based on analysis of{" "}
+                </>
+              )}
+              {(status.policyStatus === "error" ||
+                status.policyStatus === "loading") && (
+                <>COVID-AMP is currently tracking </>
+              )}
               {policyCount.active} active{" "}
               {state !== "national" ? "state and county" : "national and local"}{" "}
-              policies covering{" "}
-              {Object.keys(policyObject)
-                .map(pm => pm.toLowerCase())
-                .slice(0, -1)
-                .join(", ")}
-              , and{" "}
-              {Object.keys(policyObject)
-                .slice(-1)
-                .join("")
-                .toLowerCase()}
+              {Object.keys(policyObject).length > 1 ? "policies" : "policy"}{" "}
+              covering {policyCategoriesText}
+              {(status.policyStatus === "error" ||
+                status.policyStatus === "loading") && <> in {locationName}</>}
               .
             </p>
           )}
@@ -165,13 +204,25 @@ const ListPoliciesPage = props => {
         </div>
       </section>
       <section className={styles.caseloadPlot}>
-        <h2>Cases in {locationName}</h2>
-        <CaseloadPlot />
+        {status.caseload === "error" && (
+          <h3>No caseload data found for {locationName}</h3>
+        )}
+        {(status.caseload === "loading" || status.caseload === "loaded") && (
+          <>
+            <h2>Cases in {locationName}</h2>
+            <CaseloadPlot />
+          </>
+        )}
       </section>
       <section className={styles.policyList}>
-        {error.policies ? (
+        {status.policies === "loading" && (
+          <h3>Loading policies for {locationName}</h3>
+        )}
+        {status.policies === "error" && (
           <h3>No Policies Found in {locationName}</h3>
-        ) : (
+        )}
+
+        {status.policies === "loaded" && (
           <>
             <h2>Policies in {locationName}</h2>
             <PolicyList />

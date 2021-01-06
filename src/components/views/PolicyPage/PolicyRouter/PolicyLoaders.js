@@ -11,7 +11,7 @@ const checkPolicyActive = policy =>
 export const loadPolicyCategories = async ({
   filters,
   stateSetter,
-  setError,
+  setStatus,
 }) => {
   console.log("loadPolicyCategories Called");
   const policyResponse = await Policy({
@@ -28,10 +28,10 @@ export const loadPolicyCategories = async ({
   // functions in any order, improving responsiveness
 
   if (policyResponse.n === 0) {
-    setError(prev => ({ ...prev, policies: "No Policies Found" }));
+    setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
-    console.log(policyResponse);
-    debugger;
+    setStatus(prev => ({ ...prev, policies: "loaded" }));
+
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
         const active = checkPolicyActive(policy) ? 1 : 0;
@@ -87,7 +87,7 @@ export const loadPolicyCategories = async ({
 export const loadPolicySubCategories = async ({
   filters,
   stateSetter,
-  setError,
+  setStatus,
 }) => {
   console.log("loadPolicySubCategories Called");
   const policyResponse = await Policy({
@@ -110,8 +110,9 @@ export const loadPolicySubCategories = async ({
   // will probably totally replace the loadPoliciesCategories request.
 
   if (policyResponse.n === 0) {
-    setError(prev => ({ ...prev, policies: "No Policies Found" }));
+    setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
+    setStatus(prev => ({ ...prev, policies: "loaded" }));
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
         let path = [
@@ -191,8 +192,6 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
     ],
   });
 
-  console.log(filters);
-
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       let path = [
@@ -234,7 +233,6 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
 
     return { ...prev };
   });
-  console.log(policyResponse);
   console.log("loadPolicyDescriptions Done");
 };
 
