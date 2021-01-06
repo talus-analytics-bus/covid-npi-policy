@@ -8,7 +8,11 @@ const checkPolicyActive = policy =>
   policy.date_end_actual ? new Date(policy.date_end_actual) > new Date() : true;
 
 // Top-Level policy categories
-export const loadPolicyCategories = async ({ filters, stateSetter }) => {
+export const loadPolicyCategories = async ({
+  filters,
+  stateSetter,
+  setError,
+}) => {
   console.log("loadPolicyCategories Called");
   const policyResponse = await Policy({
     method: "post",
@@ -23,42 +27,48 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
   // this makes it safe to run any of these loader
   // functions in any order, improving responsiveness
 
-  stateSetter(prev => {
-    policyResponse.data.forEach(policy => {
-      const active = checkPolicyActive(policy) ? 1 : 0;
+  if (policyResponse.n === 0) {
+    setError(prev => ({ ...prev, policies: "No Policies Found" }));
+  } else {
+    console.log(policyResponse);
+    debugger;
+    stateSetter(prev => {
+      policyResponse.data.forEach(policy => {
+        const active = checkPolicyActive(policy) ? 1 : 0;
 
-      extendObjectByPath({
-        obj: prev,
-        path: [policy[CATEGORY_FIELD_NAME]],
-        valueObj: {
-          count:
-            getObjectByPath({
-              obj: prev,
-              path: [policy[CATEGORY_FIELD_NAME], "count"],
-            }) + 1 || 1,
-          active:
-            getObjectByPath({
-              obj: prev,
-              path: [policy[CATEGORY_FIELD_NAME], "active"],
-            }) + active || active,
-        },
+        extendObjectByPath({
+          obj: prev,
+          path: [policy[CATEGORY_FIELD_NAME]],
+          valueObj: {
+            count:
+              getObjectByPath({
+                obj: prev,
+                path: [policy[CATEGORY_FIELD_NAME], "count"],
+              }) + 1 || 1,
+            active:
+              getObjectByPath({
+                obj: prev,
+                path: [policy[CATEGORY_FIELD_NAME], "active"],
+              }) + active || active,
+          },
+        });
+
+        extendObjectByPath({
+          obj: prev,
+          path: [policy[CATEGORY_FIELD_NAME]],
+          valueObj: {
+            children: prev[policy[CATEGORY_FIELD_NAME]]
+              ? prev[policy[CATEGORY_FIELD_NAME]].children
+              : {},
+          },
+        });
       });
 
-      extendObjectByPath({
-        obj: prev,
-        path: [policy[CATEGORY_FIELD_NAME]],
-        valueObj: {
-          children: prev[policy[CATEGORY_FIELD_NAME]]
-            ? prev[policy[CATEGORY_FIELD_NAME]].children
-            : {},
-        },
-      });
+      // spread operator to create a shallow
+      // copy which will trigger re-render
+      return { ...prev };
     });
-
-    // spread operator to create a shallow
-    // copy which will trigger re-render
-    return { ...prev };
-  });
+  }
   console.log("loadPolicyCategories Done");
 
   // calling loadPolicySubCategories here would
@@ -74,7 +84,11 @@ export const loadPolicyCategories = async ({ filters, stateSetter }) => {
 
 // Load subcategories; this request should run
 // immediately after the policy categories are loaded
-export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
+export const loadPolicySubCategories = async ({
+  filters,
+  stateSetter,
+  setError,
+}) => {
   console.log("loadPolicySubCategories Called");
   const policyResponse = await Policy({
     method: "post",
@@ -95,59 +109,63 @@ export const loadPolicySubCategories = async ({ filters, stateSetter }) => {
   // With more efficient API endpoints I think this request
   // will probably totally replace the loadPoliciesCategories request.
 
-  stateSetter(prev => {
-    policyResponse.data.forEach(policy => {
-      let path = [
-        policy[CATEGORY_FIELD_NAME],
-        "children",
-        policy.auth_entity[0].place.level,
-        "children",
-        policy[SUBCATEGORY_FIELD_NAME],
-      ];
-
-      if (policy.auth_entity[0].place.level === "Local") {
-        path = [
-          ...path,
+  if (policyResponse.n === 0) {
+    setError(prev => ({ ...prev, policies: "No Policies Found" }));
+  } else {
+    stateSetter(prev => {
+      policyResponse.data.forEach(policy => {
+        let path = [
+          policy[CATEGORY_FIELD_NAME],
           "children",
-          policy.auth_entity[0].place.loc.split(",")[0],
+          policy.auth_entity[0].place.level,
+          "children",
+          policy[SUBCATEGORY_FIELD_NAME],
         ];
-      }
 
-      const active = checkPolicyActive(policy) ? 1 : 0;
-
-      // generate counts only for levels past the top level
-      // since the top level is counted by the other loader
-      path.forEach((step, index) => {
-        if (index !== 0 && step !== "children") {
-          const stepPath = [...path.slice(0, index + 1)];
-          extendObjectByPath({
-            obj: prev,
-            path: stepPath,
-            valueObj: {
-              count:
-                getObjectByPath({ obj: prev, path: [...stepPath, "count"] }) +
-                  1 || 1,
-              active:
-                getObjectByPath({
-                  obj: prev,
-                  path: [...stepPath, "active"],
-                }) + active || active,
-            },
-          });
+        if (policy.auth_entity[0].place.level === "Local") {
+          path = [
+            ...path,
+            "children",
+            policy.auth_entity[0].place.loc.split(",")[0],
+          ];
         }
+
+        const active = checkPolicyActive(policy) ? 1 : 0;
+
+        // generate counts only for levels past the top level
+        // since the top level is counted by the other loader
+        path.forEach((step, index) => {
+          if (index !== 0 && step !== "children") {
+            const stepPath = [...path.slice(0, index + 1)];
+            extendObjectByPath({
+              obj: prev,
+              path: stepPath,
+              valueObj: {
+                count:
+                  getObjectByPath({ obj: prev, path: [...stepPath, "count"] }) +
+                    1 || 1,
+                active:
+                  getObjectByPath({
+                    obj: prev,
+                    path: [...stepPath, "active"],
+                  }) + active || active,
+              },
+            });
+          }
+        });
+
+        extendObjectByPath({
+          obj: prev,
+          path: path,
+          valueObj: {
+            children: {},
+          },
+        });
       });
 
-      extendObjectByPath({
-        obj: prev,
-        path: path,
-        valueObj: {
-          children: {},
-        },
-      });
+      return { ...prev };
     });
-
-    return { ...prev };
-  });
+  }
   console.log("loadPolicySubCategories Done");
 };
 
@@ -185,7 +203,11 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
-      if (policy.auth_entity[0].place.level === "Local") {
+      if (
+        ["Local", "State / Province"].includes(
+          policy.auth_entity[0].place.level
+        )
+      ) {
         path = [
           ...path,
           "children",

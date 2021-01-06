@@ -19,7 +19,6 @@ const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
 
   const policyContextConsumer = React.useContext(policyContext);
-
   // unpacking this so the hook dependency
   // will work correctly
   const {
@@ -27,6 +26,8 @@ const ListPoliciesPage = props => {
     setPolicyObject,
     policyStatus,
     caseload,
+    error,
+    setError,
   } = policyContextConsumer;
 
   // Get category and subcategory
@@ -34,21 +35,27 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-    if (Object.keys(policyObject).length < 2) {
+
+    if (!error.policies && Object.keys(policyObject).length < 2) {
       const filters = { iso3: [iso3] };
       if (state !== "national") {
         filters["area1"] = [state];
       }
+
+      console.log("request policy list");
+
       loadPolicyCategories({
         filters,
         stateSetter: setPolicyObject,
+        setError,
       });
       loadPolicySubCategories({
         filters,
         stateSetter: setPolicyObject,
+        setError,
       });
     }
-  }, [iso3, state, policyObject, setPolicyObject]);
+  }, [iso3, state, policyObject, setPolicyObject, error, setError]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
 
@@ -68,17 +75,18 @@ const ListPoliciesPage = props => {
     { count: 0, active: 0 }
   );
 
-  // console.log(policyStatus);
-
+  console.log(policyStatus);
   const policyStatusDate =
     policyStatus &&
+    policyStatus[0] &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
       day: "numeric",
       month: "short",
       year: "numeric",
     });
 
-  const policyStatusName = policyStatus && policyStatus[0].value.toLowerCase();
+  const policyStatusName =
+    policyStatusDate && policyStatus[0].value.toLowerCase();
 
   const sevenDaySum =
     caseload && caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
@@ -91,8 +99,7 @@ const ListPoliciesPage = props => {
     ((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100
   );
 
-  // console.log(sevenDaySum);
-  // console.log(lastSevenDaySum);
+  const locationName = state !== "national" ? state : iso3;
 
   return (
     <article>
@@ -100,37 +107,54 @@ const ListPoliciesPage = props => {
         <div className={styles.text}>
           <h1>{state !== "national" ? state : iso3} COVID-19 Policies</h1>
           <div className={styles.quickFacts}>
-            <div className={styles.policies}>
-              {policyCount.count} Total Policies
+            {error.policies ? (
+              <div className={styles.policies}>
+                No Policies Found in {locationName}
+              </div>
+            ) : (
+              <>
+                <div className={styles.policies}>
+                  <strong>{policyCount.count}</strong> Total Policies
+                </div>
+                <div className={styles.status}>
+                  <strong>{policyCount.active}</strong> Active policies
+                </div>
+              </>
+            )}
+          </div>
+          <div className={styles.quickFacts}>
+            <div className={styles.status}>
+              <strong>{sevenDaySum}</strong> New Cases in Past 7 Days
             </div>
             <div className={styles.status}>
-              {policyCount.active} Active policies
-            </div>
-            <div className={styles.status}>
-              {sevenDaySum} New Cases in Past 7 Days
-            </div>
-            <div className={styles.status}>
-              {Math.abs(sevenDayChangePCT)}%{" "}
+              <strong>{Math.abs(sevenDayChangePCT)}% </strong>
               {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7 Days
             </div>
           </div>
-          <p>
-            {state !== "national" ? state : iso3} has been in a{" "}
-            {policyStatusName} policy status since {policyStatusDate}, based on
-            analysis of {policyCount.active} active{" "}
-            {state !== "national" ? "state and county" : "national and local"}{" "}
-            policies covering{" "}
-            {Object.keys(policyObject)
-              .map(pm => pm.toLowerCase())
-              .slice(0, -1)
-              .join(", ")}
-            , and{" "}
-            {Object.keys(policyObject)
-              .slice(-1)
-              .join("")
-              .toLowerCase()}
-            .
-          </p>
+          {error.policies ? (
+            <p>
+              COVID-AMP is not currently tracking any policies in {locationName}
+              . More policies are being added all the time, check back soon!
+            </p>
+          ) : (
+            <p>
+              {locationName} has been in a {policyStatusName} policy status
+              since {policyStatusDate}, based on analysis of{" "}
+              {policyCount.active} active{" "}
+              {state !== "national" ? "state and county" : "national and local"}{" "}
+              policies covering{" "}
+              {Object.keys(policyObject)
+                .map(pm => pm.toLowerCase())
+                .slice(0, -1)
+                .join(", ")}
+              , and{" "}
+              {Object.keys(policyObject)
+                .slice(-1)
+                .join("")
+                .toLowerCase()}
+              .
+            </p>
+          )}
         </div>
         <div className={styles.miniMapHolder}>
           <MiniMap.SVG
@@ -141,9 +165,19 @@ const ListPoliciesPage = props => {
         </div>
       </section>
       <section className={styles.caseloadPlot}>
+        <h2>Cases in {locationName}</h2>
         <CaseloadPlot />
       </section>
-      <PolicyList />
+      <section className={styles.policyList}>
+        {error.policies ? (
+          <h3>No Policies Found in {locationName}</h3>
+        ) : (
+          <>
+            <h2>Policies in {locationName}</h2>
+            <PolicyList />
+          </>
+        )}
+      </section>
     </article>
   );
 };

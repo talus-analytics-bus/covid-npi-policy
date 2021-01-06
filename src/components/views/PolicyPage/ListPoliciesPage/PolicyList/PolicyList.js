@@ -78,7 +78,7 @@ const PolicyList = props => {
   };
 
   return (
-    <section className={styles.policyList}>
+    <div className={styles.policyList}>
       {policyObject &&
         Object.entries(policyObject).map(([categoryName, category]) => (
           <div className={styles.topLevelContainer} key={categoryName}>
@@ -154,7 +154,7 @@ const PolicyList = props => {
             </ExpandingSection>
           </div>
         ))}
-    </section>
+    </div>
   );
 };
 

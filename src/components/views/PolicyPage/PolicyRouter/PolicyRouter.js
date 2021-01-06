@@ -34,6 +34,7 @@ const PolicyRouter = props => {
 
   const [caseload, setCaseload] = React.useState();
   const [policyStatus, setPolicyStatus] = React.useState();
+  const [error, setError] = React.useState({});
 
   const policyContextValue = {
     policyObject,
@@ -41,6 +42,8 @@ const PolicyRouter = props => {
     caseload,
     policyStatus,
     policyListScrollPos,
+    error,
+    setError,
   };
 
   React.useEffect(() => {
@@ -61,7 +64,6 @@ const PolicyRouter = props => {
     };
 
     getCaseload();
-    // geo_res: state === "national" ? "national" : "state",
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
