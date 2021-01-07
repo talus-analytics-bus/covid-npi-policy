@@ -29,11 +29,19 @@ const ExpandingSection = props => {
           height: "auto",
           transition: `${animDuration}ms ease`,
           overflow: "hidden",
+          ...(props.floating && {
+            position: "absolute",
+            zIndex: props.zIndex || 10,
+          }),
         }
       : {
           height: 0,
           transition: `${animDuration}ms ease`,
           overflow: "hidden",
+          ...(props.floating && {
+            position: "absolute",
+            zIndex: props.zIndex || 10,
+          }),
         }
   );
 
