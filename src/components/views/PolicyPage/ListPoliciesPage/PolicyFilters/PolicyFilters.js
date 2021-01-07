@@ -51,7 +51,7 @@ const PolicyFilters = props => {
   };
 
   return (
-    <div>
+    <div className={styles.filterBar}>
       <select
         value={policySort}
         onChange={() => {
@@ -63,25 +63,29 @@ const PolicyFilters = props => {
         <option value="asc">Newest policies last</option>
         <option value="desc">Newest policies first</option>
       </select>
-      <ExpandingSection
-        floating
-        zIndex={10}
-        open={datePickerOpen}
-        onOpen={() => setDatePickerOpen(true)}
-        onClose={() => setDatePickerOpen(false)}
-      >
-        Select Date
-        <DateRange
-          editableDateInputs
-          className={unedited ? styles.hideRangeSelection : ""}
-          rangeColors={unedited ? ["#fff"] : ["#4D6E78"]}
-          moveRangeOnFirstSelection={false}
-          startDatePlaceholder={"Start date"}
-          endDatePlaceholder={"End date"}
-          ranges={[dateRange]}
-          onChange={event => onChangeDateRange(event)}
-        />
-      </ExpandingSection>
+      <div className={styles.datePicker}>
+        <ExpandingSection
+          floating
+          zIndex={10}
+          open={datePickerOpen}
+          onOpen={() => setDatePickerOpen(true)}
+          onClose={() => setDatePickerOpen(false)}
+        >
+          Select Date
+          <div className={styles.datePickerFrame}>
+            <DateRange
+              editableDateInputs
+              className={unedited ? styles.hideRangeSelection : ""}
+              rangeColors={unedited ? ["#fff"] : ["#4D6E78"]}
+              moveRangeOnFirstSelection={false}
+              startDatePlaceholder={"Start date"}
+              endDatePlaceholder={"End date"}
+              ranges={[dateRange]}
+              onChange={event => onChangeDateRange(event)}
+            />
+          </div>
+        </ExpandingSection>
+      </div>
     </div>
   );
 };
