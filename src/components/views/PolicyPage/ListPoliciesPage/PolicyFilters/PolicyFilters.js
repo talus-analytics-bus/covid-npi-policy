@@ -25,30 +25,6 @@ const PolicyFilters = props => {
     policySort,
   } = React.useContext(policyContext);
 
-  // const location = useLocation();
-  // const [iso3, state] = location.pathname
-  //   .replace(/\/$/, "")
-  //   .split("/")
-  //   .slice(-2);
-
-  //   React.useEffect(() => {
-  //     const getOptions = async () => {
-  //       const testreq = await axios(`${API_URL}/get/optionset`, {
-  //         params: {
-  //           class_name: "Policy",
-  //           fields: "Policy.policy_target",
-  //         },
-  //       });
-  //
-  //       console.log("options");
-  //       console.log(testreq);
-  //     };
-  //
-  //     getOptions();
-  //   }, [iso3, state]);
-
-  // const options = [""];
-
   const [dateRange, setDateRange] = React.useState({
     startDate: null,
     endDate: null,
@@ -58,6 +34,21 @@ const PolicyFilters = props => {
   const [datePickerOpen, setDatePickerOpen] = React.useState(false);
 
   const unedited = !dateRange.startDate && !dateRange.endDate;
+
+  const onChangeDateRange = event => {
+    setDateRange(event.selection);
+    if (event.selection.startDate !== event.selection.endDate) {
+      setPolicyObject({});
+      setPolicyFilters(prev => ({
+        ...prev,
+        dates_in_effect: [
+          event.selection.startDate.toISOString().substring(0, 10),
+          event.selection.endDate.toISOString().substring(0, 10),
+        ],
+      }));
+      setStatus(prev => ({ ...prev, policies: "initial" }));
+    }
+  };
 
   return (
     <div>
@@ -88,7 +79,7 @@ const PolicyFilters = props => {
           startDatePlaceholder={"Start date"}
           endDatePlaceholder={"End date"}
           ranges={[dateRange]}
-          onChange={item => setDateRange(item.selection)}
+          onChange={event => onChangeDateRange(event)}
         />
       </ExpandingSection>
     </div>

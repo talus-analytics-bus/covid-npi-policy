@@ -81,6 +81,8 @@ const ListPoliciesPage = props => {
   // re-render so we only want to create it when this component mounts
   const miniMapCounties = React.useRef(["Unspecified"]);
 
+  console.log(policyFilters);
+
   return (
     <article>
       <section className={styles.introSection}>
