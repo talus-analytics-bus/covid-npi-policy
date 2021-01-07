@@ -15,14 +15,14 @@ const IntroSection = props => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const {
-    policyObject,
+    policySummaryObject,
     policyStatus,
     caseload,
     status,
     locationName,
   } = policyContextConsumer;
 
-  const policyCount = Object.values(policyObject).reduce(
+  const policyCount = Object.values(policySummaryObject).reduce(
     (acc, cur) => ({
       count: cur.count + acc.count,
       active: cur.active + acc.active,
@@ -50,18 +50,18 @@ const IntroSection = props => {
     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
 
   const sevenDayChangePCT =
-    status.policies === "loaded" &&
+    status.policiesSummary === "loaded" &&
     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
-    Object.keys(policyObject) === 1
-      ? Object.keys(policyObject).join("")
-      : Object.keys(policyObject)
+    Object.keys(policySummaryObject) === 1
+      ? Object.keys(policySummaryObject).join("")
+      : Object.keys(policySummaryObject)
           .map(pm => pm.toLowerCase())
           .slice(0, -1)
           .join(", ") +
         " and " +
-        Object.keys(policyObject)
+        Object.keys(policySummaryObject)
           .slice(-1)
           .join("")
           .toLowerCase();
@@ -70,17 +70,17 @@ const IntroSection = props => {
     <div className={styles.introSection}>
       <h1>{locationName} COVID-19 Policies</h1>
       <div className={styles.quickFacts}>
-        {status.policies === "loading" && (
+        {status.policiesSummary === "loading" && (
           <div className={styles.policies}>
             Loading policies for {locationName}
           </div>
         )}
-        {status.policies === "error" && (
+        {status.policiesSummary === "error" && (
           <div className={styles.policies}>
             No Policies Found in {locationName}
           </div>
         )}
-        {status.policies === "loaded" && (
+        {status.policiesSummary === "loaded" && (
           <>
             <div className={styles.policies}>
               <strong>{policyCount.count}</strong> Total Policies
@@ -114,16 +114,16 @@ const IntroSection = props => {
           </>
         )}
       </div>
-      {status.policies === "error" && (
+      {status.policiesSummary === "error" && (
         <p>
           COVID-AMP is not currently tracking any policies in {locationName}.
           More policies are being added all the time, check back soon!
         </p>
       )}
-      {status.policies === "loading" && (
+      {status.policiesSummary === "loading" && (
         <p>Loading policies for {locationName}</p>
       )}
-      {status.policies === "loaded" && (
+      {status.policiesSummary === "loaded" && (
         <p>
           {status.policyStatus === "loaded" && (
             <>
@@ -139,7 +139,7 @@ const IntroSection = props => {
           )}
           {policyCount.active} active{" "}
           {state !== "national" ? "state and county" : "national and local"}{" "}
-          {Object.keys(policyObject).length > 1 ? "policies" : "policy"}{" "}
+          {Object.keys(policySummaryObject).length > 1 ? "policies" : "policy"}{" "}
           covering {policyCategoriesText}
           {(status.policyStatus === "error" ||
             status.policyStatus === "loading") && <> in {locationName}</>}

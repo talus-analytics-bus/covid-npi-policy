@@ -37,6 +37,7 @@ const PolicyRouter = props => {
   const [policyStatus, setPolicyStatus] = React.useState();
   const [status, setStatus] = React.useState({
     policies: "initial",
+    policiesSummary: "initial",
     caseload: "initial",
     policyStatus: "initial",
   });

@@ -13,6 +13,7 @@ export const loadPolicyCategories = async ({
   stateSetter,
   setStatus,
   sort,
+  summarySetter = false,
 }) => {
   console.log("loadPolicyCategories Called");
   const policyResponse = await Policy({
@@ -31,10 +32,14 @@ export const loadPolicyCategories = async ({
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
-    setStatus(prev => ({ ...prev, policies: "loaded" }));
+    setStatus(prev => ({
+      ...prev,
+      policies: "loaded",
+      policiesSummary: "loaded",
+    }));
 
-    stateSetter(prev => {
-      policyResponse.data.forEach(policy => {
+    const buildObject = (prev, data) => {
+      data.forEach(policy => {
         const active = checkPolicyActive(policy) ? 1 : 0;
 
         extendObjectByPath({
@@ -64,11 +69,20 @@ export const loadPolicyCategories = async ({
           },
         });
       });
-
       // spread operator to create a shallow
       // copy which will trigger re-render
       return { ...prev };
-    });
+    };
+
+    if (summarySetter) {
+      summarySetter(prev => buildObject(prev, policyResponse.data));
+    }
+
+    // this duplication means that the policies are fully
+    // parsed twice on page load... because I can't guarantee
+    // that this request will finish before the subcategories
+    // request, so it has to merge with the policyObject.
+    stateSetter(prev => buildObject(prev, policyResponse.data));
   }
   console.log("loadPolicyCategories Done");
 

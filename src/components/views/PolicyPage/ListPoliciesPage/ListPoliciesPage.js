@@ -29,7 +29,10 @@ const ListPoliciesPage = props => {
     policyFilters,
     policyObject,
     setPolicyObject,
+    setPolicySummaryObject,
   } = policyContextConsumer;
+
+  const [getSummary, setGetSummary] = React.useState(true);
 
   // Get category and subcategory
   // for all policies when component mounts
@@ -40,17 +43,20 @@ const ListPoliciesPage = props => {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       loadPolicyCategories({
+        setStatus,
         filters: policyFilters,
         stateSetter: setPolicyObject,
-        setStatus,
         sort: policySort,
+        ...(getSummary && { summarySetter: setPolicySummaryObject }),
       });
       loadPolicySubCategories({
+        setStatus,
         filters: policyFilters,
         stateSetter: setPolicyObject,
-        setStatus,
         sort: policySort,
       });
+
+      setGetSummary(false);
     }
   }, [
     iso3,
@@ -61,6 +67,8 @@ const ListPoliciesPage = props => {
     setStatus,
     policyFilters,
     policySort,
+    getSummary,
+    setPolicySummaryObject,
   ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
