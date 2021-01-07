@@ -8,10 +8,21 @@ import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 import * as MiniMap from "../MiniMap/MiniMap";
 import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
+import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./PolicyPage.module.scss";
+
+const formatDate = date => {
+  if (!date) return undefined;
+  return date.toLocaleString("en-us", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    // timeZone: "UTC",
+  });
+};
 
 const PolicyPage = props => {
   const location = useLocation();
@@ -69,124 +80,260 @@ const PolicyPage = props => {
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
 
+  const policyTargetList =
+    policy && policy.subtarget && policy.subtarget.split(";");
+
+  console.log(policy);
+  console.log(policyTargetList);
+
   return (
     <article className={styles.policyPage}>
-      <Link to={`/policies/${iso3}/${state}`}>
-        {"<"} return to full list of {state.toLowerCase()} policies
-      </Link>
-      <div className={styles.row}>
-        <div className={styles.col}>
-          <div className={styles.row}>
-            <header>
-              <div className={styles.row}>
-                <PolicyCategoryIcon
-                  category={policyObjectPath && policyObjectPath[0]}
-                />
-                <h1>
-                  {state === "national" ? iso3 : state}{" "}
-                  {policy && `${policyObjectPath[0]}: ${policyObjectPath[2]}`}
-                </h1>
-              </div>
-            </header>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.col}>
-              <h2>Effective from</h2>
-              <p>{policy && policy.date_start_effective}</p>
-            </div>
-            <div className={styles.col}>
-              {/* <h2>Ended</h2> */}
-              <p>{(policy && policy.date_end_actual) || "Active"}</p>
-            </div>
-          </div>
-
-          <h2>Target</h2>
-          <p>{policy && policy.subtarget}</p>
-
-          <h2>Description</h2>
-          <p>{policy && policy.desc}</p>
-
-          <h2>Published in</h2>
-          <p>{policy && policy.policy_name}</p>
-          <button>EXPLORE SOURCE</button>
-        </div>
-        <div className={styles.col}>
-          <h2>Effective Area</h2>
-          <div className={styles.miniMapHolder}>
-            <MiniMap.SVG
-              country={iso3}
-              state={state && state}
-              counties={["Unspecified"]}
-            />
-          </div>
-        </div>
+      <div className={styles.breadCrumbs}>
+        <PolicyCategoryIcon
+          category={policyObjectPath && policyObjectPath[0]}
+        />
+        <Link to={`/policies/${iso3}/${state}`}>
+          {policyObjectPath &&
+            policyObjectPath
+              .filter(s => s !== "children")
+              .slice(0, -2)
+              .join(" / ")}
+          &nbsp; / {policyObjectPath && policyObjectPath.slice(-3)[0]}
+        </Link>
       </div>
 
-      <section className={styles.metadata}>
-        <div className={styles.leftCol}>
-          <h2>Authority</h2>
-          <h3>Office</h3>
-          <p>{policy && policy.auth_entity && policy.auth_entity[0].office}</p>
-          <h3>Official</h3>
-          <p>
-            {policy && policy.auth_entity && policy.auth_entity[0].official}
-          </p>
-        </div>
-        <div className={styles.rightCol}>
-          <h2>Government</h2>
-          <p>
-            {policyPlace &&
-              (policyPlace.level === "Local"
-                ? policyPlace.area2
-                : policyPlace.area1)}
-          </p>
-          {iso3 === "USA" && (
-            <>
-              <h2>State Structure</h2>
-              <div className={styles.cols}>
-                <div className={styles.col}>
-                  <h3>Home Rule</h3>
-                  <p>{policyPlace && policyPlace.home_rule}</p>
+      <section className={styles.headerSection}>
+        <div className={styles.row}>
+          <div className={styles.col}>
+            <div className={styles.row}>
+              <header>
+                <div className={styles.row}>
+                  <h1>
+                    {state === "national" ? iso3 : state}{" "}
+                    {policy &&
+                      `${policy.primary_ph_measure}: ${
+                        policy.ph_measure_details
+                      } issued ${formatDate(
+                        new Date(policy.date_start_effective)
+                      )}`}
+                  </h1>
                 </div>
-                <div className={styles.col}>
-                  <h3>Dillon's Rule</h3>
-                  <p>{policyPlace && policyPlace.dillons_rule}</p>
-                </div>
+              </header>
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.col}>
+                <h3>Published in</h3>
+                <p>
+                  <strong>{policy && policy.policy_name}</strong>
+                </p>
               </div>
-            </>
-          )}
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.col}>
+                <h3>Effective from</h3>
+                <p>
+                  <strong>
+                    {policy &&
+                      formatDate(new Date(policy.date_start_effective))}
+                  </strong>
+                </p>
+              </div>
+              <div className={styles.col}>
+                <h3>Ended</h3>
+                <p>
+                  <strong>
+                    {(policy &&
+                      policy.date_end_actual &&
+                      formatDate(new Date(policy.date_end_actual))) ||
+                      "Active"}
+                  </strong>
+                </p>
+              </div>
+              <div className={styles.col}>
+                <h3>Date Issued</h3>
+                <p>
+                  <strong>
+                    {policy && formatDate(new Date(policy.date_issued))}
+                  </strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className={styles.col}>
+            <div className={styles.miniMapHolder}>
+              <h3>Effective Area</h3>
+              <MiniMap.SVG
+                country={iso3}
+                state={state && state}
+                counties={["Unspecified"]}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      <h3>Policy Dates for plot</h3>
-      {relatedPolicies &&
-        Object.values(relatedPolicies).map((policy, index) => (
-          <p key={index}>
-            {policy && policy.date_start_effective},{" "}
-            {policy && policy.date_end_actual}
-          </p>
-        ))}
-      <h3>Related policies</h3>
-      <div className={styles.relatedScroller}>
-        {relatedPolicies &&
-          Object.entries(relatedPolicies).map(
-            ([relatedPolicyID, relatedPolicy]) =>
-              relatedPolicyID.replace("ID", "") !== policyID && (
-                <div
-                  key={relatedPolicyID}
-                  className={styles.policySummaryWidth}
-                >
-                  <PolicySummary
-                    location={{ iso3, state }}
-                    key={relatedPolicyID}
-                    id={relatedPolicyID.replace("ID", "")}
-                    policy={relatedPolicy}
-                    wordLimit={15}
-                  />
-                </div>
-              )
-          )}
-      </div>
+      <section className={styles.policyDetails}>
+        <h2>Policy Details</h2>
+        <div className={styles.row}>
+          <div className={styles.leftCol}>
+            <h3>Relevant Authority</h3>
+            <p>
+              <strong>[ADD TO API]</strong>
+            </p>
+            <h3>Descriptoin</h3>
+            <p>{policy && policy.desc}</p>
+            <button>EXPLORE SOURCE</button>
+          </div>
+          <div className={styles.rightCol}>
+            <h3>Policy Category</h3>
+            <p>
+              <strong>{policy && policy.primary_ph_measure}</strong>
+            </p>
+            <h3>Policy Subcategory</h3>
+            <p>
+              <strong>{policy && policy.ph_measure_details}</strong>
+            </p>
+            <h3>
+              Policy{" "}
+              {policyTargetList && policyTargetList.length > 1
+                ? "Targets"
+                : "Target"}
+            </h3>
+            {policyTargetList &&
+              policyTargetList.map(target => (
+                <p key={target}>
+                  <strong>{target}</strong>
+                </p>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.policyDetails}>
+        <h2>Location and Officials</h2>
+        <div className={styles.row}>
+          <div className={styles.leftCol}>
+            <div className={styles.row}>
+              <div className={styles.col}>
+                <h3>Level of Government</h3>
+                <p>
+                  <strong>{policy && policy.auth_entity[0].place.level}</strong>
+                </p>
+                <h3>Authorized By</h3>
+                <p>
+                  <strong>{policy && policy.auth_entity[0].office}</strong>
+                </p>
+              </div>
+              <div className={styles.col}>
+                <h3>Affected Location</h3>
+                <p>
+                  <strong>{policy && policy.auth_entity[0].place.loc}</strong>
+                </p>
+                <h3>Affected Location</h3>
+                <p>
+                  <strong>{policy && policy.auth_entity[0].official}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className={styles.rightCol}>
+            {iso3 === "USA" && (
+              <div className={styles.dillonsRule}>
+                <h3>Home Rule</h3>
+                <p>
+                  <strong>
+                    {policy && policy.auth_entity[0].place.home_rule}
+                  </strong>
+                </p>
+                <p>
+                  <strong>[CHECK API]</strong>
+                </p>
+                <h3>Dillon's Rule</h3>
+                <p>
+                  <strong>
+                    {policy && policy.auth_entity[0].place.dillons_rule}
+                  </strong>
+                </p>
+                <p>
+                  <strong>[CHECK API]</strong>
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.policyDetails}>
+        <h2>Caseload and Simultaneous Policies</h2>
+        <CaseloadPlot />
+      </section>
+
+      <section className={styles.policyDetails}>
+        <h2>Other Policies in this Document</h2>
+      </section>
+
+      <section className={styles.policyDetails}>
+        <h2>Explore Related policies</h2>
+      </section>
+
+      {/* <h2>Target</h2> */}
+      {/* <p>{policy && policy.subtarget}</p> */}
+
+      {/*       <h2>Description</h2> */}
+      {/*       <p>{policy && policy.desc}</p> */}
+      {/*  */}
+      {/*       <section className={styles.metadata}> */}
+      {/*         <div className={styles.leftCol}> */}
+      {/*           <h2>Authority</h2> */}
+      {/*           <h3>Office</h3> */}
+      {/*           <p>{policy && policy.auth_entity && policy.auth_entity[0].office}</p> */}
+      {/*           <h3>Official</h3> */}
+      {/*           <p> */}
+      {/*             {policy && policy.auth_entity && policy.auth_entity[0].official} */}
+      {/*           </p> */}
+      {/*         </div> */}
+      {/*         <div className={styles.rightCol}> */}
+      {/*           <h2>Government</h2> */}
+      {/*           <p> */}
+      {/*             {policyPlace && */}
+      {/*               (policyPlace.level === "Local" */}
+      {/*                 ? policyPlace.area2 */}
+      {/*                 : policyPlace.area1)} */}
+      {/*           </p> */}
+      {/*         </div> */}
+      {/*       </section> */}
+      {/*  */}
+      {/*       <h3>Policy Dates for plot</h3> */}
+      {/*       {relatedPolicies && */}
+      {/*         Object.values(relatedPolicies).map((policy, index) => ( */}
+      {/*           <p key={index}> */}
+      {/*             {policy && policy.date_start_effective},{" "} */}
+      {/*             {policy && policy.date_end_actual} */}
+      {/*           </p> */}
+      {/*         ))} */}
+      {/*       <h3>Related policies</h3> */}
+      {/*       <div className={styles.relatedScroller}> */}
+      {/*         {relatedPolicies && */}
+      {/*           Object.entries(relatedPolicies).map( */}
+      {/*             ([relatedPolicyID, relatedPolicy]) => */}
+      {/*               relatedPolicyID.replace("ID", "") !== policyID && ( */}
+      {/*                 <div */}
+      {/*                   key={relatedPolicyID} */}
+      {/*                   className={styles.policySummaryWidth} */}
+      {/*                 > */}
+      {/*                   <PolicySummary */}
+      {/*                     location={{ iso3, state }} */}
+      {/*                     key={relatedPolicyID} */}
+      {/*                     id={relatedPolicyID.replace("ID", "")} */}
+      {/*                     policy={relatedPolicy} */}
+      {/*                     wordLimit={15} */}
+      {/*                   /> */}
+      {/*                 </div> */}
+      {/*               ) */}
+      {/*           )} */}
+      {/*       </div> */}
     </article>
   );
 };
