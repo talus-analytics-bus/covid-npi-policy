@@ -113,7 +113,10 @@ const ListPoliciesPage = props => {
         )}
 
         {status.policies === "loading" && (
-          <h3>Loading policies for {locationName}</h3>
+          <>
+            <h3>Loading policies for {locationName}</h3>
+            <div style={{ height: "100vh" }} />
+          </>
         )}
         {status.policies === "error" && (
           <h3>No Policies Found in {locationName}</h3>
