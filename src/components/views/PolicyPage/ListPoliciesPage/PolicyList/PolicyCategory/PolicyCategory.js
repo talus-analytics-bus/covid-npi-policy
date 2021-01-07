@@ -19,8 +19,12 @@ import ExpandMarker from "../ExpandMarker/ExpandMarker";
 
 import styles from "./PolicyCategory.module.scss";
 
+import { policyContext } from "../../../PolicyRouter/PolicyRouter";
+
 const PolicyCategory = props => {
-  const location = useLocation();
+  // const location = useLocation();
+
+  const { policyFilters } = React.useContext(policyContext);
 
   const loadDescriptionsBySubCategory = (obj, path) => {
     const firstPath = getFirstPathFromObject({
@@ -29,19 +33,14 @@ const PolicyCategory = props => {
     });
 
     if (firstPath.slice(-1)[0] === undefined) {
-      const [iso3, state] = location.pathname
-        .replace(/\/$/, "")
-        .split("/")
-        .slice(-2);
-
-      const filters = {
-        iso3: [iso3],
-        [CATEGORY_FIELD_NAME]: [path[0]],
-        level: [path[2]],
-        ...(state !== "national" && { area1: [state] }),
-      };
-
-      loadPolicyDescriptions({ filters, stateSetter: props.setPolicyObject });
+      loadPolicyDescriptions({
+        stateSetter: props.setPolicyObject,
+        filters: {
+          ...policyFilters,
+          [CATEGORY_FIELD_NAME]: [path[0]],
+          level: [path[2]],
+        },
+      });
     }
   };
 

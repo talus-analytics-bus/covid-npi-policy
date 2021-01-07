@@ -45,10 +45,9 @@ export const titleCase = string =>
     .join(" ");
 
 const PolicyList = props => {
-  const location = useLocation();
-
   const {
     policyObject,
+    policyFilters,
     setPolicyObject,
     policyListScrollPos,
   } = React.useContext(policyContext);
@@ -62,18 +61,13 @@ const PolicyList = props => {
     });
 
     if (firstPath.slice(-1)[0] === undefined) {
-      const [iso3, state] = location.pathname
-        .replace(/\/$/, "")
-        .split("/")
-        .slice(-2);
-
-      const filters = {
-        iso3: [iso3],
-        [CATEGORY_FIELD_NAME]: [categoryName],
-        ...(state !== "national" && { area1: [state] }),
-      };
-
-      loadPolicyDescriptions({ filters, stateSetter: setPolicyObject });
+      loadPolicyDescriptions({
+        stateSetter: setPolicyObject,
+        filters: {
+          policyFilters,
+          [CATEGORY_FIELD_NAME]: [categoryName],
+        },
+      });
     }
   };
 

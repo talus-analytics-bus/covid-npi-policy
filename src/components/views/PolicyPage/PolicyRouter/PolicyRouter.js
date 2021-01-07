@@ -40,6 +40,11 @@ const PolicyRouter = props => {
     policyStatus: "initial",
   });
 
+  const [policyFilters, setPolicyFilters] = React.useState({
+    iso3: [iso3],
+    ...(state !== "national" && { area1: [state] }),
+  });
+
   const [locationName] = React.useState(state !== "national" ? state : iso3);
 
   const policyContextValue = {
@@ -51,6 +56,8 @@ const PolicyRouter = props => {
     status,
     setStatus,
     locationName,
+    policyFilters,
+    setPolicyFilters,
   };
 
   React.useEffect(() => {

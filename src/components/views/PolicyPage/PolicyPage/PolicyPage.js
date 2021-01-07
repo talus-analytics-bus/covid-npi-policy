@@ -40,7 +40,7 @@ const PolicyPage = props => {
       stateSetter: setPolicyObject,
       filters: {
         id: [Number(policyID)],
-        iso3,
+        iso3: [iso3],
       },
     });
   }, [policyID, iso3, setPolicyObject]);

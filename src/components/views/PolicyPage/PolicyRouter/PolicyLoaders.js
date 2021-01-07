@@ -244,6 +244,7 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
 };
 
 export const loadFullPolicy = async ({ filters, stateSetter }) => {
+  // debugger;
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
@@ -260,6 +261,8 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
       "auth_entity",
     ],
   });
+
+  // filters = { iso3: ["USA"] };
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {

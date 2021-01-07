@@ -27,6 +27,7 @@ const ListPoliciesPage = props => {
     status,
     setStatus,
     locationName,
+    policyFilters,
   } = policyContextConsumer;
 
   // Get category and subcategory
@@ -35,25 +36,28 @@ const ListPoliciesPage = props => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
     if (status.policies === "initial") {
-      const filters = {
-        iso3: [iso3],
-        ...(state !== "national" && { area1: [state] }),
-      };
-
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       loadPolicyCategories({
-        filters,
+        filters: policyFilters,
         stateSetter: setPolicyObject,
         setStatus,
       });
       loadPolicySubCategories({
-        filters,
+        filters: policyFilters,
         stateSetter: setPolicyObject,
         setStatus,
       });
     }
-  }, [iso3, state, policyObject, setPolicyObject, status, setStatus]);
+  }, [
+    iso3,
+    state,
+    policyObject,
+    setPolicyObject,
+    status,
+    setStatus,
+    policyFilters,
+  ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
 
