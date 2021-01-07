@@ -122,13 +122,13 @@ export const SVG = props => {
             fill={
               propsCounties.includes(geometry.properties.name) ||
               propsCounties[0] === "Unspecified"
-                ? "#C1272D"
-                : "#CCCCCC"
+                ? "#4E8490"
+                : "#ffffff"
             }
             stroke={
               propsCounties.includes(geometry.properties.name) ||
               propsCounties[0] === "Unspecified"
-                ? "#661417"
+                ? "#ffffff"
                 : "#707070"
             }
             d={path}
@@ -161,8 +161,8 @@ export const SVG = props => {
               key={index}
               fill={
                 geometry.properties.ADM0_A3 === propsCountry
-                  ? "#C1272D"
-                  : "#CCCCCC"
+                  ? "#4E8490"
+                  : "#ffffff"
               }
               stroke={"#707070"}
               d={path}
