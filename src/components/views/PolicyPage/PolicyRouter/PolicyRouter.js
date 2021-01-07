@@ -30,6 +30,7 @@ const PolicyRouter = props => {
   const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
+  const [policySummaryObject, setPolicySummaryObject] = React.useState({});
   const policyListScrollPos = React.useState(0);
 
   const [caseload, setCaseload] = React.useState();
@@ -45,6 +46,8 @@ const PolicyRouter = props => {
     ...(state !== "national" && { area1: [state] }),
   });
 
+  const [policySort, setPolicySort] = React.useState("desc");
+
   const [locationName] = React.useState(state !== "national" ? state : iso3);
 
   const policyContextValue = {
@@ -58,6 +61,10 @@ const PolicyRouter = props => {
     locationName,
     policyFilters,
     setPolicyFilters,
+    policySort,
+    setPolicySort,
+    policySummaryObject,
+    setPolicySummaryObject,
   };
 
   React.useEffect(() => {
@@ -124,8 +131,6 @@ const PolicyRouter = props => {
   }, [iso3, state, status]);
 
   const miniMapScope = state !== "national" ? "USA" : "world";
-
-  console.log("render router");
 
   return (
     <MiniMap.Provider scope={miniMapScope}>

@@ -64,7 +64,7 @@ const PolicyList = props => {
       loadPolicyDescriptions({
         stateSetter: setPolicyObject,
         filters: {
-          policyFilters,
+          ...policyFilters,
           [CATEGORY_FIELD_NAME]: [categoryName],
         },
       });

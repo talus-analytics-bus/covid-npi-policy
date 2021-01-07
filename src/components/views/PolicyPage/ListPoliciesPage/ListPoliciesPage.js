@@ -22,12 +22,13 @@ const ListPoliciesPage = props => {
 
   const policyContextConsumer = React.useContext(policyContext);
   const {
-    policyObject,
-    setPolicyObject,
     status,
     setStatus,
+    policySort,
     locationName,
     policyFilters,
+    policyObject,
+    setPolicyObject,
   } = policyContextConsumer;
 
   // Get category and subcategory
@@ -42,11 +43,13 @@ const ListPoliciesPage = props => {
         filters: policyFilters,
         stateSetter: setPolicyObject,
         setStatus,
+        sort: policySort,
       });
       loadPolicySubCategories({
         filters: policyFilters,
         stateSetter: setPolicyObject,
         setStatus,
+        sort: policySort,
       });
     }
   }, [
@@ -57,6 +60,7 @@ const ListPoliciesPage = props => {
     status,
     setStatus,
     policyFilters,
+    policySort,
   ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;

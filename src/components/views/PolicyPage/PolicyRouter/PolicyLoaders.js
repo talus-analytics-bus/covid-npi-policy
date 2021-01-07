@@ -12,12 +12,13 @@ export const loadPolicyCategories = async ({
   filters,
   stateSetter,
   setStatus,
+  sort,
 }) => {
   console.log("loadPolicyCategories Called");
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "desc"]],
+    ordering: [["date_start_effective", sort]],
     fields: ["id", CATEGORY_FIELD_NAME, "date_end_actual"],
   });
 
@@ -88,12 +89,13 @@ export const loadPolicySubCategories = async ({
   filters,
   stateSetter,
   setStatus,
+  sort,
 }) => {
   console.log("loadPolicySubCategories Called");
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "desc"]],
+    ordering: [["date_start_effective", sort]],
     fields: [
       "id",
       "auth_entity",
