@@ -80,8 +80,7 @@ const PolicyPage = props => {
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
 
-  const policyTargetList =
-    policy && policy.subtarget && policy.subtarget.split(";");
+  const policyTargetList = policy && policy.subtarget;
 
   console.log(policy);
   console.log(policyTargetList);
@@ -180,7 +179,7 @@ const PolicyPage = props => {
           <div className={styles.leftCol}>
             <h3>Relevant Authority</h3>
             <p>
-              <strong>[ADD TO API]</strong>
+              <strong>{policy && policy.authority_name}</strong>
             </p>
             <h3>Descriptoin</h3>
             <p>{policy && policy.desc}</p>
@@ -219,7 +218,7 @@ const PolicyPage = props => {
               <div className={styles.col}>
                 <h3>Level of Government</h3>
                 <p>
-                  <strong>{policy && policy.auth_entity[0].place.level}</strong>
+                  <strong>{policyPlace && policyPlace.level}</strong>
                 </p>
                 <h3>Authorized By</h3>
                 <p>
@@ -229,7 +228,7 @@ const PolicyPage = props => {
               <div className={styles.col}>
                 <h3>Affected Location</h3>
                 <p>
-                  <strong>{policy && policy.auth_entity[0].place.loc}</strong>
+                  <strong>{policyPlace && policyPlace.loc}</strong>
                 </p>
                 <h3>Affected Location</h3>
                 <p>
@@ -243,21 +242,13 @@ const PolicyPage = props => {
               <div className={styles.dillonsRule}>
                 <h3>Home Rule</h3>
                 <p>
-                  <strong>
-                    {policy && policy.auth_entity[0].place.home_rule}
-                  </strong>
-                </p>
-                <p>
-                  <strong>[CHECK API]</strong>
+                  <strong>{policyPlace && policyPlace.home_rule}</strong>
                 </p>
                 <h3>Dillon's Rule</h3>
                 <p>
                   <strong>
                     {policy && policy.auth_entity[0].place.dillons_rule}
                   </strong>
-                </p>
-                <p>
-                  <strong>[CHECK API]</strong>
                 </p>
               </div>
             )}

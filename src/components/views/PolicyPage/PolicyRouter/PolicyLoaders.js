@@ -276,6 +276,7 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
       "date_issued",
       "subtarget",
       "auth_entity",
+      "authority_name",
     ],
   });
 
@@ -319,6 +320,7 @@ export const loadFullPolicy = async ({ filters, stateSetter }) => {
           subtarget: policy.subtarget,
           auth_entity: policy.auth_entity,
           date_issued: policy.date_issued,
+          authority_name: policy.authority_name,
         },
       });
     });
