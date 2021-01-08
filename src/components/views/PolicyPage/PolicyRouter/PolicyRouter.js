@@ -131,10 +131,10 @@ const PolicyRouter = props => {
     if (status.policyStatus === "initial") getPolicyStatus();
   }, [iso3, state, status]);
 
-  const miniMapScope = state !== "national" ? "USA" : "world";
+  const miniMapScope = React.useRef(state !== "national" ? "USA" : "world");
 
   return (
-    <MiniMap.Provider scope={miniMapScope}>
+    <MiniMap.Provider scope={miniMapScope.current}>
       <policyContext.Provider value={policyContextValue}>
         <Switch>
           <Route path={`${match.url}/:policyID`}>
