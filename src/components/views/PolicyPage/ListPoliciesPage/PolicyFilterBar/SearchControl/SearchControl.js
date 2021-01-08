@@ -7,13 +7,18 @@ import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 let timeout;
 
 const DateRangeControl = props => {
-  const { setPolicyFilters, setStatus, setPolicyObject } = React.useContext(
-    policyContext
-  );
+  const {
+    policyFilters,
+    setPolicyFilters,
+    setStatus,
+    setPolicyObject,
+  } = React.useContext(policyContext);
 
   // local state to handle typing so that
   // updating the filter itself can debounced
-  const [searchText, setSearchText] = React.useState("");
+  // set this to match the current value in filters
+  // on component mount so that the text persists after navigation
+  const [searchText, setSearchText] = React.useState(policyFilters._text || "");
 
   const updateSearchFilter = text => {
     // clear currently loaded policies
