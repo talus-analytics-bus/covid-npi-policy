@@ -10,7 +10,7 @@ import { MiniMap } from "../MiniMap/MiniMap";
 import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 
 import IntroSection from "./IntroSection/IntroSection.js";
-import PolicyFilters from "./PolicyFilters/PolicyFilters";
+import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
@@ -105,12 +105,8 @@ const ListPoliciesPage = props => {
         )}
       </section>
       <section className={styles.policyList}>
-        {status.policies !== "error" && (
-          <>
-            <h2>Policies in {locationName}</h2>
-            <PolicyFilters />
-          </>
-        )}
+        <h2>Policies in {locationName}</h2>
+        <PolicyFilterBar />
 
         {status.policies === "loading" && (
           <>
