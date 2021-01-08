@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import {
+  loadPolicySearch,
   loadPolicyCategories,
   loadPolicySubCategories,
 } from "../PolicyRouter/PolicyLoaders";
@@ -12,6 +13,7 @@ import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 import IntroSection from "./IntroSection/IntroSection.js";
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
+import SearchResults from "./SearchResults/SearchResults";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
@@ -30,16 +32,20 @@ const ListPoliciesPage = props => {
     policyObject,
     setPolicyObject,
     setPolicySummaryObject,
+    setPolicySearchResults,
   } = policyContextConsumer;
 
   const [getSummary, setGetSummary] = React.useState(true);
+
+  const searchActive = policyFilters._text && policyFilters._text[0] !== "";
 
   // Get category and subcategory
   // for all policies when component mounts
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-    if (status.policies === "initial") {
+
+    if (!searchActive && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       loadPolicyCategories({
@@ -58,6 +64,20 @@ const ListPoliciesPage = props => {
 
       setGetSummary(false);
     }
+
+    if (searchActive && status.searchResults === "initial") {
+      setStatus(prev => ({ ...prev, searchResults: "loading" }));
+
+      loadPolicySearch({
+        setStatus,
+        setPolicyObject,
+        filters: policyFilters,
+        stateSetter: setPolicySearchResults,
+        sort: policySort,
+        pageNumber: 1,
+        pageSize: 5,
+      });
+    }
   }, [
     iso3,
     state,
@@ -69,6 +89,8 @@ const ListPoliciesPage = props => {
     policySort,
     getSummary,
     setPolicySummaryObject,
+    searchActive,
+    setPolicySearchResults,
   ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
@@ -108,17 +130,42 @@ const ListPoliciesPage = props => {
         <h2>Policies in {locationName}</h2>
         <PolicyFilterBar />
 
-        {status.policies === "loading" && (
+        {!searchActive && (
           <>
-            <h3>Loading policies for {locationName}</h3>
-            <div style={{ height: "100vh" }} />
+            {status.policies === "loading" && (
+              <>
+                <h3>Loading policies for {locationName}</h3>
+                <div style={{ height: "100vh" }} />
+              </>
+            )}
+            {status.policies === "error" && (
+              <h3>No Policies Found in {locationName}</h3>
+            )}
+            {status.policies === "loaded" && <PolicyList />}
           </>
         )}
-        {status.policies === "error" && (
-          <h3>No Policies Found in {locationName}</h3>
+        {searchActive && (
+          <>
+            {status.searchResults === "loading" && (
+              <>
+                <h3>
+                  Searching policies for {policyFilters._text} in {locationName}
+                </h3>
+                <div style={{ height: "100vh" }} />
+              </>
+            )}
+            {status.searchResults === "error" && (
+              <>
+                <h3>
+                  No policies matching {policyFilters._text} found in{" "}
+                  {locationName}
+                </h3>
+                <div style={{ height: "100vh" }} />
+              </>
+            )}
+            {status.searchResults === "loaded" && <SearchResults />}
+          </>
         )}
-
-        {status.policies === "loaded" && <PolicyList />}
       </section>
     </article>
   );

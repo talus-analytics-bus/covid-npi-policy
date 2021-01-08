@@ -44,7 +44,7 @@ const PolicyPage = props => {
 
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
 
-  let relatedPolicies;
+  // let relatedPolicies;
 
   React.useEffect(() => {
     loadFullPolicy({
@@ -82,8 +82,9 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  console.log(policy);
-  console.log(policyTargetList);
+  // console.log(location.state.path);
+  // console.log(policy);
+  // console.log(policyTargetList);
 
   return (
     <article className={styles.policyPage}>

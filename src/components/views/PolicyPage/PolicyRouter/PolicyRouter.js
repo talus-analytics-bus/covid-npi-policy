@@ -31,6 +31,8 @@ const PolicyRouter = props => {
 
   const [policyObject, setPolicyObject] = React.useState({});
   const [policySummaryObject, setPolicySummaryObject] = React.useState({});
+  const [policySearchResults, setPolicySearchResults] = React.useState();
+  const [policySearchPage, setPolicySearchPage] = React.useState(1);
   const policyListScrollPos = React.useState(0);
 
   const [caseload, setCaseload] = React.useState();
@@ -40,6 +42,7 @@ const PolicyRouter = props => {
     policiesSummary: "initial",
     caseload: "initial",
     policyStatus: "initial",
+    searchResults: "initial",
   });
 
   const [policyFilters, setPolicyFilters] = React.useState({
@@ -66,6 +69,10 @@ const PolicyRouter = props => {
     setPolicySort,
     policySummaryObject,
     setPolicySummaryObject,
+    policySearchResults,
+    setPolicySearchResults,
+    policySearchPage,
+    setPolicySearchPage,
   };
 
   React.useEffect(() => {

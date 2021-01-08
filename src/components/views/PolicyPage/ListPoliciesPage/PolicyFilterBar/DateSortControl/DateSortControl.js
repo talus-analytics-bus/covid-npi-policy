@@ -19,7 +19,11 @@ const DateSort = props => {
       onChange={() => {
         setPolicyObject({});
         setPolicySort(policySort === "desc" ? "asc" : "desc");
-        setStatus(prev => ({ ...prev, policies: "initial" }));
+        setStatus(prev => ({
+          ...prev,
+          policies: "initial",
+          // policySearch: "initial",
+        }));
       }}
     >
       <option value="asc">Newest policies last</option>
