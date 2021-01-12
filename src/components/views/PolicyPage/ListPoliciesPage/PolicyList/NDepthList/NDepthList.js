@@ -22,7 +22,7 @@
 const NDepthList = props => {
   const listToBottom = (path, obj) => {
     if (!obj.children) return [];
-    const entries = Object.entries(obj.children);
+    let entries = Object.entries(obj.children);
 
     if (entries.length === 0) return [];
 
@@ -31,6 +31,8 @@ const NDepthList = props => {
         props.renderItem([...path, "children", key], value)
       );
     }
+
+    if (props.sort) entries = entries.sort(props.sort);
 
     return entries.map(([key, value]) =>
       props.renderCategory(

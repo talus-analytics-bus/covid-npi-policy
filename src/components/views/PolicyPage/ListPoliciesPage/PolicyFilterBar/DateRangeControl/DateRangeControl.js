@@ -53,7 +53,11 @@ const DateRangeControl = props => {
           event.selection.endDate.toISOString().substring(0, 10),
         ],
       }));
-      setStatus(prev => ({ ...prev, policies: "initial" }));
+      setStatus(prev => ({
+        ...prev,
+        policies: "initial",
+        searchResults: "initial",
+      }));
     }
   };
 

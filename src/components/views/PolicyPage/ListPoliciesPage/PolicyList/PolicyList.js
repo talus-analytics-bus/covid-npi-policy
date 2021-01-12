@@ -43,8 +43,19 @@ export const titleCase = string =>
     .map(word => (articles.test(word) ? word : capitalizeLetter(word, 0)))
     .join(" ");
 
+// function for sorting all the
+const sortfunc = (a, b) => {
+  // special case; we always want
+  // Country before State before Local.
+  if (a[0] === "Local") return 1;
+  if (a[0] === "State / Province") return -1;
+  // in other cases, alphabetize.
+  return a[0].localeCompare(b[0]);
+};
+
 const PolicyList = props => {
   const {
+    policySort,
     policyObject,
     policyFilters,
     setPolicyObject,
@@ -61,6 +72,7 @@ const PolicyList = props => {
 
     if (firstPath.slice(-1)[0] === undefined) {
       loadPolicyDescriptions({
+        sort: policySort,
         stateSetter: setPolicyObject,
         filters: {
           ...policyFilters,
@@ -70,83 +82,89 @@ const PolicyList = props => {
     }
   };
 
+  console.log(policyObject);
+
   return (
     <div className={styles.policyList}>
       {policyObject &&
-        Object.entries(policyObject).map(([categoryName, category]) => (
-          <div className={styles.topLevelContainer} key={categoryName}>
-            <ExpandingSection
-              open={category.open}
-              onOpen={() => {
-                loadDescriptionsByCategory(category, categoryName);
-                setPolicyObject(prev => {
-                  extendObjectByPath({
-                    obj: prev,
-                    path: [categoryName],
-                    valueObj: { open: true },
+        Object.entries(policyObject)
+          .sort((a, b) => a[0].localeCompare(b[0]))
+          .map(([categoryName, category]) => (
+            <div className={styles.topLevelContainer} key={categoryName}>
+              <ExpandingSection
+                open={category.open}
+                onOpen={() => {
+                  loadDescriptionsByCategory(category, categoryName);
+                  setPolicyObject(prev => {
+                    extendObjectByPath({
+                      obj: prev,
+                      path: [categoryName],
+                      valueObj: { open: true },
+                    });
+                    return { ...prev };
                   });
-                  return { ...prev };
-                });
-              }}
-              onClose={() => {
-                setPolicyObject(prev => {
-                  extendObjectByPath({
-                    obj: prev,
-                    path: [categoryName],
-                    valueObj: { open: false },
+                }}
+                onClose={() => {
+                  setPolicyObject(prev => {
+                    extendObjectByPath({
+                      obj: prev,
+                      path: [categoryName],
+                      valueObj: { open: false },
+                    });
+                    return { ...prev };
                   });
-                  return { ...prev };
-                });
-              }}
-            >
-              <div className={styles.topLevelHeader}>
-                <PolicyCategoryIcon category={categoryName} />
-                <ExpandMarker
-                  arrowColor={"#29334B"}
-                  backgroundColor={"#ffffff"}
-                  open={category.open}
-                />
-                <h1>
-                  {titleCase(categoryName)}{" "}
-                  <span>
-                    (total: {category.count}, active: {category.active})
-                  </span>
-                </h1>
-              </div>
-              <div className={styles.categoryContainer}>
-                {!category.children && (
-                  <p style={{ paddingLeft: 38 }}>Loading...</p>
-                )}
-                <NDepthList
-                  // object whose keys we want to enumerate
-                  obj={category}
-                  // the pattern which will match keys at n depth
-                  idPattern={/^ID/}
-                  // starting path
-                  path={[categoryName]}
-                  // the function to render keys up to n-1
-                  renderCategory={(path, obj, children) => (
-                    <PolicyCategory
-                      key={path}
-                      {...{ path, obj, children, setPolicyObject }}
-                    />
+                }}
+              >
+                <div className={styles.topLevelHeader}>
+                  <PolicyCategoryIcon category={categoryName} />
+                  <ExpandMarker
+                    arrowColor={"#29334B"}
+                    backgroundColor={"#ffffff"}
+                    open={category.open}
+                  />
+                  <h1>
+                    {titleCase(categoryName)}{" "}
+                    <span>
+                      (total: {category.count}, active: {category.active})
+                    </span>
+                  </h1>
+                </div>
+                <div className={styles.categoryContainer}>
+                  {!category.children && (
+                    <p style={{ paddingLeft: 38 }}>Loading...</p>
                   )}
-                  // the function to render the object whose
-                  // key matches the idPattern
-                  renderItem={(path, obj) => (
-                    <PolicySummary
-                      key={path}
-                      path={path}
-                      policy={obj}
-                      setScrollPos={setScrollPos}
-                      wordLimit={50}
-                    />
-                  )}
-                />
-              </div>
-            </ExpandingSection>
-          </div>
-        ))}
+                  <NDepthList
+                    // object whose keys we want to enumerate
+                    obj={category}
+                    // function for sorting
+                    sort={sortfunc}
+                    // the pattern which will match keys at n depth
+                    idPattern={/^ID/}
+                    // starting path
+                    path={[categoryName]}
+                    // the function to render keys up to n-1
+                    renderCategory={(path, obj, children) => (
+                      <PolicyCategory
+                        key={path}
+                        {...{ path, obj, children, setPolicyObject }}
+                      />
+                    )}
+                    // the function to render the object whose
+                    // key matches the idPattern
+                    renderItem={(path, obj) => (
+                      <PolicySummary
+                        key={path}
+                        path={path}
+                        policy={obj}
+                        setScrollPos={setScrollPos}
+                        wordLimit={50}
+                      />
+                    )}
+                  />
+                </div>
+              </ExpandingSection>
+            </div>
+          ))}
     </div>
   );
 };

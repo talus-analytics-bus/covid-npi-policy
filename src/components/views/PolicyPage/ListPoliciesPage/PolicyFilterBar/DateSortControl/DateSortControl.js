@@ -22,7 +22,7 @@ const DateSort = props => {
         setStatus(prev => ({
           ...prev,
           policies: "initial",
-          // policySearch: "initial",
+          searchResults: "initial",
         }));
       }}
     >

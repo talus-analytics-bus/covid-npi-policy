@@ -196,12 +196,16 @@ export const loadPolicySubCategories = async ({
 // This function will also create any needed subcategories as it goes, so
 // that it can short-cut the loadPolicySubCategories request if the user
 // selects a category before all subcategories are loaded.
-export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
+export const loadPolicyDescriptions = async ({
+  filters,
+  stateSetter,
+  sort,
+}) => {
   console.log("loadPolicyDescriptions Called");
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "desc"]],
+    ordering: [["date_start_effective", sort]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,
@@ -259,13 +263,13 @@ export const loadPolicyDescriptions = async ({ filters, stateSetter }) => {
   console.log("loadPolicyDescriptions Done");
 };
 
-export const loadFullPolicy = async ({ filters, stateSetter }) => {
+export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
   console.log("loadFullPolicy Called");
   // debugger;
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
-    ordering: [["date_start_effective", "desc"]],
+    ordering: [["date_start_effective", sort]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,
@@ -347,7 +351,7 @@ export const loadPolicySearch = async ({
     filters: filters,
     page: pageNumber,
     pagesize: pageSize,
-    ordering: [["date_start_effective", "desc"]],
+    ordering: [["date_start_effective", sort]],
     fields: [
       "id",
       CATEGORY_FIELD_NAME,

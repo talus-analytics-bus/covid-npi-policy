@@ -24,7 +24,7 @@ import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 const PolicyCategory = props => {
   // const location = useLocation();
 
-  const { policyFilters } = React.useContext(policyContext);
+  const { policyFilters, policySort } = React.useContext(policyContext);
 
   const loadDescriptionsBySubCategory = (obj, path) => {
     const firstPath = getFirstPathFromObject({
@@ -34,6 +34,7 @@ const PolicyCategory = props => {
 
     if (firstPath.slice(-1)[0] === undefined) {
       loadPolicyDescriptions({
+        sort: policySort,
         stateSetter: props.setPolicyObject,
         filters: {
           ...policyFilters,

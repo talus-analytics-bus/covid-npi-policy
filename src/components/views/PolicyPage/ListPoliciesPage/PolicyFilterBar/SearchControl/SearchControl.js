@@ -41,7 +41,7 @@ const DateRangeControl = props => {
     // debounce by 250 ms so we don't spam the server
     setSearchText(value);
     clearTimeout(timeout);
-    timeout = setTimeout(() => updateSearchFilter(value), 250);
+    timeout = setTimeout(() => updateSearchFilter(value), 300);
   };
 
   return (
