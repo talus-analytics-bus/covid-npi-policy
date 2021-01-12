@@ -35,6 +35,12 @@
     transition: 150ms ease;
   }
 
+  .breadcrumbs {
+    width: 100%;
+    text-align: right;
+    margin-bottom: -0.5rem;
+  }
+
   .metadata {
     display: flex;
     flex-wrap: wrap;

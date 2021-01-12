@@ -19,7 +19,7 @@ const SearchResults = props => {
 
   const [, setScrollPos] = policyListScrollPos;
 
-  // console.log(policySearchResults);
+  console.log(policySearchResults);
 
   const summaries =
     policySearchResults &&
@@ -49,6 +49,7 @@ const SearchResults = props => {
 
       return (
         <PolicySummary
+          showAllMetadata
           key={path}
           path={path}
           policy={policy}
@@ -58,7 +59,19 @@ const SearchResults = props => {
       );
     });
 
-  return <section>{summaries}</section>;
+  const resultsCount = policySearchResults && policySearchResults.n;
+  const displayingCount = resultsCount > 5 ? 5 : resultsCount;
+
+  return (
+    <section>
+      <div className={styles.searchSummary}>
+        <p>
+          showing {displayingCount} of {resultsCount} results
+        </p>
+      </div>
+      {summaries}
+    </section>
+  );
 };
 
 export default SearchResults;

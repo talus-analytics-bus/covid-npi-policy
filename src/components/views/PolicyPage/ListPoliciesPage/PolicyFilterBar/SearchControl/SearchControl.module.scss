@@ -1,4 +1,7 @@
 .searchControl {
   margin: 0;
   margin-left: auto;
+  input {
+    min-width: 15em;
+  }
 }

@@ -7,6 +7,11 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
+import {
+  CATEGORY_FIELD_NAME,
+  SUBCATEGORY_FIELD_NAME,
+} from "../PolicyRouter/PolicyLoaders";
+
 const TITLE_WORD_LIMIT = 10;
 
 const formatDate = date => {
@@ -43,6 +48,8 @@ const PolicySummary = props => {
 
   const idNumber = props.path.slice(-1)[0].replace("ID", "");
 
+  console.log(props.policy.auth_entity[0]);
+
   return (
     <Link
       className={styles.policySummary}
@@ -52,6 +59,30 @@ const PolicySummary = props => {
         state: { path: props.path },
       }}
     >
+      {props.breadcrumbs && (
+        // <p className={styles.breadcrumbs}>
+        //   {props.path &&
+        //     props.path
+        //       .filter(s => s !== "children")
+        //       .slice(0, -2)
+        //       .join(" / ")}
+        //   &nbsp; / {props.path && props.path.slice(-3)[0]}
+        // </p>
+        <div className={styles.metadata}>
+          <div>
+            <h1>Category</h1>
+            <h2>{props.policy[CATEGORY_FIELD_NAME]}</h2>
+          </div>
+          <div>
+            <h1>Subcategory</h1>
+            <h2>{props.policy[SUBCATEGORY_FIELD_NAME]}</h2>
+          </div>
+          <div className={styles.area}>
+            <h1>Affected Area</h1>
+            <h2>{props.policy.auth_entity[0].place.loc.split(",")[0]}</h2>
+          </div>
+        </div>
+      )}
       <div className={styles.metadata}>
         <div>
           <h1>Effective from</h1>
