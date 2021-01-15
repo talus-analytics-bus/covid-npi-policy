@@ -8,11 +8,34 @@ import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
 const ActiveDateRange = props => {
   const {
-    // setStatus,
+    setStatus,
+    setTargets,
     policyFilters,
-    // setPolicyObject,
-    // setPolicyFilters,
+    setPolicyObject,
+    setPolicyFilters,
   } = React.useContext(policyContext);
+
+  const removeTarget = target => {
+    setPolicyFilters(prev => {
+      const remainingTargets = prev.subtarget.filter(t => t !== target);
+      return {
+        ...prev,
+        subtarget: remainingTargets.length > 0 ? remainingTargets : undefined,
+      };
+    });
+
+    setTargets(prev => ({
+      ...prev,
+      selected: prev.selected.filter(t => t.value !== target),
+    }));
+
+    setPolicyObject({});
+    setStatus(prev => ({
+      ...prev,
+      policies: "initial",
+      searchResults: "initial",
+    }));
+  };
 
   if (policyFilters.subtarget)
     return (
@@ -29,7 +52,7 @@ const ActiveDateRange = props => {
             )}
             <RemoveFilterButton
               backgroundColor={"#4E8490"}
-              onClick={() => console.log(`remove ${filter}`)}
+              onClick={() => removeTarget(filter)}
             >
               {filter}
             </RemoveFilterButton>
