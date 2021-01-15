@@ -73,6 +73,8 @@ const PolicyRouter = props => {
     setPolicySearchResults,
     policySearchPage,
     setPolicySearchPage,
+    targets,
+    setTargets,
   };
 
   React.useEffect(() => {
