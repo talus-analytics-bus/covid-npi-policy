@@ -65,7 +65,6 @@ const DateRangeControl = props => {
     <div className={styles.datePicker}>
       <ExpandingSection
         floating
-        zIndex={10}
         open={datePickerOpen}
         onOpen={() => setDatePickerOpen(true)}
         onClose={() => setDatePickerOpen(false)}
