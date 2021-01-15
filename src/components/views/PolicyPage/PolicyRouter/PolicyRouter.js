@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
-import { Caseload, DistancingLevel } from "../../../misc/Queries";
+import { Caseload } from "../../../misc/Queries";
+import PlaceQuery from "../../../misc/PlaceQuery";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -52,7 +53,20 @@ const PolicyRouter = props => {
 
   const [policySort, setPolicySort] = React.useState("desc");
 
-  const [locationName] = React.useState(state !== "national" ? state : iso3);
+  const [locationName, setLocationName] = React.useState(
+    state !== "national" ? state : iso3
+  );
+
+  React.useEffect(() => {
+    const getPlaceName = async () => {
+      const places = await PlaceQuery({ place_type: ["country"] });
+      setLocationName(places.find(place => place.iso === iso3).name);
+    };
+
+    if (state === "national") getPlaceName();
+  }, [state, iso3]);
+
+  const [targets, setTargets] = React.useState({ all: [], selected: [] });
 
   const policyContextValue = {
     policyObject,
