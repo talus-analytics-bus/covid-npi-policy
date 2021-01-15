@@ -133,16 +133,10 @@ const ListPoliciesPage = props => {
         {!searchActive && (
           <>
             {status.policies === "loading" && (
-              <>
-                <h3>Loading policies for {locationName}</h3>
-                <div style={{ height: "100vh" }} />
-              </>
+              <h3>Loading policies for {locationName}</h3>
             )}
             {status.policies === "error" && (
-              <>
-                <h3>No Policies Found in {locationName}</h3>
-                <div style={{ height: "100vh" }} />
-              </>
+              <h3>No Policies Found in {locationName}</h3>
             )}
             {status.policies === "loaded" && <PolicyList />}
           </>
@@ -150,21 +144,15 @@ const ListPoliciesPage = props => {
         {searchActive && (
           <>
             {status.searchResults === "loading" && (
-              <>
-                <h3>
-                  Searching policies for {policyFilters._text} in {locationName}
-                </h3>
-                <div style={{ height: "100vh" }} />
-              </>
+              <h3>
+                Searching policies for {policyFilters._text} in {locationName}
+              </h3>
             )}
             {status.searchResults === "error" && (
-              <>
-                <h3>
-                  No policies matching {policyFilters._text} found in{" "}
-                  {locationName}
-                </h3>
-                <div style={{ height: "100vh" }} />
-              </>
+              <h3>
+                No policies matching {policyFilters._text} found in{" "}
+                {locationName}
+              </h3>
             )}
             {status.searchResults === "loaded" && <SearchResults />}
           </>
