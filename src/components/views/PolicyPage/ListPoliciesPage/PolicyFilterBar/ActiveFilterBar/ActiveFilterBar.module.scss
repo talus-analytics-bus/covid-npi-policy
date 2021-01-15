@@ -1,6 +1,19 @@
-.activeFilters {
+.activeFilterBar {
+  margin-bottom: 1rem;
   display: flex;
-  flex-wrap: wrap;
-  // margin-bottom: 1rem;
-  margin-bottom: 2.445em;
+  flex-direction: column;
+
+  .activeFilters {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1.945em;
+  }
+  .summary {
+    display: flex;
+    align-items: baseline;
+
+    .reset {
+      margin-left: auto;
+    }
+  }
 }

@@ -26,17 +26,23 @@ const TargetFilter = props => {
 
   const onSelect = items => {
     setTargets(prev => ({ ...prev, selected: items }));
+  };
+
+  React.useEffect(() => {
     setPolicyObject({});
-    setPolicyFilters(prev => ({
-      ...prev,
-      subtarget: items.map(i => i.value),
-    }));
     setStatus(prev => ({
       ...prev,
       policies: "initial",
       searchResults: "initial",
     }));
-  };
+    setPolicyFilters(prev => ({
+      ...prev,
+      subtarget:
+        targets.selected && targets.selected.length > 0
+          ? targets.selected.map(i => i.value)
+          : undefined,
+    }));
+  }, [setPolicyFilters, targets.selected, setPolicyObject, setStatus]);
 
   const location = useLocation();
 
