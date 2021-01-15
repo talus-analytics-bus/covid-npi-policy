@@ -9,17 +9,30 @@ import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
 const ActiveDateRange = props => {
   const {
-    // setStatus,
+    setStatus,
     policyFilters,
-    // setPolicyObject,
-    // setPolicyFilters,
+    setPolicyObject,
+    setPolicyFilters,
   } = React.useContext(policyContext);
+
+  const resetDateRange = () => {
+    setPolicyFilters(prev => ({
+      ...prev,
+      dates_in_effect: undefined,
+    }));
+    setPolicyObject({});
+    setStatus(prev => ({
+      ...prev,
+      policies: "initial",
+      searchResults: "initial",
+    }));
+  };
 
   if (policyFilters.dates_in_effect)
     return (
       <div className={styles.activeDateRange}>
         <label>Dates Policy in Effect</label>
-        <RemoveFilterButton onClick={() => console.log(`remove dateRange`)}>
+        <RemoveFilterButton onClick={resetDateRange}>
           Active During:{" "}
           {dateRangeLabel({
             startDate: policyFilters.dates_in_effect[0],
