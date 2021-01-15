@@ -48,13 +48,15 @@ const ListPoliciesPage = props => {
     if (!searchActive && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
-      loadPolicyCategories({
-        setStatus,
-        filters: policyFilters,
-        stateSetter: setPolicyObject,
-        sort: policySort,
-        ...(getSummary && { summarySetter: setPolicySummaryObject }),
-      });
+      if (!policyFilters.subtarget)
+        loadPolicyCategories({
+          setStatus,
+          filters: policyFilters,
+          stateSetter: setPolicyObject,
+          sort: policySort,
+          ...(getSummary && { summarySetter: setPolicySummaryObject }),
+        });
+
       loadPolicySubCategories({
         setStatus,
         filters: policyFilters,

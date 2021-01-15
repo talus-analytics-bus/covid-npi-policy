@@ -38,26 +38,28 @@ export const loadPolicyCategories = async ({
       policiesSummary: "loaded",
     }));
 
-    const buildObject = (prev, data) => {
+    const buildObject = (prev, data, count) => {
       data.forEach(policy => {
-        const active = checkPolicyActive(policy) ? 1 : 0;
+        if (count) {
+          const active = checkPolicyActive(policy) ? 1 : 0;
 
-        extendObjectByPath({
-          obj: prev,
-          path: [policy[CATEGORY_FIELD_NAME]],
-          valueObj: {
-            count:
-              getObjectByPath({
-                obj: prev,
-                path: [policy[CATEGORY_FIELD_NAME], "count"],
-              }) + 1 || 1,
-            active:
-              getObjectByPath({
-                obj: prev,
-                path: [policy[CATEGORY_FIELD_NAME], "active"],
-              }) + active || active,
-          },
-        });
+          extendObjectByPath({
+            obj: prev,
+            path: [policy[CATEGORY_FIELD_NAME]],
+            valueObj: {
+              count:
+                getObjectByPath({
+                  obj: prev,
+                  path: [policy[CATEGORY_FIELD_NAME], "count"],
+                }) + 1 || 1,
+              active:
+                getObjectByPath({
+                  obj: prev,
+                  path: [policy[CATEGORY_FIELD_NAME], "active"],
+                }) + active || active,
+            },
+          });
+        }
 
         extendObjectByPath({
           obj: prev,
@@ -75,14 +77,14 @@ export const loadPolicyCategories = async ({
     };
 
     if (summarySetter) {
-      summarySetter(prev => buildObject(prev, policyResponse.data));
+      summarySetter(prev => buildObject(prev, policyResponse.data, true));
     }
 
     // this duplication means that the policies are fully
     // parsed twice on page load... because I can't guarantee
     // that this request will finish before the subcategories
     // request, so it has to merge with the policyObject.
-    stateSetter(prev => buildObject(prev, policyResponse.data));
+    stateSetter(prev => buildObject(prev, policyResponse.data, false));
   }
   console.log("loadPolicyCategories Done");
 
@@ -155,10 +157,8 @@ export const loadPolicySubCategories = async ({
 
         const active = checkPolicyActive(policy) ? 1 : 0;
 
-        // generate counts only for levels past the top level
-        // since the top level is counted by the other loader
         path.forEach((step, index) => {
-          if (index !== 0 && step !== "children") {
+          if (step !== "children") {
             const stepPath = [...path.slice(0, index + 1)];
             extendObjectByPath({
               obj: prev,
