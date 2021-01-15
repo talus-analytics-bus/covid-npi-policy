@@ -43,8 +43,6 @@ const PolicySummary = props => {
 
   const idNumber = props.path.slice(-1)[0].replace("ID", "");
 
-  console.log(props.policy.auth_entity[0]);
-
   return (
     <Link
       className={styles.policySummary}
