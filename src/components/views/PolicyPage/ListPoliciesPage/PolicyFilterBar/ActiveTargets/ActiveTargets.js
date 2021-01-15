@@ -17,8 +17,8 @@ const ActiveDateRange = props => {
   if (policyFilters.subtarget)
     return (
       <>
-        {policyFilters.subtarget.map((f, index) => (
-          <div className={styles.activeTarget}>
+        {policyFilters.subtarget.map((filter, index) => (
+          <div key={filter} className={styles.activeTarget}>
             {index === 0 ? (
               <label>
                 Policy{" "}
@@ -28,11 +28,10 @@ const ActiveDateRange = props => {
               <label>&nbsp;</label>
             )}
             <RemoveFilterButton
-              key={f}
               backgroundColor={"#4E8490"}
-              onClick={() => console.log(`remove ${f}`)}
+              onClick={() => console.log(`remove ${filter}`)}
             >
-              {f}
+              {filter}
             </RemoveFilterButton>
           </div>
         ))}
