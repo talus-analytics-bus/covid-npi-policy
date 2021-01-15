@@ -56,7 +56,6 @@ const TargetFilter = props => {
         },
       });
 
-      console.log(request);
       setTargets(prev => ({ ...prev, all: request.data.data.subtarget }));
     };
 
