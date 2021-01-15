@@ -5,6 +5,7 @@ import DateRangeControl from "./DateRangeControl/DateRangeControl";
 import SearchControl from "./SearchControl/SearchControl";
 import TargetFilter from "./TargetFilter/TargetFilter";
 
+import ActiveFilterBar from "./ActiveFilterBar/ActiveFilterBar";
 import ActiveDateRange from "./ActiveDateRange/ActiveDateRange";
 import ActiveTargets from "./ActiveTargets/ActiveTargets";
 
@@ -19,10 +20,10 @@ const PolicyFilters = props => (
       <SearchControl />
     </div>
 
-    <div className={styles.activeFilters}>
+    <ActiveFilterBar>
       <ActiveDateRange />
       <ActiveTargets />
-    </div>
+    </ActiveFilterBar>
   </>
 );
 

@@ -3,6 +3,8 @@ import React from "react";
 import styles from "./ActiveDateRange.module.scss";
 import { dateRangeLabel } from "../DateRangeControl/DateRangeControl";
 
+import RemoveFilterButton from "../RemoveFilterButton/RemoveFilterButton";
+
 import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
 const ActiveDateRange = props => {
@@ -15,13 +17,16 @@ const ActiveDateRange = props => {
 
   if (policyFilters.dates_in_effect)
     return (
-      <button>
-        Active During:{" "}
-        {dateRangeLabel({
-          startDate: policyFilters.dates_in_effect[0],
-          endDate: policyFilters.dates_in_effect[1],
-        })}
-      </button>
+      <div className={styles.activeDateRange}>
+        <label>Dates Policy in Effect</label>
+        <RemoveFilterButton onClick={() => console.log(`remove dateRange`)}>
+          Active During:{" "}
+          {dateRangeLabel({
+            startDate: policyFilters.dates_in_effect[0],
+            endDate: policyFilters.dates_in_effect[1],
+          })}
+        </RemoveFilterButton>
+      </div>
     );
 
   return <></>;
