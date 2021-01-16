@@ -64,11 +64,11 @@ const SearchResults = props => {
 
   return (
     <section>
-      <div className={styles.searchSummary}>
-        <p>
-          showing {displayingCount} of {resultsCount} results
-        </p>
-      </div>
+      {/* <div className={styles.searchSummary}> */}
+      {/*   <p> */}
+      {/*     showing {displayingCount} of {resultsCount} results */}
+      {/*   </p> */}
+      {/* </div> */}
       {summaries}
     </section>
   );
