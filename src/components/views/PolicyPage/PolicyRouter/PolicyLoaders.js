@@ -151,7 +151,8 @@ export const loadPolicySubCategories = async ({
           path = [
             ...path,
             "children",
-            policy.auth_entity[0].place.loc.split(",")[0],
+            policy.auth_entity[0].place.loc,
+            // policy.auth_entity[0].place.loc.split(",")[0],
           ];
         }
 
@@ -237,7 +238,8 @@ export const loadPolicyDescriptions = async ({
         path = [
           ...path,
           "children",
-          policy.auth_entity[0].place.loc.split(",")[0],
+          policy.auth_entity[0].place.loc,
+          // policy.auth_entity[0].place.loc.split(",")[0],
         ];
       }
 
@@ -306,7 +308,8 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
         path = [
           ...path,
           "children",
-          policy.auth_entity[0].place.loc.split(",")[0],
+          policy.auth_entity[0].place.loc,
+          // policy.auth_entity[0].place.loc.split(",")[0],
         ];
       }
 
@@ -390,7 +393,8 @@ export const loadPolicySearch = async ({
           path = [
             ...path,
             "children",
-            policy.auth_entity[0].place.loc.split(",")[0],
+            policy.auth_entity[0].place.loc,
+            // policy.auth_entity[0].place.loc.split(",")[0],
           ];
         }
 

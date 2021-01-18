@@ -178,12 +178,12 @@ const CaseloadPlot = props => {
       ref={svgElement}
     >
       {/* Visualize padding zone for testing */}
-      {/* <rect */}
-      {/*   x={dim.paddingLeft} */}
-      {/*   y={dim.paddingTop} */}
-      {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
-      {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
-      {/* /> */}
+      <rect
+        x={dim.paddingLeft}
+        y={dim.paddingTop}
+        width={dim.width - dim.paddingLeft - dim.paddingRight}
+        height={dim.height - dim.paddingTop - dim.paddingBottom}
+      />
       <Axes dim={dim} scale={scale} />
       <g className={styles.dailyLines}>
         {caseload &&

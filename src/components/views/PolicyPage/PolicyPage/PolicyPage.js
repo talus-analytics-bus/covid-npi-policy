@@ -8,7 +8,8 @@ import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 import * as MiniMap from "../MiniMap/MiniMap";
 import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
-import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
+
+import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
@@ -36,7 +37,9 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const { policyObject, setPolicyObject } = React.useContext(policyContext);
+  const { policyObject, setPolicyObject, locationName } = React.useContext(
+    policyContext
+  );
 
   const policyObjectPath = location.state
     ? location.state.path
@@ -55,27 +58,6 @@ const PolicyPage = props => {
       },
     });
   }, [policyID, iso3, setPolicyObject]);
-
-  // React.useEffect(() => {
-  //   // console.log("related policies check");
-  //   // console.log(policy);
-  //   // console.log(relatedPolicies);
-  //   // if (policy && Object.keys(relatedPolicies).length <= 1) {
-  //   //   console.log("get related policies");
-  //   //   const filters = {
-  //   //     iso3: [iso3],
-  //   //     [CATEGORY_FIELD_NAME]: [policy[CATEGORY_FIELD_NAME]],
-  //   //     [SUBCATEGORY_FIELD_NAME]: [policy[SUBCATEGORY_FIELD_NAME]],
-  //   //   };
-  //   //   if (state !== "national") {
-  //   //     filters["area1"] = [state];
-  //   //   }
-  //   //   loadPolicyDescriptions({
-  //   //     stateSetter: setPolicyObject,
-  //   //     filters: filters,
-  //   //   });
-  //   // }
-  // }, [relatedPolicies, iso3, state, policy, setPolicyObject]);
 
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
@@ -109,7 +91,7 @@ const PolicyPage = props => {
               <header>
                 <div className={styles.row}>
                   <h1>
-                    {state === "national" ? iso3 : state}{" "}
+                    {locationName}{" "}
                     {policy &&
                       `${policy.primary_ph_measure}: ${
                         policy.ph_measure_details
@@ -258,8 +240,13 @@ const PolicyPage = props => {
       </section>
 
       <section className={styles.policyDetails}>
-        <h2>Caseload and Simultaneous Policies</h2>
-        <CaseloadPlot />
+        <h2>
+          Caseload and Simultaneous {locationName}{" "}
+          {policy &&
+            `${policy.primary_ph_measure} ${policy.ph_measure_details}`}{" "}
+          Policies
+        </h2>
+        <CaseloadAndPolicies {...{ policyObjectPath, policyID }} />
       </section>
 
       <section className={styles.policyDetails}>
