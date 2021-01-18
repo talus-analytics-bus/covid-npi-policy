@@ -51,8 +51,6 @@ const CaseloadPlot = props => {
     .split("/")
     .slice(-3);
 
-  console.log([iso3, state]);
-
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;
@@ -66,7 +64,7 @@ const CaseloadPlot = props => {
       // height will be calculated
       // if the gantt chart is being shown
       height: 0,
-      barHeight: 5,
+      barHeight: 6,
       barGap: 1.5,
       paddingTop: 5,
     },
@@ -113,8 +111,6 @@ const CaseloadPlot = props => {
       (a, b) => a.date_start_effective - b.date_start_effective
     );
 
-    console.log(sortedPolicies);
-
     // build an array of rows to keep track of when
     // any bar in that row ends
     const rows = [new Date(0)];
@@ -122,7 +118,7 @@ const CaseloadPlot = props => {
     // iterate over the policies and register their
     // end dates in the earliest row where they fit
     sortedPolicies.forEach(policy => {
-      console.log(`find row for ${policy.id}`);
+      // console.log(`find row for ${policy.id}`);
 
       let index = 0;
       for (const endDate of rows) {

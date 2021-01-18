@@ -86,26 +86,26 @@ const CaseloadAndPolicies = props => {
       simultaneousPolicies.policyID !== policyID
     ) {
       console.log("related policies check");
-      const policiesInCategory = getObjectByPath({
-        obj: policyObject,
-        path: policyObjectPath.slice(0, -1),
-      });
-
-      if (policiesInCategory) {
-        const otherPolicies = Object.keys(policiesInCategory)
-          .filter(key => key !== `ID${policyID}`)
-          .reduce(
-            (obj, key) => ({ ...obj, [key]: policiesInCategory[key] }),
-            {}
-          );
-
-        if (Object.keys(otherPolicies).length !== 0)
-          setSimultaneousPolicies({
-            policyID: policyID,
-            policies: otherPolicies,
-          });
-        else requestSimultaneousPolicies();
-      }
+      // const policiesInCategory = getObjectByPath({
+      //   obj: policyObject,
+      //   path: policyObjectPath.slice(0, -1),
+      // });
+      //
+      // if (policiesInCategory) {
+      //   const otherPolicies = Object.keys(policiesInCategory)
+      //     .filter(key => key !== `ID${policyID}`)
+      //     .reduce(
+      //       (obj, key) => ({ ...obj, [key]: policiesInCategory[key] }),
+      //       {}
+      //     );
+      //
+      // if (Object.keys(otherPolicies).length > 1)
+      //   setSimultaneousPolicies({
+      //     policyID: policyID,
+      //     policies: otherPolicies,
+      //   });
+      // else
+      requestSimultaneousPolicies();
     }
   }, [
     iso3,
