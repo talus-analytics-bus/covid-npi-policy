@@ -23,7 +23,7 @@ const CaseloadAndPolicies = props => {
 
   const { policyObjectPath } = props;
 
-  const [simultaneousPolicies, setSimultaneousPolicies] = React.useState();
+  const [simultaneousPolicies, setSimultaneousPolicies] = React.useState({});
 
   React.useEffect(() => {
     const requestSimultaneousPolicies = async () => {
@@ -73,11 +73,18 @@ const CaseloadAndPolicies = props => {
         otherPolicies.forEach(policy => {
           otherPoliciesObject[`ID${policy.id}`] = policy;
         });
-        setSimultaneousPolicies(otherPoliciesObject);
+        setSimultaneousPolicies({
+          policyID: policyID,
+          policies: otherPoliciesObject,
+        });
       }
     };
 
-    if (!simultaneousPolicies) {
+    if (
+      policyObjectPath &&
+      simultaneousPolicies !== false &&
+      simultaneousPolicies.policyID !== policyID
+    ) {
       console.log("related policies check");
       const policiesInCategory = getObjectByPath({
         obj: policyObject,
@@ -93,7 +100,10 @@ const CaseloadAndPolicies = props => {
           );
 
         if (Object.keys(otherPolicies).length !== 0)
-          setSimultaneousPolicies(otherPolicies);
+          setSimultaneousPolicies({
+            policyID: policyID,
+            policies: otherPolicies,
+          });
         else requestSimultaneousPolicies();
       }
     }
@@ -109,13 +119,10 @@ const CaseloadAndPolicies = props => {
   console.log(simultaneousPolicies);
 
   return (
-    <>
-      {simultaneousPolicies &&
-        Object.entries(simultaneousPolicies).map(([policyID, policy]) => (
-          <p key={policyID}>{policy.policy_name}</p>
-        ))}
-      <CaseloadPlot simultaneousPolicies={simultaneousPolicies} />
-    </>
+    <CaseloadPlot
+      path={policyObjectPath}
+      simultaneousPolicies={simultaneousPolicies.policies}
+    />
   );
 };
 

@@ -71,8 +71,6 @@ const ActiveFilterBar = props => {
     }));
   };
 
-  console.log(policySearchResults);
-
   const resultsCount = policySearchResults && policySearchResults.n;
   const displayingCount = resultsCount > 5 ? 5 : resultsCount;
 

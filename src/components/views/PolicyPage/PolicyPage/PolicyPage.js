@@ -45,6 +45,8 @@ const PolicyPage = props => {
     ? location.state.path
     : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
+  console.log(policyObjectPath);
+
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
 
   // let relatedPolicies;
@@ -246,7 +248,10 @@ const PolicyPage = props => {
             `${policy.primary_ph_measure} ${policy.ph_measure_details}`}{" "}
           Policies
         </h2>
-        <CaseloadAndPolicies {...{ policyObjectPath, policyID }} />
+        <CaseloadAndPolicies
+          path={policyObjectPath}
+          {...{ policyObjectPath, policyID }}
+        />
       </section>
 
       <section className={styles.policyDetails}>

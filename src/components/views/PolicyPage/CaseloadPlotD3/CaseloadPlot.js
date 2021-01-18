@@ -1,5 +1,10 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { scaleTime, scaleLinear, line } from "d3";
+
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
 
 import Axes from "./Axes/Axes";
 
@@ -41,6 +46,13 @@ const textBBox = ({ svg, string, font, fontSize }) => {
 };
 
 const CaseloadPlot = props => {
+  const [iso3, state] = useLocation()
+    .pathname.replace(/\/$/, "")
+    .split("/")
+    .slice(-3);
+
+  console.log([iso3, state]);
+
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;
@@ -48,7 +60,16 @@ const CaseloadPlot = props => {
   // layout constants
   const [constDim, setConstDim] = React.useState({
     width: 800,
-    height: 150,
+    caseloadHeight: 150,
+
+    gantt: {
+      // height will be calculated
+      // if the gantt chart is being shown
+      height: 0,
+      barHeight: 5,
+      barGap: 1.5,
+      paddingTop: 5,
+    },
 
     paddingTop: 5,
     paddingRight: 2,
@@ -178,6 +199,8 @@ const CaseloadPlot = props => {
     y: dim.origin.y,
   };
 
+  dim.gantt.top = dim.xAxis.start.y + dim.xLabelHeight + dim.gantt.paddingTop;
+
   // make sure the gap between lines is always 40% of the line
   // width, to adjust for plots with different numbers of days
   const inlineStyles = {
@@ -251,12 +274,28 @@ const CaseloadPlot = props => {
       ref={svgElement}
     >
       {/* Visualize padding zone for testing */}
-      <rect
-        x={dim.paddingLeft}
-        y={dim.paddingTop}
-        width={dim.width - dim.paddingLeft - dim.paddingRight}
-        height={dim.height - dim.paddingTop - dim.paddingBottom}
-      />
+      {/* <rect */}
+      {/*   x={dim.paddingLeft} */}
+      {/*   y={dim.paddingTop} */}
+      {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
+      {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
+      {/*   style={{ */}
+      {/*     stroke: "grey", */}
+      {/*     strokeWidth: 1, */}
+      {/*     fill: "none", */}
+      {/*   }} */}
+      {/* /> */}
+      {/* <rect */}
+      {/*   x={0} */}
+      {/*   y={0} */}
+      {/*   width={dim.width} */}
+      {/*   height={dim.height} */}
+      {/*   style={{ */}
+      {/*     stroke: "grey", */}
+      {/*     strokeWidth: 1, */}
+      {/*     fill: "none", */}
+      {/*   }} */}
+      {/* /> */}
       <Axes dim={dim} scale={scale} />
       <g className={styles.dailyLines}>
         {caseload &&
@@ -275,6 +314,48 @@ const CaseloadPlot = props => {
             </React.Fragment>
           ))}
       </g>
+      {props.simultaneousPolicies && scale && (
+        <g className={styles.gantt}>
+          {policiesForPlot.map(policy => (
+            <Tippy
+              key={policy.policyID}
+              content={<p>{policy.desc}</p>}
+              maxWidth={"30rem"}
+              theme={"light"}
+              placement={"top"}
+            >
+              <Link
+                to={{
+                  pathname: `/policies/${iso3}/${state}/${policy.policyID.replace(
+                    "ID",
+                    ""
+                  )}`,
+                  state: {
+                    path: [...props.path.slice(0, -1), policy.policyID],
+                  },
+                }}
+              >
+                <rect
+                  x={scale.x(new Date(policy.date_start_effective))}
+                  y={
+                    dim.gantt.top +
+                    policy.rowNumber * (dim.gantt.barHeight + dim.gantt.barGap)
+                  }
+                  width={
+                    (policy.date_end_actual === "active"
+                      ? dim.xAxis.end.x
+                      : scale.x(policy.date_end_actual)) -
+                    scale.x(policy.date_start_effective)
+                  }
+                  height={dim.gantt.barHeight}
+                  fill={"#727272"}
+                />
+              </Link>
+            </Tippy>
+          ))}
+          }
+        </g>
+      )}
       <path d={averageLinePath} className={styles.averageLine} />
     </svg>
   );

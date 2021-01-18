@@ -156,6 +156,8 @@ const PolicyRouter = props => {
 
   const miniMapScope = React.useRef(state !== "national" ? "USA" : "world");
 
+  // console.log(status);
+
   return (
     <MiniMap.Provider scope={miniMapScope.current}>
       <policyContext.Provider value={policyContextValue}>
