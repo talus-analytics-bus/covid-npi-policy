@@ -5,6 +5,8 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
+import TooltipContent from "./TooltipContent/TooltipContent";
+
 const PolicyBar = props => {
   const [iso3, state] = useLocation()
     .pathname.replace(/\/$/, "")
@@ -28,12 +30,10 @@ const PolicyBar = props => {
   const linkHref = `/policies/${iso3}/${state}/${policyIDNumber}`;
   const policyLinkPath = [...props.path.slice(0, -1), policy.policyID];
 
-  const toolTipContent = <p>{policy.desc}</p>;
-
   return (
     <Tippy
       key={policy.policyID}
-      content={toolTipContent}
+      content={<TooltipContent {...{ policy }} />}
       maxWidth={"30rem"}
       theme={"light"}
       placement={"top"}
