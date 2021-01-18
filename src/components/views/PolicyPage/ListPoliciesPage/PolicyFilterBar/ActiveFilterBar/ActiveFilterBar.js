@@ -96,8 +96,9 @@ const ActiveFilterBar = props => {
               Showing <strong>{filteredPolicyCount.count}</strong> out of{" "}
               <strong>{totalPolicyCount.count}</strong>{" "}
               {state !== "national" ? "state and county" : "national and local"}{" "}
-              policies, of which <strong>{filteredPolicyCount.active}</strong>{" "}
-              are currently active.
+              policies, of which{" "}
+              <strong>{numbersToWords(filteredPolicyCount.active)}</strong> are
+              currently active.
             </p>
           )}
           {searchActive && (
