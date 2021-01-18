@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 import { Policy } from "../../../../misc/Queries";
-import { getObjectByPath } from "../../objectPathTools";
+// import { getObjectByPath } from "../../objectPathTools";
 import {
   CATEGORY_FIELD_NAME,
   SUBCATEGORY_FIELD_NAME,
@@ -27,20 +27,11 @@ const CaseloadAndPolicies = props => {
 
   React.useEffect(() => {
     const requestSimultaneousPolicies = async () => {
-      console.log(policyObjectPath);
+      // console.log(policyObjectPath);
 
       const filterByLoc =
         (iso3 === "USA" && policyObjectPath[2] === "Local") ||
         (iso3 !== "USA" && policyObjectPath[2] === "State / Province");
-
-      console.log({
-        filters: {
-          ...policyFilters,
-          [CATEGORY_FIELD_NAME]: [policyObjectPath[0]],
-          level: [policyObjectPath[2]],
-          ...(filterByLoc && { loc: [policyObjectPath[6]] }),
-        },
-      });
 
       const policyResponse = await Policy({
         method: "post",
@@ -85,7 +76,7 @@ const CaseloadAndPolicies = props => {
       simultaneousPolicies !== false &&
       simultaneousPolicies.policyID !== policyID
     ) {
-      console.log("related policies check");
+      // console.log("related policies check");
       // const policiesInCategory = getObjectByPath({
       //   obj: policyObject,
       //   path: policyObjectPath.slice(0, -1),
@@ -116,7 +107,7 @@ const CaseloadAndPolicies = props => {
     policyFilters,
   ]);
 
-  console.log(simultaneousPolicies);
+  // console.log(simultaneousPolicies);
 
   return (
     <CaseloadPlot

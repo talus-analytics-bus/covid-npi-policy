@@ -1,12 +1,8 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
 import { scaleTime, scaleLinear, line } from "d3";
 
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
-
 import Axes from "./Axes/Axes";
+import PolicyBar from "./PolicyBar/PolicyBar";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
@@ -46,11 +42,6 @@ const textBBox = ({ svg, string, font, fontSize }) => {
 };
 
 const CaseloadPlot = props => {
-  const [iso3, state] = useLocation()
-    .pathname.replace(/\/$/, "")
-    .split("/")
-    .slice(-3);
-
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;
@@ -64,7 +55,7 @@ const CaseloadPlot = props => {
       // height will be calculated
       // if the gantt chart is being shown
       height: 0,
-      barHeight: 6,
+      barHeight: 7,
       barGap: 1.5,
       paddingTop: 5,
     },
@@ -313,41 +304,11 @@ const CaseloadPlot = props => {
       {props.simultaneousPolicies && scale && (
         <g className={styles.gantt}>
           {policiesForPlot.map(policy => (
-            <Tippy
+            <PolicyBar
               key={policy.policyID}
-              content={<p>{policy.desc}</p>}
-              maxWidth={"30rem"}
-              theme={"light"}
-              placement={"top"}
-            >
-              <Link
-                to={{
-                  pathname: `/policies/${iso3}/${state}/${policy.policyID.replace(
-                    "ID",
-                    ""
-                  )}`,
-                  state: {
-                    path: [...props.path.slice(0, -1), policy.policyID],
-                  },
-                }}
-              >
-                <rect
-                  x={scale.x(new Date(policy.date_start_effective))}
-                  y={
-                    dim.gantt.top +
-                    policy.rowNumber * (dim.gantt.barHeight + dim.gantt.barGap)
-                  }
-                  width={
-                    (policy.date_end_actual === "active"
-                      ? dim.xAxis.end.x
-                      : scale.x(policy.date_end_actual)) -
-                    scale.x(policy.date_start_effective)
-                  }
-                  height={dim.gantt.barHeight}
-                  fill={"#727272"}
-                />
-              </Link>
-            </Tippy>
+              path={props.path}
+              {...{ dim, scale, policy }}
+            />
           ))}
           }
         </g>
