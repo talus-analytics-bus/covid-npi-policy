@@ -3,7 +3,10 @@ import { useLocation } from "react-router-dom";
 
 import { Policy } from "../../../../misc/Queries";
 import { getObjectByPath } from "../../objectPathTools";
-import { CATEGORY_FIELD_NAME } from "../../PolicyRouter/PolicyLoaders";
+import {
+  CATEGORY_FIELD_NAME,
+  SUBCATEGORY_FIELD_NAME,
+} from "../../PolicyRouter/PolicyLoaders";
 
 import CaseloadPlot from "../../CaseloadPlotD3/CaseloadPlot";
 
@@ -31,18 +34,21 @@ const CaseloadAndPolicies = props => {
         (iso3 !== "USA" && policyObjectPath[2] === "State / Province");
 
       console.log({
-        ...policyFilters,
-        [CATEGORY_FIELD_NAME]: [policyObjectPath[0]],
-        level: [policyObjectPath[2]],
-        ...(filterByLoc && { loc: [policyObjectPath[6]] }),
+        filters: {
+          ...policyFilters,
+          [CATEGORY_FIELD_NAME]: [policyObjectPath[0]],
+          level: [policyObjectPath[2]],
+          ...(filterByLoc && { loc: [policyObjectPath[6]] }),
+        },
       });
 
       const policyResponse = await Policy({
         method: "post",
         filters: {
           ...policyFilters,
-          [CATEGORY_FIELD_NAME]: [policyObjectPath[0]],
           level: [policyObjectPath[2]],
+          [CATEGORY_FIELD_NAME]: [policyObjectPath[0]],
+          [SUBCATEGORY_FIELD_NAME]: [policyObjectPath[4]],
           ...(filterByLoc && { loc: [policyObjectPath[6]] }),
         },
         ordering: [["date_start_effective", "asc"]],
@@ -57,7 +63,7 @@ const CaseloadAndPolicies = props => {
       });
 
       const otherPolicies = policyResponse.data.filter(
-        policy => policy.id !== `ID${policyID}`
+        policy => `${policy.id}` !== policyID
       );
 
       if (otherPolicies.length === 0) {
@@ -108,7 +114,7 @@ const CaseloadAndPolicies = props => {
         Object.entries(simultaneousPolicies).map(([policyID, policy]) => (
           <p key={policyID}>{policy.policy_name}</p>
         ))}
-      <CaseloadPlot />
+      <CaseloadPlot simultaneousPolicies={simultaneousPolicies} />
     </>
   );
 };
