@@ -284,7 +284,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       "subtarget",
       "auth_entity",
       "authority_name",
-      // "policy_number",
+      "policy_number",
     ],
   });
 
@@ -320,6 +320,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
         obj: prev,
         path: path,
         valueObj: {
+          id: policy.id,
           desc: policy.desc,
           date_start_effective: policy.date_start_effective,
           date_end_actual: policy.date_end_actual,
@@ -330,6 +331,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
           auth_entity: policy.auth_entity,
           date_issued: policy.date_issued,
           authority_name: policy.authority_name,
+          policy_number: policy.policy_number,
         },
       });
     });
