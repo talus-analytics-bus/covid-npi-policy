@@ -105,9 +105,10 @@ const PolicyRouter = props => {
       if (response.length > 10000) {
         setStatus(prev => ({ ...prev, caseload: "error" }));
       } else {
+        console.log(response);
         setCaseload(
           response.map(point => ({
-            date: new Date(point.date_time),
+            date: new Date(point.date_time.split(" ")[0]),
             value: point.value,
           }))
         );
