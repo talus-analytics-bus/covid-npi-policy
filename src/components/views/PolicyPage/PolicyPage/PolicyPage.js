@@ -164,7 +164,7 @@ const PolicyPage = props => {
             <p>
               <strong>{policy && policy.authority_name}</strong>
             </p>
-            <h3>Descriptoin</h3>
+            <h3>Description</h3>
             <p>{policy && policy.desc}</p>
             <button>EXPLORE SOURCE</button>
           </div>
