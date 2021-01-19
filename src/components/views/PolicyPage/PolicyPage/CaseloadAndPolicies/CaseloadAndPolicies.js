@@ -113,6 +113,7 @@ const CaseloadAndPolicies = props => {
     <CaseloadPlot
       path={policyObjectPath}
       simultaneousPolicies={simultaneousPolicies.policies}
+      activePolicy={props.policy}
     />
   );
 };

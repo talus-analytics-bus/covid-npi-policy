@@ -240,13 +240,8 @@ const PolicyPage = props => {
       </section>
 
       <section className={styles.policyDetails}>
-        <h2>
-          Caseload and Simultaneous {locationName}{" "}
-          {policy &&
-            `${policy.primary_ph_measure} ${policy.ph_measure_details}`}{" "}
-          Policies
-        </h2>
-        <CaseloadAndPolicies {...{ policyObjectPath, policyID }} />
+        <h2>Caseload and Policy Timeline</h2>
+        <CaseloadAndPolicies {...{ policy, policyObjectPath, policyID }} />
       </section>
 
       <section className={styles.policyDetails}>

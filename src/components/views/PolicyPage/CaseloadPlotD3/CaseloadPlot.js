@@ -58,7 +58,8 @@ const CaseloadPlot = props => {
       height: 0,
       barHeight: 7,
       barGap: 1.5,
-      paddingTop: 5,
+      paddingTop: 10,
+      labelHeight: 20,
     },
 
     paddingTop: 5,
@@ -146,7 +147,8 @@ const CaseloadPlot = props => {
       ...dim.gantt,
       height:
         rows.length * (dim.gantt.barHeight + dim.gantt.barGap) +
-        dim.gantt.paddingTop,
+        dim.gantt.paddingTop +
+        dim.gantt.labelHeight,
       paddingTop: 10,
     };
   }
@@ -187,7 +189,11 @@ const CaseloadPlot = props => {
     y: dim.origin.y,
   };
 
-  dim.gantt.top = dim.xAxis.start.y + dim.xLabelHeight + dim.gantt.paddingTop;
+  dim.gantt.top =
+    dim.xAxis.start.y +
+    dim.xLabelHeight +
+    dim.gantt.paddingTop +
+    dim.gantt.labelHeight;
 
   // make sure the gap between lines is always 40% of the line
   // width, to adjust for plots with different numbers of days
@@ -253,6 +259,8 @@ const CaseloadPlot = props => {
 
     averageLinePath = pathGenerator(pointsArray);
   }
+
+  console.log(props.path);
 
   return (
     <svg
