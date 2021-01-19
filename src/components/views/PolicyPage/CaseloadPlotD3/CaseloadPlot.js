@@ -2,7 +2,7 @@ import React from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 
 import Axes from "./Axes/Axes";
-import PolicyBar from "./PolicyBar/PolicyBar";
+import GanttChartSVG from "./GanttChartSVG/GanttChartSVG";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
@@ -45,6 +45,7 @@ const CaseloadPlot = props => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;
+  const { policy, path } = props;
 
   // layout constants
   const [constDim, setConstDim] = React.useState({
@@ -301,17 +302,8 @@ const CaseloadPlot = props => {
             </React.Fragment>
           ))}
       </g>
-      {props.simultaneousPolicies && scale && (
-        <g className={styles.gantt}>
-          {policiesForPlot.map(policy => (
-            <PolicyBar
-              key={policy.policyID}
-              path={props.path}
-              {...{ dim, scale, policy }}
-            />
-          ))}
-          }
-        </g>
+      {policiesForPlot.length > 0 && (
+        <GanttChartSVG {...{ dim, scale, policy, policiesForPlot, path }} />
       )}
       <path d={averageLinePath} className={styles.averageLine} />
     </svg>
