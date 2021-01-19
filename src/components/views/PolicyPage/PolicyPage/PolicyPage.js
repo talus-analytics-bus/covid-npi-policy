@@ -126,10 +126,10 @@ const PolicyPage = props => {
                 <h3>Ended</h3>
                 <p>
                   <strong>
-                    {(policy &&
-                      policy.date_end_actual &&
-                      formatDate(new Date(policy.date_end_actual))) ||
-                      "Active"}
+                    {policy &&
+                      ((policy.date_end_actual &&
+                        formatDate(new Date(policy.date_end_actual))) ||
+                        "Active")}
                   </strong>
                 </p>
               </div>
