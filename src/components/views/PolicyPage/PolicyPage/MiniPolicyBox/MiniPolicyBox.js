@@ -40,7 +40,7 @@ const MiniPolicyBox = ({ policy, iso3, state, path }) => {
       }}
     >
       <PolicyCategoryIcon category={policy[CATEGORY_FIELD_NAME]} />
-      <section className={styles.descripton}>
+      <section className={styles.description}>
         <h1>
           {`${policy.auth_entity[0].place.loc.split(",")[0]} 
         ${policy[CATEGORY_FIELD_NAME]}: 
