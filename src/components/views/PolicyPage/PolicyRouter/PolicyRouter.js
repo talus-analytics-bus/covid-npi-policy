@@ -1,6 +1,12 @@
 import React from "react";
 import axios from "axios";
-import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 
 import { Caseload } from "../../../misc/Queries";
 import PlaceQuery from "../../../misc/PlaceQuery";
@@ -21,6 +27,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const policyContext = React.createContext();
 
 const PolicyRouter = props => {
+  useLocation();
+
   const [setPage, setLoading] = [props.setPage, props.setLoading];
   React.useEffect(() => {
     setPage("policy");
@@ -31,6 +39,13 @@ const PolicyRouter = props => {
   const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
+
+  // React.useEffect(() => {
+  //   alert("reset policyObject");
+  //   console.log("reset policyObject");
+  //   setPolicyObject({});
+  // }, [iso3, state]);
+
   const [policySummaryObject, setPolicySummaryObject] = React.useState({});
   const [policySearchResults, setPolicySearchResults] = React.useState();
   const [policySearchPage, setPolicySearchPage] = React.useState(1);
@@ -154,12 +169,13 @@ const PolicyRouter = props => {
     if (status.policyStatus === "initial") getPolicyStatus();
   }, [iso3, state, status]);
 
-  const miniMapScope = React.useRef(state !== "national" ? "USA" : "world");
+  console.log(iso3);
+  const miniMapScope = iso3 === "USA" ? "USA" : "world";
 
   // console.log(status);
 
   return (
-    <MiniMap.Provider scope={miniMapScope.current}>
+    <MiniMap.Provider scope={miniMapScope}>
       <policyContext.Provider value={policyContextValue}>
         <Switch>
           <Route path={`${match.url}/:policyID`}>

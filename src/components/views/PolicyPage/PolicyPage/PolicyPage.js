@@ -8,6 +8,7 @@ import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 import * as MiniMap from "../MiniMap/MiniMap";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 import OthersInDocument from "./OthersInDocument/OthersInDocument";
+import RelatedPolicies from "./RelatedPolicies/RelatedPolicies";
 
 import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
@@ -41,6 +42,9 @@ const PolicyPage = props => {
     policyContext
   );
 
+  console.log("PolicyPage.js location.state");
+  console.log(location.state);
+
   const policyObjectPath = location.state
     ? location.state.path
     : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
@@ -62,7 +66,7 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  // console.log(policy);
+  console.log(policy);
   // console.log(policyTargetList);
 
   return (
@@ -248,6 +252,7 @@ const PolicyPage = props => {
 
       <section className={styles.policyDetails}>
         <h2>Explore Related policies</h2>
+        <RelatedPolicies path={policyObjectPath} policy={policy} />
       </section>
 
       {/* <h2>Target</h2> */}

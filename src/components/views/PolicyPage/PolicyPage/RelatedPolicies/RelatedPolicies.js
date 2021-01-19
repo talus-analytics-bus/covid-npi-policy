@@ -10,9 +10,9 @@ import { Policy } from "../../../../misc/Queries";
 
 import MiniPolicyBox from "../MiniPolicyBox/MiniPolicyBox";
 
-import styles from "./OthersInDocument.module.scss";
+import styles from "./RelatedPolicies.module.scss";
 
-const OthersInDocument = ({ policy, path }) => {
+const RelatedPolicies = ({ policy, path }) => {
   const [policies, setPolicies] = React.useState();
 
   const [iso3, state] = useLocation()
@@ -24,8 +24,11 @@ const OthersInDocument = ({ policy, path }) => {
     const getPoliciesInDocument = async () => {
       const policyResponse = await Policy({
         method: "post",
-        pagesize: 100,
-        filters: { policy_number: [policy.policy_number] },
+        pagesize: 3,
+        filters: {
+          [CATEGORY_FIELD_NAME]: [policy[CATEGORY_FIELD_NAME]],
+          [SUBCATEGORY_FIELD_NAME]: [policy[SUBCATEGORY_FIELD_NAME]],
+        },
         fields: [
           "id",
           CATEGORY_FIELD_NAME,
@@ -36,18 +39,14 @@ const OthersInDocument = ({ policy, path }) => {
         ],
       });
 
-      const otherPolicies = policyResponse.data.filter(
-        otherPolicy => `${otherPolicy.id}` !== `${policy.id}`
-      );
-
-      setPolicies(otherPolicies.slice(0, 3));
+      setPolicies(policyResponse.data);
     };
 
     if (policy && policy.policy_number) getPoliciesInDocument();
   }, [policy]);
 
   return (
-    <div className={styles.othersInDocument}>
+    <div className={styles.relatedPolicies}>
       {policies &&
         policies.map(policy => (
           <MiniPolicyBox key={policy.id} {...{ policy, iso3, state, path }} />
@@ -56,4 +55,4 @@ const OthersInDocument = ({ policy, path }) => {
   );
 };
 
-export default OthersInDocument;
+export default RelatedPolicies;

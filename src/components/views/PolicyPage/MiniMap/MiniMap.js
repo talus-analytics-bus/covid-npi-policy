@@ -23,15 +23,17 @@ const featureContext = React.createContext();
 
 export const Provider = props => {
   const { scope } = props;
+
   const [features, setFeatures] = React.useState({
     countries: null,
     states: null,
     counties: null,
   });
 
-  const featureContextValue = { features };
+  const featureContextValue = { features, scope: scope };
 
   React.useEffect(() => {
+    console.log("MiniMap topology");
     const getUSTopology = async country => {
       axios.get("/maps/counties-10m.json").then(response => {
         const topology = response.data;
@@ -98,7 +100,10 @@ export const SVG = props => {
   let paths = React.useMemo(() => {
     let paths;
 
-    if (featureContextConsumer.features.counties) {
+    if (
+      featureContextConsumer.scope === "USA" &&
+      featureContextConsumer.features.counties
+    ) {
       // console.count("create paths");
       const state = featureContextConsumer.features.states.find(
         state => state.properties.name === propsState
@@ -137,7 +142,10 @@ export const SVG = props => {
       });
     }
 
-    if (featureContextConsumer.features.countries) {
+    if (
+      featureContextConsumer.scope === "world" &&
+      featureContextConsumer.features.countries
+    ) {
       // console.count("create paths");
       const country = featureContextConsumer.features.countries.find(
         country => country.properties.ADM0_A3 === propsCountry
