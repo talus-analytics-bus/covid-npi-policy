@@ -12,18 +12,12 @@ const styles = {
   },
 };
 
-const GanttChartSVG = ({ dim, scale, policiesForPlot, path }) => {
-  const firstPolicy = policiesForPlot[0];
-
-  console.log(firstPolicy);
-  console.log(path);
-
-  const subcategory = path[4];
-
-  const titleLabel = `
-  Other ${firstPolicy.auth_entity[0].place.level} 
-  level ${subcategory} policies in 
-  ${firstPolicy.auth_entity[0].place.loc}:`;
+const GanttChartSVG = ({ dim, scale, activePolicy, policiesForPlot, path }) => {
+  const titleLabel =
+    activePolicy &&
+    `Other ${activePolicy.auth_entity[0].place.level} 
+    level ${activePolicy.ph_measure_details} policies in 
+    ${activePolicy.auth_entity[0].place.loc}:`;
 
   return (
     <g id={"Gantt Chart"}>

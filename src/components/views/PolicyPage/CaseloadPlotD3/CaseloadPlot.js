@@ -45,7 +45,7 @@ const CaseloadPlot = props => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;
-  const { policy, path } = props;
+  const { activePolicy, path } = props;
 
   // layout constants
   const [constDim, setConstDim] = React.useState({
@@ -60,6 +60,12 @@ const CaseloadPlot = props => {
       barGap: 1.5,
       paddingTop: 10,
       labelHeight: 20,
+
+      activePolicy: {
+        paddingTop: 10,
+        barHeight: 10,
+        labelHeight: 15,
+      },
     },
 
     paddingTop: 5,
@@ -148,7 +154,10 @@ const CaseloadPlot = props => {
       height:
         rows.length * (dim.gantt.barHeight + dim.gantt.barGap) +
         dim.gantt.paddingTop +
-        dim.gantt.labelHeight,
+        dim.gantt.labelHeight +
+        dim.gantt.activePolicy.paddingTop +
+        dim.gantt.activePolicy.barHeight +
+        dim.gantt.activePolicy.labelHeight * 3,
       paddingTop: 10,
     };
   }
@@ -311,7 +320,9 @@ const CaseloadPlot = props => {
           ))}
       </g>
       {policiesForPlot.length > 0 && (
-        <GanttChartSVG {...{ dim, scale, policy, policiesForPlot, path }} />
+        <GanttChartSVG
+          {...{ dim, scale, activePolicy, policiesForPlot, path }}
+        />
       )}
       <path d={averageLinePath} className={styles.averageLine} />
     </svg>
