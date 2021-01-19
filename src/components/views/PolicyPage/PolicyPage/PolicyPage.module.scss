@@ -74,6 +74,11 @@
     flex-direction: row;
     margin-bottom: 1em;
 
+    .wideCol {
+      flex-basis: 100%;
+    }
+
+    .wideCol:not(:last-of-type),
     .col:not(:last-of-type) {
       margin-right: 8em;
     }

@@ -86,7 +86,7 @@ const PolicyPage = props => {
 
       <section className={styles.headerSection}>
         <div className={styles.row}>
-          <div className={styles.col}>
+          <div className={styles.wideCol}>
             <div className={styles.row}>
               <header>
                 <div className={styles.row}>
