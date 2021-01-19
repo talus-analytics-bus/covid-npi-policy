@@ -1,29 +1,9 @@
 import React from "react";
 
-const styles = {
-  label: {
-    fontSize: 10,
-    textAnchor: "start",
-    dominantBaseline: "auto",
-    fontFamily: "rawline",
-    fill: "#29334B",
-    fontStyle: "italic",
-  },
-  issuedLine: {
-    stroke: "#544F92",
-  },
-  inForceLine: {
-    stroke: "#823831",
-  },
-  endLine: {
-    stroke: "#812C27",
-  },
-};
+import { textBBox } from "../../CaseloadPlot";
 
-const ActivePolicyBar = ({ dim, scale, activePolicy }) => {
+const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
   console.log(activePolicy);
-
-  const textPad = 3;
 
   const dateIssuedPos = scale.x(new Date(activePolicy.date_issued));
 
@@ -39,6 +19,49 @@ const ActivePolicyBar = ({ dim, scale, activePolicy }) => {
 
   const labelHeight = dim.gantt.activePolicy.labelHeight;
 
+  let flip = false;
+
+  const stringToMeasure = activePolicy.date_end_actual
+    ? "End of Policy"
+    : "Policy in Force";
+
+  const endLabelWidth = textBBox({
+    svg: svgElement.current,
+    string: stringToMeasure,
+    font: "rawline",
+    fontSize: 10,
+  });
+
+  console.log(endLabelWidth);
+
+  if (activePolicy.date_end_actual && endLabelWidth + endDatePos > dim.width) {
+    flip = true;
+  } else if (endLabelWidth + startDatePos > dim.width) {
+    flip = true;
+  }
+
+  const textPad = flip ? -3 : 3;
+
+  const styles = {
+    label: {
+      fontSize: 10,
+      textAnchor: flip ? "end" : "start",
+      dominantBaseline: "auto",
+      fontFamily: "rawline",
+      fill: "#29334B",
+      fontStyle: "italic",
+    },
+    issuedLine: {
+      stroke: "#544F92",
+    },
+    inForceLine: {
+      stroke: "#823831",
+    },
+    endLine: {
+      stroke: "#812C27",
+    },
+  };
+
   return (
     <g id="Active Policy">
       <rect
@@ -51,7 +74,7 @@ const ActivePolicyBar = ({ dim, scale, activePolicy }) => {
       <text
         style={styles.label}
         x={dateIssuedPos + textPad}
-        y={labelsTop + labelHeight * 3}
+        y={labelsTop + labelHeight * (flip ? 1 : 3)}
       >
         Policy Issued
       </text>
@@ -60,7 +83,7 @@ const ActivePolicyBar = ({ dim, scale, activePolicy }) => {
         x1={dateIssuedPos}
         x2={dateIssuedPos}
         y1={dim.gantt.activePolicy.top}
-        y2={labelsTop + labelHeight * 3}
+        y2={labelsTop + labelHeight * (flip ? 1 : 3)}
       />
       <text
         style={styles.label}
@@ -81,7 +104,7 @@ const ActivePolicyBar = ({ dim, scale, activePolicy }) => {
           <text
             style={styles.label}
             x={endDatePos + textPad}
-            y={labelsTop + labelHeight}
+            y={labelsTop + labelHeight * (flip ? 3 : 1)}
           >
             End of Policy
           </text>
@@ -90,7 +113,7 @@ const ActivePolicyBar = ({ dim, scale, activePolicy }) => {
             x1={endDatePos}
             x2={endDatePos}
             y1={dim.gantt.activePolicy.top}
-            y2={labelsTop + labelHeight}
+            y2={labelsTop + labelHeight * (flip ? 3 : 1)}
           />
         </>
       )}

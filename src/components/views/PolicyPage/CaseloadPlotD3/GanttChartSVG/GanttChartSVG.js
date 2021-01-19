@@ -1,5 +1,7 @@
 import React from "react";
+
 import PolicyBar from "./PolicyBar/PolicyBar";
+import ActivePolicyBar from "./ActivePolicyBar/ActivePolicyBar";
 
 const styles = {
   label: {
@@ -12,7 +14,14 @@ const styles = {
   },
 };
 
-const GanttChartSVG = ({ dim, scale, activePolicy, policiesForPlot, path }) => {
+const GanttChartSVG = ({
+  dim,
+  scale,
+  activePolicy,
+  policiesForPlot,
+  path,
+  svgElement,
+}) => {
   const titleLabel =
     activePolicy &&
     `Other ${activePolicy.auth_entity[0].place.level} 
@@ -36,6 +45,9 @@ const GanttChartSVG = ({ dim, scale, activePolicy, policiesForPlot, path }) => {
             {...{ dim, scale, policy }}
           />
         ))}
+      {activePolicy && scale && (
+        <ActivePolicyBar {...{ dim, scale, activePolicy, svgElement }} />
+      )}
     </g>
   );
 };

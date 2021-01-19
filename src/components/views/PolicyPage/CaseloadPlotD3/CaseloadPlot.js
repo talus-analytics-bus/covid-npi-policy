@@ -18,7 +18,7 @@ const rollingAverage = (series, windowSize) => {
 
 // simple function to add a svg text element to an svg,
 // measure its dimensions, remove it, and return the bbox
-const textBBox = ({ svg, string, font, fontSize }) => {
+export const textBBox = ({ svg, string, font, fontSize }) => {
   // namespace is required to create an SVG <text> node
   // instead of an HTML text node
   const svgNS = "http://www.w3.org/2000/svg";
@@ -159,10 +159,19 @@ const CaseloadPlot = props => {
         dim.gantt.activePolicy.barHeight +
         dim.gantt.activePolicy.labelHeight * 3,
       paddingTop: 10,
+      activePolicy: {
+        ...dim.gantt.activePolicy,
+        top:
+          dim.caseloadHeight +
+          dim.gantt.paddingTop +
+          dim.gantt.labelHeight +
+          rows.length * (dim.gantt.barHeight + dim.gantt.barGap) +
+          dim.gantt.activePolicy.paddingTop,
+      },
     };
   }
 
-  dim.height = dim.caseloadHeight + dim.gantt.height;
+  dim.height = dim.caseloadHeight + dim.gantt.height + dim.paddingBottom;
 
   dim.xLabelHeight = dim.xLabelFontSize + 5;
 
@@ -321,7 +330,7 @@ const CaseloadPlot = props => {
       </g>
       {policiesForPlot.length > 0 && (
         <GanttChartSVG
-          {...{ dim, scale, activePolicy, policiesForPlot, path }}
+          {...{ dim, scale, activePolicy, policiesForPlot, path, svgElement }}
         />
       )}
       <path d={averageLinePath} className={styles.averageLine} />
