@@ -79,6 +79,7 @@ const PolicyRouter = props => {
     };
 
     if (state === "national") getPlaceName();
+    else setLocationName(state);
   }, [state, iso3]);
 
   const [targets, setTargets] = React.useState({ all: [], selected: [] });

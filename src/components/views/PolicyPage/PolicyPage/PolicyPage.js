@@ -92,13 +92,11 @@ const PolicyPage = props => {
               <header>
                 <div className={styles.row}>
                   <h1>
-                    {locationName}{" "}
                     {policy &&
-                      `${policy.primary_ph_measure}: ${
-                        policy.ph_measure_details
-                      } issued ${formatDate(
-                        new Date(policy.date_start_effective)
-                      )}`}
+                      `${policy.auth_entity[0].place.loc.split(",")[0]} 
+                      ${policy.primary_ph_measure}: 
+                      ${policy.ph_measure_details} issued 
+                      ${formatDate(new Date(policy.date_start_effective))}`}
                   </h1>
                 </div>
               </header>
