@@ -3,8 +3,6 @@ import React from "react";
 import { textBBox } from "../../CaseloadPlot";
 
 const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
-  console.log(activePolicy);
-
   const dateIssuedPos = scale.x(new Date(activePolicy.date_issued));
 
   const startDatePos = scale.x(new Date(activePolicy.date_start_effective));
@@ -31,8 +29,6 @@ const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
     font: "rawline",
     fontSize: 10,
   });
-
-  console.log(endLabelWidth);
 
   if (activePolicy.date_end_actual && endLabelWidth + endDatePos > dim.width) {
     flip = true;

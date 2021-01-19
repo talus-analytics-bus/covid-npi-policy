@@ -278,8 +278,6 @@ const CaseloadPlot = props => {
     averageLinePath = pathGenerator(pointsArray);
   }
 
-  console.log(props.path);
-
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
