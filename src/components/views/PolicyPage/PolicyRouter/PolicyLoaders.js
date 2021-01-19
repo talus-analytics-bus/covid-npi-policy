@@ -134,57 +134,64 @@ export const loadPolicySubCategories = async ({
 
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
-        let path = [
-          policy[CATEGORY_FIELD_NAME],
-          "children",
-          policy.auth_entity[0].place.level,
-          "children",
-          policy[SUBCATEGORY_FIELD_NAME],
-        ];
-
-        const place = policy.auth_entity[0].place;
-
-        if (
-          (filters.iso3[0] === "USA" && place.level === "Local") ||
-          (filters.iso3[0] !== "USA" && place.level === "State / Province")
-        ) {
-          path = [
-            ...path,
+        if (policy.auth_entity[0]) {
+          let path = [
+            policy[CATEGORY_FIELD_NAME],
             "children",
-            policy.auth_entity[0].place.loc,
-            // policy.auth_entity[0].place.loc.split(",")[0],
+            policy.auth_entity[0].place.level,
+            "children",
+            policy[SUBCATEGORY_FIELD_NAME],
           ];
-        }
 
-        const active = checkPolicyActive(policy) ? 1 : 0;
+          const place = policy.auth_entity[0].place;
 
-        path.forEach((step, index) => {
-          if (step !== "children") {
-            const stepPath = [...path.slice(0, index + 1)];
-            extendObjectByPath({
-              obj: prev,
-              path: stepPath,
-              valueObj: {
-                count:
-                  getObjectByPath({ obj: prev, path: [...stepPath, "count"] }) +
-                    1 || 1,
-                active:
-                  getObjectByPath({
-                    obj: prev,
-                    path: [...stepPath, "active"],
-                  }) + active || active,
-              },
-            });
+          if (
+            (filters.iso3[0] === "USA" && place.level === "Local") ||
+            (filters.iso3[0] !== "USA" && place.level === "State / Province")
+          ) {
+            path = [
+              ...path,
+              "children",
+              policy.auth_entity[0].place.loc,
+              // policy.auth_entity[0].place.loc.split(",")[0],
+            ];
           }
-        });
 
-        extendObjectByPath({
-          obj: prev,
-          path: path,
-          valueObj: {
-            children: {},
-          },
-        });
+          const active = checkPolicyActive(policy) ? 1 : 0;
+
+          path.forEach((step, index) => {
+            if (step !== "children") {
+              const stepPath = [...path.slice(0, index + 1)];
+              extendObjectByPath({
+                obj: prev,
+                path: stepPath,
+                valueObj: {
+                  count:
+                    getObjectByPath({
+                      obj: prev,
+                      path: [...stepPath, "count"],
+                    }) + 1 || 1,
+                  active:
+                    getObjectByPath({
+                      obj: prev,
+                      path: [...stepPath, "active"],
+                    }) + active || active,
+                },
+              });
+            }
+          });
+
+          extendObjectByPath({
+            obj: prev,
+            path: path,
+            valueObj: {
+              children: {},
+            },
+          });
+        } else {
+          console.log("Skipping policy without auth_entity:");
+          console.log(policy);
+        }
       });
 
       return { ...prev };
