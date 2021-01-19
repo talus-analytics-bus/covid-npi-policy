@@ -284,6 +284,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       "subtarget",
       "auth_entity",
       "authority_name",
+      // "policy_number",
     ],
   });
 

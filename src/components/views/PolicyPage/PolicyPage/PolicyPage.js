@@ -6,8 +6,8 @@ import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 
 import * as MiniMap from "../MiniMap/MiniMap";
-import PolicySummary from "../PolicySummary/PolicySummary";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
+import OthersInDocument from "./OthersInDocument/OthersInDocument";
 
 import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
@@ -246,6 +246,7 @@ const PolicyPage = props => {
 
       <section className={styles.policyDetails}>
         <h2>Other Policies in this Document</h2>
+        <OthersInDocument {...{ policy }} />
       </section>
 
       <section className={styles.policyDetails}>
