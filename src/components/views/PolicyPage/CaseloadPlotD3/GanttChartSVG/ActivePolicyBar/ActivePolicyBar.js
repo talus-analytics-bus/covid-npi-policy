@@ -66,7 +66,7 @@ const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
         x={startDatePos}
         y={dim.gantt.activePolicy.top}
         width={barWidth}
-        height={dim.gantt.barHeight}
+        height={dim.gantt.activePolicy.barHeight}
         fill={"#812C27"}
       />
       <text
