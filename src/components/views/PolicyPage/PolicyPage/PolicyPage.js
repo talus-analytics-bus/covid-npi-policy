@@ -143,7 +143,7 @@ const PolicyPage = props => {
               </div>
             </div>
           </div>
-          <div className={styles.col}>
+          <div className={styles.rightCol}>
             <div className={styles.miniMapHolder}>
               <h3>Effective Area</h3>
               <MiniMap.SVG
