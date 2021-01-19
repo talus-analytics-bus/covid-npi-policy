@@ -30,14 +30,17 @@ const GanttChartSVG = ({
 
   return (
     <g id={"Gantt Chart"}>
-      <text
-        x={dim.xAxis.start.x}
-        y={dim.gantt.top - dim.gantt.labelHeight}
-        style={styles.label}
-      >
-        {titleLabel}
-      </text>
+      {policiesForPlot.length > 0 && (
+        <text
+          x={dim.xAxis.start.x}
+          y={dim.gantt.top - dim.gantt.labelHeight}
+          style={styles.label}
+        >
+          {titleLabel}
+        </text>
+      )}
       {scale &&
+        policiesForPlot.length > 0 &&
         policiesForPlot.map(policy => (
           <PolicyBar
             key={policy.policyID}

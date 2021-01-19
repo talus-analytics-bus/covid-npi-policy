@@ -23,12 +23,14 @@ const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
     ? "End of Policy"
     : "Policy in Force";
 
-  const endLabelWidth = textBBox({
-    svg: svgElement.current,
-    string: stringToMeasure,
-    font: "rawline",
-    fontSize: 10,
-  });
+  const endLabelWidth =
+    svgElement.current &&
+    textBBox({
+      svg: svgElement.current,
+      string: stringToMeasure,
+      font: "rawline",
+      fontSize: 10,
+    });
 
   if (activePolicy.date_end_actual && endLabelWidth + endDatePos > dim.width) {
     flip = true;

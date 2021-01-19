@@ -55,7 +55,7 @@ const CaseloadPlot = props => {
     gantt: {
       // height will be calculated
       // if the gantt chart is being shown
-      height: 0,
+      height: 100,
       barHeight: 7,
       barGap: 1.5,
       paddingTop: 10,
@@ -90,64 +90,66 @@ const CaseloadPlot = props => {
   const dim = { ...constDim };
 
   let policiesForPlot = [];
-  if (props.simultaneousPolicies) {
+  if (props.activePolicy) {
     // create gantt chart rows; goal is to pack
     // them in as much as possible.
-
-    // put policies in a sorted array starting with earliest
-    const policyArr = Object.entries(props.simultaneousPolicies).map(
-      ([policyID, policy]) => ({
-        ...policy,
-        policyID: policyID,
-        date_start_effective: new Date(policy.date_start_effective),
-        date_end_actual: policy.date_end_actual
-          ? new Date(policy.date_end_actual)
-          : "active",
-      })
-    );
-
-    const sortedPolicies = policyArr.sort(
-      (a, b) => a.date_start_effective - b.date_start_effective
-    );
 
     // build an array of rows to keep track of when
     // any bar in that row ends
     const rows = [new Date(0)];
 
-    // iterate over the policies and register their
-    // end dates in the earliest row where they fit
-    sortedPolicies.forEach(policy => {
-      // console.log(`find row for ${policy.id}`);
+    if (props.simultaneousPolicies) {
+      // put policies in a sorted array starting with earliest
+      const policyArr = Object.entries(props.simultaneousPolicies).map(
+        ([policyID, policy]) => ({
+          ...policy,
+          policyID: policyID,
+          date_start_effective: new Date(policy.date_start_effective),
+          date_end_actual: policy.date_end_actual
+            ? new Date(policy.date_end_actual)
+            : "active",
+        })
+      );
 
-      let index = 0;
-      for (const endDate of rows) {
-        // console.log(rows);
-        // console.log(`check row ${index}`);
-        // check if it fits in existing rows
-        // if the end is 'active' then the row is full
-        if (endDate !== "active" && endDate < policy.date_start_effective) {
-          // console.log(`put policy in row ${index}`);
-          // set the new end date of this row
-          rows[index] = policy.date_end_actual;
-          // add the policy to the array for plotting
-          policiesForPlot.push({ ...policy, rowNumber: index });
-          break;
+      const sortedPolicies = policyArr.sort(
+        (a, b) => a.date_start_effective - b.date_start_effective
+      );
+
+      // iterate over the policies and register their
+      // end dates in the earliest row where they fit
+      sortedPolicies.forEach(policy => {
+        // console.log(`find row for ${policy.id}`);
+
+        let index = 0;
+        for (const endDate of rows) {
+          // console.log(rows);
+          // console.log(`check row ${index}`);
+          // check if it fits in existing rows
+          // if the end is 'active' then the row is full
+          if (endDate !== "active" && endDate < policy.date_start_effective) {
+            // console.log(`put policy in row ${index}`);
+            // set the new end date of this row
+            rows[index] = policy.date_end_actual;
+            // add the policy to the array for plotting
+            policiesForPlot.push({ ...policy, rowNumber: index });
+            break;
+          }
+
+          // if it doesn't fit in any of the rows
+          if (index === rows.length - 1) {
+            // console.log("add row");
+            // console.log(`put policy in row ${index + 1}`);
+            // add new row, with new end date
+            rows.push(policy.date_end_actual);
+            // add the policy to the array for plotting
+            policiesForPlot.push({ ...policy, rowNumber: index + 1 });
+            break;
+          }
+
+          index++;
         }
-
-        // if it doesn't fit in any of the rows
-        if (index === rows.length - 1) {
-          // console.log("add row");
-          // console.log(`put policy in row ${index + 1}`);
-          // add new row, with new end date
-          rows.push(policy.date_end_actual);
-          // add the policy to the array for plotting
-          policiesForPlot.push({ ...policy, rowNumber: index + 1 });
-          break;
-        }
-
-        index++;
-      }
-    });
+      });
+    }
 
     dim.gantt = {
       ...dim.gantt,
@@ -326,7 +328,7 @@ const CaseloadPlot = props => {
             </React.Fragment>
           ))}
       </g>
-      {policiesForPlot.length > 0 && (
+      {activePolicy && (
         <GanttChartSVG
           {...{ dim, scale, activePolicy, policiesForPlot, path, svgElement }}
         />
