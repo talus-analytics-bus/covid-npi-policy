@@ -10,6 +10,8 @@ import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./MiniPolicyBox.module.scss";
 
+import { policyContext } from "../../PolicyRouter/PolicyRouter";
+
 const TITLE_WORD_LIMIT = 10;
 
 const formatDate = date => {
@@ -23,6 +25,8 @@ const formatDate = date => {
 };
 
 const MiniPolicyBox = ({ policy, path }) => {
+  const { setPolicyObject } = React.useContext(policyContext);
+
   // console.log(policyLinkPath);
 
   // console.log(policy);
@@ -51,9 +55,15 @@ const MiniPolicyBox = ({ policy, path }) => {
     ? titleWords.slice(0, TITLE_WORD_LIMIT).join(" ") + "..."
     : titleWords.join(" ");
 
+  const clickPolicyLink = e => {
+    setPolicyObject({});
+    console.log("reset policyObject");
+  };
+
   return (
     <Link
       className={styles.miniPolicyBox}
+      onClick={clickPolicyLink}
       to={{
         pathname: linkHref,
         state: undefined,
