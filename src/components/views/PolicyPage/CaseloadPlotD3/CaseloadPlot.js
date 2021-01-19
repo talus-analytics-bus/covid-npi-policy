@@ -55,7 +55,7 @@ const CaseloadPlot = props => {
     gantt: {
       // height will be calculated
       // if the gantt chart is being shown
-      height: 100,
+      height: 0,
       barHeight: 7,
       barGap: 1.5,
       paddingTop: 10,
@@ -151,12 +151,15 @@ const CaseloadPlot = props => {
       });
     }
 
+    console.log(rows.length);
+
     dim.gantt = {
       ...dim.gantt,
       height:
         rows.length * (dim.gantt.barHeight + dim.gantt.barGap) +
-        dim.gantt.paddingTop +
-        dim.gantt.labelHeight +
+        (policiesForPlot.length > 0
+          ? dim.gantt.paddingTop + dim.gantt.labelHeight
+          : 0) +
         dim.gantt.activePolicy.paddingTop +
         dim.gantt.activePolicy.barHeight +
         dim.gantt.activePolicy.labelHeight * 3,
@@ -165,8 +168,9 @@ const CaseloadPlot = props => {
         ...dim.gantt.activePolicy,
         top:
           dim.caseloadHeight +
-          dim.gantt.paddingTop +
-          dim.gantt.labelHeight +
+          (policiesForPlot.length > 0
+            ? dim.gantt.paddingTop + dim.gantt.labelHeight
+            : 0) +
           rows.length * (dim.gantt.barHeight + dim.gantt.barGap) +
           dim.gantt.activePolicy.paddingTop,
       },
