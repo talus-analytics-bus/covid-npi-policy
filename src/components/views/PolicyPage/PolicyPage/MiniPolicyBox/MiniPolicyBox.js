@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -25,7 +25,14 @@ const formatDate = date => {
 };
 
 const MiniPolicyBox = ({ policy, path }) => {
-  const { setPolicyObject, setStatus } = React.useContext(policyContext);
+  const [pageIso3, pageState, policyID] = useLocation()
+    .pathname.replace(/\/$/, "")
+    .split("/")
+    .slice(-3);
+
+  const { setPolicyObject, setStatus, setPolicyFilters } = React.useContext(
+    policyContext
+  );
 
   // console.log(policyLinkPath);
 
@@ -56,8 +63,11 @@ const MiniPolicyBox = ({ policy, path }) => {
     : titleWords.join(" ");
 
   const clickPolicyLink = e => {
-    setPolicyObject({});
-    setStatus(prev => ({ ...prev, policies: "initial" }));
+    if (state !== pageState) {
+      setPolicyObject({});
+      setStatus(prev => ({ ...prev, policies: "initial" }));
+      setPolicyFilters({});
+    }
   };
 
   return (
