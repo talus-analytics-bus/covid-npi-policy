@@ -88,9 +88,9 @@ const PolicyList = props => {
         Object.entries(policyObject)
           .sort((a, b) => a[0].localeCompare(b[0]))
           .map(([categoryName, category]) => (
-            <>
+            <React.Fragment key={categoryName}>
               {categoryName !== "Unspecified" && (
-                <div className={styles.topLevelContainer} key={categoryName}>
+                <div className={styles.topLevelContainer}>
                   <ExpandingSection
                     open={category.open}
                     onOpen={() => {
@@ -168,7 +168,7 @@ const PolicyList = props => {
                   </ExpandingSection>
                 </div>
               )}
-            </>
+            </React.Fragment>
           ))}
     </div>
   );
