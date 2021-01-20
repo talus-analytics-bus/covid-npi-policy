@@ -250,12 +250,12 @@ const PolicyPage = props => {
         <CaseloadAndPolicies {...{ policy, policyObjectPath, policyID }} />
       </section>
 
-      <section className={styles.policyDetails}>
+      <section className={styles.relatedPolicies}>
         <h2>Other Policies in this Document</h2>
         <OthersInDocument path={policyObjectPath} policy={policy} />
       </section>
 
-      <section className={styles.policyDetails}>
+      <section className={styles.relatedPolicies}>
         <h2>Explore Related policies</h2>
         <RelatedPolicies path={policyObjectPath} policy={policy} />
       </section>

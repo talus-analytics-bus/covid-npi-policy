@@ -23,10 +23,15 @@
   }
 
   .headerSection,
+  .relatedPolicies,
   .policyDetails {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid #707070;
+  }
+
+  .relatedPolicies {
+    border-bottom: none;
   }
 
   .headerSection {
