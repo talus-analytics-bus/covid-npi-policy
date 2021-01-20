@@ -30,9 +30,15 @@ const MiniPolicyBox = ({ policy, path }) => {
     .split("/")
     .slice(-3);
 
-  const { setPolicyObject, setStatus, setPolicyFilters } = React.useContext(
-    policyContext
-  );
+  const policyContextConsumer = React.useContext(policyContext);
+
+  const {
+    setPolicyObject,
+    setStatus,
+    setPolicyFilters,
+  } = policyContextConsumer;
+
+  const [, setScrollPos] = policyContextConsumer.policyListScrollPos;
 
   // console.log(policyLinkPath);
 
@@ -64,6 +70,7 @@ const MiniPolicyBox = ({ policy, path }) => {
 
   const clickPolicyLink = e => {
     if (state !== pageState) {
+      setScrollPos(0);
       setPolicyObject({});
       setStatus(prev => ({ ...prev, policies: "initial" }));
       setPolicyFilters({});
