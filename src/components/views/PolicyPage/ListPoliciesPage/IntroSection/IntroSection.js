@@ -76,7 +76,11 @@ const IntroSection = props => {
 
   return (
     <div className={styles.introSection}>
-      <h1>{locationName} COVID-19 Policies</h1>
+      {locationName !== iso3 ? (
+        <h1>{locationName} COVID-19 Policies</h1>
+      ) : (
+        <h1>&nbsp;</h1>
+      )}
       <div className={styles.quickFacts}>
         {status.policiesSummary === "loading" && (
           <div className={styles.policies}>
@@ -102,7 +106,8 @@ const IntroSection = props => {
       <div className={styles.quickFacts}>
         {status.caseload === "loading" && (
           <div className={styles.policies}>
-            Loading caseload for {locationName}
+            {/* Loading caseload for {locationName} */}
+            &nbsp;
           </div>
         )}
         {status.caseload === "error" && (

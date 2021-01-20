@@ -134,7 +134,11 @@ const ListPoliciesPage = props => {
           )}
           {(status.caseload === "loading" || status.caseload === iso3) && (
             <>
-              <h2>Cases in {locationName}</h2>
+              {status.caseload === iso3 ? (
+                <h2>Cases in {locationName}</h2>
+              ) : (
+                <h2>&nbsp;</h2>
+              )}
               <CaseloadPlot />
             </>
           )}
