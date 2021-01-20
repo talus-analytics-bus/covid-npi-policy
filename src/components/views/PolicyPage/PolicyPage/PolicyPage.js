@@ -256,63 +256,6 @@ const PolicyPage = props => {
         <h2>Explore Related policies</h2>
         <RelatedPolicies path={policyObjectPath} policy={policy} />
       </section>
-
-      {/* <h2>Target</h2> */}
-      {/* <p>{policy && policy.subtarget}</p> */}
-
-      {/*       <h2>Description</h2> */}
-      {/*       <p>{policy && policy.desc}</p> */}
-      {/*  */}
-      {/*       <section className={styles.metadata}> */}
-      {/*         <div className={styles.leftCol}> */}
-      {/*           <h2>Authority</h2> */}
-      {/*           <h3>Office</h3> */}
-      {/*           <p>{policy && policy.auth_entity && policy.auth_entity[0].office}</p> */}
-      {/*           <h3>Official</h3> */}
-      {/*           <p> */}
-      {/*             {policy && policy.auth_entity && policy.auth_entity[0].official} */}
-      {/*           </p> */}
-      {/*         </div> */}
-      {/*         <div className={styles.rightCol}> */}
-      {/*           <h2>Government</h2> */}
-      {/*           <p> */}
-      {/*             {policyPlace && */}
-      {/*               (policyPlace.level === "Local" */}
-      {/*                 ? policyPlace.area2 */}
-      {/*                 : policyPlace.area1)} */}
-      {/*           </p> */}
-      {/*         </div> */}
-      {/*       </section> */}
-      {/*  */}
-      {/*       <h3>Policy Dates for plot</h3> */}
-      {/*       {relatedPolicies && */}
-      {/*         Object.values(relatedPolicies).map((policy, index) => ( */}
-      {/*           <p key={index}> */}
-      {/*             {policy && policy.date_start_effective},{" "} */}
-      {/*             {policy && policy.date_end_actual} */}
-      {/*           </p> */}
-      {/*         ))} */}
-      {/*       <h3>Related policies</h3> */}
-      {/*       <div className={styles.relatedScroller}> */}
-      {/*         {relatedPolicies && */}
-      {/*           Object.entries(relatedPolicies).map( */}
-      {/*             ([relatedPolicyID, relatedPolicy]) => */}
-      {/*               relatedPolicyID.replace("ID", "") !== policyID && ( */}
-      {/*                 <div */}
-      {/*                   key={relatedPolicyID} */}
-      {/*                   className={styles.policySummaryWidth} */}
-      {/*                 > */}
-      {/*                   <PolicySummary */}
-      {/*                     location={{ iso3, state }} */}
-      {/*                     key={relatedPolicyID} */}
-      {/*                     id={relatedPolicyID.replace("ID", "")} */}
-      {/*                     policy={relatedPolicy} */}
-      {/*                     wordLimit={15} */}
-      {/*                   /> */}
-      {/*                 </div> */}
-      {/*               ) */}
-      {/*           )} */}
-      {/*       </div> */}
     </article>
   );
 };
