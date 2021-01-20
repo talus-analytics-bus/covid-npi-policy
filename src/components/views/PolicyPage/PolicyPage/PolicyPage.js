@@ -139,7 +139,10 @@ const PolicyPage = props => {
                 <h3>Date Issued</h3>
                 <p>
                   <strong>
-                    {policy && formatDate(new Date(policy.date_issued))}
+                    {policy &&
+                      (policy.date_issued
+                        ? formatDate(new Date(policy.date_issued))
+                        : "Not Specified")}
                   </strong>
                 </p>
               </div>
