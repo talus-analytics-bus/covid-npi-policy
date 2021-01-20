@@ -32,6 +32,9 @@
 
   .relatedPolicies {
     border-bottom: none;
+    > h2 {
+      text-transform: unset;
+    }
   }
 
   .headerSection {
