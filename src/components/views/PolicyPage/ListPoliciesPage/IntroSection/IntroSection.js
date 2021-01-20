@@ -7,10 +7,10 @@ import styles from "./IntroSection.module.scss";
 
 const IntroSection = props => {
   const location = useLocation();
-  const [state] = location.pathname
+  const [iso3, state] = location.pathname
     .replace(/\/$/, "")
     .split("/")
-    .slice(-1);
+    .slice(-2);
 
   const policyContextConsumer = React.useContext(policyContext);
 
@@ -31,7 +31,7 @@ const IntroSection = props => {
   );
 
   const policyStatusDate =
-    status.policyStatus === "loaded" &&
+    status.policyStatus === iso3 &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
       day: "numeric",
       month: "short",
@@ -39,18 +39,18 @@ const IntroSection = props => {
     });
 
   const policyStatusName =
-    status.policyStatus === "loaded" && policyStatus[0].value.toLowerCase();
+    status.policyStatus === iso3 && policyStatus[0].value.toLowerCase();
 
   const sevenDaySum =
-    status.caseload === "loaded" &&
+    status.caseload === iso3 &&
     caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
 
   const lastSevenDaySum =
-    status.caseload === "loaded" &&
+    status.caseload === iso3 &&
     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
 
   const sevenDayChangePCT =
-    status.policiesSummary === "loaded" &&
+    status.policiesSummary === iso3 &&
     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
@@ -80,7 +80,7 @@ const IntroSection = props => {
             No Policies Found in {locationName}
           </div>
         )}
-        {status.policiesSummary === "loaded" && (
+        {status.policiesSummary === iso3 && (
           <>
             <div className={styles.policies}>
               <strong>{policyCount.count}</strong> Total Policies
@@ -102,7 +102,7 @@ const IntroSection = props => {
             No Caseload Found in {locationName}
           </div>
         )}
-        {status.caseload === "loaded" && (
+        {status.caseload === iso3 && (
           <>
             <div className={styles.status}>
               <strong>{sevenDaySum}</strong> New Cases in Past 7 Days
@@ -123,9 +123,9 @@ const IntroSection = props => {
       {status.policiesSummary === "loading" && (
         <p>Loading policies for {locationName}</p>
       )}
-      {status.policiesSummary === "loaded" && (
+      {status.policiesSummary === iso3 && (
         <p>
-          {status.policyStatus === "loaded" && (
+          {status.policyStatus === iso3 && (
             <>
               {locationName} has been in{" "}
               {/[aeiou]/.test(policyStatusName[0]) ? "an " : "a "}
