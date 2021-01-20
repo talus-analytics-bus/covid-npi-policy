@@ -69,7 +69,7 @@ const MiniPolicyBox = ({ policy, path }) => {
     : titleWords.join(" ");
 
   const clickPolicyLink = e => {
-    if (state !== pageState) {
+    if (iso3 !== pageIso3) {
       setScrollPos(0);
       setPolicyObject({});
       setStatus(prev => ({ ...prev, policies: "initial" }));
