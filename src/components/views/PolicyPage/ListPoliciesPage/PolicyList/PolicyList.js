@@ -88,83 +88,87 @@ const PolicyList = props => {
         Object.entries(policyObject)
           .sort((a, b) => a[0].localeCompare(b[0]))
           .map(([categoryName, category]) => (
-            <div className={styles.topLevelContainer} key={categoryName}>
-              <ExpandingSection
-                open={category.open}
-                onOpen={() => {
-                  loadDescriptionsByCategory(category, categoryName);
-                  setPolicyObject(prev => {
-                    extendObjectByPath({
-                      obj: prev,
-                      path: [categoryName],
-                      valueObj: { open: true },
-                    });
-                    return { ...prev };
-                  });
-                }}
-                onClose={() => {
-                  setPolicyObject(prev => {
-                    extendObjectByPath({
-                      obj: prev,
-                      path: [categoryName],
-                      valueObj: { open: false },
-                    });
-                    return { ...prev };
-                  });
-                }}
-              >
-                <div className={styles.topLevelHeader}>
-                  <PolicyCategoryIcon category={categoryName} />
-                  <ExpandMarker
-                    arrowColor={"#29334B"}
-                    backgroundColor={"#ffffff"}
+            <>
+              {categoryName !== "Unspecified" && (
+                <div className={styles.topLevelContainer} key={categoryName}>
+                  <ExpandingSection
                     open={category.open}
-                  />
-                  <h1>
-                    {titleCase(categoryName)}{" "}
-                    {category.count && (
-                      <span>
-                        (total: {category.count}, active: {category.active})
-                      </span>
-                    )}
-                  </h1>
-                </div>
-                <div className={styles.categoryContainer}>
-                  {!category.children ||
-                    (Object.keys(category.children).length === 0 && (
-                      <p style={{ paddingLeft: 38 }}>Loading...</p>
-                    ))}
-                  <NDepthList
-                    // object whose keys we want to enumerate
-                    obj={category}
-                    // function for sorting
-                    sort={sortfunc}
-                    // the pattern which will match keys at n depth
-                    idPattern={/^ID/}
-                    // starting path
-                    path={[categoryName]}
-                    // the function to render keys up to n-1
-                    renderCategory={(path, obj, children) => (
-                      <PolicyCategory
-                        key={path}
-                        {...{ path, obj, children, setPolicyObject }}
+                    onOpen={() => {
+                      loadDescriptionsByCategory(category, categoryName);
+                      setPolicyObject(prev => {
+                        extendObjectByPath({
+                          obj: prev,
+                          path: [categoryName],
+                          valueObj: { open: true },
+                        });
+                        return { ...prev };
+                      });
+                    }}
+                    onClose={() => {
+                      setPolicyObject(prev => {
+                        extendObjectByPath({
+                          obj: prev,
+                          path: [categoryName],
+                          valueObj: { open: false },
+                        });
+                        return { ...prev };
+                      });
+                    }}
+                  >
+                    <div className={styles.topLevelHeader}>
+                      <PolicyCategoryIcon category={categoryName} />
+                      <ExpandMarker
+                        arrowColor={"#29334B"}
+                        backgroundColor={"#ffffff"}
+                        open={category.open}
                       />
-                    )}
-                    // the function to render the object whose
-                    // key matches the idPattern
-                    renderItem={(path, obj) => (
-                      <PolicySummary
-                        key={path}
-                        path={path}
-                        policy={obj}
-                        setScrollPos={setScrollPos}
-                        wordLimit={50}
+                      <h1>
+                        {titleCase(categoryName)}{" "}
+                        {category.count && (
+                          <span>
+                            (total: {category.count}, active: {category.active})
+                          </span>
+                        )}
+                      </h1>
+                    </div>
+                    <div className={styles.categoryContainer}>
+                      {!category.children ||
+                        (Object.keys(category.children).length === 0 && (
+                          <p style={{ paddingLeft: 38 }}>Loading...</p>
+                        ))}
+                      <NDepthList
+                        // object whose keys we want to enumerate
+                        obj={category}
+                        // function for sorting
+                        sort={sortfunc}
+                        // the pattern which will match keys at n depth
+                        idPattern={/^ID/}
+                        // starting path
+                        path={[categoryName]}
+                        // the function to render keys up to n-1
+                        renderCategory={(path, obj, children) => (
+                          <PolicyCategory
+                            key={path}
+                            {...{ path, obj, children, setPolicyObject }}
+                          />
+                        )}
+                        // the function to render the object whose
+                        // key matches the idPattern
+                        renderItem={(path, obj) => (
+                          <PolicySummary
+                            key={path}
+                            path={path}
+                            policy={obj}
+                            setScrollPos={setScrollPos}
+                            wordLimit={50}
+                          />
+                        )}
                       />
-                    )}
-                  />
+                    </div>
+                  </ExpandingSection>
                 </div>
-              </ExpandingSection>
-            </div>
+              )}
+            </>
           ))}
     </div>
   );
