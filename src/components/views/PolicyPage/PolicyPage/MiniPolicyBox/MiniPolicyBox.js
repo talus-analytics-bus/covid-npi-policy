@@ -25,7 +25,7 @@ const formatDate = date => {
 };
 
 const MiniPolicyBox = ({ policy, path }) => {
-  const [pageIso3] = useLocation()
+  const [pageIso3, pageState] = useLocation()
     .pathname.replace(/\/$/, "")
     .split("/")
     .slice(-3);
@@ -66,7 +66,7 @@ const MiniPolicyBox = ({ policy, path }) => {
     : titleWords.join(" ");
 
   const clickPolicyLink = e => {
-    if (iso3 !== pageIso3) {
+    if (iso3 !== pageIso3 || state !== pageState) {
       setScrollPos(0);
       setPolicyObject({});
       setStatus(prev => ({ ...prev, policies: "initial" }));
