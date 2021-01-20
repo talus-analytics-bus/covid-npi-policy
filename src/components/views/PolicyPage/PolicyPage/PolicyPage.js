@@ -40,9 +40,6 @@ const PolicyPage = props => {
 
   const { policyObject, setPolicyObject } = React.useContext(policyContext);
 
-  console.log("PolicyPage.js location.state");
-  console.log(location.state);
-
   const policyObjectPath = location.state
     ? location.state.path
     : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
@@ -65,7 +62,7 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  //   console.log(policy);
+  console.log(policy);
   //   console.log(policyID);
   //   // console.log(policyTargetList);
   //
@@ -155,7 +152,11 @@ const PolicyPage = props => {
               <MiniMap.SVG
                 country={iso3}
                 state={state && state}
-                counties={["Unspecified"]}
+                counties={
+                  policy
+                    ? [policy.auth_entity[0].place.area2.split(" County")[0]]
+                    : []
+                }
               />
             </div>
           </div>
