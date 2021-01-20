@@ -38,9 +38,7 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const { policyObject, setPolicyObject, locationName } = React.useContext(
-    policyContext
-  );
+  const { policyObject, setPolicyObject } = React.useContext(policyContext);
 
   console.log("PolicyPage.js location.state");
   console.log(location.state);
@@ -52,6 +50,7 @@ const PolicyPage = props => {
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
 
   React.useEffect(() => {
+    console.log("loadFullPolicy");
     loadFullPolicy({
       stateSetter: setPolicyObject,
       filters: {
@@ -66,8 +65,16 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  console.log(policy);
-  // console.log(policyTargetList);
+  //   console.log(policy);
+  //   console.log(policyID);
+  //   // console.log(policyTargetList);
+  //
+  //   React.useEffect(() => {
+  //     console.log("check policy");
+  //     if (policy && `${policy.id}` !== policyID) {
+  //       alert("wrong policy");
+  //     }
+  //   }, [policy, policyID]);
 
   return (
     <article className={styles.policyPage}>

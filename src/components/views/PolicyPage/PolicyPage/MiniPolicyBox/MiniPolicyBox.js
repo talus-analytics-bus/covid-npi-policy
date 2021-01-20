@@ -25,7 +25,7 @@ const formatDate = date => {
 };
 
 const MiniPolicyBox = ({ policy, path }) => {
-  const { setPolicyObject } = React.useContext(policyContext);
+  const { setPolicyObject, setStatus } = React.useContext(policyContext);
 
   // console.log(policyLinkPath);
 
@@ -57,7 +57,7 @@ const MiniPolicyBox = ({ policy, path }) => {
 
   const clickPolicyLink = e => {
     setPolicyObject({});
-    console.log("reset policyObject");
+    setStatus(prev => ({ ...prev, policies: "initial" }));
   };
 
   return (
