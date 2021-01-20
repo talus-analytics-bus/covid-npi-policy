@@ -69,34 +69,43 @@ const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
         height={dim.gantt.activePolicy.barHeight}
         fill={"#812C27"}
       />
-      <text
-        style={styles.label}
-        x={dateIssuedPos + textPad}
-        y={labelsTop + labelHeight * (flip ? 1 : 3)}
-      >
-        Policy Issued
-      </text>
-      <line
-        style={styles.issuedLine}
-        x1={dateIssuedPos}
-        x2={dateIssuedPos}
-        y1={dim.gantt.activePolicy.top}
-        y2={labelsTop + labelHeight * (flip ? 1 : 3)}
-      />
-      <text
-        style={styles.label}
-        x={startDatePos + textPad}
-        y={labelsTop + labelHeight * 2}
-      >
-        Policy In Force
-      </text>
-      <line
-        style={styles.inForceLine}
-        x1={startDatePos}
-        x2={startDatePos}
-        y1={dim.gantt.activePolicy.top}
-        y2={labelsTop + labelHeight * 2}
-      />
+      {activePolicy.date_issued && (
+        <>
+          <text
+            style={styles.label}
+            x={dateIssuedPos + textPad}
+            y={labelsTop + labelHeight * (flip ? 1 : 3)}
+          >
+            Policy Issued
+          </text>
+          <line
+            style={styles.issuedLine}
+            x1={dateIssuedPos}
+            x2={dateIssuedPos}
+            y1={dim.gantt.activePolicy.top}
+            y2={labelsTop + labelHeight * (flip ? 1 : 3)}
+          />
+        </>
+      )}
+      {activePolicy.date_start_effective && (
+        <>
+          {" "}
+          <text
+            style={styles.label}
+            x={startDatePos + textPad}
+            y={labelsTop + labelHeight * 2}
+          >
+            Policy In Force
+          </text>
+          <line
+            style={styles.inForceLine}
+            x1={startDatePos}
+            x2={startDatePos}
+            y1={dim.gantt.activePolicy.top}
+            y2={labelsTop + labelHeight * 2}
+          />
+        </>
+      )}
       {activePolicy.date_end_actual && (
         <>
           <text
