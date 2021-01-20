@@ -66,6 +66,14 @@ const IntroSection = props => {
           .join("")
           .toLowerCase();
 
+  if (iso3 === "Unspecified") {
+    return (
+      <div className={styles.introSection}>
+        <h1>{locationName} COVID-19 Policies</h1>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.introSection}>
       <h1>{locationName} COVID-19 Policies</h1>
@@ -94,7 +102,7 @@ const IntroSection = props => {
       <div className={styles.quickFacts}>
         {status.caseload === "loading" && (
           <div className={styles.policies}>
-            Loading casload for {locationName}
+            Loading caseload for {locationName}
           </div>
         )}
         {status.caseload === "error" && (

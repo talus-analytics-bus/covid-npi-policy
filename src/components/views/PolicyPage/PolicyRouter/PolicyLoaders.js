@@ -151,7 +151,8 @@ export const loadPolicySubCategories = async ({
 
           if (
             (filters.iso3[0] === "USA" && place.level === "Local") ||
-            (filters.iso3[0] !== "USA" && place.level === "State / Province")
+            (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+            filters.iso3[0] === "Unspecified"
           ) {
             path = [
               ...path,
@@ -244,7 +245,8 @@ export const loadPolicyDescriptions = async ({
 
       if (
         (filters.iso3[0] === "USA" && place.level === "Local") ||
-        (filters.iso3[0] !== "USA" && place.level === "State / Province")
+        (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+        filters.iso3[0] === "Unspecified"
       ) {
         path = [
           ...path,
@@ -314,9 +316,9 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       const place = policy.auth_entity[0].place;
 
       if (
-        filters.iso3 &&
-        ((filters.iso3[0] === "USA" && place.level === "Local") ||
-          (filters.iso3[0] !== "USA" && place.level === "State / Province"))
+        (filters.iso3[0] === "USA" && place.level === "Local") ||
+        (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+        filters.iso3[0] === "Unspecified"
       ) {
         path = [
           ...path,
@@ -383,6 +385,8 @@ export const loadPolicySearch = async ({
     ],
   });
 
+  console.log(policyResponse);
+
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, searchResults: "error" }));
     stateSetter(policyResponse);
@@ -404,7 +408,8 @@ export const loadPolicySearch = async ({
 
         if (
           (filters.iso3[0] === "USA" && place.level === "Local") ||
-          (filters.iso3[0] !== "USA" && place.level === "State / Province")
+          (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+          filters.iso3[0] === "Unspecified"
         ) {
           path = [
             ...path,

@@ -40,19 +40,21 @@ const PolicyPage = props => {
 
   const { policyObject, setPolicyObject } = React.useContext(policyContext);
 
-  const policyObjectPath = location.state
-    ? location.state.path
-    : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
+  const policyObjectPath =
+    // don't use location.state.path if the page was manually refreshed
+    location.state
+      ? // && window.performance && performance.navigation.type !== 1
+        location.state.path
+      : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
 
   React.useEffect(() => {
-    console.log("loadFullPolicy");
     loadFullPolicy({
       stateSetter: setPolicyObject,
       filters: {
         id: [Number(policyID)],
-        // iso3: [iso3],
+        iso3: [iso3],
       },
     });
   }, [policyID, iso3, setPolicyObject]);
@@ -62,15 +64,7 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  //   console.log(policyID);
-  //   // console.log(policyTargetList);
-  //
-  //   React.useEffect(() => {
-  //     console.log("check policy");
-  //     if (policy && `${policy.id}` !== policyID) {
-  //       alert("wrong policy");
-  //     }
-  //   }, [policy, policyID]);
+  console.log(policy);
 
   return (
     <article className={styles.policyPage}>

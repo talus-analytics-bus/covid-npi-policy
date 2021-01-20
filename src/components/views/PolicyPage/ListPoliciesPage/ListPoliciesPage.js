@@ -117,27 +117,31 @@ const ListPoliciesPage = props => {
     <article>
       <section className={styles.introSection}>
         <IntroSection />
-        <div className={styles.miniMapHolder}>
-          <MiniMap.SVG
-            country={iso3}
-            state={state}
-            counties={miniMapCounties.current}
-          />
-        </div>
-      </section>
-      <section className={styles.caseloadPlot}>
-        {status.caseload === "error" && (
-          <h3>No caseload data found for {locationName}</h3>
-        )}
-        {(status.caseload === "loading" || status.caseload === iso3) && (
-          <>
-            <h2>Cases in {locationName}</h2>
-            <CaseloadPlot />
-          </>
+        {iso3 !== "Unspecified" && (
+          <div className={styles.miniMapHolder}>
+            <MiniMap.SVG
+              country={iso3}
+              state={state}
+              counties={miniMapCounties.current}
+            />
+          </div>
         )}
       </section>
+      {iso3 !== "Unspecified" && (
+        <section className={styles.caseloadPlot}>
+          {status.caseload === "error" && (
+            <h3>No caseload data found for {locationName}</h3>
+          )}
+          {(status.caseload === "loading" || status.caseload === iso3) && (
+            <>
+              <h2>Cases in {locationName}</h2>
+              <CaseloadPlot />
+            </>
+          )}
+        </section>
+      )}
       <section className={styles.policyList}>
-        <h2>Policies in {locationName}</h2>
+        {iso3 !== "Unspecified" && <h2>Policies in {locationName}</h2>}
         <PolicyFilterBar />
 
         {!searchActive && (

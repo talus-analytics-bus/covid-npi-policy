@@ -24,6 +24,7 @@ const RelatedPolicies = ({ policy, path }) => {
     const getPoliciesInDocument = async () => {
       const policyResponse = await Policy({
         method: "post",
+        random: true,
         pagesize: 3,
         filters: {
           [CATEGORY_FIELD_NAME]: [policy[CATEGORY_FIELD_NAME]],

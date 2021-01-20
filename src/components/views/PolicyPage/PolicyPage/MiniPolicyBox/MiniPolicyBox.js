@@ -25,7 +25,7 @@ const formatDate = date => {
 };
 
 const MiniPolicyBox = ({ policy, path }) => {
-  const [pageIso3, pageState, policyID] = useLocation()
+  const [pageIso3] = useLocation()
     .pathname.replace(/\/$/, "")
     .split("/")
     .slice(-3);
@@ -46,15 +46,12 @@ const MiniPolicyBox = ({ policy, path }) => {
 
   // debugger;
 
-  const iso3 = policy.auth_entity[0].place.loc.includes("(")
-    ? policy.auth_entity[0].place.loc.split("(")[1].replace(")", "")
-    : policy.auth_entity[0].place.loc;
+  const iso3 = policy.auth_entity[0].place.iso3;
 
   let state;
   if (iso3 === "USA") {
     const area1 = policy.auth_entity[0].place.area1;
     state = area1 === "Unspecified" ? "national" : area1;
-    console.log(area1);
   } else {
     state = "national";
   }

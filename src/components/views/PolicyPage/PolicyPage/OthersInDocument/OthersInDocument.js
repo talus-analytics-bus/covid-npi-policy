@@ -23,7 +23,6 @@ const OthersInDocument = ({ policy, path }) => {
   React.useEffect(() => {
     const getPoliciesInDocument = async () => {
       const policyResponse = await Policy({
-        random: true,
         method: "post",
         pagesize: 100,
         filters: { policy_number: [policy.policy_number] },

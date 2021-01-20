@@ -80,9 +80,11 @@ const PolicyCategory = props => {
         />
         <h2>
           {titleCase(props.path.slice(-1)[0])}{" "}
-          <span>
-            (total: {props.obj.count}, active: {props.obj.active})
-          </span>
+          {props.obj.count && (
+            <span>
+              (total: {props.obj.count}, active: {props.obj.active})
+            </span>
+          )}
         </h2>
       </div>
       <div className={styles.categoryContainer}>

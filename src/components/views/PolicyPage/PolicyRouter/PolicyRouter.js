@@ -77,7 +77,7 @@ const PolicyRouter = props => {
   const [policySort, setPolicySort] = React.useState("desc");
 
   const [locationName, setLocationName] = React.useState(
-    state !== "national" ? state : iso3
+    state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
   );
 
   React.useEffect(() => {
@@ -180,7 +180,8 @@ const PolicyRouter = props => {
       getPolicyStatus();
   }, [iso3, state, status]);
 
-  const miniMapScope = iso3 === "USA" ? "USA" : "world";
+  const miniMapScope =
+    iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
   // console.log(status);
 
