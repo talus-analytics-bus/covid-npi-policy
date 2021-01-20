@@ -66,6 +66,14 @@ const PolicyRouter = props => {
     ...(state !== "national" && { area1: [state] }),
   });
 
+  React.useEffect(() => {
+    setPolicyFilters(prev => ({
+      ...prev,
+      iso3: [iso3],
+      ...(state !== "national" && { area1: [state] }),
+    }));
+  }, [iso3, state]);
+
   const [policySort, setPolicySort] = React.useState("desc");
 
   const [locationName, setLocationName] = React.useState(
@@ -75,7 +83,8 @@ const PolicyRouter = props => {
   React.useEffect(() => {
     const getPlaceName = async () => {
       const places = await PlaceQuery({ place_type: ["country"] });
-      setLocationName(places.find(place => place.iso === iso3).name);
+      const placeName = places.find(place => place.iso === iso3);
+      if (placeName) setLocationName(placeName.name);
     };
 
     if (state === "national") getPlaceName();
@@ -128,11 +137,11 @@ const PolicyRouter = props => {
           }))
         );
 
-        setStatus(prev => ({ ...prev, caseload: "loaded" }));
+        setStatus(prev => ({ ...prev, caseload: iso3 }));
       }
     };
 
-    if (status.caseload === "initial") getCaseload();
+    if (!["error", "loading", iso3].includes(status.caseload)) getCaseload();
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
@@ -163,14 +172,14 @@ const PolicyRouter = props => {
         setStatus(prev => ({ ...prev, policyStatus: "error" }));
       } else {
         setPolicyStatus(testreq.data.data);
-        setStatus(prev => ({ ...prev, policyStatus: "loaded" }));
+        setStatus(prev => ({ ...prev, policyStatus: iso3 }));
       }
     };
 
-    if (status.policyStatus === "initial") getPolicyStatus();
+    if (!["error", "loading", iso3].includes(status.policyStatus))
+      getPolicyStatus();
   }, [iso3, state, status]);
 
-  console.log(iso3);
   const miniMapScope = iso3 === "USA" ? "USA" : "world";
 
   // console.log(status);

@@ -23,6 +23,7 @@ const DateRangeControl = props => {
   );
 
   const updateSearchFilter = text => {
+    console.log("UpdateSearchFIlter");
     // clear currently loaded policies
     // setPolicyObject({});
     // set new filters

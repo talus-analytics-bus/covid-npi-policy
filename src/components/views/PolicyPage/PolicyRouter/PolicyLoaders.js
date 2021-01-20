@@ -9,6 +9,7 @@ const checkPolicyActive = policy =>
 
 // Top-Level policy categories
 export const loadPolicyCategories = async ({
+  iso3,
   filters,
   stateSetter,
   setStatus,
@@ -32,10 +33,11 @@ export const loadPolicyCategories = async ({
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
+    console.log(`setting policies status to ${iso3}`);
     setStatus(prev => ({
       ...prev,
-      policies: "loaded",
-      policiesSummary: "loaded",
+      policies: iso3,
+      policiesSummary: iso3,
     }));
 
     const buildObject = (prev, data, count) => {
@@ -102,6 +104,7 @@ export const loadPolicyCategories = async ({
 // Load subcategories; this request should run
 // immediately after the policy categories are loaded
 export const loadPolicySubCategories = async ({
+  iso3,
   filters,
   stateSetter,
   setStatus,
@@ -130,7 +133,8 @@ export const loadPolicySubCategories = async ({
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
-    setStatus(prev => ({ ...prev, policies: "loaded" }));
+    console.log(`setting policies status to ${iso3}`);
+    setStatus(prev => ({ ...prev, policies: iso3 }));
 
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
@@ -349,6 +353,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
 };
 
 export const loadPolicySearch = async ({
+  iso3,
   filters,
   stateSetter,
   setPolicyObject,
@@ -381,7 +386,7 @@ export const loadPolicySearch = async ({
     setStatus(prev => ({ ...prev, searchResults: "error" }));
     stateSetter(policyResponse);
   } else {
-    setStatus(prev => ({ ...prev, searchResults: "loaded" }));
+    setStatus(prev => ({ ...prev, searchResults: iso3 }));
     stateSetter(policyResponse);
 
     setPolicyObject(prev => {

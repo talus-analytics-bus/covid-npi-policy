@@ -44,12 +44,15 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-
-    if (!searchActive && status.policies === "initial") {
+    if (
+      !searchActive &&
+      !["error", "loading", iso3].includes(status.policies)
+    ) {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       if (!policyFilters.subtarget)
         loadPolicyCategories({
+          iso3,
           setStatus,
           filters: policyFilters,
           stateSetter: setPolicyObject,
@@ -58,6 +61,7 @@ const ListPoliciesPage = props => {
         });
 
       loadPolicySubCategories({
+        iso3,
         setStatus,
         filters: policyFilters,
         stateSetter: setPolicyObject,
@@ -67,10 +71,14 @@ const ListPoliciesPage = props => {
       setGetSummary(false);
     }
 
-    if (searchActive && status.searchResults === "initial") {
+    if (
+      searchActive &&
+      !["error", "loading", iso3].includes(status.searchResults)
+    ) {
       setStatus(prev => ({ ...prev, searchResults: "loading" }));
 
       loadPolicySearch({
+        iso3,
         setStatus,
         setPolicyObject,
         filters: policyFilters,
@@ -121,7 +129,7 @@ const ListPoliciesPage = props => {
         {status.caseload === "error" && (
           <h3>No caseload data found for {locationName}</h3>
         )}
-        {(status.caseload === "loading" || status.caseload === "loaded") && (
+        {(status.caseload === "loading" || status.caseload === iso3) && (
           <>
             <h2>Cases in {locationName}</h2>
             <CaseloadPlot />
@@ -140,7 +148,7 @@ const ListPoliciesPage = props => {
             {status.policies === "error" && (
               <h3>No Policies Found in {locationName}</h3>
             )}
-            {status.policies === "loaded" && <PolicyList />}
+            {status.policies === iso3 && <PolicyList />}
           </>
         )}
         {searchActive && (
@@ -156,7 +164,7 @@ const ListPoliciesPage = props => {
                 {locationName}
               </h3>
             )}
-            {status.searchResults === "loaded" && <SearchResults />}
+            {status.searchResults === iso3 && <SearchResults />}
           </>
         )}
       </section>
