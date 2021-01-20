@@ -1378,7 +1378,7 @@ export const tooltipGetter = async ({
                       : "national"
                   }`,
                 iconName: "table_view",
-                label: "View Policies",
+                label: "view policies",
                 urlIsExternal: true,
                 isSecondary: isUsaOnGlobalMap || isUsaMap,
               }}
