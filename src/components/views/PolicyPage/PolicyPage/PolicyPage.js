@@ -40,12 +40,9 @@ const PolicyPage = props => {
 
   const { policyObject, setPolicyObject } = React.useContext(policyContext);
 
-  const policyObjectPath =
-    // don't use location.state.path if the page was manually refreshed
-    location.state
-      ? // && window.performance && performance.navigation.type !== 1
-        location.state.path
-      : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
+  const policyObjectPath = location.state
+    ? location.state.path
+    : getFirstPathFromObject({ obj: policyObject, idPattern: /^ID/ });
 
   const policy = getObjectByPath({ obj: policyObject, path: policyObjectPath });
 
