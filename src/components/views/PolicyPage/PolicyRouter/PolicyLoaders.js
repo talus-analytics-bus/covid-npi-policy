@@ -314,8 +314,9 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       const place = policy.auth_entity[0].place;
 
       if (
-        (filters.iso3[0] === "USA" && place.level === "Local") ||
-        (filters.iso3[0] !== "USA" && place.level === "State / Province")
+        filters.iso3 &&
+        ((filters.iso3[0] === "USA" && place.level === "Local") ||
+          (filters.iso3[0] !== "USA" && place.level === "State / Province"))
       ) {
         path = [
           ...path,

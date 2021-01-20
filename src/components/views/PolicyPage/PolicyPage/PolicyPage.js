@@ -52,7 +52,7 @@ const PolicyPage = props => {
       stateSetter: setPolicyObject,
       filters: {
         id: [Number(policyID)],
-        iso3: [iso3],
+        // iso3: [iso3],
       },
     });
   }, [policyID, iso3, setPolicyObject]);
@@ -62,7 +62,6 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  console.log(policy);
   //   console.log(policyID);
   //   // console.log(policyTargetList);
   //
