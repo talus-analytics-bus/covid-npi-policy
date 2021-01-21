@@ -12,7 +12,7 @@ import styles from "./MiniPolicyBox.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
-const TITLE_WORD_LIMIT = 10;
+const TITLE_CHAR_LIMIT = 32;
 
 const formatDate = date => {
   if (!date) return undefined;
@@ -59,11 +59,10 @@ const MiniPolicyBox = ({ policy, path }) => {
   const linkHref = `/policies/${iso3}/${state}/${policy.id}`;
   // const policyLinkPath = path && [...path.slice(0, -1), `ID${policy.id}`];
 
-  const titleWords = policy.policy_name.split(" ");
-  const truncateTitle = titleWords.length > TITLE_WORD_LIMIT;
+  const truncateTitle = policy.policy_name.length > TITLE_CHAR_LIMIT;
   const title = truncateTitle
-    ? titleWords.slice(0, TITLE_WORD_LIMIT).join(" ") + "..."
-    : titleWords.join(" ");
+    ? policy.policy_name.slice(0, TITLE_CHAR_LIMIT) + "..."
+    : policy.policy_name;
 
   const clickPolicyLink = e => {
     if (iso3 !== pageIso3 || state !== pageState) {
