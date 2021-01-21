@@ -62,7 +62,11 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
+  console.log(policyObjectPath);
+  console.log(policyObject);
   console.log(policy);
+
+  // debugger;
 
   return (
     <article className={styles.policyPage}>

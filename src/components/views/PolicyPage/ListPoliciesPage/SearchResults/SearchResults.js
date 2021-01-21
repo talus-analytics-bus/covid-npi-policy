@@ -36,13 +36,11 @@ const SearchResults = props => {
 
       if (
         (policyFilters.iso3[0] === "USA" && place.level === "Local") ||
-        (policyFilters.iso3[0] !== "USA" && place.level === "State / Province")
+        (policyFilters.iso3[0] !== "USA" &&
+          place.level === "State / Province") ||
+        policyFilters.iso3[0] === "Unspecified"
       ) {
-        path = [
-          ...path,
-          "children",
-          policy.auth_entity[0].place.loc.split(",")[0],
-        ];
+        path = [...path, "children", policy.auth_entity[0].place.loc];
       }
 
       path = [...path, "children", `ID${policy.id}`];
