@@ -46,7 +46,7 @@ const OthersInDocument = ({ policy, path }) => {
     if (policy && policy.policy_number) getPoliciesInDocument();
   }, [policy]);
 
-  if (policies)
+  if (policies && policies.length > 0)
     return (
       <div className={styles.othersInDocument}>
         <h2>Other Policies in this Document</h2>

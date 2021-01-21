@@ -46,7 +46,7 @@ const RelatedPolicies = ({ policy, path }) => {
     if (policy && policy.policy_number) getPoliciesInDocument();
   }, [policy]);
 
-  if (policies)
+  if (policies && policies.length > 0)
     return (
       <div className={styles.relatedPolicies}>
         <h2>Explore Related Policies</h2>
