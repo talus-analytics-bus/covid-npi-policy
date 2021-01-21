@@ -240,14 +240,11 @@ const PolicyPage = props => {
         </div>
       </section>
 
+      <CourtChallenges {...{ policy }} />
+
       <section className={styles.policyDetails}>
         <h2>Caseload and Policy Timeline</h2>
         <CaseloadAndPolicies {...{ policy, policyObjectPath, policyID }} />
-      </section>
-
-      <section className={styles.policyDetails}>
-        <h2>Court Challenges</h2>
-        <CourtChallenges {...{ policyID }} />
       </section>
 
       <section className={styles.relatedPolicies}>
