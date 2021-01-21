@@ -12,7 +12,7 @@ import ActiveTargets from "./ActiveTargets/ActiveTargets";
 import styles from "./PolicyFilters.module.scss";
 
 const PolicyFilters = props => (
-  <>
+  <div className={styles.filterSection}>
     <div className={styles.filterBar}>
       <DateSortControl />
       <DateRangeControl />
@@ -24,7 +24,7 @@ const PolicyFilters = props => (
       <ActiveDateRange />
       <ActiveTargets />
     </ActiveFilterBar>
-  </>
+  </div>
 );
 
 export default PolicyFilters;

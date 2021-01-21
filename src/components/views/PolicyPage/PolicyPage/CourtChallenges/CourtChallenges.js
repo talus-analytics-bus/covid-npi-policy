@@ -48,7 +48,7 @@ const CourtChallenges = ({ policy }) => {
         ],
       });
 
-      console.log(challengeResponse);
+      // console.log(challengeResponse);
       setChallenges(challengeResponse.data);
     };
 

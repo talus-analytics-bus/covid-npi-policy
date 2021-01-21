@@ -1,4 +1,19 @@
-.filterBar {
-  display: flex;
-  margin-bottom: 1rem;
+.filterSection {
+  button {
+    &:focus {
+      outline: revert;
+
+      &:not(:focus-visible) {
+        outline: none;
+      }
+    }
+    &:focus-visble {
+      outline: revert;
+    }
+  }
+
+  .filterBar {
+    display: flex;
+    margin-bottom: 1rem;
+  }
 }
