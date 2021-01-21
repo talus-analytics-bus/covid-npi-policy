@@ -228,8 +228,11 @@ export const loadPolicyDescriptions = async ({
       "date_start_effective",
       "date_end_actual",
       "auth_entity",
+      "court_challenges.id",
     ],
   });
+
+  console.log(policyResponse);
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
@@ -242,6 +245,12 @@ export const loadPolicyDescriptions = async ({
       ];
 
       const place = policy.auth_entity[0].place;
+
+      if (policy.court_challenges)
+        console.log([
+          policy.auth_entity[0].place.level,
+          policy[SUBCATEGORY_FIELD_NAME],
+        ]);
 
       if (
         (filters.iso3[0] === "USA" && place.level === "Local") ||
@@ -269,6 +278,7 @@ export const loadPolicyDescriptions = async ({
           [CATEGORY_FIELD_NAME]: policy[CATEGORY_FIELD_NAME],
           [SUBCATEGORY_FIELD_NAME]: policy[SUBCATEGORY_FIELD_NAME],
           auth_entity: policy.auth_entity,
+          court_challenges: policy.court_challenges,
         },
       });
     });
@@ -298,6 +308,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       "auth_entity",
       "authority_name",
       "policy_number",
+      "court_challenges.id",
     ],
   });
 
@@ -346,6 +357,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
           date_issued: policy.date_issued,
           authority_name: policy.authority_name,
           policy_number: policy.policy_number,
+          court_challenges: policy.court_challenges,
         },
       });
     });

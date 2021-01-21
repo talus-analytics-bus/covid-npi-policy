@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 
 import styles from "./PolicySummary.module.scss";
 
+import CourtChallengeIcon from "../../../../assets/icons/CourtChallengeIcon.svg";
+
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
@@ -86,40 +88,49 @@ const PolicySummary = props => {
         //   </div>
         // </div>
       )}
-      <div className={styles.metadata}>
-        <div>
-          <h1>Effective from</h1>
-          <h2>{formatDate(new Date(props.policy.date_start_effective))}</h2>
-        </div>
-        <div>
-          <h1>Ended</h1>
-          <h2>
-            {props.policy.date_end_actual
-              ? formatDate(new Date(props.policy.date_end_actual))
-              : "Active"}
-          </h2>
-        </div>
-        <div>
-          <h1>Published in</h1>
-          {truncateTitle ? (
-            <Tippy
-              interactive={true}
-              allowHTML={true}
-              content={
-                <p className={styles.ipopup}>{props.policy.policy_name}</p>
-              }
-              maxWidth={"40rem"}
-              theme={"light"}
-              placement={"bottom"}
-              offset={[-30, 10]}
-            >
+      <header className={styles.header}>
+        <div className={styles.metadata}>
+          <div>
+            <h1>Effective from</h1>
+            <h2>{formatDate(new Date(props.policy.date_start_effective))}</h2>
+          </div>
+          <div>
+            <h1>Ended</h1>
+            <h2>
+              {props.policy.date_end_actual
+                ? formatDate(new Date(props.policy.date_end_actual))
+                : "Active"}
+            </h2>
+          </div>
+          <div>
+            <h1>Published in</h1>
+            {truncateTitle ? (
+              <Tippy
+                interactive={true}
+                allowHTML={true}
+                content={
+                  <p className={styles.ipopup}>{props.policy.policy_name}</p>
+                }
+                maxWidth={"40rem"}
+                theme={"light"}
+                placement={"bottom"}
+                offset={[-30, 10]}
+              >
+                <h2>{title}</h2>
+              </Tippy>
+            ) : (
               <h2>{title}</h2>
-            </Tippy>
-          ) : (
-            <h2>{title}</h2>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+        {props.policy.court_challenges && (
+          <img
+            className={styles.courtChallengeIcon}
+            src={CourtChallengeIcon}
+            alt="Challenged in Court"
+          />
+        )}
+      </header>
       <p>
         {description} {truncateDescription && <span>read more</span>}
       </p>

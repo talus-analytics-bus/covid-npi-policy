@@ -9,6 +9,7 @@ import * as MiniMap from "../MiniMap/MiniMap";
 import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 import OthersInDocument from "./OthersInDocument/OthersInDocument";
 import RelatedPolicies from "./RelatedPolicies/RelatedPolicies";
+import CourtChallenges from "./CourtChallenges/CourtChallenges";
 
 import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
@@ -242,6 +243,11 @@ const PolicyPage = props => {
       <section className={styles.policyDetails}>
         <h2>Caseload and Policy Timeline</h2>
         <CaseloadAndPolicies {...{ policy, policyObjectPath, policyID }} />
+      </section>
+
+      <section className={styles.policyDetails}>
+        <h2>Court Challenges</h2>
+        <CourtChallenges {...{ policyID }} />
       </section>
 
       <section className={styles.relatedPolicies}>

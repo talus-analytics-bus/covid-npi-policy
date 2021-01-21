@@ -35,6 +35,10 @@
     transition: 150ms ease;
   }
 
+  .header {
+    display: flex;
+  }
+
   .breadcrumbs {
     width: 100%;
     text-align: right;
@@ -111,6 +115,13 @@
       text-decoration: none;
       background-color: #2892a9;
     }
+  }
+
+  .courtChallengeIcon {
+    width: 3em;
+    height: 3em;
+    margin-left: auto;
+    margin-top: 25px;
   }
 }
 
