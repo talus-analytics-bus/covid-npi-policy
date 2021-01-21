@@ -46,14 +46,22 @@ const RelatedPolicies = ({ policy, path }) => {
     if (policy && policy.policy_number) getPoliciesInDocument();
   }, [policy]);
 
-  return (
-    <div className={styles.relatedPolicies}>
-      {policies &&
-        policies.map(policy => (
-          <MiniPolicyBox key={policy.id} {...{ policy, iso3, state, path }} />
-        ))}
-    </div>
-  );
+  if (policies)
+    return (
+      <div className={styles.relatedPolicies}>
+        <h2>Explore Related Policies</h2>
+        <div className={styles.others}>
+          {policies &&
+            policies.map(policy => (
+              <MiniPolicyBox
+                key={policy.id}
+                {...{ policy, iso3, state, path }}
+              />
+            ))}
+        </div>
+      </div>
+    );
+  else return false;
 };
 
 export default RelatedPolicies;

@@ -46,14 +46,22 @@ const OthersInDocument = ({ policy, path }) => {
     if (policy && policy.policy_number) getPoliciesInDocument();
   }, [policy]);
 
-  return (
-    <div className={styles.othersInDocument}>
-      {policies &&
-        policies.map(policy => (
-          <MiniPolicyBox key={policy.id} {...{ policy, iso3, state, path }} />
-        ))}
-    </div>
-  );
+  if (policies)
+    return (
+      <div className={styles.othersInDocument}>
+        <h2>Other Policies in this Document</h2>
+        <div className={styles.others}>
+          {policies &&
+            policies.map(policy => (
+              <MiniPolicyBox
+                key={policy.id}
+                {...{ policy, iso3, state, path }}
+              />
+            ))}
+        </div>
+      </div>
+    );
+  else return false;
 };
 
 export default OthersInDocument;

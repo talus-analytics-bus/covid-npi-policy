@@ -1,4 +1,8 @@
 .othersInDocument {
-  display: flex;
-  justify-content: space-between;
+  margin-top: 4rem;
+
+  .others {
+    display: flex;
+    // justify-content: space-between;
+  }
 }
