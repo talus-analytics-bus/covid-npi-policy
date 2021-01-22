@@ -12,7 +12,12 @@ const NavDropDown = props => {
       onMouseEnter={() => setExpanderOpen(true)}
       onMouseLeave={() => setExpanderOpen(false)}
     >
-      <ExpandingSection floating clickAwayClose open={expanderOpen}>
+      <ExpandingSection
+        floating
+        open={expanderOpen}
+        onOpen={() => setExpanderOpen(true)}
+        onClose={() => setExpanderOpen(false)}
+      >
         <>{children[0]}</>
         <>{children.slice(1)}</>
       </ExpandingSection>
