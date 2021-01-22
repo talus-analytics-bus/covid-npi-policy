@@ -8,19 +8,12 @@ let timeout;
 
 const DateRangeControl = props => {
   const {
-    policyFilters,
     setPolicyFilters,
     setStatus,
+    searchTextInputValue,
+    setSearchTextInputValue,
     // setPolicyObject,
   } = React.useContext(policyContext);
-
-  // local state to handle typing so that
-  // updating the filter itself can debounced
-  // set this to match the current value in filters
-  // on component mount so that the text persists after navigation
-  const [searchText, setSearchText] = React.useState(
-    (policyFilters._text && policyFilters._text[0]) || ""
-  );
 
   const updateSearchFilter = text => {
     console.log("UpdateSearchFIlter");
@@ -40,19 +33,30 @@ const DateRangeControl = props => {
     const value = event.target.value;
 
     // debounce by 250 ms so we don't spam the server
-    setSearchText(value);
+    setSearchTextInputValue(value);
     clearTimeout(timeout);
     timeout = setTimeout(() => updateSearchFilter(value), 300);
+  };
+
+  const clearSearch = e => {
+    e.preventDefault();
+    setSearchTextInputValue("");
+
+    setPolicyFilters(prev => ({
+      ...prev,
+      _text: undefined,
+    }));
   };
 
   return (
     <label className={styles.searchControl}>
       <input
         type="text"
-        value={searchText}
+        value={searchTextInputValue}
         onChange={onChange}
         placeholder="search"
       />
+      <button aria-label="Clear Search" onClick={clearSearch} />
     </label>
   );
 };

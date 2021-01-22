@@ -92,6 +92,9 @@ const PolicyRouter = props => {
   }, [state, iso3]);
 
   const [targets, setTargets] = React.useState({ all: [], selected: [] });
+  const [searchTextInputValue, setSearchTextInputValue] = React.useState(
+    (policyFilters._text && policyFilters._text[0]) || ""
+  );
 
   const policyContextValue = {
     policyObject,
@@ -114,6 +117,8 @@ const PolicyRouter = props => {
     setPolicySearchPage,
     targets,
     setTargets,
+    searchTextInputValue,
+    setSearchTextInputValue,
   };
 
   React.useEffect(() => {
