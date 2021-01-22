@@ -91,6 +91,11 @@ const PolicyRouter = props => {
     else setLocationName(state);
   }, [state, iso3]);
 
+  const [dateRangeControlValue, setDateRangeControlValue] = React.useState({
+    startDate: null,
+    endDate: null,
+    key: "selection",
+  });
   const [targets, setTargets] = React.useState({ all: [], selected: [] });
   const [searchTextInputValue, setSearchTextInputValue] = React.useState(
     (policyFilters._text && policyFilters._text[0]) || ""
@@ -119,6 +124,8 @@ const PolicyRouter = props => {
     setTargets,
     searchTextInputValue,
     setSearchTextInputValue,
+    dateRangeControlValue,
+    setDateRangeControlValue,
   };
 
   React.useEffect(() => {

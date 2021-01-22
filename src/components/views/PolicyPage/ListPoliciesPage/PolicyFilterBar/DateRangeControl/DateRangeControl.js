@@ -28,22 +28,21 @@ export const dateRangeLabel = dateRange => {
 };
 
 const DateRangeControl = props => {
-  const { setPolicyFilters, setStatus, setPolicyObject } = React.useContext(
-    policyContext
-  );
-
-  const [dateRange, setDateRange] = React.useState({
-    startDate: null,
-    endDate: null,
-    key: "selection",
-  });
+  const {
+    setStatus,
+    setPolicyObject,
+    setPolicyFilters,
+    dateRangeControlValue,
+    setDateRangeControlValue,
+  } = React.useContext(policyContext);
 
   const [datePickerOpen, setDatePickerOpen] = React.useState(false);
 
-  const unedited = !dateRange.startDate && !dateRange.endDate;
+  const unedited =
+    !dateRangeControlValue.startDate && !dateRangeControlValue.endDate;
 
   const onChangeDateRange = event => {
-    setDateRange(event.selection);
+    setDateRangeControlValue(event.selection);
     if (event.selection.startDate !== event.selection.endDate) {
       setPolicyObject({});
       setPolicyFilters(prev => ({
@@ -69,7 +68,9 @@ const DateRangeControl = props => {
         onOpen={() => setDatePickerOpen(true)}
         onClose={() => setDatePickerOpen(false)}
       >
-        <span className={styles.buttonLabel}>{dateRangeLabel(dateRange)}</span>
+        <span className={styles.buttonLabel}>
+          {dateRangeLabel(dateRangeControlValue)}
+        </span>
         <div className={styles.datePickerFrame}>
           <DateRange
             editableDateInputs
@@ -78,7 +79,7 @@ const DateRangeControl = props => {
             moveRangeOnFirstSelection={false}
             startDatePlaceholder={"Start date"}
             endDatePlaceholder={"End date"}
-            ranges={[dateRange]}
+            ranges={[dateRangeControlValue]}
             onChange={event => onChangeDateRange(event)}
           />
         </div>

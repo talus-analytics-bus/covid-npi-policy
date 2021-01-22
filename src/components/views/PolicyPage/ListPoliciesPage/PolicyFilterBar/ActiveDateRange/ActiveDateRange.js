@@ -13,9 +13,15 @@ const ActiveDateRange = props => {
     policyFilters,
     setPolicyObject,
     setPolicyFilters,
+    setDateRangeControlValue,
   } = React.useContext(policyContext);
 
   const resetDateRange = () => {
+    setDateRangeControlValue({
+      startDate: null,
+      endDate: null,
+      key: "selection",
+    });
     setPolicyFilters(prev => ({
       ...prev,
       dates_in_effect: undefined,

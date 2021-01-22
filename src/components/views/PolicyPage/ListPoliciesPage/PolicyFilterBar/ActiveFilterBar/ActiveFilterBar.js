@@ -36,6 +36,7 @@ const ActiveFilterBar = props => {
     policySummaryObject,
     policySearchResults,
     setSearchTextInputValue,
+    setDateRangeControlValue,
   } = React.useContext(policyContext);
 
   const searchActive = policyFilters._text && policyFilters._text[0] !== "";
@@ -66,6 +67,11 @@ const ActiveFilterBar = props => {
     setTargets(prev => ({ ...prev, selected: [] }));
     setPolicyObject(policySummaryObject);
     setSearchTextInputValue("");
+    setDateRangeControlValue({
+      startDate: null,
+      endDate: null,
+      key: "selection",
+    });
     setStatus(prev => ({
       ...prev,
       policies: "initial",
