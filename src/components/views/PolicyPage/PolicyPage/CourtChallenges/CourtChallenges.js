@@ -62,8 +62,8 @@ const CourtChallenges = ({ policy }) => {
           challenges.map(challenge => (
             <section key={challenge.id} className={styles.courtChallenge}>
               <header className={styles.header}>
-                <h2>Court Challenge</h2>
                 <img src={courtChallengeIcon} alt="Court Challenge Icon" />
+                <h2>Court Challenge</h2>
               </header>
               <div className={styles.info}>
                 <div className={styles.leftCol}>
