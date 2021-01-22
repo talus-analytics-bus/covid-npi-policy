@@ -247,10 +247,10 @@ const PolicyPage = props => {
 
       <CourtChallenges {...{ policy }} />
 
-      <section className={styles.policyDetails}>
-        <h2>Caseload and Policy Timeline</h2>
-        <CaseloadAndPolicies {...{ policy, policyObjectPath, policyID }} />
-      </section>
+      {/* <section className={styles.policyDetails}> */}
+      {/*   <h2>Caseload and Policy Timeline</h2> */}
+      {/*   <CaseloadAndPolicies {...{ policy, policyObjectPath, policyID }} /> */}
+      {/* </section> */}
 
       <OthersInDocument path={policyObjectPath} policy={policy} />
 
