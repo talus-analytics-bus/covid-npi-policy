@@ -26,6 +26,14 @@ const formatDate = date => {
   });
 };
 
+const formatSentenceFromArray = arr => {
+  const unique = [...new Set(arr)];
+  if (unique.length === 1) return unique[0].toLowerCase();
+  else
+    return `${unique.slice(0, -1).join(", ")}, and
+      ${unique[unique.length - 1]}`.toLowerCase();
+};
+
 const SourceSummary = ({ policy, setModalOpen }) => {
   const { policyFilters } = React.useContext(policyContext);
 
@@ -100,7 +108,27 @@ const SourceSummary = ({ policy, setModalOpen }) => {
       );
     });
 
-  console.log(policies);
+  const policyCategoriesText =
+    policies &&
+    formatSentenceFromArray(
+      policies
+        .map(policy => policy[CATEGORY_FIELD_NAME])
+        .filter(target => target !== "Unspecified")
+    );
+
+  const policyTargetsText =
+    policies &&
+    formatSentenceFromArray(
+      policies
+        .map(
+          policy =>
+            policy.subtarget &&
+            policy.subtarget
+              .filter(target => target !== "Unspecified")
+              .map(s => s.replace(/(\([^)]+\))/g, "").trim())
+        )
+        .flat()
+    );
 
   return (
     <div className={styles.sourceSummary}>
@@ -114,36 +142,11 @@ const SourceSummary = ({ policy, setModalOpen }) => {
           {policies && (
             <>
               It contains {policies.length} policies covering{" "}
-              {[
-                ...new Set(
-                  policies
-                    .map(policy => policy[CATEGORY_FIELD_NAME])
-                    .filter(target => target !== "Unspecified")
-                ),
-              ].join(", ")}
-              .
+              {policyCategoriesText}.
             </>
           )}
         </p>
-        {policies && (
-          <p>
-            These policy measures target{" "}
-            {[
-              ...new Set(
-                policies
-                  .map(
-                    policy =>
-                      policy.subtarget &&
-                      policy.subtarget.filter(
-                        target => target !== "Unspecified"
-                      )
-                  )
-                  .flat()
-              ),
-            ].join(", ")}
-            .
-          </p>
-        )}
+        {policies && <p>These policy measures target {policyTargetsText}.</p>}
         <div className={styles.policiesHeader}>
           <h2>Policies in this Document</h2>
           <a
