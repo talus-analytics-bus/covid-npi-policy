@@ -10,6 +10,7 @@ import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 import OthersInDocument from "./OthersInDocument/OthersInDocument";
 import RelatedPolicies from "./RelatedPolicies/RelatedPolicies";
 import CourtChallenges from "./CourtChallenges/CourtChallenges";
+import ExploreSource from "./ExploreSource/ExploreSource";
 
 import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
@@ -62,9 +63,9 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  console.log(policyObjectPath);
-  console.log(policyObject);
-  console.log(policy);
+  // console.log(policyObjectPath);
+  // console.log(policyObject);
+  // console.log(policy);
 
   // debugger;
 
@@ -171,7 +172,7 @@ const PolicyPage = props => {
             </p>
             <h3>Description</h3>
             <p>{policy && policy.desc}</p>
-            <button>EXPLORE SOURCE</button>
+            <ExploreSource {...{ policy }} />
           </div>
           <div className={styles.rightCol}>
             <h3>Policy Category</h3>

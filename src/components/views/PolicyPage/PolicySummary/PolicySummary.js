@@ -23,10 +23,12 @@ const formatDate = date => {
 
 const PolicySummary = props => {
   const location = useLocation();
-  const [iso3, state] = location.pathname
-    .replace(/\/$/, "")
-    .split("/")
-    .slice(-2);
+  const [iso3, state] =
+    props.location ||
+    location.pathname
+      .replace(/\/$/, "")
+      .split("/")
+      .slice(-2);
 
   const descriptionWords = props.policy.desc.split(" ");
 

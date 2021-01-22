@@ -309,6 +309,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       "authority_name",
       "policy_number",
       "court_challenges.id",
+      "file",
     ],
   });
 
@@ -358,6 +359,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
           authority_name: policy.authority_name,
           policy_number: policy.policy_number,
           court_challenges: policy.court_challenges,
+          file: policy.file,
         },
       });
     });
