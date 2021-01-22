@@ -77,6 +77,7 @@
     text-transform: uppercase;
   }
 
+  .headerInfoRow,
   .row {
     display: flex;
     flex-direction: row;
@@ -97,6 +98,26 @@
     }
     .rightCol {
       flex-basis: 30%;
+    }
+  }
+
+  .headerInfoRow {
+    .col:not(:last-of-type) {
+      margin-right: 0em;
+    }
+
+    justify-content: space-between;
+  }
+
+  .courtChallengeIcon {
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-top: 25px;
+      width: 40px;
+      height: 40px;
+      margin-right: 1rem;
     }
   }
 

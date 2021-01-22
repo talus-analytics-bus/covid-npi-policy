@@ -12,7 +12,9 @@ import RelatedPolicies from "./RelatedPolicies/RelatedPolicies";
 import CourtChallenges from "./CourtChallenges/CourtChallenges";
 import ExploreSource from "./ExploreSource/ExploreSource";
 
-import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
+import courtChallengeIcon from "../../../../assets/icons/CourtChallengeIcon.svg";
+
+// import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
@@ -111,7 +113,7 @@ const PolicyPage = props => {
               </div>
             </div>
 
-            <div className={styles.row}>
+            <div className={styles.headerInfoRow}>
               <div className={styles.col}>
                 <h3>Effective from</h3>
                 <p>
@@ -143,6 +145,17 @@ const PolicyPage = props => {
                   </strong>
                 </p>
               </div>
+              {policy && policy.court_challenges && (
+                <div className={styles.col}>
+                  <div className={styles.courtChallengeIcon}>
+                    <img src={courtChallengeIcon} alt="Court Challenge Icon" />
+                    <h3>
+                      Challenged <br />
+                      In Court
+                    </h3>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.rightCol}>
