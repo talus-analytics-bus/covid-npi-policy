@@ -5,6 +5,8 @@ import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
 import styles from "./IntroSection.module.scss";
 
+const numberFormat = new Intl.NumberFormat("en-us");
+
 const IntroSection = props => {
   const location = useLocation();
   const [iso3, state] = location.pathname
@@ -95,10 +97,12 @@ const IntroSection = props => {
         {status.policiesSummary === iso3 && (
           <>
             <div className={styles.policies}>
-              <strong>{policyCount.count}</strong> Total Policies
+              <strong>{numberFormat.format(policyCount.count)}</strong> Total
+              Policies
             </div>
             <div className={styles.status}>
-              <strong>{policyCount.active}</strong> Active policies
+              <strong>{numberFormat.format(policyCount.active)}</strong> Active
+              policies
             </div>
           </>
         )}
@@ -118,7 +122,8 @@ const IntroSection = props => {
         {status.caseload === iso3 && (
           <>
             <div className={styles.status}>
-              <strong>{sevenDaySum}</strong> New Cases in Past 7 Days
+              <strong>{numberFormat.format(sevenDaySum)}</strong> New Cases in
+              Past 7 Days
             </div>
             <div className={styles.status}>
               <strong>{Math.abs(sevenDayChangePCT)}% </strong>
@@ -150,7 +155,7 @@ const IntroSection = props => {
             status.policyStatus === "loading") && (
             <>COVID-AMP is currently tracking </>
           )}
-          {policyCount.active} active{" "}
+          {numberFormat.format(policyCount.active)} active{" "}
           {state !== "national" ? "state and county" : "national and local"}{" "}
           {Object.keys(policySummaryObject).length > 1 ? "policies" : "policy"}{" "}
           covering {policyCategoriesText}
