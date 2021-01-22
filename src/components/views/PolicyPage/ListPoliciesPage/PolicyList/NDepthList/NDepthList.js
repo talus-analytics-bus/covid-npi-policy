@@ -2,18 +2,21 @@
 //   // object whose keys we want to enumerate
 //   obj={obj}
 //
+//   // the function for sorting
+//   sort={sortfunc}
+//
 //   // starting path
 //   path={path}
 //
 //   // the pattern which will match keys at n depth
 //   idPattern={/^ID/}
 //
-//   // the component to render keys up to n-1
+//   // the function to render keys up to n-1
 //   renderCategory={(key, object, children) =>
 //     <li>{props.children}</li>
 //   }
 //
-//   // the component to render the object at n depth
+//   // the function to render the object at n depth
 //   renderItem={(key, object) =>
 //     <p>{props.children}</p>
 //     }
