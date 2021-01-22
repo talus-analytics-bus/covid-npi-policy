@@ -1,0 +1,45 @@
+.sourceSummary {
+  padding: 1rem;
+
+  .header {
+    margin-top: 1rem;
+
+    h1 {
+      text-transform: capitalize;
+      font-family: "rawline";
+      // font-size: 38px;
+      font-size: 1.5em;
+      color: #29334b;
+      font-weight: 400;
+    }
+    h2 {
+      color: #29334b;
+    }
+
+    p {
+      padding-top: 1rem;
+    }
+  }
+  .listPolicies,
+  .header {
+  }
+
+  .policiesHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .button {
+      margin-top: 1rem;
+      background: #4e8490;
+      border-radius: 5px;
+      border: 1px solid #3f6c76;
+      color: white;
+      font-size: 0.9em;
+      padding: 0.5em 1em;
+    }
+  }
+
+  .listPolicies {
+  }
+}
