@@ -31,7 +31,9 @@ const ActiveDateRange = props => {
   if (policyFilters.dates_in_effect)
     return (
       <div className={styles.activeDateRange}>
-        <label>Dates Policy in Effect</label>
+        <label>
+          <strong>Dates Policy in Effect</strong>
+        </label>
         <RemoveFilterButton onClick={resetDateRange}>
           Active During:{" "}
           {dateRangeLabel({

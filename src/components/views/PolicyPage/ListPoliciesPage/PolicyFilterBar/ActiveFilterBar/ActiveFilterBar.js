@@ -79,7 +79,7 @@ const ActiveFilterBar = props => {
   const datesAndTargets = (
     <>
       <p>
-        <strong>Active Filters:</strong>
+        <strong>Filters</strong>
       </p>
       <div className={styles.activeFilters}>{props.children}</div>
     </>

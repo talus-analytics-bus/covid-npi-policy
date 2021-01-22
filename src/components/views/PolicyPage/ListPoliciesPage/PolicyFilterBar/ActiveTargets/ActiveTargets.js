@@ -44,8 +44,10 @@ const ActiveDateRange = props => {
           <div key={filter} className={styles.activeTarget}>
             {index === 0 ? (
               <label>
-                Policy{" "}
-                {policyFilters.subtarget.length === 1 ? "Target" : "Targets"}
+                <strong>
+                  Policy{" "}
+                  {policyFilters.subtarget.length === 1 ? "Target" : "Targets"}
+                </strong>
               </label>
             ) : (
               <label>&nbsp;</label>
