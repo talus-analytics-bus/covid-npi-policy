@@ -3,6 +3,10 @@ import { useLocation } from "react-router-dom";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
+import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocumentIcon.svg";
+import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
+import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
+
 import styles from "./IntroSection.module.scss";
 
 const numberFormat = new Intl.NumberFormat("en-us");
@@ -97,12 +101,14 @@ const IntroSection = props => {
         {status.policiesSummary === iso3 && (
           <>
             <div className={styles.policies}>
-              <strong>{numberFormat.format(policyCount.count)}</strong> Total
-              Policies
+              <img src={policyPageDocumentIcon} alt="Policies Icon" />
+              <strong>{numberFormat.format(policyCount.count)}</strong>&nbsp;
+              Total Policies
             </div>
             <div className={styles.status}>
-              <strong>{numberFormat.format(policyCount.active)}</strong> Active
-              policies
+              <img src={policyPageDocumentIconActive} alt="Policies Icon" />
+              <strong>{numberFormat.format(policyCount.active)}</strong>&nbsp;
+              Active policies
             </div>
           </>
         )}
@@ -121,12 +127,25 @@ const IntroSection = props => {
         )}
         {status.caseload === iso3 && (
           <>
-            <div className={styles.status}>
-              <strong>{numberFormat.format(sevenDaySum)}</strong> New Cases in
-              Past 7 Days
+            <div className={styles.newCases}>
+              <img src={newCasesIcon} alt="New Cases Icon" />
+              <strong>{numberFormat.format(sevenDaySum)}</strong>&nbsp; New
+              Cases in Past 7 Days
             </div>
-            <div className={styles.status}>
-              <strong>{Math.abs(sevenDayChangePCT)}% </strong>
+            <div className={styles.caseloadChange}>
+              <span
+                className={styles.change}
+                style={{
+                  backgroundColor:
+                    sevenDayChangePCT > 0 ? "#A6272A" : "#007e00",
+                }}
+              >
+                <span className={styles.arrow}>
+                  {sevenDayChangePCT > 0 ? <>&#9650; </> : <>&#9660; </>}
+                </span>
+                <strong>{Math.abs(sevenDayChangePCT)}% </strong>
+              </span>
+              &nbsp;
               {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7 Days
             </div>
           </>

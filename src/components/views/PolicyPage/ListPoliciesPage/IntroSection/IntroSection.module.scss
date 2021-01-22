@@ -24,6 +24,7 @@
     }
 
     div {
+      display: flex;
       // margin: 1rem;
       margin-top: 1rem;
       margin-left: 0;
@@ -34,6 +35,33 @@
       // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.0625);
       text-align: center;
       margin-right: 3rem;
+
+      > img {
+        width: 1rem;
+        margin-right: 0.5em;
+      }
+    }
+    .newCases {
+      img {
+        width: 1.5em;
+      }
+    }
+
+    .caseloadChange {
+      align-items: baseline;
+
+      .change {
+        font-size: 0.9em;
+        padding: 2.5px 5px;
+        border-radius: 3px;
+        color: white;
+
+        .arrow {
+          position: relative;
+          top: -0.025em;
+          font-size: 0.65em;
+        }
+      }
     }
   }
 }
