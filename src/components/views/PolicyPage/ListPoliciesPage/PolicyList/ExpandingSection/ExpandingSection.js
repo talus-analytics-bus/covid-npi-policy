@@ -108,11 +108,27 @@ const ExpandingSection = props => {
 
   const childElements = renderChildren && children.slice(1);
 
+  // detect onBlur, set a no-time timer to close it next tick
+  // but cancel the timer if one of the child elements got focus
+  // taken from here:
+  // https://reactjs.org/docs/accessibility.html#mouse-and-pointer-events
+
+  let blurTimeout;
+
+  const onBlurHandler = () => {
+    if (props.floating) {
+      blurTimeout = setTimeout(() => {
+        props.onClose();
+      });
+    }
+  };
+
+  const onFocusHandler = () => {
+    clearTimeout(blurTimeout);
+  };
+
   return (
-    <div>
-      {props.floating && props.open && (
-        <button className={styles.closer} onClick={props.onClose} />
-      )}
+    <div onBlur={onBlurHandler} onFocus={onFocusHandler}>
       <button className={styles.expanderButton} onClick={onClickHandler}>
         {children[0]}
       </button>
