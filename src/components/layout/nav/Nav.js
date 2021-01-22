@@ -8,6 +8,8 @@ import ReactTooltip from "react-tooltip";
 import logo from "../../../assets/images/logo.svg";
 import localBanner from "../../../assets/images/local-banner.svg";
 
+import HoverDropdown from "./HoverDropdown/HoverDropdown";
+
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
@@ -68,15 +70,21 @@ const Nav = ({ page, ...props }) => {
                 </i>
               </button>
               <div ref={linksRef} className={styles.links}>
-                <Link
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  className={page === "policymaps" ? styles.active : ""}
-                  to={"/policymaps"}
-                >
-                  Map
-                </Link>
+                <HoverDropdown>
+                  <span className={styles.hoverTarget}>Location</span>
+                  <div className={styles.navSubmenu}>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "policymaps" ? styles.active : ""}
+                      to={"/policymaps"}
+                    >
+                      Map
+                    </Link>
+                    <p>search goes here</p>
+                  </div>
+                </HoverDropdown>
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);
