@@ -14,7 +14,7 @@ import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
 import styles from "./SourceSummary.module.scss";
 
-const API_URL = process.env.REACT_APP_METRICS_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const formatDate = date => {
   if (!date) return undefined;
@@ -149,12 +149,16 @@ const SourceSummary = ({ policy, setModalOpen }) => {
         {policies && <p>These policy measures target {policyTargetsText}.</p>}
         <div className={styles.policiesHeader}>
           <h2>Policies in this Document</h2>
-          <a
-            href={policy && `${API_URL}get/file/redirect?id=${policy.file[0]}`}
-            className={styles.button}
-          >
-            DOWNLOAD (PDF)
-          </a>
+          {policy.file && (
+            <a
+              href={
+                policy && `${API_URL}/get/file/redirect?id=${policy.file[0]}`
+              }
+              className={styles.button}
+            >
+              DOWNLOAD (PDF)
+            </a>
+          )}
         </div>
       </header>
       <section className={styles.listPolicies}>{summaries}</section>
