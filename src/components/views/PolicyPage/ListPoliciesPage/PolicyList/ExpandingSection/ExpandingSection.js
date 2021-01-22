@@ -110,7 +110,7 @@ const ExpandingSection = props => {
 
   return (
     <div>
-      {props.floating && renderChildren && (
+      {props.floating && props.open && (
         <button className={styles.closer} onClick={props.onClose} />
       )}
       <button className={styles.expanderButton} onClick={onClickHandler}>
