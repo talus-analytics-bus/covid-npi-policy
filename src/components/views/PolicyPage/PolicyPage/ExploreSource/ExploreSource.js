@@ -11,7 +11,7 @@ const ExploreSource = ({ policy }) => {
   return (
     <>
       <button className={styles.button} onClick={() => setModalOpen(true)}>
-        EXPLORE SOURCE
+        VIEW SOURCE DOCUMENT
       </button>
       <Modal open={modalOpen} setOpen={setModalOpen}>
         <SourceSummary {...{ policy, setModalOpen }} />
