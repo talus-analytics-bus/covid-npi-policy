@@ -232,8 +232,6 @@ export const loadPolicyDescriptions = async ({
     ],
   });
 
-  console.log(policyResponse);
-
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       let path = [
