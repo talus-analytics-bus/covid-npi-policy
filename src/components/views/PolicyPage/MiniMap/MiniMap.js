@@ -181,13 +181,13 @@ export const SVG = props => {
     }
     return paths;
   }, [
-    // featureContextConsumer.features.counties,
-    // featureContextConsumer.features.countries,
-    // featureContextConsumer.features.states,
+    featureContextConsumer.features.counties,
+    featureContextConsumer.features.countries,
+    featureContextConsumer.features.states,
+    featureContextConsumer.scope,
     propsCounties,
     propsCountry,
     propsState,
-    featureContextConsumer.features,
   ]);
 
   // console.count("render minmap SVG");
