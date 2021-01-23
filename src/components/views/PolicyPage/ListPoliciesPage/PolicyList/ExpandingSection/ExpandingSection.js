@@ -116,11 +116,11 @@ const ExpandingSection = props => {
   let blurTimeout;
 
   const onBlurHandler = () => {
-    if (props.floating) {
-      blurTimeout = setTimeout(() => {
-        props.onClose();
-      });
-    }
+    // if (props.floating) {
+    //   blurTimeout = setTimeout(() => {
+    //     props.onClose();
+    //   });
+    // }
   };
 
   const onFocusHandler = () => {

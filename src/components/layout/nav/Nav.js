@@ -9,6 +9,7 @@ import logo from "../../../assets/images/logo.svg";
 import localBanner from "../../../assets/images/local-banner.svg";
 
 import HoverDropdown from "./HoverDropdown/HoverDropdown";
+import LocationSearch from "./LocationSearch/LocationSearch";
 
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
@@ -83,6 +84,7 @@ const Nav = ({ page, ...props }) => {
                       Map
                     </Link>
                     <p>search goes here</p>
+                    <LocationSearch />
                   </div>
                 </HoverDropdown>
                 <Link
