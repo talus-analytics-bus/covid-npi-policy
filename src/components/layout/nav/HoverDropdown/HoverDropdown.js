@@ -10,7 +10,7 @@ const NavDropDown = props => {
   return (
     <div
       onMouseEnter={() => setExpanderOpen(true)}
-      // onMouseLeave={() => setExpanderOpen(false)}
+      onMouseLeave={() => setExpanderOpen(false)}
     >
       <ExpandingSection
         floating
