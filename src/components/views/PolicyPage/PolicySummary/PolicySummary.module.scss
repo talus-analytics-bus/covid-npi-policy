@@ -1,0 +1,132 @@
+.policySummary {
+  position: relative;
+  font-size: 16px;
+  margin-top: 15px;
+  padding: 30px;
+  padding-top: 0;
+  font-family: "rawline";
+  display: block;
+  text-decoration: none;
+  transition: 250ms ease;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    border-radius: 2.5px;
+    background-color: #4f8692;
+    content: "";
+    transition: 300ms ease;
+    opacity: 0;
+  }
+
+  &:hover:before {
+    opacity: 1;
+    transition: 150ms ease;
+  }
+
+  .header {
+    display: flex;
+  }
+
+  .breadcrumbs {
+    width: 100%;
+    text-align: right;
+    margin-bottom: -0.5rem;
+  }
+
+  .metadata {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.5em;
+
+    div {
+      padding-right: 2em;
+      min-width: 12em;
+    }
+
+    h1 {
+      color: #5f6678;
+      font-weight: 500;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      margin-top: 30px;
+    }
+
+    h2 {
+      font-family: "rawline";
+      font-weight: 600;
+      font-size: 1.2em;
+      text-transform: none;
+      line-height: 1.25;
+    }
+
+    h1,
+    a {
+    }
+  }
+
+  span {
+    margin-left: 1rem;
+    color: #5e6678;
+    font-style: italic;
+  }
+
+  p {
+    font-family: "Open Sans";
+    font-weight: 500;
+    line-height: 1.4;
+    font-size: 1.1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    color: #29334b;
+
+    span {
+      margin-left: 0;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .policyButton {
+    display: inline-block;
+    background-color: #4f8692;
+    color: white;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+    font-weight: 600;
+    letter-spacing: 0.0625em;
+    transition: 250ms ease;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #2892a9;
+    }
+  }
+
+  .courtChallengeIcon {
+    width: 2.5em;
+    height: 2.5em;
+    margin-left: auto;
+    margin-top: 28px;
+  }
+}
+
+.ipopup {
+  font-weight: 400;
+  font-style: normal;
+  // padding: 15px;
+  padding: 5px 15px;
+}

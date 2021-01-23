@@ -1,0 +1,28 @@
+.svg {
+  // border: 1px solid lightgrey;
+
+  .averageLine {
+    stroke: #436f79;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .dailyLines line {
+    stroke: #afb2b2;
+    stroke-linecap: round;
+    stroke-width: 1.75;
+  }
+
+  // rect {
+  //   stroke: grey;
+  //   stroke-width: 1;
+  //   fill: none;
+  // }
+
+  line {
+    stroke: black;
+    stroke-width: 1;
+  }
+}

@@ -1,0 +1,29 @@
+.introSection {
+  display: flex;
+  margin-bottom: 2em;
+
+  .miniMapHolder {
+    flex-basis: 25%;
+  }
+}
+
+.caseloadPlot,
+.policyList {
+  // padding-right: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+
+  > h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: #29334b;
+    font-family: "rawline";
+    text-transform: none;
+    font-size: 28px;
+  }
+}
+
+.policyList {
+  min-height: 70vh;
+}

@@ -1,0 +1,39 @@
+.categoryHeader {
+  padding-top: 8px;
+  padding-left: 0px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-left: -8px;
+
+  h2 {
+    font-family: "rawline";
+    font-size: 22px;
+    font-weight: 500;
+    text-transform: none;
+    color: #29334b;
+    margin-left: 0.5rem;
+
+    span {
+      font-weight: 200;
+    }
+  }
+}
+
+.categoryContainer {
+  position: relative;
+  padding-left: 35px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0px;
+    width: 5px;
+    border-radius: 2.5px;
+    background-color: #7fb0b4;
+    content: "";
+  }
+}

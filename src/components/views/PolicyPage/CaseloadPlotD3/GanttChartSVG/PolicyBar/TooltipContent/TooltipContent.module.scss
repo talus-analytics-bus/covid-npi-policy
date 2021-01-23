@@ -1,0 +1,24 @@
+.tooltipContent {
+  padding: 0.75rem;
+
+  header {
+    display: flex;
+    margin-bottom: 1em;
+
+    > div {
+      margin-right: 3em;
+    }
+
+    h1 {
+      font-size: 1em;
+      text-transform: uppercase;
+      color: #5f6678;
+      font-weight: 500;
+    }
+
+    h2 {
+      font-size: 1em;
+      color: #29334b;
+    }
+  }
+}
