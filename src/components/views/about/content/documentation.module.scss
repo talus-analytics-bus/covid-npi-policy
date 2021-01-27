@@ -7,6 +7,16 @@
     .downloads {
       @include spaceItemsHoriz(10px);
       display: flex;
+      i {
+        color: white;
+      }
+      button {
+        &:hover {
+          i {
+            color: $idea-primary-dark-blue;
+          }
+        }
+      }
     }
   }
 
