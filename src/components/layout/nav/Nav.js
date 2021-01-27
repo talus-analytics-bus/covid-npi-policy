@@ -5,7 +5,7 @@ import styles from "./nav.module.scss";
 import ReactTooltip from "react-tooltip";
 
 // assets
-import logo from "../../../assets/images/logo.svg";
+import logo from "../../../assets/images/full-amp-logo.png";
 import localBanner from "../../../assets/images/local-banner.svg";
 
 // constants
