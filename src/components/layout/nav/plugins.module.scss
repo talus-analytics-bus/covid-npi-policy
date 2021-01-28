@@ -5,8 +5,23 @@
     position: relative;
     .menu {
       .links {
+        text-decoration: none;
+        a {
+          &:not(:last-child) {
+            font-family: "Open Sans";
+            margin-right: 30px;
+          }
+          &:hover {
+            color: $idea-primary-light-blue;
+            text-decoration: none;
+          }
+          &.active {
+            font-weight: 600;
+            text-decoration: none;
+          }
+        }
         margin-top: 28px;
-        :nth-last-child(2) {
+        a:nth-last-child(2) {
           margin-right: 0;
         }
         a:last-child {
