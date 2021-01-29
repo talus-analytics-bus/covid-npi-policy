@@ -80,13 +80,16 @@ const ListPoliciesPage = props => {
     policyFilters,
     policySort,
     searchActive,
+    // unpack status to allow
+    // react to do string comparisons
+    status.policies,
+    status.policiesSummary,
+    status.searchResults,
+    // these setters won't change
     setPolicyObject,
     setPolicySearchResults,
     setPolicySummaryObject,
     setStatus,
-    status.policies,
-    status.policiesSummary,
-    status.searchResults,
   ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;

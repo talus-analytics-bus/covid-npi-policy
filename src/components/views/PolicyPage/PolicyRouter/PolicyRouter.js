@@ -118,6 +118,7 @@ const PolicyRouter = props => {
   React.useEffect(() => {
     // scroll to the top
     window.scroll(0, 0);
+    policyListScrollPos[1](0);
 
     // reset filters
     setPolicyFilters({
