@@ -41,7 +41,7 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-    if (!searchActive && status.policies === "initial") {
+    if (!searchActive && status.policies && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       if (!policyFilters.subtarget)
@@ -63,7 +63,11 @@ const ListPoliciesPage = props => {
       });
     }
 
-    if (searchActive && status.searchResults === "initial") {
+    if (
+      searchActive &&
+      status.searchResults &&
+      status.searchResults === "initial"
+    ) {
       setStatus(prev => ({ ...prev, searchResults: "loading" }));
 
       loadPolicySearch({
