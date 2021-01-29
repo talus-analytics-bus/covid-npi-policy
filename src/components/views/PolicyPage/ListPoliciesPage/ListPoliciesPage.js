@@ -132,9 +132,9 @@ const ListPoliciesPage = props => {
           {status.caseload === "error" && (
             <h3>No caseload data found for {locationName}</h3>
           )}
-          {(status.caseload === "loading" || status.caseload === iso3) && (
+          {(status.caseload === "loading" || status.caseload === "loaded") && (
             <>
-              {status.caseload === iso3 ? (
+              {status.caseload === "loaded" ? (
                 <h2>Cases in {locationName}</h2>
               ) : (
                 <h2>&nbsp;</h2>
@@ -156,7 +156,7 @@ const ListPoliciesPage = props => {
             {status.policies === "error" && (
               <h3>No Policies Found in {locationName}</h3>
             )}
-            {status.policies === iso3 && <PolicyList />}
+            {status.policies === "loaded" && <PolicyList />}
           </>
         )}
         {searchActive && (
@@ -172,7 +172,7 @@ const ListPoliciesPage = props => {
                 {locationName}
               </h3>
             )}
-            {status.searchResults === iso3 && <SearchResults />}
+            {status.searchResults === "loaded" && <SearchResults />}
           </>
         )}
       </section>
