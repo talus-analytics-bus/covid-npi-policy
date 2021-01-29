@@ -192,6 +192,19 @@ export const loadPolicySubCategories = async ({
         }
       });
 
+      const openObjectsWithOneChild = obj => {
+        Object.values(obj).forEach(obj => {
+          if (obj.count === 1) obj.open = true;
+          if (obj.children) return openObjectsWithOneChild(obj.children);
+          else console.log("no children");
+        });
+      };
+
+      // don't open objects at the first level
+      Object.values(prev).forEach(obj => {
+        openObjectsWithOneChild(obj.children);
+      });
+
       return { ...prev };
     });
   }
