@@ -149,11 +149,11 @@ const PolicyRouter = props => {
           }))
         );
 
-        setStatus(prev => ({ ...prev, caseload: iso3 }));
+        setStatus(prev => ({ ...prev, caseload: "loaded" }));
       }
     };
 
-    if (!["error", "loading", iso3].includes(status.caseload)) getCaseload();
+    getCaseload();
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
@@ -184,18 +184,17 @@ const PolicyRouter = props => {
         setStatus(prev => ({ ...prev, policyStatus: "error" }));
       } else {
         setPolicyStatus(testreq.data.data);
-        setStatus(prev => ({ ...prev, policyStatus: iso3 }));
+        setStatus(prev => ({ ...prev, policyStatus: "loaded" }));
       }
     };
 
-    if (!["error", "loading", iso3].includes(status.policyStatus))
-      getPolicyStatus();
-  }, [iso3, state, status]);
+    getPolicyStatus();
+  }, [iso3, state]);
 
   const miniMapScope =
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
-  // console.log(status);
+  console.log(status);
 
   return (
     <MiniMap.Provider scope={miniMapScope}>
