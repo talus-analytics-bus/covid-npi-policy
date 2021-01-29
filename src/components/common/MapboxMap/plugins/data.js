@@ -1095,7 +1095,6 @@ export const tooltipGetter = async ({
     tooltipMainContent: null,
     actions: null,
   };
-
   // for each map type, return the appropriate tooltip formation
   const formattedDate = date.format("MMM D, YYYY");
   if (mapId === "us") {
@@ -1333,10 +1332,13 @@ export const tooltipGetter = async ({
   const isUsaOnGlobalMap = mapId === "global" && d.properties.ISO_A3 === "USA";
   const isUsaMap = mapId === "us";
 
+  const hasPolicies =
+    d.state.policy_status_counts !== null && d.state.policy_status_counts > 0;
+
   // content for right side of header
   tooltip.tooltipHeaderRight = (
     <>
-      {(props.geoHaveData || mapId === "us") && (
+      {(hasPolicies || mapId === "us") && (
         <div className={styles.buttonsVertical}>
           {isUsaOnGlobalMap && (
             <PrimaryButton
@@ -1382,7 +1384,8 @@ export const tooltipGetter = async ({
   };
   const noun = mapId === "us" ? "state" : "national";
 
-  if (props.geoHaveData || mapId === "us") {
+  if (hasPolicies || mapId === "us") {
+    // if (props.geoHaveData || mapId === "us") {
     const policies = await Policy({
       method: "post",
       filters: policyFilters,
