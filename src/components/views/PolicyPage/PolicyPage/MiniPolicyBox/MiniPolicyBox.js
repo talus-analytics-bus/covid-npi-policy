@@ -22,7 +22,6 @@ const formatDate = date => {
     day: "numeric",
     month: "short",
     year: "numeric",
-    // timeZone: "UTC",
   });
 };
 
@@ -40,7 +39,6 @@ const MiniPolicyBox = ({ policy }) => {
   }
 
   const linkHref = `/policies/${iso3}/${state}/${policy.id}`;
-  // const policyLinkPath = path && [...path.slice(0, -1), `ID${policy.id}`];
 
   const truncateTitle = policy.policy_name.length > TITLE_CHAR_LIMIT;
   const title = truncateTitle
@@ -92,7 +90,5 @@ const MiniPolicyBox = ({ policy }) => {
     </Link>
   );
 };
-
-// <p>{policy.date_issued}</p>;
 
 export default MiniPolicyBox;

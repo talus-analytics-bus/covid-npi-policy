@@ -25,6 +25,16 @@ import styles from "./PolicyList.module.scss";
 
 const articles = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|v.?|vs.?|via)$/;
 
+const formatDate = date => {
+  if (!date) return undefined;
+  return date.toLocaleString("en-de", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    // timeZone: "UTC",
+  });
+};
+
 const capitalizeLetter = (word, index) => {
   if (/[a-z, A-Z]/.test(word.charAt(index))) {
     return (
@@ -126,7 +136,9 @@ const PolicyList = props => {
                         {titleCase(categoryName)}{" "}
                         {category.count && (
                           <span>
-                            (total: {category.count}, active: {category.active})
+                            (<strong>{category.count}</strong> policies,{" "}
+                            <strong>{category.active}</strong> active as of{" "}
+                            {formatDate(new Date())})
                           </span>
                         )}
                       </h1>

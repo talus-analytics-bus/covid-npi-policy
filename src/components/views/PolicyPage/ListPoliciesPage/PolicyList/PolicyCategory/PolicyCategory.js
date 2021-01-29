@@ -21,6 +21,16 @@ import styles from "./PolicyCategory.module.scss";
 
 import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
+const formatDate = date => {
+  if (!date) return undefined;
+  return date.toLocaleString("en-de", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    // timeZone: "UTC",
+  });
+};
+
 const PolicyCategory = props => {
   // const location = useLocation();
 
@@ -82,7 +92,10 @@ const PolicyCategory = props => {
           {titleCase(props.path.slice(-1)[0])}{" "}
           {props.obj.count && (
             <span>
-              (total: {props.obj.count}, active: {props.obj.active})
+              (<strong>{props.obj.count}</strong> policies,{" "}
+              <strong>{props.obj.active}</strong> active)
+              {/* as of{" "} */}
+              {/* {formatDate(new Date())}) */}
             </span>
           )}
         </h2>
