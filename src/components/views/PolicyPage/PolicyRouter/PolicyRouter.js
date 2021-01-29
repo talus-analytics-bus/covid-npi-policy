@@ -60,17 +60,6 @@ const PolicyRouter = props => {
     state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
   );
 
-  React.useEffect(() => {
-    const getPlaceName = async () => {
-      const places = await PlaceQuery({ place_type: ["country"] });
-      const placeName = places.find(place => place.iso === iso3);
-      if (placeName) setLocationName(placeName.name);
-    };
-
-    if (state === "national") getPlaceName();
-    else setLocationName(state);
-  }, [state, iso3]);
-
   const [dateRangeControlValue, setDateRangeControlValue] = React.useState({
     startDate: null,
     endDate: null,
@@ -86,7 +75,6 @@ const PolicyRouter = props => {
     setPolicyObject,
     caseload,
     policyStatus,
-    policyListScrollPos,
     status,
     setStatus,
     locationName,
@@ -106,13 +94,14 @@ const PolicyRouter = props => {
     setSearchTextInputValue,
     dateRangeControlValue,
     setDateRangeControlValue,
+    policyListScrollPos: [policyListScrollPos, setPolicyListScrollPos],
   };
 
   // if state or country changes
   React.useEffect(() => {
     // scroll to the top
     window.scroll(0, 0);
-    policyListScrollPos[1](0);
+    setPolicyListScrollPos(0);
 
     // reset filters
     setPolicyFilters({
@@ -207,10 +196,21 @@ const PolicyRouter = props => {
     getPolicyStatus();
   }, [iso3, state]);
 
+  React.useEffect(() => {
+    const getPlaceName = async () => {
+      const places = await PlaceQuery({ place_type: ["country"] });
+      const placeName = places.find(place => place.iso === iso3);
+      if (placeName) setLocationName(placeName.name);
+    };
+
+    if (state === "national") getPlaceName();
+    else setLocationName(state);
+  }, [state, iso3]);
+
   const miniMapScope =
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
-  console.log(status);
+  // console.log(status);
 
   return (
     <MiniMap.Provider scope={miniMapScope}>
