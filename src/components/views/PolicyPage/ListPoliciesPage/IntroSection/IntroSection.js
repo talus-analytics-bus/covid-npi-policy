@@ -37,7 +37,7 @@ const IntroSection = props => {
   );
 
   const policyStatusDate =
-    status.policyStatus === iso3 &&
+    status.policyStatus === "loaded" &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
       day: "numeric",
       month: "short",
@@ -45,18 +45,18 @@ const IntroSection = props => {
     });
 
   const policyStatusName =
-    status.policyStatus === iso3 && policyStatus[0].value.toLowerCase();
+    status.policyStatus === "loaded" && policyStatus[0].value.toLowerCase();
 
   const sevenDaySum =
-    status.caseload === iso3 &&
+    status.caseload === "loaded" &&
     caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
 
   const lastSevenDaySum =
-    status.caseload === iso3 &&
+    status.caseload === "loaded" &&
     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
 
   const sevenDayChangePCT =
-    status.policiesSummary === iso3 &&
+    status.policiesSummary === "loaded" &&
     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
@@ -98,7 +98,7 @@ const IntroSection = props => {
             No Policies Found in {locationName}
           </div>
         )}
-        {status.policiesSummary === iso3 && (
+        {status.policiesSummary === "loaded" && (
           <>
             <div className={styles.policies}>
               <img src={policyPageDocumentIcon} alt="Policies Icon" />
@@ -125,7 +125,7 @@ const IntroSection = props => {
             No Caseload Found in {locationName}
           </div>
         )}
-        {status.caseload === iso3 && (
+        {status.caseload === "loaded" && (
           <>
             <div className={styles.newCases}>
               <img src={newCasesIcon} alt="New Cases Icon" />
@@ -160,9 +160,9 @@ const IntroSection = props => {
       {status.policiesSummary === "loading" && (
         <p>Loading policies for {locationName}</p>
       )}
-      {status.policiesSummary === iso3 && (
+      {status.policiesSummary === "loaded" && (
         <p>
-          {status.policyStatus === iso3 && (
+          {status.policyStatus === "loaded" && (
             <>
               {locationName} has been in{" "}
               {/[aeiou]/.test(policyStatusName[0]) ? "an " : "a "}
