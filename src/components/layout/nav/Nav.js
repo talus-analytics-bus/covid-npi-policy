@@ -71,31 +71,31 @@ const Nav = ({ page, ...props }) => {
                 </i>
               </button>
               <div ref={linksRef} className={styles.links}>
-                <Link
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  className={page === "policymaps" ? styles.active : ""}
-                  to={"/policymaps"}
-                >
-                  Map
-                </Link>
-                {/* <HoverDropdown> */}
-                {/*   <span className={styles.hoverTarget}>Location</span> */}
-                {/*   <div className={styles.navSubmenu}> */}
-                {/*     <Link */}
-                {/*       onClick={() => { */}
-                {/*         setShowMobileMenu(false); */}
-                {/*       }} */}
-                {/*       className={page === "policymaps" ? styles.active : ""} */}
-                {/*       to={"/policymaps"} */}
-                {/*     > */}
-                {/*       Map */}
-                {/*     </Link> */}
-                {/*     <p>search goes here</p> */}
-                {/*     <LocationSearch /> */}
-                {/*   </div> */}
-                {/* </HoverDropdown> */}
+                {/* <Link */}
+                {/*   onClick={() => { */}
+                {/*     setShowMobileMenu(false); */}
+                {/*   }} */}
+                {/*   className={page === "policymaps" ? styles.active : ""} */}
+                {/*   to={"/policymaps"} */}
+                {/* > */}
+                {/*   Map */}
+                {/* </Link> */}
+                <HoverDropdown>
+                  <span className={styles.hoverTarget}>Location</span>
+                  <div className={styles.navSubmenu}>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "policymaps" ? styles.active : ""}
+                      to={"/policymaps"}
+                    >
+                      Map
+                    </Link>
+                    <p>search goes here</p>
+                    <LocationSearch />
+                  </div>
+                </HoverDropdown>
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);
