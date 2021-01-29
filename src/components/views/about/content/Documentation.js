@@ -131,7 +131,7 @@ const Documentation = ({ ...props }) => {
               isSecondary: true,
               url:
                 process.env.PUBLIC_URL +
-                "/export/COVID AMP data dictionary 120920.xlsx",
+                "/export/COVID AMP data dictionary 012821.xlsx",
               urlIsExternal: true,
             }}
           />
@@ -143,7 +143,7 @@ const Documentation = ({ ...props }) => {
               isSecondary: true,
               url:
                 process.env.PUBLIC_URL +
-                "/export/COVID AMP documentation 120920.pdf",
+                "/export/COVID AMP documentation 012821.pdf",
               urlIsExternal: true,
             }}
           />

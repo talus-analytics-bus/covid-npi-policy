@@ -540,7 +540,7 @@ export const DownloadBtn = ({
           e.stopPropagation();
           if (class_name[0] === "All_data") {
             window.location.assign(
-              "https://gida.ghscosting.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
+              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
             );
           } else {
             setButtonLoading(true);

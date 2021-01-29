@@ -3,10 +3,14 @@ import React from "react";
 import styles from "./Landing.module.scss";
 import { Link } from "react-router-dom";
 
-import ampLogo from "../../../assets/images/ampLogo.svg";
+import ampLogo from "../../../assets/images/amp.png";
 import policyMapsImage from "../../../assets/images/amp-screenshots/policy-maps.png";
 import policyModelImage from "../../../assets/images/amp-screenshots/policy-model.png";
 import policyDatabaseImage from "../../../assets/images/amp-screenshots/policy-database.png";
+import ideaLogo from "../../../assets/images/logo-title.png";
+import guLogo from "../../../assets/images/logo-georgetown.png";
+import talusLogo from "../../../assets/images/logo-talus.png";
+import ntiLogo from "../../../assets/images/logo-nti.png";
 
 const Landing = ({ setPage, setLoading }, props) => {
   React.useEffect(() => {
@@ -37,12 +41,6 @@ const Landing = ({ setPage, setLoading }, props) => {
         <div className={styles.ampHeader}>
           <div className={styles.wrapHolder}>
             <img src={ampLogo} alt="COVID AMP Logo" />
-            <div className={styles.text}>
-              <h1>
-                <strong>COVID</strong> AMP
-              </h1>
-              <h2>ANALYSIS AND MAPPING OF POLICIES</h2>
-            </div>
           </div>
           <div className={styles.links}>
             <Link to="/about/doc">Documentation</Link>
@@ -82,6 +80,28 @@ const Landing = ({ setPage, setLoading }, props) => {
               <span>Access data</span>
             </Link>
           </div>
+        </div>
+      </div>
+      <div class={styles.footer}>
+        <div class={styles.content}>
+          <a target="_blank" href="https://ghssidea.org">
+            <img
+              src={ideaLogo}
+              alt="International Disease and Events Analysis"
+            />
+          </a>
+          <a target="_blank" href="https://ghss.georgetown.edu/">
+            <img
+              src={guLogo}
+              alt="Georgetown University Center for Global Health Science and Security"
+            />
+          </a>
+          <a target="_blank" href="http://talusanalytics.com/">
+            <img src={talusLogo} alt="Talus Analytics, LLC" />
+          </a>
+          <a target="_blank" href="https://www.nti.org/">
+            <img src={ntiLogo} alt="Nuclear Threat Initiative" />
+          </a>
         </div>
       </div>
     </div>

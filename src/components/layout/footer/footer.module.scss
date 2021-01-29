@@ -1,102 +1,90 @@
 @import "../../../assets/styles/vars.scss";
 
-$button-width: 250px;
-$button-font-size: 16px;
-$spacing: 10px;
-
 .footer {
-  border-top: 1px $gray solid;
-
-  &.wide {
-    .wrapper {
-      max-width: unset;
-    }
-  }
-  .wrapper {
-    width: 100%;
-    max-width: $max-width;
+  height: 90px;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid $idea-black;
+  .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1300px;
+    padding: 0px 20px;
     margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-
-    $item-spacing: 30px;
-    .content {
+    width: 100%;
+    .links {
       display: flex;
-      flex-flow: row;
-      justify-content: space-between;
-      align-items: center;
-
-      min-height: 70px;
-      // margin: 0 auto;
-      div:first-child {
-        font-style: italic;
-        font-family: "Open Sans", sans-serif;
-        color: #999999;
-        font-size: 16px;
-      }
-
-      img {
-        height: 70px;
-        padding: 0 $item-spacing;
-      }
-
-      a:not(:last-child) img {
-        border-right: 1px solid $gray;
-      }
-      a:last-child img {
-        padding-right: 0;
-      }
+      flex-direction: row;
       a {
-        position: relative;
-        > div {
-          position: absolute;
-          top: -10px;
-          left: $item-spacing;
-          font-size: 0.9em;
-          pointer-events: none;
-          color: #333;
-        }
-      }
-    }
-  }
-
-  // data as of content in footer wrapper
-  .wrapper .content .dataAsOf {
-    max-width: 500px;
-  }
-
-  @media #{$phone} {
-    .wrapper {
-      .content,
-      .links {
         display: flex;
-        flex-flow: column;
-        justify-content: flex-start;
-        align-items: flex-start;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 40px;
+        &:not(:last-child) {
+          border-right: 1px solid $idea-black;
+        }
+        &:first-child {
+          padding-left: 0px;
+        }
       }
-      .content {
-        .dataAsOf {
-          margin-bottom: 20px;
-        }
-        .links {
-          a:not(:last-child) img {
-            border-right: none;
-            margin-bottom: 10px;
+      img {
+        height: 40px;
+      }
+    }
+    .dataAsOf {
+      font-style: italic;
+      font-family: "Open Sans", sans-serif;
+      font-size: 16px;
+      color: $gray-2;
+    }
+  }
+  &.wide .content {
+    max-width: unset;
+  }
+  @media (max-width: 1275px) {
+    height: unset;
+    .content {
+      flex-direction: column-reverse;
+      .links {
+        margin-bottom: 20px;
+        width: 100%;
+        justify-content: space-evenly;
+        a {
+          width: 100%;
+          &:first-child {
+            padding-left: 40px;
           }
-          a img {
-            padding: 0;
-          }
         }
+      }
+      .dataAsOf {
+        margin: 20px 0px;
       }
     }
   }
-
-  @media #{screen and (max-width: 975px)} {
-    .wrapper .content {
-      flex-flow: column;
-      align-items: flex-start;
+  @media (max-width: 800px) {
+    .content {
+      flex-direction: column-reverse;
+      .links {
+        flex-direction: column;
+        margin-bottom: 40px;
+        margin-top: 20px;
+        a {
+          &:not(:last-child) {
+            margin-bottom: 40px;
+            border-right-width: 0px;
+          }
+          img {
+            height: 60px;
+          }
+        }
+      }
       .dataAsOf {
-        margin-bottom: 20px;
+        margin: 20px 0px;
       }
     }
   }
