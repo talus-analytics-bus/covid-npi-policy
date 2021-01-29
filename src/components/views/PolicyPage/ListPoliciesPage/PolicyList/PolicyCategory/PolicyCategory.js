@@ -92,8 +92,9 @@ const PolicyCategory = props => {
           {titleCase(props.path.slice(-1)[0])}{" "}
           {props.obj.count && (
             <span>
-              (<strong>{props.obj.count}</strong> policies,{" "}
-              <strong>{props.obj.active}</strong> active)
+              <strong>{props.obj.count}</strong>{" "}
+              {props.obj.count === 1 ? "policy, " : "policies, "}
+              <strong>{props.obj.active}</strong> active
               {/* as of{" "} */}
               {/* {formatDate(new Date())}) */}
             </span>

@@ -136,9 +136,10 @@ const PolicyList = props => {
                         {titleCase(categoryName)}{" "}
                         {category.count && (
                           <span>
-                            (<strong>{category.count}</strong> policies,{" "}
+                            <strong>{category.count}</strong>{" "}
+                            {category.count === 1 ? "policy, " : "policies, "}
                             <strong>{category.active}</strong> active as of{" "}
-                            {formatDate(new Date())})
+                            {formatDate(new Date())}
                           </span>
                         )}
                       </h1>
