@@ -29,13 +29,10 @@ const ListPoliciesPage = props => {
     policySort,
     locationName,
     policyFilters,
-    policyObject,
     setPolicyObject,
     setPolicySummaryObject,
     setPolicySearchResults,
   } = policyContextConsumer;
-
-  const [getSummary, setGetSummary] = React.useState(true);
 
   const searchActive = policyFilters._text && policyFilters._text[0] !== "";
 
@@ -44,41 +41,32 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-    if (
-      !searchActive &&
-      !["error", "loading", iso3].includes(status.policies)
-    ) {
+    if (!searchActive && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       if (!policyFilters.subtarget)
         loadPolicyCategories({
-          iso3,
           setStatus,
           filters: policyFilters,
           stateSetter: setPolicyObject,
           sort: policySort,
-          ...(getSummary && { summarySetter: setPolicySummaryObject }),
+          ...(status.policiesSummary === "initial" && {
+            summarySetter: setPolicySummaryObject,
+          }),
         });
 
       loadPolicySubCategories({
-        iso3,
         setStatus,
         filters: policyFilters,
         stateSetter: setPolicyObject,
         sort: policySort,
       });
-
-      setGetSummary(false);
     }
 
-    if (
-      searchActive &&
-      !["error", "loading", iso3].includes(status.searchResults)
-    ) {
+    if (searchActive && status.searchResults === "initial") {
       setStatus(prev => ({ ...prev, searchResults: "loading" }));
 
       loadPolicySearch({
-        iso3,
         setStatus,
         setPolicyObject,
         filters: policyFilters,
@@ -89,18 +77,16 @@ const ListPoliciesPage = props => {
       });
     }
   }, [
-    iso3,
-    state,
-    policyObject,
-    setPolicyObject,
-    status,
-    setStatus,
     policyFilters,
     policySort,
-    getSummary,
-    setPolicySummaryObject,
     searchActive,
+    setPolicyObject,
     setPolicySearchResults,
+    setPolicySummaryObject,
+    setStatus,
+    status.policies,
+    status.policiesSummary,
+    status.searchResults,
   ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
