@@ -40,12 +40,6 @@ const PolicyRouter = props => {
 
   const [policyObject, setPolicyObject] = React.useState({});
 
-  // React.useEffect(() => {
-  //   alert("reset policyObject");
-  //   console.log("reset policyObject");
-  //   setPolicyObject({});
-  // }, [iso3, state]);
-
   const [policySummaryObject, setPolicySummaryObject] = React.useState({});
   const [policySearchResults, setPolicySearchResults] = React.useState();
   const [policySearchPage, setPolicySearchPage] = React.useState(1);
@@ -65,14 +59,6 @@ const PolicyRouter = props => {
     iso3: [iso3],
     ...(state !== "national" && { area1: [state] }),
   });
-
-  React.useEffect(() => {
-    setPolicyFilters(prev => ({
-      ...prev,
-      iso3: [iso3],
-      ...(state !== "national" && { area1: [state] }),
-    }));
-  }, [iso3, state]);
 
   const [policySort, setPolicySort] = React.useState("desc");
 
@@ -128,7 +114,42 @@ const PolicyRouter = props => {
     setDateRangeControlValue,
   };
 
+  // if state or country changes
   React.useEffect(() => {
+    // scroll to the top
+    window.scroll(0, 0);
+
+    // reset filters
+    setPolicyFilters({
+      iso3: [iso3],
+      ...(state !== "national" && { area1: [state] }),
+    });
+
+    // reset filters internal state
+    setDateRangeControlValue({
+      startDate: null,
+      endDate: null,
+      key: "selection",
+    });
+    setTargets({ all: [], selected: [] });
+    setSearchTextInputValue("");
+
+    // clear policyObject
+    setPolicyObject({});
+    // clear summary
+    setPolicySummaryObject({});
+
+    // set status of everything to initial
+    // this marks everything to be reloaded
+    setStatus({
+      policies: "initial",
+      policiesSummary: "initial",
+      caseload: "initial",
+      policyStatus: "initial",
+      searchResults: "initial",
+    });
+
+    // get new caseload
     const getCaseload = async () => {
       console.log(`Get Caseload`);
       setStatus(prev => ({ ...prev, caseload: "loading" }));
