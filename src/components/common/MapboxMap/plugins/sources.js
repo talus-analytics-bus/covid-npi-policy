@@ -64,10 +64,11 @@ export const mapSources = {
     },
     fill: {
       name: "geoms",
-      sourceLayer: "countries",
+      sourceLayer: "countries_v13c",
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.8k5jxx58",
+        url: "mapbox://nicoletalus.bnct4toi",
+        // url: "mapbox://nicoletalus.8k5jxx58",
         // filter to control what features are returned for layers that are
         // displaying this metric
         promoteId: "ADM0_A3",
