@@ -198,10 +198,20 @@ const PolicyRouter = props => {
 
   React.useEffect(() => {
     const getPlaceName = async () => {
-      const places = await PlaceQuery({ place_type: ["country"] });
-      console.log(places);
-      const placeName = places.find(place => place.iso === iso3);
-      if (placeName) setLocationName(placeName.name);
+      let params = new URLSearchParams();
+      params.append("fields", "id");
+      params.append("fields", "loc");
+      params.append("fields", "iso3");
+      params.append("include_policy_count", "true");
+      params.append("level", "country");
+
+      const countries = await axios(`${API_URL}/get/place`, { params });
+
+      console.log(countries);
+      const placeName = countries.data.data.find(
+        country => country.iso3 === iso3
+      );
+      if (placeName) setLocationName(placeName.loc.replace(/\([A-Z]*\)/, ""));
     };
 
     if (state === "national") getPlaceName();
