@@ -192,18 +192,34 @@ export const loadPolicySubCategories = async ({
         }
       });
 
-      const openObjectsWithOneChild = obj => {
-        Object.values(obj).forEach(obj => {
-          if (obj.count === 1) {
-            obj.open = true;
-            if (obj.children) return openObjectsWithOneChild(obj.children);
-          } else console.log("no children");
-        });
+      // siblings: parent.children
+      // children: obj.children
+      // if no siblings, open it
+      const openIfNoSiblings = ({ obj, siblings }) => {
+        if (Object.keys(siblings).length === 1) obj.open = true;
+        if (obj.children)
+          return Object.values(obj.children).forEach(child =>
+            openIfNoSiblings({
+              obj: child,
+              siblings: obj.children,
+            })
+          );
       };
 
-      // don't open objects at the first level
       Object.values(prev).forEach(obj => {
-        openObjectsWithOneChild(obj.children);
+        // special case to trigger loading when
+        // there is only one first-level box
+        if (Object.keys(prev).length === 1)
+          loadPolicyDescriptions({
+            sort,
+            stateSetter,
+            filters: {
+              ...filters,
+              [CATEGORY_FIELD_NAME]: Object.keys(prev),
+            },
+          });
+
+        openIfNoSiblings({ obj, siblings: prev });
       });
 
       return { ...prev };
