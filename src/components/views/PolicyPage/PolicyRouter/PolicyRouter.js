@@ -144,7 +144,7 @@ const PolicyRouter = props => {
         windowSizeDays: 1,
       });
 
-      if (response.length > 10000) {
+      if (response.length > 10000 || response.length === 0) {
         setStatus(prev => ({ ...prev, caseload: "error" }));
       } else {
         setCaseload(
