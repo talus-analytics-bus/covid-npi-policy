@@ -206,16 +206,16 @@ export const loadPolicySubCategories = async ({
           );
       };
 
-      Object.values(prev).forEach(obj => {
+      Object.entries(prev).forEach(([key, obj]) => {
         // special case to trigger loading when
         // there is only one first-level box
-        if (Object.keys(prev).length === 1)
+        if (obj.count === 1)
           loadPolicyDescriptions({
             sort,
             stateSetter,
             filters: {
               ...filters,
-              [CATEGORY_FIELD_NAME]: Object.keys(prev),
+              [CATEGORY_FIELD_NAME]: [key],
             },
           });
 
