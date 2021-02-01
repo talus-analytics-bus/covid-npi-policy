@@ -103,12 +103,16 @@ const IntroSection = props => {
             <div className={styles.policies}>
               <img src={policyPageDocumentIcon} alt="Policies Icon" />
               <strong>{numberFormat.format(policyCount.count)}</strong>&nbsp;
-              Total Policies
+              Total{" "}
+              {state !== "national" ? "state & county" : "national & local"}{" "}
+              policies
             </div>
             <div className={styles.status}>
               <img src={policyPageDocumentIconActive} alt="Policies Icon" />
               <strong>{numberFormat.format(policyCount.active)}</strong>&nbsp;
-              Active policies
+              Active{" "}
+              {state !== "national" ? "state & county" : "national & local"}{" "}
+              policies
             </div>
           </>
         )}
