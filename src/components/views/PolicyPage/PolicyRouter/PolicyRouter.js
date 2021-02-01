@@ -199,6 +199,7 @@ const PolicyRouter = props => {
   React.useEffect(() => {
     const getPlaceName = async () => {
       const places = await PlaceQuery({ place_type: ["country"] });
+      console.log(places);
       const placeName = places.find(place => place.iso === iso3);
       if (placeName) setLocationName(placeName.name);
     };

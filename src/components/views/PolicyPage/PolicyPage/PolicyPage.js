@@ -67,7 +67,7 @@ const PolicyPage = props => {
 
   // console.log(policyObjectPath);
   // console.log(policyObject);
-  // console.log(policy);
+  console.log(policy);
 
   // debugger;
 
@@ -162,7 +162,11 @@ const PolicyPage = props => {
             <div className={styles.miniMapHolder}>
               {iso3 !== "Unspecified" && <h3>Affected Area</h3>}
               <MiniMap.SVG
-                country={iso3}
+                country={
+                  policy &&
+                  policy.place &&
+                  policy.place.map(place => place.iso3)
+                }
                 state={state && state}
                 counties={
                   policy

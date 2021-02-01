@@ -194,9 +194,10 @@ export const loadPolicySubCategories = async ({
 
       const openObjectsWithOneChild = obj => {
         Object.values(obj).forEach(obj => {
-          if (obj.count === 1) obj.open = true;
-          if (obj.children) return openObjectsWithOneChild(obj.children);
-          else console.log("no children");
+          if (obj.count === 1) {
+            obj.open = true;
+            if (obj.children) return openObjectsWithOneChild(obj.children);
+          } else console.log("no children");
         });
       };
 
@@ -314,6 +315,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       "policy_number",
       "court_challenges.id",
       "file",
+      "place",
     ],
   });
 
@@ -362,6 +364,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
           policy_number: policy.policy_number,
           court_challenges: policy.court_challenges,
           file: policy.file,
+          place: policy.place,
         },
       });
     });

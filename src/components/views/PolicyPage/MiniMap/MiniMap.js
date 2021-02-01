@@ -93,7 +93,7 @@ export const SVG = props => {
 
   const {
     counties: propsCounties,
-    country: propsCountry,
+    country: propsCountries,
     state: propsState,
   } = props;
 
@@ -143,21 +143,22 @@ export const SVG = props => {
     }
 
     if (
+      propsCountries &&
       featureContextConsumer.scope === "world" &&
       featureContextConsumer.features.countries
     ) {
       // console.count("create paths");
-      const country = featureContextConsumer.features.countries.find(
-        country => country.properties.ADM0_A3 === propsCountry
+      const countries = featureContextConsumer.features.countries.filter(
+        country => propsCountries.includes(country.properties.ADM0_A3)
       );
 
-      if (country === undefined) {
+      if (countries === undefined) {
         return <></>;
       }
 
       const projection = geoMercator().fitSize([width, height], {
         type: "FeatureCollection",
-        features: [country],
+        features: countries,
       });
       // .rotate(geoCentroid(country).map((x, i) => (i === 1 ? -23 : x * -1)));
 
@@ -168,7 +169,7 @@ export const SVG = props => {
             <path
               key={index}
               fill={
-                geometry.properties.ADM0_A3 === propsCountry
+                propsCountries.includes(geometry.properties.ADM0_A3)
                   ? "#4E8490"
                   : "#ffffff"
               }
@@ -186,14 +187,14 @@ export const SVG = props => {
     featureContextConsumer.features.states,
     featureContextConsumer.scope,
     propsCounties,
-    propsCountry,
+    propsCountries,
     propsState,
   ]);
 
   // console.count("render minmap SVG");
   return (
     <div className={styles.container}>
-      {propsCountry && paths === null ? (
+      {propsCountries && paths === null ? (
         <div className={styles.placeholder}>
           <em>loading map...</em>
         </div>

@@ -69,7 +69,7 @@ const LocationSearch = () => {
               }}
               key={r.loc}
             >
-              {r.loc}
+              {r.loc}: policies: {r.n_policies}
             </Link>
           ))}
         </div>
