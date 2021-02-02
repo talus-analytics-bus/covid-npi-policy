@@ -39,10 +39,17 @@
       }
     }
     &.secondary {
+      background: white;
+      color: $idea-primary-dark-blue;
+      border-color: $idea-primary-dark-blue;
+      i {
+        color: $idea-primary-dark-blue;
+      }
       &:hover,
       &.active {
         color: $idea-primary-dark-blue;
         border-color: $idea-primary-dark-blue;
+        background-color: #f4f4f4;
       }
     }
   }
