@@ -11,6 +11,20 @@ import styles from "./IntroSection.module.scss";
 
 const numberFormat = new Intl.NumberFormat("en-us");
 
+const numbersToWords = number =>
+  ({
+    0: "none",
+    1: "one",
+    2: "two",
+    3: "three",
+    4: "four",
+    5: "five",
+    6: "six",
+    7: "seven",
+    8: "eight",
+    9: "nine",
+  }[number] || numberFormat.format(number));
+
 const IntroSection = props => {
   const location = useLocation();
   const [iso3, state] = location.pathname
@@ -60,8 +74,10 @@ const IntroSection = props => {
     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
-    Object.keys(policySummaryObject) === 1
-      ? Object.keys(policySummaryObject).join("")
+    Object.keys(policySummaryObject).length === 1
+      ? Object.keys(policySummaryObject)
+          .join("")
+          .toLowerCase()
       : Object.keys(policySummaryObject)
           .map(pm => pm.toLowerCase())
           .slice(0, -1)
@@ -105,14 +121,14 @@ const IntroSection = props => {
               <strong>{numberFormat.format(policyCount.count)}</strong>&nbsp;
               Total{" "}
               {state !== "national" ? "state & county" : "national & local"}{" "}
-              policies
+              {policyCount.active === 1 ? "policy" : "policies"}
             </div>
             <div className={styles.status}>
               <img src={policyPageDocumentIconActive} alt="Policies Icon" />
               <strong>{numberFormat.format(policyCount.active)}</strong>&nbsp;
               Active{" "}
               {state !== "national" ? "state & county" : "national & local"}{" "}
-              policies
+              {policyCount.active === 1 ? "policy" : "policies"}
             </div>
           </>
         )}
@@ -178,12 +194,14 @@ const IntroSection = props => {
             status.policyStatus === "loading") && (
             <>COVID-AMP is currently tracking </>
           )}
-          {numberFormat.format(policyCount.active)} active{" "}
+          {numbersToWords(policyCount.active)} active{" "}
           {state !== "national" ? "state and county" : "national and local"}{" "}
           {Object.keys(policySummaryObject).length > 1 ? "policies" : "policy"}{" "}
           covering {policyCategoriesText}
           {(status.policyStatus === "error" ||
-            status.policyStatus === "loading") && <> in {locationName}</>}
+            status.policyStatus === "loading") && (
+            <> in {locationName.trim()}</>
+          )}
           .
         </p>
       )}
