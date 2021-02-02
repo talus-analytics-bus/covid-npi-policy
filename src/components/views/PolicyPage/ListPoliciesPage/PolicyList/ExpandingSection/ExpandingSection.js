@@ -5,6 +5,10 @@ import styles from "./ExpandingSection.module.scss";
 const ExpandingSection = props => {
   const { open } = props;
 
+  // store animTimer in a ref so that
+  // canceling is reliable across render cycles
+  const animTimer = React.useRef();
+
   let children = React.Children.toArray(props.children);
 
   // rendering children or not is differnet from the open and close status
@@ -51,11 +55,9 @@ const ExpandingSection = props => {
   // the height of the children to set the target height
   // for the CSS animation
   React.useLayoutEffect(() => {
-    let animTimer;
-
     // if the expander should be open but it isn't
     if (open && animationHiderStyle.height === 0) {
-      clearTimeout(animTimer);
+      clearTimeout(animTimer.current);
       setRenderChildren(true);
       setAnimationHiderStyle(prev => ({
         ...prev,
@@ -65,7 +67,7 @@ const ExpandingSection = props => {
       // at the end of the animation, set the height
       // to auto so that it will adjust properly when
       // the window resizes
-      animTimer = setTimeout(() => {
+      animTimer.current = setTimeout(() => {
         setAnimationHiderStyle(prev => ({
           ...prev,
           height: "auto",
@@ -75,35 +77,43 @@ const ExpandingSection = props => {
 
     // if the expander should be closed but it's open
     if (!open && animationHiderStyle.height === "auto") {
-      clearTimeout(animTimer);
+      clearTimeout(animTimer.current);
+      console.log("animate closed");
 
-      // can't animate "auto" so set a height
-      setAnimationHiderStyle(prev => ({
-        ...prev,
-        height: contentContainer.current.getBoundingClientRect().height,
-      }));
-
-      // set the height to 0 immediately after the
-      // height is rendered into the DOM
-      setTimeout(() => {
+      // using nested requestAnimationFrame here
+      // so that react absolutely has to run them
+      // in order.
+      window.requestAnimationFrame(() => {
+        // can't animate "auto" so set a height
         setAnimationHiderStyle(prev => ({
           ...prev,
-          height: 0,
+          height: contentContainer.current.getBoundingClientRect().height,
         }));
-      }, 0);
 
-      // remove the children at the end of the animation
-      animTimer = setTimeout(() => {
-        setRenderChildren(false);
-      }, animDuration);
+        // set the height to 0 immediately after the
+        // height is rendered into the DOM
+        window.requestAnimationFrame(() => {
+          setAnimationHiderStyle(prev => ({
+            ...prev,
+            height: 0,
+          }));
+
+          // remove the children at the end of the animation
+          animTimer.current = setTimeout(() => {
+            setRenderChildren(false);
+          }, animDuration);
+        });
+      });
     }
   }, [open, animationHiderStyle]);
 
   // handling the onOpen() and onClose() props
   const onClickHandler = e => {
     e.preventDefault();
-    if (open) props.onClose && props.onClose();
-    else props.onOpen && props.onOpen();
+    if (!props.hover) {
+      if (open) props.onClose && props.onClose();
+      else props.onOpen && props.onOpen();
+    }
   };
 
   const childElements = renderChildren && children.slice(1);
@@ -127,8 +137,24 @@ const ExpandingSection = props => {
     clearTimeout(blurTimeout);
   };
 
+  const mouseEnterHandler = () => {
+    if (props.hover) {
+      props.onOpen();
+    }
+  };
+  const mouseLeaveHandler = () => {
+    if (props.hover) {
+      props.onClose();
+    }
+  };
+
   return (
-    <div onBlur={onBlurHandler} onFocus={onFocusHandler}>
+    <div
+      onBlur={onBlurHandler}
+      onFocus={onFocusHandler}
+      onMouseEnter={mouseEnterHandler}
+      onMouseLeave={mouseLeaveHandler}
+    >
       <button className={styles.expanderButton} onClick={onClickHandler}>
         {children[0]}
       </button>
