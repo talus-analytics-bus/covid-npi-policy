@@ -11,6 +11,7 @@ const NavDropDown = props => {
     <ExpandingSection
       hover
       floating
+      positioning={{ right: "24rem" }}
       open={expanderOpen}
       onOpen={() => setExpanderOpen(true)}
       onClose={() => setExpanderOpen(false)}

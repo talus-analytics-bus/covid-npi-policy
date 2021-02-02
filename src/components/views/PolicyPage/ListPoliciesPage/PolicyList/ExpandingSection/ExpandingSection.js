@@ -35,6 +35,7 @@ const ExpandingSection = props => {
           overflow: "hidden",
           ...(props.floating && {
             position: "absolute",
+            ...props.positioning,
             zIndex: props.zIndex || 10,
             boxShadow: "0px 15px 30px -10px rgba(0, 0, 0, 0.25)",
           }),
@@ -46,6 +47,7 @@ const ExpandingSection = props => {
           ...(props.floating && {
             zIndex: props.zIndex || 10,
             position: "absolute",
+            ...props.positioning,
             boxShadow: "0px 15px 30px -10px rgba(0, 0, 0, 0.25)",
           }),
         }
