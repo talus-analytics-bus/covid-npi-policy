@@ -146,7 +146,7 @@ const ExpandingSection = props => {
   };
   const mouseLeaveHandler = () => {
     if (props.hover) {
-      // props.onClose();
+      props.onClose();
     }
   };
 

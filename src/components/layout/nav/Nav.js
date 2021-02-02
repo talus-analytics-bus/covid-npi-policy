@@ -90,9 +90,8 @@ const Nav = ({ page, ...props }) => {
                       className={page === "policymaps" ? styles.active : ""}
                       to={"/policymaps"}
                     >
-                      Map
+                      US and Global Map
                     </Link>
-                    <p>search goes here</p>
                     <LocationSearch />
                   </div>
                 </HoverDropdown>

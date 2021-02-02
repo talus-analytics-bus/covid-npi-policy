@@ -48,28 +48,43 @@ const LocationSearch = () => {
     });
   }
 
-  const results = fuse && fuse.search(searchValue);
+  const results =
+    fuse &&
+    fuse
+      .search(searchValue)
+      .filter(r => r.loc !== "United States of America (USA)");
 
   return (
-    <div>
+    <div className={styles.searchContainer}>
       <input
+        className={styles.searchBar}
         type="text"
         value={searchValue}
         onChange={e => setSearchValue(e.target.value)}
+        placeholder="Search for location"
       />
       {results && (
-        <div className={styles.resuls}>
+        <div className={styles.results}>
+          {results.length > 0 && (
+            <div className={styles.header}>
+              <span>Place</span> <span>National Policy Count</span>
+            </div>
+          )}
           {results.slice(0, 4).map(r => (
             <Link
+              className={styles.result}
               to={{
                 pathname: r.level
                   ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
                   : `/policies/${r.iso3}/national`,
                 state: undefined,
               }}
-              key={r.loc}
+              key={r.loc + r.level}
             >
-              {r.loc}: policies: {r.n_policies}
+              <span>{r.loc.replace(/\([A-Z]*\)/, "")}</span>
+              <span>
+                <strong>{r.n_policies}</strong>
+              </span>
             </Link>
           ))}
         </div>

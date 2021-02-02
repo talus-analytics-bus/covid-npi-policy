@@ -1,4 +1,45 @@
-.results {
-  display: flex;
-  flex-direction: column;
+.searchContainer {
+  width: 25rem;
+  margin-top: 1rem;
+
+  .searchBar {
+    width: 100%;
+    border: 1px solid #647f79;
+    border-radius: 3px;
+    padding: 0.33rem 0.5rem;
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+
+    .result {
+      width: 100%;
+      display: block;
+      margin-top: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background-color: #8db3ab22;
+      border-radius: 5px;
+
+      &:hover {
+        text-decoration: none;
+        background-color: #9ec9c044;
+      }
+    }
+
+    .header {
+      width: 100%;
+      display: block;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      font-style: italic;
+      border-bottom: 1px solid #647f7988;
+      font-size: 0.9rem;
+      color: #647f79;
+    }
+  }
 }
