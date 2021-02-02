@@ -15,8 +15,6 @@ const LocationSearch = () => {
 
   React.useEffect(() => {
     const getPlaces = async () => {
-      // const allPlaces = await PlaceQuery({ place_type: ["country"] });
-
       let params = new URLSearchParams();
       params.append("fields", "id");
       params.append("fields", "loc");
@@ -32,10 +30,17 @@ const LocationSearch = () => {
 
       const states = await axios(`${API_URL}/get/place`, { params });
 
-      console.log(countries);
-      console.log(states);
+      const allPlaces = [...countries.data.data, ...states.data.data];
 
-      setPlaces([...countries.data.data, ...states.data.data]);
+      const disalowedSubstrings = ["county", "city"];
+      const filteredPlaces = allPlaces.filter(
+        place =>
+          !disalowedSubstrings.some(sub =>
+            place.loc.toLowerCase().includes(sub)
+          )
+      );
+
+      setPlaces(filteredPlaces);
     };
 
     getPlaces();
