@@ -128,17 +128,28 @@ const ListPoliciesPage = props => {
           {(status.caseload === "loading" || status.caseload === "loaded") && (
             <>
               {status.caseload === "loaded" ? (
-                <h2>Cases in {locationName}</h2>
+                <h2 className={styles.caseloadHeader}>Daily COVID-19 Cases</h2>
               ) : (
                 <h2>&nbsp;</h2>
               )}
-              <CaseloadPlot />
+              <figure>
+                <CaseloadPlot />
+                <figcaption>
+                  Source:{" "}
+                  <a
+                    target="_blank"
+                    href="https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html"
+                  >
+                    New York Times COVID-19 Data
+                  </a>
+                </figcaption>
+              </figure>
             </>
           )}
         </section>
       )}
       <section className={styles.policyList}>
-        {iso3 !== "Unspecified" && <h2>Policies in {locationName}</h2>}
+        {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
         <PolicyFilterBar />
 
         {!searchActive && (
