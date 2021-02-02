@@ -141,9 +141,7 @@ const IntroSection = props => {
           </div>
         )}
         {status.caseload === "error" && (
-          <div className={styles.policies}>
-            No Caseload Found in {locationName}
-          </div>
+          <div className={styles.policies}>COVID-19 caseload not found</div>
         )}
         {status.caseload === "loaded" && (
           <>

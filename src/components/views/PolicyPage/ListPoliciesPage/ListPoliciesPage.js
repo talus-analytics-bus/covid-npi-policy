@@ -122,9 +122,9 @@ const ListPoliciesPage = props => {
       </section>
       {iso3 !== "Unspecified" && (
         <section className={styles.caseloadPlot}>
-          {status.caseload === "error" && (
-            <h3>No caseload data found for {locationName}</h3>
-          )}
+          {/* {status.caseload === "error" && ( */}
+          {/*   <h3>No caseload data found for {locationName}</h3> */}
+          {/* )} */}
           {(status.caseload === "loading" || status.caseload === "loaded") && (
             <>
               {status.caseload === "loaded" ? (
