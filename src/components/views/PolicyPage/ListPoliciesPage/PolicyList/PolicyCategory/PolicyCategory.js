@@ -89,7 +89,7 @@ const PolicyCategory = props => {
           open={props.obj.open}
         />
         <h2>
-          {titleCase(props.path.slice(-1)[0])}{" "}
+          {titleCase(props.path.slice(-1)[0].split(",")[0])}{" "}
           {props.obj.count && (
             <span>
               <strong>{props.obj.count}</strong>{" "}
