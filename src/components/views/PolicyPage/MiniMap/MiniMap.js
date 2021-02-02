@@ -108,6 +108,9 @@ export const SVG = props => {
       const state = featureContextConsumer.features.states.find(
         state => state.properties.name === propsState
       );
+
+      if (!state) return <path />;
+
       const fips = state.id;
 
       const selectedCounties = featureContextConsumer.features.counties.filter(
