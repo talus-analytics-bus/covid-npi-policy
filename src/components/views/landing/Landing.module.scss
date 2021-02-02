@@ -238,7 +238,7 @@
       }
 
       span {
-        border: 2px solid #023f88;
+        border: 2px solid $idea-primary-dark-blue;
         border-radius: 5px;
         font-family: "Open Sans", sans-serif;
         font-size: 16px;
@@ -247,6 +247,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        text-decoration: underline;
+        text-decoration-color: $idea-primary-dark-blue;
         background: linear-gradient(
           180deg,
           rgba(2, 63, 136, 0.85) 0%,
@@ -256,6 +258,7 @@
         &:hover {
           background: white;
           color: $idea-primary-dark-blue;
+          text-decoration-color: white;
         }
         &:active {
           box-shadow: 5px 5px 15px 0 #b3b3b3;
