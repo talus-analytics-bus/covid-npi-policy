@@ -77,7 +77,7 @@ const LocationSearch = () => {
           )}
           {results.slice(0, 4).map(r => (
             <Link
-              className={styles.result}
+              className={r.level ? styles.stateResult : styles.countryResult}
               to={{
                 pathname: r.level
                   ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
