@@ -135,7 +135,9 @@ export const loadPolicySubCategories = async ({
           let path = [
             policy[CATEGORY_FIELD_NAME],
             "children",
-            policy.auth_entity[0].place.level,
+            filters.iso3[0] === "USA"
+              ? policy.auth_entity[0].place.level.replace(" / Province", "")
+              : policy.auth_entity[0].place.level,
             "children",
             policy[SUBCATEGORY_FIELD_NAME],
           ];
@@ -183,7 +185,12 @@ export const loadPolicySubCategories = async ({
             obj: prev,
             path: path,
             valueObj: {
-              children: {},
+              // spread here or delete children?
+              // not sure... delete children can
+              // cause policies to be deleted if
+              // the user is using it before this
+              // request finishes
+              // children: {},
             },
           });
         } else {
@@ -260,7 +267,10 @@ export const loadPolicyDescriptions = async ({
       let path = [
         policy[CATEGORY_FIELD_NAME],
         "children",
-        policy.auth_entity[0].place.level,
+        filters.iso3[0] === "USA"
+          ? policy.auth_entity[0].place.level.replace(" / Province", "")
+          : policy.auth_entity[0].place.level,
+
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
@@ -340,7 +350,10 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       let path = [
         policy[CATEGORY_FIELD_NAME],
         "children",
-        policy.auth_entity[0].place.level,
+        filters.iso3[0] === "USA"
+          ? policy.auth_entity[0].place.level.replace(" / Province", "")
+          : policy.auth_entity[0].place.level,
+
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
@@ -433,7 +446,10 @@ export const loadPolicySearch = async ({
         let path = [
           policy[CATEGORY_FIELD_NAME],
           "children",
-          policy.auth_entity[0].place.level,
+          filters.iso3[0] === "USA"
+            ? policy.auth_entity[0].place.level.replace(" / Province", "")
+            : policy.auth_entity[0].place.level,
+
           "children",
           policy[SUBCATEGORY_FIELD_NAME],
         ];
