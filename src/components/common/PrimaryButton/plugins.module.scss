@@ -3,7 +3,10 @@
 //IDEA rebrand button styles
 .wrapper {
   .button {
-    border: 2px solid #023f88;
+    border: 2px solid $idea-primary-dark-blue;
+    &:not(.link) {
+      border: 2px solid $idea-primary-dark-blue;
+    }
     border-radius: 5px;
     font-family: "Open Sans", sans-serif;
     font-size: 16px;
@@ -15,6 +18,7 @@
     background-color: white;
     &:hover {
       background-color: #f4f4f4;
+      border: 2px solid #023f88;
     }
     &:active {
       box-shadow: 5px 5px 15px 0 #b3b3b3;
@@ -31,6 +35,7 @@
       &:hover {
         background: white;
         color: $idea-primary-dark-blue;
+        border: 2px solid $idea-primary-dark-blue;
       }
     }
     &.secondary {
