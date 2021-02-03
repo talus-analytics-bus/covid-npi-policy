@@ -94,11 +94,23 @@ const PolicyPage = props => {
               <header>
                 <div className={styles.row}>
                   <h1>
-                    {policy &&
-                      `${policy.auth_entity[0].place.loc.split(",")[0]} 
-                      ${policy.primary_ph_measure}: 
-                      ${policy.ph_measure_details} issued 
-                      ${formatDate(new Date(policy.date_start_effective))}`}
+                    {policy ? (
+                      <>
+                        {`${policy.auth_entity[0].place.loc.split(",")[0]}
+                      ${policy.primary_ph_measure}: `}
+                        <br />
+                        {policy.ph_measure_details}
+                        <br /> {policy && "issued "}
+                        {policy &&
+                          formatDate(new Date(policy.date_start_effective))}
+                      </>
+                    ) : (
+                      <>
+                        <br />
+                        <br />
+                        <br />
+                      </>
+                    )}
                   </h1>
                 </div>
               </header>
@@ -160,20 +172,28 @@ const PolicyPage = props => {
           </div>
           <div className={styles.rightCol}>
             <div className={styles.miniMapHolder}>
-              {iso3 !== "Unspecified" && <h3>Affected Area</h3>}
-              <MiniMap.SVG
-                country={
-                  policy &&
-                  policy.place &&
-                  policy.place.map(place => place.iso3)
-                }
-                state={state && state}
-                counties={
-                  policy
-                    ? [policy.auth_entity[0].place.area2.split(" County")[0]]
-                    : []
-                }
-              />
+              <figure>
+                <MiniMap.SVG
+                  country={
+                    policy &&
+                    policy.place &&
+                    policy.place.map(place => place.iso3)
+                  }
+                  state={state && state}
+                  counties={
+                    policy
+                      ? [policy.auth_entity[0].place.area2.split(" County")[0]]
+                      : []
+                  }
+                />
+
+                {/* {iso3 !== "Unspecified" && ( */}
+                {/*   <figcaption> */}
+                {/*     Countries, states, provinces or counties affected by this */}
+                {/*     policy. */}
+                {/*   </figcaption> */}
+                {/* )} */}
+              </figure>
             </div>
           </div>
         </div>
@@ -188,7 +208,9 @@ const PolicyPage = props => {
               <strong>{policy && policy.authority_name}</strong>
             </p>
             <h3>Description</h3>
-            <p>{policy && policy.desc}</p>
+            <p>
+              <strong>{policy && policy.desc}</strong>
+            </p>
             {policy && policy.policy_name !== "Not Available" && (
               <ExploreSource {...{ policy }} />
             )}
@@ -238,7 +260,7 @@ const PolicyPage = props => {
                 <p>
                   <strong>{policyPlace && policyPlace.loc}</strong>
                 </p>
-                <h3>Affected Location</h3>
+                <h3>Official</h3>
                 <p>
                   <strong>{policy && policy.auth_entity[0].official}</strong>
                 </p>
