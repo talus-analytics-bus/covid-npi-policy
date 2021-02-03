@@ -150,22 +150,25 @@ const IntroSection = props => {
               <strong>{numberFormat.format(sevenDaySum)}</strong>&nbsp; New
               Cases in Past 7 Days
             </div>
-            <div className={styles.caseloadChange}>
-              <span
-                className={styles.change}
-                style={{
-                  backgroundColor:
-                    sevenDayChangePCT > 0 ? "#A6272A" : "#007e00",
-                }}
-              >
-                <span className={styles.arrow}>
-                  {sevenDayChangePCT > 0 ? <>&#9650; </> : <>&#9660; </>}
+            {isFinite(sevenDayChangePCT) && (
+              <div className={styles.caseloadChange}>
+                <span
+                  className={styles.change}
+                  style={{
+                    backgroundColor:
+                      sevenDayChangePCT > 0 ? "#A6272A" : "#007e00",
+                  }}
+                >
+                  <span className={styles.arrow}>
+                    {sevenDayChangePCT > 0 ? <>&#9650; </> : <>&#9660; </>}
+                  </span>
+                  <strong>{Math.abs(sevenDayChangePCT)}% </strong>
                 </span>
-                <strong>{Math.abs(sevenDayChangePCT)}% </strong>
-              </span>
-              &nbsp;
-              {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7 Days
-            </div>
+                &nbsp;
+                {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7
+                Days
+              </div>
+            )}
           </>
         )}
       </div>
