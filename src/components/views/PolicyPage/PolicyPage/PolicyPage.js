@@ -80,10 +80,20 @@ const PolicyPage = props => {
         <Link to={`/policies/${iso3}/${state}`}>
           {policyObjectPath &&
             policyObjectPath
-              .filter(s => s !== "children")
+              .filter(
+                s =>
+                  ![
+                    "children",
+                    // "Local",
+                    // "Country",
+                    // "State / Province",
+                  ].includes(s)
+              )
               .slice(0, -2)
-              .join(" / ")}
-          &nbsp; / {policyObjectPath && policyObjectPath.slice(-3)[0]}
+              .map(e => (
+                <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
+              ))}
+          {policyObjectPath && policyObjectPath.slice(-3)[0]}
         </Link>
       </div>
 
