@@ -189,7 +189,9 @@ const PolicyPage = props => {
             </p>
             <h3>Description</h3>
             <p>{policy && policy.desc}</p>
-            <ExploreSource {...{ policy }} />
+            {policy && policy.policy_name !== "Not Available" && (
+              <ExploreSource {...{ policy }} />
+            )}
           </div>
           <div className={styles.rightCol}>
             <h3>Policy Category</h3>

@@ -149,7 +149,7 @@ const SourceSummary = ({ policy, setModalOpen }) => {
         {policies && <p>These policy measures target {policyTargetsText}.</p>}
         <div className={styles.policiesHeader}>
           <h2>Policies in this Document</h2>
-          {policy.file && (
+          {policy.file && policy.file[0] && (
             <a
               href={
                 policy && `${API_URL}/get/file/redirect?id=${policy.file[0]}`
