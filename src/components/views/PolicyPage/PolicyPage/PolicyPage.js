@@ -67,7 +67,7 @@ const PolicyPage = props => {
 
   // console.log(policyObjectPath);
   // console.log(policyObject);
-  console.log(policy);
+  // console.log(policy);
 
   // debugger;
 
@@ -266,9 +266,11 @@ const PolicyPage = props => {
                 </p>
               </div>
               <div className={styles.col}>
-                <h3>Affected Location</h3>
+                <h3>Authorizing Location</h3>
                 <p>
-                  <strong>{policyPlace && policyPlace.loc}</strong>
+                  <strong>
+                    {policyPlace && policyPlace.loc.split(",")[0]}
+                  </strong>
                 </p>
                 <h3>Official</h3>
                 <p>
