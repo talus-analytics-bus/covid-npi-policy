@@ -207,7 +207,6 @@ const PolicyRouter = props => {
 
       const countries = await axios(`${API_URL}/get/place`, { params });
 
-      console.log(countries);
       const placeName = countries.data.data.find(
         country => country.iso3 === iso3
       );

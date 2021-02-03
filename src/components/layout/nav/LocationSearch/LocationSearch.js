@@ -1,6 +1,6 @@
 import React from "react";
 import Fuse from "fuse.js";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import styles from "./LocationSearch.module.scss";
@@ -10,6 +10,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 const LocationSearch = () => {
   const [places, setPlaces] = React.useState();
   const [searchValue, setSearchValue] = React.useState("");
+
+  const inputRef = React.useRef();
 
   React.useEffect(() => {
     const getPlaces = async () => {
@@ -57,10 +59,28 @@ const LocationSearch = () => {
       .search(searchValue)
       .filter(r => r.loc !== "United States of America (USA)");
 
+  const history = useHistory();
+
+  const handleKeyPress = e => {
+    if (e.key === "Enter") {
+      const r = results[0];
+      history.push({
+        pathname: r.level
+          ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
+          : `/policies/${r.iso3}/national`,
+        state: undefined,
+      });
+
+      inputRef.current.blur();
+    }
+  };
+
   return (
     <div className={styles.searchContainer}>
       <input
         autoFocus
+        ref={inputRef}
+        onKeyPress={handleKeyPress}
         className={styles.searchBar}
         type="text"
         value={searchValue}
