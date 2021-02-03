@@ -138,7 +138,7 @@ const ListPoliciesPage = props => {
                   Source:{" "}
                   <a
                     target="_blank"
-                    href="https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html"
+                    href="https://github.com/nytimes/covid-19-data"
                   >
                     New York Times COVID-19 Data
                   </a>
