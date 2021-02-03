@@ -3,8 +3,6 @@ import Fuse from "fuse.js";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-// import PlaceQuery from "../../../misc/PlaceQuery.js";
-
 import styles from "./LocationSearch.module.scss";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -62,6 +60,7 @@ const LocationSearch = () => {
   return (
     <div className={styles.searchContainer}>
       <input
+        autoFocus
         className={styles.searchBar}
         type="text"
         value={searchValue}
