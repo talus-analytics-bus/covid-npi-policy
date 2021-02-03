@@ -136,6 +136,9 @@ const ExpandingSection = props => {
 
   const onFocusHandler = () => {
     clearTimeout(blurTimeout);
+    if (props.hover) {
+      props.onOpen();
+    }
   };
 
   const mouseEnterHandler = () => {
