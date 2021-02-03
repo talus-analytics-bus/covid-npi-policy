@@ -31,6 +31,9 @@ export const loadPolicyCategories = async ({
 
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, policies: "error" }));
+    if (summarySetter) {
+      setStatus(prev => ({ ...prev, policiesSummary: "error" }));
+    }
   } else {
     setStatus(prev => ({ ...prev, policies: "loaded" }));
 
