@@ -74,18 +74,17 @@ export const Provider = props => {
 };
 
 // API:
-// <MiniMap country={} state={} counties={[]} />
+// <MiniMap countries={[]} state={} counties={[]} />
 // draws a single map with some features
 // contained in the scope of the Provider
 
 export const SVG = props => {
   const featureContextConsumer = React.useContext(featureContext);
 
-  // both 500 to make it easy,
+  // both 500 to make it square,
   // screen size will be set with CSS
   const width = 500;
   const height = 500;
-  // const country = propsCountry || "USA";
 
   // let paths = null;
 
@@ -109,7 +108,7 @@ export const SVG = props => {
         state => state.properties.name === propsState
       );
 
-      if (!state) return <path />;
+      if (!state) return "none";
 
       const fips = state.id;
 
@@ -117,10 +116,22 @@ export const SVG = props => {
         county => county.id.startsWith(fips)
       );
 
-      const projection = geoAlbersUsa().fitSize([width, height], {
-        type: "FeatureCollection",
-        features: selectedCounties,
-      });
+      let projection;
+      // using geoalbers projection for alaska because it
+      // looks tiny in mercator
+      if (fips === "02") {
+        projection = geoAlbersUsa().fitSize([width, height], {
+          type: "FeatureCollection",
+          features: selectedCounties,
+        });
+      } else {
+        // using mercator for other states for familiarity and
+        // because Albers is undefined for some US territories
+        projection = geoMercator().fitSize([width, height], {
+          type: "FeatureCollection",
+          features: selectedCounties,
+        });
+      }
 
       paths = selectedCounties.map((geometry, index) => {
         const path = geoPath().projection(projection)(geometry);
@@ -150,14 +161,11 @@ export const SVG = props => {
       featureContextConsumer.scope === "world" &&
       featureContextConsumer.features.countries
     ) {
-      // console.count("create paths");
       const countries = featureContextConsumer.features.countries.filter(
         country => propsCountries.includes(country.properties.ADM0_A3)
       );
 
-      if (countries === undefined) {
-        return <></>;
-      }
+      if (!countries === undefined) return "none";
 
       const projection = geoMercator().fitSize([width, height], {
         type: "FeatureCollection",
@@ -196,17 +204,23 @@ export const SVG = props => {
 
   // console.count("render minmap SVG");
   return (
-    <div className={styles.container}>
-      {propsCountries && paths === null ? (
-        <div className={styles.placeholder}>
-          <em>loading map...</em>
+    <>
+      {paths !== "none" ? (
+        <div className={styles.container}>
+          {propsCountries && paths === null ? (
+            <div className={styles.placeholder}>
+              <em>loading map...</em>
+            </div>
+          ) : (
+            <svg viewBox={`0 0 ${width} ${height}`}>
+              <g transform={"scale(1)"}>{paths}</g>
+            </svg>
+          )}
         </div>
       ) : (
-        <svg viewBox={`0 0 ${width} ${height}`}>
-          <g transform={"scale(1)"}>{paths}</g>
-        </svg>
+        <></>
       )}
-    </div>
+    </>
   );
 };
 
