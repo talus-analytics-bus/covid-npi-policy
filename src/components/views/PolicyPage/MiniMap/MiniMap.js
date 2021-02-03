@@ -182,9 +182,14 @@ export const SVG = props => {
               fill={
                 propsCountries.includes(geometry.properties.ADM0_A3)
                   ? "#4E8490"
-                  : "#ffffff"
+                  : "#ffffff00"
               }
-              stroke={"#707070"}
+              stroke={
+                "#707070"
+                // propsCountries.includes(geometry.properties.ADM0_A3)
+                //   ? "#707070"
+                //   : "#70707020"
+              }
               d={path}
             />
           );
@@ -212,7 +217,10 @@ export const SVG = props => {
               <em>loading map...</em>
             </div>
           ) : (
-            <svg viewBox={`0 0 ${width} ${height}`}>
+            <svg
+              viewBox={`0 0 ${width} ${height}`}
+              // style={{ overflow: "visible", zIndex: -1, position: "relative" }}
+            >
               <g transform={"scale(1)"}>{paths}</g>
             </svg>
           )}

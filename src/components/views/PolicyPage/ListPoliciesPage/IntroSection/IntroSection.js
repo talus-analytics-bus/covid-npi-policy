@@ -169,7 +169,7 @@ const IntroSection = props => {
       </div>
       {status.policiesSummary === "error" && (
         <>
-          <p>
+          <p className={styles.introParagraph}>
             COVID-AMP is not currently tracking any policies affecting{" "}
             {locationName}. More policies are being added all the time, check
             back soon!
@@ -177,7 +177,9 @@ const IntroSection = props => {
         </>
       )}
       {status.policiesSummary === "loading" && (
-        <p>Loading policies for {locationName}</p>
+        <p className={styles.introParagraph}>
+          Loading policies for {locationName}
+        </p>
       )}
       {status.policiesSummary === "loaded" && (
         <p className={styles.introParagraph}>

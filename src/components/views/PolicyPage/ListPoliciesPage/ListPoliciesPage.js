@@ -120,7 +120,7 @@ const ListPoliciesPage = props => {
           </div>
         )}
       </section>
-      {iso3 !== "Unspecified" && (
+      {iso3 !== "Unspecified" && status.caseload !== "error" && (
         <section className={styles.caseloadPlot}>
           {/* {status.caseload === "error" && ( */}
           {/*   <h3>No caseload data found for {locationName}</h3> */}
@@ -130,7 +130,9 @@ const ListPoliciesPage = props => {
               {status.caseload === "loaded" ? (
                 <h2 className={styles.caseloadHeader}>Daily COVID-19 Cases</h2>
               ) : (
-                <h2>&nbsp;</h2>
+                <h2 className={styles.caseloadHeader}>
+                  Loading COVID-19 Cases
+                </h2>
               )}
               <figure>
                 <CaseloadPlot />

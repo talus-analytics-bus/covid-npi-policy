@@ -82,7 +82,7 @@ const CaseloadPlot = props => {
     yLabelPadding: 5,
     yLabelFontSize: 10,
 
-    xLabelFontSize: 12,
+    xLabelFontSize: 11,
     xLabelPadding: 5,
   });
 
@@ -289,6 +289,7 @@ const CaseloadPlot = props => {
       xmlns="http://www.w3.org/2000/svg"
       className={styles.svg}
       ref={svgElement}
+      style={{ overflow: "visible" }}
     >
       {/* Visualize padding zone for testing */}
       {/* <rect */}

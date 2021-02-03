@@ -11,13 +11,13 @@
 .caseloadPlot,
 .policyList {
   // padding-right: 2rem;
-  margin-top: 3rem;
+  // margin-top: 3rem;
   margin-bottom: 2rem;
   width: 100%;
 
   > h2 {
     // margin-top: 1.5rem;
-    margin-top: 4rem;
+    // margin-top: 4rem;
     margin-bottom: 1rem;
     color: #29334b;
     font-family: "rawline";
@@ -27,6 +27,7 @@
 }
 .caseloadPlot {
   margin-top: 0;
+  padding-bottom: 1rem;
 
   .caseloadHeader {
     margin-bottom: -0.5rem;
