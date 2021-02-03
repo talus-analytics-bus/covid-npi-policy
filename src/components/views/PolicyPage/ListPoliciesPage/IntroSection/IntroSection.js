@@ -70,7 +70,7 @@ const IntroSection = props => {
     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
 
   const sevenDayChangePCT =
-    status.policiesSummary === "loaded" &&
+    lastSevenDaySum &&
     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
@@ -145,7 +145,7 @@ const IntroSection = props => {
               <strong>{numberFormat.format(sevenDaySum)}</strong>&nbsp; New
               Cases in Past 7 Days
             </div>
-            {isFinite(sevenDayChangePCT) && (
+            {Number.isFinite(sevenDayChangePCT) && (
               <div className={styles.caseloadChange}>
                 <span
                   className={styles.change}
