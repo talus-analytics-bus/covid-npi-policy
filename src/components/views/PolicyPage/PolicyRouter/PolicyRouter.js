@@ -103,6 +103,10 @@ const PolicyRouter = props => {
     window.scroll(0, 0);
     setPolicyListScrollPos(0);
 
+    setLocationName(
+      state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
+    );
+
     // reset filters
     setPolicyFilters({
       iso3: [iso3],
@@ -132,6 +136,8 @@ const PolicyRouter = props => {
       policyStatus: "initial",
       searchResults: "initial",
     });
+
+    setCaseload();
 
     // get new caseload
     const getCaseload = async () => {

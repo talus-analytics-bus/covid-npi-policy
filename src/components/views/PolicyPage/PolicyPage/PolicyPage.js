@@ -42,7 +42,9 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const { policyObject, setPolicyObject } = React.useContext(policyContext);
+  const { policyObject, setPolicyObject, locationName } = React.useContext(
+    policyContext
+  );
 
   const policyObjectPath = location.state
     ? location.state.path
@@ -74,27 +76,31 @@ const PolicyPage = props => {
   return (
     <article className={styles.policyPage}>
       <div className={styles.breadCrumbs}>
-        <PolicyCategoryIcon
-          category={policyObjectPath && policyObjectPath[0]}
-        />
-        <Link to={`/policies/${iso3}/${state}`}>
-          {policyObjectPath &&
-            policyObjectPath
-              .filter(
-                s =>
-                  ![
-                    "children",
-                    // "Local",
-                    // "Country",
-                    // "State / Province",
-                  ].includes(s)
-              )
-              .slice(0, -2)
-              .map(e => (
-                <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
-              ))}
-          {policyObjectPath && policyObjectPath.slice(-3)[0]}
-        </Link>
+        {iso3 !== "Unspecified" && (
+          <>
+            <PolicyCategoryIcon
+              category={policyObjectPath && policyObjectPath[0]}
+            />
+            <Link to={`/policies/${iso3}/${state}`}>
+              {policyObjectPath &&
+                policyObjectPath
+                  .filter(
+                    s =>
+                      ![
+                        "children",
+                        // "Local",
+                        // "Country",
+                        // "State / Province",
+                      ].includes(s)
+                  )
+                  .slice(0, -2)
+                  .map(e => (
+                    <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
+                  ))}
+              {policyObjectPath && policyObjectPath.slice(-3)[0]}
+            </Link>
+          </>
+        )}
       </div>
 
       <section className={styles.headerSection}>
@@ -104,9 +110,9 @@ const PolicyPage = props => {
               <header>
                 <div className={styles.row}>
                   <h1>
-                    {policy ? (
+                    {locationName && policy ? (
                       <>
-                        {`${policy.auth_entity[0].place.loc.split(",")[0]}
+                        {`${locationName}
                       ${policy.primary_ph_measure}: `}
                         <br />
                         {policy.ph_measure_details}
