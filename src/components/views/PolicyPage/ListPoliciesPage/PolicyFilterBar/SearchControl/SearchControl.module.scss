@@ -1,12 +1,18 @@
 .searchControl {
   margin: 0;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   margin-left: auto;
   position: relative;
 
   input {
     padding: 4px 8px;
-    min-width: 15em;
+    min-width: 18em;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+
+    &::placeholder {
+      font-weight: 500;
+    }
   }
 
   button {

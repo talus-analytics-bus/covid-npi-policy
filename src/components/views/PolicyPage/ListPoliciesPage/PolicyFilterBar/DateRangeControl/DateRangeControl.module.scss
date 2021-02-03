@@ -1,21 +1,22 @@
 .datePicker {
-  margin-top: 0.5rem;
-  min-width: 14rem;
+  margin-top: 0.75rem;
   margin-right: 0.5em;
-
-  appearance: none;
-  padding: 4px 8px;
-  padding-left: 0;
-  padding-right: 50px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0px' y='0px' viewBox='0 0 216 216' style='enable-background:new 0 0 216 216;' xml:space='preserve'%3E%3Crect style='fill:%23DDDDDD;' width='216' height='216'/%3E%3Cpolygon style='fill:%2358595B;' points='72,92.25 144,92.25 108,132.75 '/%3E%3C/svg%3E%0A");
-  background-repeat: no-repeat;
-  background-position: center right;
-  line-height: normal;
-  border: 1px solid #aaa;
-  border-radius: 5px;
+  min-width: 14rem;
 
   .buttonLabel {
-    padding: 0.25em 1em;
+    display: block;
+
+    appearance: none;
+    padding: 4px 8px;
+    padding-right: 50px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' id='Layer_1' x='0px' y='0px' viewBox='0 0 216 216' style='enable-background:new 0 0 216 216;' xml:space='preserve'%3E%3Crect style='fill:%23DDDDDD;' width='216' height='216'/%3E%3Cpolygon style='fill:%2358595B;' points='72,92.25 144,92.25 108,132.75 '/%3E%3C/svg%3E%0A");
+    background-repeat: no-repeat;
+    background-position: center right;
+    line-height: normal;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+
+    text-align: left;
   }
 
   .datePickerFrame {

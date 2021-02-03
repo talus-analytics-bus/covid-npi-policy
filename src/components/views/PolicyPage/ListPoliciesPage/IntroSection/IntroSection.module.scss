@@ -7,6 +7,7 @@
     color: #29334b;
     font-family: "rawline";
     text-transform: none;
+    margin-bottom: 1rem;
   }
 
   p {
@@ -21,10 +22,6 @@
     padding-left: 0.25rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
-
-    &:first-of-type {
-      margin-top: 0.5rem;
-    }
 
     div {
       display: flex;

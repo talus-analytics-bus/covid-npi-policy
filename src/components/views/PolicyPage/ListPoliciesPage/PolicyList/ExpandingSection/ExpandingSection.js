@@ -80,7 +80,6 @@ const ExpandingSection = props => {
     // if the expander should be closed but it's open
     if (!open && animationHiderStyle.height === "auto") {
       clearTimeout(animTimer.current);
-      console.log("animate closed");
 
       // using nested requestAnimationFrame here
       // so that react absolutely has to run them
