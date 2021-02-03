@@ -90,7 +90,7 @@ const Nav = ({ page, ...props }) => {
                       className={page === "policymaps" ? styles.active : ""}
                       to={"/policymaps"}
                     >
-                      US and Global Map
+                      View US and Global Map
                     </Link>
                     <LocationSearch />
                   </div>
