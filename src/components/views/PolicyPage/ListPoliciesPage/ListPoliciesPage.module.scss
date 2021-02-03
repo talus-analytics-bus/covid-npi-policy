@@ -1,6 +1,6 @@
 .introSection {
   display: flex;
-  margin-bottom: 2em;
+  // margin-bottom: 2em;
 
   .miniMapHolder {
     flex-basis: 25%;
@@ -26,9 +26,11 @@
   }
 }
 .caseloadPlot {
+  margin-top: 0;
+
   .caseloadHeader {
-    margin-bottom: -1rem;
-    margin-top: 4rem;
+    margin-bottom: -0.5rem;
+    margin-top: 0;
   }
 
   figcaption {

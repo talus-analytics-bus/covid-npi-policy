@@ -180,7 +180,7 @@ const IntroSection = props => {
         <p>Loading policies for {locationName}</p>
       )}
       {status.policiesSummary === "loaded" && (
-        <p>
+        <p className={styles.introParagraph}>
           {status.policyStatus === "loaded" && (
             <>
               {locationName} has been in{" "}
@@ -194,9 +194,12 @@ const IntroSection = props => {
             <>COVID-AMP is currently tracking </>
           )}
           {numbersToWords(policyCount.active)} active{" "}
-          {state !== "national" ? "state and county" : "national and local"}{" "}
+          {policyCount.active > 1 &&
+            (state !== "national"
+              ? "state and county"
+              : "national and local")}{" "}
           {Object.keys(policySummaryObject).length > 1 ? "policies" : "policy"}{" "}
-          covering {policyCategoriesText}
+          affecting {policyCategoriesText}
           {(status.policyStatus === "error" ||
             status.policyStatus === "loading") && (
             <> in {locationName.trim()}</>
