@@ -148,38 +148,40 @@ const ListPoliciesPage = props => {
           )}
         </section>
       )}
-      <section className={styles.policyList}>
-        {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
-        <PolicyFilterBar />
+      {status.policiesSummary !== "error" && (
+        <section className={styles.policyList}>
+          {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
+          <PolicyFilterBar />
 
-        {!searchActive && (
-          <>
-            {status.policies === "loading" && (
-              <h3>Loading policies for {locationName}</h3>
-            )}
-            {status.policies === "error" && (
-              <h3>No Policies Found in {locationName}</h3>
-            )}
-            {status.policies === "loaded" && <PolicyList />}
-          </>
-        )}
-        {searchActive && (
-          <>
-            {status.searchResults === "loading" && (
-              <h3>
-                Searching policies for {policyFilters._text} in {locationName}
-              </h3>
-            )}
-            {status.searchResults === "error" && (
-              <h3>
-                No policies matching {policyFilters._text} found in{" "}
-                {locationName}
-              </h3>
-            )}
-            {status.searchResults === "loaded" && <SearchResults />}
-          </>
-        )}
-      </section>
+          {!searchActive && (
+            <>
+              {status.policies === "loading" && (
+                <h3>Loading policies for {locationName}</h3>
+              )}
+              {status.policies === "error" && (
+                <h3>No Policies Found in {locationName}</h3>
+              )}
+              {status.policies === "loaded" && <PolicyList />}
+            </>
+          )}
+          {searchActive && (
+            <>
+              {status.searchResults === "loading" && (
+                <h3>
+                  Searching policies for {policyFilters._text} in {locationName}
+                </h3>
+              )}
+              {status.searchResults === "error" && (
+                <h3>
+                  No policies matching {policyFilters._text} found in{" "}
+                  {locationName}
+                </h3>
+              )}
+              {status.searchResults === "loaded" && <SearchResults />}
+            </>
+          )}
+        </section>
+      )}
     </article>
   );
 };
