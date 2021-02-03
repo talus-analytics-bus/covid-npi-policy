@@ -42,9 +42,7 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const { policyObject, setPolicyObject, locationName } = React.useContext(
-    policyContext
-  );
+  const { policyObject, setPolicyObject } = React.useContext(policyContext);
 
   const policyObjectPath = location.state
     ? location.state.path
@@ -110,9 +108,11 @@ const PolicyPage = props => {
               <header>
                 <div className={styles.row}>
                   <h1>
-                    {locationName && policy ? (
+                    {policy ? (
                       <>
-                        {`${locationName}
+                        {`${policy.auth_entity[0].place.loc
+                          .split(",")[0]
+                          .replace(/\([A-Z]*\)/, "")}
                       ${policy.primary_ph_measure}: `}
                         <br />
                         {policy.ph_measure_details}
