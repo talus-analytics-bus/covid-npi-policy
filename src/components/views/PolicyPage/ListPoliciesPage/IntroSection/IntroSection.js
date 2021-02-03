@@ -109,11 +109,6 @@ const IntroSection = props => {
             Loading policies for {locationName}
           </div>
         )}
-        {status.policiesSummary === "error" && (
-          <div className={styles.policies}>
-            No Policies Found in {locationName}
-          </div>
-        )}
         {status.policiesSummary === "loaded" && (
           <>
             <div className={styles.policies}>
@@ -173,10 +168,13 @@ const IntroSection = props => {
         )}
       </div>
       {status.policiesSummary === "error" && (
-        <p>
-          COVID-AMP is not currently tracking any policies in {locationName}.
-          More policies are being added all the time, check back soon!
-        </p>
+        <>
+          <p>
+            COVID-AMP is not currently tracking any policies affecting{" "}
+            {locationName}. More policies are being added all the time, check
+            back soon!
+          </p>
+        </>
       )}
       {status.policiesSummary === "loading" && (
         <p>Loading policies for {locationName}</p>
