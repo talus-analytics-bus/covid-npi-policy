@@ -11,6 +11,20 @@ import styles from "./IntroSection.module.scss";
 
 const numberFormat = new Intl.NumberFormat("en-us");
 
+const numbersToWords = number =>
+  ({
+    0: "none",
+    1: "one",
+    2: "two",
+    3: "three",
+    4: "four",
+    5: "five",
+    6: "six",
+    7: "seven",
+    8: "eight",
+    9: "nine",
+  }[number] || numberFormat.format(number));
+
 const IntroSection = props => {
   const location = useLocation();
   const [iso3, state] = location.pathname
@@ -37,7 +51,7 @@ const IntroSection = props => {
   );
 
   const policyStatusDate =
-    status.policyStatus === iso3 &&
+    status.policyStatus === "loaded" &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
       day: "numeric",
       month: "short",
@@ -45,23 +59,25 @@ const IntroSection = props => {
     });
 
   const policyStatusName =
-    status.policyStatus === iso3 && policyStatus[0].value.toLowerCase();
+    status.policyStatus === "loaded" && policyStatus[0].value.toLowerCase();
 
   const sevenDaySum =
-    status.caseload === iso3 &&
+    status.caseload === "loaded" &&
     caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
 
   const lastSevenDaySum =
-    status.caseload === iso3 &&
+    status.caseload === "loaded" &&
     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
 
   const sevenDayChangePCT =
-    status.policiesSummary === iso3 &&
+    lastSevenDaySum &&
     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
-    Object.keys(policySummaryObject) === 1
-      ? Object.keys(policySummaryObject).join("")
+    Object.keys(policySummaryObject).length === 1
+      ? Object.keys(policySummaryObject)
+          .join("")
+          .toLowerCase()
       : Object.keys(policySummaryObject)
           .map(pm => pm.toLowerCase())
           .slice(0, -1)
@@ -93,22 +109,21 @@ const IntroSection = props => {
             Loading policies for {locationName}
           </div>
         )}
-        {status.policiesSummary === "error" && (
-          <div className={styles.policies}>
-            No Policies Found in {locationName}
-          </div>
-        )}
-        {status.policiesSummary === iso3 && (
+        {status.policiesSummary === "loaded" && (
           <>
             <div className={styles.policies}>
               <img src={policyPageDocumentIcon} alt="Policies Icon" />
               <strong>{numberFormat.format(policyCount.count)}</strong>&nbsp;
-              Total Policies
+              Total{" "}
+              {state !== "national" ? "state & county" : "national & local"}{" "}
+              {policyCount.active === 1 ? "policy" : "policies"}
             </div>
             <div className={styles.status}>
               <img src={policyPageDocumentIconActive} alt="Policies Icon" />
               <strong>{numberFormat.format(policyCount.active)}</strong>&nbsp;
-              Active policies
+              Active{" "}
+              {state !== "national" ? "state & county" : "national & local"}{" "}
+              {policyCount.active === 1 ? "policy" : "policies"}
             </div>
           </>
         )}
@@ -121,48 +136,54 @@ const IntroSection = props => {
           </div>
         )}
         {status.caseload === "error" && (
-          <div className={styles.policies}>
-            No Caseload Found in {locationName}
-          </div>
+          <div className={styles.policies}>COVID-19 caseload not found</div>
         )}
-        {status.caseload === iso3 && (
+        {status.caseload === "loaded" && (
           <>
             <div className={styles.newCases}>
               <img src={newCasesIcon} alt="New Cases Icon" />
               <strong>{numberFormat.format(sevenDaySum)}</strong>&nbsp; New
               Cases in Past 7 Days
             </div>
-            <div className={styles.caseloadChange}>
-              <span
-                className={styles.change}
-                style={{
-                  backgroundColor:
-                    sevenDayChangePCT > 0 ? "#A6272A" : "#007e00",
-                }}
-              >
-                <span className={styles.arrow}>
-                  {sevenDayChangePCT > 0 ? <>&#9650; </> : <>&#9660; </>}
+            {Number.isFinite(sevenDayChangePCT) && (
+              <div className={styles.caseloadChange}>
+                <span
+                  className={styles.change}
+                  style={{
+                    backgroundColor:
+                      sevenDayChangePCT > 0 ? "#A6272A" : "#007e00",
+                  }}
+                >
+                  <span className={styles.arrow}>
+                    {sevenDayChangePCT > 0 ? <>&#9650; </> : <>&#9660; </>}
+                  </span>
+                  <strong>{Math.abs(sevenDayChangePCT)}% </strong>
                 </span>
-                <strong>{Math.abs(sevenDayChangePCT)}% </strong>
-              </span>
-              &nbsp;
-              {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7 Days
-            </div>
+                &nbsp;
+                {sevenDayChangePCT > 0 ? "Increase" : "Decrease"} Over Past 7
+                Days
+              </div>
+            )}
           </>
         )}
       </div>
       {status.policiesSummary === "error" && (
-        <p>
-          COVID-AMP is not currently tracking any policies in {locationName}.
-          More policies are being added all the time, check back soon!
-        </p>
+        <>
+          <p className={styles.introParagraph}>
+            COVID-AMP is not currently tracking any policies affecting{" "}
+            {locationName}. More policies are being added all the time, check
+            back soon!
+          </p>
+        </>
       )}
       {status.policiesSummary === "loading" && (
-        <p>Loading policies for {locationName}</p>
+        <p className={styles.introParagraph}>
+          Loading policies for {locationName}
+        </p>
       )}
-      {status.policiesSummary === iso3 && (
-        <p>
-          {status.policyStatus === iso3 && (
+      {status.policiesSummary === "loaded" && (
+        <p className={styles.introParagraph}>
+          {status.policyStatus === "loaded" && (
             <>
               {locationName} has been in{" "}
               {/[aeiou]/.test(policyStatusName[0]) ? "an " : "a "}
@@ -174,12 +195,17 @@ const IntroSection = props => {
             status.policyStatus === "loading") && (
             <>COVID-AMP is currently tracking </>
           )}
-          {numberFormat.format(policyCount.active)} active{" "}
-          {state !== "national" ? "state and county" : "national and local"}{" "}
+          {numbersToWords(policyCount.active)} active{" "}
+          {policyCount.active > 1 &&
+            (state !== "national"
+              ? "state and county"
+              : "national and local")}{" "}
           {Object.keys(policySummaryObject).length > 1 ? "policies" : "policy"}{" "}
-          covering {policyCategoriesText}
+          affecting {policyCategoriesText}
           {(status.policyStatus === "error" ||
-            status.policyStatus === "loading") && <> in {locationName}</>}
+            status.policyStatus === "loading") && (
+            <> in {locationName.trim()}</>
+          )}
           .
         </p>
       )}

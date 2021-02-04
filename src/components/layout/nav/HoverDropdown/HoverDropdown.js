@@ -8,20 +8,17 @@ const NavDropDown = props => {
   const [expanderOpen, setExpanderOpen] = React.useState();
 
   return (
-    <div
-      onMouseEnter={() => setExpanderOpen(true)}
-      onMouseLeave={() => setExpanderOpen(false)}
+    <ExpandingSection
+      hover
+      floating
+      positioning={{ right: "24rem" }}
+      open={expanderOpen}
+      onOpen={() => setExpanderOpen(true)}
+      onClose={() => setExpanderOpen(false)}
     >
-      <ExpandingSection
-        floating
-        open={expanderOpen}
-        onOpen={() => setExpanderOpen(true)}
-        onClose={() => setExpanderOpen(false)}
-      >
-        <>{children[0]}</>
-        <>{children.slice(1)}</>
-      </ExpandingSection>
-    </div>
+      <>{children[0]}</>
+      <>{children.slice(1)}</>
+    </ExpandingSection>
   );
 };
 

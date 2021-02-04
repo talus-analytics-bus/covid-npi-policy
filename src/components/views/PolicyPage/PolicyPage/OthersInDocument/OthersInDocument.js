@@ -1,5 +1,4 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -14,11 +13,6 @@ import styles from "./OthersInDocument.module.scss";
 
 const OthersInDocument = ({ policy, path }) => {
   const [policies, setPolicies] = React.useState();
-
-  const [iso3, state] = useLocation()
-    .pathname.replace(/\/$/, "")
-    .split("/")
-    .slice(-3);
 
   React.useEffect(() => {
     const getPoliciesInDocument = async () => {
@@ -53,10 +47,7 @@ const OthersInDocument = ({ policy, path }) => {
         <div className={styles.others}>
           {policies &&
             policies.map(policy => (
-              <MiniPolicyBox
-                key={policy.id}
-                {...{ policy, iso3, state, path }}
-              />
+              <MiniPolicyBox key={policy.id} policy={policy} />
             ))}
         </div>
       </div>

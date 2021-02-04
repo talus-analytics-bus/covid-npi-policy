@@ -40,56 +40,25 @@ const PolicyRouter = props => {
 
   const [policyObject, setPolicyObject] = React.useState({});
 
-  // React.useEffect(() => {
-  //   alert("reset policyObject");
-  //   console.log("reset policyObject");
-  //   setPolicyObject({});
-  // }, [iso3, state]);
-
   const [policySummaryObject, setPolicySummaryObject] = React.useState({});
   const [policySearchResults, setPolicySearchResults] = React.useState();
   const [policySearchPage, setPolicySearchPage] = React.useState(1);
-  const policyListScrollPos = React.useState(0);
+  const [policyListScrollPos, setPolicyListScrollPos] = React.useState(0);
 
   const [caseload, setCaseload] = React.useState();
   const [policyStatus, setPolicyStatus] = React.useState();
-  const [status, setStatus] = React.useState({
-    policies: "initial",
-    policiesSummary: "initial",
-    caseload: "initial",
-    policyStatus: "initial",
-    searchResults: "initial",
-  });
+  const [status, setStatus] = React.useState({});
 
   const [policyFilters, setPolicyFilters] = React.useState({
     iso3: [iso3],
     ...(state !== "national" && { area1: [state] }),
   });
 
-  React.useEffect(() => {
-    setPolicyFilters(prev => ({
-      ...prev,
-      iso3: [iso3],
-      ...(state !== "national" && { area1: [state] }),
-    }));
-  }, [iso3, state]);
-
   const [policySort, setPolicySort] = React.useState("desc");
 
   const [locationName, setLocationName] = React.useState(
     state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
   );
-
-  React.useEffect(() => {
-    const getPlaceName = async () => {
-      const places = await PlaceQuery({ place_type: ["country"] });
-      const placeName = places.find(place => place.iso === iso3);
-      if (placeName) setLocationName(placeName.name);
-    };
-
-    if (state === "national") getPlaceName();
-    else setLocationName(state);
-  }, [state, iso3]);
 
   const [dateRangeControlValue, setDateRangeControlValue] = React.useState({
     startDate: null,
@@ -106,7 +75,6 @@ const PolicyRouter = props => {
     setPolicyObject,
     caseload,
     policyStatus,
-    policyListScrollPos,
     status,
     setStatus,
     locationName,
@@ -126,9 +94,52 @@ const PolicyRouter = props => {
     setSearchTextInputValue,
     dateRangeControlValue,
     setDateRangeControlValue,
+    policyListScrollPos: [policyListScrollPos, setPolicyListScrollPos],
   };
 
+  // if state or country changes
   React.useEffect(() => {
+    // scroll to the top
+    window.scroll(0, 0);
+    setPolicyListScrollPos(0);
+
+    setLocationName(
+      state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
+    );
+
+    // reset filters
+    setPolicyFilters({
+      iso3: [iso3],
+      ...(state !== "national" && { area1: [state] }),
+    });
+
+    // reset filters internal state
+    setDateRangeControlValue({
+      startDate: null,
+      endDate: null,
+      key: "selection",
+    });
+    setTargets({ all: [], selected: [] });
+    setSearchTextInputValue("");
+
+    // clear policyObject
+    setPolicyObject({});
+    // clear summary
+    setPolicySummaryObject({});
+
+    // set status of everything to initial
+    // this marks everything to be reloaded
+    setStatus({
+      policies: "initial",
+      policiesSummary: "initial",
+      caseload: "initial",
+      policyStatus: "initial",
+      searchResults: "initial",
+    });
+
+    setCaseload();
+
+    // get new caseload
     const getCaseload = async () => {
       console.log(`Get Caseload`);
       setStatus(prev => ({ ...prev, caseload: "loading" }));
@@ -139,7 +150,7 @@ const PolicyRouter = props => {
         windowSizeDays: 1,
       });
 
-      if (response.length > 10000) {
+      if (response.length > 10000 || response.length === 0) {
         setStatus(prev => ({ ...prev, caseload: "error" }));
       } else {
         setCaseload(
@@ -149,11 +160,11 @@ const PolicyRouter = props => {
           }))
         );
 
-        setStatus(prev => ({ ...prev, caseload: iso3 }));
+        setStatus(prev => ({ ...prev, caseload: "loaded" }));
       }
     };
 
-    if (!["error", "loading", iso3].includes(status.caseload)) getCaseload();
+    getCaseload();
 
     const getPolicyStatus = async () => {
       console.log(`Get PolicyStatus`);
@@ -184,13 +195,33 @@ const PolicyRouter = props => {
         setStatus(prev => ({ ...prev, policyStatus: "error" }));
       } else {
         setPolicyStatus(testreq.data.data);
-        setStatus(prev => ({ ...prev, policyStatus: iso3 }));
+        setStatus(prev => ({ ...prev, policyStatus: "loaded" }));
       }
     };
 
-    if (!["error", "loading", iso3].includes(status.policyStatus))
-      getPolicyStatus();
-  }, [iso3, state, status]);
+    getPolicyStatus();
+  }, [iso3, state]);
+
+  React.useEffect(() => {
+    const getPlaceName = async () => {
+      let params = new URLSearchParams();
+      params.append("fields", "id");
+      params.append("fields", "loc");
+      params.append("fields", "iso3");
+      params.append("include_policy_count", "true");
+      params.append("level", "country");
+
+      const countries = await axios(`${API_URL}/get/place`, { params });
+
+      const placeName = countries.data.data.find(
+        country => country.iso3 === iso3
+      );
+      if (placeName) setLocationName(placeName.loc.replace(/\([A-Z]*\)/, ""));
+    };
+
+    if (state === "national") getPlaceName();
+    else setLocationName(state);
+  }, [state, iso3]);
 
   const miniMapScope =
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";

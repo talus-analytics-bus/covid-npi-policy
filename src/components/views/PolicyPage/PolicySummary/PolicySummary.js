@@ -75,20 +75,6 @@ const PolicySummary = props => {
               ))}
           {props.path && props.path.slice(-3)[0]}
         </p>
-        // <div className={styles.metadata}>
-        //   <div>
-        //     <h1>Category</h1>
-        //     <h2>{props.policy[CATEGORY_FIELD_NAME]}</h2>
-        //   </div>
-        //   <div>
-        //     <h1>Subcategory</h1>
-        //     <h2>{props.policy[SUBCATEGORY_FIELD_NAME]}</h2>
-        //   </div>
-        //   <div className={styles.area}>
-        //     <h1>Affected Area</h1>
-        //     <h2>{props.policy.auth_entity[0].place.loc.split(",")[0]}</h2>
-        //   </div>
-        // </div>
       )}
       <header className={styles.header}>
         <div className={styles.metadata}>

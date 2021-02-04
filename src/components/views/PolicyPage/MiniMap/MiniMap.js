@@ -74,18 +74,17 @@ export const Provider = props => {
 };
 
 // API:
-// <MiniMap country={} state={} counties={[]} />
+// <MiniMap countries={[]} state={} counties={[]} />
 // draws a single map with some features
 // contained in the scope of the Provider
 
 export const SVG = props => {
   const featureContextConsumer = React.useContext(featureContext);
 
-  // both 500 to make it easy,
+  // both 500 to make it square,
   // screen size will be set with CSS
   const width = 500;
   const height = 500;
-  // const country = propsCountry || "USA";
 
   // let paths = null;
 
@@ -93,7 +92,7 @@ export const SVG = props => {
 
   const {
     counties: propsCounties,
-    country: propsCountry,
+    country: propsCountries,
     state: propsState,
   } = props;
 
@@ -108,16 +107,31 @@ export const SVG = props => {
       const state = featureContextConsumer.features.states.find(
         state => state.properties.name === propsState
       );
+
+      if (!state) return "none";
+
       const fips = state.id;
 
       const selectedCounties = featureContextConsumer.features.counties.filter(
         county => county.id.startsWith(fips)
       );
 
-      const projection = geoAlbersUsa().fitSize([width, height], {
-        type: "FeatureCollection",
-        features: selectedCounties,
-      });
+      let projection;
+      // using geoalbers projection for alaska because it
+      // looks tiny in mercator
+      if (fips === "02") {
+        projection = geoAlbersUsa().fitSize([width, height], {
+          type: "FeatureCollection",
+          features: selectedCounties,
+        });
+      } else {
+        // using mercator for other states for familiarity and
+        // because Albers is undefined for some US territories
+        projection = geoMercator().fitSize([width, height], {
+          type: "FeatureCollection",
+          features: selectedCounties,
+        });
+      }
 
       paths = selectedCounties.map((geometry, index) => {
         const path = geoPath().projection(projection)(geometry);
@@ -143,21 +157,19 @@ export const SVG = props => {
     }
 
     if (
+      propsCountries &&
       featureContextConsumer.scope === "world" &&
       featureContextConsumer.features.countries
     ) {
-      // console.count("create paths");
-      const country = featureContextConsumer.features.countries.find(
-        country => country.properties.ADM0_A3 === propsCountry
+      const countries = featureContextConsumer.features.countries.filter(
+        country => propsCountries.includes(country.properties.ADM0_A3)
       );
 
-      if (country === undefined) {
-        return <></>;
-      }
+      if (!countries === undefined) return "none";
 
       const projection = geoMercator().fitSize([width, height], {
         type: "FeatureCollection",
-        features: [country],
+        features: countries,
       });
       // .rotate(geoCentroid(country).map((x, i) => (i === 1 ? -23 : x * -1)));
 
@@ -168,11 +180,16 @@ export const SVG = props => {
             <path
               key={index}
               fill={
-                geometry.properties.ADM0_A3 === propsCountry
+                propsCountries.includes(geometry.properties.ADM0_A3)
                   ? "#4E8490"
-                  : "#ffffff"
+                  : "#ffffff00"
               }
-              stroke={"#707070"}
+              stroke={
+                "#707070"
+                // propsCountries.includes(geometry.properties.ADM0_A3)
+                //   ? "#707070"
+                //   : "#70707020"
+              }
               d={path}
             />
           );
@@ -186,23 +203,32 @@ export const SVG = props => {
     featureContextConsumer.features.states,
     featureContextConsumer.scope,
     propsCounties,
-    propsCountry,
+    propsCountries,
     propsState,
   ]);
 
   // console.count("render minmap SVG");
   return (
-    <div className={styles.container}>
-      {propsCountry && paths === null ? (
-        <div className={styles.placeholder}>
-          <em>loading map...</em>
+    <>
+      {paths !== "none" ? (
+        <div className={styles.container}>
+          {propsCountries && paths === null ? (
+            <div className={styles.placeholder}>
+              <em>loading map...</em>
+            </div>
+          ) : (
+            <svg
+              viewBox={`0 0 ${width} ${height}`}
+              // style={{ overflow: "visible", zIndex: -1, position: "relative" }}
+            >
+              <g transform={"scale(1)"}>{paths}</g>
+            </svg>
+          )}
         </div>
       ) : (
-        <svg viewBox={`0 0 ${width} ${height}`}>
-          <g transform={"scale(1)"}>{paths}</g>
-        </svg>
+        <></>
       )}
-    </div>
+    </>
   );
 };
 

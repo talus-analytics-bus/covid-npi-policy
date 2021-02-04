@@ -2,6 +2,7 @@ import React from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 
 import Axes from "./Axes/Axes";
+import Legend from "./Legend/Legend";
 import GanttChartSVG from "./GanttChartSVG/GanttChartSVG";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
@@ -50,7 +51,7 @@ const CaseloadPlot = props => {
   // layout constants
   const [constDim, setConstDim] = React.useState({
     width: 800,
-    caseloadHeight: 150,
+    caseloadHeight: 180,
 
     gantt: {
       // height will be calculated
@@ -68,10 +69,10 @@ const CaseloadPlot = props => {
       },
     },
 
-    paddingTop: 5,
+    paddingTop: 35,
     paddingRight: 2,
     paddingLeft: 0,
-    paddingBottom: 5,
+    paddingBottom: 0,
 
     // yLabelWidth will be changed
     // once it is calculated based
@@ -79,9 +80,9 @@ const CaseloadPlot = props => {
     // rendered.
     yLabelWidth: 20,
     yLabelPadding: 5,
-    yLabelFontSize: 8,
+    yLabelFontSize: 10,
 
-    xLabelFontSize: 8,
+    xLabelFontSize: 11,
     xLabelPadding: 5,
   });
 
@@ -288,6 +289,7 @@ const CaseloadPlot = props => {
       xmlns="http://www.w3.org/2000/svg"
       className={styles.svg}
       ref={svgElement}
+      style={{ overflow: "visible" }}
     >
       {/* Visualize padding zone for testing */}
       {/* <rect */}
@@ -313,6 +315,7 @@ const CaseloadPlot = props => {
       {/*   }} */}
       {/* /> */}
       <Axes dim={dim} scale={scale} />
+      <Legend />
       <g className={styles.dailyLines}>
         {caseload &&
           scale &&

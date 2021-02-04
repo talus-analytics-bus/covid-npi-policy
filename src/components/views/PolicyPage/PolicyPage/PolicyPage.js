@@ -74,17 +74,31 @@ const PolicyPage = props => {
   return (
     <article className={styles.policyPage}>
       <div className={styles.breadCrumbs}>
-        <PolicyCategoryIcon
-          category={policyObjectPath && policyObjectPath[0]}
-        />
-        <Link to={`/policies/${iso3}/${state}`}>
-          {policyObjectPath &&
-            policyObjectPath
-              .filter(s => s !== "children")
-              .slice(0, -2)
-              .join(" / ")}
-          &nbsp; / {policyObjectPath && policyObjectPath.slice(-3)[0]}
-        </Link>
+        {iso3 !== "Unspecified" && (
+          <>
+            <PolicyCategoryIcon
+              category={policyObjectPath && policyObjectPath[0]}
+            />
+            <Link to={`/policies/${iso3}/${state}`}>
+              {policyObjectPath &&
+                policyObjectPath
+                  .filter(
+                    s =>
+                      ![
+                        "children",
+                        // "Local",
+                        // "Country",
+                        // "State / Province",
+                      ].includes(s)
+                  )
+                  .slice(0, -2)
+                  .map(e => (
+                    <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
+                  ))}
+              {policyObjectPath && policyObjectPath.slice(-3)[0]}
+            </Link>
+          </>
+        )}
       </div>
 
       <section className={styles.headerSection}>
@@ -94,11 +108,25 @@ const PolicyPage = props => {
               <header>
                 <div className={styles.row}>
                   <h1>
-                    {policy &&
-                      `${policy.auth_entity[0].place.loc.split(",")[0]} 
-                      ${policy.primary_ph_measure}: 
-                      ${policy.ph_measure_details} issued 
-                      ${formatDate(new Date(policy.date_start_effective))}`}
+                    {policy ? (
+                      <>
+                        {`${policy.auth_entity[0].place.loc
+                          .split(",")[0]
+                          .replace(/\([A-Z]*\)/, "")}
+                      ${policy.primary_ph_measure}: `}
+                        <br />
+                        {policy.ph_measure_details}
+                        <br /> {policy && "issued "}
+                        {policy &&
+                          formatDate(new Date(policy.date_start_effective))}
+                      </>
+                    ) : (
+                      <>
+                        <br />
+                        <br />
+                        <br />
+                      </>
+                    )}
                   </h1>
                 </div>
               </header>
@@ -160,16 +188,28 @@ const PolicyPage = props => {
           </div>
           <div className={styles.rightCol}>
             <div className={styles.miniMapHolder}>
-              {iso3 !== "Unspecified" && <h3>Affected Area</h3>}
-              <MiniMap.SVG
-                country={iso3}
-                state={state && state}
-                counties={
-                  policy
-                    ? [policy.auth_entity[0].place.area2.split(" County")[0]]
-                    : []
-                }
-              />
+              <figure>
+                <MiniMap.SVG
+                  country={
+                    policy &&
+                    policy.place &&
+                    policy.place.map(place => place.iso3)
+                  }
+                  state={state && state}
+                  counties={
+                    policy
+                      ? [policy.auth_entity[0].place.area2.split(" County")[0]]
+                      : []
+                  }
+                />
+
+                {/* {iso3 !== "Unspecified" && ( */}
+                {/*   <figcaption> */}
+                {/*     Countries, states, provinces or counties affected by this */}
+                {/*     policy. */}
+                {/*   </figcaption> */}
+                {/* )} */}
+              </figure>
             </div>
           </div>
         </div>
@@ -184,8 +224,12 @@ const PolicyPage = props => {
               <strong>{policy && policy.authority_name}</strong>
             </p>
             <h3>Description</h3>
-            <p>{policy && policy.desc}</p>
-            <ExploreSource {...{ policy }} />
+            <p>
+              <strong>{policy && policy.desc}</strong>
+            </p>
+            {policy && policy.policy_name !== "Not Available" && (
+              <ExploreSource {...{ policy }} />
+            )}
           </div>
           <div className={styles.rightCol}>
             <h3>Policy Category</h3>
@@ -228,11 +272,13 @@ const PolicyPage = props => {
                 </p>
               </div>
               <div className={styles.col}>
-                <h3>Affected Location</h3>
+                <h3>Authorizing Location</h3>
                 <p>
-                  <strong>{policyPlace && policyPlace.loc}</strong>
+                  <strong>
+                    {policyPlace && policyPlace.loc.split(",")[0]}
+                  </strong>
                 </p>
-                <h3>Affected Location</h3>
+                <h3>Official</h3>
                 <p>
                   <strong>{policy && policy.auth_entity[0].official}</strong>
                 </p>

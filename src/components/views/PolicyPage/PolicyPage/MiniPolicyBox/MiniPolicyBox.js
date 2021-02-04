@@ -1,5 +1,7 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+import { getObjectByPath } from "../../objectPathTools.js";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -20,31 +22,11 @@ const formatDate = date => {
     day: "numeric",
     month: "short",
     year: "numeric",
-    // timeZone: "UTC",
   });
 };
 
-const MiniPolicyBox = ({ policy, path }) => {
-  const [pageIso3, pageState] = useLocation()
-    .pathname.replace(/\/$/, "")
-    .split("/")
-    .slice(-3);
-
-  const policyContextConsumer = React.useContext(policyContext);
-
-  const {
-    setPolicyObject,
-    setStatus,
-    setPolicyFilters,
-  } = policyContextConsumer;
-
-  const [, setScrollPos] = policyContextConsumer.policyListScrollPos;
-
-  // console.log(policyLinkPath);
-
-  // console.log(policy);
-
-  // debugger;
+const MiniPolicyBox = ({ policy }) => {
+  const { policyFilters, policyObject } = React.useContext(policyContext);
 
   const iso3 = policy.auth_entity[0].place.iso3;
 
@@ -57,29 +39,42 @@ const MiniPolicyBox = ({ policy, path }) => {
   }
 
   const linkHref = `/policies/${iso3}/${state}/${policy.id}`;
-  // const policyLinkPath = path && [...path.slice(0, -1), `ID${policy.id}`];
 
   const truncateTitle = policy.policy_name.length > TITLE_CHAR_LIMIT;
   const title = truncateTitle
     ? policy.policy_name.slice(0, TITLE_CHAR_LIMIT) + "..."
     : policy.policy_name;
 
-  const clickPolicyLink = e => {
-    if (iso3 !== pageIso3 || state !== pageState) {
-      setScrollPos(0);
-      setPolicyObject({});
-      setStatus(prev => ({ ...prev, policies: "initial" }));
-      setPolicyFilters({});
-    }
-  };
+  let path = [
+    policy[CATEGORY_FIELD_NAME],
+    "children",
+    policy.auth_entity[0].place.level,
+    "children",
+    policy[SUBCATEGORY_FIELD_NAME],
+  ];
+
+  const place = policy.auth_entity[0].place;
+
+  if (
+    (policyFilters.iso3[0] === "USA" && place.level === "Local") ||
+    (policyFilters.iso3[0] !== "USA" && place.level === "State / Province") ||
+    policyFilters.iso3[0] === "Unspecified"
+  ) {
+    path = [...path, "children", policy.auth_entity[0].place.loc];
+  }
+
+  path = [...path, "children", `ID${policy.id}`];
+
+  const linkState = getObjectByPath({ obj: policyObject, path })
+    ? { path: path }
+    : undefined;
 
   return (
     <Link
       className={styles.miniPolicyBox}
-      onClick={clickPolicyLink}
       to={{
         pathname: linkHref,
-        state: undefined,
+        state: linkState,
       }}
     >
       <PolicyCategoryIcon category={policy[CATEGORY_FIELD_NAME]} />
@@ -95,7 +90,5 @@ const MiniPolicyBox = ({ policy, path }) => {
     </Link>
   );
 };
-
-// <p>{policy.date_issued}</p>;
 
 export default MiniPolicyBox;

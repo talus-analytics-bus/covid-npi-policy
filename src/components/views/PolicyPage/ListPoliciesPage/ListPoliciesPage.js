@@ -29,13 +29,10 @@ const ListPoliciesPage = props => {
     policySort,
     locationName,
     policyFilters,
-    policyObject,
     setPolicyObject,
     setPolicySummaryObject,
     setPolicySearchResults,
   } = policyContextConsumer;
-
-  const [getSummary, setGetSummary] = React.useState(true);
 
   const searchActive = policyFilters._text && policyFilters._text[0] !== "";
 
@@ -44,41 +41,36 @@ const ListPoliciesPage = props => {
   React.useEffect(() => {
     // don't re-request if policies are already
     // loaded like when the user navigates backwards
-    if (
-      !searchActive &&
-      !["error", "loading", iso3].includes(status.policies)
-    ) {
+    if (!searchActive && status.policies && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
       if (!policyFilters.subtarget)
         loadPolicyCategories({
-          iso3,
           setStatus,
           filters: policyFilters,
           stateSetter: setPolicyObject,
           sort: policySort,
-          ...(getSummary && { summarySetter: setPolicySummaryObject }),
+          ...(status.policiesSummary === "initial" && {
+            summarySetter: setPolicySummaryObject,
+          }),
         });
 
       loadPolicySubCategories({
-        iso3,
         setStatus,
         filters: policyFilters,
         stateSetter: setPolicyObject,
         sort: policySort,
       });
-
-      setGetSummary(false);
     }
 
     if (
       searchActive &&
-      !["error", "loading", iso3].includes(status.searchResults)
+      status.searchResults &&
+      status.searchResults === "initial"
     ) {
       setStatus(prev => ({ ...prev, searchResults: "loading" }));
 
       loadPolicySearch({
-        iso3,
         setStatus,
         setPolicyObject,
         filters: policyFilters,
@@ -89,18 +81,19 @@ const ListPoliciesPage = props => {
       });
     }
   }, [
-    iso3,
-    state,
-    policyObject,
-    setPolicyObject,
-    status,
-    setStatus,
     policyFilters,
     policySort,
-    getSummary,
-    setPolicySummaryObject,
     searchActive,
+    // unpack status to allow
+    // react to do string comparisons
+    status.policies,
+    status.policiesSummary,
+    status.searchResults,
+    // these setters won't change
+    setPolicyObject,
     setPolicySearchResults,
+    setPolicySummaryObject,
+    setStatus,
   ]);
 
   const [scrollPos] = policyContextConsumer.policyListScrollPos;
@@ -127,55 +120,70 @@ const ListPoliciesPage = props => {
           </div>
         )}
       </section>
-      {iso3 !== "Unspecified" && (
+      {iso3 !== "Unspecified" && status.caseload !== "error" && (
         <section className={styles.caseloadPlot}>
-          {status.caseload === "error" && (
-            <h3>No caseload data found for {locationName}</h3>
-          )}
-          {(status.caseload === "loading" || status.caseload === iso3) && (
+          {/* {status.caseload === "error" && ( */}
+          {/*   <h3>No caseload data found for {locationName}</h3> */}
+          {/* )} */}
+          {(status.caseload === "loading" || status.caseload === "loaded") && (
             <>
-              {status.caseload === iso3 ? (
-                <h2>Cases in {locationName}</h2>
+              {status.caseload === "loaded" ? (
+                <h2 className={styles.caseloadHeader}>Daily COVID-19 Cases</h2>
               ) : (
-                <h2>&nbsp;</h2>
+                <h2 className={styles.caseloadHeader}>
+                  Loading COVID-19 Cases
+                </h2>
               )}
-              <CaseloadPlot />
+              <figure>
+                <CaseloadPlot />
+                <figcaption>
+                  Source:{" "}
+                  <a
+                    target="_blank"
+                    href="https://github.com/nytimes/covid-19-data"
+                  >
+                    New York Times COVID-19 Data
+                  </a>
+                </figcaption>
+              </figure>
             </>
           )}
         </section>
       )}
-      <section className={styles.policyList}>
-        {iso3 !== "Unspecified" && <h2>Policies in {locationName}</h2>}
-        <PolicyFilterBar />
+      {status.policiesSummary !== "error" && (
+        <section className={styles.policyList}>
+          {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
+          <PolicyFilterBar />
 
-        {!searchActive && (
-          <>
-            {status.policies === "loading" && (
-              <h3>Loading policies for {locationName}</h3>
-            )}
-            {status.policies === "error" && (
-              <h3>No Policies Found in {locationName}</h3>
-            )}
-            {status.policies === iso3 && <PolicyList />}
-          </>
-        )}
-        {searchActive && (
-          <>
-            {status.searchResults === "loading" && (
-              <h3>
-                Searching policies for {policyFilters._text} in {locationName}
-              </h3>
-            )}
-            {status.searchResults === "error" && (
-              <h3>
-                No policies matching {policyFilters._text} found in{" "}
-                {locationName}
-              </h3>
-            )}
-            {status.searchResults === iso3 && <SearchResults />}
-          </>
-        )}
-      </section>
+          {!searchActive && (
+            <>
+              {status.policies === "loading" && (
+                <h3>Loading policies for {locationName}</h3>
+              )}
+              {status.policies === "error" && (
+                <h3>No Policies Found in {locationName}</h3>
+              )}
+              {status.policies === "loaded" && <PolicyList />}
+            </>
+          )}
+          {searchActive && (
+            <>
+              {status.searchResults === "loading" && (
+                <h3>
+                  Searching policies for {policyFilters._text} in {locationName}
+                </h3>
+              )}
+              {status.searchResults === "error" && (
+                <h3>
+                  No policies matching {policyFilters._text} found in{" "}
+                  {locationName}
+                </h3>
+              )}
+              {status.searchResults === "loaded" && <SearchResults />}
+            </>
+          )}
+        </section>
+      )}
     </article>
   );
 };

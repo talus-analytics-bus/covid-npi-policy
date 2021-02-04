@@ -49,6 +49,7 @@
   border: 1px solid #dbdbdb;
   border-radius: 5px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  background: #fff;
 
   .topLevelHeader {
     display: flex;
@@ -70,9 +71,19 @@
       // text-transform: capitalize;
       text-transform: none;
       color: #29334b;
+      width: 100%;
+      display: flex;
+      align-items: baseline;
 
       span {
-        font-weight: 200;
+        font-weight: 400;
+        font-size: 0.75em;
+        margin-left: 0.5rem;
+        margin-left: auto;
+
+        strong {
+          font-weight: 600;
+        }
       }
     }
   }

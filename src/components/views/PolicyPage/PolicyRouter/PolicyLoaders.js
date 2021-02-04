@@ -9,7 +9,6 @@ const checkPolicyActive = policy =>
 
 // Top-Level policy categories
 export const loadPolicyCategories = async ({
-  iso3,
   filters,
   stateSetter,
   setStatus,
@@ -32,13 +31,11 @@ export const loadPolicyCategories = async ({
 
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, policies: "error" }));
+    if (summarySetter) {
+      setStatus(prev => ({ ...prev, policiesSummary: "error" }));
+    }
   } else {
-    console.log(`setting policies status to ${iso3}`);
-    setStatus(prev => ({
-      ...prev,
-      policies: iso3,
-      policiesSummary: iso3,
-    }));
+    setStatus(prev => ({ ...prev, policies: "loaded" }));
 
     const buildObject = (prev, data, count) => {
       data.forEach(policy => {
@@ -79,7 +76,8 @@ export const loadPolicyCategories = async ({
     };
 
     if (summarySetter) {
-      summarySetter(prev => buildObject(prev, policyResponse.data, true));
+      summarySetter(buildObject({}, policyResponse.data, true));
+      setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
     }
 
     // this duplication means that the policies are fully
@@ -104,7 +102,6 @@ export const loadPolicyCategories = async ({
 // Load subcategories; this request should run
 // immediately after the policy categories are loaded
 export const loadPolicySubCategories = async ({
-  iso3,
   filters,
   stateSetter,
   setStatus,
@@ -133,8 +130,7 @@ export const loadPolicySubCategories = async ({
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, policies: "error" }));
   } else {
-    console.log(`setting policies status to ${iso3}`);
-    setStatus(prev => ({ ...prev, policies: iso3 }));
+    setStatus(prev => ({ ...prev, policies: "loaded" }));
 
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
@@ -142,7 +138,9 @@ export const loadPolicySubCategories = async ({
           let path = [
             policy[CATEGORY_FIELD_NAME],
             "children",
-            policy.auth_entity[0].place.level,
+            filters.iso3[0] === "USA"
+              ? policy.auth_entity[0].place.level.replace(" / Province", "")
+              : policy.auth_entity[0].place.level,
             "children",
             policy[SUBCATEGORY_FIELD_NAME],
           ];
@@ -190,13 +188,48 @@ export const loadPolicySubCategories = async ({
             obj: prev,
             path: path,
             valueObj: {
-              children: {},
+              // spread here or delete children?
+              // not sure... delete children can
+              // cause policies to be deleted if
+              // the user is using it before this
+              // request finishes
+              // children: {},
             },
           });
         } else {
           console.log("Skipping policy without auth_entity:");
           console.log(policy);
         }
+      });
+
+      // siblings: parent.children
+      // children: obj.children
+      // if no siblings, open it
+      const openIfNoSiblings = ({ obj, siblings }) => {
+        if (Object.keys(siblings).length === 1) obj.open = true;
+        if (obj.children)
+          return Object.values(obj.children).forEach(child =>
+            openIfNoSiblings({
+              obj: child,
+              siblings: obj.children,
+            })
+          );
+      };
+
+      Object.entries(prev).forEach(([key, obj]) => {
+        // special case to trigger loading when
+        // there is only one first-level box
+        if (obj.count === 1)
+          loadPolicyDescriptions({
+            sort,
+            stateSetter,
+            filters: {
+              ...filters,
+              [CATEGORY_FIELD_NAME]: [key],
+            },
+          });
+
+        openIfNoSiblings({ obj, siblings: prev });
       });
 
       return { ...prev };
@@ -237,7 +270,10 @@ export const loadPolicyDescriptions = async ({
       let path = [
         policy[CATEGORY_FIELD_NAME],
         "children",
-        policy.auth_entity[0].place.level,
+        filters.iso3[0] === "USA"
+          ? policy.auth_entity[0].place.level.replace(" / Province", "")
+          : policy.auth_entity[0].place.level,
+
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
@@ -308,17 +344,19 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
       "policy_number",
       "court_challenges.id",
       "file",
+      "place",
     ],
   });
-
-  // filters = { iso3: ["USA"] };
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
       let path = [
         policy[CATEGORY_FIELD_NAME],
         "children",
-        policy.auth_entity[0].place.level,
+        filters.iso3[0] === "USA"
+          ? policy.auth_entity[0].place.level.replace(" / Province", "")
+          : policy.auth_entity[0].place.level,
+
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
@@ -358,6 +396,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
           policy_number: policy.policy_number,
           court_challenges: policy.court_challenges,
           file: policy.file,
+          place: policy.place,
         },
       });
     });
@@ -368,7 +407,6 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
 };
 
 export const loadPolicySearch = async ({
-  iso3,
   filters,
   stateSetter,
   setPolicyObject,
@@ -403,7 +441,7 @@ export const loadPolicySearch = async ({
     setStatus(prev => ({ ...prev, searchResults: "error" }));
     stateSetter(policyResponse);
   } else {
-    setStatus(prev => ({ ...prev, searchResults: iso3 }));
+    setStatus(prev => ({ ...prev, searchResults: "loaded" }));
     stateSetter(policyResponse);
 
     setPolicyObject(prev => {
@@ -411,7 +449,10 @@ export const loadPolicySearch = async ({
         let path = [
           policy[CATEGORY_FIELD_NAME],
           "children",
-          policy.auth_entity[0].place.level,
+          filters.iso3[0] === "USA"
+            ? policy.auth_entity[0].place.level.replace(" / Province", "")
+            : policy.auth_entity[0].place.level,
+
           "children",
           policy[SUBCATEGORY_FIELD_NAME],
         ];
