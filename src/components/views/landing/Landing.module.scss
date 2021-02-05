@@ -292,6 +292,12 @@
         &:not(:last-child) {
           border-right: 1px solid #303434;
         }
+        &:nth-child(2) {
+          //bump the height of GU logo slightly
+          img {
+            height: 50px;
+          }
+        }
       }
       img {
         height: 40px;
