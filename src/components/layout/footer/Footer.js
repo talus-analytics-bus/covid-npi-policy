@@ -53,8 +53,19 @@ const Footer = ({ page, versions }) => {
       <div className={styles.content}>
         <div className={styles.links}>
           {images.map(d => (
-            <a key={d.imgSrc} target="_blank" href={d.url} alt={d.alt}>
+            <a
+              key={d.imgSrc}
+              target="_blank"
+              href={d.url}
+              alt={d.alt}
+              className={
+                d.alt == "Talus Analytics, LLC" ? styles.talusLogo : null
+              }
+            >
               <img style={d.style} src={d.imgSrc} />
+              {d.alt == "Talus Analytics, LLC" && (
+                <div className={styles.builtBy}>Built by</div>
+              )}
             </a>
           ))}
         </div>
