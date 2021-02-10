@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     max-width: 1300px;
     padding: 0px 20px;
     margin: 0 auto;
@@ -20,6 +21,7 @@
     .links {
       display: flex;
       flex-direction: row;
+      max-height: 50px;
       a {
         display: flex;
         justify-content: center;
@@ -46,7 +48,7 @@
             color: #404041;
             position: absolute;
             left: 40px;
-            top: 8px;
+            top: 0px;
             @media (max-width: 1275px) {
               left: 25%;
               top: 0px;
