@@ -100,6 +100,7 @@ export const Policy = async function({
   by_category = null,
   ordering = [],
   count = false,
+  random = false,
 }) {
   // prepare params
   const params = new URLSearchParams();
@@ -110,6 +111,7 @@ export const Policy = async function({
   params.append("page", page);
   params.append("pagesize", pagesize);
   params.append("count", count);
+  params.append("random", random);
 
   // prepare request
   let req;
@@ -124,6 +126,68 @@ export const Policy = async function({
     req = await axios.post(
       `${API_URL}/post/policy`,
       { filters, ordering },
+      {
+        params,
+      }
+    );
+  } else {
+    console.log("Error: Method not implemented for `Policy`: " + method);
+    return false;
+  }
+  const res = await req;
+  if (res.data !== undefined) {
+    if (isEmpty(filters)) {
+      allPolicies = res.data;
+    }
+    return res.data;
+  } else return false;
+};
+
+/**
+ * Get policy list from API.
+ */
+export const PolicyList = async function({
+  method,
+  page = 1,
+  pagesize = 1000000,
+  fields = [],
+  filters = null,
+  by_category = null,
+  ordering = [],
+}) {
+  // prepare params
+  const params = new URLSearchParams();
+  fields.forEach(d => {
+    params.append("fields", d);
+  });
+  if (by_category !== null) params.append("by_category", by_category);
+  params.append("page", page);
+  params.append("pagesize", pagesize);
+
+  // prepare request
+  let req;
+  if (method === "get") {
+    req = await axios(`${API_URL}/get/policy_number`, {
+      params,
+    });
+  } else if (method === "post") {
+    if (filters === null) {
+      console.log("Error: `filters` is required for method POST.");
+    }
+
+    const filtersNoUndefined = {};
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value[0] !== undefined) {
+        filtersNoUndefined[key] = value;
+      }
+    });
+
+    console.log({ filters, ordering });
+    console.log({ filtersNoUndefined, ordering });
+    req = await axios.post(
+      `${API_URL}/post/policy_number`,
+      { filters: filtersNoUndefined, ordering },
       {
         params,
       }
@@ -257,16 +321,27 @@ export const Plan = async function({
  * Get distancing level data from API.
  */
 export const DistancingLevel = async function({
-  method,
-  geo_res = "state",
+  method = "get",
+  geo_res,
+  iso3,
+  state_name,
+  deltas_only = false,
+  all_dates = true,
   fields = [],
   filters = null,
   date,
+  // method,
+  // geo_res = "state",
+  // fields = [],
+  // filters = null,
+  // date,
 }) {
   // prepare params
   const params = new URLSearchParams();
   const toAdd = [
     ["geo_res", geo_res],
+    ["iso3", iso3],
+    ["state_name", state_name],
     ["date", date],
     ["all_dates", false],
     ["deltas_only", false],

@@ -8,6 +8,9 @@ import ReactTooltip from "react-tooltip";
 import logo from "../../../assets/images/full-amp-logo.png";
 import localBanner from "../../../assets/images/local-banner.svg";
 
+import HoverDropdown from "./HoverDropdown/HoverDropdown";
+import LocationSearch from "./LocationSearch/LocationSearch";
+
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
@@ -68,15 +71,30 @@ const Nav = ({ page, ...props }) => {
                 </i>
               </button>
               <div ref={linksRef} className={styles.links}>
-                <Link
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  className={page === "policymaps" ? styles.active : ""}
-                  to={"/policymaps"}
-                >
-                  Map
-                </Link>
+                {/* <Link */}
+                {/*   onClick={() => { */}
+                {/*     setShowMobileMenu(false); */}
+                {/*   }} */}
+                {/*   className={page === "policymaps" ? styles.active : ""} */}
+                {/*   to={"/policymaps"} */}
+                {/* > */}
+                {/*   Map */}
+                {/* </Link> */}
+                <HoverDropdown>
+                  <span className={styles.hoverTarget}>Location</span>
+                  <div className={styles.navSubmenu}>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "policymaps" ? styles.active : ""}
+                      to={"/policymaps"}
+                    >
+                      View US and Global Map
+                    </Link>
+                    <LocationSearch />
+                  </div>
+                </HoverDropdown>
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);

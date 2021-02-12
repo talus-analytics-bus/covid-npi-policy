@@ -1311,6 +1311,7 @@ export const tooltipGetter = async ({
   if (mapId === "us") {
     filtersForStr.country_name = ["United States of America (USA)"];
     filtersForStr.area1 = [d.properties.state_name];
+    filtersForStr.iso3 = "USA";
   } else {
     // find place match
     const matchingPlace = plugins.places.find(
@@ -1320,13 +1321,14 @@ export const tooltipGetter = async ({
       filtersForStr.country_name = [
         `${matchingPlace.name} (${matchingPlace.iso})`,
       ];
+      filtersForStr.iso3 = [matchingPlace.iso];
     } else {
       filtersForStr.country_name = [
         `${d.properties.NAME} (${d.properties.ISO_A3})`,
       ];
+      filtersForStr.iso3 = [d.properties.ISO_A3];
     }
   }
-  const filtersStr = JSON.stringify(filtersForStr);
 
   // show "view state-level map" button?
   const isUsaOnGlobalMap = mapId === "global" && d.properties.ISO_A3 === "USA";
@@ -1362,16 +1364,26 @@ export const tooltipGetter = async ({
               }}
             />
           )}
-          <PrimaryButton
-            {...{
-              key: "to_data",
-              url: "/data?type=policy&filters_policy=" + filtersStr,
-              iconName: "table_view",
-              label: "view in data table",
-              urlIsExternal: true,
-              isSecondary: isUsaOnGlobalMap || isUsaMap,
-            }}
-          />
+          {!isUsaOnGlobalMap && hasPolicies && (
+            <PrimaryButton
+              {...{
+                key: "to_data",
+                // url: "/data?type=policy&filters_policy=" + filtersStr,
+                url:
+                  `/policies/` +
+                  `${filtersForStr.iso3}/` +
+                  `${
+                    filtersForStr.iso3 === "USA"
+                      ? filtersForStr.area1
+                      : "national"
+                  }`,
+                iconName: "table_view",
+                label: "view policies",
+                urlIsExternal: true,
+                isSecondary: isUsaOnGlobalMap || isUsaMap,
+              }}
+            />
+          )}
         </div>
       )}
     </>

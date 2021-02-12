@@ -30,7 +30,7 @@
     .active {
       font-weight: bold;
     }
-    a:first-child {
+    > a:first-child {
       margin-right: auto;
       display: flex;
       align-items: center;
@@ -68,3 +68,16 @@
 }
 @import "./plugins.module.scss";
 @import "./responsive.module.scss";
+
+.hoverTarget {
+  margin: -15px;
+  padding: 15px;
+}
+
+.navSubmenu {
+  padding: 15px;
+  border: 1px solid #647f7966;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+  background-color: #fff;
+}

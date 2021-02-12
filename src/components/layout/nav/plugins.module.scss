@@ -6,7 +6,7 @@
     .menu {
       .links {
         text-decoration: none;
-        a {
+        > a {
           &:not(:last-child) {
             font-family: "Open Sans";
             margin-right: 30px;
@@ -21,10 +21,10 @@
           }
         }
         margin-top: 28px;
-        a:nth-last-child(2) {
+        > a:nth-last-child(2) {
           margin-right: 0;
         }
-        a:last-child {
+        > a:last-child {
           background-color: #90c0b8;
           padding: 8px 15px;
           border-radius: 0 0 12px 12px;
