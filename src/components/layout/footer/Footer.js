@@ -3,6 +3,7 @@ import styles from "./footer.module.scss";
 import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";
+import idea from "../../../assets/images/logo-title.png";
 import Util from "../../misc/Util.js";
 import classNames from "classnames";
 
@@ -21,27 +22,25 @@ const Footer = ({ page, versions }) => {
   // define footer images and links
   const images = [
     {
+      imgSrc: idea,
+      url: "https://ghssidea.org",
+      alt: "International Disease and Events Analysis",
+    },
+    {
       imgSrc: gu,
       url: "https://ghss.georgetown.edu/",
       alt:
         "Georgetown University Center for Global Health Science and Security",
-      txt: null,
     },
     {
       imgSrc: talus,
       url: "http://talusanalytics.com/",
       alt: "Talus Analytics, LLC",
-      // txt: "Built by",
-      // style: {
-      //   height: "60px",
-      //   position: "relative"
-      // }
     },
     {
       imgSrc: nti,
       url: "https://www.nti.org/about/biosecurity/",
       alt: "Nuclear Threat Initiative",
-      txt: null,
     },
   ];
 
@@ -51,44 +50,52 @@ const Footer = ({ page, versions }) => {
         [styles.wide]: page === "policymaps" || page === "model",
       })}
     >
-      <div className={styles.wrapper}>
-        <div className={styles.content}>
-          <div className={styles.dataAsOf}>
-            {
-              // TODO set date dynamically from API
-            }
-            {lastUpdatedDatePolicy && (
-              <span>
-                Policy and plan data last updated{" "}
-                {new moment(lastUpdatedDatePolicy).format("MMM D, YYYY")}
-              </span>
-            )}
-            .{" "}
-            {lastUpdatedDatePolicy && (
-              <span>
-                COVID-19 case data last updated{" "}
-                {new moment(lastUpdatedDateCases).format("MMM D, YYYY")}
-                {lastUpdatedCases.last_datum_date !== null && (
-                  <span>
-                    {" "}
-                    with data available through{" "}
-                    {moment(lastUpdatedCases.last_datum_date).format(
-                      "MMM D, YYYY"
-                    )}
-                  </span>
-                )}
-              </span>
-            )}
-            .
-          </div>
-          <div className={styles.links}>
-            {images.map(d => (
-              <a key={d.imgSrc} target="_blank" href={d.url} alt={d.alt}>
-                <img style={d.style} src={d.imgSrc} />
-                {d.txt && <div>{d.txt}</div>}
-              </a>
-            ))}
-          </div>
+      <div className={styles.content}>
+        <div className={styles.links}>
+          {images.map(d => (
+            <a
+              key={d.imgSrc}
+              target="_blank"
+              href={d.url}
+              alt={d.alt}
+              className={
+                d.alt == "Talus Analytics, LLC" ? styles.talusLogo : null
+              }
+            >
+              <img style={d.style} src={d.imgSrc} />
+              {d.alt == "Talus Analytics, LLC" && (
+                <div className={styles.builtBy}>Built by</div>
+              )}
+            </a>
+          ))}
+        </div>
+        <div className={styles.dataAsOf}>
+          {
+            // TODO set date dynamically from API
+          }
+          {lastUpdatedDatePolicy && (
+            <span>
+              Policy and plan data last updated{" "}
+              {new moment(lastUpdatedDatePolicy).format("MMM D, YYYY")}
+            </span>
+          )}
+          .{" "}
+          {lastUpdatedDatePolicy && (
+            <span>
+              COVID-19 case data last updated{" "}
+              {new moment(lastUpdatedDateCases).format("MMM D, YYYY")}
+              {lastUpdatedCases.last_datum_date !== null && (
+                <span>
+                  {" "}
+                  with data available through{" "}
+                  {moment(lastUpdatedCases.last_datum_date).format(
+                    "MMM D, YYYY"
+                  )}
+                </span>
+              )}
+            </span>
+          )}
+          .
         </div>
       </div>
     </div>

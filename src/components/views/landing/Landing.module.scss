@@ -1,3 +1,4 @@
+@import "../../../assets/styles/vars.scss";
 .ampLanding {
   background: white;
   background-image: linear-gradient(
@@ -119,20 +120,22 @@
       align-items: center;
 
       .wrapHolder {
-        display: flex;
+        height: 70px;
 
         @media (max-width: 550px) {
           flex-direction: column;
           align-items: flex-start;
           img {
             padding-bottom: 0.5rem;
-            width: 7rem;
           }
+        }
+        @media (max-width: 400px) {
+          height: 55px;
         }
       }
 
       img {
-        width: 6rem;
+        height: 100%;
         margin-right: 1rem;
       }
 
@@ -141,7 +144,6 @@
         align-items: flex-start;
         img {
           padding-bottom: 0.5rem;
-          width: 7rem;
         }
       }
 
@@ -236,20 +238,104 @@
       }
 
       span {
-        background-color: #124561;
-        border: 1px solid #092634;
-        border-radius: 3px;
-        color: white;
-        padding: 0.5em 1em;
-        font-size: 1.1rem;
+        border: 2px solid $idea-primary-dark-blue;
+        border-radius: 5px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 10px 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: underline;
+        text-decoration-color: $idea-primary-dark-blue;
         margin-bottom: 2rem;
-        text-decoration: none;
+        background: linear-gradient(
+          180deg,
+          rgba(2, 63, 136, 0.85) 0%,
+          #023f88 100%
+        );
+        color: white;
+        &:hover {
+          background: white;
+          color: $idea-primary-dark-blue;
+          text-decoration-color: white;
+        }
+        &:active {
+          box-shadow: 5px 5px 15px 0 #b3b3b3;
+          -webkit-box-shadow: 5px 5px 15px 0 #b3b3b3;
+        }
+        cursor: pointer;
       }
     }
 
     .inactive {
       opacity: 0.5;
       pointer-events: none;
+    }
+  }
+  .footer {
+    margin-top: 80px;
+    height: 90px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #303434;
+    .content {
+      display: flex;
+      flex-direction: row;
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:not(:last-child) {
+          border-right: 1px solid #303434;
+        }
+        &:nth-child(2) {
+          //bump the height of GU logo slightly
+          img {
+            height: 50px;
+          }
+        }
+        &.talusLogo {
+          position: relative;
+          .builtBy {
+            font-family: "Raleway", sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            color: #404041;
+            position: absolute;
+            left: 40px;
+            top: 0px;
+            @media (max-width: 760px) {
+              display: none;
+            }
+          }
+        }
+      }
+      img {
+        height: 40px;
+        padding: 0px 40px;
+      }
+    }
+    @media (max-width: 760px) {
+      height: unset;
+      margin-top: 40px;
+      padding: 10px 0px;
+      .content {
+        flex-direction: column;
+        a {
+          &:not(:last-child) {
+            border-right: 0px solid #303434;
+          }
+        }
+        img {
+          height: 70px;
+          padding: 10px 0px;
+        }
+      }
     }
   }
 }

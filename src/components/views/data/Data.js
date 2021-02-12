@@ -379,7 +379,7 @@ const Data = ({
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>COVID AMP Data Access</h1>
+        <h1>COVID AMP data access</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
@@ -399,7 +399,7 @@ const Data = ({
         <>
           <Drawer
             {...{
-              title: <h2>Search and Filter</h2>,
+              title: <h2>Search and filter</h2>,
               label: DownloadBtn({
                 render: table,
                 class_name: [nouns.s, "secondary"],
@@ -540,7 +540,7 @@ export const DownloadBtn = ({
           e.stopPropagation();
           if (class_name[0] === "All_data") {
             window.location.assign(
-              "https://gida.ghscosting.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
+              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
             );
           } else {
             setButtonLoading(true);

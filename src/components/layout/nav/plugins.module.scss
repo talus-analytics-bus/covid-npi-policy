@@ -1,21 +1,38 @@
 @import "../../../assets/styles/vars.scss";
 .navWrapper {
+  border-bottom: 1px solid $idea-black;
   .nav {
     position: relative;
     .menu {
       .links {
-        :nth-last-child(2) {
+        text-decoration: none;
+        a {
+          &:not(:last-child) {
+            font-family: "Open Sans";
+            margin-right: 30px;
+          }
+          &:hover {
+            color: $idea-primary-light-blue;
+            text-decoration: none;
+          }
+          &.active {
+            font-weight: 600;
+            text-decoration: none;
+          }
+        }
+        margin-top: 28px;
+        a:nth-last-child(2) {
           margin-right: 0;
         }
         a:last-child {
           background-color: #90c0b8;
-          padding: 10px 15px;
+          padding: 8px 15px;
           border-radius: 0 0 12px 12px;
           position: absolute;
           top: 0;
           line-height: 1;
           right: 20px;
-          height: 40px;
+          height: 32px;
           font-weight: 600;
           font-size: 0.9rem;
         }
@@ -27,12 +44,12 @@
         position: absolute;
         top: 0;
         img {
-          height: 40px;
+          height: 32px;
         }
       }
       a.logo img {
-        margin-top: 40px;
-        height: 46px;
+        margin-top: 26px;
+        height: 50px;
       }
     }
   }

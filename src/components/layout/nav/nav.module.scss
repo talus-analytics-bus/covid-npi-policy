@@ -47,8 +47,8 @@
     }
     &[data-page="policymaps"] {
       + div {
-        height: calc(100% - 127px);
-        top: 127px;
+        height: calc(100% - 116px);
+        top: 116px;
         // height: calc(100% - 90px);
       }
     }
@@ -62,7 +62,7 @@
     position: fixed;
     top: 0;
     + div {
-      margin-top: 127px;
+      margin-top: 116px;
     }
   }
 }
