@@ -91,7 +91,8 @@ const LocationSearch = () => {
         <div className={styles.results}>
           {results.length > 0 && (
             <div className={styles.header}>
-              <span>Place</span> <span>National Policy Count</span>
+              <span>Place</span>
+              {/* <span>National Policy Count</span> */}
             </div>
           )}
           {results.slice(0, 4).map(r => (
@@ -106,9 +107,7 @@ const LocationSearch = () => {
               key={r.loc + r.level}
             >
               <span>{r.loc.replace(/\([A-Z]*\)/, "")}</span>
-              <span>
-                <strong>{r.n_policies}</strong>
-              </span>
+              <span>{/* <strong>{r.n_policies}</strong> */}</span>
             </Link>
           ))}
         </div>
