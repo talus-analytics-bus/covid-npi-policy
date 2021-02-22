@@ -313,6 +313,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             setMapId,
                             policyResolution,
                             setPolicyResolution,
+                            fill,
                           }}
                         />,
                         <>
@@ -561,6 +562,9 @@ export default Map;
  */
 function MapIdToggle(props) {
   const noun = props.mapId === "us" ? "State" : "National";
+  const showChildren = (mapId, fill, value) => {
+    return mapId === value && fill === "policy_status_counts";
+  };
   return (
     <RadioToggle
       {...{
@@ -573,22 +577,21 @@ function MapIdToggle(props) {
             value,
             name,
             tooltip,
-            children:
-              props.mapId === value ? (
-                <RadioToggle
-                  choices={[
-                    { value: "geo", label: `${noun}-level policies` },
-                    {
-                      value: "subgeo",
-                      label: `Sub-${noun.toLowerCase()}-level policies`,
-                    },
-                  ]}
-                  curVal={props.policyResolution}
-                  callback={props.setPolicyResolution}
-                />
-              ) : (
-                undefined
-              ),
+            children: showChildren(props.mapId, props.fill, value) ? (
+              <RadioToggle
+                choices={[
+                  { value: "geo", label: `${noun}-level policies` },
+                  {
+                    value: "subgeo",
+                    label: `Sub-${noun.toLowerCase()}-level policies`,
+                  },
+                ]}
+                curVal={props.policyResolution}
+                callback={props.setPolicyResolution}
+              />
+            ) : (
+              undefined
+            ),
           };
         }),
         curVal: props.mapId,
