@@ -9,8 +9,11 @@ import { InfoTooltip } from "..";
  * @method RadioToggle
  */
 const RadioToggle = ({
-  choices,
-  curVal,
+  choices = [
+    { value: "a", label: "Sample choice A" },
+    { value: "b", label: "Sample choice B" },
+  ],
+  curVal = "a",
   callback,
   onClick,
   label,
@@ -78,7 +81,12 @@ const RadioToggle = ({
         <form className={classNames({ [styles.asGrid]: showRadiosAsCols })}>
           {choices.map(c => (
             <>
-              <span key={c.value}>
+              <span
+                key={c.value}
+                className={classNames({
+                  [styles.hasChildren]: c.children !== undefined,
+                })}
+              >
                 {onClick(
                   c.value,
                   <label

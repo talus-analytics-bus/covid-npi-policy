@@ -19,6 +19,15 @@
     grid-template-columns: auto auto;
     grid-gap: 0 10px;
   }
+  span.hasChildren + div {
+      // indent children
+      form {
+        @include indented;
+        margin-left: 5px;
+      }
+      // space between children and next radio toggle, if present
+      + span {margin-top: 10px;}
+  }
   span:last-child label {
     margin-bottom: 0;
   }
@@ -81,4 +90,6 @@
       margin-right: auto !important;
     }
   }
+
+  
 }

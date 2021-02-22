@@ -43,6 +43,7 @@ import {
 } from "../../common";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
+
 const Map = ({ setLoading, setPage, versions, ...props }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
@@ -53,6 +54,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
+
+  // whether to show policies at the selected geo or below it
+  const [policyResolution, setPolicyResolution] = useState("geo");
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
   const casesLastUpdated =
@@ -302,25 +306,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                         <div className={styles.mapOptionsTitle}>
                           Map options
                         </div>,
-                        <RadioToggle
+                        <MapIdToggle
+                          setInfoTooltipContent={props.setInfoTooltipContent}
                           {...{
-                            left: true,
-                            horizontal: false,
-                            setInfoTooltipContent: props.setInfoTooltipContent,
-                            tooltipPlace: "top",
-                            choices: Object.values(mapStyles).map(
-                              ({ value, name, tooltip }) => {
-                                return {
-                                  value,
-                                  name,
-                                  tooltip,
-                                  // disabled: value === "global"
-                                };
-                              }
-                            ),
-                            curVal: mapId,
-                            callback: setMapId,
-                            label: "Geographic resolution",
+                            mapId,
+                            setMapId,
+                            policyResolution,
+                            setPolicyResolution,
                           }}
                         />,
                         <>
@@ -497,6 +489,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
               fill,
               circle,
               places,
+              policyResolution,
             },
           }}
         />
@@ -561,3 +554,47 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 };
 
 export default Map;
+
+/**
+ * Radio buttons toggling the map ID displayed.
+ * @param {*} props
+ */
+function MapIdToggle(props) {
+  const noun = props.mapId === "us" ? "State" : "National";
+  return (
+    <RadioToggle
+      {...{
+        left: true,
+        horizontal: false,
+        setInfoTooltipContent: props.setInfoTooltipContent,
+        tooltipPlace: "top",
+        choices: Object.values(mapStyles).map(({ value, name, tooltip }) => {
+          return {
+            value,
+            name,
+            tooltip,
+            children:
+              props.mapId === value ? (
+                <RadioToggle
+                  choices={[
+                    { value: "geo", label: `${noun}-level policies` },
+                    {
+                      value: "subgeo",
+                      label: `Sub-${noun.toLowerCase()}-level policies`,
+                    },
+                  ]}
+                  curVal={props.policyResolution}
+                  callback={props.setPolicyResolution}
+                />
+              ) : (
+                undefined
+              ),
+          };
+        }),
+        curVal: props.mapId,
+        callback: props.setMapId,
+        label: "Geographic resolution",
+      }}
+    />
+  );
+}

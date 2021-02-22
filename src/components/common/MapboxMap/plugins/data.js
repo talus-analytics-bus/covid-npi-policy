@@ -21,12 +21,7 @@ import { comma, isLightColor } from "../../../misc/Util";
 
 // queries
 import ObservationQuery from "../../../misc/ObservationQuery.js";
-import TrendQuery from "../../../misc/TrendQuery.js";
-import {
-  DistancingLevel,
-  PolicyStatusCounts,
-  execute,
-} from "../../../misc/Queries";
+import { DistancingLevel, PolicyStatusCounts } from "../../../misc/Queries";
 
 // assets and styles
 // import dots from "./assets/images/dots.png";
@@ -145,8 +140,14 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "state" };
+      params: ({ filters, policyResolution }) => {
+        const countSub = policyResolution === "subgeo";
+        return {
+          method: "post",
+          filters,
+          geo_res: "state",
+          count_sub: countSub,
+        };
       },
 
       // array of layer types for which this metric is used
@@ -276,8 +277,14 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return { method: "post", filters, geo_res: "country" };
+      params: ({ filters, policyResolution }) => {
+        const countSub = policyResolution === "subgeo";
+        return {
+          method: "post",
+          filters,
+          geo_res: "country",
+          count_sub: countSub,
+        };
       },
 
       // array of layer types for which this metric is used
@@ -328,7 +335,10 @@ export const mapMetrics = {
       id: "77",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
       featureLinkField: "place_iso3",
-      styleId: { fill: "metric-test", circle: "metric-test-transp-global" },
+      styleId: {
+        fill: "metric-test",
+        circle: "metric-test-transp-global",
+      },
       trend: true,
       styleOptions: { outline: true, pattern: false },
     },
@@ -343,7 +353,10 @@ export const mapMetrics = {
       id: "75",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
       featureLinkField: "place_iso3",
-      styleId: { fill: "metric-test", circle: "metric-test-solid-global" },
+      styleId: {
+        fill: "metric-test",
+        circle: "metric-test-solid-global",
+      },
       trend: true,
       styleOptions: { outline: true, pattern: false },
     },
@@ -993,106 +1006,4 @@ export const metricMeta = {
       // }
     },
   },
-};
-
-/**
- * dataGetter
- * Given the date, map ID, and filters, obtains the data that should be joined
- * to the features on the map
- * @method dataGetter
- * @param  {[type]}   date    [description]
- * @param  {[type]}   mapId   [description]
- * @param  {[type]}   filters [description]
- * @param  {[type]}   map     [description]
- * @return {Promise}          [description]
- */
-export const dataGetter = async ({ date, mapId, filters, map }) => {
-  // get all metrics displayed in the current map
-  const metrics = mapMetrics[mapId];
-
-  // define date parameters for API calls
-  const dates = {
-    start_date: date.format("YYYY-MM-DD"),
-    end_date: date.format("YYYY-MM-DD"),
-  };
-
-  // collate query definitions based on the metrics that are to be displayed
-  // for this map and whether those metrics will have trends displayed or not
-  const queryDefs = {};
-  metrics.forEach(d => {
-    // if the query for this metric hasn't been defined yet, define it
-    if (queryDefs[d.id] === undefined) {
-      // parse query params
-      const params =
-        typeof d.params === "function"
-          ? d.params({ date, mapId, filters, map })
-          : d.params;
-
-      // add base data query
-      queryDefs[d.id] = {
-        queryFunc: d.queryFunc,
-        ...params,
-        ...dates,
-      };
-
-      // add trend query if applicable
-      if (d.trend === true) {
-        const trendKey = d.params.metric_id.toString() + "-trend";
-        queryDefs[trendKey] = {
-          queryFunc: TrendQuery,
-          ...d.params,
-          end: dates.end_date,
-        };
-      }
-    }
-  });
-
-  // collate queries in object to be called by the `execute method below`
-  const queries = {};
-  for (const [k, v] of Object.entries(queryDefs)) {
-    queries[k] = v.queryFunc({
-      ...v,
-    });
-  }
-
-  // execute queries in parallel
-  const results = await execute({ queries });
-
-  // return results
-  return results;
-};
-
-const TableDrawer = ({
-  header,
-  id,
-  open,
-  openTableDrawer,
-  setOpenTableDrawer,
-  children,
-}) => {
-  return (
-    <div className={styles.tableDrawer}>
-      <div
-        onClick={() => {
-          if (open) setOpenTableDrawer(null);
-          else setOpenTableDrawer(id);
-        }}
-        className={styles.header}
-      >
-        {header}
-        <button>
-          {
-            <i
-              className={classNames("material-icons", {
-                [styles.flipped]: open,
-              })}
-            >
-              play_arrow
-            </i>
-          }
-        </button>
-      </div>
-      <div className={styles.content}>{open && children}</div>
-    </div>
-  );
 };

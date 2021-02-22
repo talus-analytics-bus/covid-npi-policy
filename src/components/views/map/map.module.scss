@@ -51,6 +51,11 @@
       }
     }
   }
+  .subToggle {
+    > [role="label"] {
+      margin: 0;
+    }
+  }
   .circleToggle {
     input,
     select {
@@ -109,8 +114,6 @@
 
   // indented filters
   .indented {
-    padding-left: 13px;
-    margin-left: 15px;
-    border-left: 1px solid lightgray;
+    @include indented;
   }
 }

@@ -206,6 +206,14 @@ $border-radius: 5px;
   -webkit-box-shadow: none;
 }
 
+@mixin indented() {
+  padding-left: 13px;
+  margin-left: 15px;
+  border-left: 1px solid lightgray;
+  font-size: .9rem;
+  margin-top: 5px !important;
+}
+
 // globals
 $small-laptop: "screen and (max-width : 1220px)";
 $breakpoint-one: "screen and (max-width: 1150px)";

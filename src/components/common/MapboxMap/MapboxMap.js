@@ -18,7 +18,8 @@ import classNames from "classnames";
 import * as d3 from "d3/dist/d3.min";
 
 // local modules
-import { metricMeta, dataGetter } from "./plugins/data";
+import { metricMeta } from "./plugins/data";
+import { dataGetter } from "./plugins/dataGetter";
 import { tooltipGetter } from "./plugins/tooltipGetter";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
@@ -445,8 +446,13 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    getMapData({ date, filters, mapId });
-  }, [filters, mapId]);
+    getMapData({
+      date,
+      filters,
+      mapId,
+      policyResolution: plugins.policyResolution,
+    });
+  }, [filters, mapId, date, plugins.policyResolution]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {

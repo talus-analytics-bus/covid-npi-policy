@@ -375,12 +375,15 @@ export const PolicyStatusCounts = async function({
   geo_res = "state",
   fields = [],
   filters = null,
+  count_sub = false,
 }) {
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
   });
+
+  params.append("count_sub", count_sub);
 
   // prepare request
   let req;
