@@ -267,6 +267,9 @@ const MapboxMap = ({
       nouns.singular = "Country";
       nouns.level = "national";
     }
+    // prepend "sub-" if subgeo policies are being viewed
+    if (plugins.policyResolution === "subgeo")
+      nouns.level = "sub-" + nouns.level;
 
     const isPolicyStatus = fill === "policy_status";
     const isPolicyStatusCounts = fill === "policy_status_counts";
@@ -290,6 +293,7 @@ const MapboxMap = ({
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
         : undefined;
+
       const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {

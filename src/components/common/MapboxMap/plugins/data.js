@@ -624,8 +624,8 @@ export const metricMeta = {
   policy_status_counts: {
     metric_definition: (
       <span>
-        The number of policies in effect with the given category / subcategories
-        in the location on the specified date.
+        The number of policies at the specified resolution in effect with the
+        given category / subcategories in the location on the specified date.
       </span>
     ),
     metric_displayname: "Relative policy count",
