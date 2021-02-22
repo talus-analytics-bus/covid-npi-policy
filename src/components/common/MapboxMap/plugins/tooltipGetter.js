@@ -292,13 +292,13 @@ export const tooltipGetter = async ({
   const isUsaOnGlobalMap = mapId === "global" && d.properties.ISO_A3 === "USA";
   const isUsaMap = mapId === "us";
 
-  const hasPolicies =
-    d.state.policy_status_counts !== null && d.state.policy_status_counts > 0;
+  // TODO include national and subnational in this
+  // const hasPolicies = d.state.policy_status_counts !== null && d.state.policy_status_counts > 0;
 
   // content for right side of header
   tooltip.tooltipHeaderRight = (
     <>
-      {(hasPolicies || mapId === "us") && (
+      {
         <div className={styles.buttonsVertical}>
           {isUsaOnGlobalMap && (
             <PrimaryButton
@@ -310,7 +310,7 @@ export const tooltipGetter = async ({
               }}
             />
           )}
-          {mapId === "us" && (
+          {isUsaMap && (
             <PrimaryButton
               {...{
                 key: "to_model",
@@ -322,28 +322,13 @@ export const tooltipGetter = async ({
               }}
             />
           )}
-          {!isUsaOnGlobalMap && hasPolicies && (
-            <PrimaryButton
-              {...{
-                key: "to_data",
-                // url: "/data?type=policy&filters_policy=" + filtersStr,
-                url:
-                  `/policies/` +
-                  `${filtersForStr.iso3}/` +
-                  `${
-                    filtersForStr.iso3 === "USA"
-                      ? filtersForStr.area1
-                      : "national"
-                  }`,
-                iconName: "table_view",
-                label: "view policies",
-                urlIsExternal: true,
-                isSecondary: isUsaOnGlobalMap || isUsaMap,
-              }}
-            />
-          )}
+
+          <ViewPoliciesButton
+            urlParams={filtersForStr}
+            isSecondary={isUsaOnGlobalMap || isUsaMap}
+          />
         </div>
-      )}
+      }
     </>
   );
   const nPolicies = {
@@ -351,7 +336,7 @@ export const tooltipGetter = async ({
   };
   const noun = mapId === "us" ? "state" : "national";
 
-  if (hasPolicies || mapId === "us") {
+  if (mapId === "us") {
     // if (props.geoHaveData || mapId === "us") {
     const policies = await Policy({
       method: "post",
@@ -490,3 +475,28 @@ export const tooltipGetter = async ({
   if (callback) callback();
   return tooltip;
 };
+
+/**
+ * Click to navigate to location-specific policy list page.
+ * @param {*} props
+ */
+function ViewPoliciesButton(props) {
+  return (
+    <PrimaryButton
+      {...{
+        key: "to_data",
+        // url: "/data?type=policy&filters_policy=" + filtersStr,
+        url:
+          `/policies/` +
+          `${props.urlParams.iso3}/` +
+          `${
+            props.urlParams.iso3 === "USA" ? props.urlParams.area1 : "national"
+          }`,
+        iconName: "table_view",
+        label: "view policies",
+        urlIsExternal: true,
+        isSecondary: props.isSecondary,
+      }}
+    />
+  );
+}
