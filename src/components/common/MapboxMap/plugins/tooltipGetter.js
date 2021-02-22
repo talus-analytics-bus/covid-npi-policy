@@ -116,15 +116,14 @@ export const tooltipGetter = async ({
   // on the list of metrics to `include` in the tooltip then add it to the
   // tooltip, otherwise skip
   for (const [k, v] of Object.entries(state)) {
+    const badValue = v === "null" || v === null || v < 0;
+    const isTrend = k.includes("-trend");
+    const isOmitted = !include.includes(k);
+    const isNotOnMap = k !== plugins.fill && k !== plugins.circle;
+    const skipMetric = isOmitted || isNotOnMap || isTrend || badValue;
+
     // skip metric unless it is to be included
-    if (
-      !include.includes(k) ||
-      k.includes("-trend") ||
-      v === "null" ||
-      v === null ||
-      v < 0
-    )
-      continue;
+    if (skipMetric) continue;
     else {
       // get metric metadata
       const thisMetricMeta = metricMeta[k];

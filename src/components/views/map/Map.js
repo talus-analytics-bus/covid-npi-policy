@@ -499,6 +499,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
             ),
             plugins: {
               fill,
+              circle,
               places,
             },
           }}
