@@ -1,22 +1,18 @@
 /**
  * Tooltip for MapboxMap component.
  */
-
 // standard packages
-import React from "react";
+import React from "react"; // 3rd party packages
 
-// 3rd party packages
-import classNames from "classnames";
+import classNames from "classnames"; // assets and styles
 
-// assets and styles
-import styles from "./maptooltip.module.scss";
-
-// FUNCTION COMPONENT // ----------------------------------------------------//
+import styles from "./maptooltip.module.scss"; // FUNCTION COMPONENT // ----------------------------------------------------//
 
 /**
  * Popup on map when a feature is clicked
  * @param {*} param0
  */
+
 const MapTooltip = ({
   tooltipHeader,
   tooltipMainContent,
@@ -37,12 +33,13 @@ const MapTooltip = ({
     </div>
   );
 };
-export default MapTooltip;
 
+export default MapTooltip;
 /**
  * Header of map tooltip (i.e., popup)
  * @param {*} props
  */
+
 function TooltipHeader(props) {
   if (props.content === null || props.content === undefined) return null;
   else
@@ -58,11 +55,11 @@ function TooltipHeader(props) {
       </div>
     );
 }
-
 /**
  * Main content of tooltip.
  * @param {*} props
  */
+
 function TooltipBody(props) {
   if (props.content === null || props.content === undefined) return null;
   else
@@ -78,19 +75,19 @@ function TooltipBody(props) {
       </div>
     );
 }
-
 /**
  * List of entries of tooltip content
  * @param {*} props
  */
+
 function TooltipBodyEntries(props) {
   return props.content.map(d => <TooltipBodyEntry content={d} />);
 }
-
 /**
  * Actions (buttons) available to click at bottom of popup.
  * @param {*} props
  */
+
 function TooltipBodyActions(props) {
   return (
     props.content.length > 0 && (
@@ -124,11 +121,11 @@ function TooltipBodyEntry(props) {
     </div>
   );
 }
-
 /**
  * Trends up, down, or same for metrics in tooltip
  * @param {*} props
  */
+
 function TooltipTrendInfo(props) {
   if (props.content === null || props.content === undefined) return null;
   else

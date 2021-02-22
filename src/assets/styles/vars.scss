@@ -92,9 +92,15 @@ $border-radius: 5px;
   border-radius: 5px;
 }
 
-@mixin spaceItemsHoriz($size) {
-  > :not(:last-child) {
-    margin-right: $size;
+@mixin spaceItemsHoriz($size, $side-right: true) {
+  @if $side-right {
+    > :not(:last-child) {
+      margin-right: $size;
+    }
+  } @else {
+    > :not(:first-child) {
+      margin-left: $size;
+    }
   }
 }
 
@@ -157,25 +163,13 @@ $border-radius: 5px;
     background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
     background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
     background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -webkit-linear-gradient(
-      top,
-      #ffffff 0%,
-      darken(#e4e4e4, 5%) 100%
-    );
+    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
   }
   &:active {
-    background: -moz-linear-gradient(
-      top,
-      #ffffff 0%,
-      darken(#e4e4e4, 10%) 100%
-    );
+    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
     background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
     background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -webkit-linear-gradient(
-      top,
-      #ffffff 0%,
-      darken(#e4e4e4, 10%) 100%
-    );
+    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
   }
 }
 
@@ -210,7 +204,7 @@ $border-radius: 5px;
   padding-left: 13px;
   margin-left: 15px;
   border-left: 1px solid lightgray;
-  font-size: .9rem;
+  font-size: 0.9rem;
   margin-top: 5px !important;
 }
 

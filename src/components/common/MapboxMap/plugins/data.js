@@ -408,7 +408,7 @@ export const metricMeta = {
         <div
           style={{
             fontFamily: "'rawline', serif",
-            fontSize: ".9rem",
+            // fontSize: ".9rem",
             fontWeight: "normal",
             fontStyle: "italic",
             lineHeight: "1.1",
@@ -515,7 +515,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              fontSize: ".9rem",
+              // fontSize: ".9rem",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -570,7 +570,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              fontSize: ".9rem",
+              // fontSize: ".9rem",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -592,7 +592,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              fontSize: ".9rem",
+              // fontSize: ".9rem",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",

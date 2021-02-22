@@ -301,17 +301,18 @@ export const tooltipGetter = async ({
       {
         <div className={styles.buttonsVertical}>
           {isUsaOnGlobalMap && (
-            <PrimaryButton
+            <TooltipButton
               {...{
+                setMapId,
                 key: "to_us",
-                onClick: () => setMapId("us"),
+                onClick: () => props.setMapId("us"),
                 iconName: "zoom_in",
                 label: "view state-level map",
               }}
             />
           )}
           {isUsaMap && (
-            <PrimaryButton
+            <TooltipButton
               {...{
                 key: "to_model",
                 url: "/model/#" + d.properties.state_abbrev.toUpperCase(),
@@ -406,16 +407,13 @@ export const tooltipGetter = async ({
   if (state.lockdown_level === null && mapId === "us") {
     if (nPolicies !== undefined && nPolicies.total > 0) {
       message = (
-        <i>
-          No {noun}-level distancing
-          <br />
-          level could be determined
-          <br />
-          from policies in effect
-        </i>
+        <div className={styles.noDataText}>
+          No {noun}-level distancing level could be determined from policies in
+          effect
+        </div>
       );
     } else {
-      message = <i>No {noun}-level policies in effect</i>;
+      message = <div>No {noun}-level policies in effect</div>;
     }
 
     tooltip.tooltipMainContent.push({
@@ -435,11 +433,9 @@ export const tooltipGetter = async ({
     let message;
     if (props.geoHaveData === false) {
       message = (
-        <i>
-          No policies yet available,
-          <br />
-          data collection in progress
-        </i>
+        <div className={styles.noDataText}>
+          No policies yet available, data collection in progress
+        </div>
       );
     } else if (
       state.lockdown_level === null &&
@@ -447,16 +443,13 @@ export const tooltipGetter = async ({
       nPolicies.total > 0
     ) {
       message = (
-        <i>
-          No national-level distancing
-          <br />
-          level could be determined
-          <br />
-          from policies in effect
-        </i>
+        <div className={styles.noDataText}>
+          No national-level distancing level could be determined from policies
+          in effect
+        </div>
       );
     } else {
-      message = <i>No {noun}-level policies in effect</i>;
+      message = <div>No {noun}-level policies in effect</div>;
     }
     if (state.lockdown_level === null)
       tooltip.tooltipMainContent.push({
@@ -482,7 +475,7 @@ export const tooltipGetter = async ({
  */
 function ViewPoliciesButton(props) {
   return (
-    <PrimaryButton
+    <TooltipButton
       {...{
         key: "to_data",
         // url: "/data?type=policy&filters_policy=" + filtersStr,
@@ -496,6 +489,17 @@ function ViewPoliciesButton(props) {
         label: "view policies",
         urlIsExternal: true,
         isSecondary: props.isSecondary,
+      }}
+    />
+  );
+}
+
+function TooltipButton(props) {
+  return (
+    <PrimaryButton
+      {...{
+        ...props,
+        customClassNames: [styles.tooltipButton],
       }}
     />
   );

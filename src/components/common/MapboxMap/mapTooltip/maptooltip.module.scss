@@ -8,6 +8,12 @@
   @include boxShadowStrong();
   min-width: 400px;
   cursor: default;
+  .tooltipButton {
+    button,
+    span i {
+      font-size: 1.2rem;
+    }
+  }
 
   .header {
     background-color: #f2f2f2;
@@ -16,6 +22,7 @@
     border-radius: 8px 8px 0 0;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     @include spaceItemsHoriz(50px);
 
     .titles {
@@ -24,8 +31,8 @@
         font-size: 2.15rem;
         font-family: "rawline", serif;
         font-weight: 600;
-        line-height: 1;
-        margin-bottom: 5px;
+        line-height: 1.2;
+        // margin-bottom: 5px;
       }
       .subtitle {
         font-style: italic;
@@ -76,13 +83,23 @@
     .metric {
       display: flex;
       flex-flow: column;
-      font-size: 1rem;
+      font-size: 1.5rem;
 
       // NEW metric styles, simpler
       .label {
         margin-bottom: 0.75rem;
         font-family: "Open Sans", sans-serif;
         font-weight: 600;
+        :last-child {
+          font-size: 1.2rem;
+        }
+      }
+      .value {
+        .noDataText {
+            font-size: 1.2rem;
+            max-width: 200px;
+            font-style: italic;
+        }
       }
 
       .metricHeader {
@@ -90,7 +107,7 @@
         font-family: "rawline", serif;
         justify-content: flex-end;
         .label {
-          font-size: 0.9rem;
+          font-size: 1.4rem;
           max-width: 200px;
         }
       }
@@ -99,18 +116,18 @@
         flex-flow: column;
         position: relative;
         top: -0.5rem;
+        
         .value {
           color: $dark-blue;
           font-weight: 600;
-          font-size: 2.4rem;
+          font-size: 3rem;
           display: flex;
           align-items: center;
           justify-content: flex-end;
           margin-bottom: 0.2rem;
-
+          
           .unit {
             font-weight: 600;
-            font-size: 1.1rem;
             line-height: 1;
             text-align: left;
             position: relative;
@@ -125,13 +142,15 @@
     text-transform: none;
     display: flex;
     align-items: center;
+    font-size: 1rem;
+
     @include spaceItemsHoriz(10px);
     .sentiment {
+      font-size: 1.2em;
       font-weight: 600;
       white-space: nowrap;
       width: min-content;
       font-family: "rawline", serif;
-      font-size: 1rem;
       i {
         font-size: 1.15em;
         vertical-align: middle;
@@ -149,7 +168,6 @@
 
       & + div {
         max-width: 125px;
-        font-size: 0.8rem;
         line-height: 1;
         margin-top: -5px;
         font-family: "Open Sans", sans-serif;
@@ -233,12 +251,10 @@
 [class*="mapboxgl-popup-anchor-top-right"] > [class*="mapboxgl-popup-content"] {
   transform-origin: top right;
 }
-[class*="mapboxgl-popup-anchor-bottom-left"]
-  > [class*="mapboxgl-popup-content"] {
+[class*="mapboxgl-popup-anchor-bottom-left"] > [class*="mapboxgl-popup-content"] {
   transform-origin: bottom left;
 }
-[class*="mapboxgl-popup-anchor-bottom-right"]
-  > [class*="mapboxgl-popup-content"] {
+[class*="mapboxgl-popup-anchor-bottom-right"] > [class*="mapboxgl-popup-content"] {
   transform-origin: bottom right;
 }
 
