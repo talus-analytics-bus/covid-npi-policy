@@ -18,7 +18,8 @@ import classNames from "classnames";
 import * as d3 from "d3/dist/d3.min";
 
 // local modules
-import { metricMeta, dataGetter, tooltipGetter } from "./plugins/data";
+import { metricMeta, dataGetter } from "./plugins/data";
+import { tooltipGetter } from "./plugins/tooltipGetter";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
