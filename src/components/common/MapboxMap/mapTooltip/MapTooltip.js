@@ -12,138 +12,146 @@ import classNames from "classnames";
 import styles from "./maptooltip.module.scss";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
+
+/**
+ * Popup on map when a feature is clicked
+ * @param {*} param0
+ */
 const MapTooltip = ({
   tooltipHeader,
   tooltipMainContent,
   actions = [],
   ...props
 }) => {
-  const dHeader = props.tooltipHeaderMetric;
   return (
     <div className={styles.mapTooltip}>
       {
         // Populate header title and subtitle if available
       }
-      {tooltipHeader && (
-        <div className={styles.header}>
-          <div className={styles.titles}>
-            <div className={styles.title}>{tooltipHeader.title}</div>
-            <div className={styles.subtitle}>{tooltipHeader.subtitle}</div>
-          </div>
-          {props.tooltipHeaderRight && (
-            <div className={styles.tooltipHeaderRight}>
-              {props.tooltipHeaderRight}
-            </div>
-          )}
-          {
-            // dHeader && (
-            //   <div className={styles.metric}>
-            //     <React.Fragment>
-            //       <div className={styles.metricContent}>
-            //         <div className={styles.value}>
-            //           {dHeader.value}&nbsp;
-            //           <div className={styles.unit}>{dHeader.unit}</div>
-            //         </div>
-            //         {
-            //           // <div className={styles.metricHeader}>
-            //           //   <div className={styles.label}>{dHeader.label}</div>
-            //           // </div>
-            //         }
-            //         {
-            //           // if trend information available, visualize it
-            //         }
-            //         {dHeader.trend && (
-            //           <div
-            //             className={classNames(
-            //               styles.trend,
-            //               ...dHeader.trend.classes.map(d => styles[d])
-            //             )}
-            //           >
-            //             <div
-            //               className={classNames(
-            //                 styles.sentiment,
-            //                 styles[dHeader.trend.noun.replace(" ", "-")]
-            //               )}
-            //             >
-            //               {dHeader.trend.pct !== 0 && (
-            //                 <span>{dHeader.trend.pct_fmt}&nbsp;</span>
-            //               )}
-            //             </div>{" "}
-            //             <div>
-            //               {dHeader.trend.noun} {dHeader.trend.timeframe}
-            //             </div>
-            //           </div>
-            //         )}
-            //       </div>
-            //     </React.Fragment>
-            //   </div>
-            // )
-          }
-        </div>
-      )}
+      <TooltipHeader content={tooltipHeader} right={props.tooltipHeaderRight} />
+
       {
         // Populate tooltip main content, if available
       }
-      {tooltipMainContent && (
-        <div className={styles.content}>
-          {tooltipMainContent.length === 0 && (
-            <div>
-              <i>No data to show</i>
-            </div>
-          )}
-          {tooltipMainContent.map(d => (
-            <div
-              className={classNames(styles.metric, styles[d.className])}
-              key={d.label}
-            >
-              {d.customContent && d.customContent}
-              {!d.customContent && (
-                <React.Fragment>
-                  <div className={styles.metricHeader}>
-                    <div className={styles.label}>{d.label}</div>
-                  </div>
-                  <div className={styles.metricContent}>
-                    <div className={styles.value}>
-                      {d.value}&nbsp;
-                      <span className={styles.unit}>{d.unit}</span>
-                    </div>
-                    {
-                      // if trend information available, visualize it
-                    }
-                    {d.trend && (
-                      <div
-                        className={classNames(
-                          styles.trend,
-                          ...d.trend.classes.map(d => styles[d])
-                        )}
-                      >
-                        <div
-                          className={classNames(
-                            styles.sentiment,
-                            styles[d.trend.noun.replace(" ", "-")]
-                          )}
-                        >
-                          {d.trend.pct !== 0 && (
-                            <span>{d.trend.pct_fmt}&nbsp;</span>
-                          )}
-                        </div>{" "}
-                        <div>
-                          {d.trend.noun} {d.trend.timeframe}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </React.Fragment>
-              )}
-            </div>
-          ))}
-          {// actions, such as "view state", etc.
-          actions.length > 0 && (
-            <div className={styles.actions}>{actions.map(d => d)}</div>
-          )}
-        </div>
-      )}
+      {<TooltipBody content={tooltipMainContent} actions={actions} />}
     </div>
   );
 };
 export default MapTooltip;
+
+/**
+ * Header of map tooltip (i.e., popup)
+ * @param {*} props
+ */
+function TooltipHeader(props) {
+  if (props.content === null || props.content === undefined) return null;
+  else
+    return (
+      <div className={styles.header}>
+        <div className={styles.titles}>
+          <div className={styles.title}>{props.content.title}</div>
+          <div className={styles.subtitle}>{props.content.subtitle}</div>
+        </div>
+        {props.right !== null && props.right !== undefined && (
+          <div className={styles.tooltipHeaderRight}>{props.right}</div>
+        )}
+      </div>
+    );
+}
+
+/**
+ * Main content of tooltip.
+ * @param {*} props
+ */
+function TooltipBody(props) {
+  if (props.content === null || props.content === undefined) return null;
+  else
+    return (
+      <div className={styles.content}>
+        {props.content.length === 0 && (
+          <div>
+            <i>No data to show</i>
+          </div>
+        )}
+        {<TooltipBodyEntries content={props.content} />}
+        {<TooltipBodyActions content={props.actions} />}
+      </div>
+    );
+}
+
+/**
+ * List of entries of tooltip content
+ * @param {*} props
+ */
+function TooltipBodyEntries(props) {
+  return props.content.map(d => <TooltipBodyEntry content={d} />);
+}
+
+/**
+ * Actions (buttons) available to click at bottom of popup.
+ * @param {*} props
+ */
+function TooltipBodyActions(props) {
+  return (
+    props.content.length > 0 && (
+      <div className={styles.actions}>{props.content}</div>
+    )
+  );
+}
+
+function TooltipBodyEntry(props) {
+  return (
+    <div
+      className={classNames(styles.metric, styles[props.content.className])}
+      key={props.content.label}
+    >
+      {props.content.customContent && props.content.customContent}
+      {!props.content.customContent && (
+        <React.Fragment>
+          <div className={styles.metricHeader}>
+            <div className={styles.label}>{props.content.label}</div>
+          </div>
+          <div className={styles.metricContent}>
+            <div className={styles.value}>
+              {props.content.value}&nbsp;
+              <span className={styles.unit}>{props.content.unit}</span>
+            </div>
+
+            <TooltipTrendInfo content={props.content.trend}></TooltipTrendInfo>
+          </div>
+        </React.Fragment>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Trends up, down, or same for metrics in tooltip
+ * @param {*} props
+ */
+function TooltipTrendInfo(props) {
+  if (props.content === null || props.content === undefined) return null;
+  else
+    return (
+      <div
+        className={classNames(
+          styles.trend,
+          ...props.content.classes.map(d => styles[d])
+        )}
+      >
+        <div
+          className={classNames(
+            styles.sentiment,
+            styles[props.content.noun.replace(" ", "-")]
+          )}
+        >
+          {props.content.pct !== 0 && (
+            <span>{props.content.pct_fmt}&nbsp;</span>
+          )}
+        </div>{" "}
+        <div>
+          {props.content.noun} {props.content.timeframe}
+        </div>
+      </div>
+    );
+}
