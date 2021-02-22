@@ -3,4 +3,8 @@ bin/
 sh/
 build/
 
+# VSCode files
+*.code-workspace
+launch.json
+
 *.DS_STORE
