@@ -11,7 +11,6 @@
 import React, { useEffect, useState } from "react";
 
 // 3rd party packages
-import * as d3 from "d3/dist/d3.min";
 import moment from "moment";
 
 // local packages
@@ -31,13 +30,12 @@ import {
 import PlaceQuery from "../../misc/PlaceQuery";
 
 // assets and styles
-import styles, { style, drawer, dark } from "./map.module.scss";
+import styles, { style, dark } from "./map.module.scss";
 
 // common components
 import {
   MapboxMap,
   RadioToggle,
-  Drawer,
   DateSlider,
   FilterSet,
   InfoTooltip,
@@ -51,7 +49,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   const [initialized, setInitialized] = useState(false);
 
   // map circle scale linear? otherwise log
-  const [linCircleScale, setLinCircleScale] = useState(true);
+  const [linCircleScale] = useState(true);
 
   // unique ID of map to display, e.g., 'us', 'global'
   const [mapId, setMapId] = useState(defaults.mapId);
@@ -90,7 +88,6 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       }
       return title;
     } else {
-      const level = mapId === "us" ? "state" : "national";
       if (fill !== null) {
         title += metricMeta[fill].metric_displayname;
       }
@@ -156,7 +153,6 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
    * @return {Promise}              [description]
    */
   const getData = async (filters = {}) => {
-    const method = Object.keys(filters).length === 0 ? "get" : "post";
     const queries = {};
     // get all country places for tooltip names, etc.
     queries.places = PlaceQuery({ place_type: ["country"] });
@@ -185,7 +181,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     // set options for filters
     const newFilterDefs = [...filterDefs];
     newFilterDefs.forEach(d => {
-      for (const [k, v] of Object.entries(d)) {
+      for (const [k] of Object.entries(d)) {
         if (!k.startsWith("date") && d[k].items === undefined)
           d[k].items = optionsets[k];
       }
