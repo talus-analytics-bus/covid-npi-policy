@@ -1,7 +1,5 @@
 import React from "react";
-import * as d3 from "d3/dist/d3.min";
 import classNames from "classnames";
-import { comma } from "../../../misc/Util";
 import { Policy } from "../../../misc/Queries";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
 import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
@@ -9,6 +7,10 @@ import localLogo from "./assets/icons/logo-local-pill.png";
 import { percentize } from "../../../misc/Util";
 import { PrimaryButton } from "../../../common";
 import { metricMeta, COVID_LOCAL_URL } from "./data";
+
+// // packages for qualitative value binning
+// import * as d3 from "d3/dist/d3.min";
+// import { comma } from "../../../misc/Util";
 
 /**
  * tooltipGetter
@@ -170,17 +172,26 @@ export const tooltipGetter = async ({
         // if (v === "No restrictions") continue;
         const valueStyling = thisMetricMeta.valueStyling[v];
         if (valueStyling === undefined)
-          throw "Missing value styling for value: " + v;
+          console.error("Missing value styling for value: " + v);
         const label = valueStyling.labelShort || valueStyling.label;
         item.value = (
           <div className={styles[k]}>
             <div className={styles.icon}>
-              {valueStyling.icon && <img src={valueStyling.icon} />}
+              {valueStyling.icon && (
+                <img
+                  alt={"Icon denoting a distancing level of " + label}
+                  src={valueStyling.icon}
+                />
+              )}
               <div>{label}</div>
             </div>
             <div className={styles.footer}>
-              <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-                <img src={localLogo} />
+              <a
+                href={COVID_LOCAL_URL + "metrics/"}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <img alt={"The COVID Local logo"} src={localLogo} />
                 <span>{valueStyling.phase} (view in COVID-Local)</span>
               </a>
             </div>
@@ -364,32 +375,32 @@ export const tooltipGetter = async ({
     //       break;
     //   }
     // });
-    // determine qualitative label to use for relative policy count
-    const useQual = true;
-    const maxVal = d3.max(data.policy_status_counts, d => d.value);
-    const minVal = d3.min(data.policy_status_counts, d => d.value);
-    const diff = maxVal - minVal;
-    const binSize = diff / 5;
-    const breakpoints = [1, 2, 3, 4].map(d => {
-      return binSize * d + minVal;
-    });
-    const labels = ["Fewest", "Some", "Some", "Some", "Most"];
-    const qualValScale = d3
-      .scaleThreshold()
-      .domain(breakpoints)
-      .range(labels);
-    const getQualVal = v => {
-      if (v === 0) return "No";
-      else return qualValScale(v);
-    };
-    const value = useQual
-      ? getQualVal(nPolicies.total)
-      : comma(nPolicies.total);
+    // // determine qualitative label to use for relative policy count
+    // const useQual = true;
+    // const maxVal = d3.max(data.policy_status_counts, d => d.value);
+    // const minVal = d3.min(data.policy_status_counts, d => d.value);
+    // const diff = maxVal - minVal;
+    // const binSize = diff / 5;
+    // const breakpoints = [1, 2, 3, 4].map(d => {
+    //   return binSize * d + minVal;
+    // });
+    // const labels = ["Fewest", "Some", "Some", "Some", "Most"];
+    // const qualValScale = d3
+    //   .scaleThreshold()
+    //   .domain(breakpoints)
+    //   .range(labels);
+    // const getQualVal = v => {
+    //   if (v === 0) return "No";
+    //   else return qualValScale(v);
+    // };
 
     // define tooltip subtitle with date
     tooltip.tooltipHeader.subtitle = <span> as of {formattedDate}</span>;
 
     //  // define tooltip subtitle including policy count
+    // const value = useQual
+    //   ? getQualVal(nPolicies.total)
+    //   : comma(nPolicies.total);
     //  tooltip.tooltipHeader.subtitle = (
     //    <>
     //      <span>
