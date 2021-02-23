@@ -116,12 +116,15 @@ export const tooltipGetter = async ({
   // for each metric (k) and value (v) defined in the feature state, if it is
   // on the list of metrics to `include` in the tooltip then add it to the
   // tooltip, otherwise skip
+  const showing = {};
   for (const [k, v] of Object.entries(state)) {
     const badValue = v === "null" || v === null || v < 0;
     const isTrend = k.includes("-trend");
     const isOmitted = !include.includes(k);
     const isNotOnMap = k !== plugins.fill && k !== plugins.circle;
     const skipMetric = isOmitted || isNotOnMap || isTrend || badValue;
+
+    showing[k] = !isNotOnMap;
 
     // skip metric unless it is to be included
     if (skipMetric) continue;
@@ -293,9 +296,6 @@ export const tooltipGetter = async ({
   const isUsaOnGlobalMap = mapId === "global" && d.properties.ISO_A3 === "USA";
   const isUsaMap = mapId === "us";
 
-  // TODO include national and subnational in this
-  // const hasPolicies = d.state.policy_status_counts !== null && d.state.policy_status_counts > 0;
-
   // content for right side of header
   tooltip.tooltipHeaderRight = (
     <>
@@ -333,15 +333,33 @@ export const tooltipGetter = async ({
       }
     </>
   );
+  if (showing.lockdown_level === true)
+    await setNoDataMessages(
+      mapId,
+      policyFilters,
+      tooltip,
+      formattedDate,
+      state,
+      props
+    );
+
+  tooltip.tooltipMainContent.reverse();
+  if (callback) callback();
+  return tooltip;
+};
+
+async function setNoDataMessages(
+  mapId,
+  policyFilters,
+  tooltip,
+  formattedDate,
+  state,
+  props
+) {
   const nPolicies = {
     total: 0,
   };
   const noun = mapId === "us" ? "state" : "national";
-  const policyFiltersAnyLevel = {
-    ...policyFilters,
-    level: undefined,
-    dates_in_effect: undefined,
-  };
 
   const countsGeoRes = mapId === "us" ? "state" : "country";
   const countsFilters = {
@@ -365,9 +383,6 @@ export const tooltipGetter = async ({
     ...countsParams,
     count_sub: false,
   });
-
-  console.log("geoCountsData");
-  console.log(geoCountsData);
 
   function getCount(data) {
     if (data.data !== undefined) {
@@ -425,7 +440,6 @@ export const tooltipGetter = async ({
     //   if (v === 0) return "No";
     //   else return qualValScale(v);
     // };
-
     // define tooltip subtitle with date
     tooltip.tooltipHeader.subtitle = <span> as of {formattedDate}</span>;
 
@@ -466,22 +480,11 @@ export const tooltipGetter = async ({
   if (noLockdownLevelForState) {
     setNoDataForUs(nPolicies, noun, tooltip);
   } else if (noLockdownLevelForCountry) {
-    setNoDataForGlobal(props, state, {}, noun, tooltip, locationDataStatus);
+    setNoDataForGlobal(state, noun, tooltip, locationDataStatus);
   }
+}
 
-  tooltip.tooltipMainContent.reverse();
-  if (callback) callback();
-  return tooltip;
-};
-
-function setNoDataForGlobal(
-  props,
-  state,
-  nPolicies,
-  noun,
-  tooltip,
-  locationDataStatus
-) {
+function setNoDataForGlobal(state, noun, tooltip, locationDataStatus) {
   const hasAnyPoliciesAtAll = locationDataStatus.hasAnyPoliciesEver;
   let message;
   // TODO if have ANY policies, then show "No distancing level yet available..."
@@ -497,8 +500,7 @@ function setNoDataForGlobal(
   ) {
     message = (
       <div className={styles.noDataText}>
-        No national-level distancing level could be determined from policies in
-        effect
+        National-level policy data to determine distancing levels not available
       </div>
     );
   } else if (
