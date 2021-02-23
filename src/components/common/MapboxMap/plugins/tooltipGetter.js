@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { Policy } from "../../../misc/Queries";
+import { Policy, PolicyStatusCounts } from "../../../misc/Queries";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
 import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import localLogo from "./assets/icons/logo-local-pill.png";
@@ -99,6 +99,7 @@ export const tooltipGetter = async ({
         ? filters.primary_ph_measure
         : ["Social distancing"],
   };
+
   if (
     plugins.fill !== "lockdown_level" &&
     filters.ph_measure_details !== undefined &&
@@ -336,6 +337,52 @@ export const tooltipGetter = async ({
     total: 0,
   };
   const noun = mapId === "us" ? "state" : "national";
+  const policyFiltersAnyLevel = {
+    ...policyFilters,
+    level: undefined,
+    dates_in_effect: undefined,
+  };
+
+  const countsGeoRes = mapId === "us" ? "state" : "country";
+  const countsFilters = {
+    ...policyFilters,
+    dates_in_effect: undefined,
+    primary_ph_measure: undefined,
+    ph_measure_details: undefined,
+    level: undefined,
+  };
+  const countsParams = {
+    method: "post",
+    geo_res: countsGeoRes,
+    filters: countsFilters,
+  };
+
+  const subgeoCountsData = await PolicyStatusCounts({
+    ...countsParams,
+    count_sub: true,
+  });
+  const geoCountsData = await PolicyStatusCounts({
+    ...countsParams,
+    count_sub: false,
+  });
+
+  console.log("geoCountsData");
+  console.log(geoCountsData);
+
+  function getCount(data) {
+    if (data.data !== undefined) {
+      return data.data[0].n;
+    } else {
+      if (data.length > 0) {
+        const match = data.find(d => d.place_name === countsFilters.iso3[0]);
+        if (match) return match.value;
+        else return 0;
+      } else return 0;
+    }
+  }
+
+  const nPoliciesGeoEver = getCount(geoCountsData);
+  const nPoliciesSubgeoEver = getCount(subgeoCountsData);
 
   if (mapId === "us") {
     // if (props.geoHaveData || mapId === "us") {
@@ -401,21 +448,73 @@ export const tooltipGetter = async ({
     //  );
   }
 
-  // special -- add note if policy data not yet collected
-  // TODO rewrite the block below for clarity
-  let message;
-  if (state.lockdown_level === null && mapId === "us") {
-    if (nPolicies !== undefined && nPolicies.total > 0) {
-      message = (
-        <div className={styles.noDataText}>
-          No {noun}-level distancing level could be determined from policies in
-          effect
-        </div>
-      );
-    } else {
-      message = <div>No {noun}-level policies in effect</div>;
-    }
+  const noLockdownLevelForState =
+    state.lockdown_level === null && mapId === "us";
 
+  const noLockdownLevelForCountry =
+    (state.lockdown_level === null || props.geoHaveData === false) &&
+    mapId === "global";
+
+  // special -- add note if policy data not yet collected or if only
+  // at sub[geo] resolution
+  const locationDataStatus = {
+    hasAnyDistancingLevelsEver: props.geoHaveData === true,
+    hasAnyGeoPoliciesEver: nPoliciesGeoEver > 0,
+    hasAnySubgeoPoliciesEver: nPoliciesSubgeoEver > 0,
+    hasAnyPoliciesEver: nPoliciesGeoEver > 0 || nPoliciesSubgeoEver > 0,
+  };
+  if (noLockdownLevelForState) {
+    setNoDataForUs(nPolicies, noun, tooltip);
+  } else if (noLockdownLevelForCountry) {
+    setNoDataForGlobal(props, state, {}, noun, tooltip, locationDataStatus);
+  }
+
+  tooltip.tooltipMainContent.reverse();
+  if (callback) callback();
+  return tooltip;
+};
+
+function setNoDataForGlobal(
+  props,
+  state,
+  nPolicies,
+  noun,
+  tooltip,
+  locationDataStatus
+) {
+  const hasAnyPoliciesAtAll = locationDataStatus.hasAnyPoliciesEver;
+  let message;
+  // TODO if have ANY policies, then show "No distancing level yet available..."
+  if (!hasAnyPoliciesAtAll && !locationDataStatus.hasAnyDistancingLevelsEver) {
+    message = (
+      <div className={styles.noDataText}>
+        No data yet collected for this location
+      </div>
+    );
+  } else if (
+    state.lockdown_level === null &&
+    locationDataStatus.hasAnyGeoPoliciesEver
+  ) {
+    message = (
+      <div className={styles.noDataText}>
+        No national-level distancing level could be determined from policies in
+        effect
+      </div>
+    );
+  } else if (
+    state.lockdown_level === null &&
+    !locationDataStatus.hasAnyGeoPoliciesEver
+  ) {
+    message = (
+      <div className={styles.noDataText}>
+        No national-level policy data to determine distancing levels are yet
+        available
+      </div>
+    );
+  } else {
+    message = <div>No {noun}-level policies in effect</div>;
+  }
+  if (state.lockdown_level === null)
     tooltip.tooltipMainContent.push({
       customContent: (
         <>
@@ -426,48 +525,32 @@ export const tooltipGetter = async ({
         </>
       ),
     });
-  } else if (
-    (state.lockdown_level === null || props.geoHaveData === false) &&
-    mapId === "global"
-  ) {
-    let message;
-    if (props.geoHaveData === false) {
-      message = (
-        <div className={styles.noDataText}>
-          No policies yet available, data collection in progress
-        </div>
-      );
-    } else if (
-      state.lockdown_level === null &&
-      nPolicies !== undefined &&
-      nPolicies.total > 0
-    ) {
-      message = (
-        <div className={styles.noDataText}>
-          No national-level distancing level could be determined from policies
-          in effect
-        </div>
-      );
-    } else {
-      message = <div>No {noun}-level policies in effect</div>;
-    }
-    if (state.lockdown_level === null)
-      tooltip.tooltipMainContent.push({
-        customContent: (
-          <>
-            <div className={styles.label}>Distancing level</div>
-            <div style={{ color: "gray" }} className={styles.value}>
-              {message}
-            </div>
-          </>
-        ),
-      });
+}
+
+function setNoDataForUs(nPolicies, noun, tooltip) {
+  let message;
+  if (nPolicies !== undefined && nPolicies.total > 0) {
+    message = (
+      <div className={styles.noDataText}>
+        No {noun}-level distancing level could be determined from policies in
+        effect
+      </div>
+    );
+  } else {
+    message = <div>No {noun}-level policies in effect</div>;
   }
 
-  tooltip.tooltipMainContent.reverse();
-  if (callback) callback();
-  return tooltip;
-};
+  tooltip.tooltipMainContent.push({
+    customContent: (
+      <>
+        <div className={styles.label}>Distancing level</div>
+        <div style={{ color: "gray" }} className={styles.value}>
+          {message}
+        </div>
+      </>
+    ),
+  });
+}
 
 /**
  * Click to navigate to location-specific policy list page.

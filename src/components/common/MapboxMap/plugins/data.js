@@ -8,12 +8,10 @@
  */
 
 // standard packages
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 
 // 3rd party packages
 import * as d3 from "d3/dist/d3.min";
-import classNames from "classnames";
 import moment from "moment";
 
 // utilities
@@ -26,19 +24,14 @@ import { DistancingLevel, PolicyStatusCounts } from "../../../misc/Queries";
 // assets and styles
 // import dots from "./assets/images/dots.png";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
-import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
 import phase1 from "./assets/icons/phase-1.png";
 import phase2 from "./assets/icons/phase-2.png";
 import phase3 from "./assets/icons/phase-3.png";
 import phase4 from "./assets/icons/phase-4.png";
 // import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
-import dataTableIcon from "../../../../assets/icons/dataTableIcon.svg";
-import modelIcon from "../../../../assets/icons/modelIcon.svg";
 
 // utilities and local components
-import { isEmpty } from "../../../misc/Util";
-import { Table, ShowMore } from "../../../common";
 import { greenStepsScale } from "./layers";
 // define default parameters for MapboxMap
 const today = moment();
@@ -632,7 +625,7 @@ export const metricMeta = {
     value: v => v,
     unit: v => "",
     legendInfo: {
-      fill: mapId => {
+      fill: (mapId, policyResolution) => {
         const noun = mapId === "us" ? "state" : "national";
         return {
           for: "basemap", // TODO dynamically
@@ -669,9 +662,13 @@ export const metricMeta = {
           ],
           domain: [
             <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-              data not
+              {getNounFromPolicyResolution({
+                mapId,
+                policyResolution,
+              }).toLowerCase()}{" "}
+              data
               <br />
-              available
+              not available
             </div>,
             <div
               style={{
@@ -680,7 +677,12 @@ export const metricMeta = {
                 lineHeight: 1.1,
               }}
             >
-              no {noun}-level
+              no{" "}
+              {getNounFromPolicyResolution({
+                mapId,
+                policyResolution,
+              }).toLowerCase()}
+              -level
               <br />
               policy in effect
             </div>,
@@ -1007,3 +1009,13 @@ export const metricMeta = {
     },
   },
 };
+
+function getNounFromPolicyResolution({ mapId, policyResolution }) {
+  if (mapId === "us") {
+    if (policyResolution === "geo") return "State";
+    else return "Sub-state";
+  } else {
+    if (policyResolution === "geo") return "National";
+    else return "Sub-national";
+  }
+}

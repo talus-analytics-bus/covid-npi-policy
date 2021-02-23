@@ -144,7 +144,10 @@ const MapboxMap = ({
         else {
           const featureOrder = {};
           data[sortOrderMetricId].forEach(d => {
-            const hasBorder = d.value === "No restrictions" || d.value === null;
+            const hasBorder =
+              d.value === "No restrictions" ||
+              // d.value === null ||
+              d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
           if (mapId === "global") {
@@ -181,7 +184,7 @@ const MapboxMap = ({
           data[sortOrderMetricId].forEach(d => {
             const hasBorder =
               d.value === "No restrictions" ||
-              d.value === null ||
+              // d.value === null ||
               d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
@@ -195,10 +198,11 @@ const MapboxMap = ({
               [
                 "!=",
                 ["get", ["get", promoteId], ["literal", featureOrder]],
-                null,
-              ],
+                null, // if the feature appears in the order list...
+              ], // use its id to determine stack order
               ["get", ["get", promoteId], ["literal", featureOrder]],
-              3,
+              0, // otherwise put it on bottom
+              // 3, // otherwise put it on top
             ]
           );
         }
@@ -877,7 +881,10 @@ const MapboxMap = ({
                       metric_displayname: (
                         <span>{getFillLegendName({ filters, fill })}</span>
                       ),
-                      ...metricMeta[fill].legendInfo.fill(mapId),
+                      ...metricMeta[fill].legendInfo.fill(
+                        mapId,
+                        plugins.policyResolution
+                      ),
                     }}
                   />
                 )}

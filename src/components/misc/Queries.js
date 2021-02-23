@@ -101,6 +101,7 @@ export const Policy = async function({
   ordering = [],
   count = false,
   random = false,
+  merge_like_policies = true,
 }) {
   // prepare params
   const params = new URLSearchParams();
@@ -112,6 +113,7 @@ export const Policy = async function({
   params.append("pagesize", pagesize);
   params.append("count", count);
   params.append("random", random);
+  params.append("merge_like_policies", merge_like_policies);
 
   // prepare request
   let req;
@@ -384,6 +386,7 @@ export const PolicyStatusCounts = async function({
   });
 
   params.append("count_sub", count_sub);
+  params.append("include_zeros", true);
 
   // prepare request
   let req;
