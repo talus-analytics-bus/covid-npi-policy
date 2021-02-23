@@ -6,5 +6,6 @@ build/
 # VSCode files
 *.code-workspace
 launch.json
+.vscode/
 
 *.DS_STORE
