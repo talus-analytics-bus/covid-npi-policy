@@ -305,10 +305,13 @@ const Data = ({
         // clear filters for current doc type and update window history
         newState[filtersUrlParamKey] = "";
       } else {
-        newState[filtersUrlParamKey] = JSON.stringify({
+        const newStateObj = {
           ...filters,
-          _text: [searchText],
-        });
+        };
+        console.log("newStateObj");
+        console.log(newStateObj);
+        if (searchText !== null) newStateObj["_text"] = [searchText];
+        newState[filtersUrlParamKey] = JSON.stringify(newStateObj);
       }
       const newUrlParams = new URLSearchParams();
       for (const [k, v] of Object.entries(newState)) {
