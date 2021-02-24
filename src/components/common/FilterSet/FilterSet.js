@@ -65,6 +65,7 @@ const FilterSet = ({
             label: v.label,
             items: items,
             radio: v.radio,
+            tooltip: v.tooltip,
             className: v.className,
             defaultRadioValue: v.defaultRadioValue,
             dateRange: v.dateRange,

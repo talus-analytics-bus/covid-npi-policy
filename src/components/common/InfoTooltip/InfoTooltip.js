@@ -9,15 +9,17 @@ import classNames from "classnames";
  * Generic info tooltip
  * @method InfoTooltip
  */
-const InfoTooltip = ({ id, text, place, ...props }) => {
+const InfoTooltip = ({ id, text, place, customStyles = {}, ...props }) => {
+  useEffect(ReactTooltip.rebuild, []);
+  if (text === undefined || text === null) return null;
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer}>{text}</div>
   );
   const bindWithFunction = props.setInfoTooltipContent !== undefined;
-  useEffect(ReactTooltip.rebuild, []);
   ReactTooltip.rebuild();
   return (
     <div
+      style={customStyles}
       className={classNames(styles.infoTooltip, { [styles.wide]: props.wide })}
       data-for={bindWithFunction ? "infoTooltip" : id}
       data-tip={dataHtml}

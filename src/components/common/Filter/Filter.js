@@ -7,7 +7,7 @@ import { DateRange } from "react-date-range";
 import moment from "moment";
 
 // misc and common components
-import { RadioToggle } from "../../common";
+import { RadioToggle, InfoTooltip } from "../../common";
 import { isEmpty, arraysMatch } from "../../misc/Util";
 
 // assets and styles
@@ -232,6 +232,7 @@ const Filter = ({
     }
     responsiveHeight = sortedItems && nEntries < 5 ? nEntries * 42 : 7 * 42;
   }
+  // dropdowns
   if (props.radio !== true) {
     return (
       <div
@@ -242,6 +243,13 @@ const Filter = ({
       >
         <div role={"label"} className={styles.label}>
           {label}
+          <InfoTooltip
+            {...{
+              id: "filter-info-" + field,
+              text: props.tooltip,
+              customStyles: { fontWeight: "normal" },
+            }}
+          />
         </div>
         <div className={styles.input}>
           <div
