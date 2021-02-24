@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 
 // assets and styles
 import styles from "./search.module.scss";
-import classNames from "classnames";
 
 /**
  * @method Search
