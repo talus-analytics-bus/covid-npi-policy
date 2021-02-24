@@ -32,13 +32,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const policyInfo = {
   filterDefs: [
     {
-      level: {
-        entity_name: "Place",
-        field: "level",
-        label: "Level of government",
-      },
-    },
-    {
       country_name: {
         entity_name: "Place",
         field: "country_name",
@@ -62,12 +55,26 @@ export const policyInfo = {
       },
     },
     {
-      relaxing_or_restricting: {
-        entity_name: "Policy",
-        field: "relaxing_or_restricting",
-        label: "Relaxing or restricting",
+      level: {
+        entity_name: "Place",
+        field: "level",
+        label: "Level of government",
       },
     },
+    {
+      subtarget: {
+        entity_name: "Policy",
+        field: "subtarget",
+        label: "Target(s)",
+      },
+    },
+    // {
+    //   relaxing_or_restricting: {
+    //     entity_name: "Policy",
+    //     field: "relaxing_or_restricting",
+    //     label: "Relaxing or restricting",
+    //   },
+    // },
     {
       primary_ph_measure: {
         entity_name: "Policy",
@@ -97,25 +104,6 @@ export const policyInfo = {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       {
-        dataField: "place.level",
-        defKey: "place.level",
-        header: "Level of government",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        formatter: (cell, row) => {
-          if (row.place !== undefined && row.place.length > 0)
-            return row.place[0].level;
-          else return null;
-        },
-      },
-      {
         dataField: "place.loc",
         defKey: "place.loc",
         header: "Affected location",
@@ -141,6 +129,25 @@ export const policyInfo = {
         },
       },
       {
+        dataField: "place.level",
+        defKey: "place.level",
+        header: "Level of government",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: (cell, row) => {
+          if (row.place !== undefined)
+            return row.place.map(d => d.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (cell, row) => {
+          if (row.place !== undefined && row.place.length > 0)
+            return row.place[0].level;
+          else return null;
+        },
+      },
+      {
         dataField: "name_and_desc",
         header: "Policy name and description",
         defCharLimit: 1000,
@@ -153,7 +160,11 @@ export const policyInfo = {
           return (
             <>
               <PolicyLink
-                {...{ aText: nameAndDesc.name, policyDatum: row, suffix: ": " }}
+                {...{
+                  aText: nameAndDesc.name,
+                  policyDatum: row,
+                  suffix: ": ",
+                }}
               />
               <ShowMore text={nameAndDesc.desc} charLimit={200} />
             </>
@@ -179,18 +190,30 @@ export const policyInfo = {
           v !== null ? moment(v).format("MMM D, YYYY") : unspecified,
       },
       {
-        dataField: "authority_name",
-        header: "Relevant authority",
+        dataField: "subtarget",
+        header: "Target(s)",
         sort: true,
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
         formatter: v => {
-          // TODO REPLACE ALL
-          if (v === undefined) return "";
-          return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+          const text = v.map(d => d.replace("/", " / ")).join("; ");
+          return <ShowMore {...{ text, charLimit: 100 }} />;
         },
       },
+      // {
+      //   dataField: "authority_name",
+      //   header: "Relevant authority",
+      //   sort: true,
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   formatter: v => {
+      //     // TODO REPLACE ALL
+      //     if (v === undefined) return "";
+      //     return <ShowMore text={v.replace("_", " ")} charLimit={90} />;
+      //   },
+      // },
       {
         dataField: "file",
         header: "PDF / Link",
@@ -262,6 +285,8 @@ export const policyInfo = {
         d.definition =
           "The name and a written description of the policy or law and who it impacts.";
       }
+      if (d.dataField === "subtarget")
+        d.definition = "The primary population, location or entities impacted";
     });
 
     return newColumns;
@@ -283,8 +308,7 @@ export const policyInfo = {
         "id",
         "place",
         "primary_ph_measure",
-        "authority_name",
-        // "name_and_desc",
+        "subtarget",
         "policy_name",
         "desc",
         "date_start_effective",
