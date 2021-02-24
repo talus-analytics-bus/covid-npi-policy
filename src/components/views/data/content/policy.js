@@ -15,6 +15,9 @@ import { Policy } from "../../../misc/Queries";
 // assets and styles
 // use same styles as main Data page
 import styles from "../data.module.scss";
+import PolicyLink, {
+  parseNameAndDesc,
+} from "../../../common/PolicyLink/PolicyLink";
 
 // constants
 const unspecified = (
@@ -146,14 +149,15 @@ export const policyInfo = {
           setOrdering([["name_and_desc", order]]);
         },
         formatter: (cell, row) => {
-          // const title =
-          //   row.policy_name !== "Unspecified" &&
-          //   row.policy_name !== "" &&
-          //   row.policy_name !== null &&
-          //   row.policy_name !== undefined
-          //     ? row.policy_name + ": "
-          //     : "";
-          return <ShowMore text={cell} charLimit={200} />;
+          const nameAndDesc = parseNameAndDesc(row.policy_name, row.desc);
+          return (
+            <>
+              <PolicyLink
+                {...{ aText: nameAndDesc.name, policyDatum: row, suffix: ": " }}
+              />
+              <ShowMore text={nameAndDesc.desc} charLimit={200} />
+            </>
+          );
         },
       },
       {
@@ -280,7 +284,9 @@ export const policyInfo = {
         "place",
         "primary_ph_measure",
         "authority_name",
-        "name_and_desc",
+        // "name_and_desc",
+        "policy_name",
+        "desc",
         "date_start_effective",
         "file",
       ],
