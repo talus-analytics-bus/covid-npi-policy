@@ -1,36 +1,25 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import moment from "moment";
-import axios from "axios";
 
 // common components
 import Search from "../../common/Table/content/Search/Search";
-import {
-  FilterSet,
-  Table,
-  RadioToggle,
-  ShowMore,
-  PrimaryButton,
-} from "../../common";
+import { FilterSet, Table, RadioToggle } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import {
-  Metadata,
-  Policy,
-  OptionSet,
-  Export,
-  execute,
-} from "../../misc/Queries.js";
-import { isEmpty, comma } from "../../misc/Util.js";
+import { Metadata, OptionSet, execute } from "../../misc/Queries.js";
+import { isEmpty } from "../../misc/Util.js";
 
 // styles and assets
 import styles from "./data.module.scss";
-import classNames from "classnames";
 
 // constants
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
 import challengeInfo from "./content/challenge.js";
-const API_URL = process.env.REACT_APP_MODEL_API_URL;
+import {
+  DownloadExcelButton,
+  DownloadStatusMessage,
+} from "./DownloadExcelButton";
 
 // primary data viewing and download page
 const Data = ({
@@ -57,13 +46,12 @@ const Data = ({
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
-  const unspecified = entityInfo.unspecified;
   const nouns = entityInfo.nouns;
 
   // define data and metadata for table
   const [data, setData] = useState(null);
 
-  const [metadata, setMetadata] = useState(null);
+  const [, setMetadata] = useState(null);
 
   // define filters
   const getFiltersFromUrlParams = () => {
@@ -87,11 +75,11 @@ const Data = ({
   );
 
   // min and max dates for date range pickers dynamically determined by data
-  const [minMaxStartDate, setMinMaxStartDate] = useState({
+  const [, setMinMaxStartDate] = useState({
     min: undefined,
     max: undefined,
   });
-  const [minMaxEndDate, setMinMaxEndDate] = useState({
+  const [, setMinMaxEndDate] = useState({
     min: undefined,
     max: undefined,
   });
@@ -199,7 +187,7 @@ const Data = ({
       // set options for filters
       const newFilterDefs = [...entityInfoForQuery.filterDefs];
       newFilterDefs.forEach(d => {
-        for (const [k, v] of Object.entries(d)) {
+        for (const [k] of Object.entries(d)) {
           if (!k.startsWith("date")) d[k].items = optionsets[k];
         }
       });
@@ -301,7 +289,6 @@ const Data = ({
       // get filter strings for each doc type
       const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
       const curUrlFilterParamsPlan = urlParams.get("filters_plan");
-      const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
 
       // get key corresponding to the currently viewed doc type's filters
       const filtersUrlParamKey = "filters_" + docType;
@@ -400,7 +387,7 @@ const Data = ({
           <Drawer
             {...{
               title: <h2>Search and filter</h2>,
-              label: DownloadBtn({
+              label: DownloadExcelButton({
                 render: table,
                 class_name: [nouns.s, "secondary"],
                 classNameForApi: hasFilters ? nouns.s : "All_data",
@@ -410,23 +397,14 @@ const Data = ({
                 filters,
                 disabled: data && data.length === 0,
                 message: (
-                  <span>
-                    {data && data.length === 0 && (
-                      <>No {nouns.p.toLowerCase()} found</>
-                    )}
-                    {data && data.length > 0 && (
-                      <>
-                        <span className={styles.primaryText}>
-                          Download {!hasFilters ? "all" : "filtered"} data
-                        </span>
-                        <br />({comma(numInstances)}{" "}
-                        {numInstances !== 1
-                          ? nouns.p.toLowerCase()
-                          : nouns.s.toLowerCase().replace("_", " ")}
-                        , .xlsx)
-                      </>
-                    )}
-                  </span>
+                  <DownloadStatusMessage
+                    {...{
+                      data,
+                      nouns,
+                      hasFilters,
+                      numInstances,
+                    }}
+                  />
                 ),
               }),
               noCollapse: false,
@@ -499,64 +477,6 @@ const Data = ({
         </>
       )}
     </div>
-  );
-};
-
-export const DownloadBtn = ({
-  render = true,
-  message = "Download",
-  class_name = [],
-  classNameForApi,
-  filters,
-  disabled,
-  searchText,
-  buttonLoading = false,
-  setButtonLoading = () => "",
-}) => {
-  // define custom class names
-  const thisClassNames = {
-    [styles.loading]: buttonLoading || disabled,
-  };
-  class_name.forEach(d => {
-    thisClassNames[styles[d]] = true;
-  });
-  // flag for whether the download button should say loading or not
-  return (
-    render && (
-      <PrimaryButton
-        iconName={"get_app"}
-        label={
-          <div>
-            {!buttonLoading && render && message}
-            {buttonLoading && (
-              <>
-                <span>Downloading, please wait...</span>
-              </>
-            )}
-          </div>
-        }
-        customClassNames={[styles.downloadBtn, ...Object.keys(thisClassNames)]}
-        onClick={e => {
-          e.stopPropagation();
-          if (class_name[0] === "All_data") {
-            window.location.assign(
-              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
-            );
-          } else {
-            setButtonLoading(true);
-
-            Export({
-              method: "post",
-              filters: {
-                ...filters,
-                _text: searchText !== null ? [searchText] : [],
-              },
-              class_name: classNameForApi,
-            }).then(d => setButtonLoading(false));
-          }
-        }}
-      />
-    )
   );
 };
 

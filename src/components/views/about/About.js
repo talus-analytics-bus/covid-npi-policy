@@ -8,7 +8,7 @@ import Documentation from "./content/Documentation";
 
 // local components
 import { AccessibilityNote } from "../../common";
-import { DownloadBtn } from "../data/Data";
+import { DownloadExcelButton } from "../data/DownloadExcelButton";
 
 // assets
 import logo from "../../../assets/images/logo.svg";
@@ -155,7 +155,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             </button>
           </Link>
         ))}
-        {DownloadBtn({
+        {DownloadExcelButton({
           message: <span>Download data (.xls)</span>,
           class_name: ["All_data"],
           classNameForApi: "All_data",
