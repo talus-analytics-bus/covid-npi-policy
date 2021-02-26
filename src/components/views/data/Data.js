@@ -1,36 +1,21 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import moment from "moment";
-import axios from "axios";
 
 // common components
 import Search from "../../common/Table/content/Search/Search";
-import {
-  FilterSet,
-  Table,
-  RadioToggle,
-  ShowMore,
-  PrimaryButton,
-} from "../../common";
+import { FilterSet, Table, RadioToggle, PrimaryButton } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import {
-  Metadata,
-  Policy,
-  OptionSet,
-  Export,
-  execute,
-} from "../../misc/Queries.js";
+import { Metadata, OptionSet, Export, execute } from "../../misc/Queries.js";
 import { isEmpty, comma } from "../../misc/Util.js";
 
 // styles and assets
 import styles from "./data.module.scss";
-import classNames from "classnames";
 
 // constants
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
 import challengeInfo from "./content/challenge.js";
-const API_URL = process.env.REACT_APP_MODEL_API_URL;
 
 // primary data viewing and download page
 const Data = ({
@@ -57,13 +42,12 @@ const Data = ({
   const [pagesize, setPagesize] = useState(5); // TODO dynamically
 
   // set `unspecified` component, etc., from entity info
-  const unspecified = entityInfo.unspecified;
   const nouns = entityInfo.nouns;
 
   // define data and metadata for table
   const [data, setData] = useState(null);
 
-  const [metadata, setMetadata] = useState(null);
+  const [, setMetadata] = useState(null);
 
   // define filters
   const getFiltersFromUrlParams = () => {
@@ -87,11 +71,11 @@ const Data = ({
   );
 
   // min and max dates for date range pickers dynamically determined by data
-  const [minMaxStartDate, setMinMaxStartDate] = useState({
+  const [, setMinMaxStartDate] = useState({
     min: undefined,
     max: undefined,
   });
-  const [minMaxEndDate, setMinMaxEndDate] = useState({
+  const [, setMinMaxEndDate] = useState({
     min: undefined,
     max: undefined,
   });
@@ -199,7 +183,7 @@ const Data = ({
       // set options for filters
       const newFilterDefs = [...entityInfoForQuery.filterDefs];
       newFilterDefs.forEach(d => {
-        for (const [k, v] of Object.entries(d)) {
+        for (const [k] of Object.entries(d)) {
           if (!k.startsWith("date")) d[k].items = optionsets[k];
         }
       });
@@ -301,7 +285,7 @@ const Data = ({
       // get filter strings for each doc type
       const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
       const curUrlFilterParamsPlan = urlParams.get("filters_plan");
-      const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
+      // const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
 
       // get key corresponding to the currently viewed doc type's filters
       const filtersUrlParamKey = "filters_" + docType;
@@ -318,10 +302,16 @@ const Data = ({
         // clear filters for current doc type and update window history
         newState[filtersUrlParamKey] = "";
       } else {
-        newState[filtersUrlParamKey] = JSON.stringify({
+        const newFiltersForState = {
           ...filters,
-          _text: [searchText],
-        });
+        };
+        // add search text to new URL state if it's not null
+        if (searchText !== null) {
+          newFiltersForState._text = [searchText];
+        } else {
+          delete newFiltersForState._text;
+        }
+        newState[filtersUrlParamKey] = JSON.stringify(newFiltersForState);
       }
       const newUrlParams = new URLSearchParams();
       for (const [k, v] of Object.entries(newState)) {
