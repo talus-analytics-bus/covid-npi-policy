@@ -9,3 +9,6 @@ launch.json
 .vscode/
 
 *.DS_STORE
+
+# VSCode files
+.vscode
