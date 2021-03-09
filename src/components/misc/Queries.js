@@ -482,7 +482,7 @@ export const OptionSet = async function({
     fields.forEach(d => {
       params.append("fields", d);
     });
-    params.set("class_name", class_name);
+    params.set("class_name", class_name || "Policy");
 
     req = await axios.get(`${API_URL}/get/optionset`, {
       params,
