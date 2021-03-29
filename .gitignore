@@ -2,3 +2,8 @@ node_modules/
 bin/
 sh/
 build/
+
+*.DS_STORE
+
+# VSCode files
+.vscode
