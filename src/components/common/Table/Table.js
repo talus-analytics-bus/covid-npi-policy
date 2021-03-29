@@ -1,16 +1,12 @@
 // standard modules
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./table.module.scss";
 import classNames from "classnames";
 
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-// import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import paginationFactory from "react-bootstrap-table2-paginator";
 
 // utilities and common components
-import { comma } from "../../misc/Util";
-import { ShowMore } from "../../common/";
 import { Paginator } from "./content/Paginator/Paginator";
 
 // assets
@@ -19,11 +15,8 @@ import desc from "../../../assets/icons/table/sorted-desc.svg";
 import unsorted from "../../../assets/icons/table/unsorted.svg";
 
 const Table = ({
-  name,
   data,
   columns,
-  dataGetter,
-  childGetter,
   defaultSortedField,
   className,
   nTotalRecords,
@@ -31,38 +24,47 @@ const Table = ({
   setCurPage,
   pagesize,
   setPagesize,
-  ...props
 }) => {
-  // // define search bar
-  // const { SearchBar } = Search;
-
   // define custom design for sort carets
-  const sortCaret = (order, column) => {
-    if (!order) return <img className={styles.sortable} src={unsorted} />;
+  const sortCaret = order => {
+    if (!order)
+      return (
+        <img className={styles.sortable} src={unsorted} alt={"Unsorted icon"} />
+      );
     else if (order === "asc")
-      return <img className={styles.sortable} src={asc} />;
+      return (
+        <img
+          className={styles.sortable}
+          src={asc}
+          alt={"Ascending sort caret"}
+        />
+      );
     else if (order === "desc")
-      return <img className={styles.sortable} src={desc} />;
+      return (
+        <img
+          className={styles.sortable}
+          src={desc}
+          alt={"Descending sort caret"}
+        />
+      );
     return null;
   };
 
   // for each column, specify various constants, including the null value,
   // sort carets, etc.
   columns.forEach(d => {
-    d.sortFunc = (a, b, order, dataField) => {
+    d.sortFunc = () => {
       return 1;
     };
+    // d.sortFunc = (a, b, order, dataField) => {
+    //   return 1;
+    // };
     d.sortCaret = sortCaret;
     if (d.definition) {
       d.text = (
         <div>
           <p>{d.header}</p>
-          <p className={styles.definition}>
-            {
-              d.definition
-              // <ShowMore text={d.definition} charLimit={d.defCharLimit || 30} />
-            }
-          </p>
+          <p className={styles.definition}>{d.definition}</p>
         </div>
       );
     } else {
@@ -89,8 +91,7 @@ const Table = ({
     })
     .filter(d => d !== undefined);
 
-  // define how expandable rows should be rendered (e.g., note logs)
-  // TODO move the notes-specific content out of this file, eventually
+  // define how expandable rows should be rendered
   const expandRow = {
     parentClassName: styles.expandedParent,
     nonExpandable,
@@ -115,20 +116,13 @@ const Table = ({
     },
   ];
 
-  // TKP component with search bar enabled
-  // <ToolkitProvider keyField="id" data={data} columns={columns} search>
-
+  // Return component with paginator
   return (
     <>
       <div className={styles.table}>
         <ToolkitProvider keyField="id" data={data} columns={columns}>
           {props => (
             <div>
-              {
-                // <SearchBar
-                //   {...{ ...props.searchProps, placeholder: "search for..." }}
-                // />
-              }
               <BootstrapTable
                 expandRow={expandable ? expandRow : undefined}
                 classes={classNames({
@@ -153,22 +147,5 @@ const Table = ({
       />
     </>
   );
-  // const defaultSorted = [
-  //   {
-  //     dataField: "date_issued",
-  //     order: "desc"
-  //   }
-  // ];
-  // // main jsx for Bootstrap table
-  // return (
-  //   <div className={styles.table}>
-  //     <BootstrapTable
-  // defaultSorted={defaultSorted}
-  //       keyField={"id"}
-  //       data={data}
-  //       columns={columns}
-  //     />
-  //   </div>
-  // );
 };
 export default Table;
