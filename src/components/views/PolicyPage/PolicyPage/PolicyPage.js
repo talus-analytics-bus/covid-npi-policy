@@ -198,13 +198,7 @@ const PolicyPage = props => {
                   state={state && state}
                   counties={
                     policy
-                      ? policy.place
-                        ? [
-                            ...policy.place.map(
-                              place => place.area2.split(" County")[0]
-                            ),
-                          ]
-                        : []
+                      ? [policy.auth_entity[0].place.area2.split(" County")[0]]
                       : []
                   }
                 />
