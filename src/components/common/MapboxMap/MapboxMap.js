@@ -596,11 +596,11 @@ const MapboxMap = ({
   // MAP EVENT CALLBACKS // -------------------------------------------------//
   /**
    * Handle map clicks: Select or deselect fill and show / hide tooltips
-   * @method handleClick
+   * @method handleMapClick
    * @param  {[type]}    e [description]
    * @return {[type]}      [description]
    */
-  const handleClick = e => {
+  const handleMapClick = e => {
     // allow no interaction until map exists
     if (mapRef.current === null) return;
     else {
@@ -659,11 +659,11 @@ const MapboxMap = ({
 
   /**
    * Handle map mousemoves: highlight hovered fill
-   * @method handleMouseMove
+   * @method handleMapMouseMove
    * @param  {[type]}        e [description]
    * @return {[type]}          [description]
    */
-  const handleMouseMove = e => {
+  const handleMapMouseMove = e => {
     // allow no interaction until map exists
     if (mapRef.current === null) return;
     else {
@@ -724,7 +724,13 @@ const MapboxMap = ({
 
   // JSX // -----------------------------------------------------------------//
   // render map only after data initially load
-  if (data === null) return <div />;
+  if (data === null)
+    return (
+      <>
+        {overlays}
+        <div />
+      </>
+    );
   else
     return (
       <>
@@ -757,8 +763,8 @@ const MapboxMap = ({
               setShowReset(true);
             else setShowReset(false);
           }}
-          onClick={handleClick}
-          onMouseMove={handleMouseMove}
+          onClick={handleMapClick}
+          onMouseMove={handleMapMouseMove}
           onLoad={() => {
             // when map has loaded, add event listener to update the map data
             // whenever the map style, i.e., the type of map, is changed
@@ -839,7 +845,7 @@ const MapboxMap = ({
                 play_arrow
               </i>
             </button>
-            {true && (
+            {
               <div className={classNames(styles.entries, {})}>
                 {
                   // fill legend entry
@@ -884,7 +890,7 @@ const MapboxMap = ({
                   />
                 )}
               </div>
-            )}
+            }
           </div>
           {showReset && <ResetZoom handleClick={resetViewport} />}
           {
