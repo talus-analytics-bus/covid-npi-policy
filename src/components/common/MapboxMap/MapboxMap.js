@@ -910,25 +910,4 @@ const MapboxMap = ({
     );
 };
 
-// export const geoHaveData = [
-//   "AUS",
-//   "BRA",
-//   "DJI",
-//   "EST",
-//   "FRA",
-//   "IND",
-//   "ITA",
-//   "JPN",
-//   "KOR",
-//   "MEX",
-//   "MHL",
-//   "NGA",
-//   "NZL",
-//   "PER",
-//   "PHL",
-//   "SOM",
-//   "THA",
-//   "USA",
-// ];
-
 export default MapboxMap;
