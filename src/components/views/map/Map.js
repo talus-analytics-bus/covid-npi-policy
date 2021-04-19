@@ -505,6 +505,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   );
 
   // when map style changes, update default metrics selected
+  // TODO persist selection across map types if it makes sense
   useEffect(
     function updateDefaultMetrics() {
       setCircle(defaults[mapId].circle);

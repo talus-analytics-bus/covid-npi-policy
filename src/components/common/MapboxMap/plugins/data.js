@@ -626,7 +626,6 @@ export const metricMeta = {
     unit: v => "",
     legendInfo: {
       fill: (mapId, policyResolution) => {
-        const noun = mapId === "us" ? "state" : "national";
         return {
           for: "basemap", // TODO dynamically
           type: "quantized",
@@ -993,29 +992,40 @@ export const metricMeta = {
             ]), // TODO dynamically
         };
       },
-      // circle: {
-      //   for: "bubble",
-      //   type: "continuous",
-      //   outline: "#e65d36",
-      //   colorscale: d3
-      //     .scaleLinear()
-      //     .domain([0, 100])
-      //     .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
-      //   labels: {
-      //     bubble: { min: "Low", max: "High" },
-      //     basemap: { min: "Minimal", max: "High" }
-      //   }
-      // }
     },
   },
 };
 
+/**
+ * Given the `mapId` of a map return the appropriate lower case noun for the
+ * geographic features shown in the map.
+ */
+function getMapNoun(mapId) {
+  switch (mapId) {
+    case "us":
+      return "state";
+    case "us-county":
+      return "county";
+    default:
+      return "national";
+  }
+}
+
+/**
+ * Given the `mapId` and resolution of policies to view (`geo` meaning
+ * policies applicable to the visible geographic unit of the map, and `sub`
+ * meaning policies applicable to those beneath it), returns the correct noun
+ * to describe the policy level.
+ */
 function getNounFromPolicyResolution({ mapId, policyResolution }) {
-  if (mapId === "us") {
-    if (policyResolution === "geo") return "State";
-    else return "Sub-state";
-  } else {
-    if (policyResolution === "geo") return "National";
-    else return "Sub-national";
+  switch (mapId) {
+    case "us":
+      if (policyResolution === "geo") return "State";
+      else return "Sub-state";
+    case "us-county":
+      return "County";
+    default:
+      if (policyResolution === "geo") return "National";
+      else return "Sub-national";
   }
 }

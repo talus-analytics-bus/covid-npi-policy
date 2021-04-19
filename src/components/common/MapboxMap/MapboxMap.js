@@ -129,24 +129,29 @@ const MapboxMap = ({
 
   const updateFillOrder = ({ map, f = null }) => {
     // initialize the vertical order of shapes for certain metrics
-    if (mapId === "global") {
-      const hasFillLayers = mapSources[mapId].fill !== undefined;
-      if (hasFillLayers) {
-        // get data fields to bind data to geo feature
-        const featureLinkField = mapSources[mapId].fill.fillLayers.find(
-          d => d.id === fill
-        ).featureLinkField;
-        const promoteId = mapSources[mapId].fill.def.promoteId;
+    const hasFillLayers = mapSources[mapId].fill !== undefined;
+    if (hasFillLayers) {
+      // get data fields to bind data to geo feature
+      const featureLinkField = mapSources[mapId].fill.fillLayers.find(
+        d => d.id === fill
+      ).featureLinkField;
+      const promoteId = mapSources[mapId].fill.def.promoteId;
 
-        // get sort order of circles based on covid caseload metric
-        const sortOrderMetricId = fill;
-        if (sortOrderMetricId === undefined) return;
-        else {
-          const featureOrder = {};
-          data[sortOrderMetricId].forEach(d => {
-            const hasBorder = d.value === "No restrictions" || d.value === 0;
-            featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
-          });
+      // get sort order of circles based on covid caseload metric
+      const sortOrderMetricId = fill;
+      if (sortOrderMetricId === undefined) return;
+      else {
+        const featureOrder = {};
+        data[sortOrderMetricId].forEach(d => {
+          const hasBorder =
+            d.value === "No restrictions" ||
+            // d.value === null ||
+            d.value === 0;
+          featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
+        });
+
+        // for global maps only:
+        if (mapId === "global")
           geoHaveData.forEach(d => {
             // set any geographies that have no data to 2
             if (featureOrder[d] === undefined) {
@@ -154,53 +159,22 @@ const MapboxMap = ({
             }
           });
 
-          // update circle ordering
-          map.setLayoutProperty(
-            sortOrderMetricId + "-fill-outline",
-            "line-sort-key",
-            ["get", ["get", promoteId], ["literal", featureOrder]]
-          );
-        }
-      }
-    } else if (mapId === "us") {
-      const hasFillLayers = mapSources[mapId].fill !== undefined;
-      if (hasFillLayers) {
-        // get data fields to bind data to geo feature
-        const featureLinkField = mapSources[mapId].fill.fillLayers.find(
-          d => d.id === fill
-        ).featureLinkField;
-        const promoteId = mapSources[mapId].fill.def.promoteId;
-
-        // get sort order of circles based on covid caseload metric
-        const sortOrderMetricId = fill;
-        if (sortOrderMetricId === undefined) return;
-        else {
-          const featureOrder = {};
-          data[sortOrderMetricId].forEach(d => {
-            const hasBorder =
-              d.value === "No restrictions" ||
-              // d.value === null ||
-              d.value === 0;
-            featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
-          });
-
-          // update circle ordering
-          map.setLayoutProperty(
-            sortOrderMetricId + "-fill-outline",
-            "line-sort-key",
+        // update circle ordering
+        map.setLayoutProperty(
+          sortOrderMetricId + "-fill-outline",
+          "line-sort-key",
+          [
+            "case",
             [
-              "case",
-              [
-                "!=",
-                ["get", ["get", promoteId], ["literal", featureOrder]],
-                null, // if the feature appears in the order list...
-              ], // use its id to determine stack order
+              "!=",
               ["get", ["get", promoteId], ["literal", featureOrder]],
-              0, // otherwise put it on bottom
-              // 3, // otherwise put it on top
-            ]
-          );
-        }
+              null, // if the feature appears in the order list...
+            ], // use its id to determine stack order
+            ["get", ["get", promoteId], ["literal", featureOrder]],
+            0, // otherwise put it on bottom
+            // 3, // otherwise put it on top
+          ]
+        );
       }
     }
 
@@ -260,12 +234,8 @@ const MapboxMap = ({
   const getFillLegendName = ({ filters, fill }) => {
     const isLockdownLevel = fill === "lockdown_level";
 
-    const nouns = { plural: "States", singular: "State", level: "state" };
-    if (mapId === "global") {
-      nouns.plural = "Countries";
-      nouns.singular = "Country";
-      nouns.level = "national";
-    }
+    const nouns = getMapNouns(mapId);
+
     // prepend "sub-" if subgeo policies are being viewed
     if (plugins.policyResolution === "subgeo")
       nouns.level = "sub-" + nouns.level;
@@ -912,3 +882,22 @@ const MapboxMap = ({
 };
 
 export default MapboxMap;
+
+/**
+ * Given the `mapId`, returns the appropriate set of nouns and the level with
+ * which geographic features in the map should be referred to.
+ */
+function getMapNouns(mapId) {
+  switch (mapId) {
+    case "us":
+      return { plural: "States", singular: "State", level: "state" };
+    case "us-county":
+      return { plural: "Counties", singular: "County", level: "county" };
+    default:
+      return {
+        plural: "Countries",
+        singular: "Country",
+        level: "national",
+      };
+  }
+}
