@@ -1,5 +1,5 @@
 /**
- * Standard Mapbox map component for display metrics as fill and circle.
+ * Standard Mapbox map component for displaying metrics as fill and circle.
  * All data elements are defined in `plugins` directory on a per-project basis.
  * `plugins/data.js` defines metric metadata, metric data getter methods, etc.,
  *    , and default settings
@@ -147,12 +147,12 @@ const MapboxMap = ({
             const hasBorder = d.value === "No restrictions" || d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
-            geoHaveData.forEach(d => {
-              // set any geographies that have no data to 2
-              if (featureOrder[d] === undefined) {
-                featureOrder[d] = 2;
-              }
-            });
+          geoHaveData.forEach(d => {
+            // set any geographies that have no data to 2
+            if (featureOrder[d] === undefined) {
+              featureOrder[d] = 2;
+            }
+          });
 
           // update circle ordering
           map.setLayoutProperty(
