@@ -144,20 +144,15 @@ const MapboxMap = ({
         else {
           const featureOrder = {};
           data[sortOrderMetricId].forEach(d => {
-            const hasBorder =
-              d.value === "No restrictions" ||
-              // d.value === null ||
-              d.value === 0;
+            const hasBorder = d.value === "No restrictions" || d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
-          if (mapId === "global") {
             geoHaveData.forEach(d => {
               // set any geographies that have no data to 2
               if (featureOrder[d] === undefined) {
                 featureOrder[d] = 2;
               }
             });
-          }
 
           // update circle ordering
           map.setLayoutProperty(
