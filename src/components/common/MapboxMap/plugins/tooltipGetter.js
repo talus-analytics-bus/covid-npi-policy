@@ -346,7 +346,7 @@ const setTooltipHeader = ({ mapId, tooltip, d, plugins }) => {
       break;
     case "us-county":
       tooltip.tooltipHeader = {
-        title: "County name",
+        title: `${d.properties.county_name}, ${d.properties.state_name}`,
         subtitle: null,
       };
       // tooltip.tooltipHeader = {

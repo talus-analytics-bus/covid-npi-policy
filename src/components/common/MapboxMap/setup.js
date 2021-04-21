@@ -364,7 +364,7 @@ export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
   const curMapMetrics = mapMetrics[mapId];
   bindFeatureStatesForSource({
     map,
-    mvmNew: mapSources[mapId],
+    newSources: mapSources[mapId],
     data,
     curMapMetrics,
     selectedFeature,
@@ -387,12 +387,12 @@ const bindFeatureStatesForSource = ({
   map,
   // sourceTypeKey,
   // source,
-  mvmNew,
+  newSources,
   data,
   curMapMetrics,
   selectedFeature,
 }) => {
-  for (const [sourceTypeKey, source] of Object.entries(mvmNew)) {
+  for (const [sourceTypeKey, source] of Object.entries(newSources)) {
     // define standard layer list key, e.g., 'circleLayers', 'fillLayers', ...
     const layerListKey = sourceTypeKey + "Layers";
 
@@ -465,7 +465,7 @@ const bindFeatureStatesForSource = ({
 
       // bind updated feature state to any feature that matches the
       // feature props
-      for (const [sourceTypeKey, source] of Object.entries(mvmNew)) {
+      for (const [sourceTypeKey, source] of Object.entries(newSources)) {
         const featureProps = {
           source: source.name,
           sourceLayer: source.sourceLayer,

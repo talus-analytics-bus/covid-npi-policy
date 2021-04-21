@@ -38,7 +38,7 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "us",
+  mapId: "us-county",
 
   // default date for map to start on
   // date: "2020-06-18",
@@ -57,6 +57,16 @@ export const defaults = {
     circle: "74",
     // id of default fill metric
     fill: "policy_status_counts",
+    // fill: "lockdown_level",
+    // base layer immediately behind which layers should be appended to map
+    priorLayer: "state-points",
+  },
+  // defaults for map with ID `us-county`
+  "us-county": {
+    // id of default circle metric
+    circle: "104",
+    // id of default fill metric
+    fill: "104",
     // fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points",
@@ -211,6 +221,24 @@ export const mapMetrics = {
       trend: true,
       styleOptions: { outline: true },
       // styleOptions: { outline: true, pattern: true },
+    },
+  ],
+  "us-county": [
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle"],
+      params: {
+        metric_id: 104,
+        temporal_resolution: "daily",
+        spatial_resolution: "county",
+        fields: ["value", "place_fips"],
+      },
+      id: "104",
+      featureLinkField: "place_fips",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      filter: ["==", ["get", "type"], "county"],
+      trend: true,
+      styleOptions: { outline: true },
     },
   ],
   global: [
@@ -473,6 +501,9 @@ export const metricMeta = {
         },
       },
     },
+  },
+  get "104"() {
+    return this["74"];
   },
   // additional metric legend information...
   get "72"() {
