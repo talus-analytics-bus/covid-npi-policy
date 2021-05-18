@@ -374,7 +374,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                 type="radio"
                                 value="show"
                                 name="casecount"
-                                defaultChecked
+                                defaultChecked={defaults[mapId].circle !== null}
                               />{" "}
                               <span>Show</span>
                             </label>
@@ -384,6 +384,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                 type="radio"
                                 value="hide"
                                 name="casecount"
+                                defaultChecked={defaults[mapId].circle === null}
                               />{" "}
                               <span>Hide</span>
                             </label>
