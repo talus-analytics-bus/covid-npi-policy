@@ -26,8 +26,8 @@ export const dataGetter = async ({
 
   // define date parameters for API calls
   const dates = {
-    start_date: date.format("YYYY-MM-DD"),
-    end_date: date.format("YYYY-MM-DD"),
+    start_date: date,
+    end_date: date,
   };
 
   // collate query definitions based on the metrics that are to be displayed
