@@ -235,10 +235,78 @@ export const mapMetrics = {
       },
       id: "104",
       featureLinkField: "place_fips",
+      styleId: { fill: "metric-transp", circle: "metric-test-transp" },
+      filter: ["==", ["get", "type"], "county"],
+      trend: true,
+      styleOptions: { outline: true },
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle"],
+      params: {
+        metric_id: 102,
+        temporal_resolution: "daily",
+        spatial_resolution: "county",
+        fields: ["value", "place_fips"],
+      },
+      id: "102",
+      featureLinkField: "place_fips",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "county"],
       trend: true,
       styleOptions: { outline: true },
+    },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatusCounts,
+
+      // params that must be passed to `queryFunc` as object
+      params: ({ filters, policyResolution }) => {
+        const countSub = policyResolution === "subgeo";
+        return {
+          method: "post",
+          filters,
+          geo_res: "county",
+          count_sub: countSub,
+        };
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status_counts",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status_counts" },
+
+      // filter to control what features are returned for layers that are
+      // displaying this metric
+      filter: ["==", ["get", "type"], "county"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      },
     },
   ],
   global: [
@@ -502,9 +570,7 @@ export const metricMeta = {
       },
     },
   },
-  get "104"() {
-    return this["74"];
-  },
+
   // additional metric legend information...
   get "72"() {
     return {
@@ -565,6 +631,44 @@ export const metricMeta = {
           },
         },
       },
+    };
+  },
+  get "102"() {
+    return {
+      ...this["72"],
+      metric_definition: (
+        <span>
+          The total cumulative number of COVID-19 cases (confirmed and probable)
+          in the county as of the indicated date
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source:{" "}
+            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+              New York Times compilation of data from state and local
+              governments and health departments
+            </a>
+          </i>
+        </span>
+      ),
+    };
+  },
+  get "104"() {
+    return {
+      ...this["74"],
+      metric_definition: (
+        <span>
+          The number of new COVID-19 cases (confirmed and probable) in the
+          county in the past 7 days.
+          <br />
+          <i style={{ fontSize: ".8rem" }}>
+            Source: Calculated from{" "}
+            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+              New York Times compilation of data from state and local
+              governments and health departments
+            </a>
+          </i>
+        </span>
+      ),
     };
   },
   get "77"() {
