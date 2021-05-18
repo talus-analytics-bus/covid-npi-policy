@@ -494,6 +494,13 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     if (!initialized) getData();
   }, []);
 
+  // When map ID is changed, update policy resolution to a supported one,
+  // if needed
+  useEffect(() => {
+    if (mapId === "us-county" && policyResolution !== "geo")
+      setPolicyResolution("geo");
+  }, [mapId, policyResolution, setPolicyResolution]);
+
   // when date is changed, update `dates_in_effect` filter
   useEffect(
     function updateFilters() {
