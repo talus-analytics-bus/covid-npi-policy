@@ -555,7 +555,10 @@ export default Map;
 function MapIdToggle(props) {
   const noun = props.mapId === "us" ? "State" : "National";
   const showChildren = (mapId, fill, value) => {
-    return mapId === value && fill === "policy_status_counts";
+    const isCurrentMap = mapId === value;
+    const viewingPolicyCounts = fill === "policy_status_counts";
+    const isSupportedMap = mapId !== "us-county";
+    return isCurrentMap && isSupportedMap && viewingPolicyCounts;
   };
   return (
     <RadioToggle
