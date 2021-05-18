@@ -64,12 +64,12 @@ export const defaults = {
   // defaults for map with ID `us-county`
   "us-county": {
     // id of default circle metric
-    circle: "104",
+    circle: null,
     // id of default fill metric
-    fill: "104",
+    fill: "policy_status_counts",
     // fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
-    priorLayer: "state-points",
+    priorLayer: "county-points",
   },
   // defaults for additional maps...
   global: {
