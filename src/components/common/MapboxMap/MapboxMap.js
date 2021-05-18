@@ -127,10 +127,13 @@ const MapboxMap = ({
     }
   };
 
+  /**
+   * Initialize the vertical order of map shapes for certain metrics.
+   */
   const updateFillOrder = ({ map, f = null }) => {
-    // initialize the vertical order of shapes for certain metrics
     const hasFillLayers =
-      mapSources[mapId].fill !== undefined && mapSources[mapId].fill.length > 0;
+      mapSources[mapId].fill !== undefined &&
+      mapSources[mapId].fill.fillLayers.length > 0;
     if (hasFillLayers) {
       // get data fields to bind data to geo feature
       const featureLinkField = mapSources[mapId].fill.fillLayers.find(
