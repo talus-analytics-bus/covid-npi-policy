@@ -25,10 +25,15 @@ export const dataGetter = async ({
   const metrics = mapMetrics[mapId];
 
   // define date parameters for API calls
+  const dateStr = date.format("YYYY-MM-DD");
   const dates = {
-    start_date: date,
-    end_date: date,
+    start_date: dateStr,
+    end_date: dateStr,
   };
+
+  // add dates to filters
+  const filtersWithDates = { ...filters };
+  filtersWithDates.dates_in_effect = [dateStr, dateStr];
 
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
@@ -39,7 +44,13 @@ export const dataGetter = async ({
       // parse query params
       const params =
         typeof d.params === "function"
-          ? d.params({ date, mapId, filters, policyResolution, map })
+          ? d.params({
+              date,
+              mapId,
+              filters: filtersWithDates,
+              policyResolution,
+              map,
+            })
           : d.params;
 
       // add base data query

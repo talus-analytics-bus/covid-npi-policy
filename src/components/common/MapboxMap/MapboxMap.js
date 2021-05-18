@@ -424,12 +424,12 @@ const MapboxMap = ({
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
     getMapData({
-      date: filters.dates_in_effect[0],
+      date,
       filters,
       mapId,
       policyResolution: plugins.policyResolution,
     });
-  }, [filters, mapId, plugins.policyResolution]);
+  }, [filters, date, mapId, plugins.policyResolution]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
