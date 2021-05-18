@@ -41,7 +41,7 @@ export const defaults = {
   mapId: "us-county",
 
   // default date for map to start on
-  // date: "2020-06-18",
+  // date: "2020-11-19",
   date: yesterday.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
