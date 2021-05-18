@@ -11,7 +11,7 @@
 import * as d3 from "d3/dist/d3.min";
 
 // utilities
-import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
+import { getLog10Scale, getLinearScale } from "../../../misc/Util";
 // import { geoHaveData } from "../MapboxMap";
 
 // assets
