@@ -11,7 +11,7 @@ import militaryMobilizationIcon from "./icons/military-mobilization.png";
 import reliefMeasuresIcon from "./icons/relief-measures.png";
 import socialDistancingIcon from "./icons/social-distancing.png";
 import travelRestrictionsIcon from "./icons/travel-restrictions.png";
-import vacineIcon from "./icons/vaccine.png";
+import vaccineIcon from "./icons/vaccine.png";
 
 const iconDictionary = {
   "Support for public health and clinical capacity": healthcareReadinessIcon,
@@ -22,7 +22,7 @@ const iconDictionary = {
   "Authorization and enforcement": authorizationEnforcementIcon,
   "Enabling and relief measures": reliefMeasuresIcon,
   "Travel restrictions": travelRestrictionsIcon,
-  Vaccine: vacineIcon,
+  Vaccine: vaccineIcon,
   "Military mobilization": militaryMobilizationIcon,
 };
 
