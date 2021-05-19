@@ -9,7 +9,7 @@
  */
 
 // standard packages
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./mapboxmap.module.scss";
 
 // 3rd party packages
@@ -32,6 +32,9 @@ import MapTooltip from "./mapTooltip/MapTooltip";
 // common components
 import { Legend, ShowMore } from "..";
 
+// context
+import MapOptionContext from "../../views/map/context/MapOptionContext";
+
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -50,9 +53,6 @@ const MapboxMap = ({
   setMapId,
   mapId,
   mapStyle,
-  date,
-  circle,
-  fill,
   filters,
   // array of JSX components that should go on top of the map field, e.g.,
   // map options and legend components
@@ -67,6 +67,8 @@ const MapboxMap = ({
   // store map reference which is frequently invoked to get the current
   // Mapbox map object in effect hooks
   let mapRef = useRef(null);
+  const curMapOptions = useContext(MapOptionContext);
+  const { fill, circle, date } = curMapOptions;
 
   // is map initially loaded?
   const [loading, setLoading] = useState(true);
@@ -389,7 +391,12 @@ const MapboxMap = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = async dataArgs => {
-    const newMapData = await dataGetter({ ...dataArgs, circle, fill });
+    console.log(curMapOptions);
+    const newMapData = await dataGetter({
+      data,
+      ...dataArgs,
+      ...curMapOptions,
+    });
     setData(newMapData);
   };
 

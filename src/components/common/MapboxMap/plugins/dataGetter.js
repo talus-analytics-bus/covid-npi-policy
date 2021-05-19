@@ -1,5 +1,6 @@
 import TrendQuery from "../../../misc/TrendQuery.js";
 import { execute } from "../../../misc/Queries";
+import { parseStringSafe } from "../../../misc/UtilsTyped";
 import { mapMetrics } from "./data";
 
 /**
@@ -15,17 +16,35 @@ import { mapMetrics } from "./data";
  */
 
 export const dataGetter = async ({
-  date,
+  data,
   mapId,
+  prevMapId,
   filters,
   policyResolution,
   map,
+  date,
   circle,
   fill,
+  prevDate,
+  prevCircle,
+  prevFill,
+  prevFilters,
 }) => {
   // get all metrics displayed in the current map
-  const metrics = mapMetrics[mapId];
-
+  const [metricsToUpdate, metricsToReuse] = getUpdateMetrics(
+    data,
+    mapMetrics[mapId],
+    mapId,
+    circle,
+    fill,
+    date,
+    filters,
+    prevCircle,
+    prevFill,
+    prevDate,
+    prevFilters,
+    prevMapId
+  );
   // define date parameters for API calls
   const dateStr = date.format("YYYY-MM-DD");
   const dates = {
@@ -37,18 +56,10 @@ export const dataGetter = async ({
   const filtersWithDates = { ...filters };
   filtersWithDates.dates_in_effect = [dateStr, dateStr];
 
-  // convert circle and fill IDs to strings for comparison with metric info
-  const circleStr = circle !== null ? circle.toString() : circle;
-  const fillStr = fill !== null ? fill.toString() : fill;
-
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
   const queryDefs = {};
-  metrics.forEach(d => {
-    // if this metric is not currently visible, do not fetch its data
-    const visible = d.id === circleStr || d.id === fillStr;
-    if (!visible) return;
-
+  metricsToUpdate.forEach(d => {
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
       // parse query params
@@ -92,6 +103,73 @@ export const dataGetter = async ({
 
   // execute queries in parallel
   const results = await execute({ queries });
-  // debugger;
-  return results;
+  const reusedData = {};
+  metricsToReuse.forEach(d => {
+    reusedData[d.id] = data[d.id];
+    const trendKey = d.id + "-trend";
+    const trend = data[trendKey];
+    if (trend !== undefined) reusedData[trendKey] = trend;
+  });
+  return { ...reusedData, ...results };
+};
+
+const getUpdateMetrics = (
+  data,
+  metrics,
+  mapId,
+  circle,
+  fill,
+  date,
+  filters,
+  prevCircle,
+  prevFill,
+  prevDate,
+  prevFilters,
+  prevMapId
+) => {
+  // convert circle and fill IDs to strings for comparison with metric info
+  const circleStr = parseStringSafe(circle);
+  const fillStr = parseStringSafe(fill);
+
+  // if date is different, or if circle and fill are different, update all,
+  // reuse none
+  const diffDate = date !== prevDate;
+  const diffFilters = JSON.stringify(filters) !== JSON.stringify(prevFilters);
+  const diffCircle = circle !== prevCircle;
+  const diffFill = fill !== prevFill;
+  const diffMapId = mapId !== prevMapId;
+  const allSame = !diffDate && !diffCircle && !diffFill && !diffFilters;
+  const updateAll =
+    data === null ||
+    diffMapId ||
+    diffDate ||
+    (diffCircle && diffFill) ||
+    allSame;
+
+  const toUpdate = [];
+  const toReuse = [];
+  const getIsVisibleMetric = d => d.id === circleStr || d.id === fillStr;
+  const visibleMetrics = metrics.filter(getIsVisibleMetric);
+  if (updateAll) {
+    return [visibleMetrics, []];
+    // else if circle is different, update circle, reuse fill
+  } else if (diffCircle) {
+    visibleMetrics.forEach(d => {
+      if (d.for.includes("circle") && d.id === circleStr) {
+        toUpdate.push(d);
+      } else toReuse.push(d);
+    });
+    // else if fill is different, update fill, reuse circle
+  } else if (diffFill || diffFilters) {
+    visibleMetrics.forEach(d => {
+      if (d.for.includes("fill") && d.id === fillStr) {
+        toUpdate.push(d);
+      } else toReuse.push(d);
+    });
+    // else reuse all
+  } else {
+    return [[], visibleMetrics];
+  }
+
+  return [toUpdate, toReuse]; // TODO
 };

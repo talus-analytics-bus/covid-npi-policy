@@ -65,7 +65,8 @@ export const defaults = {
   "us-county": {
     // id of default circle metric
     circle: 104,
-    showCircle: true,
+    showCircle: false,
+    // allowCircle: false,
 
     // id of default fill metric
     fill: "policy_status_counts",
