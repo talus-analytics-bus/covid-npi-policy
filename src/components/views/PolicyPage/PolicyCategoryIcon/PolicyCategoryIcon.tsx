@@ -30,6 +30,9 @@ type PolicyCategoryIconProps = {
   category: string;
 };
 
+/**
+ * Return circular icon representing the policy category.
+ */
 const PolicyCategoryIcon = (props: PolicyCategoryIconProps) => (
   <div className={styles.iconBackground} style={{ backgroundColor: "#96d6db" }}>
     {iconDictionary[props.category] && (
