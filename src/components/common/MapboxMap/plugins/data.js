@@ -153,6 +153,7 @@ export const mapMetrics = {
           filters,
           geo_res: "state",
           count_sub: countSub,
+          include_min_max: true,
         };
       },
 
@@ -272,6 +273,7 @@ export const mapMetrics = {
           filters,
           geo_res: "county",
           count_sub: countSub,
+          include_min_max: true,
         };
       },
 
@@ -376,6 +378,7 @@ export const mapMetrics = {
           filters,
           geo_res: "country",
           count_sub: countSub,
+          include_min_max: true,
         };
       },
 

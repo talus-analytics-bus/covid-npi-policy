@@ -230,8 +230,7 @@ const MapboxMap = ({
     const toCheck = ["policy_status_counts"];
     toCheck.forEach(key => {
       if (data[key] !== undefined) {
-        const maxVal = d3.max(data[key], d => d.value);
-        const minVal = d3.min(data[key], d => d.value);
+        const [minVal, maxVal] = getMinMaxVals(data, key);
         const fillStylesFunc = layerStyles.fill[key];
         const newFillColorStyle = fillStylesFunc(
           key,
@@ -915,6 +914,14 @@ const MapboxMap = ({
 };
 
 export default MapboxMap;
+
+function getMinMaxVals(data, key) {
+  const curSeries = data[key];
+  if (curSeries.max_all_time !== undefined) {
+    return [curSeries.min_all_time.value, curSeries.max_all_time.value];
+  } else
+    return [d3.min(data[key], d => d.value), d3.max(data[key], d => d.value)];
+}
 
 /**
  * Given the `mapId`, returns the appropriate set of nouns and the level with

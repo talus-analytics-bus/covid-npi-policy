@@ -378,6 +378,7 @@ export const PolicyStatusCounts = async function({
   fields = [],
   filters = null,
   count_sub = false,
+  include_min_max = false,
 }) {
   // prepare params
   const params = new URLSearchParams();
@@ -387,6 +388,7 @@ export const PolicyStatusCounts = async function({
 
   params.append("count_sub", count_sub);
   params.append("include_zeros", true);
+  params.append("include_min_max", include_min_max);
 
   // prepare request
   let req;
@@ -413,8 +415,12 @@ export const PolicyStatusCounts = async function({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data.data;
-  else return false;
+  if (res.data !== undefined) {
+    const formattedRes = res.data.data;
+    formattedRes.min_all_time = res.data.min_all_time;
+    formattedRes.max_all_time = res.data.max_all_time;
+    return formattedRes;
+  } else return false;
 };
 
 /**

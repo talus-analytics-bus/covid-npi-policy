@@ -47,7 +47,7 @@ export const dataGetter = async ({
 }: DataGetterArgs) => {
   // get all metrics displayed in the current map
   const mapMetrics: Record<string, any> = _mapMetrics;
-  const [metricsToUpdate, metricsToReuse] = getUpdateMetrics(
+  const [metricsToUpdate, metricsToReuse] = getMetricsToUpdateOrReuse(
     data,
     mapMetrics[mapId],
     mapId,
@@ -130,7 +130,7 @@ export const dataGetter = async ({
   return { ...reusedData, ...results };
 };
 
-const getUpdateMetrics = (
+const getMetricsToUpdateOrReuse = (
   data: Record<string, any>,
   metrics: Array<MetricInfo>,
   mapId: string,
