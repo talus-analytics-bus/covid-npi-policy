@@ -19,7 +19,7 @@ import * as d3 from "d3/dist/d3.min";
 
 // local modules
 import { metricMeta } from "./plugins/data";
-import { dataGetter } from "./plugins/dataGetter";
+import { dataGetter } from "./plugins/dataGetter.tsx";
 import { tooltipGetter } from "./plugins/tooltipGetter";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";

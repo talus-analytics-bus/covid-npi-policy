@@ -1,18 +1,33 @@
 import TrendQuery from "../../../misc/TrendQuery.js";
 import { execute } from "../../../misc/Queries";
 import { parseStringSafe } from "../../../misc/UtilsTyped";
-import { mapMetrics } from "./data";
+import { mapMetrics as _mapMetrics } from "./data";
+import { Moment } from "moment";
+
+// types
+import { MetricInfo } from "./mapTypes";
+
+type DataGetterArgs = {
+  data: Record<string, any>;
+  mapId: string;
+  prevMapId: string;
+  filters: Record<string, any>;
+  policyResolution: string;
+  map: Record<string, any>;
+  date: Moment;
+  circle: number | string | null;
+  fill: number | string | null;
+  prevDate: Moment;
+  prevCircle: number | string | null;
+  prevFill: number | string | null;
+  prevFilters: Record<string, any>;
+};
 
 /**
  * dataGetter
  * Given the date, map ID, and filters, obtains the data that should be joined
  * to the features on the map
  * @method dataGetter
- * @param  {[type]}   date    [description]
- * @param  {[type]}   mapId   [description]
- * @param  {[type]}   filters [description]
- * @param  {[type]}   map     [description]
- * @return {Promise}          [description]
  */
 
 export const dataGetter = async ({
@@ -29,8 +44,9 @@ export const dataGetter = async ({
   prevCircle,
   prevFill,
   prevFilters,
-}) => {
+}: DataGetterArgs) => {
   // get all metrics displayed in the current map
+  const mapMetrics: Record<string, any> = _mapMetrics;
   const [metricsToUpdate, metricsToReuse] = getUpdateMetrics(
     data,
     mapMetrics[mapId],
@@ -53,13 +69,13 @@ export const dataGetter = async ({
   };
 
   // add dates to filters
-  const filtersWithDates = { ...filters };
+  const filtersWithDates: Record<string, any> = { ...filters };
   filtersWithDates.dates_in_effect = [dateStr, dateStr];
 
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
-  const queryDefs = {};
-  metricsToUpdate.forEach(d => {
+  const queryDefs: Record<string, any> = {};
+  metricsToUpdate.forEach((d: MetricInfo) => {
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
       // parse query params
@@ -94,7 +110,7 @@ export const dataGetter = async ({
   });
 
   // collate queries in object to be called by the `execute method below`
-  const queries = {};
+  const queries: Record<string, Promise<Record<string, any>>> = {};
   for (const [k, v] of Object.entries(queryDefs)) {
     queries[k] = v.queryFunc({
       ...v,
@@ -102,8 +118,9 @@ export const dataGetter = async ({
   }
 
   // execute queries in parallel
-  const results = await execute({ queries });
-  const reusedData = {};
+  const executeParams: any = { queries };
+  const results: Record<string, any> = await execute(executeParams);
+  const reusedData: Record<string, any> = {};
   metricsToReuse.forEach(d => {
     reusedData[d.id] = data[d.id];
     const trendKey = d.id + "-trend";
@@ -114,19 +131,19 @@ export const dataGetter = async ({
 };
 
 const getUpdateMetrics = (
-  data,
-  metrics,
-  mapId,
-  circle,
-  fill,
-  date,
-  filters,
-  prevCircle,
-  prevFill,
-  prevDate,
-  prevFilters,
-  prevMapId
-) => {
+  data: Record<string, any>,
+  metrics: Array<MetricInfo>,
+  mapId: string,
+  circle: number | string | null,
+  fill: number | string | null,
+  date: Moment,
+  filters: Record<string, any>,
+  prevCircle: number | string | null,
+  prevFill: number | string | null,
+  prevDate: Moment,
+  prevFilters: Record<string, any>,
+  prevMapId: string
+): Array<Array<MetricInfo>> => {
   // convert circle and fill IDs to strings for comparison with metric info
   const circleStr = parseStringSafe(circle);
   const fillStr = parseStringSafe(fill);
@@ -146,15 +163,16 @@ const getUpdateMetrics = (
     (diffCircle && diffFill) ||
     allSame;
 
-  const toUpdate = [];
-  const toReuse = [];
-  const getIsVisibleMetric = d => d.id === circleStr || d.id === fillStr;
-  const visibleMetrics = metrics.filter(getIsVisibleMetric);
+  const toUpdate: Array<MetricInfo> = [];
+  const toReuse: Array<MetricInfo> = [];
+  const getIsVisibleMetric = (d: MetricInfo): boolean =>
+    d.id === circleStr || d.id === fillStr;
+  const visibleMetrics: Array<MetricInfo> = metrics.filter(getIsVisibleMetric);
   if (updateAll) {
     return [visibleMetrics, []];
     // else if circle is different, update circle, reuse fill
   } else if (diffCircle) {
-    visibleMetrics.forEach(d => {
+    visibleMetrics.forEach((d: MetricInfo) => {
       if (d.for.includes("circle") && d.id === circleStr) {
         toUpdate.push(d);
       } else toReuse.push(d);
@@ -171,5 +189,5 @@ const getUpdateMetrics = (
     return [[], visibleMetrics];
   }
 
-  return [toUpdate, toReuse]; // TODO
+  return [toUpdate, toReuse];
 };

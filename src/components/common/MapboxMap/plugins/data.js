@@ -461,6 +461,7 @@ const getCovidLocalMetricLink = (v, color, style) => {
     <a
       style={{ color: color || "unset", ...style }}
       href={COVID_LOCAL_URL + "metrics/"}
+      rel="noopener noreferrer"
       target="_blank"
       key={v}
       id={v}
