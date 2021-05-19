@@ -190,8 +190,9 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
       const layers = mapMetrics[mapId].filter(d => d.for.includes("circle"));
 
       // if there are none, return, otherwise continue adding
-      const hasLayers = sources["circle"] !== undefined && layers.length > 0;
-      if (!hasLayers) return;
+      const hasCircleLayers =
+        sources["circle"] !== undefined && layers.length > 0;
+      if (!hasCircleLayers) return;
       else {
         // get source for centroids of circle
         const source = sources["circle"];
@@ -266,6 +267,11 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
               "circle-stroke-opacity": layerStyle.circleStrokeOpacity,
             };
 
+            const defaultCircleIdStr =
+              defaults[mapId].circle !== null &&
+              defaults[mapId].circle !== undefined
+                ? defaults[mapId].circle.toString()
+                : null;
             // add circle shadow layer first
             map.addLayer(
               {
@@ -278,7 +284,7 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
                 // hide layer initially unless it is the current one
                 layout: {
                   visibility:
-                    defaults[mapId].circle === layer.id ? "visible" : "none",
+                    defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
               },
               // insert this layer just behind the `priorLayer`
@@ -297,7 +303,7 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
                 // hide layer initially unless it is the current one
                 layout: {
                   visibility:
-                    defaults[mapId].circle === layer.id ? "visible" : "none",
+                    defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
               },
               // insert this layer just behind the `priorLayer`
@@ -359,9 +365,19 @@ export const addSources = (map, mapId) => {
  * @param  {[type]}          selectedFeature [description]
  * @return {[type]}                          [description]
  */
-export const bindFeatureStates = ({ map, mapId, data, selectedFeature }) => {
-  const sources = mapSources[mapId];
-  const curMapMetrics = mapMetrics[mapId];
+export const bindFeatureStates = ({
+  map,
+  mapId,
+  data,
+  selectedFeature,
+  circle,
+  fill,
+}) => {
+  const circleStr = circle !== null ? circle.toString() : circle;
+  const fillStr = fill !== null ? fill.toString() : fill;
+  const curMapMetrics = mapMetrics[mapId].filter(
+    d => d.id === circleStr || d.id === fillStr
+  );
   bindFeatureStatesForSource({
     map,
     newSources: mapSources[mapId],
@@ -392,10 +408,7 @@ const bindFeatureStatesForSource = ({
   curMapMetrics,
   selectedFeature,
 }) => {
-  for (const [sourceTypeKey, source] of Object.entries(newSources)) {
-    // define standard layer list key, e.g., 'circleLayers', 'fillLayers', ...
-    const layerListKey = sourceTypeKey + "Layers";
-
+  for (const [_sourceTypeKey, source] of Object.entries(newSources)) {
     // first erase original feature state for all features
     curMapMetrics.forEach(layer => {
       // get all features from source, using filter if defined
@@ -425,6 +438,7 @@ const bindFeatureStatesForSource = ({
   curMapMetrics.forEach(layer => {
     // get data for layer features
     const layerData = data[layer.id];
+    if (layerData === undefined) return; // TODO elegantly
     layerData.forEach(dd => {
       // bind null value to feature if no data
       const state = {};

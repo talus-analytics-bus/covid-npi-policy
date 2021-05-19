@@ -25,6 +25,7 @@ import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
 import { isEmpty, getAndListString } from "../../misc/Util";
+import { parseStringSafe } from "../../misc/UtilsTyped";
 import ResetZoom from "./resetZoom/ResetZoom";
 import MapTooltip from "./mapTooltip/MapTooltip";
 
@@ -59,6 +60,7 @@ const MapboxMap = ({
   geoHaveData,
   plugins,
   linCircleScale, // `log` or `lin`
+  mapIsChanging,
   ...props
 }) => {
   // STATE // ---------------------------------------------------------------//
@@ -92,16 +94,22 @@ const MapboxMap = ({
   // default, false otherwise
   const [showReset, setShowReset] = useState(false);
 
+  // CONSTANTS // -----------------------------------------------------------//
+  // declare string versions of fill and circle IDs
+  const circleIdStr = parseStringSafe(circle);
+  const fillIdStr = parseStringSafe(fill);
+
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   const setLinLogCircleStyle = () => {
     const map = mapRef.getMap();
 
     // does map have circle layers?
-    const hasCircleLayers = mapSources[mapId].circle !== undefined;
+    const hasVisibleCircleLayers =
+      circle !== null && mapSources[mapId].circle !== undefined;
 
     // if yes, update scale type of circle and its shadow
     const circleLayers = mapSources[mapId].circle.circleLayers;
-    if (hasCircleLayers) {
+    if (hasVisibleCircleLayers) {
       circleLayers.forEach(layer => {
         const layerId = layer.id + "-circle";
 
@@ -137,12 +145,12 @@ const MapboxMap = ({
     if (hasFillLayers) {
       // get data fields to bind data to geo feature
       const featureLinkField = mapSources[mapId].fill.fillLayers.find(
-        d => d.id === fill
+        d => d.id === fillIdStr
       ).featureLinkField;
       const promoteId = mapSources[mapId].fill.def.promoteId;
 
       // get sort order of circles based on covid caseload metric
-      const sortOrderMetricId = fill;
+      const sortOrderMetricId = fillIdStr;
       if (sortOrderMetricId === undefined) return;
       else {
         const featureOrder = {};
@@ -188,16 +196,19 @@ const MapboxMap = ({
       mapSources[mapId].circle !== undefined && circle !== null;
     if (hasCircleLayers) {
       // get data fields to bind data to geo feature
-      const featureLinkField = mapSources[mapId].circle.circleLayers.find(
-        d => d.id === circle
-      ).featureLinkField;
+      const circLayer = mapSources[mapId].circle.circleLayers.find(
+        d => d.id === circleIdStr
+      );
+      if (circLayer === undefined) return; // TODO handle elegantly
+      const featureLinkField = circLayer.featureLinkField;
       const promoteId = mapSources[mapId].circle.def.promoteId;
 
       // get sort order of circles based on covid caseload metric
-      const sortOrderMetricId = circle;
+      const sortOrderMetricId = circleIdStr;
       if (sortOrderMetricId === undefined) return;
       else {
         const featureOrder = {};
+        if (data[sortOrderMetricId] === undefined) return;
         data[sortOrderMetricId].forEach(d => {
           featureOrder[d[featureLinkField]] = -d.value;
         });
@@ -378,7 +389,7 @@ const MapboxMap = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = async dataArgs => {
-    const newMapData = await dataGetter(dataArgs);
+    const newMapData = await dataGetter({ ...dataArgs, circle, fill });
     setData(newMapData);
   };
 
@@ -423,13 +434,14 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    getMapData({
-      date,
-      filters,
-      mapId,
-      policyResolution: plugins.policyResolution,
-    });
-  }, [filters, date, mapId, plugins.policyResolution]);
+    if (!mapIsChanging)
+      getMapData({
+        date,
+        filters,
+        mapId,
+        policyResolution: plugins.policyResolution,
+      });
+  }, [filters, date, circle, fill, plugins.policyResolution]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
@@ -457,12 +469,12 @@ const MapboxMap = ({
           {
             sourceTypeKey: "circle",
             layerListKey: "circleLayers",
-            curOption: circle,
+            curOption: parseStringSafe(circle),
           },
           {
             sourceTypeKey: "fill",
             layerListKey: "fillLayers",
-            curOption: fill,
+            curOption: parseStringSafe(fill),
           },
         ];
 
@@ -517,9 +529,6 @@ const MapboxMap = ({
             });
           } else return;
         });
-
-        // update sort order of circles, etc.
-        updateFillOrder({ map, f: null });
       }
     }
   }, [circle, fill, mapId]);
@@ -541,7 +550,13 @@ const MapboxMap = ({
           geoHaveData,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
-            bindFeatureStates({ map, mapId, data });
+            bindFeatureStates({
+              map,
+              mapId,
+              data,
+              circle: plugins.circle,
+              fill: plugins.fill,
+            });
 
             // load layer images, if any, for pattern layers
             layerImages.forEach(({ asset, name }) => {
@@ -559,7 +574,14 @@ const MapboxMap = ({
       } else {
         // if map had already loaded, then just bind feature states using the
         // latest map data
-        bindFeatureStates({ map, mapId, data, selectedFeature });
+        bindFeatureStates({
+          map,
+          mapId,
+          data,
+          selectedFeature,
+          circle: plugins.circle,
+          fill: plugins.fill,
+        });
         updateFillOrder({ map, f: null });
         updateFillStyles({ map });
         updateMapTooltip({ map });

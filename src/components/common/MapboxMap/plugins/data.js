@@ -41,7 +41,7 @@ export const defaults = {
   mapId: "us-county",
 
   // default date for map to start on
-  // date: "2020-11-19",
+  // date: "2021-04-22",
   date: yesterday.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
@@ -64,7 +64,9 @@ export const defaults = {
   // defaults for map with ID `us-county`
   "us-county": {
     // id of default circle metric
-    circle: null,
+    circle: 104,
+    showCircle: true,
+
     // id of default fill metric
     fill: "policy_status_counts",
     // fill: "lockdown_level",

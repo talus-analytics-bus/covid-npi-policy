@@ -20,6 +20,8 @@ export const dataGetter = async ({
   filters,
   policyResolution,
   map,
+  circle,
+  fill,
 }) => {
   // get all metrics displayed in the current map
   const metrics = mapMetrics[mapId];
@@ -35,10 +37,18 @@ export const dataGetter = async ({
   const filtersWithDates = { ...filters };
   filtersWithDates.dates_in_effect = [dateStr, dateStr];
 
+  // convert circle and fill IDs to strings for comparison with metric info
+  const circleStr = circle !== null ? circle.toString() : circle;
+  const fillStr = fill !== null ? fill.toString() : fill;
+
   // collate query definitions based on the metrics that are to be displayed
   // for this map and whether those metrics will have trends displayed or not
   const queryDefs = {};
   metrics.forEach(d => {
+    // if this metric is not currently visible, do not fetch its data
+    const visible = d.id === circleStr || d.id === fillStr;
+    if (!visible) return;
+
     // if the query for this metric hasn't been defined yet, define it
     if (queryDefs[d.id] === undefined) {
       // parse query params
@@ -82,7 +92,6 @@ export const dataGetter = async ({
 
   // execute queries in parallel
   const results = await execute({ queries });
-
-  // return results
+  // debugger;
   return results;
 };
