@@ -13,7 +13,7 @@ import socialDistancingIcon from "./icons/social-distancing.png";
 import travelRestrictionsIcon from "./icons/travel-restrictions.png";
 import vaccineIcon from "./icons/vaccine.png";
 
-const iconDictionary = {
+const iconDictionary: Record<string, string> = {
   "Support for public health and clinical capacity": healthcareReadinessIcon,
   "Face mask": faceMaskIcon,
   "Social distancing": socialDistancingIcon,
@@ -26,7 +26,11 @@ const iconDictionary = {
   "Military mobilization": militaryMobilizationIcon,
 };
 
-const PolicyCategoryIcon = props => (
+type PolicyCategoryIconProps = {
+  category: string;
+};
+
+const PolicyCategoryIcon = (props: PolicyCategoryIconProps) => (
   <div className={styles.iconBackground} style={{ backgroundColor: "#96d6db" }}>
     {iconDictionary[props.category] && (
       <img src={iconDictionary[props.category]} alt={props.category + "icon"} />
