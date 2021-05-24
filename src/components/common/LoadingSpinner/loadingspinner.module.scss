@@ -1,0 +1,17 @@
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.loadingSpinner {
+    padding: 10px;
+    img {
+        $size: 40px;
+        height: $size;
+        width: $size;
+        animation: rotation 12s infinite linear;
+    }
+}

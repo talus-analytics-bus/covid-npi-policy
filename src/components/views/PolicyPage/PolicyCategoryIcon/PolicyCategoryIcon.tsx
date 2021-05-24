@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 
 import styles from "./PolicyCategoryIcon.module.scss";
 
@@ -28,13 +28,17 @@ const iconDictionary: Record<string, string> = {
 
 type PolicyCategoryIconProps = {
   category: string;
+  margin?: string;
 };
 
 /**
  * Return circular icon representing the policy category.
  */
-const PolicyCategoryIcon = (props: PolicyCategoryIconProps) => (
-  <div className={styles.iconBackground} style={{ backgroundColor: "#96d6db" }}>
+const PolicyCategoryIcon: FunctionComponent<PolicyCategoryIconProps> = props => (
+  <div
+    style={{ backgroundColor: "#96d6db", margin: props.margin }}
+    className={styles.iconBackground}
+  >
     {iconDictionary[props.category] && (
       <img src={iconDictionary[props.category]} alt={props.category + "icon"} />
     )}

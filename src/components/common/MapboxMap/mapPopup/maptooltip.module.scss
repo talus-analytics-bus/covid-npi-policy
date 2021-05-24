@@ -96,9 +96,9 @@
       }
       .value {
         .noDataText {
-            font-size: 1.2rem;
-            max-width: 200px;
-            font-style: italic;
+          font-size: 1.2rem;
+          max-width: 200px;
+          font-style: italic;
         }
       }
 
@@ -116,7 +116,7 @@
         flex-flow: column;
         position: relative;
         top: -0.5rem;
-        
+
         .value {
           color: $dark-blue;
           font-weight: 600;
@@ -125,7 +125,7 @@
           align-items: center;
           justify-content: flex-end;
           margin-bottom: 0.2rem;
-          
+
           .unit {
             font-weight: 600;
             line-height: 1;
@@ -209,7 +209,7 @@
   margin: 0;
 
   // map popups 75% of default size
-  transform: scale(0.75);
+  // transform: scale(0.75);
 }
 
 [class*="mapboxgl-popup-anchor-bottom"] > [class*="mapboxgl-popup-content"] {

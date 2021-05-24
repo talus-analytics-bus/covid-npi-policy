@@ -22,7 +22,7 @@ import moment from "moment";
 // local packages
 import {
   defaults,
-  mapMetrics,
+  allMapMetrics,
   metricMeta,
 } from "../../common/MapboxMap/plugins/data";
 import { mapStyles } from "../../common/MapboxMap/plugins/sources";
@@ -411,7 +411,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                       setInfoTooltipContent:
                                         props.setInfoTooltipContent,
                                       tooltipPlace: "left",
-                                      choices: mapMetrics[mapId]
+                                      choices: allMapMetrics[mapId]
                                         .filter(d => d.for.includes("fill"))
                                         .map(d => {
                                           return {
@@ -501,7 +501,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                                             setCircle(e.target.value);
                                           }}
                                         >
-                                          {mapMetrics[mapId]
+                                          {allMapMetrics[mapId]
                                             .filter(d =>
                                               d.for.includes("circle")
                                             )

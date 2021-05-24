@@ -348,9 +348,7 @@ export const DistancingLevel = async function({
     ["all_dates", false],
     ["deltas_only", false],
   ];
-  toAdd.forEach(([key, value]) => {
-    if (value !== undefined) params.append(key, value);
-  });
+  addParams(toAdd, params);
 
   // prepare request
   let req;
@@ -379,6 +377,9 @@ export const PolicyStatusCounts = async function({
   filters = null,
   count_sub = false,
   include_min_max = false,
+  include_zeros = true,
+  one = false,
+  merge_like_policies = true,
 }) {
   // prepare params
   const params = new URLSearchParams();
@@ -389,6 +390,9 @@ export const PolicyStatusCounts = async function({
   params.append("count_sub", count_sub);
   params.append("include_zeros", true);
   params.append("include_min_max", include_min_max);
+  params.append("one", one);
+  params.append("merge_like_policies", merge_like_policies);
+  params.append("include_zeros", include_zeros);
 
   // prepare request
   let req;
@@ -631,3 +635,38 @@ export const Deaths = async ({
   // send request and return response data
   return await ObservationQuery({ ...params });
 };
+
+export const Place = async ({ one = false, ansiFips, level, iso3, fields }) => {
+  // prepare params
+  const params = new URLSearchParams();
+  const toAdd = [
+    ["iso3", iso3],
+    ["ansi_fips", ansiFips],
+    ["level", level],
+    ["fields", fields],
+  ];
+  addParams(toAdd, params);
+  const req = await axios(`${API_URL}/get/place`, {
+    params,
+  });
+  const res = await req;
+  if (res.data !== undefined) {
+    if (one) {
+      if (res.data.data.length > 0) return res.data.data[0];
+      else return null;
+    }
+    return res.data.data;
+  } else return false;
+};
+
+function addParams(toAdd, params) {
+  toAdd.forEach(([key, value]) => {
+    if (value !== undefined) {
+      if (typeof value === "object" && value.length > 0) {
+        value.forEach(v => {
+          params.append(key, v);
+        });
+      } else params.append(key, value);
+    }
+  });
+}

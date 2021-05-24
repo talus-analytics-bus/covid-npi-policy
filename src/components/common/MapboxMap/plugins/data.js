@@ -38,7 +38,7 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "us-county",
+  mapId: "global",
 
   // default date for map to start on
   // date: "2021-04-22",
@@ -87,7 +87,7 @@ export const defaults = {
 export const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
 // define metrics to retrieve for each map
-export const mapMetrics = {
+export const allMapMetrics = {
   // map ID of map in which metrics are used
   us: [
     {
@@ -96,12 +96,16 @@ export const mapMetrics = {
       queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return {
-          method: "get",
-          geo_res: "state",
-          date: filters.dates_in_effect[0],
-        };
+      params: {
+        func: ({ filters, state_name }) => {
+          const baseParams = {
+            method: "get",
+            geo_res: "state",
+            date: filters.dates_in_effect[0],
+            state_name,
+          };
+          return baseParams;
+        },
       },
 
       // array of layer types for which this metric is used
@@ -146,15 +150,17 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters, policyResolution }) => {
-        const countSub = policyResolution === "subgeo";
-        return {
-          method: "post",
-          filters,
-          geo_res: "state",
-          count_sub: countSub,
-          include_min_max: true,
-        };
+      params: {
+        func: ({ filters, policyResolution }) => {
+          const countSub = policyResolution === "subgeo";
+          return {
+            method: "post",
+            filters,
+            geo_res: "state",
+            count_sub: countSub,
+            include_min_max: true,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -266,15 +272,17 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters, policyResolution }) => {
-        const countSub = policyResolution === "subgeo";
-        return {
-          method: "post",
-          filters,
-          geo_res: "county",
-          count_sub: countSub,
-          include_min_max: true,
-        };
+      params: {
+        func: ({ filters, policyResolution }) => {
+          const countSub = policyResolution === "subgeo";
+          return {
+            method: "post",
+            filters,
+            geo_res: "county",
+            count_sub: countSub,
+            include_min_max: true,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -321,12 +329,15 @@ export const mapMetrics = {
       queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return {
-          method: "get",
-          geo_res: "country",
-          date: filters.dates_in_effect[0],
-        };
+      params: {
+        func: ({ filters, iso3 }) => {
+          return {
+            method: "get",
+            geo_res: "country",
+            date: filters.dates_in_effect[0],
+            iso3,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -371,15 +382,17 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters, policyResolution }) => {
-        const countSub = policyResolution === "subgeo";
-        return {
-          method: "post",
-          filters,
-          geo_res: "country",
-          count_sub: countSub,
-          include_min_max: true,
-        };
+      params: {
+        func: ({ filters, policyResolution }) => {
+          const countSub = policyResolution === "subgeo";
+          return {
+            method: "post",
+            filters,
+            geo_res: "country",
+            count_sub: countSub,
+            include_min_max: true,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -486,7 +499,11 @@ export const metricMeta = {
         <br />
         <i style={{ fontSize: ".8rem" }}>
           Source: Calculated from{" "}
-          <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/nytimes/covid-19-data"
+          >
             New York Times compilation of data from state and local governments
             and health departments
           </a>
@@ -590,7 +607,11 @@ export const metricMeta = {
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source:{" "}
-            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/nytimes/covid-19-data"
+            >
               New York Times compilation of data from state and local
               governments and health departments
             </a>
@@ -650,7 +671,11 @@ export const metricMeta = {
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source:{" "}
-            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/nytimes/covid-19-data"
+            >
               New York Times compilation of data from state and local
               governments and health departments
             </a>
@@ -669,7 +694,11 @@ export const metricMeta = {
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source: Calculated from{" "}
-            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/nytimes/covid-19-data"
+            >
               New York Times compilation of data from state and local
               governments and health departments
             </a>
@@ -690,6 +719,7 @@ export const metricMeta = {
             Source: Calculated from{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://github.com/CSSEGISandData/COVID-19"
             >
               COVID-19 Data Repository by the Center for Systems Science and
@@ -746,6 +776,7 @@ export const metricMeta = {
             Source:{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://github.com/CSSEGISandData/COVID-19"
             >
               COVID-19 Data Repository by the Center for Systems Science and
@@ -994,8 +1025,12 @@ export const metricMeta = {
               The level of distancing in the location on the specified date.{" "}
             </span>
             <br />
-            <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-              <img src={localLogo} />
+            <a
+              href={COVID_LOCAL_URL + "metrics/"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img alt={"COVID Local logo"} src={localLogo} />
               <span>view metrics at COVID-Local</span>
             </a>
           </p>
@@ -1138,20 +1173,20 @@ export const metricMeta = {
   },
 };
 
-/**
- * Given the `mapId` of a map return the appropriate lower case noun for the
- * geographic features shown in the map.
- */
-function getMapNoun(mapId) {
-  switch (mapId) {
-    case "us":
-      return "state";
-    case "us-county":
-      return "county";
-    default:
-      return "national";
-  }
-}
+// /**
+//  * Given the `mapId` of a map return the appropriate lower case noun for the
+//  * geographic features shown in the map.
+//  */
+// function getMapNoun(mapId) {
+//   switch (mapId) {
+//     case "us":
+//       return "state";
+//     case "us-county":
+//       return "county";
+//     default:
+//       return "national";
+//   }
+// }
 
 /**
  * Given the `mapId` and resolution of policies to view (`geo` meaning

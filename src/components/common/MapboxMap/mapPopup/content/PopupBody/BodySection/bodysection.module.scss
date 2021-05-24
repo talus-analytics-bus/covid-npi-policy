@@ -1,0 +1,33 @@
+@import "src/assets/styles/vars.scss";
+.bodySection {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    .title,
+    .action {
+        font-family: Open Sans, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 1.1875rem;
+    }
+    .title {
+        color: $idea-gray-2;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+    .content {
+        margin-bottom: 20px;
+    }
+    .action {
+        color: $idea-primary-dark-blue;
+        margin-top: auto;
+        > {
+            text-decoration: underline;
+            [data-disabled] {
+                color: $gray-2;
+                text-decoration: none;
+            }
+        }
+    }
+}

@@ -132,6 +132,9 @@ export const mapStyles = {
     // slug of map, should be map ID
     value: "us",
 
+    // geographic resolution for Metrics database
+    geo_res: "state",
+
     // name of map displayed to user
     name: "US states",
 
@@ -158,6 +161,9 @@ export const mapStyles = {
     // slug of map, should be map ID
     value: "us-county",
 
+    // geographic resolution for Metrics database
+    geo_res: "county",
+
     // name of map displayed to user
     name: "US counties",
 
@@ -181,6 +187,7 @@ export const mapStyles = {
   global: {
     url: "mapbox://styles/nicoletalus/ckaofpis006y41ik5mr49kjnd",
     value: "global",
+    geo_res: "country",
     name: "Countries",
     tooltip: <span>View national-level data for the world</span>,
     minZoom: 1.7246463935904246,

@@ -86,6 +86,9 @@
 }
 
 // override default mapbox styles
+div[class*="mapboxgl-popup-content"] {
+  padding: 0;
+}
 [class*="mapboxgl-ctrl-attrib-inner"] > a {
   color: #1e3e6e !important;
 }

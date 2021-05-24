@@ -9,7 +9,7 @@
 // local components
 import { layerStyles } from "./plugins/layers";
 import { mapSources } from "./plugins/sources";
-import { defaults, mapMetrics } from "./plugins/data";
+import { defaults, allMapMetrics } from "./plugins/data";
 
 /**
  * initMap
@@ -63,7 +63,9 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
     const addFillLayers = () => {
       // get list of fill layers that need to be added from the map metrics
       // definitions (see `plugins/data.js`)
-      const fillLayers = mapMetrics[mapId].filter(d => d.for.includes("fill"));
+      const fillLayers = allMapMetrics[mapId].filter(d =>
+        d.for.includes("fill")
+      );
 
       // if the map has fill layers, continue and add them
       const hasFillLayers =
@@ -187,7 +189,7 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
      */
     const addCircleLayers = () => {
       // get all circle layers to add
-      const layers = mapMetrics[mapId].filter(d => d.for.includes("circle"));
+      const layers = allMapMetrics[mapId].filter(d => d.for.includes("circle"));
 
       // if there are none, return, otherwise continue adding
       const hasCircleLayers =
@@ -375,7 +377,7 @@ export const bindFeatureStates = ({
 }) => {
   const circleStr = circle !== null ? circle.toString() : circle;
   const fillStr = fill !== null ? fill.toString() : fill;
-  const curMapMetrics = mapMetrics[mapId].filter(
+  const curMapMetrics = allMapMetrics[mapId].filter(
     d => d.id === circleStr || d.id === fillStr
   );
   bindFeatureStatesForSource({

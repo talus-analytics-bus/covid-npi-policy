@@ -1,0 +1,98 @@
+import { LabeledIcon } from "components/common/MapboxMap/mapPopup/content/PopupBody/LabeledIcon/LabeledIcon";
+import PolicyCategoryIcon from "components/views/PolicyPage/PolicyCategoryIcon/PolicyCategoryIcon";
+import React, { FC, ReactElement } from "react";
+import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import { NO_POLICY_FOR_LOC_MSG } from "components/views/map/content/AmpMapPopupDataProvider/helpers";
+
+type ComponentProps = {
+  categories: string[];
+  subcategories: string[];
+  count: number | null;
+};
+export const PolicyCount: FC<ComponentProps> = ({
+  categories,
+  subcategories,
+  count,
+}): ReactElement => {
+  if (count !== null) {
+    // define plurality form of "policy" to use
+    const noun = count !== 1 ? "policies" : "policy";
+
+    // get string to express categories
+    const categoryPhrase: string = getPolicyCatSubcatPhrase(
+      categories,
+      subcategories,
+      noun
+    );
+
+    const categoryIconName: string =
+      categories.length === 1 ? categories[0] : "multiple";
+    return (
+      <LabeledIcon
+        {...{
+          icon: <PolicyCategoryIcon category={categoryIconName} margin={"0"} />,
+          label: (
+            <div>
+              <strong>
+                <FMT.ExactNumber>{count}</FMT.ExactNumber>
+              </strong>{" "}
+              {categoryPhrase}
+            </div>
+          ),
+          maxLabelWidth: 170,
+        }}
+      />
+    );
+  } else
+    return (
+      <LabeledIcon
+        {...{
+          icon: null,
+          label: <FMT.Subtle>{NO_POLICY_FOR_LOC_MSG}</FMT.Subtle>,
+          maxLabelWidth: 170,
+        }}
+      />
+    );
+};
+
+export default PolicyCount;
+
+/**
+ * Returns string succinctly expressing categories and/or subcategories of
+ * policy selected
+ * @param categories Array of strings of policy categories selected
+ * @param subcategories Array of strings of policy subcategories selected
+ * @param noun Plurality of policy noun to use
+ * @returns {string} String expressing cats. / subcats. of policy selected
+ */
+const getPolicyCatSubcatPhrase: Function = (
+  categories: string[] = [],
+  subcategories: string[] = [],
+  noun: "policies" | "policy"
+): string => {
+  const suffix: string = ` ${noun} in effect`;
+  const nSubcats: number = subcategories.length;
+  const nCats: number = categories.length;
+
+  if (nCats === 1 && nSubcats === 0) {
+    // one category, zero subcat
+    return categories[0].toLowerCase() + suffix;
+  } else if (nCats === 1 && nSubcats === 1) {
+    // one category, one subcat
+    return subcategories[0].toLowerCase() + suffix;
+  } else if (nCats === 1 && nSubcats > 1) {
+    // one category, more than one subcat
+    return (
+      ` ${categories[0].toLowerCase()} ${noun} with selected ` +
+      `subcategories in effect`
+    );
+  } else if (nCats > 1 && nSubcats === 0) {
+    // multi category, no subcat
+    return ` ${noun} with selected categories in effect`;
+  } else if (nCats > 1 && nSubcats > 0) {
+    // multi category, some subcat
+    return ` ${noun} with selected categories and subcategories in effect`;
+  } else {
+    throw "Unreachable state reached.";
+  }
+};

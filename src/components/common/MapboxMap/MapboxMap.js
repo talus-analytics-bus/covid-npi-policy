@@ -20,20 +20,19 @@ import * as d3 from "d3/dist/d3.min";
 // local modules
 import { metricMeta } from "./plugins/data";
 import { dataGetter } from "./plugins/dataGetter.tsx";
-import { tooltipGetter } from "./plugins/tooltipGetter";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
 import { isEmpty, getAndListString } from "../../misc/Util";
 import { parseStringSafe } from "../../misc/UtilsTyped";
 import ResetZoom from "./resetZoom/ResetZoom";
-import MapTooltip from "./mapTooltip/MapTooltip";
 
 // common components
 import { Legend, ShowMore } from "..";
 
 // context
 import MapOptionContext from "../../views/map/context/MapOptionContext";
+import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -85,8 +84,8 @@ const MapboxMap = ({
 
   // state management for tooltips
   const [cursorLngLat, setCursorLngLat] = useState([0, 0]);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [mapTooltip, setMapTooltip] = useState(null);
+  const [showTooltip, setShowMapPopup] = useState(false);
+  const [mapPopup, setMapPopup] = useState(null);
 
   // state management for selected/hovered status of geometries
   const [selectedFeature, setSelectedFeature] = useState(null);
@@ -298,7 +297,7 @@ const MapboxMap = ({
     const map = mapRef.getMap();
 
     // hide tooltip and reset button and fly to original position
-    setShowTooltip(false);
+    setShowMapPopup(false);
     flyToLongLat(
       // lnglat
       [defaultViewport.longitude, defaultViewport.latitude],
@@ -401,39 +400,33 @@ const MapboxMap = ({
 
   /**
    * Update the current map tooltip
-   * @method updateMapTooltip
+   * @method updateMapPopup
    * @param  {[type]}         map [description]
    * @return {[type]}             [description]
    */
-  const updateMapTooltip = async ({ map }) => {
+  const updateMapPopup = async ({ map }) => {
     if (selectedFeature !== null) {
-      setShowTooltip(false);
-      const newMapTooltip = (
-        <MapTooltip
+      setShowMapPopup(false);
+      const newMapPopup = (
+        <AmpMapPopupDataProvider
           {...{
-            ...(await tooltipGetter({
-              mapId: mapId,
-              setMapId,
-              d: selectedFeature,
-              include: [circle, "lockdown_level"],
-              // include: [circle, fill],
-              geoHaveData:
-                geoHaveData.includes(selectedFeature.properties.BRK_A3) ||
-                geoHaveData.includes(selectedFeature.properties.ADM0_A3),
-              // include: [circle, fill],
-              date,
-              map,
-              data,
-              filters,
-              plugins,
-              callback: () => {
-                setShowTooltip(true);
-              },
-            })),
+            key: selectedFeature.id,
+            mapId,
+            feature: {
+              ...selectedFeature,
+              state: map.getFeatureState(selectedFeature),
+            },
+            dataDate: date,
+            policyCategories: filters["primary_ph_measure"],
+            policySubcategories: filters["ph_measure_details"],
+            map,
+            policyResolution: plugins.policyResolution,
+            filters,
           }}
         />
       );
-      setMapTooltip(newMapTooltip);
+      setShowMapPopup(true);
+      setMapPopup(newMapPopup);
     }
   };
 
@@ -453,7 +446,7 @@ const MapboxMap = ({
   useEffect(() => {
     if (mapRef.getMap !== undefined) {
       const map = mapRef.getMap();
-      updateMapTooltip({ map });
+      updateMapPopup({ map });
     }
   }, [selectedFeature, circle, fill]);
 
@@ -590,7 +583,7 @@ const MapboxMap = ({
         });
         updateFillOrder({ map, f: null });
         updateFillStyles({ map });
-        updateMapTooltip({ map });
+        updateMapPopup({ map });
       }
     }
   }, [data]);
@@ -652,7 +645,7 @@ const MapboxMap = ({
 
           // otherwise, mark no feature as selected and hide the tooltip
         } else {
-          setShowTooltip(false);
+          setShowMapPopup(false);
           setSelectedFeature(null);
         }
       }
@@ -818,7 +811,7 @@ const MapboxMap = ({
                 captureScroll={true}
                 interactive={true}
               >
-                {mapTooltip}
+                {mapPopup}
               </Popup>
             </div>
           )}
@@ -927,7 +920,7 @@ function getMinMaxVals(data, key) {
  * Given the `mapId`, returns the appropriate set of nouns and the level with
  * which geographic features in the map should be referred to.
  */
-function getMapNouns(mapId) {
+export function getMapNouns(mapId) {
   switch (mapId) {
     case "us":
       return { plural: "States", singular: "State", level: "state" };

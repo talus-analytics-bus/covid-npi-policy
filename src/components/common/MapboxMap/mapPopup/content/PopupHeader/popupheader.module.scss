@@ -1,0 +1,28 @@
+@import "src/assets/styles/vars.scss";
+.popupHeader {
+    padding: 10px;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    .left {
+        .title {
+            font-family: Rawline, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 1.5rem;
+            line-height: 1.875rem;
+            color: $idea-black;
+        }
+        .subtitle {
+            font-family: Open Sans, sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.875rem;
+            line-height: 1.125rem;
+            color: $orange;
+        }
+    }
+    .right {
+        margin-left: 5rem;
+    }
+}

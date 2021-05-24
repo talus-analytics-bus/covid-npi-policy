@@ -1,0 +1,19 @@
+@import "src/assets/styles/vars.scss";
+.labeledIcon {
+    display: flex;
+    flex-flow: row;
+
+    .iconContainer {
+        + .labelContainer {
+            margin-left: 1rem;
+        }
+    }
+
+    .labelContainer {
+        font-family: Open Sans, sans-serif;
+        font-style: normal;
+        font-size: 1.125rem;
+        line-height: 1.25rem;
+        color: $idea-black;
+    }
+}

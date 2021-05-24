@@ -6,7 +6,7 @@ import React from "react"; // 3rd party packages
 
 import classNames from "classnames"; // assets and styles
 
-import styles from "./maptooltip.module.scss"; // FUNCTION COMPONENT // ----------------------------------------------------//
+import styles from "./maptooltip.module.scss";
 
 /**
  * Popup on map when a feature is clicked

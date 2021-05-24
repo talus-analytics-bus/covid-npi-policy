@@ -15,6 +15,7 @@ import Drawer from "./Drawer/Drawer.js";
 import AccessibilityNote from "./AccessibilityNote/AccessibilityNote.js";
 import PrimaryButton from "./PrimaryButton/PrimaryButton.js";
 import OptionsMenu from "./OptionsMenu/OptionsMenu.js";
+import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 export {
   Selectpicker,
   CheckboxSet,
@@ -33,4 +34,5 @@ export {
   AccessibilityNote,
   PrimaryButton,
   OptionsMenu,
+  LoadingSpinner,
 };

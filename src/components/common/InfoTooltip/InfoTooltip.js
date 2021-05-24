@@ -27,6 +27,7 @@ const InfoTooltip = ({ id, text, place, ...props }) => {
     >
       <img
         src={imgSrc}
+        alt={"Info tooltip icon"}
         onMouseOver={() => {
           if (bindWithFunction) {
             props.setInfoTooltipContent(dataHtml);

@@ -1,7 +1,73 @@
-export type MetricInfo = {
-  id: number | string;
-  params: Record<string, any>;
-  queryFunc: Function;
-  trend: boolean;
-  for: Array<string>;
+export type PolicyResolution = "geo" | "subgeo";
+export type FeatureState = Record<string, any>;
+
+export type CountyFeature = {
+  id: string;
+  state: FeatureState;
+  properties: {
+    county_name: string;
+    state_abbrev: string;
+    state_name: string;
+    type: string;
+  };
 };
+export type StateFeature = {
+  id: string;
+  state: FeatureState;
+  properties: {
+    state_name: string;
+    state_abbrev: string;
+    type: string;
+  };
+};
+export type CountryFeature = {
+  id: string;
+  state: FeatureState;
+  properties: {
+    NAME: string;
+    POSTAL: string;
+    TYPE: string;
+    ISO_A3: string;
+
+    // compatibility types
+    state_name: undefined;
+  };
+};
+
+export type MapFeature = CountyFeature | StateFeature | CountryFeature;
+
+export type ObservationQueryParams = {
+  metric_id?: string | number;
+  func?: Function;
+};
+
+/**
+ * Map metric attributes used to query for metrics.
+ */
+export type MapMetric = {
+  // functions that, when passed `params`, returns the data for the map
+  // for this metric
+  queryFunc: Function | Record<string, any>;
+  // params that must be passed to `queryFunc` as object
+  params: ObservationQueryParams;
+  for: ("circle" | "fill")[];
+  id: string;
+  featureLinkField: string;
+  styleId: Record<string, string>;
+  filter: Array<any>;
+  trend: boolean;
+  styleOptions: {
+    outline: boolean;
+    pattern: boolean;
+  };
+};
+
+export type MapId = "us-county" | "us" | "global";
+export type DistancingLevel =
+  | "Lockdown"
+  | "Stay at home"
+  | "Safer at home"
+  | "Partially open"
+  | "Open"
+  | null;
+export type ElementsOrNull = (JSX.Element | null)[] | JSX.Element | null;
