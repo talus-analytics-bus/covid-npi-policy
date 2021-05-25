@@ -44,7 +44,9 @@ export const DistancingIcon: FunctionComponent<DistancingIconProps> = ({
         label: (
           <div>
             <strong className={styles.labelText}>{labelText}</strong>
-            <CovidLocalBadge {...{ label: phaseText }} />
+            <CovidLocalBadge
+              {...{ label: phaseText || "View on COVID-Local" }}
+            />
           </div>
         ),
         // maxLabelWidth: 100,

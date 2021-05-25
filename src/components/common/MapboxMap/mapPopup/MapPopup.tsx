@@ -14,6 +14,7 @@ import classNames from "classnames";
 type MapPopupProps = {
   headerTitle: string | JSX.Element;
   headerSub?: string | JSX.Element;
+  headerRightContent?: ElementsOrNull;
   headerCustomContent?: ElementsOrNull;
   bodySections?: ElementsOrNull;
   bodyCustomContent?: ElementsOrNull;
@@ -28,6 +29,7 @@ export type ActionLink = ReactElement<LinkProps> | null;
 const MapPopup = ({
   headerTitle,
   headerSub,
+  headerRightContent = null,
   headerCustomContent = null,
   bodySections = null,
   bodyCustomContent = null,
@@ -39,6 +41,7 @@ const MapPopup = ({
         {...{
           title: headerTitle,
           subtitle: headerSub,
+          rightContent: headerRightContent,
           customContent: headerCustomContent,
         }}
       />

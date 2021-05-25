@@ -10,13 +10,16 @@ import DistancingBodySection from "./content/DistancingBodySection/DistancingBod
 import PoliciesBodySection from "./content/PoliciesBodySection/PoliciesBodySection";
 import {
   DistancingLevel,
+  MapFeature,
   MapId,
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import { CaseSparkline } from "./content/AmpPopupHeader/content/CaseSparkline/CaseSparkline";
 
 type AmpMapPopupProps = {
   mapId: MapId;
+  feature: MapFeature;
   featureName: string;
   dataDate: Moment;
   distancingLevel: DistancingLevel;
@@ -30,6 +33,7 @@ type AmpMapPopupProps = {
 
 export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   mapId,
+  feature,
   featureName,
   dataDate,
   distancingLevel,
@@ -48,6 +52,11 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
           <>
             as of <FMT.LocalDate>{dataDate}</FMT.LocalDate>
           </>
+        ),
+        headerRightContent: (
+          <CaseSparkline
+            {...{ mapId, feature, dataDate, unit: "", label: "" }}
+          />
         ),
         bodySections: [
           <DistancingBodySection

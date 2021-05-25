@@ -1,0 +1,16 @@
+.sparklineChart {
+    .chartAreaRect {
+        fill: transparent;
+    }
+    .line {
+        stroke: #828282;
+        stroke-width: 1px;
+        fill: rgba(130, 130, 130, 0.4);
+        width: auto;
+    }
+    .xAxisMarker {
+        stroke: #303434;
+        stroke-width: 1px;
+        fill: none;
+    }
+}

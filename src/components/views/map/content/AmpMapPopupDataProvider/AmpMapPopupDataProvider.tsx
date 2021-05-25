@@ -166,6 +166,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       <AmpMapPopup
         {...{
           mapId,
+          feature,
           featureName,
           dataDate,
           distancingLevel,

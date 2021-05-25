@@ -16,6 +16,8 @@ import AccessibilityNote from "./AccessibilityNote/AccessibilityNote.js";
 import PrimaryButton from "./PrimaryButton/PrimaryButton.js";
 import OptionsMenu from "./OptionsMenu/OptionsMenu.js";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
+import Axes from "./D3React/Axes/Axes";
+import Sparkline from "./Sparkline/Sparkline";
 export {
   Selectpicker,
   CheckboxSet,
@@ -35,4 +37,6 @@ export {
   PrimaryButton,
   OptionsMenu,
   LoadingSpinner,
+  Axes,
+  Sparkline,
 };

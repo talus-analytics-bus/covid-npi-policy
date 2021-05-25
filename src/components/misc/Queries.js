@@ -516,19 +516,25 @@ export const Caseload = async ({
   countryIso3, // name for country, e.g., United States of America
   stateId, // place_id for state, e.g., 264
   stateName, // name for state, e.g., Alabama
+  ansiFips, // ansi / fips code of county, e.g., 06073 (for San Diego, CA)
   fields = ["date_time", "value"], // fields to return, return all if empty
   windowSizeDays = 7, // size of window over which to aggregate cases; only
+  getAverage = false, // true if average for windowsize is needed
   // 1 and 7 are currently supported
 }) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
 
-  const getMetricId = ({ isState, windowSizeDays }) => {
+  const getMetricId = ({ isState, isCounty, windowSizeDays }) => {
     if (isState) {
       if (windowSizeDays === 7) {
         return 74;
       } else if (windowSizeDays === 1) return 73;
+    } else if (isCounty) {
+      if (windowSizeDays === 7) {
+        return 104;
+      } else if (windowSizeDays === 1) return 103;
     } else {
       if (windowSizeDays === 7) {
         return 77;
@@ -536,10 +542,15 @@ export const Caseload = async ({
     }
   };
   const isState = stateName !== undefined || stateId !== undefined;
-  const metric_id = getMetricId({ isState, windowSizeDays });
+  const isCounty = ansiFips !== undefined;
+  const metric_id = getMetricId({ isState, isCounty, windowSizeDays });
 
   // define spatial resolution based on same
-  const spatial_resolution = isState ? "state" : "country";
+  const spatial_resolution = isState
+    ? "state"
+    : isCounty
+    ? "county"
+    : "country";
 
   // prepare parameters
   const params = {
@@ -557,9 +568,14 @@ export const Caseload = async ({
   if (stateId !== undefined) params.place_id = stateId;
   if (countryIso3 !== undefined) params.place_iso3 = countryIso3;
   if (stateName !== undefined) params.place_name = stateName;
-
+  if (ansiFips !== undefined) params.fips = ansiFips;
   // send request and return response data
-  return await ObservationQuery({ ...params });
+  const res = await ObservationQuery({ ...params });
+  if (getAverage && windowSizeDays !== 1)
+    res.forEach(d => {
+      d.value = Math.round(d.value / windowSizeDays);
+    });
+  return res;
 };
 
 /**

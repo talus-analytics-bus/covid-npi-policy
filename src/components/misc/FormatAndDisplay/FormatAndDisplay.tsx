@@ -1,4 +1,3 @@
-import { Moment } from "moment";
 import React, { FunctionComponent, ReactElement } from "react";
 import styles from "./FormatAndDisplay.module.scss";
 type Formattable = {

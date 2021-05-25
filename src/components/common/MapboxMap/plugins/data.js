@@ -38,11 +38,11 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "global",
+  mapId: "us",
 
   // default date for map to start on
-  // date: "2021-04-22",
-  date: yesterday.format("YYYY-MM-DD"),
+  date: "2021-04-29",
+  // date: yesterday.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
@@ -207,6 +207,9 @@ export const allMapMetrics = {
         temporal_resolution: "daily",
         spatial_resolution: "state",
         fields: ["value", "date_time", "place_name", "place_id"],
+        transform: d => {
+          d.value = d.value / 7.0;
+        },
       },
       id: "74",
       featureLinkField: "place_name",
@@ -494,8 +497,8 @@ export const metricMeta = {
     // metric definition
     metric_definition: (
       <span>
-        The number of new COVID-19 cases (confirmed and probable) in the state
-        in the past 7 days.
+        The moving 7-day average number of new daily COVID-19 cases (confirmed
+        and probable) in the state.
         <br />
         <i style={{ fontSize: ".8rem" }}>
           Source: Calculated from{" "}
@@ -512,7 +515,7 @@ export const metricMeta = {
     ),
 
     // metric name displayed on front-end
-    metric_displayname: "New cases in past 7 days",
+    metric_displayname: "7-day average new cases",
 
     // Optional: Short name for metric where needed
     shortName: (
@@ -536,8 +539,7 @@ export const metricMeta = {
     value: v => comma(v),
 
     // unit label formatter for metric
-    unit: v =>
-      v === 1 ? "new case in past 7 days" : "new cases in past 7 days",
+    unit: v => "7-day avg. daily cases",
 
     // if metric has trends, the label describing timeframe of those trends
     trendTimeframe: (
@@ -689,8 +691,8 @@ export const metricMeta = {
       ...this["74"],
       metric_definition: (
         <span>
-          The number of new COVID-19 cases (confirmed and probable) in the
-          county in the past 7 days.
+          The moving 7-day average number of new daily COVID-19 cases (confirmed
+          and probable) in the county.
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source: Calculated from{" "}
@@ -712,8 +714,8 @@ export const metricMeta = {
       ...this["74"],
       metric_definition: (
         <span>
-          The number of new COVID-19 cases (confirmed) in the country in the
-          past 7 days.
+          The moving 7-day average number of new daily COVID-19 cases
+          (confirmed) in the country.
           <br />
           <i style={{ fontSize: ".8rem" }}>
             Source: Calculated from{" "}
@@ -1004,6 +1006,7 @@ export const metricMeta = {
       Open: {
         label: "Open",
         color: "#e9f3fc",
+        phase: null,
         def: <span>No active restrictions are in place.</span>,
       },
       // TODO elegantly

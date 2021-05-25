@@ -1,3 +1,6 @@
+import { Numeric } from "d3";
+import { Moment } from "moment";
+
 export type PolicyResolution = "geo" | "subgeo";
 export type FeatureState = Record<string, any>;
 
@@ -39,6 +42,26 @@ export type MapFeature = CountyFeature | StateFeature | CountryFeature;
 export type ObservationQueryParams = {
   metric_id?: string | number;
   func?: Function;
+};
+
+export type CaseloadQueryArgs = {
+  windowSizeDays: 1 | 7;
+  stateName?: string;
+  fields?: string[];
+  countryId?: number;
+  countryIso3?: string;
+  ansiFips?: string;
+  stateId?: number;
+  getAverage?: boolean;
+};
+
+export type Observation = {
+  date_time: string;
+  value: Numeric | null | undefined | number | string;
+};
+export type NumericObservation = {
+  date_time: string;
+  value: Numeric | number | null | undefined;
 };
 
 /**

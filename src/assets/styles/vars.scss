@@ -6,6 +6,7 @@ $light-blue-3: #d4eef9;
 $cyan: #d4eef9;
 $blue: #4682b4;
 $dark-blue: #11315d;
+$darker-blue: #24365b;
 $light-gray-2: #f2f2f2;
 $light-gray-3: #f7f7f7;
 $selected-blue: #0096c2;
@@ -42,6 +43,17 @@ $orange: #e55e37;
 // general styles
 $border: 1px solid #ccc;
 $border-radius: 5px;
+$light-bg: #f0f3f9;
+$lighter-bg: #f6f9ff;
+$darker-bg: darken($light-bg, 4%);
+$even-darker-bg: darken($light-bg, 20%);
+
+// Fonts
+$large-font: 2.4rem;
+$medium-font: 1.4rem;
+$smallish-font: 1.2rem;
+$small-font: 1rem;
+$very-small-font: 0.9rem;
 
 // // make colors available to JS
 // :export {

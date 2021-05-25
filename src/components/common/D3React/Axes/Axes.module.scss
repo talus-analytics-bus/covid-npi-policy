@@ -1,0 +1,36 @@
+@import '../../../../assets/styles/vars.scss';
+
+.axes {
+  stroke-width: 1px;
+  .xAxis,
+  .yAxis {
+    .label {
+      fill: $darker-blue;
+      font-size: $very-small-font;
+    }
+    .axis {
+      fill: none;
+      stroke: $darker-blue;
+    }
+    .gridline {
+      stroke: $darker-bg;
+      // stroke-dasharray: 1 1;
+    }
+    .boundaryLine {
+      // stroke: $darker-blue;
+    }
+  }
+  .yAxis {
+    .axis {
+      stroke: $darker-bg;
+    }
+    .label {
+      text-anchor: end;
+    }
+  }
+  .xAxis {
+    .label {
+      text-anchor: middle;
+    }
+  }
+}

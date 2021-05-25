@@ -6,9 +6,9 @@ import { ElementsOrNull } from "../../../plugins/mapTypes";
 
 // component types
 type PopupHeaderProps = {
-  title: string | JSX.Element;
-  subtitle?: string | JSX.Element | null;
-  rightContent?: JSX.Element | null;
+  title: string | ElementsOrNull;
+  subtitle?: string | ElementsOrNull;
+  rightContent?: ElementsOrNull;
   customContent?: ElementsOrNull;
 };
 

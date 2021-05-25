@@ -1,18 +1,22 @@
 @import "src/assets/styles/vars.scss";
 .covidLocalBadge {
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    > :not(:last-child) {
-        margin-right: 0.5rem;
-    }
-    img {
-        height: 17px;
-    }
-    .label {
+    a.label {
         text-decoration: underline;
         color: $amp-green;
         font-size: 0.625rem;
         line-height: 0.875rem;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+
+        img + span {
+            margin-left: 0.5rem;
+        }
+        &:hover {
+            color: darken($amp-green, 20%);
+        }
+        img {
+            height: 17px;
+        }
     }
 }
