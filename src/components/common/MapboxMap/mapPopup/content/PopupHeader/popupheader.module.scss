@@ -1,9 +1,8 @@
 @import "src/assets/styles/vars.scss";
 .popupHeader {
     padding: 10px;
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr;
     .left {
         .title {
             font-family: Rawline, serif;
@@ -24,5 +23,6 @@
     }
     .right {
         margin-left: 5rem;
+        text-align: right;
     }
 }

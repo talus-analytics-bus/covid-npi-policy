@@ -7,11 +7,32 @@
     }
 }
 .loadingSpinner {
-    padding: 10px;
-    img {
+    position: relative;
+    img.spinnerImage {
+        position: absolute;
         $size: 40px;
         height: $size;
         width: $size;
         animation: rotation 12s infinite linear;
+        &,
+        + .children {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            &.hidden {
+                transition: opacity 0.5s ease;
+                opacity: 0;
+            }
+        }
+    }
+
+    &.rightSide {
+        img.spinnerImage {
+            right: 0;
+        }
+    }
+    &.leftSide {
+        img.spinnerImage {
+            left: 0;
+        }
     }
 }

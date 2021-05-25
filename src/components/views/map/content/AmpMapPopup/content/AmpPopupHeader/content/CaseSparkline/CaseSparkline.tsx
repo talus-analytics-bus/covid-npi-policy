@@ -45,8 +45,13 @@ export const CaseSparkline: FC<ComponentProps> = ({
     left: 1,
     right: 1,
   };
-  if (ready)
-    return (
+
+  return (
+    <LoadingSpinner
+      style={{ height: height + margin.top + 42 }}
+      right={true}
+      {...{ ready }}
+    >
       <Sparkline
         {...{
           width: 150,
@@ -62,6 +67,6 @@ export const CaseSparkline: FC<ComponentProps> = ({
           },
         }}
       />
-    );
-  else return <LoadingSpinner style={{ height: height + margin.top + 42 }} />;
+    </LoadingSpinner>
+  );
 };
