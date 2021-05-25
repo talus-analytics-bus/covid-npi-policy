@@ -53,6 +53,7 @@ export type CaseloadQueryArgs = {
   ansiFips?: string;
   stateId?: number;
   getAverage?: boolean;
+  isCumulative?: boolean;
 };
 
 export type Observation = {

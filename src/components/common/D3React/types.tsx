@@ -52,7 +52,14 @@ export type Dimensions = {
   width: number;
 };
 
+export type Margin = {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
 export type SparklineCustomOptions = {
   xMin?: Moment; // hardcode x-axis minimum
-  margin?: { top: number; bottom: number; left: number; right: number };
+  margin?: Margin;
 };

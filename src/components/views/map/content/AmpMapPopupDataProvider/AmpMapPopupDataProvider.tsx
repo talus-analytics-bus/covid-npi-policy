@@ -43,6 +43,7 @@ type UpdateDataProps = {
   setReady: Function;
   map: Record<string, any>;
   mapId: MapId;
+  circle: string | null;
   paramArgs: Record<string, any>;
 };
 const updateData: Function = async ({
@@ -54,6 +55,7 @@ const updateData: Function = async ({
   setReady,
   map,
   mapId,
+  circle,
   paramArgs,
 }: UpdateDataProps) => {
   // if county map, get state `lockdown_level
@@ -120,6 +122,7 @@ type ComponentProps = {
   map: Record<string, any>;
   filters: Record<string, any>;
   policyResolution: PolicyResolution;
+  circle: string | null;
 };
 
 export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
@@ -131,6 +134,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   map,
   policyResolution,
   filters,
+  circle,
 }) => {
   const [policiesLink, setPoliciesLink] = useState<ActionLink>(null);
   const [ready, setReady] = useState<boolean>(false);
@@ -152,6 +156,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       setReady,
       map,
       mapId,
+      circle,
       paramArgs: {
         policyResolution,
         stateName,
@@ -176,6 +181,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
           modelLink: getModelLink(feature),
           policiesLink,
           policyResolution,
+          circle,
         }}
       />
     );

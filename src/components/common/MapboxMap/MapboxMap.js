@@ -422,6 +422,7 @@ const MapboxMap = ({
             map,
             policyResolution: plugins.policyResolution,
             filters,
+            circle,
           }}
         />
       );

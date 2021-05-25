@@ -1,6 +1,6 @@
 // library components
 import React, { FunctionComponent } from "react";
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 
 // local components
 import MapPopup, {
@@ -29,6 +29,7 @@ type AmpMapPopupProps = {
   modelLink?: ActionLink;
   policiesLink?: ActionLink;
   policyResolution: PolicyResolution;
+  circle: string | null;
 };
 
 export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
@@ -43,6 +44,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   modelLink,
   policiesLink,
   policyResolution,
+  circle,
 }) => {
   return (
     <MapPopup

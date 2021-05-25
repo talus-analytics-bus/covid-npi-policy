@@ -13,8 +13,8 @@ type ComponentProps = {
   height: number;
   data: NumericObservation[] | null;
   dataDate: Moment;
-  unit: string;
-  label: string;
+  unit: string[];
+  label: string | null;
   caption?: string;
   footer?: string;
   classes: string[];
@@ -54,7 +54,9 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
           <span className={styles.value}>
             <FMT.ExactNumber>{curValue}</FMT.ExactNumber>
           </span>{" "}
-          <span className={styles.unit}>{unit}</span>
+          <span className={styles.unit}>
+            {curValue === 1 ? unit[0] : unit[1]}
+          </span>
         </div>
         <div className={styles.label}>{label}</div>
         <SparklineChart

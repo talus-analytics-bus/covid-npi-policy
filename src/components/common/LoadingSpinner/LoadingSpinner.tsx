@@ -6,15 +6,19 @@ import loadingImg from "./assets/images/loading.gif";
 
 type ComponentProps = {
   delay?: number;
+  style?: Record<string, any>;
 };
-export const LoadingSpinner: FC<ComponentProps> = ({ delay = 0 }) => {
+export const LoadingSpinner: FC<ComponentProps> = ({
+  delay = 0,
+  style = {},
+}) => {
   const [delayIsOver, setDelayIsOver] = useState(delay === 0);
   useEffect(() => {
     setTimeout(() => setDelayIsOver(true), delay);
   }, []);
   if (delayIsOver)
     return (
-      <div className={styles.loadingSpinner}>
+      <div style={style} className={styles.loadingSpinner}>
         <img src={loadingImg} alt="Loading spinner" />
       </div>
     );

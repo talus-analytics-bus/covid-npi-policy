@@ -34,14 +34,6 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
   customOptions,
 }) => {
   // VARS
-  // create line generator function
-  const line = d3
-    .line()
-    //@ts-ignore TODO: rm this
-    .x((d: NumericObservation) => xScale(moment(d.date_time)))
-    //@ts-ignore TODO: rm this
-    .y((d: NumericObservation) => yScale(d.value))
-    .curve(d3.curveMonotoneX);
   const [lineVisible, setLineVisible] = useState<boolean>(false);
   const [mousePath, setMousePath] = useState<string>("");
   const chartRef: MutableRefObject<null> = useRef(null);
@@ -68,7 +60,8 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
     data,
     (d: NumericObservation) => d.value
   ) as number;
-  const [yDomain, setYDomain] = useState<[number, number]>([0, yMax]);
+  // const [yDomain, setYDomain] = useState<[number, number]>([0, yMax]);
+  const yDomain: number[] = [0, yMax];
 
   const xScale = d3
     .scaleUtc()
@@ -78,6 +71,15 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
     .scaleLinear()
     .range([height, 0])
     .domain(yDomain);
+
+  // create line generator function
+  const line = d3
+    .line()
+    //@ts-ignore TODO: rm this
+    .x((d: NumericObservation) => xScale(moment(d.date_time)))
+    //@ts-ignore TODO: rm this
+    .y((d: NumericObservation) => yScale(d.value))
+    .curve(d3.curveMonotoneX);
 
   // get x-axis marker data for vertical line
   const dataDateStr: string = dataDate.format("YYYY-MM-DD");
@@ -95,6 +97,8 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
       <figure>
         {data !== [] && (
           <svg
+            width={width + margin.left + margin.right}
+            height={height + margin.top + margin.bottom}
             viewBox={`0 0 ${width + margin.left + margin.right} ${height +
               margin.top +
               margin.bottom}`}

@@ -68,7 +68,7 @@ const circleStyles = {
           return getLinearScale({
             minSize: 1,
             zeroSize: 1,
-            maxValue: 150e3,
+            maxValue: 150e3 / 7.0,
             maxSize: 15,
             featurePropertyKey: key,
           });
@@ -76,7 +76,7 @@ const circleStyles = {
           return getLog10Scale({
             minSize: 5,
             zeroSize: 5,
-            maxValue: 1e7,
+            maxValue: 1e7 / 7.0,
             featurePropertyKey: key,
           });
       },

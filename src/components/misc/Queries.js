@@ -519,6 +519,7 @@ export const Caseload = async ({
   ansiFips, // ansi / fips code of county, e.g., 06073 (for San Diego, CA)
   fields = ["date_time", "value"], // fields to return, return all if empty
   windowSizeDays = 7, // size of window over which to aggregate cases; only
+  isCumulative = false, // true if cumulative values needed
   getAverage = false, // true if average for windowsize is needed
   // 1 and 7 are currently supported
 }) => {
@@ -526,9 +527,10 @@ export const Caseload = async ({
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
 
-  const getMetricId = ({ isState, isCounty, windowSizeDays }) => {
+  const getMetricId = ({ isState, isCounty, windowSizeDays, isCumulative }) => {
     if (isState) {
-      if (windowSizeDays === 7) {
+      if (isCumulative) return 72;
+      else if (windowSizeDays === 7) {
         return 74;
       } else if (windowSizeDays === 1) return 73;
     } else if (isCounty) {
@@ -543,7 +545,12 @@ export const Caseload = async ({
   };
   const isState = stateName !== undefined || stateId !== undefined;
   const isCounty = ansiFips !== undefined;
-  const metric_id = getMetricId({ isState, isCounty, windowSizeDays });
+  const metric_id = getMetricId({
+    isState,
+    isCounty,
+    windowSizeDays,
+    isCumulative,
+  });
 
   // define spatial resolution based on same
   const spatial_resolution = isState
