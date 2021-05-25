@@ -534,10 +534,12 @@ export const Caseload = async ({
         return 74;
       } else if (windowSizeDays === 1) return 73;
     } else if (isCounty) {
+      if (isCumulative) return 102;
       if (windowSizeDays === 7) {
         return 104;
       } else if (windowSizeDays === 1) return 103;
     } else {
+      if (isCumulative) return 75;
       if (windowSizeDays === 7) {
         return 77;
       } else if (windowSizeDays === 1) return 76;
