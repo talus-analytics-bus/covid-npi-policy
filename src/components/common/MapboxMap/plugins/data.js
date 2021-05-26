@@ -31,8 +31,18 @@ import phase4 from "./assets/icons/phase-4.png";
 // import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 
+import {
+  mapGreen1,
+  mapGreen2,
+  mapGreen3,
+  mapGreen4,
+  mapGreen5,
+  mapGreen6,
+} from "assets/styles/vars.scss";
+
 // utilities and local components
-import { greenStepsScale } from "./layers";
+// import { greenStepsScale } from "./layers";
+
 // define default parameters for MapboxMap
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
@@ -808,18 +818,20 @@ export const metricMeta = {
           range: [
             "#eaeaea",
             "none",
-            greenStepsScale(0),
-            greenStepsScale(0.25),
-            greenStepsScale(0.5),
-            greenStepsScale(0.75),
-            greenStepsScale(1),
+            mapGreen6,
+            mapGreen5,
+            mapGreen4,
+            mapGreen3,
+            mapGreen2,
+            mapGreen1,
           ],
-          borders: [null, "2px solid gray", null, null, null, null, null],
-          width: [null, null, 40, 40, 40, 40, 40],
+          borders: [null, "2px solid gray", null, null, null, null, null, null],
+          width: [null, null, 40, 40, 40, 40, 40, 40],
           entryStyles: [
             undefined,
             { marginLeft: 10 },
             { marginLeft: 20, marginRight: 0 },
+            { marginRight: 0 },
             { marginRight: 0 },
             { marginRight: 0 },
             { marginRight: 0 },
@@ -830,7 +842,8 @@ export const metricMeta = {
             undefined,
             { position: "absolute", top: 20 },
             undefined,
-            { position: "absolute", top: 20 },
+            undefined,
+            undefined,
             undefined,
             { position: "absolute", top: 20 },
           ],
@@ -862,7 +875,8 @@ export const metricMeta = {
             </div>,
             "fewest",
             "",
-            "some",
+            "",
+            "",
             "",
             "most",
           ],

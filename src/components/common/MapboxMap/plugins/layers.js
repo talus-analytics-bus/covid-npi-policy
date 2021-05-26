@@ -10,8 +10,18 @@
 // 3rd party packages
 import * as d3 from "d3/dist/d3.min";
 
+// assets and styles
+import {
+  mapGreen1,
+  mapGreen2,
+  mapGreen3,
+  mapGreen4,
+  mapGreen5,
+  mapGreen6,
+} from "assets/styles/vars.scss";
+
 // utilities
-import { getLog10Scale, getLinearScale } from "../../../misc/Util";
+import { getLog10Scale, getLinearScale, range } from "../../../misc/Util";
 // import { geoHaveData } from "../MapboxMap";
 
 // assets
@@ -211,7 +221,7 @@ const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
 const lightTeal = "#e0f4f3";
-const teal = "#66CAC4";
+// const teal = "#66CAC4";
 // const medTeal = "#41beb6";
 const darkTeal = "#349891";
 export const greenStepsScale = d3
@@ -219,46 +229,59 @@ export const greenStepsScale = d3
   .domain([0, 1]) // TODO dynamically
   .range([lightTeal, darkTeal]);
 
-const getLinearColorBins = ({ nBins, scale, maxVal, minVal, key }) => {
+/**
+ * Given a series of colors, the max and min values of the data series, and the
+ * key for the data series, returns a Mapbox styling expression that returns
+ * the colors in the series according to a quantized color scale with
+ * breakpoints linearly determined by the values.
+ * @param {Object} o The parameters
+ * @param {string[]} o.colors The color series
+ * @param {string} o.key The key for the data series in the data object
+ * @param {number} o.minVal The smallest value in the data series
+ * @param {number} o.maxVal The largest value in the data series
+ * @returns {Array<any>}
+ * Mapbox expression styling values with quantized color scale using linear
+ * and evenly-sized bins.
+ */
+const getQuantizedColorStyle = ({ colors, maxVal, minVal, key }) => {
+  const nBins = colors.length;
   const diff = maxVal - minVal;
-  const binSize = diff / 5;
-  const breakpoints = [1, 2, 3, 4].map(d => {
+  const binSize = diff / nBins;
+
+  const breakpoints = range(1, nBins - 1).map(d => {
     return binSize * d + minVal;
   });
-  const colors = scale.range();
-  const newColorScale = d3
-    .scaleLinear()
-    .domain([0, 1])
-    .range(colors);
 
-  // const base = ["case"];
   const base = ["case", ["==", ["feature-state", key], 0], "#ffffff"];
   breakpoints.forEach((v, i) => {
     base.push(["<=", ["feature-state", key], v]);
-    base.push(newColorScale(i * 0.25));
+    base.push(colors[i]);
   });
-  base.push(newColorScale(1));
+  base.push(colors[colors.length - 1]);
   return base;
-
-  // OLD VERSION BELOW
-  // const range = scale.range();
-  // const newScale = d3
-  //   .scaleLinear()
-  //   .domain([0, 1])
-  //   .range(range);
-  // const base = ["case"];
-  // const capVal = maxVal - minVal;
-  // const nRules = nBins - 1;
-  // const binStep = 1 / (nBins - 1);
-  // for (let i = 0; i < nRules; i++) {
-  //   const val = ((i + 1) * capVal) / (nBins + 1) + minVal;
-  //   base.push(["<=", ["feature-state", key], val]);
-  //   base.push(newScale(i * binStep));
-  // }
-  // // add max color
-  // base.push(newScale(1));
-  // return base;
 };
+
+// const getLinearColorBins = ({ scale, maxVal, minVal, key }) => {
+//   const diff = maxVal - minVal;
+//   const binSize = diff / 5;
+//   const breakpoints = [1, 2, 3, 4].map(d => {
+//     return binSize * d + minVal;
+//   });
+//   const colors = scale.range();
+//   const newColorScale = d3
+//     .scaleLinear()
+//     .domain([0, 1])
+//     .range(colors);
+
+//   // const base = ["case"];
+//   const base = ["case", ["==", ["feature-state", key], 0], "#ffffff"];
+//   breakpoints.forEach((v, i) => {
+//     base.push(["<=", ["feature-state", key], v]);
+//     base.push(newColorScale(i * 0.25));
+//   });
+//   base.push(newColorScale(1));
+//   return base;
+// };
 
 // similar for fill styles
 const fillStyles = {
@@ -294,9 +317,15 @@ const fillStyles = {
       "fill-color": [
         "case",
         ["!=", ["feature-state", key], null],
-        getLinearColorBins({
-          nBins: 5,
-          scale: greenStepsScale,
+        getQuantizedColorStyle({
+          colors: [
+            mapGreen6,
+            mapGreen5,
+            mapGreen4,
+            mapGreen3,
+            mapGreen2,
+            mapGreen1,
+          ],
           maxVal,
           minVal,
           key,

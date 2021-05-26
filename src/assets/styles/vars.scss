@@ -55,18 +55,32 @@ $smallish-font: 1.2rem;
 $small-font: 1rem;
 $very-small-font: 0.9rem;
 
-// // make colors available to JS
-// :export {
-//   red: $red;
-//   lightred: $light-red;
-//   darkblue: $dark-blue;
-//   white: $white;
-//   cyan: $cyan;
-//   lightcyan: $light-cyan;
-//   noDataGray: $no-data-gray;
-//   gray: $gray;
-//   darkSelectedBlue: $dark-selected-blue;
-// }
+// Map colors
+$map-green-1: #116858;
+$map-green-2: #1a7c6b;
+$map-green-3: #409384;
+$map-green-4: #66a99d;
+$map-green-5: #96c4bb;
+$map-green-6: #c6dfda;
+
+// make colors available to JS
+:export {
+  red: $red;
+  lightred: $light-red;
+  darkblue: $dark-blue;
+  white: $white;
+  cyan: $cyan;
+  lightcyan: $light-cyan;
+  noDataGray: $no-data-gray;
+  gray: $gray;
+  darkSelectedBlue: $dark-selected-blue;
+  mapGreen1: $map-green-1;
+  mapGreen2: $map-green-2;
+  mapGreen3: $map-green-3;
+  mapGreen4: $map-green-4;
+  mapGreen5: $map-green-5;
+  mapGreen6: $map-green-6;
+}
 
 // MIXINS
 @mixin spaceItemsVert($size, $top: true, $padding: false) {
