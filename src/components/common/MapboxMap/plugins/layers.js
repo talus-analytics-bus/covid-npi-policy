@@ -18,6 +18,7 @@ import {
   mapGreen4,
   mapGreen5,
   mapGreen6,
+  noDataGray,
 } from "assets/styles/vars.scss";
 
 // utilities
@@ -216,7 +217,7 @@ const circleStyles = {
 };
 
 // colors
-const noDataColor = "#eaeaea";
+const noDataColor = noDataGray;
 const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";

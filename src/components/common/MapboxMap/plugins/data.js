@@ -38,6 +38,7 @@ import {
   mapGreen4,
   mapGreen5,
   mapGreen6,
+  noDataGray,
 } from "assets/styles/vars.scss";
 
 // utilities and local components
@@ -48,10 +49,10 @@ const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "us",
+  mapId: "global",
 
   // default date for map to start on
-  date: "2021-04-29",
+  date: "2021-03-03",
   // date: yesterday.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
@@ -580,7 +581,7 @@ export const metricMeta = {
           colorscale: d3
             .scaleOrdinal()
             .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-            .range(["#eaeaea", "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+            .range([noDataGray, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
 
           // for non-quantized legend `type`: the labels that should be used for
           // each `for` category
@@ -816,7 +817,7 @@ export const metricMeta = {
           type: "quantized",
           labelsInside: false,
           range: [
-            "#eaeaea",
+            noDataGray,
             "none",
             mapGreen6,
             mapGreen5,
@@ -931,11 +932,11 @@ export const metricMeta = {
   //         "no policy",
   //         "policy in effect",
   //       ],
-  //       // range: ["#eaeaea", "white", "#66CAC4"],
+  //       // range: [noDataGray, "white", "#66CAC4"],
   //       colorscale: d3
   //         .scaleOrdinal()
   //         .domain(["no policy", "policy in effect"])
-  //         .range(["#eaeaea", "white", "#66CAC4"]),
+  //         .range([noDataGray, "white", "#66CAC4"]),
   //     },
   //   },
   // },
@@ -1115,7 +1116,7 @@ export const metricMeta = {
           layout: "grid",
           labelsInside: true,
           range: [
-            "#eaeaea",
+            noDataGray,
             // "#ffffff",
             "#2165a1",
             "#549FE2",
@@ -1176,7 +1177,7 @@ export const metricMeta = {
               "open",
             ])
             .range([
-              "#eaeaea",
+              noDataGray,
               // "#ffffff",
               "#2165a1",
               "#549FE2",

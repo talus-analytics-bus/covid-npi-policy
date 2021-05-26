@@ -185,7 +185,7 @@ export const mapStyles = {
   },
   // additional maps...
   global: {
-    url: "mapbox://styles/nicoletalus/ckaofpis006y41ik5mr49kjnd",
+    url: process.env.REACT_APP_GLOBAL_MAP_STYLE_URL,
     value: "global",
     geo_res: "country",
     name: "Countries",

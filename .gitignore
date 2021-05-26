@@ -12,3 +12,6 @@ launch.json
 
 # VSCode files
 .vscode
+
+# dotenv
+.env
