@@ -28,8 +28,8 @@ export type CountryFeature = {
   state: FeatureState;
   properties: {
     NAME: string;
-    POSTAL: string;
-    TYPE: string;
+    // POSTAL: string;
+    // TYPE: string;
     ISO_A3: string;
 
     // compatibility types
