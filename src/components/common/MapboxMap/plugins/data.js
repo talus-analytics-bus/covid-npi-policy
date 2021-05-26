@@ -853,7 +853,7 @@ export const metricMeta = {
               {getNounFromPolicyResolution({
                 mapId,
                 policyResolution,
-              }).toLowerCase()}{" "}
+              })}{" "}
               data
               <br />
               not available
@@ -865,7 +865,7 @@ export const metricMeta = {
                 lineHeight: 1.1,
               }}
             >
-              no{" "}
+              No{" "}
               {getNounFromPolicyResolution({
                 mapId,
                 policyResolution,
@@ -874,72 +874,18 @@ export const metricMeta = {
               <br />
               policy in effect
             </div>,
-            "fewest",
+            "Fewest",
             "",
             "",
             "",
             "",
-            "most",
+            "Most",
           ],
           subLabels: [],
         };
       },
     },
   },
-  // policy_status: {
-  //   metric_definition: (
-  //     <span>
-  //       {
-  //         <table className={infostyles.distancingLevelTable}>
-  //           <tbody>
-  //             <tr>
-  //               <td>
-  //                 <div
-  //                   style={{
-  //                     backgroundColor: "#66CAC4",
-  //                     marginRight: "20px",
-  //                   }}
-  //                   className={infostyles.rect}
-  //                 >
-  //                   policy in effect
-  //                 </div>
-  //               </td>
-  //               <td style={{ display: "none" }} />
-  //               <td>
-  //                 At least one policy in effect with the given category /
-  //                 subcategories on the specified date.
-  //               </td>
-  //             </tr>
-  //           </tbody>
-  //         </table>
-  //       }
-  //     </span>
-  //   ),
-  //   metric_displayname: "Policy status",
-  //   value: v => v,
-  //   unit: v => "",
-  //   legendInfo: {
-  //     fill: {
-  //       for: "basemap", // TODO dynamically
-  //       type: "quantized",
-  //       labelsInside: true,
-  //       domain: [
-  //         <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-  //           data not
-  //           <br />
-  //           available
-  //         </div>,
-  //         "no policy",
-  //         "policy in effect",
-  //       ],
-  //       // range: [noDataGray, "white", "#66CAC4"],
-  //       colorscale: d3
-  //         .scaleOrdinal()
-  //         .domain(["no policy", "policy in effect"])
-  //         .range([noDataGray, "white", "#66CAC4"]),
-  //     },
-  //   },
-  // },
   lockdown_level: {
     // last updated: 2020-06-24
     // MV via JK and GU
