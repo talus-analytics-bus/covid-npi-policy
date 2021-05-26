@@ -64,7 +64,7 @@ export const defaults = {
   // defaults for map with ID `us-county`
   "us-county": {
     // id of default circle metric
-    circle: 104,
+    circle: "104",
     showCircle: false,
     // allowCircle: false,
 

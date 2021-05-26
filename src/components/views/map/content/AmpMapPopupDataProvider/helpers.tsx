@@ -324,3 +324,44 @@ export const getDistancingMapMetric: Function = (
       "add it to variable `allMapMetrics` in file `data.js`.";
   }
 };
+
+export const getLocationFilters = (
+  mapId: string,
+  feature: MapFeature
+): Record<string, any> => {
+  switch (mapId) {
+    case "us":
+      return getUsStateLocationFilters(feature as StateFeature);
+    case "us-county":
+      return getUsCountyLocationFilters(feature as CountyFeature);
+    case "global":
+    default:
+      return getCountryLocationFilters(feature as CountryFeature);
+  }
+  function getUsStateLocationFilters(
+    feature: StateFeature
+  ): Record<string, any> {
+    return {
+      iso3: ["USA"],
+      area1: [feature.properties.state_name],
+    };
+  }
+
+  function getUsCountyLocationFilters(
+    feature: StateFeature
+  ): Record<string, any> {
+    return {
+      iso3: ["USA"],
+      area1: [feature.properties.state_name],
+      ansi_fips: [feature.id],
+    };
+  }
+
+  function getCountryLocationFilters(
+    feature: CountryFeature
+  ): Record<string, any> {
+    return {
+      iso3: [feature.properties.ISO_A3],
+    };
+  }
+};

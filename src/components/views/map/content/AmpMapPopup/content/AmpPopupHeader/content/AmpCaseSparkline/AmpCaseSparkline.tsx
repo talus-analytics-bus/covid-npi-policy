@@ -12,17 +12,18 @@ import {
   NumericObservation,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import moment, { Moment } from "moment";
-import styles from "./CaseSparkline.module.scss";
+import styles from "./AmpCaseSparkline.module.scss";
 import { updateData, getLabelFromMapMetricId } from "./helpers";
 import MapOptionContext from "components/views/map/context/MapOptionContext";
 import { Margin } from "components/common/D3React/types";
+import { defaults } from "components/common/MapboxMap/plugins/data";
 
 type ComponentProps = {
   mapId: MapId;
   feature: MapFeature;
   dataDate: Moment;
 };
-export const CaseSparkline: FC<ComponentProps> = ({
+export const AmpCaseSparkline: FC<ComponentProps> = ({
   mapId,
   feature,
   dataDate,
@@ -32,12 +33,13 @@ export const CaseSparkline: FC<ComponentProps> = ({
   const { circle }: { circle: string | null } = useContext<any>(
     MapOptionContext
   );
+  const circleForUpdate: string | null = circle || defaults[mapId].circle;
   const height: number = 30;
 
   useEffect(() => {
     if (ready) setReady(false);
-    updateData(mapId, feature, setData, setReady, circle);
-  }, [circle]);
+    updateData(mapId, feature, setData, setReady, circleForUpdate);
+  }, [circleForUpdate]);
 
   const margin: Margin = {
     top: 5,
@@ -60,7 +62,7 @@ export const CaseSparkline: FC<ComponentProps> = ({
           data,
           dataDate,
           unit: ["case", "cases"],
-          label: getLabelFromMapMetricId(circle),
+          label: getLabelFromMapMetricId(circleForUpdate),
           customOptions: {
             xMin: moment("2020-01-21"),
             margin,

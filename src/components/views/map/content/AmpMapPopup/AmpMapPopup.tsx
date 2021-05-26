@@ -15,7 +15,7 @@ import {
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
-import { CaseSparkline } from "./content/AmpPopupHeader/content/CaseSparkline/CaseSparkline";
+import { AmpCaseSparkline } from "./content/AmpPopupHeader/content/AmpCaseSparkline/AmpCaseSparkline";
 
 type AmpMapPopupProps = {
   mapId: MapId;
@@ -29,7 +29,6 @@ type AmpMapPopupProps = {
   modelLink?: ActionLink;
   policiesLink?: ActionLink;
   policyResolution: PolicyResolution;
-  circle: string | null;
 };
 
 export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
@@ -44,7 +43,6 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   modelLink,
   policiesLink,
   policyResolution,
-  circle,
 }) => {
   return (
     <MapPopup
@@ -56,7 +54,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
           </>
         ),
         headerRightContent: (
-          <CaseSparkline
+          <AmpCaseSparkline
             {...{ mapId, feature, dataDate, unit: "", label: "" }}
           />
         ),

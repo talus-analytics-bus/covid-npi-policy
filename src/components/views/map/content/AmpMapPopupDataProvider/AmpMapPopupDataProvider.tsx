@@ -4,7 +4,6 @@ import React, { FunctionComponent as FC, useEffect, useState } from "react";
 // local components
 import {
   CountryFeature,
-  CountyFeature,
   DistancingLevel,
   MapFeature,
   MapId,
@@ -25,6 +24,7 @@ import {
   getDistancingMapMetric,
   getFeatureMetric,
   getFeatureName,
+  getLocationFilters,
   getModelLink,
   getPoliciesLink,
   PoliciesLink,
@@ -55,7 +55,6 @@ const updateData: Function = async ({
   setReady,
   map,
   mapId,
-  circle,
   paramArgs,
 }: UpdateDataProps) => {
   // if county map, get state `lockdown_level
@@ -122,7 +121,6 @@ type ComponentProps = {
   map: Record<string, any>;
   filters: Record<string, any>;
   policyResolution: PolicyResolution;
-  circle: string | null;
 };
 
 export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
@@ -134,7 +132,6 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   map,
   policyResolution,
   filters,
-  circle,
 }) => {
   const [policiesLink, setPoliciesLink] = useState<ActionLink>(null);
   const [ready, setReady] = useState<boolean>(false);
@@ -156,7 +153,6 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       setReady,
       map,
       mapId,
-      circle,
       paramArgs: {
         policyResolution,
         stateName,
@@ -181,7 +177,6 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
           modelLink: getModelLink(feature),
           policiesLink,
           policyResolution,
-          circle,
         }}
       />
     );
@@ -189,44 +184,3 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
 };
 
 export default AmpMapPopupDataProvider;
-
-const getLocationFilters = (
-  mapId: string,
-  feature: MapFeature
-): Record<string, any> => {
-  switch (mapId) {
-    case "us":
-      return getUsStateLocationFilters(feature as StateFeature);
-    case "us-county":
-      return getUsCountyLocationFilters(feature as CountyFeature);
-    case "global":
-    default:
-      return getCountryLocationFilters(feature as CountryFeature);
-  }
-  function getUsStateLocationFilters(
-    feature: StateFeature
-  ): Record<string, any> {
-    return {
-      iso3: ["USA"],
-      area1: [feature.properties.state_name],
-    };
-  }
-
-  function getUsCountyLocationFilters(
-    feature: StateFeature
-  ): Record<string, any> {
-    return {
-      iso3: ["USA"],
-      area1: [feature.properties.state_name],
-      ansi_fips: [feature.id],
-    };
-  }
-
-  function getCountryLocationFilters(
-    feature: CountryFeature
-  ): Record<string, any> {
-    return {
-      iso3: [feature.properties.ISO_A3],
-    };
-  }
-};
