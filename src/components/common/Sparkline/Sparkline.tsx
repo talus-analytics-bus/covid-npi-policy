@@ -30,7 +30,7 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
   caption,
   footer,
   classes = [],
-  customOptions,
+  customOptions = {},
 }) => {
   // date shown in sparkline
   const [date, setDate] = useState<Moment>(dataDate);
@@ -72,6 +72,11 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
         />
       </div>
     );
-  } else return <span>No data to show.</span>;
+  } else
+    return (
+      <span className={styles.noData}>
+        {customOptions.noDataText || "No data to show."}
+      </span>
+    );
 };
 export default Sparkline;

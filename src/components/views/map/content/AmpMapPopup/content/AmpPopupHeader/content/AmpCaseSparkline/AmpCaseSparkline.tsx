@@ -66,6 +66,7 @@ export const AmpCaseSparkline: FC<ComponentProps> = ({
           customOptions: {
             xMin: moment("2020-01-21"),
             margin,
+            noDataText: "No case data to show.",
           },
         }}
       />
