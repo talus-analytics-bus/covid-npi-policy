@@ -89,23 +89,13 @@ export const mapSources = {
 
   // additional map types, layer types, and source defs...
   global: {
-    // fill: {
-    //   name: "geoms",
-    //   sourceLayer: "countries_id_rpr",
-    //   pattern: true,
-    //   def: {
-    //     type: "vector",
-    //     url: "mapbox://traethethird.4kh7sxxt",
-    //     promoteId: "ADM0_A3",
-    //   },
-    // },
     fill: {
       name: "geoms",
-      sourceLayer: "countries_v13c",
+      sourceLayer: "countries_slim_v13c02", // generated from:
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.bnct4toi",
-        promoteId: "ADM0_A3",
+        url: "mapbox://nicoletalus.3yglf67j",
+        promoteId: "ISO_A3",
       },
     },
     circle: {
@@ -114,8 +104,8 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://nicoletalus.3hl37c3u",
-        promoteId: "ADM0_A3",
-        filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
+        promoteId: "ISO_A3",
+        filter: ["==", ["in", ["get", "ISO_A3"], ["literal", ["PRI"]]], false],
       },
     },
   },
