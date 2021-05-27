@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "../PolicyPage2.module.scss";
+import styles from "../PolicyPage.module.scss";
 
 const LocationAndOfficials = ({ policy, policyPlace }) => (
   <section>

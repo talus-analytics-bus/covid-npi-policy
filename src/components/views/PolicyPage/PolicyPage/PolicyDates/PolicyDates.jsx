@@ -2,7 +2,7 @@ import React from "react";
 
 import courtChallengeIcon from "../../../../../assets/icons/CourtChallengeIcon.svg";
 
-import styles from "../PolicyPage2.module.scss";
+import styles from "../PolicyPage.module.scss";
 
 // TODO: replace with <FMT.Date> component
 const formatDate = date => {

@@ -6,10 +6,8 @@ import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
 
 // import * as MiniMap from "../MiniMap/MiniMap";
-import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 import OthersInDocument from "./OthersInDocument/OthersInDocument";
 import RelatedPolicies from "./RelatedPolicies/RelatedPolicies";
-import CourtChallenges from "./CourtChallenges/CourtChallenges";
 
 import PolicyBreadcrumbs from "./PolicyBreadcrumbs/PolicyBreadcrumbs";
 import MapFigure from "./MapFigure/MapFigure";
@@ -23,7 +21,7 @@ import LocationAndOfficials from "./LocationAndOfficials/LocationAndOfficials";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
-import styles from "./PolicyPage2.module.scss";
+import styles from "./PolicyPage.module.scss";
 
 const PolicyPage = props => {
   const location = useLocation();
