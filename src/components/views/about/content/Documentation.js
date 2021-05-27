@@ -208,8 +208,8 @@ const Documentation = ({ ...props }) => {
         <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
           https://creativecommons.org/licenses/by/4.0/
         </a>
-        ), with appropriate referenceandacknowledgement of the original research
-        team, as available under the About section of{" "}
+        ), with appropriate reference and acknowledgement of the original
+        research team, as available under the About section of{" "}
         <a target="_blank" href="https://covid-local.org">
           https://covid-local.org
         </a>{" "}
