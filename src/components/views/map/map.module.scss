@@ -3,6 +3,7 @@
   height: 100%;
   width: 100%;
   position: relative;
+  overflow: clip;
   > :last-child {
     width: 100% !important;
     $drawer-header-height: 50px;
