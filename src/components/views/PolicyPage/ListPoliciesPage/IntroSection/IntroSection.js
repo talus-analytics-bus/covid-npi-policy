@@ -7,6 +7,8 @@ import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocume
 import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
 import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
 
+import SnapshotChart from "../SnapshotChart/SnapshotChart";
+
 import styles from "./IntroSection.module.scss";
 
 const numberFormat = new Intl.NumberFormat("en-us");
@@ -96,6 +98,8 @@ const IntroSection = props => {
     );
   }
 
+  console.log(policySummaryObject);
+
   return (
     <div className={styles.introSection}>
       {locationName !== iso3 ? (
@@ -103,6 +107,8 @@ const IntroSection = props => {
       ) : (
         <h1>&nbsp;</h1>
       )}
+
+      <SnapshotChart {...{ policySummaryObject }} />
       {status.policiesSummary === "error" && (
         <>
           <p className={styles.introParagraph}>
