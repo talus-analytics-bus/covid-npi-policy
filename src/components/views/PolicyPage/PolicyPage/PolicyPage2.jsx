@@ -84,6 +84,7 @@ const PolicyPage = props => {
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
           )}
+          <OthersInDocument path={policyObjectPath} policy={policy} />
         </div>
       </main>
       <RelatedPolicies path={policyObjectPath} policy={policy} />

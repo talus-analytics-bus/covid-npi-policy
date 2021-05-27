@@ -1,8 +1,22 @@
 .othersInDocument {
   margin-top: 4rem;
 
+  .lightGreyH2 {
+    color: #828282;
+  }
+
+  .seeMoreText {
+    margin-top: 40px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: #303434;
+  }
+
   .others {
     display: flex;
+    flex-direction: column;
     // justify-content: space-between;
   }
 }

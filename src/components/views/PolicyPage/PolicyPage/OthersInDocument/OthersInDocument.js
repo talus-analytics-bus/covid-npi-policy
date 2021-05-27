@@ -8,6 +8,7 @@ import {
 import { Policy } from "../../../../misc/Queries";
 
 import MiniPolicyBox from "../MiniPolicyBox/MiniPolicyBox";
+import ExploreSource from "../ExploreSource/ExploreSource";
 
 import styles from "./OthersInDocument.module.scss";
 
@@ -34,7 +35,7 @@ const OthersInDocument = ({ policy, path }) => {
         otherPolicy => `${otherPolicy.id}` !== `${policy.id}`
       );
 
-      setPolicies(otherPolicies.slice(0, 3));
+      setPolicies(otherPolicies.slice(0, 2));
     };
 
     if (policy && policy.policy_number) getPoliciesInDocument();
@@ -43,12 +44,21 @@ const OthersInDocument = ({ policy, path }) => {
   if (policies && policies.length > 0)
     return (
       <div className={styles.othersInDocument}>
-        <h2>Other Policies in this Document</h2>
+        <h2 className={styles.lightGreyH2}>Other Policies in this Document</h2>
         <div className={styles.others}>
           {policies &&
             policies.map(policy => (
               <MiniPolicyBox key={policy.id} policy={policy} />
             ))}
+          {policy && policy.policy_name !== "Not Available" && (
+            <>
+              <span className={styles.seeMoreText}>
+                To see all other policies in this document, click the button
+                below:
+              </span>
+              <ExploreSource {...{ policy }} />
+            </>
+          )}
         </div>
       </div>
     );
