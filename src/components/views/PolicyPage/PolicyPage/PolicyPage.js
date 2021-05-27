@@ -73,6 +73,7 @@ const PolicyPage = props => {
 
   return (
     <article className={styles.policyPage}>
+      <h1>Policy details</h1>
       <div className={styles.breadCrumbs}>
         {iso3 !== "Unspecified" && (
           <>
@@ -104,10 +105,11 @@ const PolicyPage = props => {
       <section className={styles.headerSection}>
         <div className={styles.row}>
           <div className={styles.wideCol}>
+            <div className={styles.divider} />
             <div className={styles.row}>
               <header>
                 <div className={styles.row}>
-                  <h1>
+                  <h2>
                     {policy ? (
                       <>
                         {`${policy.auth_entity[0].place.loc
@@ -127,7 +129,7 @@ const PolicyPage = props => {
                         <br />
                       </>
                     )}
-                  </h1>
+                  </h2>
                 </div>
               </header>
             </div>
