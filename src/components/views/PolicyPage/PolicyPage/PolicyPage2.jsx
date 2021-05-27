@@ -86,6 +86,7 @@ const PolicyPage = props => {
           )}
         </div>
       </main>
+      <RelatedPolicies path={policyObjectPath} policy={policy} />
     </article>
   );
 };
