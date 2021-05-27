@@ -4,10 +4,9 @@ import * as MiniMap from "../../MiniMap/MiniMap";
 
 import styles from "./MapFigure.module.scss";
 
-const MapFigure = ({ state, policy }) => {
-  let locationTitle = policy && policy.auth_entity[0].place.area2;
-  if (locationTitle === "Unspecified")
-    locationTitle = policy && policy.auth_entity[0].place.area1;
+const MapFigure = ({ state, policy, policyPlace }) => {
+  let locationTitle =
+    policyPlace && policyPlace.loc.split(",")[0].split("(")[0];
 
   return (
     <figure className={styles.miniMapHolder}>

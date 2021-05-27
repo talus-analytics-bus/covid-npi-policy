@@ -80,7 +80,7 @@ const PolicyPage = props => {
           <LocationAndOfficials {...{ policy, policyPlace }} />
         </div>
         <div className={styles.right}>
-          <MapFigure {...{ policy, state }} />
+          <MapFigure {...{ policy, state, policyPlace }} />
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
           )}
