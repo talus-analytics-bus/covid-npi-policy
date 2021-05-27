@@ -17,6 +17,7 @@ import HomeRuleDillonsRule from "./HomeRuleDillonsRule/HomeRuleDillonsRule";
 import PolicyTitle from "./PolicyTitle/PolicyTitle";
 import PolicyDates from "./PolicyDates/PolicyDates";
 import PolicyDetails from "./PolicyDetails/PolicyDetails";
+import LocationAndOfficials from "./LocationAndOfficials/LocationAndOfficials";
 
 // import CaseloadAndPolicies from "./CaseloadAndPolicies/CaseloadAndPolicies";
 
@@ -76,6 +77,7 @@ const PolicyPage = props => {
           <PolicyTitle {...{ policy }} />
           <PolicyDates {...{ policy }} />
           <PolicyDetails {...{ policy }} />
+          <LocationAndOfficials {...{ policy, policyPlace }} />
         </div>
         <div className={styles.right}>
           <MapFigure {...{ policy, state }} />
