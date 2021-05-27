@@ -13,7 +13,7 @@ import PlaceQuery from "../../../misc/PlaceQuery";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
-import PolicyPage from "../PolicyPage/PolicyPage";
+import PolicyPage from "../PolicyPage/PolicyPage2";
 import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 
 const API_URL = process.env.REACT_APP_API_URL;
