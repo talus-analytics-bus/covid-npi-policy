@@ -2,6 +2,14 @@
   overflow: visible;
   // border: 1px solid lightgrey;
 
+  .background {
+    pointer-events: none;
+  }
+
+  text {
+    pointer-events: none;
+  }
+
   .averageLine {
     stroke: #bdbdbd;
     fill: none;
@@ -26,5 +34,9 @@
   line {
     stroke: black;
     stroke-width: 1;
+  }
+
+  .sliderGroup {
+    cursor: pointer;
   }
 }

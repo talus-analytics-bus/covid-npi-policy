@@ -13,6 +13,7 @@ const Axes = props => {
         dominantBaseline: "hanging",
         fontFamily: "rawline",
         fill: "rgba(130, 130, 130, 1)",
+        pointerEvents: "none",
       },
     },
     yAxis: {
@@ -22,6 +23,7 @@ const Axes = props => {
         dominantBaseline: "middle",
         fontFamily: "rawline",
         fill: "rgba(130, 130, 130, 1)",
+        pointerEvents: "none",
       },
       gridline: {
         stroke: "lightgrey",

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 
 import Axes from "./Axes/Axes";
+import Slider from "./Slider/Slider";
 
 import styles from "./PolicyEnvironmentPlot.module.scss";
 
@@ -172,6 +173,32 @@ const PolicyEnvironmentPlot = ({ path }) => {
     averageLinePath = pathGenerator(pointsArray);
   }
 
+  const [dragging, setDragging] = useState();
+  const [sliderX, setSliderX] = useState(0);
+  const [dragStartX, setDragStartX] = useState(0);
+
+  const handleDragStart = e => {
+    // prevent the text from highlighting
+    e.stopPropagation();
+    e.preventDefault();
+    setDragging(true);
+    const CTM = svgElement.current.getScreenCTM();
+    const xPos = (e.clientX - CTM.e) / CTM.a;
+    setDragStartX(xPos - sliderX);
+  };
+  const handleDrag = e => {
+    if (dragging) {
+      const CTM = svgElement.current.getScreenCTM();
+      const xPos = (e.clientX - CTM.e) / CTM.a;
+      setSliderX(xPos - dragStartX);
+    }
+  };
+
+  const handleDragEnd = e => {
+    setDragging(false);
+    setDragStartX(0);
+  };
+
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
@@ -179,49 +206,60 @@ const PolicyEnvironmentPlot = ({ path }) => {
       className={styles.svg}
       ref={svgElement}
       style={{ overflow: "visible" }}
+      onMouseMove={handleDrag}
+      onMouseUp={handleDragEnd}
     >
-      Visualize padding zone for testing
-      <rect
-        x={dim.paddingLeft}
-        y={dim.paddingTop}
-        width={dim.width - dim.paddingLeft - dim.paddingRight}
-        height={dim.height - dim.paddingTop - dim.paddingBottom}
-        style={{
-          stroke: "grey",
-          strokeWidth: 1,
-          fill: "none",
-        }}
-      />
-      <rect
-        x={0}
-        y={0}
-        width={dim.width}
-        height={dim.height}
-        style={{
-          stroke: "grey",
-          strokeWidth: 1,
-          fill: "none",
-        }}
-      />
-      <Axes dim={dim} scale={scale} />
-      <g className={styles.dailyLines}>
-        {caseload &&
-          scale &&
-          caseload.map(day => (
-            <React.Fragment key={day.date}>
-              {day.value >= 0 && (
-                <line
-                  style={inlineStyles.dailyLines}
-                  x1={scale.x(day.date)}
-                  y1={dim.origin.y}
-                  x2={scale.x(day.date)}
-                  y2={scale.y(day.value)}
-                />
-              )}
-            </React.Fragment>
-          ))}
+      {/* Visualize padding zone for testing */}
+      <g className={styles.background}>
+        <rect
+          x={dim.paddingLeft}
+          y={dim.paddingTop}
+          width={dim.width - dim.paddingLeft - dim.paddingRight}
+          height={dim.height - dim.paddingTop - dim.paddingBottom}
+          style={{
+            stroke: "grey",
+            strokeWidth: 1,
+            fill: "none",
+          }}
+        />
+        <rect
+          x={0}
+          y={0}
+          width={dim.width}
+          height={dim.height}
+          style={{
+            stroke: "grey",
+            strokeWidth: 1,
+            fill: "none",
+          }}
+        />
+        <Axes dim={dim} scale={scale} />
+        <g className={styles.dailyLines}>
+          {caseload &&
+            scale &&
+            caseload.map(day => (
+              <React.Fragment key={day.date}>
+                {day.value >= 0 && (
+                  <line
+                    style={inlineStyles.dailyLines}
+                    x1={scale.x(day.date)}
+                    y1={dim.origin.y}
+                    x2={scale.x(day.date)}
+                    y2={scale.y(day.value)}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+        </g>
+        <path d={averageLinePath} className={styles.averageLine} />
       </g>
-      <path d={averageLinePath} className={styles.averageLine} />
+      <g
+        className={styles.sliderGroup}
+        onMouseDown={handleDragStart}
+        style={{ transform: `translateX(${sliderX}px)` }}
+      >
+        <Slider {...{ dim }} />
+      </g>
     </svg>
   );
 };
