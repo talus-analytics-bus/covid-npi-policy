@@ -7,7 +7,7 @@ import styles from "./SnapshotChartSection.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
-const SnapshotChartSection = () => {
+const SnapshotChartSection = ({ policyCount }) => {
   const location = useLocation();
   const [iso3, state] = location.pathname
     .replace(/\/$/, "")
@@ -18,14 +18,6 @@ const SnapshotChartSection = () => {
 
   const policyScope =
     state !== "national" ? "state and county" : "national and local";
-
-  const policyCount = Object.values(policySummaryObject).reduce(
-    (acc, category) => ({
-      count: acc.count + category.count,
-      active: acc.active + category.active,
-    }),
-    { count: 0, active: 0 }
-  );
 
   return (
     <>

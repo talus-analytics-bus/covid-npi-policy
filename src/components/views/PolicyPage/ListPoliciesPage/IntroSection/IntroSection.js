@@ -108,7 +108,7 @@ const IntroSection = props => {
         <h1>&nbsp;</h1>
       )}
 
-      <SnapshotChartSection />
+      <SnapshotChartSection {...{ policyCount }} />
 
       {status.policiesSummary === "error" && (
         <>
