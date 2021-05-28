@@ -7,7 +7,7 @@ import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocume
 import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
 import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
 
-import SnapshotChart from "../SnapshotChart/SnapshotChart";
+import SnapshotChartSection from "../SnapshotChart/SnapshotChartSection";
 
 import styles from "./IntroSection.module.scss";
 
@@ -108,7 +108,8 @@ const IntroSection = props => {
         <h1>&nbsp;</h1>
       )}
 
-      <SnapshotChart {...{ policySummaryObject }} />
+      <SnapshotChartSection />
+
       {status.policiesSummary === "error" && (
         <>
           <p className={styles.introParagraph}>

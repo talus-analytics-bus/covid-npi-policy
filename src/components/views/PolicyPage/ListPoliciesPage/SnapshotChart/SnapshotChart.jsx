@@ -44,7 +44,7 @@ const SnapshotChart = ({ policySummaryObject }) => {
     .domain([0, maxBar])
     .range([dim.axes.y.start, dim.axes.y.end]);
 
-  // just usig the x scale here to get
+  // just using the x scale here to get
   // evenly spaced bars between the padding
   dim.axes.x.scale = d3
     .scaleLinear()

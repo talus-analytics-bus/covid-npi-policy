@@ -1,0 +1,21 @@
+.chartContainer {
+	display: flex;
+
+	.legend {
+		display: flex;
+		flex-direction: column;
+
+		.entry {
+			margin-bottom: 15px;
+			display: flex;
+
+			.total,
+			.active {
+				width: 1.25em;
+				height: 1.25em;
+				flex-shrink: 0;
+				margin-right: 0.5em;
+			}
+		}
+	}
+}
