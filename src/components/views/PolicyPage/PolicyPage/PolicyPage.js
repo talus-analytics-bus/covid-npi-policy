@@ -19,7 +19,7 @@ import courtChallengeIcon from "../../../../assets/icons/CourtChallengeIcon.svg"
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./PolicyPage.module.scss";
-import { removeParenthetical } from "components/misc/UtilsTyped";
+import { removeParenthetical } from "../../../misc/UtilsTyped";
 
 const formatDate = date => {
   if (!date) return undefined;
