@@ -43,7 +43,7 @@ const SnapshotChartSection = () => {
                 />
                 <span>
                   <strong>{policyCount.active}</strong> active {policyScope}{" "}
-                  policies
+                  policies as of TODO DATE
                 </span>
               </div>
               <div className={styles.entry}>
@@ -53,7 +53,7 @@ const SnapshotChartSection = () => {
                 />
                 <span>
                   <strong>{policyCount.count}</strong> total {policyScope}{" "}
-                  policies
+                  policies as of TODO DATE
                 </span>
               </div>
             </>

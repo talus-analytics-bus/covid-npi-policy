@@ -6,7 +6,7 @@ import Bar from "./Bar/Bar";
 const SnapshotChart = ({ policySummaryObject }) => {
   const dim = {
     width: 200,
-    height: 100,
+    height: 80,
 
     padding: {
       top: 5,
