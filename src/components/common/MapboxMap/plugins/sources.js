@@ -91,10 +91,10 @@ export const mapSources = {
   global: {
     fill: {
       name: "geoms",
-      sourceLayer: "countries_slim_v13c02", // generated from:
+      sourceLayer: "countries_slim_v13c03", // generated from:
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.3yglf67j",
+        url: "mapbox://nicoletalus.92q1pclg",
         promoteId: "ISO_A3",
       },
     },
