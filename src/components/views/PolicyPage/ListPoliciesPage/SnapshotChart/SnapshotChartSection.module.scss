@@ -1,5 +1,18 @@
+.header2 {
+	font-family: Rawline;
+	font-style: normal;
+	font-weight: bold;
+	color: #303434;
+}
+.asOfDate {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: 600;
+	color: #e55e37;
+}
 .chartContainer {
-	display: flex;
+	display: grid;
+	grid-template-columns: 2fr 1fr;
 
 	.legend {
 		display: flex;

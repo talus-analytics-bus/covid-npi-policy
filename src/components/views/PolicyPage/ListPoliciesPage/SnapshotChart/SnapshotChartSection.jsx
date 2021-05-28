@@ -27,35 +27,40 @@ const SnapshotChartSection = () => {
     { count: 0, active: 0 }
   );
 
-  console.log(policyCount);
-
   return (
-    <div className={styles.chartContainer}>
-      <SnapshotChart {...{ policySummaryObject }} />
-      <div className={styles.legend}>
-        {policySummaryObject && (
-          <>
-            <div className={styles.entry}>
-              <div
-                className={styles.active}
-                style={{ background: "#409384" }}
-              />
-              <span>
-                <strong>{policyCount.active}</strong> active {policyScope}{" "}
-                policies
-              </span>
-            </div>
-            <div className={styles.entry}>
-              <div className={styles.total} style={{ background: "#96C4BB" }} />
-              <span>
-                <strong>{policyCount.count}</strong> total {policyScope}{" "}
-                policies
-              </span>
-            </div>
-          </>
-        )}
+    <>
+      <h2 className={styles.header2}>Policy snapshot</h2>
+      <span className={styles.asOfDate}>As of TODO DATE</span>
+      <div className={styles.chartContainer}>
+        <SnapshotChart {...{ policySummaryObject }} />
+        <div className={styles.legend}>
+          {policySummaryObject && (
+            <>
+              <div className={styles.entry}>
+                <div
+                  className={styles.active}
+                  style={{ background: "#409384" }}
+                />
+                <span>
+                  <strong>{policyCount.active}</strong> active {policyScope}{" "}
+                  policies
+                </span>
+              </div>
+              <div className={styles.entry}>
+                <div
+                  className={styles.total}
+                  style={{ background: "#96C4BB" }}
+                />
+                <span>
+                  <strong>{policyCount.count}</strong> total {policyScope}{" "}
+                  policies
+                </span>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
