@@ -18,7 +18,9 @@ import classNames from "classnames";
 import * as d3 from "d3/dist/d3.min";
 
 // local modules
-import { metricMeta, dataGetter, tooltipGetter } from "./plugins/data";
+import { metricMeta } from "./plugins/data";
+import { dataGetter } from "./plugins/dataGetter";
+import { tooltipGetter } from "./plugins/tooltipGetter";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
@@ -142,7 +144,10 @@ const MapboxMap = ({
         else {
           const featureOrder = {};
           data[sortOrderMetricId].forEach(d => {
-            const hasBorder = d.value === "No restrictions" || d.value === null;
+            const hasBorder =
+              d.value === "No restrictions" ||
+              // d.value === null ||
+              d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
           if (mapId === "global") {
@@ -179,7 +184,7 @@ const MapboxMap = ({
           data[sortOrderMetricId].forEach(d => {
             const hasBorder =
               d.value === "No restrictions" ||
-              d.value === null ||
+              // d.value === null ||
               d.value === 0;
             featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
           });
@@ -193,10 +198,11 @@ const MapboxMap = ({
               [
                 "!=",
                 ["get", ["get", promoteId], ["literal", featureOrder]],
-                null,
-              ],
+                null, // if the feature appears in the order list...
+              ], // use its id to determine stack order
               ["get", ["get", promoteId], ["literal", featureOrder]],
-              3,
+              0, // otherwise put it on bottom
+              // 3, // otherwise put it on top
             ]
           );
         }
@@ -265,6 +271,9 @@ const MapboxMap = ({
       nouns.singular = "Country";
       nouns.level = "national";
     }
+    // prepend "sub-" if subgeo policies are being viewed
+    if (plugins.policyResolution === "subgeo")
+      nouns.level = "sub-" + nouns.level;
 
     const isPolicyStatus = fill === "policy_status";
     const isPolicyStatusCounts = fill === "policy_status_counts";
@@ -288,6 +297,7 @@ const MapboxMap = ({
       const subcategory = !isEmpty(filters["ph_measure_details"])
         ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
         : undefined;
+
       const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
       const suffix = ` on ${date.format("MMM D, YYYY")}`;
       if (subcategory !== undefined) {
@@ -444,8 +454,13 @@ const MapboxMap = ({
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    getMapData({ date, filters, mapId });
-  }, [filters, mapId]);
+    getMapData({
+      date,
+      filters,
+      mapId,
+      policyResolution: plugins.policyResolution,
+    });
+  }, [filters, mapId, date, plugins.policyResolution]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
@@ -866,7 +881,10 @@ const MapboxMap = ({
                       metric_displayname: (
                         <span>{getFillLegendName({ filters, fill })}</span>
                       ),
-                      ...metricMeta[fill].legendInfo.fill(mapId),
+                      ...metricMeta[fill].legendInfo.fill(
+                        mapId,
+                        plugins.policyResolution
+                      ),
                     }}
                   />
                 )}

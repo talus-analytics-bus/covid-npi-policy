@@ -9,7 +9,6 @@
 
 // 3rd party packages
 import * as d3 from "d3/dist/d3.min";
-import moment from "moment";
 
 // utilities
 import { getLog10Scale, getLinearScale, comma } from "../../../misc/Util";
@@ -289,6 +288,7 @@ const fillStyles = {
     };
   },
 
+  // TODO redo all this based on new API responses for `include_zeros = true`
   policy_status_counts: (key, geoHaveData, maxVal = 1, minVal = 0) => {
     return {
       "fill-color": [
@@ -301,8 +301,6 @@ const fillStyles = {
           minVal,
           key,
         }),
-        ["==", ["has", "state_name"], true],
-        negColor,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataColor,
         ["==", ["feature-state", key], null],
@@ -315,10 +313,10 @@ const fillStyles = {
     return {
       "line-color": [
         "case",
+        ["==", ["feature-state", key], 0],
+        negBorder,
         ["!=", ["feature-state", key], null],
         "#ffffff",
-        ["==", ["has", "state_name"], true], // all states are reporting data
-        negBorder,
         ["==", ["in", ["get", "ADM0_A3"], ["literal", geoHaveData]], false],
         noDataBorder,
         ["==", ["feature-state", key], null],

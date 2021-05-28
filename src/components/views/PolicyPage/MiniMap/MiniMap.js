@@ -52,8 +52,7 @@ export const Provider = props => {
         const topology = response.data;
 
         setFeatures({
-          countries: feature(topology, topology.objects.countries_v13c_limited)
-            .features,
+          countries: feature(topology, topology.objects.countries).features,
         });
       });
     };

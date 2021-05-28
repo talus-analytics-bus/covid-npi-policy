@@ -9,12 +9,16 @@ import { InfoTooltip } from "..";
  * @method RadioToggle
  */
 const RadioToggle = ({
-  choices,
-  curVal,
+  choices = [
+    { value: "a", label: "Sample choice A" },
+    { value: "b", label: "Sample choice B" },
+  ],
+  curVal = "a",
   callback,
   onClick,
   label,
   className,
+  children,
   ...props
 }) => {
   // display radios as sets of columns?
@@ -76,50 +80,58 @@ const RadioToggle = ({
         <div role="label">{label}</div>
         <form className={classNames({ [styles.asGrid]: showRadiosAsCols })}>
           {choices.map(c => (
-            <span key={c.value}>
-              {onClick(
-                c.value,
-                <label
-                  style={{
-                    color:
-                      curVal.toString() === c.value.toString()
-                        ? darkSelectedBlue
-                        : "",
-                  }}
-                  disabled={
-                    props.disabled === true || c.disabled === true
-                      ? "disabled"
-                      : ""
-                  }
-                  onClick={callback ? onChange : undefined}
-                >
-                  <input
+            <>
+              <span
+                key={c.value}
+                className={classNames({
+                  [styles.hasChildren]: c.children !== undefined,
+                })}
+              >
+                {onClick(
+                  c.value,
+                  <label
+                    style={{
+                      color:
+                        curVal.toString() === c.value.toString()
+                          ? darkSelectedBlue
+                          : "",
+                    }}
                     disabled={
                       props.disabled === true || c.disabled === true
                         ? "disabled"
                         : ""
                     }
-                    type="radio"
-                    name={c.name || c.label}
-                    value={c.value}
-                    checked={curVal.toString() === c.value.toString()}
-                    readOnly
-                  />
-                  <span>
-                    {getLabelJsx(c.name || c.label)}
-                    {c.tooltip && (
-                      <InfoTooltip
-                        id={c.value}
-                        text={c.tooltip}
-                        setInfoTooltipContent={props.setInfoTooltipContent}
-                        wide={c.wideTooltip === true}
-                        place={props.tooltipPlace}
-                      />
-                    )}
-                  </span>
-                </label>
-              )}
-            </span>
+                    onClick={callback ? onChange : undefined}
+                  >
+                    <input
+                      disabled={
+                        props.disabled === true || c.disabled === true
+                          ? "disabled"
+                          : ""
+                      }
+                      type="radio"
+                      name={c.name || c.label}
+                      value={c.value}
+                      checked={getIsChecked(curVal, c)}
+                      readOnly
+                    />
+                    <span>
+                      {getLabelJsx(c.name || c.label)}
+                      {c.tooltip && (
+                        <InfoTooltip
+                          id={c.value}
+                          text={c.tooltip}
+                          setInfoTooltipContent={props.setInfoTooltipContent}
+                          wide={c.wideTooltip === true}
+                          place={props.tooltipPlace}
+                        />
+                      )}
+                    </span>
+                  </label>
+                )}
+              </span>
+              {getIsChecked(curVal, c) && c.children}
+            </>
           ))}
         </form>
       </div>
@@ -161,3 +173,6 @@ const getLabelJsx = text => {
 };
 
 export default RadioToggle;
+function getIsChecked(curVal, c) {
+  return curVal.toString() === c.value.toString();
+}
