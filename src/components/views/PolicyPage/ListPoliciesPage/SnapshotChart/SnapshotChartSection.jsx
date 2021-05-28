@@ -28,7 +28,7 @@ const SnapshotChartSection = () => {
   );
 
   return (
-    <>
+    <div className={styles.sectionContainer}>
       <h2 className={styles.header2}>Policy snapshot</h2>
       <span className={styles.asOfDate}>As of TODO DATE</span>
       <div className={styles.chartContainer}>
@@ -60,7 +60,7 @@ const SnapshotChartSection = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
