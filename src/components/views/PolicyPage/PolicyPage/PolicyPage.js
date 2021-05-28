@@ -19,6 +19,7 @@ import courtChallengeIcon from "../../../../assets/icons/CourtChallengeIcon.svg"
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./PolicyPage.module.scss";
+import { removeParenthetical } from "components/misc/UtilsTyped";
 
 const formatDate = date => {
   if (!date) return undefined;
@@ -110,9 +111,9 @@ const PolicyPage = props => {
                   <h1>
                     {policy ? (
                       <>
-                        {`${policy.auth_entity[0].place.loc
-                          .split(",")[0]
-                          .replace(/\([A-Z]*\)/, "")}
+                        {`${removeParenthetical(
+                          policy.auth_entity[0].place.loc.split(",")[0]
+                        )}
                       ${policy.primary_ph_measure}: `}
                         <br />
                         {policy.ph_measure_details}

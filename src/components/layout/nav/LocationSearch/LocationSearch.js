@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import styles from "./LocationSearch.module.scss";
+import { removeParenthetical } from "components/misc/UtilsTyped";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -106,7 +107,7 @@ const LocationSearch = () => {
               }}
               key={r.loc + r.level}
             >
-              <span>{r.loc.replace(/\([A-Z]*\)/, "")}</span>
+              <span>{removeParenthetical(r.loc)}</span>
               <span>{/* <strong>{r.n_policies}</strong> */}</span>
             </Link>
           ))}

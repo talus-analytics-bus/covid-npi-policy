@@ -25,3 +25,7 @@ export const usePrevious = (value: any) => {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 };
+
+export const removeParenthetical = (value: string) => {
+  return value.replace(/\([A-Z-]*\)/, "");
+};
