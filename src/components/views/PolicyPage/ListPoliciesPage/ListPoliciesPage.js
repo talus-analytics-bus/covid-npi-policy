@@ -19,6 +19,7 @@ import SearchResults from "./SearchResults/SearchResults";
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./ListPoliciesPage.module.scss";
+import PolicyEnvironmentPlot from "./PolicyEnvironmentPlot/PolicyEnvironmentPlot";
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
@@ -139,16 +140,19 @@ const ListPoliciesPage = props => {
           {(status.caseload === "loading" || status.caseload === "loaded") && (
             <>
               {status.caseload === "loaded" ? (
-                <h2 className={styles.caseloadHeader}>Daily COVID-19 Cases</h2>
+                <h2 className={styles.caseloadHeader}>
+                  Policy environment over time
+                </h2>
               ) : (
                 <h2 className={styles.caseloadHeader}>
                   Loading COVID-19 Cases
                 </h2>
               )}
               <figure>
+                <PolicyEnvironmentPlot />
                 <CaseloadPlot />
                 <figcaption>
-                  Source:{" "}
+                  Caseload Source:{" "}
                   <a
                     target="_blank"
                     href="https://github.com/nytimes/covid-19-data"
