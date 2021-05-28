@@ -109,7 +109,7 @@ const ListPoliciesPage = props => {
 
   return (
     <article className={styles.listPoliciesPage}>
-      <header>
+      <header className={styles.pageHeader}>
         {locationName !== iso3 ? (
           <h1>{locationName} COVID-19 Policies</h1>
         ) : (
