@@ -7,8 +7,6 @@ import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocume
 import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
 import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
 
-import SnapshotChartSection from "../SnapshotChart/SnapshotChartSection";
-
 import styles from "./IntroSection.module.scss";
 
 const numberFormat = new Intl.NumberFormat("en-us");
@@ -102,13 +100,7 @@ const IntroSection = props => {
 
   return (
     <div className={styles.introSection}>
-      {locationName !== iso3 ? (
-        <h1>{locationName} COVID-19 Policies</h1>
-      ) : (
-        <h1>&nbsp;</h1>
-      )}
-
-      <SnapshotChartSection {...{ policyCount }} />
+      <h2>Description of policy environment</h2>
 
       {status.policiesSummary === "error" && (
         <>

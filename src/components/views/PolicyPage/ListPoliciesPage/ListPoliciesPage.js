@@ -10,6 +10,7 @@ import {
 import { MiniMap } from "../MiniMap/MiniMap";
 import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 
+import SnapshotChartSection from "./SnapshotChart/SnapshotChartSection";
 import IntroSection from "./IntroSection/IntroSection.js";
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
@@ -116,7 +117,7 @@ const ListPoliciesPage = props => {
         )}
       </header>
       <section className={styles.introSection}>
-        <IntroSection />
+        <SnapshotChartSection />
         {iso3 !== "Unspecified" && (
           <div className={styles.miniMapHolder}>
             <MiniMap.SVG
@@ -157,6 +158,7 @@ const ListPoliciesPage = props => {
           )}
         </section>
       )}
+      <IntroSection />
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
           {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
