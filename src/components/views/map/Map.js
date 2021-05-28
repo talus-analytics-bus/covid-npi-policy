@@ -47,6 +47,10 @@ import {
   InfoTooltip,
   OptionsMenu,
 } from "../../common";
+import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
+import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
+import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
+import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 
@@ -369,217 +373,207 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                       </div>
                     </div>
                     {
-                      <OptionsMenu
-                        {...{
-                          allowDesktop: false,
-                          defaultOpen: true,
-                          toggleText: open =>
-                            open ? (
-                              <span>
-                                <span>hide options</span>
-                                {arrow}
-                              </span>
-                            ) : (
-                              <span>
-                                <span>show options</span>
-                                {arrow}
-                              </span>
-                            ),
-                          content: [
-                            <div className={styles.mapOptionsTitle}>
-                              Map options
-                            </div>,
-                            <MapIdToggle
-                              setInfoTooltipContent={
-                                props.setInfoTooltipContent
-                              }
-                              {...{
-                                mapId,
-                                setMapId,
-                                policyResolution,
-                                setPolicyResolution,
-                                fill,
-                              }}
-                            />,
-                            <>
-                              {[
-                                // fill metric radio toggle
-                                fill !== null && (
-                                  <RadioToggle
-                                    {...{
-                                      // TODO define choices based on current mapType
-                                      setInfoTooltipContent:
-                                        props.setInfoTooltipContent,
-                                      tooltipPlace: "left",
-                                      choices: allMapMetrics[mapId]
-                                        .filter(d => d.for.includes("fill"))
-                                        .map(d => {
-                                          return {
-                                            value: d.id,
-                                            name:
-                                              metricMeta[d.id]
-                                                .metric_displayname,
-                                            wideTooltip:
-                                              d.id === "lockdown_level",
-                                            tooltip:
-                                              metricMeta[d.id]
-                                                .metric_definition,
-                                          };
-                                        }),
-                                      curVal: fill,
-                                      callback: setFill,
-                                      label: viewLabel,
-                                      key: "DataType",
-                                    }}
-                                  />
-                                ),
-                                // Filter set containing the filters specified in `filterDefs`
-                                <>
-                                  {(fill === "policy_status" ||
-                                    fill === "policy_status_counts") && (
-                                    <div className={styles.indented}>
-                                      <FilterSet
-                                        {...{
-                                          filterDefs,
-                                          filters,
-                                          setFilters,
-                                          // if true, the selected filters bay will show
-                                          // TODO style selected filters bay
-                                          showSelectedFilters: false,
-                                          vertical: true,
-                                          key: "FilterSet",
-                                        }}
-                                      />
-                                    </div>
-                                  )}
-                                </>,
-
-                                // circle metric radio toggle
-                                <div className={styles.circleToggle}>
-                                  <label>COVID-19 cases</label>
-                                  <div
-                                    onChange={e => {
-                                      setCircle(
-                                        e.target.value === "show"
-                                          ? defaults[mapId].circle
-                                          : null
-                                      );
-                                    }}
-                                  >
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        value="show"
-                                        name="casecount"
-                                        defaultChecked={
-                                          defaults[mapId].showCircle !== false
-                                        }
-                                      />{" "}
-                                      <span>Show</span>
-                                    </label>
-                                    <br />
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        value="hide"
-                                        name="casecount"
-                                        defaultChecked={
-                                          defaults[mapId].showCircle === false
-                                        }
-                                      />{" "}
-                                      <span>Hide</span>
-                                    </label>
-                                  </div>
-
-                                  {circle !== null && (
-                                    <>
-                                      <div
-                                        className={styles.selectTooltipHolder}
-                                      >
-                                        <select
-                                          onChange={e => {
-                                            setCircle(e.target.value);
-                                          }}
-                                        >
-                                          {allMapMetrics[mapId]
-                                            .filter(d =>
-                                              d.for.includes("circle")
-                                            )
-                                            .map(d => (
-                                              <option
-                                                key={d.id}
-                                                value={d.id}
-                                                selected={
-                                                  circle.toString() ===
-                                                  d.id.toString()
-                                                }
-                                              >
-                                                {
-                                                  metricMeta[d.id]
-                                                    .metric_displayname
-                                                }
-                                              </option>
-                                            ))}
-                                        </select>
-                                        <InfoTooltip
-                                          text={
-                                            metricMeta[circle].metric_definition
-                                          }
-                                          setInfoTooltipContent={
-                                            props.setInfoTooltipContent
-                                          }
-                                          place={"left"}
-                                        />
-                                      </div>
-
-                                      {
-                                        // // lin or log scale toggle
-                                        // // currently disabled
-                                        // <select
-                                        //   onChange={e => {
-                                        //     setLinCircleScale(
-                                        //       e.target.value === "linear"
-                                        //         ? true
-                                        //         : false
-                                        //     );
-                                        //   }}
-                                        // >
-                                        //   <option
-                                        //     value="linear"
-                                        //     selected={linCircleScale}
-                                        //   >
-                                        //     Linear scale
-                                        //   </option>
-                                        //   <option
-                                        //     value="log"
-                                        //     selected={!linCircleScale}
-                                        //   >
-                                        //     Log scale
-                                        //   </option>
-                                        // </select>
-                                      }
-                                    </>
-                                  )}
-                                </div>,
-                              ].map(d => d)}
-                            </>,
-                          ],
-                        }}
-                      />
-                    }
-                    {
-                      <DateSlider
-                        {...{
-                          label:
-                            "View policies and cases over the course of the outbreak",
-                          date,
-                          setDate,
-                          float: true,
-                          // { minDate: YYYY-MM-DD, maxDate: YYYY-MM-DD }
-                          ...defaults.minMaxDate,
-                          key: "DateSlider",
-                        }}
-                      />
+                      <PanelSet height={"calc(100% - 50px)"}>
+                        <AmpMapLegendPanel />
+                        <AmpMapDatePanel
+                          {...{ date, setDate, ...defaults.minMaxDate }}
+                        />
+                        <AmpMapOptionsPanel />
+                      </PanelSet>
+                      // <OptionsMenu
+                      //   {...{
+                      //     allowDesktop: false,
+                      //     defaultOpen: true,
+                      //     toggleText: open =>
+                      //       open ? (
+                      //         <span>
+                      //           <span>hide options</span>
+                      //           {arrow}
+                      //         </span>
+                      //       ) : (
+                      //         <span>
+                      //           <span>show options</span>
+                      //           {arrow}
+                      //         </span>
+                      //       ),
+                      //     content: [
+                      //       <div className={styles.mapOptionsTitle}>
+                      //         Map options
+                      //       </div>,
+                      //       <MapIdToggle
+                      //         setInfoTooltipContent={
+                      //           props.setInfoTooltipContent
+                      //         }
+                      //         {...{
+                      //           mapId,
+                      //           setMapId,
+                      //           policyResolution,
+                      //           setPolicyResolution,
+                      //           fill,
+                      //         }}
+                      //       />,
+                      //       <>
+                      //         {[
+                      //           // fill metric radio toggle
+                      //           fill !== null && (
+                      //             <RadioToggle
+                      //               {...{
+                      //                 // TODO define choices based on current mapType
+                      //                 setInfoTooltipContent:
+                      //                   props.setInfoTooltipContent,
+                      //                 tooltipPlace: "left",
+                      //                 choices: allMapMetrics[mapId]
+                      //                   .filter(d => d.for.includes("fill"))
+                      //                   .map(d => {
+                      //                     return {
+                      //                       value: d.id,
+                      //                       name:
+                      //                         metricMeta[d.id]
+                      //                           .metric_displayname,
+                      //                       wideTooltip:
+                      //                         d.id === "lockdown_level",
+                      //                       tooltip:
+                      //                         metricMeta[d.id]
+                      //                           .metric_definition,
+                      //                     };
+                      //                   }),
+                      //                 curVal: fill,
+                      //                 callback: setFill,
+                      //                 label: viewLabel,
+                      //                 key: "DataType",
+                      //               }}
+                      //             />
+                      //           ),
+                      //           // Filter set containing the filters specified in `filterDefs`
+                      //           <>
+                      //             {(fill === "policy_status" ||
+                      //               fill === "policy_status_counts") && (
+                      //               <div className={styles.indented}>
+                      //                 <FilterSet
+                      //                   {...{
+                      //                     filterDefs,
+                      //                     filters,
+                      //                     setFilters,
+                      //                     // if true, the selected filters bay will show
+                      //                     // TODO style selected filters bay
+                      //                     showSelectedFilters: false,
+                      //                     vertical: true,
+                      //                     key: "FilterSet",
+                      //                   }}
+                      //                 />
+                      //               </div>
+                      //             )}
+                      //           </>,
+                      //           // circle metric radio toggle
+                      //           <div className={styles.circleToggle}>
+                      //             <label>COVID-19 cases</label>
+                      //             <div
+                      //               onChange={e => {
+                      //                 setCircle(
+                      //                   e.target.value === "show"
+                      //                     ? defaults[mapId].circle
+                      //                     : null
+                      //                 );
+                      //               }}
+                      //             >
+                      //               <label>
+                      //                 <input
+                      //                   type="radio"
+                      //                   value="show"
+                      //                   name="casecount"
+                      //                   defaultChecked={
+                      //                     defaults[mapId].showCircle !== false
+                      //                   }
+                      //                 />{" "}
+                      //                 <span>Show</span>
+                      //               </label>
+                      //               <br />
+                      //               <label>
+                      //                 <input
+                      //                   type="radio"
+                      //                   value="hide"
+                      //                   name="casecount"
+                      //                   defaultChecked={
+                      //                     defaults[mapId].showCircle === false
+                      //                   }
+                      //                 />{" "}
+                      //                 <span>Hide</span>
+                      //               </label>
+                      //             </div>
+                      //             {circle !== null && (
+                      //               <>
+                      //                 <div
+                      //                   className={styles.selectTooltipHolder}
+                      //                 >
+                      //                   <select
+                      //                     onChange={e => {
+                      //                       setCircle(e.target.value);
+                      //                     }}
+                      //                   >
+                      //                     {allMapMetrics[mapId]
+                      //                       .filter(d =>
+                      //                         d.for.includes("circle")
+                      //                       )
+                      //                       .map(d => (
+                      //                         <option
+                      //                           key={d.id}
+                      //                           value={d.id}
+                      //                           selected={
+                      //                             circle.toString() ===
+                      //                             d.id.toString()
+                      //                           }
+                      //                         >
+                      //                           {
+                      //                             metricMeta[d.id]
+                      //                               .metric_displayname
+                      //                           }
+                      //                         </option>
+                      //                       ))}
+                      //                   </select>
+                      //                   <InfoTooltip
+                      //                     text={
+                      //                       metricMeta[circle].metric_definition
+                      //                     }
+                      //                     setInfoTooltipContent={
+                      //                       props.setInfoTooltipContent
+                      //                     }
+                      //                     place={"left"}
+                      //                   />
+                      //                 </div>
+                      //                 {
+                      //                   // // lin or log scale toggle
+                      //                   // // currently disabled
+                      //                   // <select
+                      //                   //   onChange={e => {
+                      //                   //     setLinCircleScale(
+                      //                   //       e.target.value === "linear"
+                      //                   //         ? true
+                      //                   //         : false
+                      //                   //     );
+                      //                   //   }}
+                      //                   // >
+                      //                   //   <option
+                      //                   //     value="linear"
+                      //                   //     selected={linCircleScale}
+                      //                   //   >
+                      //                   //     Linear scale
+                      //                   //   </option>
+                      //                   //   <option
+                      //                   //     value="log"
+                      //                   //     selected={!linCircleScale}
+                      //                   //   >
+                      //                   //     Log scale
+                      //                   //   </option>
+                      //                   // </select>
+                      //                 }
+                      //               </>
+                      //             )}
+                      //           </div>,
+                      //         ].map(d => d)}
+                      //       </>,
+                      //     ],
+                      //   }}
+                      // />
                     }
                   </>
                 ),

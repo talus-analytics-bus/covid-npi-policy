@@ -1,0 +1,66 @@
+@import "src/assets/styles/vars.scss";
+.mapPanel {
+    .tab,
+    .body {
+        padding: 10px;
+        font-size: 1rem;
+        border: solid $light-gray-4 1px;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+    .tab {
+        border-bottom-width: 0;
+        font-family: Rawline, serif;
+        font-style: normal;
+        font-weight: bold;
+        line-height: 1.375rem;
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        &.fit {
+            max-width: fit-content;
+        }
+        .caret {
+            margin-left: 20px;
+            transform: rotate(90deg) scaleX(1) scaleY(1.5);
+            transition: 0.25s transform ease;
+            font-size: 1rem;
+            justify-self: flex-end;
+            &.up {
+                transform: rotate(90deg) scaleX(-1) scaleY(1.5);
+            }
+        }
+    }
+}
+.panelSet {
+    display: grid;
+    grid-auto-flow: column;
+    overflow: hidden;
+    align-items: flex-end;
+    position: absolute;
+    z-index: 1000000000; // TODO elegantly
+    width: 100%;
+    bottom: 0;
+    pointer-events: none;
+    * {
+        pointer-events: all;
+    }
+
+    .mapPanel {
+        position: relative;
+        transition: bottom 0.5s ease;
+        .body {
+            border-right-color: transparent;
+        }
+        &.maxHeight {
+            align-self: flex-start;
+            height: 100%;
+        }
+        &:first-of-type > .body {
+            border-left-color: transparent;
+        }
+        &:last-of-type > .body {
+            border-right-width: 0;
+        }
+    }
+}

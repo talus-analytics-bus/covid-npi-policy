@@ -14,25 +14,21 @@ import styles from "./mapboxmap.module.scss";
 
 // 3rd party packages
 import ReactMapGL, { NavigationControl, Popup } from "react-map-gl";
-import classNames from "classnames";
 import * as d3 from "d3/dist/d3.min";
 
 // local modules
-import { metricMeta } from "./plugins/data";
 import { dataGetter } from "./plugins/dataGetter.tsx";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
-import { isEmpty, getAndListString } from "../../misc/Util";
+import { isEmpty } from "../../misc/Util";
 import { parseStringSafe } from "../../misc/UtilsTyped";
 import ResetZoom from "./resetZoom/ResetZoom";
-
-// common components
-import { Legend, ShowMore } from "..";
 
 // context
 import MapOptionContext from "../../views/map/context/MapOptionContext";
 import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
+import { AmpMapLegendPanel } from "components/views/map/content/AmpMapLegendPanel/AmpMapLegendPanel";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -244,48 +240,6 @@ const MapboxMap = ({
         );
       }
     });
-  };
-
-  const getFillLegendName = ({ filters, fill }) => {
-    const isLockdownLevel = fill === "lockdown_level";
-
-    const nouns = getMapNouns(mapId);
-
-    // prepend "sub-" if subgeo policies are being viewed
-    if (plugins.policyResolution === "subgeo")
-      nouns.level = "sub-" + nouns.level;
-
-    const isPolicyStatus = fill === "policy_status";
-    const isPolicyStatusCounts = fill === "policy_status_counts";
-
-    if (isLockdownLevel) {
-      return `Distancing level at ${nouns.level.toLowerCase()} level on ${date.format(
-        "MMM D, YYYY"
-      )}`;
-    } else if (isPolicyStatus) {
-      const category = filters["primary_ph_measure"][0].toLowerCase();
-      const subcategory = !isEmpty(filters["ph_measure_details"])
-        ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
-        : undefined;
-      const prefix = nouns.plural + " with at least one policy in effect for ";
-      const suffix = ` on ${date.format("MMM D, YYYY")}`;
-      if (subcategory !== undefined) {
-        return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
-      } else return prefix + category + suffix;
-    } else if (isPolicyStatusCounts) {
-      const category = filters["primary_ph_measure"][0].toLowerCase();
-      const subcategory = !isEmpty(filters["ph_measure_details"])
-        ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
-        : undefined;
-
-      const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
-      const suffix = ` on ${date.format("MMM D, YYYY")}`;
-      if (subcategory !== undefined) {
-        return (
-          <ShowMore text={prefix + subcategory + suffix} charLimit={120} />
-        );
-      } else return prefix + category + suffix;
-    }
   };
 
   /**
@@ -819,75 +773,6 @@ const MapboxMap = ({
           {
             // map legend
           }
-          <div
-            className={classNames(styles.legend, {
-              [styles.show]: showLegend,
-            })}
-          >
-            <button
-              onClick={e => {
-                // toggle legend show / hide on button click
-                e.stopPropagation();
-                e.preventDefault();
-                setShowLegend(!showLegend);
-              }}
-            >
-              {showLegend ? "hide legend" : "show legend"}
-              <i
-                className={classNames("material-icons", {
-                  [styles.flipped]: showLegend,
-                })}
-              >
-                play_arrow
-              </i>
-            </button>
-            {
-              <div className={classNames(styles.entries, {})}>
-                {
-                  // fill legend entry
-                  // note: legend entries are listed in reverse order
-                }
-                {circle !== null && (
-                  <Legend
-                    {...{
-                      setInfoTooltipContent: props.setInfoTooltipContent,
-                      className: "mapboxLegend",
-                      key: "basemap - quantized - " + circle,
-                      metric_definition: metricMeta[circle].metric_definition,
-                      metric_displayname: (
-                        <span>
-                          {metricMeta[circle].metric_displayname}
-                          {!linCircleScale ? " (log scale)" : ""}
-                        </span>
-                      ),
-                      ...metricMeta[circle].legendInfo.circle,
-                    }}
-                  />
-                )}
-                {
-                  // circle legend entry
-                }
-                {fill !== null && (
-                  <Legend
-                    {...{
-                      setInfoTooltipContent: props.setInfoTooltipContent,
-                      className: "mapboxLegend",
-                      key: "bubble - linear - " + fill,
-                      metric_definition: metricMeta[fill].metric_definition,
-                      wideDefinition: metricMeta[fill].wideDefinition,
-                      metric_displayname: (
-                        <span>{getFillLegendName({ filters, fill })}</span>
-                      ),
-                      ...metricMeta[fill].legendInfo.fill(
-                        mapId,
-                        plugins.policyResolution
-                      ),
-                    }}
-                  />
-                )}
-              </div>
-            }
-          </div>
           {showReset && <ResetZoom handleClick={resetViewport} />}
           {
             // map zoom plus and minus buttons
@@ -911,7 +796,7 @@ export default MapboxMap;
 
 function getMinMaxVals(data, key) {
   const curSeries = data[key];
-  if (curSeries.max_all_time !== undefined) {
+  if (curSeries.max_all_time !== undefined && curSeries.max_all_time !== null) {
     return [curSeries.min_all_time.value, curSeries.max_all_time.value];
   } else
     return [d3.min(data[key], d => d.value), d3.max(data[key], d => d.value)];

@@ -1,5 +1,6 @@
 import { Numeric } from "d3";
 import { Moment } from "moment";
+import { ReactElement } from "react-transition-group/node_modules/@types/react";
 
 export type PolicyResolution = "geo" | "subgeo";
 export type FeatureState = Record<string, any>;
@@ -64,6 +65,19 @@ export type NumericObservation = {
   date_time: string;
   value: Numeric | number | null | undefined;
 };
+
+export type MetricMetaEntry = {
+  metric_definition: ReactElement;
+  metric_displayname: string;
+  shortName?: ReactElement;
+  value: Function;
+  unit: Function;
+  trendTimeframe?: ReactElement;
+  legendInfo: Record<string, any>;
+  wideDefinition?: boolean;
+};
+
+export type MetricMeta = Record<string, MetricMetaEntry>;
 
 /**
  * Map metric attributes used to query for metrics.
