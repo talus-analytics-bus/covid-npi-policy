@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import {
   loadPolicySearch,
@@ -119,13 +119,15 @@ const ListPoliciesPage = props => {
       <section className={styles.chartAndMap}>
         <SnapshotChartSection />
         {iso3 !== "Unspecified" && (
-          <div className={styles.miniMapHolder}>
+          <figure className={styles.miniMapHolder}>
+            <figcaption>{locationName}</figcaption>
             <MiniMap.SVG
               country={iso3}
               state={state}
               counties={miniMapCounties.current}
             />
-          </div>
+            <Link to="/policymaps">View on the United States map</Link>
+          </figure>
         )}
       </section>
       <section className={styles.introSection}></section>
