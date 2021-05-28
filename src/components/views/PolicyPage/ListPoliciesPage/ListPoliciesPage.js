@@ -164,7 +164,7 @@ const ListPoliciesPage = props => {
       <IntroSection />
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
-          {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
+          {iso3 !== "Unspecified" && <h2>Find a policy</h2>}
           <PolicyFilterBar />
 
           {!searchActive && (

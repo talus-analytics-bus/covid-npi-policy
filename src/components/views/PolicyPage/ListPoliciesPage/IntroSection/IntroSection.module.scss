@@ -1,6 +1,8 @@
 .introSection {
   flex-basis: 75%;
   padding-right: 2rem;
+  border-bottom: 1px solid #c4c4c4;
+  margin-bottom: 2rem;
 
   h1 {
     margin-top: 2rem;
@@ -12,7 +14,7 @@
   }
 
   p {
-    margin-top: 3rem;
+    margin-top: 1rem;
     font-size: 1.3rem;
   }
 
@@ -75,6 +77,6 @@
   }
 
   .introParagraph {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
   }
 }
