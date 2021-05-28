@@ -577,21 +577,21 @@ function MapIdToggle(props) {
             value,
             name,
             tooltip,
-            children: showChildren(props.mapId, props.fill, value) ? (
-              <RadioToggle
-                choices={[
-                  { value: "geo", label: `${noun}-level policies` },
-                  {
-                    value: "subgeo",
-                    label: `Sub-${noun.toLowerCase()}-level policies`,
-                  },
-                ]}
-                curVal={props.policyResolution}
-                callback={props.setPolicyResolution}
-              />
-            ) : (
-              undefined
-            ),
+            // children: showChildren(props.mapId, props.fill, value) ? (
+            //   <RadioToggle
+            //     choices={[
+            //       { value: "geo", label: `${noun}-level policies` },
+            //       {
+            //         value: "subgeo",
+            //         label: `Sub-${noun.toLowerCase()}-level policies`,
+            //       },
+            //     ]}
+            //     curVal={props.policyResolution}
+            //     callback={props.setPolicyResolution}
+            //   />
+            // ) : (
+            //   undefined
+            // ),
           };
         }),
         curVal: props.mapId,
