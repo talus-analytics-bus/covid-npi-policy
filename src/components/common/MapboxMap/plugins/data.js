@@ -66,7 +66,7 @@ export const defaults = {
     circle: "77",
     // fill: "lockdown_level",
     fill: "policy_status_counts",
-    priorLayer: "country-label",
+    priorLayer: "state-label",
   },
 };
 
