@@ -107,7 +107,14 @@ const ListPoliciesPage = props => {
   const miniMapCounties = React.useRef(["Unspecified"]);
 
   return (
-    <article>
+    <article className={styles.listPoliciesPage}>
+      <header>
+        {locationName !== iso3 ? (
+          <h1>{locationName} COVID-19 Policies</h1>
+        ) : (
+          <h1>&nbsp;</h1>
+        )}
+      </header>
       <section className={styles.introSection}>
         <IntroSection />
         {iso3 !== "Unspecified" && (
