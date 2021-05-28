@@ -156,7 +156,7 @@ const PolicyRouter = props => {
         setCaseload(
           response.map(point => ({
             date: new Date(point.date_time.split(" ")[0]),
-            value: point.value,
+            value: Math.max(point.value, 0),
           }))
         );
 
