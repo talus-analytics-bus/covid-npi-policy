@@ -58,9 +58,11 @@ const SnapshotChart = ({ policySummaryObject }) => {
       viewBox={`0 0 ${dim.width} ${dim.height}`}
       // style={{ border: "1px solid black" }}
     >
-      {Object.entries(policySummaryObject).map(([category, bar], index) => (
-        <Bar key={category} {...{ category, bar, index, dim }} />
-      ))}
+      {Object.entries(policySummaryObject)
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([category, bar], index) => (
+          <Bar key={category} {...{ category, bar, index, dim }} />
+        ))}
       <path
         style={{ stroke: "#C4C4C4", strokeWidth: 0.5 }}
         d={`
