@@ -150,7 +150,7 @@ const ListPoliciesPage = props => {
               )}
               <figure>
                 <PolicyEnvironmentPlot />
-                <CaseloadPlot />
+                {/* <CaseloadPlot /> */}
                 <figcaption>
                   Caseload Source:{" "}
                   <a

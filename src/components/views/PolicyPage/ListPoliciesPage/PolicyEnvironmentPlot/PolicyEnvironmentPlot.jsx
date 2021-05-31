@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { scaleTime, scaleLinear, line } from "d3";
+import { useParams } from "react-router-dom";
 
 import Axes from "./Axes/Axes";
 import Slider from "./Slider/Slider";
@@ -7,6 +8,8 @@ import Slider from "./Slider/Slider";
 import styles from "./PolicyEnvironmentPlot.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
+
+import { Policy } from "../../../../misc/Queries";
 
 const rollingAverage = (series, windowSize) => {
   const padded = [...Array(windowSize).fill(0), ...series];
@@ -45,6 +48,50 @@ const PolicyEnvironmentPlot = ({ path }) => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;
+
+  const { iso3, state } = useParams();
+
+  const [policiesByDate, setPoliciesByDate] = useState();
+
+  useEffect(() => {
+    const getPolicies = async () => {
+      const policyResponse = await Policy({
+        method: "post",
+        filters: {
+          iso3: [iso3],
+          ...(state !== "national" && { area1: [state] }),
+        },
+        ordering: [["date_start_effective", "asc"]],
+        fields: ["id", "primary_ph_measure", "date_start_effective"],
+      });
+
+      const byDate = {};
+      policyResponse.data.forEach(policy => {
+        if (!byDate[policy.date_start_effective])
+          byDate[policy.date_start_effective] = {
+            [policy.primary_ph_measure]: [policy.id],
+          };
+        else if (
+          !byDate[policy.date_start_effective][policy.primary_ph_measure]
+        )
+          byDate[policy.date_start_effective][policy.primary_ph_measure] = [
+            policy.id,
+          ];
+        else
+          byDate[policy.date_start_effective] = {
+            ...byDate[policy.date_start_effective],
+            [policy.primary_ph_measure]: [
+              ...byDate[policy.date_start_effective][policy.primary_ph_measure],
+              policy.id,
+            ],
+          };
+      });
+
+      setPoliciesByDate(byDate);
+    };
+
+    getPolicies();
+  }, [iso3, state]);
 
   // layout
   const [constDim, setConstDim] = React.useState({
@@ -199,6 +246,8 @@ const PolicyEnvironmentPlot = ({ path }) => {
     setDragStartX(0);
   };
 
+  console.log(policiesByDate);
+
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
@@ -209,30 +258,30 @@ const PolicyEnvironmentPlot = ({ path }) => {
       onMouseMove={handleDrag}
       onMouseUp={handleDragEnd}
     >
-      {/* Visualize padding zone for testing */}
       <g className={styles.background}>
-        <rect
-          x={dim.paddingLeft}
-          y={dim.paddingTop}
-          width={dim.width - dim.paddingLeft - dim.paddingRight}
-          height={dim.height - dim.paddingTop - dim.paddingBottom}
-          style={{
-            stroke: "grey",
-            strokeWidth: 1,
-            fill: "none",
-          }}
-        />
-        <rect
-          x={0}
-          y={0}
-          width={dim.width}
-          height={dim.height}
-          style={{
-            stroke: "grey",
-            strokeWidth: 1,
-            fill: "none",
-          }}
-        />
+        {/* Visualize padding zone for testing */}
+        {/* <rect */}
+        {/*   x={dim.paddingLeft} */}
+        {/*   y={dim.paddingTop} */}
+        {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
+        {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
+        {/*   style={{ */}
+        {/*     stroke: "grey", */}
+        {/*     strokeWidth: 1, */}
+        {/*     fill: "none", */}
+        {/*   }} */}
+        {/* /> */}
+        {/* <rect */}
+        {/*   x={0} */}
+        {/*   y={0} */}
+        {/*   width={dim.width} */}
+        {/*   height={dim.height} */}
+        {/*   style={{ */}
+        {/*     stroke: "grey", */}
+        {/*     strokeWidth: 1, */}
+        {/*     fill: "none", */}
+        {/*   }} */}
+        {/* /> */}
         <Axes dim={dim} scale={scale} />
         <g className={styles.dailyLines}>
           {caseload &&
@@ -252,14 +301,42 @@ const PolicyEnvironmentPlot = ({ path }) => {
             ))}
         </g>
         <path d={averageLinePath} className={styles.averageLine} />
+        {scale &&
+          policiesByDate &&
+          Object.entries(policiesByDate)
+            .map(([date, categories]) => {
+              const xPos = scale.x(new Date(date));
+              let count = 0;
+              const vSpacing = 5;
+              return Object.values(categories).map(policies =>
+                policies.map(policy => {
+                  count = count + 1;
+                  return (
+                    <circle
+                      style={{
+                        fill: "rgba(2, 63, 136, 1)",
+                        stroke: "white",
+                        strokeWidth: "0",
+                      }}
+                      cx={xPos}
+                      cy={dim.yAxis.end.y - (count - 1) * vSpacing}
+                      r={2}
+                    />
+                  );
+                })
+              );
+            })
+            .flat()}
       </g>
-      <g
-        className={styles.sliderGroup}
-        onMouseDown={handleDragStart}
-        style={{ transform: `translateX(${sliderX}px)` }}
-      >
-        <Slider {...{ dim }} />
-      </g>
+      {caseload && (
+        <g
+          className={styles.sliderGroup}
+          onMouseDown={handleDragStart}
+          style={{ transform: `translateX(${sliderX}px)` }}
+        >
+          <Slider {...{ dim }} />
+        </g>
+      )}
     </svg>
   );
 };
