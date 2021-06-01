@@ -780,7 +780,7 @@ const MapboxMap = ({
           <div
             style={{
               position: "absolute",
-              bottom: "3px",
+              top: "3px",
               left: "5px",
               padding: 0,
             }}
