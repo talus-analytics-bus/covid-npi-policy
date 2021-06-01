@@ -1,2 +1,3 @@
 import OptionRadioSet from "./OptionRadioSet/OptionRadioSet";
-export { OptionRadioSet };
+import OptionCheckboxSet from "./OptionCheckboxSet/OptionCheckboxSet";
+export { OptionRadioSet, OptionCheckboxSet };

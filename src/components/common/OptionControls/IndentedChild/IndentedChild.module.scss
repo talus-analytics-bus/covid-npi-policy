@@ -1,6 +1,6 @@
 @import "src/assets/styles/vars.scss";
 .indentedChild {
-    margin-left: calc(0.5rem - 2px);
-    padding: 0.5rem 0 0 0.5rem;
+    margin-left: 6px;
+    padding: 1rem 0 0 1rem;
     border-left: 1px solid $light-gray-4;
 }

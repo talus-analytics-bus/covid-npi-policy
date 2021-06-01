@@ -13,7 +13,7 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
 }) => {
   return (
     <div className={styles.optionRadioSet}>
-      {title && <span>{title}</span>}
+      {title && <div className={styles.title}>{title}</div>}
       <section
         onChange={e => {
           // prevent events from propagating up to parent radio sets, if any

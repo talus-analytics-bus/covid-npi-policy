@@ -10,9 +10,10 @@ import {
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import styles from "./AmpMapLegendPanel.module.scss";
-import { getAndListString, isEmpty } from "components/misc/Util";
+import { getAndListString, isEmpty, getInitCap } from "components/misc/Util";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
+import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/PolicyCount";
 
 type ComponentProps = {
   setInfoTooltipContent: Function;
@@ -135,6 +136,21 @@ const getFillLegendName: Function = ({
       return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
     } else return prefix + category + suffix;
   } else if (isPolicyStatusCounts) {
+    if (
+      filters["primary_ph_measure"] === undefined ||
+      filters["primary_ph_measure"].length === 0
+    )
+      return `Policies in effect at ${nouns.level} level on ${date.format(
+        "MMM D, YYYY"
+      )}`;
+    else {
+      const desc = getPolicyCatSubcatPhrase(
+        filters["primary_ph_measure"] || [],
+        filters["ph_measure_details"] || [],
+        "policies"
+      ).trim();
+      return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
+    }
     const category = filters["primary_ph_measure"][0].toLowerCase();
     const subcategory = !isEmpty(filters["ph_measure_details"])
       ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()

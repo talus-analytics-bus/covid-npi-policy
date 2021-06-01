@@ -2,7 +2,7 @@ import { InfoTooltip } from "components/common";
 import React, { FC, useState } from "react";
 import styles from "../../OptionControls.module.scss";
 import { Option } from "../../types";
-import { IndentedChild } from "./IndentedChild/IndentedChild";
+import { IndentedChild } from "../../IndentedChild/IndentedChild";
 import classNames from "classnames";
 
 export const OptionRadio: FC<Option> = ({

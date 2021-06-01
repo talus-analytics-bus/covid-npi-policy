@@ -1,6 +1,9 @@
 import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel";
 import { OptionDrawer } from "components/common/MapOptions";
-import { OptionRadioSet } from "components/common/OptionControls";
+import {
+  OptionRadioSet,
+  OptionCheckboxSet,
+} from "components/common/OptionControls";
 import { Option } from "components/common/OptionControls/types";
 import React, { FC, ReactElement, useContext, useState } from "react";
 import {
@@ -89,16 +92,56 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
    */
   const updateFilters = (
     key: "primary_ph_measure" | "ph_measure_details",
-    selected: Option[]
+    selected: Option[],
+    options: Option[],
+    allSubOptions: Option[]
   ): void => {
     const newFilters = {
       [key]: selected.map(o => o.value),
+      // .filter(o => options.find(oo => oo.value === o)),
     };
+    const oldFilters: string[] =
+      filters !== undefined && filters[key] !== undefined
+        ? filters[key].filter((v: string) => !options.find(o => o.value === v))
+        : [];
+    newFilters[key] = newFilters[key].concat(oldFilters);
+    if (key === "primary_ph_measure") {
+      // keep only subfilters that match current main filters
+      if (
+        filters !== undefined &&
+        filters.ph_measure_details !== undefined &&
+        filters.ph_measure_details.length > 0
+      ) {
+        const newSubFilters: string[] = [];
+        filters.ph_measure_details.forEach((subcat: string | number) => {
+          const subcatOption: Option | undefined = allSubOptions.find(
+            o => o.value === subcat
+          );
+          if (subcatOption !== undefined) {
+            const parentCat: Option | undefined = options.find(
+              o => o.value === subcatOption.parent
+            );
+            if (
+              parentCat !== undefined &&
+              newFilters.primary_ph_measure.includes(parentCat.value)
+            )
+              newSubFilters.push(subcat as string);
+          }
+        });
+        newFilters.ph_measure_details = newSubFilters;
+        // newFilters.primary_ph_measure.forEach((cat: string | number) => {
+        //   const catSubCats: Option[] = allSubOptions.filter(
+        //     o => o.parent === cat
+        //   );
+        // });
+      }
+    }
     if (setFilters !== undefined) setFilters({ ...filters, ...newFilters });
   };
 
   const fillSubOptions: ReactElement = (
-    <OptionRadioSet
+    <OptionCheckboxSet
+      title={"Policy category"}
       options={categoryOptions.map(o => {
         const curCatSubcats: Option[] = subcategoryOptions.filter(
           so => so.parent === o.value
@@ -107,7 +150,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         const newChild: Option = {
           ...o,
           child: (
-            <OptionRadioSet
+            <OptionCheckboxSet
+              title={"Subcategory"}
               options={curCatSubcats}
               selectedOptions={curCatSubcats.filter(
                 o =>
@@ -116,8 +160,15 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                   filters.ph_measure_details.includes(o.value)
               )}
               callback={selected =>
-                updateFilters("ph_measure_details", selected)
+                updateFilters(
+                  "ph_measure_details",
+                  selected,
+                  curCatSubcats,
+                  subcategoryOptions
+                )
               }
+              field={"ph_measure_details-" + o.value}
+              emptyMeansAll={true}
             />
           ),
         };
@@ -129,7 +180,15 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           filters.primary_ph_measure !== undefined &&
           filters.primary_ph_measure.includes(o.value)
       )}
-      callback={selected => updateFilters("primary_ph_measure", selected)}
+      callback={selected =>
+        updateFilters(
+          "primary_ph_measure",
+          selected,
+          categoryOptions,
+          subcategoryOptions
+        )
+      }
+      field={"primary_ph_measure"}
     />
   );
 

@@ -171,7 +171,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // currently selected filters
   const [filters, setFilters] = useState({
-    primary_ph_measure: ["Social distancing"],
+    // primary_ph_measure: ["Social distancing"],
   });
   const prevFilters = usePrevious(filters);
 

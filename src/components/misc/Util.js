@@ -228,6 +228,9 @@ export const isLightColor = color => {
 export const getInitLower = str => {
   return str.charAt(0).toLowerCase() + str.slice(1, str.length);
 };
+export const getInitCap = str => {
+  return str.charAt(0).toUpperCase() + str.slice(1, str.length);
+};
 
 /**
  * Returns the series of integers from `start` to `end`, inclusive.

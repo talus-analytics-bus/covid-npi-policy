@@ -65,7 +65,7 @@ export default PolicyCount;
  * @param noun Plurality of policy noun to use
  * @returns {string} String expressing cats. / subcats. of policy selected
  */
-const getPolicyCatSubcatPhrase: Function = (
+export const getPolicyCatSubcatPhrase: Function = (
   categories: string[] = [],
   subcategories: string[] = [],
   noun: "policies" | "policy"
@@ -74,7 +74,9 @@ const getPolicyCatSubcatPhrase: Function = (
   const nSubcats: number = subcategories.length;
   const nCats: number = categories.length;
 
-  if (nCats === 1 && nSubcats === 0) {
+  if (nCats === 0 && nSubcats === 0) {
+    return `${noun} in effect`;
+  } else if (nCats === 1 && nSubcats === 0) {
     // one category, zero subcat
     return categories[0].toLowerCase() + suffix;
   } else if (nCats === 1 && nSubcats === 1) {

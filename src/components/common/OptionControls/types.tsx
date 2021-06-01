@@ -39,6 +39,11 @@ export interface Option {
    * Indented child element shown only when this option is selected.
    */
   readonly child?: ReactElement;
+
+  /**
+   * The data field with which this option is associated.
+   */
+  readonly field?: string;
 }
 
 export interface OptionWidget {
