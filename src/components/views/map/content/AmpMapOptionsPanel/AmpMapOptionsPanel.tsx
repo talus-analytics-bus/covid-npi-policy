@@ -21,7 +21,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   /**
    * The possible geographic resolutions of map that can be viewed.
    */
-  const geoOptions = [
+  const geoOptions: Option[] = [
     {
       name: "Countries",
       value: "global",
@@ -34,6 +34,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         "View data for the United States at the state or county level",
       child: (
         <OptionRadioSet
+          key={"subGeoToggle"}
           options={usSubGeoOptions}
           callback={selected => setMapId(selected[0].value as string)}
           selectedOptions={usSubGeoOptions.filter(o => o.value === mapId)}
@@ -56,9 +57,14 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
     >
       <OptionDrawer title={"Geographic resolution"}>
         <OptionRadioSet
+          key={"geoToggle"}
           options={geoOptions}
-          callback={selected => setMapId(selected[0].value as string)}
-          selectedOptions={geoOptions.filter(o => mapId.startsWith(o.value))}
+          callback={selected => {
+            setMapId(selected[0].value as string);
+          }}
+          selectedOptions={geoOptions.filter(o =>
+            mapId.startsWith(o.value as string)
+          )}
         />
       </OptionDrawer>
       <OptionDrawer title={"View states by"}>

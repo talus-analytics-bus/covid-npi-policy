@@ -1,4 +1,7 @@
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import {
+  ChangeEvent,
+  ReactElement,
+} from "react-transition-group/node_modules/@types/react";
 
 export interface Option {
   /**
@@ -16,11 +19,11 @@ export interface Option {
    */
   selectedOptions?: Option[];
 
-  /**
-   * True if this option is a default selection, false otherwise. The first one
-   * will be used if there is no default.
-   */
-  readonly isDefault?: boolean;
+  // /**
+  //  * Change event handler function called when input changes.
+  //  * @param e {React.ChangeEvent<HTMLInputElement>} Change event
+  //  */
+  // onChange(e: ChangeEvent<HTMLInputElement>): void;
 
   /**
    * A description of the option that will be shown as a tooltip.

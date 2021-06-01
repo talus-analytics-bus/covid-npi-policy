@@ -25,24 +25,27 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
   return (
     <div className={styles.optionRadioSet}>
       {title && <span>{title}</span>}
-      <section>
+      <section
+        onChange={e => {
+          // prevent events from propagating up to parent radio sets, if any
+          e.stopPropagation();
+
+          // get click element value
+          const el: HTMLInputElement = e.target as HTMLInputElement;
+
+          // set selected options to option with that value
+          const newSelectedOptions: Option[] = options.filter(
+            o => o.value === el.value
+          );
+          callback(newSelectedOptions);
+        }}
+      >
         {options.map(o => (
           <OptionRadio
             {...{
               ...o,
               selectedOptions,
               key: o.value,
-              onChange: e => {
-                // get click element value
-                console.log(e.target);
-                const el: HTMLInputElement = e.target as HTMLInputElement;
-
-                // set selected options to option with that value
-                const newSelectedOptions: Option[] = options.filter(
-                  o => o.value === el.value
-                );
-                callback(newSelectedOptions);
-              },
             }}
           />
         ))}
