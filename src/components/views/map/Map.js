@@ -378,7 +378,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                         <AmpMapDatePanel
                           {...{ date, setDate, ...defaults.minMaxDate }}
                         />
-                        <AmpMapOptionsPanel />
+                        <AmpMapOptionsPanel
+                          {...{ key: "mapOptions", mapId, setMapId }}
+                        />
                       </PanelSet>
                       // <OptionsMenu
                       //   {...{

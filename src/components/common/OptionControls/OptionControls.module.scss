@@ -1,0 +1,28 @@
+@import "src/assets/styles/vars.scss";
+.optionRadioSet {
+    width: auto;
+}
+.optionWidget {
+    &:not(:last-of-type) {
+        margin-bottom: 0.5rem;
+    }
+    &.optionRadio {
+        > input,
+        label {
+            cursor: pointer;
+        }
+
+        > input {
+            margin-right: 0.5rem;
+        }
+
+        > label {
+            margin: 0;
+            font-weight: normal;
+            color: $idea-black;
+        }
+        input:checked + label {
+            font-weight: 600;
+        }
+    }
+}

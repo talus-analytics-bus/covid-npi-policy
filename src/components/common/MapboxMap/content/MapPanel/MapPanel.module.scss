@@ -20,21 +20,12 @@
         &.fit {
             max-width: fit-content;
         }
-        .caret {
-            margin-left: 20px;
-            transform: rotate(90deg) scaleX(1) scaleY(1.5);
-            transition: 0.25s transform ease;
-            font-size: 1rem;
-            justify-self: flex-end;
-            &.up {
-                transform: rotate(90deg) scaleX(-1) scaleY(1.5);
-            }
-        }
     }
 }
 .panelSet {
     display: grid;
     grid-auto-flow: column;
+    grid-template-columns: auto auto auto;
     overflow: hidden;
     align-items: flex-end;
     position: absolute;
@@ -49,12 +40,17 @@
     .mapPanel {
         position: relative;
         transition: bottom 0.5s ease;
+        display: grid;
         .body {
             border-right-color: transparent;
         }
         &.maxHeight {
+            grid-template-rows: auto 100%;
             align-self: flex-start;
             height: 100%;
+        }
+        &:not(.maxHeight) {
+            grid-template-rows: auto minmax(100px, 12vh);
         }
         &:first-of-type > .body {
             border-left-color: transparent;

@@ -1,21 +1,23 @@
 import classNames from "classnames";
 import React, { FC, ReactElement, useRef, useState } from "react";
-import { Caret } from "./helpers";
+import { Caret } from "../../../MapOptions/OptionDrawer/content/Caret/Caret";
 import styles from "./MapPanel.module.scss";
-type TabStyle = "expand" | "fit";
+type TabType = "expand" | "fit";
 type ComponentProps = {
-  tabStyle?: TabStyle;
+  tabType?: TabType;
   tabName: string;
-  children: ReactElement;
+  children: ReactElement | ReactElement[];
   openDefault?: boolean;
   maxHeight?: boolean;
+  bodyStyle?: Record<string, string>;
 };
 export const MapPanel: FC<ComponentProps> = ({
-  tabStyle = "fit",
+  tabType = "fit",
   tabName,
   children,
   openDefault = true,
   maxHeight = false,
+  bodyStyle = {},
 }): ReactElement => {
   let bodyRef = useRef<HTMLDivElement>(null);
   let tabRef = useRef<HTMLDivElement>(null);
@@ -26,14 +28,16 @@ export const MapPanel: FC<ComponentProps> = ({
 
   return (
     <div
-      className={classNames(styles.mapPanel, { [styles.maxHeight]: maxHeight })}
+      className={classNames(styles.mapPanel, {
+        [styles.maxHeight]: maxHeight,
+      })}
       style={{
         bottom,
       }}
     >
       <div
         className={classNames(styles.tab, {
-          [styles.fit]: tabStyle === "fit",
+          [styles.fit]: tabType === "fit",
         })}
         onClick={() => {
           setOpen(!open);
@@ -49,6 +53,7 @@ export const MapPanel: FC<ComponentProps> = ({
           height: maxHeight
             ? `calc(100% - ${getElHeight(tabRef)}px)`
             : undefined,
+          ...bodyStyle,
         }}
         ref={bodyRef}
       >

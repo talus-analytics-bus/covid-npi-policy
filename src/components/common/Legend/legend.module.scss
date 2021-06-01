@@ -5,18 +5,17 @@
   flex-flow: column;
   background-color: white;
   width: max-content;
-  padding: 5px;
-  margin: 5px;
   @include spaceItemsVert(10px);
   z-index: 1000;
   cursor: default;
   .name {
-    max-width: 420px;
+    max-width: 550px;
   }
   .content {
     display: flex;
     @include spaceItemsHoriz(30px);
     // justify-content: center;
+
     .entry {
       display: flex;
       flex-flow: column;
@@ -98,14 +97,7 @@
           width: $height;
         }
         &.hatched {
-          background: repeating-linear-gradient(
-            -45deg,
-            #bfbfbf,
-            #bfbfbf,
-            1px,
-            #fff 1px,
-            #fff 6px
-          );
+          background: repeating-linear-gradient(-45deg, #bfbfbf, #bfbfbf, 1px, #fff 1px, #fff 6px);
           border: 1px solid #bfbfbf;
         }
       }

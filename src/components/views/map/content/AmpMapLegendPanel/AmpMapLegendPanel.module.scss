@@ -1,0 +1,16 @@
+@import "src/assets/styles/vars.scss";
+.legend {
+    .entries {
+        display: flex;
+        background-color: rgba(255, 255, 255, 0.85);
+        > div {
+            background-color: transparent;
+        }
+
+        @include borderItemsHoriz(20px);
+        > div:not(:first-child) {
+            padding-left: 0;
+            margin-left: 0;
+        }
+    }
+}

@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import React, { FC, ReactElement } from "react";
-import styles from "./MapPanel.module.scss";
+import styles from "./Caret.module.scss";
 
 /**
  * Caret props type
  */
-type CaretProps = {
+type ComponentProps = {
   up: boolean;
 };
 
@@ -15,7 +15,7 @@ type CaretProps = {
  * @param {boolean} o.up True if caret is facing up, false if down
  * @returns {ReactElement} A caret
  */
-export const Caret: FC<CaretProps> = ({ up }): ReactElement => {
+export const Caret: FC<ComponentProps> = ({ up }): ReactElement => {
   return (
     <i
       className={classNames(styles.caret, "material-icons", {
