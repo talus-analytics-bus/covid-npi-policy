@@ -89,4 +89,4 @@ workflows:
             branches:
               only:
                 - dev-not-whole-timeseries
-                - dev
+                - dev-map-updates
