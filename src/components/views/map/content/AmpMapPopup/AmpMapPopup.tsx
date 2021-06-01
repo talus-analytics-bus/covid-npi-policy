@@ -61,6 +61,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
         bodySections: [
           <DistancingBodySection
             {...{
+              key: "distancingBody",
               title:
                 mapId !== "us-county"
                   ? "Distancing level"
@@ -71,6 +72,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
           />,
           <PoliciesBodySection
             {...{
+              key: "policiesBody",
               categories: policyCategories,
               subcategories: policySubcategories,
               count: policyCount,
