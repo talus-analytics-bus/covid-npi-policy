@@ -140,7 +140,7 @@ const getFillLegendName: Function = ({
       ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
       : undefined;
 
-    const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
+    const prefix = `Policies in effect at ${nouns.level} level for `;
     const suffix = ` on ${date.format("MMM D, YYYY")}`;
     if (subcategory !== undefined) {
       return <ShowMore text={prefix + subcategory + suffix} charLimit={120} />;

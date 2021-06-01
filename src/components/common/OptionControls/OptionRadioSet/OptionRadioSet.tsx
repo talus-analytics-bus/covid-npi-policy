@@ -3,18 +3,7 @@ import styles from "../OptionControls.module.scss";
 import { Option, OptionWidget } from "../types";
 import { OptionRadio } from "./OptionRadio/OptionRadio";
 
-interface OptionRadioSetProps extends OptionWidget {
-  /**
-   * List of radio options to show.
-   */
-  options: Option[];
-
-  /**
-   * The default option
-   */
-  // defaultOption: Option;
-  selectedOptions: Option[];
-}
+interface OptionRadioSetProps extends OptionWidget {}
 
 export const OptionRadioSet: FC<OptionRadioSetProps> = ({
   title,

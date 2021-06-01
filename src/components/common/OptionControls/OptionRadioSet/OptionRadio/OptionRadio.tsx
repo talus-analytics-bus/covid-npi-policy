@@ -16,16 +16,21 @@ export const OptionRadio: FC<Option> = ({
   const [inputId] = useState<string>("radio-" + Math.random().toString());
   return (
     <div className={classNames(styles.optionRadio, styles.optionWidget)}>
-      <input
-        id={inputId}
-        type={"radio"}
-        value={value}
-        defaultChecked={checked}
-      />
-      <label htmlFor={inputId}>{name}</label>
-      {description && (
-        <InfoTooltip id={inputId} text={description} place={"top"} />
-      )}
+      <span>
+        <input
+          id={inputId}
+          type={"radio"}
+          value={value}
+          checked={checked}
+          readOnly={true}
+        />
+        <label htmlFor={inputId}>
+          {name}{" "}
+          {description && (
+            <InfoTooltip id={inputId} text={description} place={"left"} />
+          )}
+        </label>
+      </span>
       {checked && child && <IndentedChild>{child}</IndentedChild>}
     </div>
   );

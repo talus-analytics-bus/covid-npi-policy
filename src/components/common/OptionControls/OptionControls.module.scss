@@ -3,25 +3,46 @@
     width: auto;
 }
 .optionWidget {
+    .title {
+        font-family: "Open Sans", sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        margin-bottom: 0.5rem;
+        color: $idea-gray-2;
+        text-transform: uppercase;
+    }
     &:not(:last-of-type) {
         margin-bottom: 0.5rem;
     }
     &.optionRadio {
-        > input,
-        label {
-            cursor: pointer;
-        }
+        > span {
+            display: flex;
+            align-items: baseline;
+            > input,
+            label {
+                cursor: pointer;
+            }
 
-        > input {
-            margin-right: 0.5rem;
-        }
+            > input {
+                margin-right: 0.5rem;
+            }
 
-        > label {
-            margin: 0;
-            font-weight: normal;
-            color: $idea-black;
+            > label {
+                margin: 0;
+                font-weight: normal;
+                color: $idea-black;
+            }
+            input:checked + label > span {
+                font-weight: 600;
+            }
         }
-        input:checked + label {
+    }
+    &.optionSelect {
+        select {
+            background: $idea-gray-4;
+            padding: 0.25rem;
+            border-radius: 2px;
             font-weight: 600;
         }
     }

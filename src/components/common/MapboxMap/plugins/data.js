@@ -1161,12 +1161,12 @@ export const metricMeta = {
 function getNounFromPolicyResolution({ mapId, policyResolution }) {
   switch (mapId) {
     case "us":
-      if (policyResolution === "geo") return "State";
+      if (policyResolution !== "subgeo") return "State";
       else return "Sub-state";
     case "us-county":
       return "County";
     default:
-      if (policyResolution === "geo") return "National";
+      if (policyResolution !== "subgeo") return "National";
       else return "Sub-national";
   }
 }

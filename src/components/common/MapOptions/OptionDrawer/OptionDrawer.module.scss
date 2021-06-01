@@ -20,6 +20,10 @@
         align-items: center;
         white-space: nowrap;
     }
+    .body {
+        max-height: 325px;
+        overflow-y: scroll;
+    }
     &:first-child .title {
         border-top-width: 0;
     }

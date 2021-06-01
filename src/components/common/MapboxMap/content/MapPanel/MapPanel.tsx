@@ -1,3 +1,4 @@
+import classes from "*.module.css";
 import classNames from "classnames";
 import React, { FC, ReactElement, useRef, useState } from "react";
 import { Caret } from "../../../MapOptions/OptionDrawer/content/Caret/Caret";
@@ -10,6 +11,7 @@ type ComponentProps = {
   openDefault?: boolean;
   maxHeight?: boolean;
   bodyStyle?: Record<string, string>;
+  classes?: string[];
 };
 export const MapPanel: FC<ComponentProps> = ({
   tabType = "fit",
@@ -18,6 +20,7 @@ export const MapPanel: FC<ComponentProps> = ({
   openDefault = true,
   maxHeight = false,
   bodyStyle = {},
+  classes = [],
 }): ReactElement => {
   let bodyRef = useRef<HTMLDivElement>(null);
   let tabRef = useRef<HTMLDivElement>(null);
@@ -28,7 +31,7 @@ export const MapPanel: FC<ComponentProps> = ({
 
   return (
     <div
-      className={classNames(styles.mapPanel, {
+      className={classNames(styles.mapPanel, ...classes, {
         [styles.maxHeight]: maxHeight,
       })}
       style={{

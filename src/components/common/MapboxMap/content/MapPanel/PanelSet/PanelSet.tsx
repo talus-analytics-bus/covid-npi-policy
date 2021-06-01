@@ -3,14 +3,14 @@ import styles from "../MapPanel.module.scss";
 
 type ComponentProps = {
   children: ReactElement;
-  height?: string;
+  style?: Record<string, string | number | undefined>;
 };
 export const PanelSet: FC<ComponentProps> = ({
   children,
-  height,
+  style,
 }): ReactElement => {
   return (
-    <div className={styles.panelSet} style={{ height }}>
+    <div className={styles.panelSet} style={style}>
       {children}
     </div>
   );

@@ -43,6 +43,7 @@
         display: grid;
         .body {
             border-right-color: transparent;
+            overflow-y: scroll;
         }
         &.maxHeight {
             grid-template-rows: auto 100%;

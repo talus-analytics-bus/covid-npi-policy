@@ -15,6 +15,11 @@ export interface Option {
   readonly value: string | number;
 
   /**
+   * The value of the parent option of this option, if any
+   */
+  readonly parent?: string | number;
+
+  /**
    * The currently selected options in this option's set.
    */
   selectedOptions?: Option[];
@@ -28,7 +33,7 @@ export interface Option {
   /**
    * A description of the option that will be shown as a tooltip.
    */
-  readonly description?: string;
+  readonly description?: string | ReactElement;
 
   /**
    * Indented child element shown only when this option is selected.
@@ -43,6 +48,16 @@ export interface OptionWidget {
   readonly title?: string;
 
   /**
+   * List of options to show.
+   */
+  options: Option[];
+
+  /**
+   * The selected options
+   */
+  selectedOptions: Option[];
+
+  /**
    * The callback function called on the currently selected options whenever
    * they are altered.
    * @param selected {Option[]} The currently selected option(s)
@@ -50,3 +65,22 @@ export interface OptionWidget {
    */
   callback(selected: Option[]): void;
 }
+
+export type OptionSetEntry = {
+  id: number;
+  group?: string;
+  label: string;
+  value: string;
+};
+
+// export type FilterDefs = {
+
+// }
+
+// export type FilterDefEntry = {
+//   field: string;
+//   entity_name: "Policy";
+//   label: string;
+//   radio: boolean;
+//   defaultRadioValue
+// }
