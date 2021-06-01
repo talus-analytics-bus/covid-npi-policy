@@ -1,5 +1,6 @@
 @import "src/assets/styles/vars.scss";
 .mapPanel {
+    z-index: 0;
     .tab,
     .body {
         padding: 10px;
@@ -41,8 +42,14 @@
         position: relative;
         transition: bottom 0.5s ease;
         display: grid;
+        &:not(:first-of-type) {
+            left: -1px;
+        }
+        &:last-of-type {
+            left: -2px;
+        }
         .body {
-            border-right-color: transparent;
+            // border-right-color: transparent;
             overflow-y: scroll;
         }
         &.maxHeight {

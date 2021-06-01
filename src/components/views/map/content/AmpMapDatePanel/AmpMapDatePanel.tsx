@@ -16,10 +16,10 @@ export const AmpMapDatePanel: FC<ComponentProps> = ({
   maxDate,
 }): ReactElement => {
   return (
-    <MapPanel tabName={"Date selection"}>
+    <MapPanel tabName={"Date selection"} bodyStyle={{ zIndex: "2" }}>
       <DateSlider
         {...{
-          label: "View policies and cases over the course of the outbreak",
+          label: "Choose date or press play to view change over time",
           date,
           setDate,
           minDate,

@@ -278,6 +278,38 @@ const DateSlider = ({
       {
         // main content of slider component
       }
+      <div className={styles.sliderControls}>
+        {
+          <i
+            onClick={() => handleBackForward(-1)}
+            className={classNames("material-icons", {
+              [styles.disabled]: curSliderVal <= sliderMinValue,
+            })}
+          >
+            fast_rewind
+          </i>
+        }
+        {// Show play button if not playing, pause button otherwise
+        !playing ? (
+          <i onClick={handlePlay} className={classNames("material-icons")}>
+            play_arrow
+          </i>
+        ) : (
+          <i onClick={handlePause} className={classNames("material-icons")}>
+            pause
+          </i>
+        )}
+        {
+          <i
+            onClick={() => handleBackForward(+1)}
+            className={classNames("material-icons", {
+              [styles.disabled]: curSliderVal >= sliderMaxValue,
+            })}
+          >
+            fast_forward
+          </i>
+        }
+      </div>
       <div className={styles.content}>
         {
           // bar
@@ -302,38 +334,6 @@ const DateSlider = ({
         {
           // play, pause, ffwd, rewind
         }
-        <div className={styles.sliderControls}>
-          {
-            <i
-              onClick={() => handleBackForward(-1)}
-              className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal <= sliderMinValue,
-              })}
-            >
-              fast_rewind
-            </i>
-          }
-          {// Show play button if not playing, pause button otherwise
-          !playing ? (
-            <i onClick={handlePlay} className={classNames("material-icons")}>
-              play_arrow
-            </i>
-          ) : (
-            <i onClick={handlePause} className={classNames("material-icons")}>
-              pause
-            </i>
-          )}
-          {
-            <i
-              onClick={() => handleBackForward(+1)}
-              className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal >= sliderMaxValue,
-              })}
-            >
-              fast_forward
-            </i>
-          }
-        </div>
       </div>
       {
         // calendar datepicker

@@ -49,11 +49,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
    */
   const geoOptions: Option[] = [
     {
-      name: "Countries",
-      value: "global",
-      description: "View data for the world at the country level",
-    },
-    {
       name: "US States",
       value: "us",
       description:
@@ -66,6 +61,11 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           selectedOptions={usSubGeoOptions.filter(o => o.value === mapId)}
         />
       ),
+    },
+    {
+      name: "Countries",
+      value: "global",
+      description: "View data for the world at the country level",
     },
   ];
 
