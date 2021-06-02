@@ -45,9 +45,9 @@
     "victory": "^35.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+    "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test",
     "eject": "react-scripts eject",
     "tslint": "./node_modules/.bin/tslint",
     "deploy": "CI=false REACT_APP_GLOBAL_MAP_STYLE_URL=mapbox://styles/nicoletalus/ckp8qyvy55atc18mlkmw80ebq REACT_APP_API_URL=https://api.covidamp.org REACT_APP_COVID_LOCAL_URL=https://covid-local.org/ REACT_APP_MODEL_API_URL=https://amp-model-api.covidamp.org/ yarn build && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete",
