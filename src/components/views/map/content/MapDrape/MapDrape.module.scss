@@ -1,0 +1,38 @@
+@import "src/assets/styles/vars.scss";
+.mapDrape {
+    position: absolute;
+    background-color: rgba($color: white, $alpha: 0.5);
+    z-index: 1;
+    pointer-events: none;
+    .mapBanner {
+        display: flex;
+        flex-flow: column;
+        padding: 10px;
+        pointer-events: none;
+
+        .title {
+            font-family: "rawline", serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            pointer-events: all;
+        }
+
+        .dates {
+            pointer-events: all;
+            width: max-content;
+            font-family: "rawline", serif;
+            display: flex;
+            flex-flow: column;
+            .primary {
+                font-size: 1rem;
+                font-weight: bold;
+                color: $orange;
+            }
+            .secondary {
+                font-weight: normal;
+                font-style: italic;
+                font-size: 0.7rem;
+            }
+        }
+    }
+}

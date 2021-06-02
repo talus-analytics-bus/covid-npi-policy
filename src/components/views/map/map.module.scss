@@ -3,6 +3,7 @@
   height: 100%;
   width: 100%;
   position: relative;
+  border-top: 1px solid $idea-black;
   > :last-child {
     width: 100% !important;
     $drawer-header-height: 50px;
@@ -68,37 +69,7 @@
       font-weight: unset;
     }
   }
-  .mapBanner {
-    display: flex;
-    align-items: center;
-    background-color: #d3d7da;
-    padding: 10px;
-    height: 50px;
 
-    .title {
-      font-family: "rawline", serif;
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-
-    .dates {
-      margin-left: auto;
-      font-family: "rawline", serif;
-      display: flex;
-      @include spaceItemsHoriz(10px);
-      align-items: center;
-      .primary {
-        font-size: 1rem;
-        font-weight: bold;
-        color: $orange;
-      }
-      .secondary {
-        font-weight: normal;
-        font-style: italic;
-        font-size: 0.7rem;
-      }
-    }
-  }
   .rightControls {
     div > label {
       font-weight: normal;
