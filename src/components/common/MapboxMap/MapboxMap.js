@@ -697,8 +697,6 @@ const MapboxMap = ({
           onViewportChange={newViewport => {
             // set current viewport state variable to the new viewport
             setViewport(newViewport);
-            console.log("newViewport");
-            console.log(newViewport);
             const lngLatNotDefault =
               newViewport.longitude !== defaultViewport.longitude ||
               newViewport.latitude !== defaultViewport.latitude;
@@ -780,7 +778,7 @@ const MapboxMap = ({
           <div
             style={{
               position: "absolute",
-              bottom: "140px",
+              bottom: "180px",
               left: "5px",
               padding: 0,
             }}
