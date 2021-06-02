@@ -1,3 +1,4 @@
+@import "src/assets/styles/vars.scss";
 .sparklineChart {
     .chartAreaRect {
         fill: transparent;
@@ -9,7 +10,7 @@
         width: auto;
     }
     .xAxisMarker {
-        stroke: #303434;
+        stroke: $orange;
         stroke-width: 1px;
         fill: none;
     }
