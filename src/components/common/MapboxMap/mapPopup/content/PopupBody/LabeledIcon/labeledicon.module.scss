@@ -3,7 +3,7 @@
     display: flex;
     flex-flow: row;
 
-    .iconContainer {
+    .iconContainer:not(:empty) {
         + .labelContainer {
             margin-left: 1rem;
         }

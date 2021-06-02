@@ -30,7 +30,13 @@ export const PolicyCount: FC<ComponentProps> = ({
     return (
       <LabeledIcon
         {...{
-          icon: <PolicyCategoryIcon category={categoryIconName} margin={"0"} />,
+          icon: (
+            <PolicyCategoryIcon
+              category={categoryIconName}
+              margin={"0"}
+              blankIfNone={true}
+            />
+          ),
           label: (
             <div>
               <strong>
