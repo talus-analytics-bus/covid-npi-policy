@@ -129,11 +129,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           }
         });
         newFilters.ph_measure_details = newSubFilters;
-        // newFilters.primary_ph_measure.forEach((cat: string | number) => {
-        //   const catSubCats: Option[] = allSubOptions.filter(
-        //     o => o.parent === cat
-        //   );
-        // });
       }
     }
     if (setFilters !== undefined) setFilters({ ...filters, ...newFilters });
@@ -198,16 +193,11 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const fillOptions: Option[] = getMetricsAsOptions(mapId, "fill", {
     policy_status_counts: fillSubOptions,
   });
-  // fillOptions.forEach(o => {
-  //   if (o.value === 'policy_status_counts') o.child = child;
-  // })
 
   /**
-   * List of policy category suboptions for fill metric option "Relative
-   * policy count".
+   * List of possible circle show/hide options with option select for circle
+   * metric to show.
    */
-  // const policyCategorySubOptions: Option[] =
-
   const circleShowOptions: Option[] = [
     {
       name: "Show",
@@ -258,7 +248,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           )}
         />
       </OptionDrawer>
-      <OptionDrawer title={"View states by"}>
+      <OptionDrawer title={getFillOptionsTitleFromMapId(mapId)}>
         <OptionRadioSet
           key={"fillToggle"}
           options={fillOptions}
@@ -298,6 +288,24 @@ const usSubGeoOptions: Option[] = [
     description: "View policies at the county level",
   },
 ];
+/**
+ * Given the ID of the map, returns the fill options drawer title to use
+ * @param mapId The ID of the map for which the fill options title is needed
+ * @returns {string} The fill options drawer title to use for the map
+ */
+function getFillOptionsTitleFromMapId(mapId: MapId): string {
+  switch (mapId) {
+    case "us":
+      return "View states by";
+    case "us-county":
+      return "View counties by";
+    case "global":
+      return "View countries by";
+    default:
+      return "View locations by";
+  }
+}
+
 /**
  * Given the ID of the map and the shape type, returns a list of options
  * corresponding to the metrics that can be shown on the map with the shape.
