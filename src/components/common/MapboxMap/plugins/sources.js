@@ -149,8 +149,8 @@ export const mapStyles = {
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
-      [-21.652727776788545, 15.933811109714933],
-      [23.32292033437369, -16.93431157205865],
+      [-18.6648191354895, 12.943108183178344],
+      [35.049939748022084, -21.721625686656985],
     ],
 
     // optional: info tooltip to display for map in radio selections
@@ -178,8 +178,8 @@ export const mapStyles = {
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
-      [-21.652727776788545, 15.933811109714933],
-      [23.32292033437369, -16.93431157205865],
+      [-18.6648191354895, 12.943108183178344],
+      [35.049939748022084, -21.721625686656985],
     ],
 
     // optional: info tooltip to display for map in radio selections
@@ -198,7 +198,7 @@ export const mapStyles = {
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
     defaultFitBounds: [
-      [-177.44289170791797, 64.05440369592642],
+      [-141.78623293980732, 60.46188253859922],
       [179.97107965372615, -54.77460938717267],
     ],
   },

@@ -11,6 +11,7 @@
 // standard packages
 import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./mapboxmap.module.scss";
+import { defaults } from "./plugins/data.js";
 
 // 3rd party packages
 import ReactMapGL, { NavigationControl, Popup } from "react-map-gl";
@@ -28,7 +29,6 @@ import ResetZoom from "./resetZoom/ResetZoom";
 // context
 import MapOptionContext from "../../views/map/context/MapOptionContext";
 import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
-import { AmpMapLegendPanel } from "components/views/map/content/AmpMapLegendPanel/AmpMapLegendPanel";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -72,11 +72,10 @@ const MapboxMap = ({
   const [data, setData] = useState(null);
 
   // current viewport of map
-  const [viewport, setViewport] = useState({});
+  const [viewport, setViewport] = useState({
+    ...defaults[mapId].initViewport,
+  });
   const [defaultViewport, setDefaultViewport] = useState({});
-
-  // show or hide the legend
-  const [showLegend, setShowLegend] = useState(true);
 
   // state management for tooltips
   const [cursorLngLat, setCursorLngLat] = useState([0, 0]);
@@ -343,7 +342,6 @@ const MapboxMap = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = async dataArgs => {
-    console.log(curMapOptions);
     const newMapData = await dataGetter({
       data,
       ...dataArgs,
@@ -699,6 +697,8 @@ const MapboxMap = ({
           onViewportChange={newViewport => {
             // set current viewport state variable to the new viewport
             setViewport(newViewport);
+            console.log("newViewport");
+            console.log(newViewport);
             const lngLatNotDefault =
               newViewport.longitude !== defaultViewport.longitude ||
               newViewport.latitude !== defaultViewport.latitude;
@@ -727,7 +727,7 @@ const MapboxMap = ({
             // if default fit bounds are specified, center the viewport on them
             // (fly animation relative to default viewport)
             if (mapStyle.defaultFitBounds !== undefined) {
-              const test = () => {
+              const updateViewport = () => {
                 const center = map.getCenter();
                 setViewport({
                   ...viewport,
@@ -742,9 +742,9 @@ const MapboxMap = ({
                   latitude: center.lat,
                 });
                 setShowReset(false);
-                map.off("moveend", test);
+                map.off("moveend", updateViewport);
               };
-              map.on("moveend", test);
+              map.on("moveend", updateViewport);
               map.fitBounds(mapStyle.defaultFitBounds);
             }
 
