@@ -39,7 +39,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   distancingLevel,
   policyCategories,
   policySubcategories,
-  policyCount = 1032,
+  policyCount,
   modelLink,
   policiesLink,
   policyResolution,

@@ -87,8 +87,8 @@ const updateData: Function = async ({
       method: "post",
       geo_res: mapStyles[mapId].geo_res,
       count_sub: paramArgs.policyResolution === "subgeo",
-      include_min_max: false,
-      include_zeros: false,
+      include_min_max: true,
+      include_zeros: true,
       filters: { ...filtersWithDate, ...getLocationFilters(mapId, feature) },
       one: true,
       merge_like_policies: false,
@@ -97,8 +97,10 @@ const updateData: Function = async ({
   };
   const executeArgs: any = { queries };
   const res: any = await execute(executeArgs);
+  const placeHasPoliciesToday: boolean = res.policyCount.length > 0;
+  const placeHasPolicies: boolean = res.policyCount.max_all_time !== null;
   const policyCount: number | null =
-    res.policyCount.length > 0 ? res.policyCount[0].value : null;
+    placeHasPoliciesToday && placeHasPolicies ? res.policyCount[0].value : null;
   const policiesLink: ActionLink =
     policyCount === 0 ? (
       <PoliciesLink tooltip={ZERO_POLICY_MSG} />

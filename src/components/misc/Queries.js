@@ -388,7 +388,6 @@ export const PolicyStatusCounts = async function({
   });
 
   params.append("count_sub", count_sub);
-  params.append("include_zeros", true);
   params.append("include_min_max", include_min_max);
   params.append("one", one);
   params.append("merge_like_policies", merge_like_policies);
