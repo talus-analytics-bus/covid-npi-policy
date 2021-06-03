@@ -4,6 +4,7 @@
   [class*="rc-slider-handle"] {
     z-index: 1;
     background: red;
+    pointer-events: none;
   }
   [class*="rc-slider-mark"] {
     z-index: 0;
@@ -12,7 +13,6 @@
   display: flex;
   flex-flow: column;
   $background-color: rgba(4, 4, 4, 0.95);
-  // @include spaceItemsVert(10px);
 
   // toggle and hide/show styling
   &.hide {

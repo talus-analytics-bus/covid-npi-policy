@@ -102,8 +102,17 @@ const DateSlider = ({
     const unit = (height - 3) / 3;
 
     const grooveYs = [0, 1, 2].map((d, i) => unit / 2 + unit * i);
+
     return (
-      <Handle data-tip={true} data-for={"sliderTooltip"} {...restProps}>
+      <Handle
+        onDrag={e => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        data-tip={true}
+        data-for={"sliderTooltip"}
+        {...restProps}
+      >
         {
           <div className={classNames(styles.dateLabel, styles[labelPos])}>
             {curSliderDate.format("MMM D")}
