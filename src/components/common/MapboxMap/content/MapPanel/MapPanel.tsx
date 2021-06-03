@@ -36,6 +36,7 @@ export const MapPanel: FC<ComponentProps> = ({
       className={classNames(styles.mapPanel, ...classes, {
         [styles.maxHeight]: maxHeight,
         [styles.drawerPanel]: drawerPanel,
+        [styles.open]: open,
       })}
       style={{
         bottom,

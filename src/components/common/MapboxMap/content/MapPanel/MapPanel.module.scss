@@ -44,7 +44,6 @@
     width: 100%;
     bottom: 0;
     pointer-events: none;
-    // height: calc(100vh - 122px);
 
     .mapPanel {
         position: relative;
@@ -64,6 +63,9 @@
             grid-template-rows: auto 100%;
             align-self: flex-start;
             height: 100%;
+            &.open > .tab {
+                border-top-width: 0;
+            }
         }
         &:not(.maxHeight) {
             grid-template-rows: auto minmax(125px, 12vh);
