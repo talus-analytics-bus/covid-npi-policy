@@ -5,6 +5,20 @@
   width: auto;
   // min-height: 50vh;
 }
+.navAndAttribControl {
+  position: absolute;
+  top: 103px;
+  left: 5px;
+  padding: 0;
+  .attributionControl {
+    position: relative;
+    // top: 10px;
+  }
+  .navigationControl {
+    position: relative;
+    top: 50px;
+  }
+}
 // MAPBOX LEGEND
 .legend {
   display: flex;
@@ -89,9 +103,11 @@
 div[class*="mapboxgl-popup-content"] {
   padding: 0;
 }
-[class*="mapboxgl-ctrl-attrib-inner"] > a {
-  color: #1e3e6e !important;
+[class*="mapboxgl-ctrl-attrib"] a {
+  font-size: 0.6rem;
+  width: max-content;
 }
+
 [class*="overlays"] {
   display: flex;
   align-items: flex-end;

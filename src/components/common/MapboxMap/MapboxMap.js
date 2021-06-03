@@ -14,7 +14,11 @@ import styles from "./mapboxmap.module.scss";
 import { defaults } from "./plugins/data.js";
 
 // 3rd party packages
-import ReactMapGL, { NavigationControl, Popup } from "react-map-gl";
+import ReactMapGL, {
+  NavigationControl,
+  AttributionControl,
+  Popup,
+} from "react-map-gl";
 import * as d3 from "d3/dist/d3.min";
 
 // local modules
@@ -685,12 +689,12 @@ const MapboxMap = ({
     return (
       <>
         {overlays}
-
         <ReactMapGL
           mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
           ref={ref => {
             if (ref) mapRef = ref;
           }}
+          attributionControl={false}
           captureClick={true}
           mapStyle={mapStyle.url}
           {...viewport}
@@ -777,15 +781,13 @@ const MapboxMap = ({
           {
             // map zoom plus and minus buttons
           }
-          <div
-            style={{
-              position: "absolute",
-              top: "103px",
-              left: "5px",
-              padding: 0,
-            }}
-          >
-            <NavigationControl />
+          <div className={styles.navAndAttribControl}>
+            <div className={styles.attributionControl}>
+              <AttributionControl />
+            </div>
+            <div className={styles.navigationControl}>
+              <NavigationControl />
+            </div>
           </div>
         </ReactMapGL>
       </>
