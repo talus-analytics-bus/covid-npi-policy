@@ -19,7 +19,7 @@ import {
   mapGreen5,
   mapGreen6,
   noDataGray,
-} from "assets/styles/vars.scss";
+} from "assets/styles/vars.module.scss";
 
 // utilities
 import { getLog10Scale, getLinearScale, range } from "../../../misc/Util";

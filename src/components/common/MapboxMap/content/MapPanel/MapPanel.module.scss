@@ -1,4 +1,4 @@
-@import "src/assets/styles/vars.scss";
+@import "src/assets/styles/vars.module.scss";
 .mapPanel {
     z-index: 0;
     pointer-events: none;
@@ -8,7 +8,15 @@
         padding: 10px;
         font-size: 1rem;
         border: solid $light-gray-4 1px;
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: rgba(255, 255, 255, 0.75);
+        transition: 0.25s background-color;
+    }
+    &:hover {
+        .tab,
+        .body {
+            background-color: rgba(255, 255, 255, 1);
+            transition: 0.25s background-color;
+        }
     }
     .tab {
         border-bottom-width: 0;
@@ -32,13 +40,11 @@
     overflow: hidden;
     align-items: flex-end;
     position: absolute;
-    z-index: 1000000000; // TODO elegantly
+    z-index: 1;
     width: 100%;
     bottom: 0;
     pointer-events: none;
-    // * {
-    //     pointer-events: all;
-    // }
+    // height: calc(100vh - 122px);
 
     .mapPanel {
         position: relative;
@@ -51,8 +57,8 @@
             left: -2px;
         }
         .body {
-            // border-right-color: transparent;
             overflow-y: scroll;
+            display: grid;
         }
         &.maxHeight {
             grid-template-rows: auto 100%;
@@ -67,6 +73,13 @@
         }
         &:last-of-type > .body {
             border-right-width: 0;
+        }
+        &.drawerPanel {
+            .body {
+                grid-template-rows: repeat(3, min-content minmax(0, min-content));
+                height: calc(100vh - 116px - 43px) !important;
+                overflow-y: hidden;
+            }
         }
     }
 }

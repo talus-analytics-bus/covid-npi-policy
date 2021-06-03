@@ -12,6 +12,7 @@ export const OptionCheckbox: FC<Option> = ({
   description,
   child,
   field = "",
+  onClick = undefined,
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());
@@ -25,6 +26,7 @@ export const OptionCheckbox: FC<Option> = ({
           checked={checked}
           readOnly={true}
           data-field={field}
+          onClick={onClick}
         />
         <label htmlFor={inputId}>
           {name}{" "}

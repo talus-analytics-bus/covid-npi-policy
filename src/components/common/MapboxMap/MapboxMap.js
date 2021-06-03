@@ -62,6 +62,7 @@ const MapboxMap = ({
   // store map reference which is frequently invoked to get the current
   // Mapbox map object in effect hooks
   let mapRef = useRef(null);
+  // const [map, setMap] = useState(null);
   const curMapOptions = useContext(MapOptionContext);
   const { fill, circle, date } = curMapOptions;
 
@@ -490,9 +491,10 @@ const MapboxMap = ({
     // if no map data, do nothing
     if (data === null) return;
     else {
-      const map = mapRef.getMap();
+      // const map = mapRef.getMap();
 
       // if map has not yet loaded
+      const map = mapRef.getMap();
       if (loading) {
         // initialize the map
         initMap({
@@ -686,8 +688,8 @@ const MapboxMap = ({
 
         <ReactMapGL
           mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-          ref={map => {
-            mapRef = map;
+          ref={ref => {
+            if (ref) mapRef = ref;
           }}
           captureClick={true}
           mapStyle={mapStyle.url}

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./checkbox.module.scss";
-import { darkModerateBlue } from "../../../../assets/styles/vars.scss";
+import { darkModerateBlue } from "../../../../assets/styles/vars.module.scss";
 
 /**
  * Generic radio toggle

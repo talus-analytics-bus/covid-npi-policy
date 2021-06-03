@@ -12,6 +12,7 @@ type ComponentProps = {
   maxHeight?: boolean;
   bodyStyle?: Record<string, string>;
   classes?: string[];
+  drawerPanel?: boolean;
 };
 export const MapPanel: FC<ComponentProps> = ({
   tabType = "fit",
@@ -21,6 +22,7 @@ export const MapPanel: FC<ComponentProps> = ({
   maxHeight = false,
   bodyStyle = {},
   classes = [],
+  drawerPanel = false,
 }): ReactElement => {
   let bodyRef = useRef<HTMLDivElement>(null);
   let tabRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,7 @@ export const MapPanel: FC<ComponentProps> = ({
     <div
       className={classNames(styles.mapPanel, ...classes, {
         [styles.maxHeight]: maxHeight,
+        [styles.drawerPanel]: drawerPanel,
       })}
       style={{
         bottom,

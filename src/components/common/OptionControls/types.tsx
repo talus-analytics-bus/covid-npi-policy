@@ -22,7 +22,7 @@ export interface Option {
   /**
    * The currently selected options in this option's set.
    */
-  selectedOptions?: Option[];
+  selectedOptions?: Option[] | never[];
 
   // /**
   //  * Change event handler function called when input changes.
@@ -44,6 +44,12 @@ export interface Option {
    * The data field with which this option is associated.
    */
   readonly field?: string;
+
+  /**
+   * Function called when option is clicked, for special options like the
+   * "Select all" option.
+   */
+  onClick?(): void;
 }
 
 export interface OptionWidget {

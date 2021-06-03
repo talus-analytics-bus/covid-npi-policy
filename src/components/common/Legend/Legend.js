@@ -13,7 +13,7 @@ import Util, { percentize, isLightColor } from "../../misc/Util.js";
 
 // assets and styles
 import styles from "./legend.module.scss";
-import { noDataGray } from "../../../assets/styles/vars.scss";
+import { noDataGray } from "../../../assets/styles/vars.module.scss";
 
 /**
  * @method Legend
@@ -238,7 +238,7 @@ const Legend = ({ ...props }) => {
       const subLabels = props.subLabels || null;
       // prep style entries
       const styleEntries = range.map((d, i) => {
-        if (!d.startsWith("data:image")) {
+        if (d !== undefined && !d.startsWith("data:image")) {
           return {
             width: props.width !== undefined ? props.width[i] : undefined,
             border: borders !== null ? borders[i] : undefined,

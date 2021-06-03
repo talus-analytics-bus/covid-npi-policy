@@ -1,0 +1,54 @@
+@import "src/assets/styles/vars.module.scss";
+.title,
+.body {
+    padding: 10px;
+}
+.title {
+    border: 1px solid $light-gray-4;
+    border-width: 1px 0;
+    font-family: "Open Sans", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    color: $idea-gray-2;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    white-space: nowrap;
+
+    &:first-child {
+        border-top-width: 0;
+    }
+    &.closed:not(:nth-last-child(2)) {
+        border-bottom-width: 0;
+    }
+}
+.body {
+    // max-height: 250px;
+    height: auto;
+    overflow-y: scroll;
+    &.closed {
+        visibility: hidden;
+        height: 0;
+        padding: 0;
+    }
+}
+
+// &:first-child .title {
+//     border-top-width: 0;
+// }
+
+// &.closed {
+//     .body {
+//         display: none;
+//     }
+//     &:not(:last-child) {
+//         margin-bottom: 0;
+//         .title {
+//             border-bottom-width: 0;
+//         }
+//     }
+// }

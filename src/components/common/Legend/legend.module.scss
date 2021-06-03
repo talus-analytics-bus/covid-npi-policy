@@ -1,9 +1,8 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 .style {
   display: flex;
   flex-flow: column;
-  background-color: white;
   width: max-content;
   @include spaceItemsVert(10px);
   z-index: 1000;
@@ -108,13 +107,7 @@
     }
   }
   &.mapboxLegend {
-    background-color: white;
     border: none;
-
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
-    // width: 100%;
   }
 }
 

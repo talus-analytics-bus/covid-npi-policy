@@ -33,17 +33,10 @@ import PlaceQuery from "../../misc/PlaceQuery";
 import MapDrape from "./content/MapDrape/MapDrape";
 
 // assets and styles
-import styles, { style, dark } from "./map.module.scss";
+import { style, dark } from "./map.module.scss";
 
 // common components
-import {
-  MapboxMap,
-  RadioToggle,
-  DateSlider,
-  FilterSet,
-  InfoTooltip,
-  OptionsMenu,
-} from "../../common";
+import { MapboxMap } from "../../common";
 import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
@@ -225,9 +218,6 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   };
 
   // CONSTANTS // -----------------------------------------------------------//
-  // Label for "View [xxx] by" radio button set
-  const viewLabel = `View ${mapId === "us" ? "states" : "countries"} by`;
-
   // last updated date of overall data
   const lastUpdatedDateOverall = versions.filter(d => {
     if (d.type === "COVID-19 case data (countries)" && mapId === "us") {
@@ -236,9 +226,6 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       return false;
     } else return true;
   })[0].date;
-
-  // define arrow icon for open/close toggle icons in map overlays
-  const arrow = <i className={"material-icons"}>play_arrow</i>;
 
   // EFFECT HOOKS // -------------------------------------------------------------//
   // init
@@ -334,65 +321,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                       }}
                     />
                     {
-                      // <div className={styles.mapBanner}>
-                      //   <div className={styles.title}>{mapTitle}</div>
-                      //   <div className={styles.dates}>
-                      //     <div className={styles.primary}>
-                      //       Data for {date.format("MMM D, YYYY")}
-                      //     </div>
-                      //     <div className={styles.secondary}>
-                      //       Data last updated on{" "}
-                      //       {moment(lastUpdatedDateOverall).format(
-                      //         "MMM D, YYYY"
-                      //       )}
-                      //       <InfoTooltip
-                      //         place={"left"}
-                      //         text={
-                      //           <div>
-                      //             {versions
-                      //               .filter(d => {
-                      //                 if (
-                      //                   d.type ===
-                      //                     "COVID-19 case data (countries)" &&
-                      //                   mapId === "us"
-                      //                 ) {
-                      //                   return false;
-                      //                 } else if (
-                      //                   d.type === "COVID-19 case data" &&
-                      //                   mapId === "global"
-                      //                 ) {
-                      //                   return false;
-                      //                 } else return true;
-                      //               })
-                      //               .map(d => (
-                      //                 <p key={d.type}>
-                      //                   <b>{d.type}</b> last updated on{" "}
-                      //                   {moment(d.date).format("MMM D, YYYY")}
-                      //                   {d.last_datum_date !== null && (
-                      //                     <span>
-                      //                       {" "}
-                      //                       with data available through{" "}
-                      //                       {moment(d.last_datum_date).format(
-                      //                         "MMM D, YYYY"
-                      //                       )}
-                      //                     </span>
-                      //                   )}
-                      //                 </p>
-                      //               ))}
-                      //           </div>
-                      //         }
-                      //         setInfoTooltipContent={
-                      //           props.setInfoTooltipContent
-                      //         }
-                      //       />
-                      //     </div>
-                      //   </div>
-                      // </div>
-                    }
-                    {
                       <PanelSet
                         style={{
-                          height: "100%",
+                          // height: "100%",
                           gridTemplateColumns: "auto auto 325px",
                         }}
                       >

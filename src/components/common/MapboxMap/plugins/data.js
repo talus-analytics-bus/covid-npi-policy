@@ -39,7 +39,7 @@ import {
   mapGreen5,
   mapGreen6,
   noDataGray,
-} from "assets/styles/vars.scss";
+} from "assets/styles/vars.module.scss";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -48,66 +48,66 @@ import {
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
-         // default map ID
-         mapId: "us",
+  // default map ID
+  mapId: "global",
 
-         // default date for map to start on
-         date: "2021-03-03",
-         // date: yesterday.format("YYYY-MM-DD"),
+  // default date for map to start on
+  date: "2021-03-03",
+  // date: yesterday.format("YYYY-MM-DD"),
 
-         // min/max dates for date selection -- if there are none, then provide
-         // `undefined` as value for each
-         minMaxDate: {
-           minDate: "2020-01-21",
-           maxDate: yesterday.format("YYYY-MM-DD"),
-         },
+  // min/max dates for date selection -- if there are none, then provide
+  // `undefined` as value for each
+  minMaxDate: {
+    minDate: "2020-01-21",
+    maxDate: yesterday.format("YYYY-MM-DD"),
+  },
 
-         // defaults for map with ID `us`
-         us: {
-           // id of default circle metric
-           circle: "74",
-           // id of default fill metric
-           fill: "policy_status_counts",
-           // fill: "lockdown_level",
-           // base layer immediately behind which layers should be appended to map
-           priorLayer: "state-points",
-           initViewport: {
-             latitude: -2.534888253109417,
-             longitude: 6.042008668434793,
-             zoom: 3.9432136288314994,
-           },
-         },
-         // defaults for map with ID `us-county`
-         "us-county": {
-           // id of default circle metric
-           circle: "104",
-           showCircle: false,
-           // allowCircle: false,
+  // defaults for map with ID `us`
+  us: {
+    // id of default circle metric
+    circle: "74",
+    // id of default fill metric
+    fill: "policy_status_counts",
+    // fill: "lockdown_level",
+    // base layer immediately behind which layers should be appended to map
+    priorLayer: "state-points",
+    initViewport: {
+      latitude: -2.534888253109417,
+      longitude: 6.042008668434793,
+      zoom: 3.9432136288314994,
+    },
+  },
+  // defaults for map with ID `us-county`
+  "us-county": {
+    // id of default circle metric
+    circle: "104",
+    showCircle: false,
+    // allowCircle: false,
 
-           // id of default fill metric
-           fill: "policy_status_counts",
-           // fill: "lockdown_level",
-           // base layer immediately behind which layers should be appended to map
-           priorLayer: "county-points",
-           initViewport: {
-             latitude: -2.534888253109417,
-             longitude: 6.042008668434793,
-             zoom: 3.9432136288314994,
-           },
-         },
-         // defaults for additional maps...
-         global: {
-           circle: "77",
-           // fill: "lockdown_level",
-           fill: "policy_status_counts",
-           priorLayer: "country-label",
-           initViewport: {
-             latitude: 5.315112144927277,
-             longitude: 18.895843377706207,
-             zoom: 1.8386647937804286,
-           },
-         },
-       };
+    // id of default fill metric
+    fill: "policy_status_counts",
+    // fill: "lockdown_level",
+    // base layer immediately behind which layers should be appended to map
+    priorLayer: "county-points",
+    initViewport: {
+      latitude: -2.534888253109417,
+      longitude: 6.042008668434793,
+      zoom: 3.9432136288314994,
+    },
+  },
+  // defaults for additional maps...
+  global: {
+    circle: "77",
+    // fill: "lockdown_level",
+    fill: "policy_status_counts",
+    priorLayer: "country-label",
+    initViewport: {
+      latitude: 5.315112144927277,
+      longitude: 18.895843377706207,
+      zoom: 1.8386647937804286,
+    },
+  },
+};
 
 // constants
 export const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;

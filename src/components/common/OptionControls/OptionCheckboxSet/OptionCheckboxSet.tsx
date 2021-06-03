@@ -9,6 +9,11 @@ interface OptionRadioSetProps extends OptionWidget {
    */
   field: string;
   emptyMeansAll?: boolean;
+
+  /**
+   * True if a "Select all" checkbox should be included at the top
+   */
+  selectAll?: boolean;
 }
 
 export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
@@ -18,12 +23,14 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
   callback,
   field,
   emptyMeansAll = false,
+  selectAll = false,
 }) => {
   let setRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (emptyMeansAll) callback(options);
   }, []);
+
   return (
     <div className={styles.optionRadioSet}>
       {title && <div className={styles.title}>{title}</div>}
@@ -67,6 +74,22 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
           }
         }}
       >
+        {selectAll && (
+          <OptionCheckbox
+            name={"Select all"}
+            value={"all"}
+            key={"select-all"}
+            selectedOptions={
+              selectedOptions.length === options.length
+                ? [{ name: "Select all", value: "all" }]
+                : []
+            }
+            field={"special-all"}
+            onClick={() => {
+              callback(options);
+            }}
+          />
+        )}
         {options.map(o => (
           <OptionCheckbox
             {...{

@@ -1,5 +1,4 @@
 import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel";
-import { OptionDrawer } from "components/common/MapOptions";
 import {
   OptionRadioSet,
   OptionCheckboxSet,
@@ -20,6 +19,7 @@ import {
   metricMeta,
 } from "components/common/MapboxMap/plugins/data";
 import styles from "./AmpMapOptionsPanel.module.scss";
+import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -154,16 +154,17 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                   filters.ph_measure_details !== undefined &&
                   filters.ph_measure_details.includes(o.value)
               )}
-              callback={selected =>
+              callback={selected => {
                 updateFilters(
                   "ph_measure_details",
                   selected,
                   curCatSubcats,
                   subcategoryOptions
-                )
-              }
+                );
+              }}
               field={"ph_measure_details-" + o.value}
               emptyMeansAll={true}
+              selectAll={true}
             />
           ),
         };
@@ -230,13 +231,15 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
 
   return (
     <MapPanel
-      tabType={"expand"}
       tabName={"Map options"}
       maxHeight={true}
-      bodyStyle={{ padding: "0" }}
+      bodyStyle={{
+        padding: "0",
+      }}
+      drawerPanel={true}
       classes={[styles.ampMapOptionsPanel]}
     >
-      <OptionDrawer title={"Geographic resolution"}>
+      <AccordionDrawer title={"Geographic resolution"}>
         <OptionRadioSet
           key={"geoToggle"}
           options={geoOptions}
@@ -247,8 +250,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
             mapId.startsWith(o.value as string)
           )}
         />
-      </OptionDrawer>
-      <OptionDrawer title={getFillOptionsTitleFromMapId(mapId)}>
+      </AccordionDrawer>
+      <AccordionDrawer title={getFillOptionsTitleFromMapId(mapId)}>
         <OptionRadioSet
           key={"fillToggle"}
           options={fillOptions}
@@ -257,8 +260,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
             if (setFill !== undefined) setFill(selected[0].value as string);
           }}
         />
-      </OptionDrawer>
-      <OptionDrawer title={"COVID-19 cases"}>
+      </AccordionDrawer>
+      <AccordionDrawer title={"COVID-19 cases"}>
         <OptionRadioSet
           key={"toggleCircleVisibility"}
           options={circleShowOptions}
@@ -267,7 +270,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           }
           callback={updateCircle}
         />
-      </OptionDrawer>
+      </AccordionDrawer>
     </MapPanel>
   );
 };

@@ -1,4 +1,6 @@
+import React from "react";
 import { useEffect, useRef } from "react";
+import { MapContext } from "react-map-gl";
 /**
  * Parses a value as a string or, if it is null or undefined, returns itself.
  * @param v The value to be parsed as a string
@@ -24,6 +26,13 @@ export const usePrevious = (value: any) => {
   }, [value]); // Only re-run if value changes
   // Return previous value (happens before update in useEffect above)
   return ref.current;
+};
+
+// Hook
+// https://usehooks.com/usePrevious/
+export const useMap = () => {
+  const { map } = React.useContext(MapContext);
+  return map;
 };
 
 export const removeParenthetical = (value: string) => {

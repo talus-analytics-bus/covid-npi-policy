@@ -1,8 +1,7 @@
-@import "src/assets/styles/vars.scss";
+@import "src/assets/styles/vars.module.scss";
 .legend {
     .entries {
         display: flex;
-        background-color: rgba(255, 255, 255, 0.85);
         > div {
             background-color: transparent;
         }
