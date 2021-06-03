@@ -101,6 +101,6 @@ export const getPolicyCatSubcatPhrase: Function = (
     // multi category, some subcat
     return ` ${noun} with selected categories and subcategories in effect`;
   } else {
-    throw "Unreachable state reached.";
+    throw Error("Unreachable state reached.");
   }
 };
