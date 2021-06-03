@@ -176,14 +176,14 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           filters.primary_ph_measure !== undefined &&
           filters.primary_ph_measure.includes(o.value)
       )}
-      callback={selected =>
+      callback={selected => {
         updateFilters(
           "primary_ph_measure",
           selected,
           categoryOptions,
           subcategoryOptions
-        )
-      }
+        );
+      }}
       field={"primary_ph_measure"}
     />
   );

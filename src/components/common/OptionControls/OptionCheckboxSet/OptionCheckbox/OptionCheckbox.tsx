@@ -1,5 +1,5 @@
 import { InfoTooltip } from "components/common";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "../../OptionControls.module.scss";
 import { Option } from "../../types";
 import { IndentedChild } from "../../IndentedChild/IndentedChild";
@@ -13,9 +13,17 @@ export const OptionCheckbox: FC<Option> = ({
   child,
   field = "",
   onClick = undefined,
+  indeterminate = false,
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());
+  useEffect(() => {
+    const el: HTMLInputElement | null = document.getElementById(
+      inputId
+    ) as HTMLInputElement;
+    // render indeterminate if applicable
+    if (el !== null) el.indeterminate = indeterminate;
+  }, [inputId, indeterminate]);
   return (
     <div className={classNames(styles.optionRadio, styles.optionWidget)}>
       <span>

@@ -31,6 +31,10 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
     if (emptyMeansAll) callback(options);
   }, []);
 
+  const allSelected: boolean = selectedOptions.length === options.length;
+  const someSelected: boolean = selectedOptions.length > 0;
+  const selectAllIndeterminate = selectAll && !allSelected && someSelected;
+
   return (
     <div className={styles.optionRadioSet}>
       {title && <div className={styles.title}>{title}</div>}
@@ -68,6 +72,13 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
               )
                 newSelectedOptions.push(match);
             }
+            if (clickedVal === "all") {
+              const allSelected: boolean =
+                newSelectedOptions.length === options.length;
+              if (allSelected) callback([]);
+              return;
+            }
+
             if (emptyMeansAll && newSelectedOptions.length === 0)
               callback(options);
             else callback(newSelectedOptions);
@@ -80,14 +91,13 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
             value={"all"}
             key={"select-all"}
             selectedOptions={
-              selectedOptions.length === options.length
-                ? [{ name: "Select all", value: "all" }]
-                : []
+              allSelected ? [{ name: "Select all", value: "all" }] : []
             }
             field={"special-all"}
             onClick={() => {
               callback(options);
             }}
+            indeterminate={selectAllIndeterminate}
           />
         )}
         {options.map(o => (

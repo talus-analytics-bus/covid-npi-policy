@@ -50,6 +50,12 @@ export interface Option {
    * "Select all" option.
    */
   onClick?(): void;
+
+  /**
+   * True if this option is a checkbox that should be rendered as indeterminate
+   * and false otherwise.
+   */
+  indeterminate?: boolean;
 }
 
 export interface OptionWidget {
