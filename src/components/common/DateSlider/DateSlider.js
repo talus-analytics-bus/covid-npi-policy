@@ -3,7 +3,7 @@
  */
 
 // standard packages
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./dateslider.module.scss";
 
 // common components
@@ -65,7 +65,7 @@ const DateSlider = ({
   // when slider date changes, update all data
   useEffect(() => {
     setDate(curSliderDate);
-  }, [curSliderDate]);
+  }, [setDate, curSliderDate]);
 
   // date slider and styles
   // wrapper style: optional
@@ -348,7 +348,10 @@ const DateSlider = ({
                 })}
               >
                 <button>{date.format("MMM D, 'YY")}</button>{" "}
-                <img src={open ? calendarSelectedSvg : calendarSvg} />
+                <img
+                  alt={"Calendar icon"}
+                  src={open ? calendarSelectedSvg : calendarSvg}
+                />
               </div>
             ),
           }}
