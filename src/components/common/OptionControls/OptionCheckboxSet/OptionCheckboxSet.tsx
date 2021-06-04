@@ -28,9 +28,9 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
 }) => {
   let setRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (emptyMeansAll) callback(options);
-  }, []);
+  // useEffect(() => {
+  //   if (emptyMeansAll) callback(options);
+  // }, []);
 
   const allSelected: boolean = selectedOptions.length === options.length;
   const someSelected: boolean = selectedOptions.length > 0;
@@ -103,6 +103,7 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
               callback(options);
             }}
             indeterminate={selectAllIndeterminate}
+            defaultChecked={emptyMeansAll}
           />
         )}
         {options.map(o => (

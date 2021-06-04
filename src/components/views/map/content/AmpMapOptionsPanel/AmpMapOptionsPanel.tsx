@@ -100,7 +100,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   ): void => {
     const newFilters = {
       [key]: selected.map(o => o.value),
-      // .filter(o => options.find(oo => oo.value === o)),
     };
     const oldFilters: string[] =
       filters !== undefined && filters[key] !== undefined
@@ -132,6 +131,19 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         });
         newFilters.ph_measure_details = newSubFilters;
       }
+
+      // if category filter is new, add all subcats too
+      newFilters[key].forEach(newFilter => {
+        if (!oldFilters.includes(newFilter as string)) {
+          const subcats = allSubOptions.filter(so => so.parent === newFilter);
+          if (newFilters.ph_measure_details === undefined)
+            newFilters.ph_measure_details = [];
+          newFilters.ph_measure_details = [
+            ...newFilters.ph_measure_details,
+            ...subcats.map(o => o.value),
+          ];
+        }
+      });
     }
     if (setFilters !== undefined) setFilters({ ...filters, ...newFilters });
   };

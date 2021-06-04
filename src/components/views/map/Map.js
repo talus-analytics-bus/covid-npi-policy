@@ -8,7 +8,7 @@
  */
 
 // standard packages
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 // custom hooks
 import { usePrevious } from "../../misc/UtilsTyped";
@@ -175,7 +175,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
    * @param  {Object}  [filters={}] [description]
    * @return {Promise}              [description]
    */
-  const getData = async (filters = {}) => {
+  const getData = useCallback(async () => {
     const queries = {};
     // get all country places for tooltip names, etc.
     queries.places = PlaceQuery({ place_type: ["country"] });
@@ -211,11 +211,10 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     });
     setPlaces(results.places);
     setFilterDefs(newFilterDefs);
-    console.log(newFilterDefs);
     setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
     setLoading(false);
-  };
+  }, [filterDefs, setLoading]);
 
   // CONSTANTS // -----------------------------------------------------------//
   // last updated date of overall data
@@ -229,15 +228,19 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // EFFECT HOOKS // -------------------------------------------------------------//
   // init
-  useEffect(function initializeOptionSets() {
-    // set loading spinner to visible
-    setLoading(true);
+  useEffect(
+    function initializeOptionSets() {
+      // set loading spinner to visible
+      setLoading(true);
 
-    // set current page
-    setPage("policymaps");
+      // set current page
+      setPage("policymaps");
 
-    if (!initialized) getData();
-  }, []);
+      if (!initialized) getData();
+    },
+    [setLoading, setPage]
+  );
+  // }, []); // eslint-disable-line
 
   // When map ID is changed, update policy resolution to a supported one,
   // if needed

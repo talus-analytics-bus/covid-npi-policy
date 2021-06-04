@@ -9,7 +9,13 @@
  */
 
 // standard packages
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import styles from "./mapboxmap.module.scss";
 import { defaults } from "./plugins/data.js";
 
@@ -348,14 +354,17 @@ const MapboxMap = ({
 
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
-  const getMapData = async dataArgs => {
-    const newMapData = await dataGetter({
-      data,
-      ...dataArgs,
-      ...curMapOptions,
-    });
-    setData(newMapData);
-  };
+  const getMapData = useCallback(
+    async dataArgs => {
+      const newMapData = await dataGetter({
+        data,
+        ...dataArgs,
+        ...curMapOptions,
+      });
+      setData(newMapData);
+    },
+    [data, curMapOptions]
+  );
 
   /**
    * Update the current map tooltip
