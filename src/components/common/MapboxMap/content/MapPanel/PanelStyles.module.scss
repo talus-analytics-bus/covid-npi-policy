@@ -1,21 +1,7 @@
 @import "src/assets/styles/vars.module.scss";
 .panelStyles {
-    $max-font-size: 16px;
-    $min-font-size: 10px;
-    $diff: 6;
-    $lower-thresh: 320px;
-    $upper-thresh: 2400px;
-    $diff-thresh: 2080;
-    font-size: $max-font-size;
+    @include slidingFontSize();
 
-    $factor: calc(calc(100vw - #{$lower-thresh}) / #{$diff-thresh});
-    $offset: calc(#{$diff} * #{$factor});
-    @media screen and (min-width: $lower-thresh) {
-        font-size: calc(#{$min-font-size} + #{$offset});
-    }
-    @media screen and (min-width: $upper-thresh) {
-        font-size: $max-font-size;
-    }
     &.mapPanel {
         z-index: 0;
         pointer-events: none;
