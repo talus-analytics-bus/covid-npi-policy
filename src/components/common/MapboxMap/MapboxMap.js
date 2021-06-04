@@ -155,7 +155,9 @@ const MapboxMap = ({
       if (sortOrderMetricId === undefined) return;
       else {
         const featureOrder = {};
-        data[sortOrderMetricId].forEach(d => {
+        const dataToSort = data[sortOrderMetricId];
+        if (dataToSort === undefined) return;
+        dataToSort.forEach(d => {
           const hasBorder =
             d.value === "No restrictions" ||
             // d.value === null ||
