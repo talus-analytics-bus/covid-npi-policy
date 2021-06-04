@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, { FC, useEffect, useState } from "react";
 import styles from "../OptionControls.module.scss";
 import { Option, OptionWidget } from "../types";
@@ -12,8 +13,12 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
   callback,
 }) => {
   return (
-    <div className={styles.optionRadioSet}>
-      {title && <div className={styles.title}>{title}</div>}
+    <div className={classNames(styles.optionRadioSet, styles.optionWidget)}>
+      {title && (
+        <div className={styles.titleAndTooltip}>
+          <div className={styles.title}>{title}</div>
+        </div>
+      )}
       <section
         onChange={e => {
           // prevent events from propagating up to parent radio sets, if any

@@ -16,7 +16,7 @@ export const OptionSelect: FC<OptionSelectProps> = ({
     <div className={classNames(styles.optionWidget, styles.optionSelect)}>
       {title && (
         <div className={styles.titleAndTooltip}>
-          <span className={styles.title}>{title}</span>{" "}
+          <div className={styles.title}>{title}</div>{" "}
           {selectedOptions.length > 0 && selectedOptions[0].description && (
             <InfoTooltip
               id={"selectTooltip"}

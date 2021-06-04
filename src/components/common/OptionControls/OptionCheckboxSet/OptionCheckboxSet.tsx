@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, { FC, useEffect, useRef, useState } from "react";
 import styles from "../OptionControls.module.scss";
 import { Option, OptionWidget } from "../types";
@@ -36,8 +37,12 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
   const selectAllIndeterminate = selectAll && !allSelected && someSelected;
 
   return (
-    <div className={styles.optionRadioSet}>
-      {title && <div className={styles.title}>{title}</div>}
+    <div className={classNames(styles.optionRadioSet, styles.optionWidget)}>
+      {title && (
+        <div className={styles.titleAndTooltip}>
+          <div className={styles.title}>{title}</div>
+        </div>
+      )}
       <section
         ref={setRef}
         onChange={e => {

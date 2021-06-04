@@ -4,14 +4,22 @@
 }
 .optionWidget {
     .title,
-    .titleAndTooltip {
+    .titleAndTooltip > .title {
         font-family: "Open Sans", sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 0.875em;
-        margin-bottom: 0.5em;
         color: $idea-gray-2;
-        text-transform: uppercase;
+        &.title {
+            text-transform: uppercase;
+        }
+    }
+    .titleAndTooltip {
+        margin-bottom: 0.5em;
+        display: flex;
+        color: red !important;
+        flex-flow: auto;
+        align-items: center;
     }
     &:not(:last-of-type) {
         margin-bottom: 0.5em;
