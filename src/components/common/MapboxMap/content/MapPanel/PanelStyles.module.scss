@@ -83,7 +83,7 @@
             }
 
             &:not(.maxHeight) {
-                grid-template-rows: auto 7em;
+                grid-template-rows: auto 7.5em;
                 @media screen and (max-width: 1500px) {
                     grid-template-rows: auto auto;
                 }
