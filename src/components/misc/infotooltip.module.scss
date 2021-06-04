@@ -32,11 +32,11 @@
   position: relative;
 
   img {
-    $size: 15px;
+    $size: 10px;
     height: $size;
     width: $size;
-    top: 1px;
-    position: relative;
+    // top: 1px;
+    // position: relative;
     cursor: default;
   }
 }
