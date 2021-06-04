@@ -1,4 +1,3 @@
-import classes from "*.module.css";
 import classNames from "classnames";
 import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import { Caret } from "../../../MapOptions/OptionDrawer/content/Caret/Caret";
@@ -30,46 +29,31 @@ export const MapPanel: FC<ComponentProps> = ({
   const [bottom, setBottom] = useState<number>(
     openDefault ? getElHeight(bodyRef) : 0
   );
+  const [animating, setAnimating] = useState<boolean>(false);
+  const curWidth: number = useCurrentWidth();
 
-  const getWidth = () =>
-    window.innerWidth ||
-    document.documentElement.clientWidth ||
-    document.body.clientWidth;
+  useEffect(() => {
+    if (!open) updateBottom(setBottom, !open, bodyRef);
+  }, [curWidth, setBottom, open]);
 
-  function useCurrentWidth() {
-    // save current window width in the state object
-    let [width, setWidth] = useState(getWidth());
-
-    // in this case useEffect will execute only once because
-    // it does not have any dependencies.
-    useEffect(() => {
-      // timeoutId for debounce mechanism
-      let timeoutId: NodeJS.Timeout | null = null;
-      const resizeListener = () => {
-        // prevent execution of previous setTimeout
-        if (timeoutId) clearTimeout(timeoutId);
-        // change width from the state object after 150 milliseconds
-        timeoutId = setTimeout(() => setWidth(getWidth()), 150);
-      };
-      // set resize listener
-      window.addEventListener("resize", resizeListener);
-
-      // clean up function
-      return () => {
-        // remove resize listener
-        window.removeEventListener("resize", resizeListener);
-      };
-    }, []);
-    return width;
-  }
+  useEffect(() => {
+    if (animating) {
+      setOpen(!open);
+      updateBottom(setBottom, open, bodyRef);
+      setTimeout(() => {
+        setAnimating(false);
+      }, 500);
+    }
+  }, [animating]); // eslint-disable-line
 
   return (
     <div
-      data-window-width={useCurrentWidth()}
+      data-window-width={curWidth}
       className={classNames(styles.mapPanel, styles.panelStyles, ...classes, {
         [styles.maxHeight]: maxHeight,
         [styles.drawerPanel]: drawerPanel,
         [styles.open]: open,
+        [styles.animating]: animating,
       })}
       style={{
         bottom,
@@ -80,8 +64,7 @@ export const MapPanel: FC<ComponentProps> = ({
           [styles.fit]: tabType === "fit",
         })}
         onClick={() => {
-          setOpen(!open);
-          setBottom(!open ? 0 : 1 - getElHeight(bodyRef));
+          setAnimating(true);
         }}
         ref={tabRef}
       >
@@ -102,8 +85,49 @@ export const MapPanel: FC<ComponentProps> = ({
     </div>
   );
 };
+function updateBottom(
+  setBottom: React.Dispatch<React.SetStateAction<number>>,
+  open: boolean,
+  bodyRef: React.RefObject<HTMLDivElement>
+) {
+  setBottom(!open ? 0 : 1 - getElHeight(bodyRef));
+}
+
 function getElHeight(ref: React.RefObject<HTMLDivElement>): number {
   if (ref !== null && ref.current !== null) {
     return ref.current.getBoundingClientRect().height;
   } else return 0;
+}
+
+const getWidth = () =>
+  window.innerWidth ||
+  document.documentElement.clientWidth ||
+  document.body.clientWidth;
+
+// TODO move this into a separate component for resizing-responsiveness
+function useCurrentWidth() {
+  // save current window width in the state object
+  let [width, setWidth] = useState(getWidth());
+
+  // in this case useEffect will execute only once because
+  // it does not have any dependencies.
+  useEffect(() => {
+    // timeoutId for debounce mechanism
+    let timeoutId: NodeJS.Timeout | null = null;
+    const resizeListener = () => {
+      // prevent execution of previous setTimeout
+      if (timeoutId) clearTimeout(timeoutId);
+      // change width from the state object after 150 milliseconds
+      timeoutId = setTimeout(() => setWidth(getWidth()), 150);
+    };
+    // set resize listener
+    window.addEventListener("resize", resizeListener);
+
+    // clean up function
+    return () => {
+      // remove resize listener
+      window.removeEventListener("resize", resizeListener);
+    };
+  }, []);
+  return width;
 }
