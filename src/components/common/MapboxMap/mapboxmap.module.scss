@@ -107,6 +107,9 @@ div[class*="mapboxgl-popup-content"] {
   font-size: 0.6rem;
   width: max-content;
 }
+[class*="mapboxgl-ctrl-attrib-button"] {
+  display: none;
+}
 
 [class*="overlays"] {
   display: flex;
