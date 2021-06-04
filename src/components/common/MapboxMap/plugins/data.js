@@ -526,7 +526,7 @@ export const metricMeta = {
         The moving 7-day average number of new daily COVID-19 cases (confirmed
         and probable) in the state.
         <br />
-        <i style={{ fontSize: ".8rem" }}>
+        <i style={{ fontSize: ".8em" }}>
           Source: Calculated from{" "}
           <a
             target="_blank"
@@ -550,7 +550,7 @@ export const metricMeta = {
         <div
           style={{
             fontFamily: "'rawline', serif",
-            // fontSize: ".9rem",
+            // fontSize: ".9em",
             fontWeight: "normal",
             fontStyle: "italic",
             lineHeight: "1.1",
@@ -633,7 +633,7 @@ export const metricMeta = {
           The total cumulative number of COVID-19 cases (confirmed and probable)
           in the state as of the indicated date
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source:{" "}
             <a
               target="_blank"
@@ -661,7 +661,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              // fontSize: ".9rem",
+              // fontSize: ".9em",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -697,7 +697,7 @@ export const metricMeta = {
           The total cumulative number of COVID-19 cases (confirmed and probable)
           in the county as of the indicated date
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source:{" "}
             <a
               target="_blank"
@@ -720,7 +720,7 @@ export const metricMeta = {
           The moving 7-day average number of new daily COVID-19 cases (confirmed
           and probable) in the county.
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source: Calculated from{" "}
             <a
               target="_blank"
@@ -743,7 +743,7 @@ export const metricMeta = {
           The moving 7-day average number of new daily COVID-19 cases
           (confirmed) in the country.
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source: Calculated from{" "}
             <a
               target="_blank"
@@ -763,7 +763,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              // fontSize: ".9rem",
+              // fontSize: ".9em",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -785,7 +785,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              // fontSize: ".9rem",
+              // fontSize: ".9em",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -800,7 +800,7 @@ export const metricMeta = {
           The total cumulative number of COVID-19 cases (confirmed) in the
           country as of the indicated date
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source:{" "}
             <a
               target="_blank"
@@ -864,7 +864,7 @@ export const metricMeta = {
             { position: "absolute", top: 20 },
           ],
           domain: [
-            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            <div style={{ fontSize: ".8em", lineHeight: 1.1 }}>
               {getNounFromPolicyResolution({
                 mapId,
                 policyResolution,
@@ -876,7 +876,7 @@ export const metricMeta = {
             <div
               style={{
                 color: "#333",
-                fontSize: ".8rem",
+                fontSize: ".8em",
                 lineHeight: 1.1,
               }}
             >
@@ -1098,12 +1098,12 @@ export const metricMeta = {
           borders: [null, null, null, null, null, null],
           // borders: [null, "2px solid gray", null, null, null, null, null],
           domain: [
-            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            <div style={{ fontSize: ".8em", lineHeight: 1.1 }}>
               data not
               <br />
               available
             </div>,
-            // <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>no policy</div>,
+            // <div style={{ fontSize: ".8em", lineHeight: 1.1 }}>no policy</div>,
             getCovidLocalMetricLink("lockdown"),
             getCovidLocalMetricLink("stay-at-home"),
             getCovidLocalMetricLink("safer-at-home"),

@@ -37,7 +37,7 @@ export const OptionCheckbox: FC<Option> = ({
           onClick={onClick}
         />
         <label htmlFor={inputId}>
-          {name}{" "}
+          <span className={styles.optionLabel}>{name}</span>{" "}
           {description && (
             <InfoTooltip id={inputId} text={description} place={"left"} />
           )}

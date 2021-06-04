@@ -25,16 +25,14 @@
 }
 .infoTooltip {
   display: inline-flex;
-  margin: 0 5px;
+  margin: 0 0.1em;
   position: relative;
   pointer-events: all;
 
   img {
-    $size: 15px;
+    $size: 10px;
     height: $size;
     width: $size;
-    top: 2px;
-    position: relative;
     cursor: default;
   }
 }

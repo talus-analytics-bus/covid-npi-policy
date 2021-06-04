@@ -49,14 +49,12 @@
       + div {
         height: calc(100% - 116px);
         top: 116px;
-        // height: calc(100% - 90px);
       }
     }
     &[data-page="model"] {
       border-bottom: 2px solid $amp-green;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
     }
-    border-bottom: none;
   }
   &:not(.wide) {
     position: fixed;

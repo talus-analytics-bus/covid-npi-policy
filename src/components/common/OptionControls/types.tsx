@@ -81,6 +81,11 @@ export interface OptionWidget {
    * @returns Nothing.
    */
   callback(selected: Option[]): void;
+
+  /**
+   * Custom styles to apply to widget container (div).
+   */
+  customStyle?: Record<string, any>;
 }
 
 export type OptionSetEntry = {

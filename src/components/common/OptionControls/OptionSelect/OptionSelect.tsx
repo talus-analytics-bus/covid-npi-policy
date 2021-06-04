@@ -10,10 +10,22 @@ export const OptionSelect: FC<OptionSelectProps> = ({
   options,
   selectedOptions,
   callback,
+  customStyle = {},
 }) => {
   return (
     <div className={classNames(styles.optionWidget, styles.optionSelect)}>
-      {title && <div className={styles.title}>{title}</div>}
+      {title && (
+        <div className={styles.titleAndTooltip}>
+          <span className={styles.title}>{title}</span>{" "}
+          {selectedOptions.length > 0 && selectedOptions[0].description && (
+            <InfoTooltip
+              id={"selectTooltip"}
+              text={selectedOptions[0].description}
+              place={"left"}
+            />
+          )}
+        </div>
+      )}
       <select
         value={
           selectedOptions.length > 0
@@ -27,6 +39,7 @@ export const OptionSelect: FC<OptionSelectProps> = ({
           );
           callback(newSelectedOptions);
         }}
+        style={customStyle}
       >
         {options.map(o => (
           <option key={o.value} value={o.value}>
@@ -34,13 +47,6 @@ export const OptionSelect: FC<OptionSelectProps> = ({
           </option>
         ))}
       </select>
-      {selectedOptions.length > 0 && selectedOptions[0].description && (
-        <InfoTooltip
-          id={"selectTooltip"}
-          text={selectedOptions[0].description}
-          place={"left"}
-        />
-      )}
     </div>
   );
 };

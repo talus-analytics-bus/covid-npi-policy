@@ -3,7 +3,6 @@
   // overriding module defaults
   [class*="rc-slider-handle"] {
     z-index: 1;
-    background: red;
     pointer-events: none;
   }
   [class*="rc-slider-mark"] {
@@ -33,7 +32,7 @@
       padding: 10px 5px;
       .buttonText {
         font-style: italic;
-        font-size: 0.9rem;
+        font-size: 0.9em;
         .icon {
           font-style: normal;
         }
@@ -48,7 +47,7 @@
     white-space: nowrap;
     width: 15px;
     margin-left: auto;
-    font-size: 1rem;
+    font-size: 1em;
     position: absolute;
 
     bottom: 0px;
@@ -82,8 +81,6 @@
   // width: min-content;
   .label {
     width: max-content;
-    // font-weight: 700;
-    // font-style: italic;
     font-family: "Open Sans", sans-serif;
     min-width: 315px;
     margin-bottom: 30px;
@@ -98,7 +95,7 @@
 
     i {
       cursor: pointer;
-      font-size: 2rem;
+      font-size: 1.5em;
     }
     color: $idea-primary-dark-blue;
     .disabled {
@@ -123,6 +120,7 @@
     [class*="mark"] {
       white-space: nowrap;
       color: #333;
+      font-size: 0.9em;
     }
     $height: 12px;
     .sliderBar {
@@ -143,13 +141,13 @@
         top: -$height - $padding * 2 - 10px;
         background-color: $orange;
         border-radius: 4px;
-        font-size: 0.9rem;
+        font-size: 0.9em;
         font-family: "Open Sans", sans-serif;
         padding: 4px;
 
         &.bottom {
           top: unset;
-          bottom: -$height - $padding * 2 - 10px;
+          bottom: -$height - $padding * 2 - 5px;
         }
       }
       .grooves {
@@ -164,7 +162,7 @@
     display: flex;
     @include spaceItemsHoriz(10px);
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.9em;
     button {
       @include btn-secondary();
       border-radius: 4px;

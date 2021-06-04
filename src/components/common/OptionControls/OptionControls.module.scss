@@ -3,17 +3,18 @@
     width: auto;
 }
 .optionWidget {
-    .title {
+    .title,
+    .titleAndTooltip {
         font-family: "Open Sans", sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: 14px;
-        margin-bottom: 0.5rem;
+        font-size: 0.875em;
+        margin-bottom: 0.5em;
         color: $idea-gray-2;
         text-transform: uppercase;
     }
     &:not(:last-of-type) {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.5em;
     }
     &.optionRadio {
         > span {
@@ -25,7 +26,7 @@
             }
 
             > input {
-                margin-right: 0.5rem;
+                margin-right: 0.5em;
             }
 
             > label {
@@ -39,9 +40,14 @@
         }
     }
     &.optionSelect {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr auto;
+        align-items: center;
         select {
+            grid-column: 1/-1;
             background: $idea-gray-4;
-            padding: 0.25rem;
+            padding: 0.25em;
             border-radius: 2px;
             font-weight: 600;
             @include selectStyling();

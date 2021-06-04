@@ -1,5 +1,6 @@
+import classNames from "classnames";
 import React, { FC, ReactElement } from "react";
-import styles from "../MapPanel.module.scss";
+import styles from "../PanelStyles.module.scss";
 
 type ComponentProps = {
   children: ReactElement;
@@ -10,7 +11,10 @@ export const PanelSet: FC<ComponentProps> = ({
   style,
 }): ReactElement => {
   return (
-    <div className={styles.panelSet} style={style}>
+    <div
+      className={classNames(styles.panelSet, styles.panelStyles)}
+      style={style}
+    >
       {children}
     </div>
   );
