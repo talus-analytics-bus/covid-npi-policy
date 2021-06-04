@@ -785,7 +785,7 @@ const MapboxMap = ({
           }
           <div className={styles.navAndAttribControl}>
             <div className={styles.attributionControl}>
-              <AttributionControl />
+              <AttributionControl compact={false} />
             </div>
             <div className={styles.navigationControl}>
               <NavigationControl />
