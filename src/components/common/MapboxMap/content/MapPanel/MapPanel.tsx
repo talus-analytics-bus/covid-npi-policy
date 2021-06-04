@@ -43,7 +43,6 @@ export const MapPanel: FC<ComponentProps> = ({
     openDefault ? getElHeight(bodyRef) : 0
   );
   const [animating, setAnimating] = useState<boolean>(false);
-  const [widthInitialized, setWidthInitialized] = useState(false);
   const curWidth: number = useCurrentWidth();
   const { panelWidths, setPanelWidths } = useContext(PanelSetContext);
 
@@ -113,7 +112,7 @@ function updateBottom(
   open: boolean,
   bodyRef: React.RefObject<HTMLDivElement>
 ) {
-  setBottom(!open ? 0 : 1 - getElHeight(bodyRef));
+  setBottom(!open ? 0 : 0 - getElHeight(bodyRef));
 }
 
 function getElHeight(ref: React.RefObject<HTMLDivElement>): number {
