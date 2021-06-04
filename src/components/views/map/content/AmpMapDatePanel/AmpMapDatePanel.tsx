@@ -8,15 +8,21 @@ type ComponentProps = {
   setDate: Function;
   minDate: string;
   maxDate: string;
+  panelSetId?: number;
 };
 export const AmpMapDatePanel: FC<ComponentProps> = ({
   date,
   setDate,
   minDate,
   maxDate,
+  panelSetId,
 }): ReactElement => {
   return (
-    <MapPanel tabName={"Date selection"} bodyStyle={{ zIndex: "2" }}>
+    <MapPanel
+      tabName={"Date selection"}
+      bodyStyle={{ zIndex: "2" }}
+      {...{ panelSetId }}
+    >
       <DateSlider
         {...{
           label: "Choose date or press play to view change over time",

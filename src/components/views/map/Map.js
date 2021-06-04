@@ -323,7 +323,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                     {
                       <PanelSet
                         style={{
-                          gridTemplateColumns: "auto auto 20em",
+                          gridTemplateColumns: "auto auto auto",
                         }}
                       >
                         <AmpMapLegendPanel />

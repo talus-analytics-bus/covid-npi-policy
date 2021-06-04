@@ -19,11 +19,13 @@ type ComponentProps = {
   setInfoTooltipContent: Function;
   linCircleScale: boolean;
   policyResolution: PolicyResolution;
+  panelSetId?: number;
 };
 export const AmpMapLegendPanel: FC<ComponentProps> = ({
   setInfoTooltipContent,
   linCircleScale,
   policyResolution,
+  panelSetId = 0,
 }) => {
   const { circle, fill, mapId, filters, date } = useContext<{
     circle?: string | null;
@@ -38,7 +40,7 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
   const fillMeta: MetricMetaEntry | null =
     fill !== null ? (metricMeta as MetricMeta)[fill || ""] : null;
   return (
-    <MapPanel tabName={"Legend"}>
+    <MapPanel tabName={"Legend"} {...{ panelSetId }}>
       <div className={styles.legend}>
         {
           <div className={styles.entries}>

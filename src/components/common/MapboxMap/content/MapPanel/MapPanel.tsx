@@ -1,6 +1,14 @@
 import classNames from "classnames";
-import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Caret } from "../../../MapOptions/OptionDrawer/content/Caret/Caret";
+import PanelSetContext from "./PanelSet/PanelSet";
 import styles from "./PanelStyles.module.scss";
 type TabType = "expand" | "fit";
 type ComponentProps = {
@@ -12,6 +20,10 @@ type ComponentProps = {
   bodyStyle?: Record<string, string>;
   classes?: string[];
   drawerPanel?: boolean;
+  /**
+   * If this map panel is in a set, which number it is (zero-indexed)
+   */
+  panelSetId?: number;
 };
 export const MapPanel: FC<ComponentProps> = ({
   tabType = "fit",
@@ -22,6 +34,7 @@ export const MapPanel: FC<ComponentProps> = ({
   bodyStyle = {},
   classes = [],
   drawerPanel = false,
+  panelSetId = 0,
 }): ReactElement => {
   let bodyRef = useRef<HTMLDivElement>(null);
   let tabRef = useRef<HTMLDivElement>(null);
@@ -30,7 +43,9 @@ export const MapPanel: FC<ComponentProps> = ({
     openDefault ? getElHeight(bodyRef) : 0
   );
   const [animating, setAnimating] = useState<boolean>(false);
+  const [widthInitialized, setWidthInitialized] = useState(false);
   const curWidth: number = useCurrentWidth();
+  const { panelWidths, setPanelWidths } = useContext(PanelSetContext);
 
   useEffect(() => {
     if (!open) updateBottom(setBottom, !open, bodyRef);
@@ -46,6 +61,12 @@ export const MapPanel: FC<ComponentProps> = ({
     }
   }, [animating]); // eslint-disable-line
 
+  useEffect(() => {
+    const newPanelWidths: number[] = [...panelWidths];
+    newPanelWidths[panelSetId] = open ? 1 : 0;
+    setPanelWidths(newPanelWidths);
+  }, [open]); // eslint-disable-line
+
   return (
     <div
       data-window-width={curWidth}
@@ -57,6 +78,7 @@ export const MapPanel: FC<ComponentProps> = ({
       })}
       style={{
         bottom,
+        width: open ? undefined : getElWidth(tabRef),
       }}
     >
       <div
@@ -68,10 +90,11 @@ export const MapPanel: FC<ComponentProps> = ({
         }}
         ref={tabRef}
       >
-        {tabName} <Caret up={!open} />
+        {tabName}
+        <Caret up={!open} />
       </div>
       <div
-        className={styles.body}
+        className={classNames(styles.body, { [styles.animating]: animating })}
         style={{
           height: maxHeight
             ? `calc(100vh - ${getElHeight(tabRef)}px - 116px)`
@@ -96,6 +119,11 @@ function updateBottom(
 function getElHeight(ref: React.RefObject<HTMLDivElement>): number {
   if (ref !== null && ref.current !== null) {
     return ref.current.getBoundingClientRect().height;
+  } else return 0;
+}
+function getElWidth(ref: React.RefObject<HTMLDivElement>): number {
+  if (ref !== null && ref.current !== null) {
+    return ref.current.getBoundingClientRect().width;
   } else return 0;
 }
 

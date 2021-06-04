@@ -26,6 +26,7 @@ interface AmpMapOptionsPanelProps {
    * ID of currently-displayed map.
    */
   mapId: MapId;
+  panelSetId?: number;
 
   /**
    * Setter function for this map's `mapId`, which determines what source is
@@ -42,6 +43,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   setMapId,
   categoryOptions,
   subcategoryOptions,
+  panelSetId = 0,
 }) => {
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
   /**
@@ -238,6 +240,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       }}
       drawerPanel={true}
       classes={[styles.ampMapOptionsPanel]}
+      {...{ panelSetId }}
     >
       <AccordionDrawer title={"Geographic resolution"}>
         <OptionRadioSet

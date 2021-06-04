@@ -39,18 +39,22 @@
     &.panelSet {
         display: grid;
         grid-auto-flow: column;
-        grid-template-columns: auto auto auto;
         overflow: hidden;
         align-items: flex-end;
+        justify-content: flex-end;
         position: absolute;
         z-index: 1;
         width: 100%;
         bottom: 0;
         pointer-events: none;
-
+        transition: 1s grid-template-columns ease;
+        > * {
+            justify-self: flex-end;
+        }
         .mapPanel {
             position: relative;
             display: grid;
+
             &:not(:first-of-type) {
                 left: -1px;
             }
@@ -60,6 +64,14 @@
             .body {
                 overflow-y: scroll;
                 display: grid;
+                * {
+                    transition: opacity 0.25s ease;
+                    opacity: 1;
+                }
+                &.animating * {
+                    transition: opacity 0.25s ease;
+                    opacity: 0;
+                }
             }
             &.maxHeight {
                 grid-template-rows: auto 100%;
@@ -77,9 +89,9 @@
                 }
             }
 
-            &:first-of-type > .body {
-                border-left-color: transparent;
-            }
+            // &:first-of-type > .body {
+            //     border-left-color: transparent;
+            // }
             &:last-of-type > .body {
                 border-right-width: 0;
             }
