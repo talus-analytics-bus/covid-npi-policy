@@ -11,5 +11,14 @@
             padding-left: 0;
             margin-left: 0;
         }
+        @media screen and (max-width: 1500px) {
+            flex-flow: column;
+            > :not(:last-child) {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                margin-bottom: 10px;
+            }
+        }
     }
 }

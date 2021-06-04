@@ -13,7 +13,6 @@
   .content {
     display: flex;
     @include spaceItemsHoriz(30px);
-    // justify-content: center;
 
     .entry {
       display: flex;

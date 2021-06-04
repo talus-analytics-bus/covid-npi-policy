@@ -70,9 +70,14 @@
                     border-top-width: 0;
                 }
             }
+
             &:not(.maxHeight) {
                 grid-template-rows: auto 7em;
+                @media screen and (max-width: 1500px) {
+                    grid-template-rows: auto auto;
+                }
             }
+
             &:first-of-type > .body {
                 border-left-color: transparent;
             }
