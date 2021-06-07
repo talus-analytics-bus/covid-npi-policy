@@ -9,6 +9,7 @@
 
 // standard packages
 import React, { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 // custom hooks
 import { usePrevious } from "../../misc/UtilsTyped";
@@ -41,6 +42,7 @@ import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
+import { replaceMapIdState, getMapHistoryState } from "./helpers";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 
@@ -56,16 +58,30 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   const [linCircleScale] = useState(true);
 
   // unique ID of map to display, e.g., 'us', 'global'
-  const [mapId, _setMapId] = useState(defaults.mapId);
+  // if there is a map id in the URL search params, use it as the initial value
+  const params = new URLSearchParams(
+    window !== undefined ? window.location.search : ""
+  );
+  const paramsMapId = params.get("mapId");
+  const defaultMapId = paramsMapId !== null ? paramsMapId : defaults.mapId;
+  const [mapId, _setMapId] = useState(defaultMapId);
   const prevMapId = usePrevious(mapId);
+  const history = useHistory();
 
   /**
    * Always set map status to "changing" when map ID is changed
    */
-  const setMapId = v => {
-    setMapIsChanging(true);
-    _setMapId(v);
-  };
+  const setMapId = useCallback(
+    v => {
+      setMapIsChanging(true);
+      _setMapId(v);
+
+      // update URL search params
+      // history.replace(getMapHistoryState(mapId));
+      replaceMapIdState(history, v);
+    },
+    [history]
+  );
 
   // whether to show policies at the selected geo or below it
   const [policyResolution, setPolicyResolution] = useState("geo");
@@ -236,11 +252,20 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
       // set current page
       setPage("policymaps");
 
-      if (!initialized) getData();
+      if (!initialized) {
+        getData();
+      }
     },
-    [setLoading, setPage]
+    [getData, initialized, setLoading, setPage]
   );
-  // }, []); // eslint-disable-line
+
+  // initialize URL parameter for map ID
+  useEffect(() => {
+    if (paramsMapId === null) replaceMapIdState(history, mapId);
+    else if (paramsMapId !== mapId) {
+      setMapId(paramsMapId);
+    }
+  }, [paramsMapId, history, setMapId, mapId]);
 
   // When map ID is changed, update policy resolution to a supported one,
   // if needed
@@ -260,7 +285,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
       if (mapIsChanging) setMapIsChanging(false);
     },
-    [mapId]
+    [mapId, mapIsChanging]
   );
 
   // when map data selection changes, update dynamic title
@@ -270,6 +295,20 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     },
     [circle, fill]
   );
+
+  // TODO implement history handling such that "forward" returns you to the
+  // previously-selected map state
+  // // handle history
+  // useEffect(() => {
+  //   const popstateListener = function(e) {
+  //     console.log(e.state);
+  //     updateUrlParams(history, mapId);
+  //   };
+  //   window.addEventListener("popstate", popstateListener);
+  //   return () => {
+  //     window.removeEventListener("popstate", popstateListener);
+  //   };
+  // }, []);
 
   // JSX // -----------------------------------------------------------------//
   if (!initialized) return <div />;
