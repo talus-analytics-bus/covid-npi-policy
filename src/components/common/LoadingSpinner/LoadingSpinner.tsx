@@ -36,39 +36,36 @@ export const LoadingSpinner: FC<ComponentProps> = ({
     setDelayIsOver(false);
     setTimeout(() => setDelayIsOver(true), delay);
   }, [delay, ready]);
-  if (delayIsOver)
-    return (
+
+  return (
+    <div
+      style={style}
+      className={classNames(styles.loadingSpinner, {
+        [styles.rightSide]: right,
+        [styles.leftSide]: !right,
+        [styles.fill]: fill,
+      })}
+    >
       <div
-        style={style}
-        className={classNames(styles.loadingSpinner, {
-          [styles.rightSide]: right,
-          [styles.leftSide]: !right,
-          [styles.fill]: fill,
+        className={classNames(styles.spinnerImageAndText, {
+          [styles.hidden]: ready || !delayIsOver,
         })}
       >
-        <div
-          className={classNames(styles.spinnerImageAndText, {
-            [styles.hidden]: ready,
-          })}
-        >
-          <img
-            className={styles.spinnerImage}
-            src={loadingImg}
-            alt="Loading spinner"
-          />
-          {text && <div className={styles.text}>{text}</div>}
-        </div>
-        {children && (
-          <div
-            className={classNames(styles.children, {
-              [styles.hidden]: !ready,
-            })}
-          >
-            {ready && children}
-          </div>
-        )}
+        <img
+          className={styles.spinnerImage}
+          src={loadingImg}
+          alt="Loading spinner"
+        />
+        {text && <div className={styles.text}>{text}</div>}
       </div>
-    );
-  else return null;
+      <div
+        className={classNames(styles.children, {
+          [styles.hidden]: !ready,
+        })}
+      >
+        {children}
+      </div>
+    </div>
+  );
 };
 export default LoadingSpinner;

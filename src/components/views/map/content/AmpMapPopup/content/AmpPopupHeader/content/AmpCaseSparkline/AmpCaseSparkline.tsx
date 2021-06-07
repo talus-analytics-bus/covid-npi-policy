@@ -52,6 +52,7 @@ export const AmpCaseSparkline: FC<ComponentProps> = ({
     <LoadingSpinner
       style={{ height: height + margin.top + 42 }}
       right={true}
+      delay={500}
       {...{ ready }}
     >
       <Sparkline

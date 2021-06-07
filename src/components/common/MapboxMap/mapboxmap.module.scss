@@ -100,8 +100,11 @@
 }
 
 // override default mapbox styles
-div[class*="mapboxgl-popup-content"] {
-  padding: 0;
+div[class^="mapboxgl-popup "] {
+  z-index: 1;
+  div[class*="mapboxgl-popup-content"] {
+    padding: 0;
+  }
 }
 [class*="mapboxgl-ctrl-attrib"] a {
   font-size: 0.6rem;
@@ -113,16 +116,13 @@ div[class*="mapboxgl-popup-content"] {
 
 [class*="overlays"] {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
   position: absolute;
   display: flex;
   flex-flow: column;
   width: 100%;
   height: 100%;
-  justify-content: flex-end;
   overflow: hidden;
+  z-index: 1;
 }
 
 // override default mapbox controls

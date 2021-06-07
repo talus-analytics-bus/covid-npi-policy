@@ -14,15 +14,6 @@
         height: $size;
         width: $size;
         animation: rotation 12s infinite linear;
-        &,
-        + .children {
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-    }
-    &.hidden .spinnerImageAndText {
-        transition: opacity 0.5s ease;
-        opacity: 0;
     }
 
     &.rightSide {
@@ -43,7 +34,7 @@
         display: grid;
         pointer-events: none;
         .spinnerImageAndText {
-            background-color: rgba(white, 0.75);
+            background-color: rgba(white, 1);
             width: max-content;
             padding: 1em;
             display: grid;
@@ -53,8 +44,6 @@
             justify-items: center;
             text-align: center;
             position: relative;
-            // top: 50%;
-            // left: 50%;
             margin: auto auto;
             img {
                 position: unset;
@@ -66,6 +55,14 @@
     }
 }
 
-.spinnerImageAndText.hidden {
-    opacity: 0;
+.spinnerImageAndText,
+.children {
+    &.hidden {
+        transition: opacity 0.5s ease;
+        opacity: 0;
+    }
+    &:not(.hidden) {
+        transition: opacity 0.5s ease;
+        opacity: 1;
+    }
 }

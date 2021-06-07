@@ -696,14 +696,12 @@ const MapboxMap = ({
   if (data === null)
     return (
       <>
-        {overlays}
         <div />
       </>
     );
   else
     return (
       <>
-        {overlays}
         <ReactMapGL
           mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
           ref={ref => {
@@ -773,6 +771,22 @@ const MapboxMap = ({
           }}
           doubleClickZoom={false} //remove 300ms delay on clicking
         >
+          {
+            // map legend
+          }
+          {showReset && <ResetZoom handleClick={resetViewport} />}
+          {
+            // map zoom plus and minus buttons
+          }
+          <div className={styles.navAndAttribControl}>
+            <div className={styles.attributionControl}>
+              <AttributionControl compact={false} />
+            </div>
+            <div className={styles.navigationControl}>
+              <NavigationControl />
+            </div>
+          </div>
+          {overlays}
           {// map tooltip component
           showTooltip && (
             <div className={styles.mapboxMap}>
@@ -789,21 +803,6 @@ const MapboxMap = ({
               </Popup>
             </div>
           )}
-          {
-            // map legend
-          }
-          {showReset && <ResetZoom handleClick={resetViewport} />}
-          {
-            // map zoom plus and minus buttons
-          }
-          <div className={styles.navAndAttribControl}>
-            <div className={styles.attributionControl}>
-              <AttributionControl compact={false} />
-            </div>
-            <div className={styles.navigationControl}>
-              <NavigationControl />
-            </div>
-          </div>
         </ReactMapGL>
       </>
     );
