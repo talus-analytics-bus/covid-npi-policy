@@ -66,6 +66,8 @@ const MapboxMap = ({
   plugins,
   linCircleScale, // `log` or `lin`
   mapIsChanging,
+  setShowLoadingSpinner,
+  setDataIsLoading,
   ...props
 }) => {
   // STATE // ---------------------------------------------------------------//
@@ -356,12 +358,14 @@ const MapboxMap = ({
   // map data updater function
   const getMapData = useCallback(
     async dataArgs => {
+      setDataIsLoading(true);
       const newMapData = await dataGetter({
         data,
         ...dataArgs,
         ...curMapOptions,
       });
       setData(newMapData);
+      setDataIsLoading(false);
     },
     [data, curMapOptions]
   );
@@ -517,6 +521,7 @@ const MapboxMap = ({
           mapId,
           data,
           geoHaveData,
+          setShowLoadingSpinner,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
             bindFeatureStates({

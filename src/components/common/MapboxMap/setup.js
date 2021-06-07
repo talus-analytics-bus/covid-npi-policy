@@ -21,7 +21,14 @@ import { defaults, allMapMetrics } from "./plugins/data";
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
+export const initMap = ({
+  map,
+  mapId,
+  data,
+  geoHaveData,
+  setShowLoadingSpinner,
+  callback,
+}) => {
   // get sources for current map (see `plugins/sources.js`)
   const sources = mapSources[mapId];
 
@@ -54,6 +61,7 @@ export const initMap = ({ map, mapId, data, geoHaveData, callback }) => {
 
       // trigger `initMap` callback function
       callback();
+      setShowLoadingSpinner(false);
     }
 
     /**

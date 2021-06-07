@@ -37,16 +37,16 @@ import MapDrape from "./content/MapDrape/MapDrape";
 import { style, dark } from "./map.module.scss";
 
 // common components
-import { MapboxMap } from "../../common";
+import { LoadingSpinner, MapboxMap } from "../../common";
 import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
-import { replaceMapIdState, getMapHistoryState } from "./helpers";
+import { replaceMapIdState } from "./helpers";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 
-const Map = ({ setLoading, setPage, versions, ...props }) => {
+const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -56,6 +56,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // map circle scale linear? otherwise log
   const [linCircleScale] = useState(true);
+
+  // is data being loaded?
+  const [dataIsLoading, setDataIsLoading] = useState(false);
 
   // unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
@@ -229,8 +232,7 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
     setFilterDefs(newFilterDefs);
     setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
-    setLoading(false);
-  }, [filterDefs, setLoading]);
+  }, [filterDefs]);
 
   // CONSTANTS // -----------------------------------------------------------//
   // last updated date of overall data
@@ -278,6 +280,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // TODO persist selection across map types if it makes sense
   useEffect(
     function updateDefaultMetrics() {
+      setLoading(true);
+
       if (defaults[mapId].showCircle !== false)
         setCircle(defaults[mapId].circle);
       else setCircle(null);
@@ -339,6 +343,12 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
               setFilters,
             }}
           >
+            <LoadingSpinner
+              text={"Loading data"}
+              ready={!dataIsLoading || loading}
+              fill={true}
+              delay={500}
+            />
             <MapboxMap
               {...{
                 setInfoTooltipContent: props.setInfoTooltipContent,
@@ -350,6 +360,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                 filters,
                 geoHaveData,
                 mapIsChanging,
+                setShowLoadingSpinner: setLoading,
+                setDataIsLoading,
                 overlays: (
                   <>
                     <MapDrape

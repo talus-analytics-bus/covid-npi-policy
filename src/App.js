@@ -183,6 +183,7 @@ const App = () => {
                           {...{
                             versions,
                             setPage,
+                            loading,
                             setLoading,
                             setInfoTooltipContent,
                           }}
@@ -280,7 +281,7 @@ const App = () => {
             <div
               className={classNames(styles.loading, { [styles.on]: loading })}
             >
-              <img src={loadingSvg} />
+              <img src={loadingSvg} alt={"Loading spinner"} />
             </div>
           }
           {<BrowserDetection>{modalToShow}</BrowserDetection>}
