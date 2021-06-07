@@ -29,6 +29,7 @@ type AmpMapPopupProps = {
   modelLink?: ActionLink;
   policiesLink?: ActionLink;
   policyResolution: PolicyResolution;
+  updating: boolean;
 };
 
 export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
@@ -43,6 +44,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   modelLink,
   policiesLink,
   policyResolution,
+  updating,
 }) => {
   return (
     <MapPopup
@@ -79,6 +81,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
               policiesLink,
               policyResolution,
               mapId,
+              updating,
             }}
           />,
         ],

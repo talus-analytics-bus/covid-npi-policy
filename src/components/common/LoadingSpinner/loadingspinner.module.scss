@@ -59,6 +59,9 @@
 .children {
     &.hidden {
         transition: opacity 0.5s ease;
+        &.instantFadeout {
+            transition: opacity 0s ease;
+        }
         opacity: 0;
     }
     &:not(.hidden) {

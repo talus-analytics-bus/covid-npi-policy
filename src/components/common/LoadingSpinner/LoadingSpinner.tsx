@@ -21,6 +21,11 @@ type ComponentProps = {
    * If any, text shown with spinner
    */
   text?: string;
+
+  /**
+   * If true, fadeout is always instantaneous
+   */
+  instantFadeout?: boolean;
 };
 export const LoadingSpinner: FC<ComponentProps> = ({
   delay = 0,
@@ -30,6 +35,7 @@ export const LoadingSpinner: FC<ComponentProps> = ({
   ready = false,
   right = false,
   fill = false,
+  instantFadeout = true,
 }) => {
   const [delayIsOver, setDelayIsOver] = useState(delay === 0);
   useEffect(() => {
@@ -44,6 +50,7 @@ export const LoadingSpinner: FC<ComponentProps> = ({
         [styles.rightSide]: right,
         [styles.leftSide]: !right,
         [styles.fill]: fill,
+        [styles.instantFadeout]: instantFadeout,
       })}
     >
       <div
@@ -61,6 +68,7 @@ export const LoadingSpinner: FC<ComponentProps> = ({
       <div
         className={classNames(styles.children, {
           [styles.hidden]: !ready,
+          [styles.instantFadeout]: instantFadeout,
         })}
       >
         {children}

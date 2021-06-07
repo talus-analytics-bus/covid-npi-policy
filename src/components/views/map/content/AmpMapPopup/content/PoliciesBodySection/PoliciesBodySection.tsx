@@ -7,6 +7,7 @@ import {
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
+import { LoadingSpinner } from "components/common";
 
 type PoliciesBodySectionProps = {
   categories: string[];
@@ -15,6 +16,7 @@ type PoliciesBodySectionProps = {
   policiesLink?: ActionLink;
   policyResolution: PolicyResolution;
   mapId: MapId;
+  updating: boolean;
 };
 export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = ({
   categories,
@@ -23,6 +25,7 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
   policiesLink,
   policyResolution,
   mapId,
+  updating,
 }) => {
   const nouns: Record<string, string> = getMapNouns(mapId);
   const prefix: string = policyResolution === "subgeo" ? "sub-" : "";
@@ -30,8 +33,12 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
     <BodySection
       {...{
         title: `Policies (${prefix}${nouns.level} level)`,
-        content: <PolicyCount {...{ categories, subcategories, count }} />,
-        action: policiesLink,
+        content: (
+          <LoadingSpinner ready={!updating} delay={0}>
+            <PolicyCount {...{ categories, subcategories, count }} />
+          </LoadingSpinner>
+        ),
+        action: updating ? null : policiesLink,
       }}
     />
   );

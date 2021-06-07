@@ -36,11 +36,14 @@ import { mapStyles } from "components/common/MapboxMap/plugins/sources";
 type UpdateDataProps = {
   feature: MapFeature;
   dataDate: Moment;
+  ready: boolean;
+  updating: boolean;
   mapMetrics: Record<string, any>;
   setPoliciesLink: Function;
   setPolicyCount: Function;
   setDistancingLevel: Function;
   setReady: Function;
+  setUpdating: Function;
   map: Record<string, any>;
   mapId: MapId;
   circle: string | null;
@@ -49,14 +52,18 @@ type UpdateDataProps = {
 const updateData: Function = async ({
   feature,
   dataDate,
+  ready,
+  updating,
   setPoliciesLink,
   setPolicyCount,
   setDistancingLevel,
   setReady,
+  setUpdating,
   map,
   mapId,
   paramArgs,
 }: UpdateDataProps) => {
+  if (ready) setUpdating(true);
   // if county map, get state `lockdown_level
   const distancingMapMetric: MapMetric[] = getDistancingMapMetric(
     mapId,
@@ -108,6 +115,7 @@ const updateData: Function = async ({
       res.policiesLink
     );
   const distancingLevel: string | null = res.distancingLevel;
+  setUpdating(false);
   setPoliciesLink(policiesLink);
   setPolicyCount(policyCount);
   setDistancingLevel(distancingLevel);
@@ -137,6 +145,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
 }) => {
   const [policiesLink, setPoliciesLink] = useState<ActionLink>(null);
   const [ready, setReady] = useState<boolean>(false);
+  const [updating, setUpdating] = useState<boolean>(false);
   const [distancingLevel, setDistancingLevel] = useState<DistancingLevel>(null);
   const [policyCount, setPolicyCount] = useState<number | null>(null);
   const featureName: string = getFeatureName(feature);
@@ -149,10 +158,13 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
     updateData({
       feature,
       dataDate,
+      ready,
+      updating,
       setPoliciesLink,
       setPolicyCount,
       setDistancingLevel,
       setReady,
+      setUpdating,
       map,
       mapId,
       paramArgs: {
@@ -179,6 +191,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
           modelLink: getModelLink(feature),
           policiesLink,
           policyResolution,
+          updating,
         }}
       />
     );
