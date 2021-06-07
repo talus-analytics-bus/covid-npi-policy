@@ -56,8 +56,6 @@ export interface Option {
    * and false otherwise.
    */
   indeterminate?: boolean;
-
-  readonly defaultChecked?: boolean;
 }
 
 export interface OptionWidget {

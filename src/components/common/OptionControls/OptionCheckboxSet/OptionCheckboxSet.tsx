@@ -103,7 +103,6 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
               callback(options);
             }}
             indeterminate={selectAllIndeterminate}
-            defaultChecked={emptyMeansAll}
           />
         )}
         {options.map(o => (
