@@ -3,15 +3,18 @@ import PolicyCategoryIcon from "components/views/PolicyPage/PolicyCategoryIcon/P
 import React, { FC, ReactElement } from "react";
 import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
 import { NO_POLICY_FOR_LOC_MSG } from "components/views/map/content/AmpMapPopupDataProvider/helpers";
+import { Option } from "components/common/OptionControls/types";
 
 type ComponentProps = {
   categories: string[];
   subcategories: string[];
   count: number | null;
+  subcategoryOptions?: Option[];
 };
 export const PolicyCount: FC<ComponentProps> = ({
   categories,
   subcategories,
+  subcategoryOptions = [],
   count,
 }): ReactElement => {
   if (count !== null) {
@@ -22,6 +25,7 @@ export const PolicyCount: FC<ComponentProps> = ({
     const categoryPhrase: string = getPolicyCatSubcatPhrase(
       categories,
       subcategories,
+      subcategoryOptions,
       noun
     );
 
@@ -74,15 +78,33 @@ export default PolicyCount;
 export const getPolicyCatSubcatPhrase: Function = (
   categories: string[] = [],
   subcategories: string[] = [],
+  subcategoryOptions: Option[],
   noun: "policies" | "policy"
 ): string => {
   const suffix: string = ` ${noun} in effect`;
   const nSubcats: number = subcategories.length;
   const nCats: number = categories.length;
+  const uniqueSubcats = Array.from(new Set(subcategories));
 
-  if (nCats === 0 && nSubcats === 0) {
+  // if only one category and all subcats selected, show as if nCats is 1 and
+  // subcats is zero
+  const allSubcatsSelected = !categories.some(c => {
+    const subcatsPossible: string[] = subcategoryOptions
+      .filter(sc => sc.parent === c)
+      .map(sc => sc.value as string);
+    const nCatSubcatsSelected: number = uniqueSubcats.filter(sc =>
+      subcatsPossible.includes(sc)
+    ).length;
+    const nCatSubcats = subcatsPossible.length;
+    return nCatSubcats !== nCatSubcatsSelected;
+  });
+
+  if (nCats > 1 && (allSubcatsSelected || nSubcats === 0)) {
+    // multi category, no subcat
+    return ` ${noun} with selected categories in effect`;
+  } else if (nCats === 0 && nSubcats === 0) {
     return `${noun} in effect`;
-  } else if (nCats === 1 && nSubcats === 0) {
+  } else if (nCats === 1 && (nSubcats === 0 || allSubcatsSelected)) {
     // one category, zero subcat
     return categories[0].toLowerCase() + suffix;
   } else if (nCats === 1 && nSubcats === 1) {
@@ -94,9 +116,6 @@ export const getPolicyCatSubcatPhrase: Function = (
       ` ${categories[0].toLowerCase()} ${noun} with selected ` +
       `subcategories in effect`
     );
-  } else if (nCats > 1 && nSubcats === 0) {
-    // multi category, no subcat
-    return ` ${noun} with selected categories in effect`;
   } else if (nCats > 1 && nSubcats > 0) {
     // multi category, some subcat
     return ` ${noun} with selected categories and subcategories in effect`;

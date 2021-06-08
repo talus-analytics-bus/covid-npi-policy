@@ -341,6 +341,18 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
               setCircle,
               setFill,
               setFilters,
+              categoryOptions: filterDefs[0].primary_ph_measure.items.map(i => {
+                return { name: i.label, value: i.value };
+              }),
+              subcategoryOptions: filterDefs[0].ph_measure_details.items.map(
+                i => {
+                  return {
+                    name: i.label,
+                    value: i.value,
+                    parent: i.group,
+                  };
+                }
+              ),
             }}
           >
             <LoadingSpinner

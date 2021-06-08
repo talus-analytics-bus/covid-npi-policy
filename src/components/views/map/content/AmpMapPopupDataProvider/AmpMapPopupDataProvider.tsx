@@ -176,27 +176,25 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
     });
   }, [feature.state]);
 
-  if (true)
-    return (
-      <AmpMapPopup
-        {...{
-          mapId,
-          feature,
-          featureName,
-          dataDate,
-          distancingLevel,
-          policyCategories,
-          policySubcategories,
-          policyCount,
-          modelLink: getModelLink(feature),
-          policiesLink,
-          policyResolution,
-          updating,
-          ready,
-        }}
-      />
-    );
-  else return <LoadingSpinner delay={500} />;
+  return (
+    <AmpMapPopup
+      {...{
+        mapId,
+        feature,
+        featureName,
+        dataDate,
+        distancingLevel,
+        policyCategories,
+        policySubcategories,
+        policyCount,
+        modelLink: getModelLink(feature),
+        policiesLink,
+        policyResolution,
+        updating,
+        ready,
+      }}
+    />
+  );
 };
 
 export default AmpMapPopupDataProvider;

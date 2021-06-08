@@ -116,6 +116,7 @@ const getFillLegendName: Function = ({
   const isLockdownLevel = fill === "lockdown_level";
 
   const nouns = getMapNouns(mapId);
+  const { subcategoryOptions } = useContext(MapOptionContext);
 
   // prepend "sub-" if subgeo policies are being viewed
   if (policyResolution === "subgeo") nouns.level = "sub-" + nouns.level;
@@ -149,6 +150,7 @@ const getFillLegendName: Function = ({
       const desc = getPolicyCatSubcatPhrase(
         filters["primary_ph_measure"] || [],
         filters["ph_measure_details"] || [],
+        subcategoryOptions,
         "policies"
       ).trim();
       return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
