@@ -17,6 +17,7 @@ import React, {
   useCallback,
 } from "react";
 import styles from "./mapboxmap.module.scss";
+import classNames from "classnames";
 import { defaults } from "./plugins/data.js";
 
 // 3rd party packages
@@ -697,12 +698,14 @@ const MapboxMap = ({
   if (data === null)
     return (
       <>
+        {overlays}
         <div />
       </>
     );
   else
     return (
       <>
+        {overlays}
         <ReactMapGL
           mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
           ref={ref => {
