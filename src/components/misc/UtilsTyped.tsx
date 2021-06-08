@@ -46,3 +46,14 @@ export const parseStringAsMoment = (value: string) => {
   const formattedValue = `${yyyymmdd} ${valueArr.slice(1).join(" ")}`.trim();
   return moment(formattedValue);
 };
+
+export function getElHeight(ref: React.RefObject<HTMLDivElement>): number {
+  if (ref !== null && ref.current !== null) {
+    return ref.current.getBoundingClientRect().height;
+  } else return 0;
+}
+export function getElWidth(ref: React.RefObject<HTMLDivElement>): number {
+  if (ref !== null && ref.current !== null) {
+    return ref.current.getBoundingClientRect().width;
+  } else return 0;
+}

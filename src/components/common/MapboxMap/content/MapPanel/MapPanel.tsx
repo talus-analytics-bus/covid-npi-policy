@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { getElHeight, getElWidth } from "components/misc/UtilsTyped";
 import React, {
   FC,
   ReactElement,
@@ -113,17 +114,6 @@ function updateBottom(
   bodyRef: React.RefObject<HTMLDivElement>
 ) {
   setBottom(!open ? 0 : 0 - getElHeight(bodyRef));
-}
-
-function getElHeight(ref: React.RefObject<HTMLDivElement>): number {
-  if (ref !== null && ref.current !== null) {
-    return ref.current.getBoundingClientRect().height;
-  } else return 0;
-}
-function getElWidth(ref: React.RefObject<HTMLDivElement>): number {
-  if (ref !== null && ref.current !== null) {
-    return ref.current.getBoundingClientRect().width;
-  } else return 0;
 }
 
 const getWidth = () =>

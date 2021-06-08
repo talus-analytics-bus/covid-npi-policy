@@ -65,11 +65,11 @@
                 overflow-y: scroll;
                 display: grid;
                 * {
-                    transition: opacity 0.25s ease;
+                    transition: opacity, height 0.25s ease;
                     opacity: 1;
                 }
                 &.animating * {
-                    transition: opacity 0.25s ease;
+                    transition: opacity, height 0.25s ease;
                     opacity: 0;
                 }
             }

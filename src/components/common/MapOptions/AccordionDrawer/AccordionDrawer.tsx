@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import { Caret } from "./content/Caret/Caret";
 import styles from "./AccordionDrawer.module.scss";
+import { getElHeight } from "components/misc/UtilsTyped";
 type ComponentProps = {
   readonly title: string;
   readonly openDefault?: boolean;
@@ -12,17 +13,46 @@ export const AccordionDrawer: FC<ComponentProps> = ({
   openDefault = true,
   children,
 }) => {
-  const [open, setOpen] = useState(openDefault);
+  const [open, setOpen] = useState<boolean>(openDefault);
+  const [animating, setAnimating] = useState<boolean>(false);
+  const [bodyHeight, setBodyHeight] = useState<string>("unset");
+  const bodyRef = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   if (animating) {
+  //     const opening = !open;
+  //     // if opening, unset height, then trigger closing
+  //     if (opening) {
+  //       setBodyHeight("100px");
+  //     }
+  //     // if closing, set height to current calculated height, then trigger open
+  //     else {
+  //       setBodyHeight(getElHeight(bodyRef) + "px");
+  //     }
+  //   }
+  // }, [animating]);
+
+  // useEffect(() => {
+  //   if (animating) {
+  //     setAnimating(false);
+  //     setOpen(!open);
+  //   }
+  // }, [bodyHeight]);
   return (
     <>
       <div
         className={classNames(styles.title, { [styles.closed]: !open })}
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+        }}
       >
         {title} <Caret up={!open} />
       </div>
-      <div className={classNames(styles.body, { [styles.closed]: !open })}>
-        {children}
+      <div
+        ref={bodyRef}
+        style={{ height: bodyHeight }}
+        className={classNames(styles.body, { [styles.closed]: !open })}
+      >
+        <div className={styles.bodyChildContainer}>{children}</div>
       </div>
     </>
   );
