@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import {
   CountryFeature,
   CountyFeature,
@@ -15,6 +15,7 @@ import { Place } from "components/misc/Queries";
 import { PlaceRecord } from "components/misc/dataTypes";
 import { InfoTooltip } from "components/common";
 import { Moment } from "moment";
+import InfoTooltipContext from "context/InfoTooltipContext";
 
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
@@ -34,6 +35,7 @@ export const PoliciesLink: FC<PoliciesLinkProps> = ({
   disabled = false,
   children,
 }): ReactElement => {
+  const { setInfoTooltipContent } = useContext(InfoTooltipContext);
   if (!disabled && to !== undefined)
     return (
       <Link to={to} target={target}>
@@ -46,10 +48,12 @@ export const PoliciesLink: FC<PoliciesLinkProps> = ({
         <span data-disabled={true}>View policies</span>
         {tooltip !== undefined && (
           <InfoTooltip
+            wide={false}
             {...{
               id: "policyLinkTooltip",
               text: tooltip,
               place: undefined,
+              setInfoTooltipContent,
             }}
           />
         )}
