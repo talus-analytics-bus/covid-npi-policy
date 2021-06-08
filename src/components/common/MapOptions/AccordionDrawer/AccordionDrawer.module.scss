@@ -27,15 +27,12 @@
     }
 }
 .body {
-    // max-height: 250px;
-    // height: 100%;
     overflow-y: scroll;
     padding: 0;
     .bodyChildContainer {
         padding: 0.625em;
     }
     &.closed {
-        visibility: hidden;
         height: 0px !important;
     }
 }

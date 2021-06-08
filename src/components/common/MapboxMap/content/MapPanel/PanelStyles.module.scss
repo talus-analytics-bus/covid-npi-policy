@@ -65,7 +65,9 @@
                 overflow-y: scroll;
                 display: grid;
                 * {
-                    transition: opacity, height 0.25s ease;
+                    transition-duration: 0.25s;
+                    transition-timing-function: ease;
+                    transition-property: opacity, height;
                     opacity: 1;
                 }
                 &.animating * {

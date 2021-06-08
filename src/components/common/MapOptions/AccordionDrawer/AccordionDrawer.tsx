@@ -14,29 +14,20 @@ export const AccordionDrawer: FC<ComponentProps> = ({
   children,
 }) => {
   const [open, setOpen] = useState<boolean>(openDefault);
-  const [animating, setAnimating] = useState<boolean>(false);
-  const [bodyHeight, setBodyHeight] = useState<string>("unset");
+  const [bodyHeight, setBodyHeight] = useState<string>("100%");
   const bodyRef = useRef<HTMLDivElement>(null);
-  // useEffect(() => {
-  //   if (animating) {
-  //     const opening = !open;
-  //     // if opening, unset height, then trigger closing
-  //     if (opening) {
-  //       setBodyHeight("100px");
-  //     }
-  //     // if closing, set height to current calculated height, then trigger open
-  //     else {
-  //       setBodyHeight(getElHeight(bodyRef) + "px");
-  //     }
-  //   }
-  // }, [animating]);
+  useEffect(() => {
+    const opening = open;
+    // if opening, unset height, then trigger closing
+    if (opening) {
+      setBodyHeight("100%");
+    }
+    // if closing, set height to current calculated height, then trigger open
+    else {
+      setBodyHeight(getElHeight(bodyRef) + "px");
+    }
+  }, [open]);
 
-  // useEffect(() => {
-  //   if (animating) {
-  //     setAnimating(false);
-  //     setOpen(!open);
-  //   }
-  // }, [bodyHeight]);
   return (
     <>
       <div
