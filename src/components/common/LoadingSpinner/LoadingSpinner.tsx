@@ -26,10 +26,16 @@ type ComponentProps = {
    * If true, fadeout is always instantaneous
    */
   instantFadeout?: boolean;
+
+  /**
+   * Inline CSS for children container
+   */
+  childrenStyle?: Record<string, any>;
 };
 export const LoadingSpinner: FC<ComponentProps> = ({
   delay = 0,
   style = {},
+  childrenStyle = {},
   text,
   children = null,
   ready = false,
@@ -66,6 +72,7 @@ export const LoadingSpinner: FC<ComponentProps> = ({
         {text && <div className={styles.text}>{text}</div>}
       </div>
       <div
+        style={childrenStyle}
         className={classNames(styles.children, {
           [styles.hidden]: !ready,
           [styles.instantFadeout]: instantFadeout,

@@ -33,12 +33,9 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
     <BodySection
       {...{
         title: `Policies (${prefix}${nouns.level} level)`,
-        content: (
-          <LoadingSpinner ready={!updating} delay={0}>
-            <PolicyCount {...{ categories, subcategories, count }} />
-          </LoadingSpinner>
-        ),
-        action: updating ? null : policiesLink,
+        content: <PolicyCount {...{ categories, subcategories, count }} />,
+        action: policiesLink,
+        updating,
       }}
     />
   );

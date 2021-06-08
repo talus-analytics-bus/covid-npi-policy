@@ -176,7 +176,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
     });
   }, [feature.state]);
 
-  if (ready)
+  if (true)
     return (
       <AmpMapPopup
         {...{
@@ -192,6 +192,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
           policiesLink,
           policyResolution,
           updating,
+          ready,
         }}
       />
     );

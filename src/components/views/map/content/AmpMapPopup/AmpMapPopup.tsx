@@ -30,6 +30,7 @@ type AmpMapPopupProps = {
   policiesLink?: ActionLink;
   policyResolution: PolicyResolution;
   updating: boolean;
+  ready: boolean;
 };
 
 export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
@@ -45,7 +46,9 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   policiesLink,
   policyResolution,
   updating,
+  ready,
 }) => {
+  const updatingOrNotReady: boolean = updating || !ready;
   return (
     <MapPopup
       {...{
@@ -70,6 +73,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
                   : "Distancing level of state",
               distancingLevel,
               modelLink,
+              updating: updatingOrNotReady,
             }}
           />,
           <PoliciesBodySection
@@ -81,7 +85,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
               policiesLink,
               policyResolution,
               mapId,
-              updating,
+              updating: updating || !ready,
             }}
           />,
         ],
