@@ -53,14 +53,14 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
       ? customOptions.xMin
       : moment(data[0].date_time);
   const xMax: Moment = moment(data[data.length - 1].date_time);
-  const [xDomain, setXDomain] = useState<[Moment, Moment]>([xMin, xMax]);
+  const [xDomain] = useState<[Moment, Moment]>([xMin, xMax]);
 
   // define y-domain from max y-value
-  const yMax: number = d3.max(
+  const yMaxTmp: number = d3.max(
     data,
     (d: NumericObservation) => d.value
   ) as number;
-  // const [yDomain, setYDomain] = useState<[number, number]>([0, yMax]);
+  const yMax: number = d3.max([yMaxTmp, 1]) as number;
   const yDomain: number[] = [0, yMax];
 
   const xScale = d3
