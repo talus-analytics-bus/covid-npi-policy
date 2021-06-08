@@ -194,7 +194,7 @@ export const getPoliciesLink: Function = async (
   if (featureName !== undefined) {
     return await getCountriesPoliciesLink(feature as CountryFeature, countSub);
   } else {
-    throw "Unknown feature type: " + feature;
+    throw Error("Unknown feature type: " + feature);
   }
 
   async function getCountyPoliciesLink(
