@@ -65,7 +65,7 @@ export const AmpCaseSparkline: FC<ComponentProps> = ({
           unit: ["case", "cases"],
           label: getLabelFromMapMetricId(circleForUpdate),
           customOptions: {
-            xMin: moment("2020-01-21"),
+            xMin: "2020-01-21",
             margin,
             noDataText: "No case data to show.",
           },

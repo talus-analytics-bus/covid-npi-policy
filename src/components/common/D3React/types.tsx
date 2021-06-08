@@ -60,7 +60,7 @@ export type Margin = {
 };
 
 export type SparklineCustomOptions = {
-  xMin?: Moment; // hardcode x-axis minimum
+  xMin?: string; // hardcode x-axis minimum
   margin?: Margin;
   noDataText?: string;
   loadingDelay?: number;

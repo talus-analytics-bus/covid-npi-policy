@@ -10,6 +10,7 @@
         width: auto;
     }
     .xAxisMarker {
+        transition: transform 0.5s ease;
         stroke: $orange;
         stroke-width: 1px;
         fill: none;

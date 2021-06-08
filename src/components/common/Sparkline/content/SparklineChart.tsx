@@ -48,10 +48,11 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
         };
 
   // create scales based on data and space to work in
-  const xMin: Moment =
+  const xMinStr: string =
     customOptions !== undefined && customOptions.xMin !== undefined
       ? customOptions.xMin
-      : parseStringAsMoment(data[0].date_time);
+      : data[0].date_time;
+  const xMin: Moment = parseStringAsMoment(xMinStr);
   const xMax: Moment = parseStringAsMoment(data[data.length - 1].date_time);
 
   const [xDomain] = useState<[Moment, Moment]>([xMin, xMax]);
@@ -88,6 +89,10 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
     { date_time: dataDateStr, value: 0 },
     { date_time: dataDateStr, value: yMax },
   ];
+  const xAxisMarkerOrigin: NumericObservation[] = [
+    { date_time: xMinStr, value: 0 },
+    { date_time: xMinStr, value: yMax },
+  ];
 
   // define extra zero point at end of data series
   const extraZeroPoint: NumericObservation[] = [
@@ -113,8 +118,11 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
               <path
                 className={styles.xAxisMarker}
                 //@ts-ignore TODO: rm this once typed correctly
-                d={line(xAxisMarkerData)}
+                d={line(xAxisMarkerOrigin)}
                 clipPath="url(#clip)"
+                transform={`translate(${xScale(
+                  parseStringAsMoment(dataDateStr)
+                )}, 0)`}
               />
               <Axes
                 {...{
