@@ -90,8 +90,14 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   /**
    * Update the filters for the specified key to consist of the
    * specified options.
-   * @param key {string} The filter key
-   * @param selected {Option[]} The selected options
+   * @param {string} key The filter key
+   * @param {Option[]} selected
+   * The currently selected options for the optionset
+   * @param {Option[]} options
+   * The possible options for the optionset
+   * @param {Option[]} allSubOptions
+   * If applicable, all suboptions that could be used in the optionset that has
+   * the defined `key`
    */
   const updateFilters = (
     key: "primary_ph_measure" | "ph_measure_details",
@@ -99,54 +105,74 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
     options: Option[],
     allSubOptions: Option[]
   ): void => {
-    const newFilters = {
-      [key]: selected.map(o => o.value),
-    };
-    const oldFilters: string[] =
-      filters !== undefined && filters[key] !== undefined
-        ? filters[key].filter((v: string) => !options.find(o => o.value === v))
-        : [];
-    newFilters[key] = newFilters[key].concat(oldFilters);
-    if (key === "primary_ph_measure") {
-      // keep only subfilters that match current main filters
-      if (
-        filters !== undefined &&
-        filters.ph_measure_details !== undefined &&
-        filters.ph_measure_details.length > 0
-      ) {
-        const newSubFilters: string[] = [];
-        filters.ph_measure_details.forEach((subcat: string | number) => {
-          const subcatOption: Option | undefined = allSubOptions.find(
-            o => o.value === subcat
-          );
-          if (subcatOption !== undefined) {
-            const parentCat: Option | undefined = options.find(
-              o => o.value === subcatOption.parent
-            );
-            if (
-              parentCat !== undefined &&
-              newFilters.primary_ph_measure.includes(parentCat.value)
-            )
-              newSubFilters.push(subcat as string);
-          }
-        });
-        newFilters.ph_measure_details = newSubFilters;
-      }
+    // if filter state variables undefined, abort
+    if (filters === undefined || setFilters === undefined) return;
 
-      // if category filter is new, add all subcats too
-      newFilters[key].forEach(newFilter => {
-        if (!oldFilters.includes(newFilter as string)) {
-          const subcats = allSubOptions.filter(so => so.parent === newFilter);
-          if (newFilters.ph_measure_details === undefined)
-            newFilters.ph_measure_details = [];
-          newFilters.ph_measure_details = [
-            ...newFilters.ph_measure_details,
-            ...subcats.map(o => o.value),
-          ];
+    // initialized current and updated filters
+    const currentFilters: Record<string, any> = {
+      primary_ph_measure: [],
+      ph_measure_details: [],
+      ...filters,
+    };
+    const updatedFilters: Record<string, any> = {
+      primary_ph_measure: [],
+      ph_measure_details: [],
+    };
+
+    // if category filter being updated:
+    if (key === "primary_ph_measure") {
+      // update category filters
+      // set updated category filters to equal selected values
+      updatedFilters[key] = selected.map(o => o.value);
+
+      // update subcategory filters
+      // Set updated subcat filters equal to current subcat filters except
+      // those whose cats aren't in selected values
+      updatedFilters["ph_measure_details"] = currentFilters[
+        "ph_measure_details"
+      ].filter((v: string) => {
+        const subcatOption: Option | undefined = allSubOptions.find(
+          o => o.value === v
+        );
+        const keepSubcatFilter: boolean =
+          subcatOption !== undefined &&
+          updatedFilters.primary_ph_measure.includes(subcatOption.value);
+        return keepSubcatFilter;
+      });
+      // For each updated cat filter, if no subcats for it are in updated
+      // subcat filters, add every possible subcat
+      updatedFilters.ph_measure_details = currentFilters.ph_measure_details;
+      updatedFilters.primary_ph_measure.forEach((v: string) => {
+        const possibleCatSubcats: string[] = allSubOptions
+          .filter(o => o.parent === v)
+          .map(o => o.value as string);
+        const addAllCatSubcats = !updatedFilters.ph_measure_details.some(
+          (v: string) => {
+            return possibleCatSubcats.includes(v);
+          }
+        );
+        if (addAllCatSubcats) {
+          updatedFilters.ph_measure_details = updatedFilters.ph_measure_details.concat(
+            possibleCatSubcats
+          );
         }
       });
+    } else if (key === "ph_measure_details") {
+      // Remove all values from subcat filters that belong to the parent of
+      // this checkbox set
+      updatedFilters.primary_ph_measure = currentFilters.primary_ph_measure;
+      const possibleCatSubcats: string[] = options.map(o => o.value as string);
+      updatedFilters.ph_measure_details = currentFilters.ph_measure_details;
+      updatedFilters.ph_measure_details = updatedFilters.ph_measure_details.filter(
+        (v: string) => {
+          return !possibleCatSubcats.includes(v);
+        }
+      );
+      updatedFilters.ph_measure_details = updatedFilters.ph_measure_details.concat(
+        selected.map(o => o.value as string)
+      );
     }
-    if (setFilters !== undefined) setFilters({ ...filters, ...newFilters });
+    setFilters(updatedFilters);
   };
 
   const fillSubOptions: ReactElement = (
