@@ -113,9 +113,6 @@ div[class^="mapboxgl-popup "] {
   font-size: 0.6rem;
   width: max-content;
 }
-[class*="mapboxgl-ctrl-attrib-button"] {
-  display: none;
-}
 
 [class*="overlays"] {
   display: flex;
@@ -189,6 +186,9 @@ div[class^="mapboxgl-popup "] {
       box-shadow: none !important;
       -webkit-box-shadow: none !important;
     }
+  }
+  [class*="mapboxgl-ctrl-attrib-button"] {
+    display: none;
   }
 }
 
