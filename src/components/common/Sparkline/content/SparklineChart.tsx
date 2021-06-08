@@ -120,9 +120,11 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
                 //@ts-ignore TODO: rm this once typed correctly
                 d={line(xAxisMarkerOrigin)}
                 clipPath="url(#clip)"
-                transform={`translate(${xScale(
-                  parseStringAsMoment(dataDateStr)
-                )}, 0)`}
+                style={{
+                  transform: `translate(${xScale(
+                    parseStringAsMoment(dataDateStr)
+                  )}px)`,
+                }}
               />
               <Axes
                 {...{
