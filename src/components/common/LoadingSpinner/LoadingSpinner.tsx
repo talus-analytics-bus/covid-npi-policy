@@ -69,6 +69,7 @@ export const LoadingSpinner: FC<ComponentProps> = ({
         className={classNames(styles.children, {
           [styles.hidden]: !ready,
           [styles.instantFadeout]: instantFadeout,
+          [styles.displayed]: children !== null && children !== undefined,
         })}
       >
         {children}
