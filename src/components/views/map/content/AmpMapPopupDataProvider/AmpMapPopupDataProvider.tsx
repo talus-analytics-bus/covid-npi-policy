@@ -1,5 +1,10 @@
 // library components
-import React, { FunctionComponent as FC, useEffect, useState } from "react";
+import React, {
+  FunctionComponent as FC,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 // local components
 import {
@@ -13,7 +18,6 @@ import {
 } from "components/common/MapboxMap/plugins/mapTypes";
 import AmpMapPopup from "../AmpMapPopup/AmpMapPopup";
 import { Moment } from "moment";
-import { LoadingSpinner } from "components/common";
 import { ActionLink } from "components/common/MapboxMap/mapPopup/MapPopup";
 
 // local constants
@@ -32,6 +36,7 @@ import {
 } from "./helpers";
 import { execute, PolicyStatusCounts } from "components/misc/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
+import SettingsContext, { SettingsContextProps } from "context/SettingsContext";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -46,6 +51,7 @@ type UpdateDataProps = {
   setUpdating: Function;
   map: Record<string, any>;
   mapId: MapId;
+  DISABLE_POLICY_LINK_IF_ZERO: boolean;
   circle: string | null;
   paramArgs: Record<string, any>;
 };
@@ -61,6 +67,7 @@ const updateData: Function = async ({
   setUpdating,
   map,
   mapId,
+  DISABLE_POLICY_LINK_IF_ZERO,
   paramArgs,
 }: UpdateDataProps) => {
   if (ready) setUpdating(true);
@@ -109,7 +116,7 @@ const updateData: Function = async ({
   const policyCount: number | null =
     placeHasPoliciesToday && placeHasPolicies ? res.policyCount[0].value : null;
   const policiesLink: ActionLink =
-    policyCount === 0 ? (
+    policyCount === 0 && DISABLE_POLICY_LINK_IF_ZERO ? (
       <PoliciesLink tooltip={ZERO_POLICY_MSG} />
     ) : policyCount === null ? null : (
       res.policiesLink
@@ -150,6 +157,11 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   const [policyCount, setPolicyCount] = useState<number | null>(null);
   const featureName: string = getFeatureName(feature);
 
+  // context
+  const { DISABLE_POLICY_LINK_IF_ZERO } = useContext<SettingsContextProps>(
+    SettingsContext
+  );
+
   useEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
       .state_name;
@@ -167,6 +179,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       setUpdating,
       map,
       mapId,
+      DISABLE_POLICY_LINK_IF_ZERO,
       paramArgs: {
         policyResolution,
         stateName,

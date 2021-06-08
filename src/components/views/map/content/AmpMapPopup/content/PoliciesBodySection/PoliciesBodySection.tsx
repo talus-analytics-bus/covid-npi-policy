@@ -7,7 +7,6 @@ import {
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
-import { LoadingSpinner } from "components/common";
 import MapOptionContext from "components/views/map/context/MapOptionContext";
 
 type PoliciesBodySectionProps = {

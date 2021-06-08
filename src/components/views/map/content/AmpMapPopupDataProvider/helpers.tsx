@@ -205,7 +205,7 @@ export const getPoliciesLink: Function = async (
       return (
         <PoliciesLink
           target={"_blank"}
-          to={"/policies/USA/national/" + countyFeature.properties.state_name}
+          to={"/policies/USA/" + countyFeature.properties.state_name}
         >
           View state policies
         </PoliciesLink>
