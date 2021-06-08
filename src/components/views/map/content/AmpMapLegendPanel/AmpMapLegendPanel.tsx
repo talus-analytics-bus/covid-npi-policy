@@ -155,16 +155,6 @@ const getFillLegendName: Function = ({
       ).trim();
       return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
     }
-    const category = filters["primary_ph_measure"][0].toLowerCase();
-    const subcategory = !isEmpty(filters["ph_measure_details"])
-      ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
-      : undefined;
-
-    const prefix = `Policies in effect at ${nouns.level} level for `;
-    const suffix = ` on ${date.format("MMM D, YYYY")}`;
-    if (subcategory !== undefined) {
-      return <ShowMore text={prefix + subcategory + suffix} charLimit={120} />;
-    } else return prefix + category + suffix;
   }
   return null;
 };
