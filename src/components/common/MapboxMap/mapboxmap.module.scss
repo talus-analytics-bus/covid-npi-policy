@@ -13,6 +13,9 @@
   .attributionControl {
     position: relative;
     top: 5px;
+    &.empty + .navigationControl {
+      top: 10px;
+    }
   }
   .navigationControl {
     position: relative;
@@ -123,6 +126,10 @@ div[class^="mapboxgl-popup "] {
   height: 100%;
   overflow: hidden;
   z-index: 2;
+  pointer-events: none;
+  * {
+    pointer-events: all;
+  }
 }
 
 // override default mapbox controls

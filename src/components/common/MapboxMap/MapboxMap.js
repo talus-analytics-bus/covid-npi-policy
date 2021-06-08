@@ -775,19 +775,22 @@ const MapboxMap = ({
           {
             // map legend
           }
-          {showReset && <ResetZoom handleClick={resetViewport} />}
           {
             // map zoom plus and minus buttons
           }
           <div className={styles.navAndAttribControl}>
-            <div className={styles.attributionControl}>
+            <div
+              className={classNames(styles.attributionControl, {
+                [styles.empty]: mapStyle.attribution !== true,
+              })}
+            >
               <AttributionControl compact={false} />
             </div>
             <div className={styles.navigationControl}>
               <NavigationControl />
+              {showReset && <ResetZoom handleClick={resetViewport} />}
             </div>
           </div>
-          {overlays}
           {// map tooltip component
           showTooltip && (
             <div className={styles.mapboxMap}>

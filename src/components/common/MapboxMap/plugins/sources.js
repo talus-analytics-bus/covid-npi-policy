@@ -191,6 +191,7 @@ export const mapStyles = {
     value: "global",
     geo_res: "country",
     name: "Countries",
+    attribution: true,
     tooltip: <span>View national-level data for the world</span>,
     minZoom: 1.7246463935904246,
     maxZoom: 6,
