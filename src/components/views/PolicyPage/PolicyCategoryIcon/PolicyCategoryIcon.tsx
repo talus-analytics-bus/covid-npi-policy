@@ -27,7 +27,7 @@ const iconDictionary: Record<string, string> = {
 };
 
 type PolicyCategoryIconProps = {
-  category: string;
+  category: string | string[];
   margin?: string;
   blankIfNone?: boolean;
 };
@@ -38,20 +38,33 @@ type PolicyCategoryIconProps = {
 const PolicyCategoryIcon: FunctionComponent<PolicyCategoryIconProps> = (
   props
 ): ReactElement | null => {
-  const src: string | undefined = iconDictionary[props.category];
-  const showIcon: boolean = src !== undefined || props.blankIfNone !== true;
-  if (showIcon)
+  const categories: string[] =
+    typeof props.category === "string" ? [props.category] : props.category;
+
+  const srcs: Array<Array<string>> = categories
+    .map((v: string) => {
+      return [iconDictionary[v], v];
+    })
+    .filter(([v]) => {
+      return v !== undefined;
+    });
+  const showIcons: boolean = srcs.length > 0 || props.blankIfNone !== true;
+  if (showIcons)
     return (
       <div
-        style={{ backgroundColor: "#96d6db", margin: props.margin }}
-        className={styles.iconBackground}
+        style={{
+          gridTemplateColumns: `repeat(${srcs.length > 1 ? 2 : 1}, 1fr)`,
+        }}
+        className={styles.icons}
       >
-        {src && (
-          <img
-            src={iconDictionary[props.category]}
-            alt={props.category + "icon"}
-          />
-        )}
+        {srcs.map(([src, cat]) => (
+          <div
+            style={{ backgroundColor: "#96d6db", margin: props.margin }}
+            className={styles.iconBackground}
+          >
+            <img src={src} alt={cat + " icon"} />
+          </div>
+        ))}
       </div>
     );
   else return null;

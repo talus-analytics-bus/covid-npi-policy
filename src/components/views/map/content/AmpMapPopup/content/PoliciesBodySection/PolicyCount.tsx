@@ -29,14 +29,12 @@ export const PolicyCount: FC<ComponentProps> = ({
       noun
     );
 
-    const categoryIconName: string =
-      categories.length === 1 ? categories[0] : "multiple";
     return (
       <LabeledIcon
         {...{
           icon: (
             <PolicyCategoryIcon
-              category={categoryIconName}
+              category={categories}
               margin={"0"}
               blankIfNone={true}
             />
