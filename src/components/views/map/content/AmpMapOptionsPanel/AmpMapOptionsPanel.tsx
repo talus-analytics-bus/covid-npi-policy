@@ -128,6 +128,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       // update subcategory filters
       // Set updated subcat filters equal to current subcat filters except
       // those whose cats aren't in selected values
+      updatedFilters.ph_measure_details = currentFilters.ph_measure_details;
       updatedFilters["ph_measure_details"] = currentFilters[
         "ph_measure_details"
       ].filter((v: string) => {
@@ -141,7 +142,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       });
       // For each updated cat filter, if no subcats for it are in updated
       // subcat filters, add every possible subcat
-      updatedFilters.ph_measure_details = currentFilters.ph_measure_details;
       updatedFilters.primary_ph_measure.forEach((v: string) => {
         const possibleCatSubcats: string[] = allSubOptions
           .filter(o => o.parent === v)
@@ -157,6 +157,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           );
         }
       });
+
+      // if no
     } else if (key === "ph_measure_details") {
       // Remove all values from subcat filters that belong to the parent of
       // this checkbox set
