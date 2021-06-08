@@ -230,6 +230,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         );
       }}
       field={"primary_ph_measure"}
+      clearAll={true}
       {...{ setInfoTooltipContent }}
     />
   );

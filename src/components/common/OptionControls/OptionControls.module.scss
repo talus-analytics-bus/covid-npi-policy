@@ -17,12 +17,21 @@
     .titleAndTooltip {
         margin-bottom: 0.5em;
         display: flex;
-        color: red !important;
         flex-flow: auto;
         align-items: center;
     }
     &:not(:last-of-type) {
         margin-bottom: 0.5em;
+    }
+    .clearAll {
+        font-size: 0.875em;
+        margin-left: 0.5em;
+        cursor: pointer;
+        color: $selected-blue;
+        &:hover {
+            text-decoration: underline;
+            color: $dark-selected-blue;
+        }
     }
     &.optionRadio {
         > span {

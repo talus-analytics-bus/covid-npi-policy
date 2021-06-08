@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useRef } from "react";
 import styles from "../OptionControls.module.scss";
 import { Option, OptionWidget } from "../types";
 import { OptionCheckbox } from "./OptionCheckbox/OptionCheckbox";
@@ -17,6 +17,12 @@ interface OptionRadioSetProps extends OptionWidget {
   selectAll?: boolean;
 
   /**
+   * True if a "clear all" button should be included next to the name of the
+   * checkbox set
+   */
+  clearAll?: boolean;
+
+  /**
    * Optional: Function to set tooltip content. If undefined, tooltip will be
    * rendered inside component.
    */
@@ -31,13 +37,10 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
   field,
   emptyMeansAll = false,
   selectAll = false,
+  clearAll = false,
   setInfoTooltipContent,
 }) => {
   let setRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (emptyMeansAll) callback(options);
-  // }, []);
 
   const allSelected: boolean = selectedOptions.length === options.length;
   const someSelected: boolean = selectedOptions.length > 0;
@@ -48,6 +51,13 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
       {title && (
         <div className={styles.titleAndTooltip}>
           <div className={styles.title}>{title}</div>
+          {clearAll && selectedOptions.length > 0 && (
+            <>
+              <div onClick={() => callback([])} className={styles.clearAll}>
+                clear all
+              </div>
+            </>
+          )}
         </div>
       )}
       <section
