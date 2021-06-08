@@ -39,6 +39,7 @@ import ResetZoom from "./resetZoom/ResetZoom";
 // context
 import MapOptionContext from "../../views/map/context/MapOptionContext";
 import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
+import { elementIsMapCanvas } from "./plugins/helpers";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -575,7 +576,7 @@ const MapboxMap = ({
     if (mapRef.current === null) return;
     else {
       // was the cursor moving on the map?
-      const cursorOnMap = e.target.classList.contains("overlays");
+      const cursorOnMap = elementIsMapCanvas(e.target);
       if (!cursorOnMap) return;
 
       // Get map reference object and sources for map
@@ -642,7 +643,7 @@ const MapboxMap = ({
       else {
         // if the cursor is not hovering on the map itself, unhover
         // all features
-        const cursorOnMap = e.target.classList.contains("overlays");
+        const cursorOnMap = elementIsMapCanvas(e.target);
 
         if (!cursorOnMap) {
           if (hoveredFeature !== null) {
