@@ -85,10 +85,6 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
 
   // get x-axis marker data for vertical line
   const dataDateStr: string = dataDate.format("YYYY-MM-DD");
-  const xAxisMarkerData: NumericObservation[] = [
-    { date_time: dataDateStr, value: 0 },
-    { date_time: dataDateStr, value: yMax },
-  ];
   const xAxisMarkerOrigin: NumericObservation[] = [
     { date_time: xMinStr, value: 0 },
     { date_time: xMinStr, value: yMax },
