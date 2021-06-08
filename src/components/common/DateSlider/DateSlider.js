@@ -62,10 +62,10 @@ const DateSlider = ({
   const sliderMaxValue = sliderMax.diff(sliderMin, "days");
 
   // EFFECT HOOKS // --------------------------------------------------------//
-  // when slider date changes, update all data
-  useEffect(() => {
-    setDate(curSliderDate);
-  }, [setDate, curSliderDate]);
+  // // when slider date changes, update all data
+  // useEffect(() => {
+  //   setDate(curSliderDate);
+  // }, [setDate, curSliderDate]);
 
   // date slider and styles
   // wrapper style: optional
@@ -144,6 +144,17 @@ const DateSlider = ({
     setCurSliderDate(newCurSliderDate);
   };
 
+  const handleSliderAfterChange = valNumeric => {
+    // update slider numeric value and date based on latest numeric value
+    // on slider
+    setCurSliderVal(valNumeric);
+    const newCurSliderDate = moment(sliderMin);
+    newCurSliderDate.add(valNumeric, "days");
+    setCurSliderDate(newCurSliderDate);
+    setDate(newCurSliderDate);
+    if (playing) handlePause();
+  };
+
   /**
    * Handle play behavior
    * @method handlePlay
@@ -186,15 +197,15 @@ const DateSlider = ({
     setPlayTimeouts(newPlayTimeouts);
   };
 
-  /**
-   * Stop playing after playing after slider is changed
-   * @method handleSliderAfterChange
-   * @return {[type]}                [description]
-   */
-  const handleSliderAfterChange = () => {
-    // Stop playing if playing
-    if (playing) handlePause();
-  };
+  // /**
+  //  * Stop playing after playing after slider is changed
+  //  * @method handleSliderAfterChange
+  //  * @return {[type]}                [description]
+  //  */
+  // const handleSliderAfterChange = () => {
+  //   // Stop playing if playing
+  //   if (playing) handlePause();
+  // };
 
   /**
    * If paused, stop playing and clear all playing timeouts (events that

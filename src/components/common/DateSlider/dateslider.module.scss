@@ -3,7 +3,7 @@
   // overriding module defaults
   [class*="rc-slider-handle"] {
     z-index: 1;
-    pointer-events: none;
+    // pointer-events: none;
   }
   [class*="rc-slider-mark"] {
     z-index: 0;
