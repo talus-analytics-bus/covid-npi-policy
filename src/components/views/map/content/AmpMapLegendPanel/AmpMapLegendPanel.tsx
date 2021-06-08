@@ -14,6 +14,7 @@ import { getAndListString, isEmpty, getInitCap } from "components/misc/Util";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
 import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/PolicyCount";
+import { Option } from "components/common/OptionControls/types";
 
 type ComponentProps = {
   setInfoTooltipContent: Function;
@@ -39,6 +40,8 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
     circle !== null ? (metricMeta as MetricMeta)[circle || ""] : null;
   const fillMeta: MetricMetaEntry | null =
     fill !== null ? (metricMeta as MetricMeta)[fill || ""] : null;
+  const { subcategoryOptions } = useContext(MapOptionContext);
+
   return (
     <MapPanel tabName={"Legend"} {...{ panelSetId }}>
       <div className={styles.legend}>
@@ -84,6 +87,7 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
                         policyResolution,
                         mapId,
                         date,
+                        subcategoryOptions,
                       })}
                     </span>
                   ),
@@ -104,6 +108,7 @@ type GetFillLegendNameArgs = {
   filters: Record<string, any>;
   date: Moment;
   policyResolution: PolicyResolution;
+  subcategoryOptions: Option[];
 };
 
 const getFillLegendName: Function = ({
@@ -112,11 +117,11 @@ const getFillLegendName: Function = ({
   policyResolution,
   mapId,
   date,
+  subcategoryOptions,
 }: GetFillLegendNameArgs): string | ReactElement | null => {
   const isLockdownLevel = fill === "lockdown_level";
 
   const nouns = getMapNouns(mapId);
-  const { subcategoryOptions } = useContext(MapOptionContext);
 
   // prepend "sub-" if subgeo policies are being viewed
   if (policyResolution === "subgeo") nouns.level = "sub-" + nouns.level;
