@@ -33,6 +33,7 @@ import classNames from "classnames";
 import loadingSvg from "./assets/images/loading.svg";
 import { InfoTooltipProvider } from "context/InfoTooltipContext";
 import { SettingsDefaults, SettingsProvider } from "context/SettingsContext";
+import { LoadingSpinner } from "components/common";
 
 //: React.FC
 const App = () => {
@@ -282,13 +283,14 @@ const App = () => {
               <Footer {...{ page, versions }} />
             )}
             {
-              // Loading spinner
-              <div
-                className={classNames(styles.loading, { [styles.on]: loading })}
-              >
-                <img src={loadingSvg} alt={"Loading spinner"} />
-              </div>
+              // // Loading spinner
+              // <div
+              //   className={classNames(styles.loading, { [styles.on]: loading })}
+              // >
+              //   <img src={loadingSvg} alt={"Loading spinner"} />
+              // </div>
             }
+            {<LoadingSpinner ready={!loading} fullscreen={true} />}
             {<BrowserDetection>{modalToShow}</BrowserDetection>}
           </BrowserRouter>
           {

@@ -2,7 +2,8 @@ import React, { FC, ReactElement, useEffect, useState } from "react";
 import styles from "./loadingspinner.module.scss";
 
 // assets
-import loadingImg from "./assets/images/loading.gif";
+import loadingImg from "./assets/images/loading.svg";
+// import loadingImg from "./assets/images/loading.gif";
 import classNames from "classnames";
 
 type ComponentProps = {
@@ -16,6 +17,11 @@ type ComponentProps = {
    * True if spinner fills container and centers inside
    */
   fill?: boolean;
+
+  /**
+   * True if spinner fills entire screen and prevents interactions
+   */
+  fullscreen?: boolean;
 
   /**
    * If any, text shown with spinner
@@ -41,13 +47,26 @@ export const LoadingSpinner: FC<ComponentProps> = ({
   ready = false,
   right = false,
   fill = false,
+  fullscreen = false,
   instantFadeout = true,
 }) => {
   const [delayIsOver, setDelayIsOver] = useState(delay === 0);
+  const [rotation, setRotation] = useState(0);
   useEffect(() => {
     setDelayIsOver(false);
     setTimeout(() => setDelayIsOver(true), delay);
   }, [delay, ready]);
+
+  useEffect(() => {
+    setTimeout(
+      curRotation => {
+        // rotate an additional 60deg every sec
+        setRotation(curRotation + 60);
+      },
+      1000,
+      rotation
+    );
+  }, [rotation]);
 
   return (
     <div
@@ -56,7 +75,9 @@ export const LoadingSpinner: FC<ComponentProps> = ({
         [styles.rightSide]: right,
         [styles.leftSide]: !right,
         [styles.fill]: fill,
+        [styles.fullscreen]: fullscreen,
         [styles.instantFadeout]: instantFadeout,
+        [styles.hiddenFullscreen]: fullscreen && (ready || !delayIsOver),
       })}
     >
       <div
@@ -64,11 +85,16 @@ export const LoadingSpinner: FC<ComponentProps> = ({
           [styles.hidden]: ready || !delayIsOver,
         })}
       >
-        <img
-          className={styles.spinnerImage}
-          src={loadingImg}
-          alt="Loading spinner"
-        />
+        <div
+          style={{ transform: `rotate(${rotation}deg)` }}
+          className={styles.spinnerImageContainer}
+        >
+          <img
+            className={styles.spinnerImage}
+            src={loadingImg}
+            alt="Loading spinner"
+          />
+        </div>
         {text && <div className={styles.text}>{text}</div>}
       </div>
       <div
