@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { useEffect, useRef } from "react";
 import { MapContext } from "react-map-gl";
@@ -37,4 +38,11 @@ export const useMap = () => {
 
 export const removeParenthetical = (value: string) => {
   return value.replace(/\([A-Z-]*\)/, "");
+};
+
+export const parseStringAsMoment = (value: string) => {
+  const valueArr: string[] = value.split(" ");
+  const yyyymmdd: string = valueArr[0].replaceAll("-", "/");
+  const formattedValue = `${yyyymmdd} ${valueArr.slice(1).join(" ")}`.trim();
+  return moment(formattedValue);
 };

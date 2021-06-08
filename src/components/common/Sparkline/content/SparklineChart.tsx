@@ -10,10 +10,10 @@ import React, {
 } from "react";
 import styles from "./SparklineChart.module.scss";
 import { Axes } from "components/common";
-import moment from "moment";
 import { getHandleMouseMove } from "./helpers";
 import { NumericObservation } from "components/common/MapboxMap/plugins/mapTypes";
 import { SparklineCustomOptions } from "components/common/D3React/types";
+import { parseStringAsMoment } from "components/misc/UtilsTyped";
 
 type ComponentProps = {
   width: number;
@@ -51,8 +51,9 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
   const xMin: Moment =
     customOptions !== undefined && customOptions.xMin !== undefined
       ? customOptions.xMin
-      : moment(data[0].date_time);
-  const xMax: Moment = moment(data[data.length - 1].date_time);
+      : parseStringAsMoment(data[0].date_time);
+  const xMax: Moment = parseStringAsMoment(data[data.length - 1].date_time);
+
   const [xDomain] = useState<[Moment, Moment]>([xMin, xMax]);
 
   // define y-domain from max y-value
@@ -76,7 +77,7 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
   const line = d3
     .line()
     //@ts-ignore TODO: rm this
-    .x((d: NumericObservation) => xScale(moment(d.date_time)))
+    .x((d: NumericObservation) => xScale(parseStringAsMoment(d.date_time)))
     //@ts-ignore TODO: rm this
     .y((d: NumericObservation) => yScale(d.value))
     .curve(d3.curveMonotoneX);
@@ -92,6 +93,7 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
   const extraZeroPoint: NumericObservation[] = [
     { date_time: xMax.format("YYYY-MM-DD"), value: 0 },
   ];
+  // JSX
   return (
     <section className={styles.sparklineChart}>
       <figure>

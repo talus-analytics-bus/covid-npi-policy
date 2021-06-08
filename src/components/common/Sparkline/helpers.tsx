@@ -1,3 +1,4 @@
+import { parseStringAsMoment } from "components/misc/UtilsTyped";
 import moment from "moment";
 import { NumericObservation } from "../MapboxMap/plugins/mapTypes";
 
@@ -13,7 +14,7 @@ export function getDatumByDate(
   date: moment.Moment
 ): NumericObservation | undefined {
   return data.find(d => {
-    return moment(d.date_time)
+    return parseStringAsMoment(d.date_time)
       .utc()
       .isSame(date, "date");
   });
