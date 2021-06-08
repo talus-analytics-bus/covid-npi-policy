@@ -62,10 +62,10 @@ const DateSlider = ({
   const sliderMaxValue = sliderMax.diff(sliderMin, "days");
 
   // EFFECT HOOKS // --------------------------------------------------------//
-  // // when slider date changes, update all data
-  // useEffect(() => {
-  //   setDate(curSliderDate);
-  // }, [setDate, curSliderDate]);
+  // when slider date changes while playing, update all data
+  useEffect(() => {
+    if (playing) setDate(curSliderDate);
+  }, [setDate, curSliderDate, playing]);
 
   // date slider and styles
   // wrapper style: optional
@@ -139,8 +139,7 @@ const DateSlider = ({
     // update slider numeric value and date based on latest numeric value
     // on slider
     setCurSliderVal(valNumeric);
-    const newCurSliderDate = moment(sliderMin);
-    newCurSliderDate.add(valNumeric, "days");
+    const newCurSliderDate = getSliderDateFromNumeric(sliderMin, valNumeric);
     setCurSliderDate(newCurSliderDate);
   };
 
@@ -148,8 +147,7 @@ const DateSlider = ({
     // update slider numeric value and date based on latest numeric value
     // on slider
     setCurSliderVal(valNumeric);
-    const newCurSliderDate = moment(sliderMin);
-    newCurSliderDate.add(valNumeric, "days");
+    const newCurSliderDate = getSliderDateFromNumeric(sliderMin, valNumeric);
     setCurSliderDate(newCurSliderDate);
     setDate(newCurSliderDate);
     if (playing) handlePause();
@@ -235,7 +233,7 @@ const DateSlider = ({
     // Update slider value by incrementing or decrementing as appropriate
     const newSliderVal = curSliderVal + change;
     if (newSliderVal < sliderMinValue || newSliderVal > sliderMaxValue) return;
-    handleSliderChange(newSliderVal);
+    handleSliderAfterChange(newSliderVal);
   };
 
   /**
@@ -410,3 +408,8 @@ const DateSlider = ({
 };
 
 export default DateSlider;
+function getSliderDateFromNumeric(sliderMin, valNumeric) {
+  const newCurSliderDate = moment(sliderMin);
+  newCurSliderDate.add(valNumeric, "days");
+  return newCurSliderDate;
+}
