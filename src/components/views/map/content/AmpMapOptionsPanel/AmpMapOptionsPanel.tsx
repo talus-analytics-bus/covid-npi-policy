@@ -1,3 +1,4 @@
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel";
 import {
   OptionRadioSet,
@@ -267,14 +268,16 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         />
       </AccordionDrawer>
       <AccordionDrawer title={getFillOptionsTitleFromMapId(mapId)}>
-        <OptionRadioSet
-          key={"fillToggle"}
-          options={fillOptions}
-          selectedOptions={fillOptions.filter(o => o.value === fill)}
-          callback={selected => {
-            if (setFill !== undefined) setFill(selected[0].value as string);
-          }}
-        />
+        <PerfectScrollbar>
+          <OptionRadioSet
+            key={"fillToggle"}
+            options={fillOptions}
+            selectedOptions={fillOptions.filter(o => o.value === fill)}
+            callback={selected => {
+              if (setFill !== undefined) setFill(selected[0].value as string);
+            }}
+          />
+        </PerfectScrollbar>
       </AccordionDrawer>
       <AccordionDrawer title={"COVID-19 cases"}>
         <OptionRadioSet

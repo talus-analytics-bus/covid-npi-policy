@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import styles from "./PopupHeader.module.scss";
+import styles from "./popupheader.module.scss";
 
 // types
 import { ElementsOrNull } from "../../../plugins/mapTypes";
