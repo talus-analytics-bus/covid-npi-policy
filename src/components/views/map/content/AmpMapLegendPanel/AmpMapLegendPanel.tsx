@@ -15,15 +15,14 @@ import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
 import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/PolicyCount";
 import { Option } from "components/common/OptionControls/types";
+import InfoTooltipContext from "context/InfoTooltipContext";
 
 type ComponentProps = {
-  setInfoTooltipContent: Function;
   linCircleScale: boolean;
   policyResolution: PolicyResolution;
   panelSetId?: number;
 };
 export const AmpMapLegendPanel: FC<ComponentProps> = ({
-  setInfoTooltipContent,
   linCircleScale,
   policyResolution,
   panelSetId = 0,
@@ -35,6 +34,8 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
     filters?: Record<string, any>;
     date?: Moment;
   }>(MapOptionContext);
+
+  const { setInfoTooltipContent } = useContext(InfoTooltipContext);
 
   const circleMeta: MetricMetaEntry | null =
     circle !== null ? (metricMeta as MetricMeta)[circle || ""] : null;
@@ -54,7 +55,7 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
             {circleMeta !== null && (
               <Legend
                 {...{
-                  setInfoTooltipContent: setInfoTooltipContent,
+                  setInfoTooltipContent,
                   className: "mapboxLegend",
                   key: "basemap - quantized - " + circle,
                   metric_definition: circleMeta.metric_definition,

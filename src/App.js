@@ -31,6 +31,7 @@ import { Version, Count, execute } from "./components/misc/Queries";
 import styles from "./App.module.scss";
 import classNames from "classnames";
 import loadingSvg from "./assets/images/loading.svg";
+import { InfoTooltipProvider } from "context/InfoTooltipContext";
 
 //: React.FC
 const App = () => {
@@ -110,7 +111,7 @@ const App = () => {
   if (versions === null || counts === null) return <div />;
   else
     return (
-      <React.Fragment>
+      <InfoTooltipProvider value={{ setInfoTooltipContent }}>
         <BrowserRouter>
           <Nav {...{ page }} />
           <Switch>
@@ -300,7 +301,7 @@ const App = () => {
             getContent={() => infoTooltipContent}
           />
         }
-      </React.Fragment>
+      </InfoTooltipProvider>
     );
 };
 

@@ -15,6 +15,12 @@ interface OptionRadioSetProps extends OptionWidget {
    * True if a "Select all" checkbox should be included at the top
    */
   selectAll?: boolean;
+
+  /**
+   * Optional: Function to set tooltip content. If undefined, tooltip will be
+   * rendered inside component.
+   */
+  setInfoTooltipContent?(): void;
 }
 
 export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
@@ -25,6 +31,7 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
   field,
   emptyMeansAll = false,
   selectAll = false,
+  setInfoTooltipContent,
 }) => {
   let setRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +110,7 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
               callback(options);
             }}
             indeterminate={selectAllIndeterminate}
+            {...{ setInfoTooltipContent }}
           />
         )}
         {options.map(o => (

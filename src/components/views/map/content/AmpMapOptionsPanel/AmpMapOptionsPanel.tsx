@@ -21,6 +21,7 @@ import {
 } from "components/common/MapboxMap/plugins/data";
 import styles from "./AmpMapOptionsPanel.module.scss";
 import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
+import InfoTooltipContext from "context/InfoTooltipContext";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -46,6 +47,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   subcategoryOptions,
   panelSetId = 0,
 }) => {
+  const { setInfoTooltipContent } = useContext(InfoTooltipContext);
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
   /**
    * The possible geographic resolutions of map that can be viewed.
@@ -62,6 +64,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           options={usSubGeoOptions}
           callback={selected => setMapId(selected[0].value as string)}
           selectedOptions={usSubGeoOptions.filter(o => o.value === mapId)}
+          {...{ setInfoTooltipContent }}
         />
       ),
     },
@@ -71,7 +74,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       description: "View data for the world at the country level",
     },
   ];
-
   const curMapOptions = useContext(MapOptionContext);
   const {
     circle,
@@ -228,6 +230,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         );
       }}
       field={"primary_ph_measure"}
+      {...{ setInfoTooltipContent }}
     />
   );
 
@@ -254,6 +257,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           callback={selected => {
             if (setCircle !== undefined) setCircle(selected[0].value as string);
           }}
+          {...{ setInfoTooltipContent }}
         />
       ),
     },
@@ -293,6 +297,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           selectedOptions={geoOptions.filter(o =>
             mapId.startsWith(o.value as string)
           )}
+          {...{ setInfoTooltipContent }}
         />
       </AccordionDrawer>
       <AccordionDrawer title={getFillOptionsTitleFromMapId(mapId)}>
@@ -304,6 +309,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
             callback={selected => {
               if (setFill !== undefined) setFill(selected[0].value as string);
             }}
+            {...{ setInfoTooltipContent }}
           />
         </PerfectScrollbar>
       </AccordionDrawer>
@@ -315,6 +321,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
             circle !== null ? [circleShowOptions[0]] : [circleShowOptions[1]]
           }
           callback={updateCircle}
+          {...{ setInfoTooltipContent }}
         />
       </AccordionDrawer>
     </MapPanel>

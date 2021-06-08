@@ -14,6 +14,7 @@ export const OptionCheckbox: FC<Option> = ({
   field = "",
   onClick = undefined,
   indeterminate = false,
+  setInfoTooltipContent,
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());
@@ -39,7 +40,13 @@ export const OptionCheckbox: FC<Option> = ({
         <label htmlFor={inputId}>
           <span className={styles.optionLabel}>{name}</span>{" "}
           {description && (
-            <InfoTooltip id={inputId} text={description} place={"left"} />
+            <InfoTooltip
+              id={inputId}
+              text={description}
+              place={"left"}
+              wide={false}
+              {...{ setInfoTooltipContent }}
+            />
           )}
         </label>
       </span>

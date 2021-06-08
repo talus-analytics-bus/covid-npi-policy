@@ -11,6 +11,7 @@ export const OptionSelect: FC<OptionSelectProps> = ({
   selectedOptions,
   callback,
   customStyle = {},
+  setInfoTooltipContent,
 }) => {
   return (
     <div className={classNames(styles.optionWidget, styles.optionSelect)}>
@@ -22,6 +23,8 @@ export const OptionSelect: FC<OptionSelectProps> = ({
               id={"selectTooltip"}
               text={selectedOptions[0].description}
               place={"left"}
+              wide={false}
+              {...{ setInfoTooltipContent }}
             />
           )}
         </div>

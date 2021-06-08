@@ -56,6 +56,12 @@ export interface Option {
    * and false otherwise.
    */
   indeterminate?: boolean;
+
+  /**
+   * Optional: Function to set tooltip content. If undefined, tooltip will be
+   * rendered inside component.
+   */
+  setInfoTooltipContent?(): void;
 }
 
 export interface OptionWidget {
@@ -86,6 +92,12 @@ export interface OptionWidget {
    * Custom styles to apply to widget container (div).
    */
   customStyle?: Record<string, any>;
+
+  /**
+   * Optional: Function to set tooltip content. If undefined, tooltip will be
+   * rendered inside component.
+   */
+  setInfoTooltipContent?(): void;
 }
 
 export type OptionSetEntry = {

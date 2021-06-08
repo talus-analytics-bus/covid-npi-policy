@@ -11,6 +11,7 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
   options,
   selectedOptions,
   callback,
+  setInfoTooltipContent,
 }) => {
   return (
     <div className={classNames(styles.optionRadioSet, styles.optionWidget)}>
@@ -36,10 +37,11 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
       >
         {options.map(o => (
           <OptionRadio
+            key={o.value}
             {...{
               ...o,
               selectedOptions,
-              key: o.value,
+              setInfoTooltipContent,
             }}
           />
         ))}

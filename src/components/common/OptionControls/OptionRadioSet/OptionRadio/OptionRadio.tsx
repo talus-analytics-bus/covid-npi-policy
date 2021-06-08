@@ -11,6 +11,7 @@ export const OptionRadio: FC<Option> = ({
   selectedOptions = [],
   description,
   child,
+  setInfoTooltipContent,
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());
@@ -27,7 +28,13 @@ export const OptionRadio: FC<Option> = ({
         <label htmlFor={inputId}>
           <span className={styles.optionLabel}>{name}</span>{" "}
           {description && (
-            <InfoTooltip id={inputId} text={description} place={"left"} />
+            <InfoTooltip
+              id={inputId}
+              text={description}
+              place={"left"}
+              wide={false}
+              {...{ setInfoTooltipContent }}
+            />
           )}
         </label>
       </span>
