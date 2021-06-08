@@ -59,6 +59,7 @@ const PolicyCategoryIcon: FunctionComponent<PolicyCategoryIconProps> = (
       >
         {srcs.map(([src, cat]) => (
           <div
+            key={cat}
             style={{ backgroundColor: "#96d6db", margin: props.margin }}
             className={styles.iconBackground}
           >
