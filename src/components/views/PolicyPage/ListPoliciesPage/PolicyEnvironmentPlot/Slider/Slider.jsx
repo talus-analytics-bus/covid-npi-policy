@@ -33,6 +33,7 @@ const Slider = ({
     const xPos = (e.clientX - CTM.e) / CTM.a;
     setDragStartX(xPos - sliderX);
   };
+
   const handleDrag = e => {
     if (dragStartX !== 0) {
       const CTM = svgElement.current.getScreenCTM();
@@ -41,17 +42,19 @@ const Slider = ({
     }
   };
 
-  // the +1 offset makes the slider visually align to the date
-  const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
-
   const handleDragEnd = e => {
     setDragStartX(0);
   };
+
+  // the +1 offset makes the slider visually align to the date
+  const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
 
   const highlightPolicies =
     policiesByDate &&
     sliderDate &&
     policiesByDate[sliderDate.toISOString().substring(0, 10)];
+
+  const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.4;
 
   return (
     <g id="slider" onMouseMove={handleDrag} onMouseUp={handleDragEnd}>
@@ -72,7 +75,7 @@ const Slider = ({
             strokeWidth: 3,
             stroke: "rgba(2, 63, 136, 1)",
           }}
-          d={`M ${dim.xAxis.start.x},${dim.yAxis.start.y} 
+          d={`M ${dim.xAxis.start.x},${0} 
         L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
         />
         <rect
@@ -136,7 +139,7 @@ const Slider = ({
           transform: `translateX(${sliderX}px)`,
         }}
         cx={dim.xAxis.start.x}
-        cy={(dim.yAxis.end.y - dim.yAxis.start.y) * 0.25}
+        cy={handleYPos}
         r={6}
       />
     </g>
