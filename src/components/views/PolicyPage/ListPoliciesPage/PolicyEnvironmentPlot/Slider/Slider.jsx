@@ -1,6 +1,19 @@
 import React, { useState } from "react";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 const sliderStrokeWidth = 3;
+
+const formatDate = date => {
+  if (!date) return undefined;
+  return date.toLocaleString("en-de", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const Slider = ({
   dim,
@@ -12,7 +25,7 @@ const Slider = ({
 }) => {
   const [dragging, setDragging] = useState();
   const [sliderX, setSliderX] = useState(0);
-  const [sliderDate, setSliderDate] = useState();
+  const [sliderDate, setSliderDate] = useState(scale.x.invert(0));
   const [dragStartX, setDragStartX] = useState(0);
 
   const handleDragStart = e => {
@@ -47,26 +60,54 @@ const Slider = ({
   return (
     <g id="slider" onMouseMove={handleDrag} onMouseUp={handleDragEnd}>
       <rect
+        // this rect is what sizes the group
         width={dim.width}
         height={dim.height}
+        // doesn't work with fill='none'
         style={{ fill: "rgba(0,0,0,0)" }}
       />
-      <path
+      <g
         style={{
-          strokeWidth: sliderStrokeWidth,
-          stroke: "rgba(2, 63, 136, 1)",
           transform: `translateX(${sliderX - sliderStrokeWidth / 4}px)`,
         }}
-        d={`M ${dim.xAxis.start.x},${dim.yAxis.start.y} 
+      >
+        <path
+          style={{
+            strokeWidth: sliderStrokeWidth,
+            stroke: "rgba(2, 63, 136, 1)",
+          }}
+          d={`M ${dim.xAxis.start.x},${dim.yAxis.start.y} 
         L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
-      />
+        />
+        <rect
+          x={dim.xAxis.start.x - 30}
+          y={0}
+          width={60}
+          height={15}
+          rx={3}
+          style={{ fill: "rgb(229, 94, 55)" }}
+        />
+        <text
+          x={dim.xAxis.start.x}
+          y={3}
+          style={{
+            alignmentBaseline: "hanging",
+            textAnchor: "middle",
+            fill: "white",
+            fontSize: 9,
+          }}
+        >
+          {formatDate(sliderDate)}
+        </text>
+      </g>
 
       {highlightPolicies &&
         Object.entries(highlightPolicies)
           .map(([category, policies]) => policies)
           .flat()
-          .map((policies, index) => (
+          .map((_, index) => (
             <circle
+              key={index}
               style={{
                 fill: "rgb(229, 94, 55)",
                 // stroke: "white",
