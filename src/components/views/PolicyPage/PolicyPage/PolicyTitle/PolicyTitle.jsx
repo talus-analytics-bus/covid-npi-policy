@@ -1,4 +1,5 @@
 import React from "react";
+import removeParenthetical from "../../../../misc/UtilsTyped.tsx";
 
 // TODO: replace with <FMT.Date> component
 const formatDate = date => {
@@ -15,9 +16,7 @@ const PolicyTitle = ({ policy }) => (
   <h2>
     {policy ? (
       <>
-        {`${policy.auth_entity[0].place.loc
-          .split(",")[0]
-          .replace(/\([A-Z]*\)/, "")}
+        {`${removeParenthetical(policy.auth_entity[0].place.loc.split(",")[0])}
                       ${policy.primary_ph_measure}: `}
         <br />
         {policy.ph_measure_details}

@@ -54,49 +54,33 @@ export const mapSources = {
   global: {
     fill: {
       name: "geoms",
-      sourceLayer: "countries_id_rpr",
-      pattern: true,
+      sourceLayer: "countries_slim_v13c03", // generated from:
       def: {
         type: "vector",
-        url: "mapbox://traethethird.4kh7sxxt",
-        promoteId: "ADM0_A3",
+        url: "mapbox://nicoletalus.92q1pclg",
+        promoteId: "ISO_A3",
       },
     },
-    fill: {
-      name: "geoms",
-      sourceLayer: "countries_v13c",
-      def: {
-        type: "vector",
-        url: "mapbox://nicoletalus.bnct4toi",
-        // url: "mapbox://nicoletalus.8k5jxx58",
-        // filter to control what features are returned for layers that are
-        // displaying this metric
-        promoteId: "ADM0_A3",
-        // filter: [
-        //   "==",
-        //   ["in", ["get", "ADM0_A3"], ["literal", ["TWN", "HKG"]]],
-        //   false,
-        // ],
-      },
-    },
-    // fill: {
-    //   name: "geoms",
-    //   sourceLayer: "countries_id_rpr",
-    //   pattern: true,
-    //   def: {
-    //     type: "vector",
-    //     url: "mapbox://traethethird.4kh7sxxt",
-    //     promoteId: "ADM0_A3",
-    //   },
-    // },
     circle: {
       name: "centroids",
-      sourceLayer: "centroids_v3-abrc0x",
+      sourceLayer: "centroids_v4c_slim-an20gc",
+      //  sourceLayer: "centroids_v4b_slim-0s8vf9",
+      // sourceLayer: "centroids_v4_slim-1bw67n",
+      //  sourceLayer: "centroids_v3-abrc0x",
+      // sourceLayer: "centroids_v4_slim",
       def: {
         type: "vector",
-        url: "mapbox://nicoletalus.3hl37c3u",
-        promoteId: "ADM0_A3",
-        filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
+        url: "mapbox://nicoletalus.3a8qy0w1",
+        // url: "mapbox://nicoletalus.527dlmpc",
+        // url: "mapbox://nicoletalus.8n43la7h",
+        //  url: "mapbox://nicoletalus.3hl37c3u",
+        // url: "mapbox://nicoletalus.5weuste2",
+        promoteId: "ISO_A3",
+        filter: [
+          "==",
+          ["in", ["get", "ISO_A3"], ["literal", ["PRI", "GBR"]]],
+          false,
+        ],
       },
     },
   },

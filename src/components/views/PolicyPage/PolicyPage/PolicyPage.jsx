@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 
@@ -55,14 +55,6 @@ const PolicyPage = props => {
 
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
-
-  const policyTargetList = policy && policy.subtarget;
-
-  // console.log(policyObjectPath);
-  // console.log(policyObject);
-  console.log(policy);
-
-  // debugger;
 
   return (
     <article className={styles.policyPage}>
