@@ -8,7 +8,6 @@ import {
 } from "../PolicyRouter/PolicyLoaders";
 
 import { MiniMap } from "../MiniMap/MiniMap";
-import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 
 import SnapshotChartSection from "./SnapshotChart/SnapshotChartSection";
 import IntroSection from "./IntroSection/IntroSection.js";
@@ -131,7 +130,6 @@ const ListPoliciesPage = props => {
           </figure>
         )}
       </section>
-      <section className={styles.introSection}></section>
       {iso3 !== "Unspecified" && status.caseload !== "error" && (
         <section className={styles.caseloadPlot}>
           {/* {status.caseload === "error" && ( */}
