@@ -4,11 +4,9 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
-const sliderStrokeWidth = 3;
-
 const formatDate = date => {
   if (!date) return undefined;
-  return date.toLocaleString("en-de", {
+  return new Date(date).toLocaleString("en-de", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -23,32 +21,30 @@ const Slider = ({
   vSpacing,
   circlePadding,
 }) => {
-  const [dragging, setDragging] = useState();
+  // const [dragging,setDragging] = useState();
   const [sliderX, setSliderX] = useState(0);
-  const [sliderDate, setSliderDate] = useState(scale.x.invert(0));
   const [dragStartX, setDragStartX] = useState(0);
 
   const handleDragStart = e => {
     // prevent the text from highlighting
     e.stopPropagation();
     e.preventDefault();
-    setDragging(true);
     const CTM = svgElement.current.getScreenCTM();
     const xPos = (e.clientX - CTM.e) / CTM.a;
     setDragStartX(xPos - sliderX);
   };
   const handleDrag = e => {
-    if (dragging) {
+    if (dragStartX !== 0) {
       const CTM = svgElement.current.getScreenCTM();
       const xPos = (e.clientX - CTM.e) / CTM.a;
       setSliderX(xPos - dragStartX);
-      const sliderDate = scale.x.invert(xPos - dragStartX + dim.xAxis.start.x);
-      setSliderDate(sliderDate);
     }
   };
 
+  // the +1 offset makes the slider visually align to the date
+  const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
+
   const handleDragEnd = e => {
-    setDragging(false);
     setDragStartX(0);
   };
 
@@ -68,12 +64,12 @@ const Slider = ({
       />
       <g
         style={{
-          transform: `translateX(${sliderX - sliderStrokeWidth / 4}px)`,
+          transform: `translateX(${sliderX}px)`,
         }}
       >
         <path
           style={{
-            strokeWidth: sliderStrokeWidth,
+            strokeWidth: 3,
             stroke: "rgba(2, 63, 136, 1)",
           }}
           d={`M ${dim.xAxis.start.x},${dim.yAxis.start.y} 
@@ -97,8 +93,21 @@ const Slider = ({
             fontSize: 9,
           }}
         >
-          {formatDate(sliderDate)}
+          {formatDate(sliderDate.toISOString().substring(0, 10))}
         </text>
+        {/* <foreignObject */}
+        {/*   y={(dim.yAxis.end.y - dim.yAxis.start.y) * 0.25} */}
+        {/*   width={50} */}
+        {/*   height={50} */}
+        {/* > */}
+        {/*   <Tippy */}
+        {/*     visible={true} */}
+        {/*     content={<p>Hello world</p>} */}
+        {/*     placement={"right"} */}
+        {/*   > */}
+        {/*     <div /> */}
+        {/*   </Tippy> */}
+        {/* </foreignObject> */}
       </g>
 
       {highlightPolicies &&
@@ -124,7 +133,7 @@ const Slider = ({
           fill: "rgba(2, 63, 136, 1)",
           stroke: "white",
           strokeWidth: "1",
-          transform: `translateX(${sliderX - sliderStrokeWidth / 4}px)`,
+          transform: `translateX(${sliderX}px)`,
         }}
         cx={dim.xAxis.start.x}
         cy={(dim.yAxis.end.y - dim.yAxis.start.y) * 0.25}
