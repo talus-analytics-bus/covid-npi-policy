@@ -48,6 +48,10 @@ export const textBBox = ({ svg, string, font, fontSize }) => {
   return bbox;
 };
 
+const earliestDate = (a, b) => {
+  return new Date(Math.min(new Date(a).getTime(), new Date(b).getTime()));
+};
+
 const PolicyEnvironmentPlot = ({ path }) => {
   console.count("PolicyEnvironmentPlot");
   const policyContextConsumer = React.useContext(policyContext);
@@ -176,15 +180,19 @@ const PolicyEnvironmentPlot = ({ path }) => {
 
   const scale = React.useMemo(
     () =>
-      caseloadMax && {
+      caseloadMax &&
+      policiesByDate && {
         x: scaleTime()
-          .domain([caseload[0].date, caseload.slice(-1)[0].date])
+          .domain([
+            earliestDate(caseload[0].date, Object.keys(policiesByDate)[0]),
+            caseload.slice(-1)[0].date,
+          ])
           .range([dim.xAxis.start.x, dim.xAxis.end.x]),
         y: scaleLinear()
           .domain([0, caseloadMax])
           .range([dim.yAxis.end.y, dim.yAxis.start.y]),
       },
-    [caseload, caseloadMax, dim.yAxis, dim.xAxis]
+    [caseload, caseloadMax, policiesByDate, dim.yAxis, dim.xAxis]
   );
 
   const svgElement = React.useRef();
