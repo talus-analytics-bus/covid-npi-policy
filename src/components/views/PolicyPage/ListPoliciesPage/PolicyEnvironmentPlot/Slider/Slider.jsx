@@ -98,19 +98,15 @@ const Slider = ({
         >
           {formatDate(sliderDate.toISOString().substring(0, 10))}
         </text>
-        {/* <foreignObject */}
-        {/*   y={(dim.yAxis.end.y - dim.yAxis.start.y) * 0.25} */}
-        {/*   width={50} */}
-        {/*   height={50} */}
-        {/* > */}
-        {/*   <Tippy */}
-        {/*     visible={true} */}
-        {/*     content={<p>Hello world</p>} */}
-        {/*     placement={"right"} */}
-        {/*   > */}
-        {/*     <div /> */}
-        {/*   </Tippy> */}
-        {/* </foreignObject> */}
+        <foreignObject x={10} y={handleYPos} width={50} height={50}>
+          <Tippy
+            visible={true}
+            content={<p>Hello world</p>}
+            placement={"right"}
+          >
+            <div />
+          </Tippy>
+        </foreignObject>
       </g>
 
       {highlightPolicies &&
