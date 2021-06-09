@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import { Caseload } from "../../../misc/Queries";
+import { removeParenthetical } from "../../../misc/UtilsTyped.tsx";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 

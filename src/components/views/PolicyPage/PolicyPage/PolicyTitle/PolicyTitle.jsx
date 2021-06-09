@@ -1,5 +1,5 @@
 import React from "react";
-import removeParenthetical from "../../../../misc/UtilsTyped.tsx";
+import { removeParenthetical } from "../../../../misc/UtilsTyped.tsx";
 
 // TODO: replace with <FMT.Date> component
 const formatDate = date => {
