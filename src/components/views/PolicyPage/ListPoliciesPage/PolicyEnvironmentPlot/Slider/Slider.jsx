@@ -17,6 +17,7 @@ const Slider = ({
   scale,
   vSpacing,
   circlePadding,
+  caseLoadByDate,
 }) => {
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
@@ -49,6 +50,11 @@ const Slider = ({
     policiesByDate &&
     sliderDate &&
     policiesByDate[sliderDate.toISOString().substring(0, 10)];
+
+  const highlightCaseload =
+    caseLoadByDate &&
+    sliderDate &&
+    caseLoadByDate[sliderDate.toISOString().substring(0, 10)];
 
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.4;
 
@@ -94,7 +100,15 @@ const Slider = ({
         >
           {formatDate(sliderDate.toISOString().substring(0, 10))}
         </text>
-        <Tooltip {...{ handleYPos, dim, sliderDate, highlightPolicies }} />
+        <Tooltip
+          {...{
+            handleYPos,
+            dim,
+            sliderDate,
+            highlightPolicies,
+            highlightCaseload,
+          }}
+        />
       </g>
 
       {highlightPolicies &&

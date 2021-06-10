@@ -108,6 +108,18 @@ const PolicyEnvironmentPlot = ({ path }) => {
     getPolicies();
   }, [iso3, state]);
 
+  const [caseLoadByDate, setCaseloadByDate] = useState();
+
+  useEffect(() => {
+    if (caseload) {
+      const caseloadObj = {};
+      caseload.forEach(day => {
+        caseloadObj[day.date.toISOString().substring(0, 10)] = day.value;
+      });
+      setCaseloadByDate(caseloadObj);
+    }
+  }, [caseload]);
+
   // layout
   const [constDim, setConstDim] = React.useState({
     width: 800,
@@ -352,6 +364,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
             scale,
             vSpacing,
             circlePadding,
+            caseLoadByDate,
           }}
         />
       )}
