@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Tooltip from "./Tooltip/Tooltip";
 
 const formatDate = date => {
@@ -22,6 +22,7 @@ const Slider = ({
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
   const [popupVisible, setPopupVisible] = useState(false);
+  const sliderRef = useRef();
 
   const handleDragStart = e => {
     // prevent the text from highlighting
@@ -45,10 +46,17 @@ const Slider = ({
     setDragStartX(0);
   };
 
-  const onClickBackground = e => {
-    console.log("onClickBackground");
-    setPopupVisible(false);
+  const onClickBody = e => {
+    if (e.target !== sliderRef.current) setPopupVisible(false);
   };
+
+  useEffect(() => {
+    console.log("addEventListener");
+    document.body.addEventListener("click", onClickBody);
+    return function cleanup() {
+      document.body.removeEventListener("click", onClickBody);
+    };
+  }, []);
 
   // the +1 offset makes the slider visually align to the date
   const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
@@ -66,12 +74,7 @@ const Slider = ({
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.45;
 
   return (
-    <g
-      id="slider"
-      onClick={onClickBackground}
-      onMouseMove={handleDrag}
-      onMouseUp={handleDragEnd}
-    >
+    <g id="slider" onMouseMove={handleDrag} onMouseUp={handleDragEnd}>
       <rect
         // this rect is what sizes the group
         width={dim.width}
@@ -157,6 +160,7 @@ const Slider = ({
           r={6}
         />
         <rect
+          ref={sliderRef}
           onClick={e => e.stopPropagation()}
           onMouseDown={handleDragStart}
           x={dim.xAxis.start.x - 10}
