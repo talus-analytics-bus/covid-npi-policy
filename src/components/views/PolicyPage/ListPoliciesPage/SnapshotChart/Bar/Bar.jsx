@@ -2,6 +2,10 @@ import React from "react";
 
 import PolicyCategoryIcon from "../../../PolicyCategoryIcon/PolicyCategoryIcon.js";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light.css";
+
 import styles from "./Bar.module.scss";
 
 const Bar = ({ category, bar, index, dim }) => {
@@ -29,9 +33,11 @@ const Bar = ({ category, bar, index, dim }) => {
         width={dim.barWidth}
         height={dim.barWidth}
       >
-        <div className={styles.iconHolder}>
-          <PolicyCategoryIcon category={category} />
-        </div>
+        <Tippy content={category} theme={"light"} placement={"bottom"}>
+          <div className={styles.iconHolder}>
+            <PolicyCategoryIcon category={category} />
+          </div>
+        </Tippy>
       </foreignObject>
     </g>
   );
