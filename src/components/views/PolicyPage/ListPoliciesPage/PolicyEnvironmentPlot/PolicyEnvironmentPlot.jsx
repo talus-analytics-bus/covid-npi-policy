@@ -361,7 +361,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
             );
           })
           .flat()}
-      {caseload && (
+      {scale && (
         <Slider
           {...{
             dim,

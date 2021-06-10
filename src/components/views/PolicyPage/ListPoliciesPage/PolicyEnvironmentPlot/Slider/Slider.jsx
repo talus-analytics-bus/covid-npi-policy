@@ -63,7 +63,7 @@ const Slider = ({
     sliderDate &&
     Math.round(avgCaseLoadByDate[sliderDate.toISOString().substring(0, 10)]);
 
-  const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.4;
+  const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.45;
 
   return (
     <g

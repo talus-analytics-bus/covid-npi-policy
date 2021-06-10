@@ -27,7 +27,10 @@ const iconDictionary = {
 };
 
 const PolicyCategoryIcon = props => (
-  <div className={styles.iconBackground} style={{ backgroundColor: "#96d6db" }}>
+  <div
+    className={styles.iconBackground}
+    style={{ backgroundColor: "#96d6db", ...props.style }}
+  >
     {iconDictionary[props.category] && (
       <img src={iconDictionary[props.category]} alt={props.category + "icon"} />
     )}
