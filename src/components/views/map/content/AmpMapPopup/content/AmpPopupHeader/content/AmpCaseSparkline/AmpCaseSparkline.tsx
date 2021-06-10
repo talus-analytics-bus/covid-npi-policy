@@ -11,7 +11,7 @@ import {
   MapId,
   NumericObservation,
 } from "components/common/MapboxMap/plugins/mapTypes";
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 import styles from "./AmpCaseSparkline.module.scss";
 import { updateData, getLabelFromMapMetricId } from "./helpers";
 import MapOptionContext from "components/views/map/context/MapOptionContext";
