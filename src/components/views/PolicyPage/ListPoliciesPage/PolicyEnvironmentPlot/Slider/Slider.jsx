@@ -21,6 +21,7 @@ const Slider = ({
 }) => {
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
+  const [popupVisible, setPopupVisible] = useState(false);
 
   const handleDragStart = e => {
     // prevent the text from highlighting
@@ -36,11 +37,17 @@ const Slider = ({
       const CTM = svgElement.current.getScreenCTM();
       const xPos = (e.clientX - CTM.e) / CTM.a;
       setSliderX(xPos - dragStartX);
+      setPopupVisible(true);
     }
   };
 
   const handleDragEnd = e => {
     setDragStartX(0);
+  };
+
+  const onClickBackground = e => {
+    console.log("onClickBackground");
+    setPopupVisible(false);
   };
 
   // the +1 offset makes the slider visually align to the date
@@ -59,7 +66,12 @@ const Slider = ({
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.4;
 
   return (
-    <g id="slider" onMouseMove={handleDrag} onMouseUp={handleDragEnd}>
+    <g
+      id="slider"
+      onClick={onClickBackground}
+      onMouseMove={handleDrag}
+      onMouseUp={handleDragEnd}
+    >
       <rect
         // this rect is what sizes the group
         width={dim.width}
@@ -107,6 +119,7 @@ const Slider = ({
             sliderDate,
             highlightPolicies,
             highlightCaseload,
+            popupVisible,
           }}
         />
       </g>
@@ -128,18 +141,31 @@ const Slider = ({
               r={3}
             />
           ))}
-      <circle
-        onMouseDown={handleDragStart}
+      <g
         style={{
-          fill: "rgba(2, 63, 136, 1)",
-          stroke: "white",
-          strokeWidth: "1",
           transform: `translateX(${sliderX}px)`,
         }}
-        cx={dim.xAxis.start.x}
-        cy={handleYPos}
-        r={6}
-      />
+      >
+        <circle
+          style={{
+            fill: "rgba(2, 63, 136, 1)",
+            stroke: "white",
+            strokeWidth: "1",
+          }}
+          cx={dim.xAxis.start.x}
+          cy={handleYPos}
+          r={6}
+        />
+        <rect
+          onClick={e => e.stopPropagation()}
+          onMouseDown={handleDragStart}
+          x={dim.xAxis.start.x - 10}
+          y={0}
+          width={20}
+          height={dim.yAxis.height + dim.paddingTop}
+          style={{ fill: "rgba(0,0,0,0)" }}
+        />
+      </g>
     </g>
   );
 };

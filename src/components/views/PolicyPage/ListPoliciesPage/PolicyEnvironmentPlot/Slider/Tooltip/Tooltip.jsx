@@ -9,27 +9,39 @@ const TooltipContent = ({
   highlightPolicies,
   highlightCaseload,
 }) => {
-  const [renderPolicies, setRenderPolicies] = useState();
+  //   const [renderPolicies, setRenderPolicies] = useState();
+  //
+  //   console.log(highlightCaseload);
+  //
+  //   // make sure not to empty out the popup when highlightPolicies
+  //   // is undefined so that the closing animation is smooth
+  //   useEffect(() => {
+  //     if (highlightPolicies)
+  //       setRenderPolicies(
+  //         <>
+  //           <p>{highlightCaseload} new cases</p>
+  //           {Object.entries(highlightPolicies).map(([category, policies]) => (
+  //             <p key={category}>
+  //               {category}: ({policies.length})
+  //             </p>
+  //           ))}
+  //         </>
+  //       );
+  //   }, [highlightPolicies, highlightCaseload]);
 
-  console.log(highlightCaseload);
-
-  // make sure not to empty out the popup when highlightPolicies
-  // is undefined so that the closing animation is smooth
-  useEffect(() => {
-    if (highlightPolicies)
-      setRenderPolicies(
-        <>
-          <p>{highlightCaseload} new cases</p>
-          {Object.entries(highlightPolicies).map(([category, policies]) => (
-            <p key={category}>
-              {category}: ({policies.length})
-            </p>
-          ))}
-        </>
-      );
-  }, [highlightPolicies, highlightCaseload]);
-
-  return <div>{renderPolicies}</div>;
+  return (
+    <div>
+      {/* <> */}
+      <p>{highlightCaseload} new cases</p>
+      {highlightPolicies &&
+        Object.entries(highlightPolicies).map(([category, policies]) => (
+          <p key={category}>
+            {category}: ({policies.length})
+          </p>
+        ))}
+      {/* </> */}
+    </div>
+  );
 };
 
 const Tooltip = ({
@@ -38,11 +50,12 @@ const Tooltip = ({
   sliderDate,
   highlightPolicies,
   highlightCaseload,
+  popupVisible,
 }) => {
   return (
     <foreignObject x={dim.xAxis.start.x} y={handleYPos} width={0} height={0}>
       <Tippy
-        visible={Boolean(highlightPolicies)}
+        visible={popupVisible}
         content={
           <TooltipContent
             {...{ sliderDate, highlightPolicies, highlightCaseload }}
