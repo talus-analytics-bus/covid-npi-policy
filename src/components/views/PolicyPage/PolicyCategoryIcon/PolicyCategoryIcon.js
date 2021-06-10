@@ -22,7 +22,7 @@ const iconDictionary = {
   "Authorization and enforcement": authorizationEnforcementIcon,
   "Enabling and relief measures": reliefMeasuresIcon,
   "Travel restrictions": travelRestrictionsIcon,
-  Vaccine: vacineIcon,
+  Vaccinations: vacineIcon,
   "Military mobilization": militaryMobilizationIcon,
 };
 
