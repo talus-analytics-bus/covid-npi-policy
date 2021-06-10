@@ -23,9 +23,9 @@ const TooltipContent = ({ sliderDate, highlightPolicies }) => {
   return <div>{renderPolicies}</div>;
 };
 
-const Tooltip = ({ handleYPos, sliderDate, highlightPolicies }) => {
+const Tooltip = ({ handleYPos, dim, sliderDate, highlightPolicies }) => {
   return (
-    <foreignObject x={10} y={handleYPos} width={50} height={50}>
+    <foreignObject x={dim.xAxis.start.x} y={handleYPos} width={0} height={0}>
       <Tippy
         visible={Boolean(highlightPolicies)}
         content={<TooltipContent {...{ sliderDate, highlightPolicies }} />}

@@ -18,7 +18,6 @@ const Slider = ({
   vSpacing,
   circlePadding,
 }) => {
-  // const [dragging,setDragging] = useState();
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
 
@@ -95,7 +94,7 @@ const Slider = ({
         >
           {formatDate(sliderDate.toISOString().substring(0, 10))}
         </text>
-        <Tooltip {...{ handleYPos, sliderDate, highlightPolicies }} />
+        <Tooltip {...{ handleYPos, dim, sliderDate, highlightPolicies }} />
       </g>
 
       {highlightPolicies &&
