@@ -48,7 +48,7 @@ const TooltipContent = ({
       {highlightPolicies && (
         <section className={styles.policies}>
           {Object.entries(highlightPolicies).map(([category, policies]) => (
-            <a href="/policymaps" className={styles.policyLink}>
+            <a key={category} href="/policymaps" className={styles.policyLink}>
               <PolicyCategoryIcon
                 category={category}
                 style={{ width: "1.5em", height: "1.5em" }}
