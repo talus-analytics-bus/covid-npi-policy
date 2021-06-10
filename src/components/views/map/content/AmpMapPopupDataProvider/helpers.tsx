@@ -324,8 +324,10 @@ export const getDistancingMapMetric: Function = (
   );
   if (distancingMapMetric !== undefined) return [distancingMapMetric];
   else {
-    throw "Could not find state-level metric for `lockdown_level`, please " +
-      "add it to variable `allMapMetrics` in file `data.js`.";
+    throw Error(
+      "Could not find state-level metric for `lockdown_level`, please " +
+        "add it to variable `allMapMetrics` in file `data.js`."
+    );
   }
 };
 
