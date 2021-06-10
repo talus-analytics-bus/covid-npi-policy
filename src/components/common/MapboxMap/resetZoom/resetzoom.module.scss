@@ -7,7 +7,6 @@ $border-radius: 50%;
 
 .resetButton {
   $icon-size: 40px;
-  // left: 5px;
   top: calc(calc(#{$icon-size} * 2) + 10px);
   position: absolute;
 
