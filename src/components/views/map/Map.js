@@ -289,7 +289,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
 
       if (mapIsChanging) setMapIsChanging(false);
     },
-    [mapId, mapIsChanging]
+    [mapId, mapIsChanging, setLoading]
   );
 
   // when map data selection changes, update dynamic title
