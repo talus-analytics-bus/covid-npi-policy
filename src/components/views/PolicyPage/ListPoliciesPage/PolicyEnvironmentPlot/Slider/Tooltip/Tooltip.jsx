@@ -16,6 +16,9 @@ const formatDate = date => {
   });
 };
 
+const formatNumber = number =>
+  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+
 const TooltipContent = ({
   sliderDate,
   highlightPolicies,
@@ -31,7 +34,9 @@ const TooltipContent = ({
           {formatDate(sliderDate.toISOString().substring(0, 10))}
         </div>
         <div className={styles.caseload}>
-          <span className={styles.cases}>{highlightCaseload} cases</span>
+          <span className={styles.cases}>
+            {formatNumber(highlightCaseload)} cases
+          </span>
           <span className={styles.caption}>7-day moving average</span>
         </div>
       </header>
