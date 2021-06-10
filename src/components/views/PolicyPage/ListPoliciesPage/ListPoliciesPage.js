@@ -126,7 +126,11 @@ const ListPoliciesPage = props => {
               state={state}
               counties={miniMapCounties.current}
             />
-            <Link to="/policymaps">View on the United States map</Link>
+            <Link
+              to={`/policymaps?mapId=${state === "national" ? "global" : "us"}`}
+            >
+              View on the {state === "national" ? "world" : "United States"} map
+            </Link>
           </figure>
         )}
       </section>
