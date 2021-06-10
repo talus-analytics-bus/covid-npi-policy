@@ -81,6 +81,7 @@ const Tooltip = ({
         }
         placement={"right-start"}
         theme={"light"}
+        maxWidth={"none"}
         popperOptions={{
           modifiers: [
             {
