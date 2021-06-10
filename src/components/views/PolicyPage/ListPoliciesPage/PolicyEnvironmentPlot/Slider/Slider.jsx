@@ -17,7 +17,7 @@ const Slider = ({
   scale,
   vSpacing,
   circlePadding,
-  caseLoadByDate,
+  avgCaseLoadByDate,
 }) => {
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
@@ -59,9 +59,9 @@ const Slider = ({
     policiesByDate[sliderDate.toISOString().substring(0, 10)];
 
   const highlightCaseload =
-    caseLoadByDate &&
+    avgCaseLoadByDate &&
     sliderDate &&
-    caseLoadByDate[sliderDate.toISOString().substring(0, 10)];
+    Math.round(avgCaseLoadByDate[sliderDate.toISOString().substring(0, 10)]);
 
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.4;
 

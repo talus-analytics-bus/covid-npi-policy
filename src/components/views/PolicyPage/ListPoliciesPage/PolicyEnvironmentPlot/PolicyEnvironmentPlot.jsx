@@ -108,15 +108,21 @@ const PolicyEnvironmentPlot = ({ path }) => {
     getPolicies();
   }, [iso3, state]);
 
-  const [caseLoadByDate, setCaseloadByDate] = useState();
+  const [avgCaseLoadByDate, setAvgCaseloadByDate] = useState();
 
   useEffect(() => {
     if (caseload) {
+      const rollingAverageValues = rollingAverage(
+        caseload.map(day => day.value),
+        7
+      );
+
       const caseloadObj = {};
-      caseload.forEach(day => {
-        caseloadObj[day.date.toISOString().substring(0, 10)] = day.value;
+      caseload.forEach((day, index) => {
+        caseloadObj[day.date.toISOString().substring(0, 10)] =
+          rollingAverageValues[index];
       });
-      setCaseloadByDate(caseloadObj);
+      setAvgCaseloadByDate(caseloadObj);
     }
   }, [caseload]);
 
@@ -364,7 +370,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
             scale,
             vSpacing,
             circlePadding,
-            caseLoadByDate,
+            avgCaseLoadByDate,
           }}
         />
       )}
