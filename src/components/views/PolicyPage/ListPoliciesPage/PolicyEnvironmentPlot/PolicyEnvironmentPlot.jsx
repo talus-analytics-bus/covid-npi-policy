@@ -132,7 +132,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
     caseloadHeight: 180,
 
     paddingTop: 19,
-    paddingRight: 25,
+    paddingRight: 3,
     paddingLeft: 25,
     paddingBottom: 0,
 
