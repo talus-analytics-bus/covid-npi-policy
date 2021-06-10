@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
+import Tooltip from "./Tooltip/Tooltip";
 
 const formatDate = date => {
   if (!date) return undefined;
@@ -98,15 +95,7 @@ const Slider = ({
         >
           {formatDate(sliderDate.toISOString().substring(0, 10))}
         </text>
-        <foreignObject x={10} y={handleYPos} width={50} height={50}>
-          <Tippy
-            visible={true}
-            content={<p>Hello world</p>}
-            placement={"right"}
-          >
-            <div />
-          </Tippy>
-        </foreignObject>
+        <Tooltip {...{ handleYPos, sliderDate, highlightPolicies }} />
       </g>
 
       {highlightPolicies &&
