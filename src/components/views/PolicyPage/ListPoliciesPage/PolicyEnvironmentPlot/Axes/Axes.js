@@ -1,6 +1,8 @@
 import React from "react";
 
 // import styles from "./Axes.module.scss";
+const formatNumber = number =>
+  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 const Axes = props => {
   const { dim, scale } = props;
@@ -59,7 +61,7 @@ const Axes = props => {
                   y={scale.y(tick)}
                   style={styles.yAxis.label}
                 >
-                  {tick}
+                  {formatNumber(tick)}
                   {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
                 </text>
               )}
