@@ -2,6 +2,7 @@ import React from "react";
 
 // import DateSortControl from "./DateSortControl/DateSortControl";
 import DateRangeControl from "./DateRangeControl/DateRangeControl";
+import JurisdictionControl from "./JurisdictionControl/JurisdictionControl";
 import SearchControl from "./SearchControl/SearchControl";
 import TargetFilter from "./TargetFilter/TargetFilter";
 
@@ -16,6 +17,7 @@ const PolicyFilters = props => (
     <div className={styles.filterBar}>
       {/* <DateSortControl /> */}
       <DateRangeControl />
+      <JurisdictionControl />
       <TargetFilter />
       <SearchControl />
     </div>
