@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Tooltip from "./Tooltip/Tooltip";
 
 const formatDate = date => {
@@ -25,6 +25,7 @@ const Slider = ({
   const sliderRef = useRef();
 
   const handleDragStart = e => {
+    setPopupVisible(true);
     // prevent the text from highlighting
     e.stopPropagation();
     e.preventDefault();
@@ -38,7 +39,6 @@ const Slider = ({
       const CTM = svgElement.current.getScreenCTM();
       const xPos = (e.clientX - CTM.e) / CTM.a;
       setSliderX(xPos - dragStartX);
-      setPopupVisible(true);
     }
   };
 
@@ -50,13 +50,25 @@ const Slider = ({
     if (e.target !== sliderRef.current) setPopupVisible(false);
   };
 
+  const onScroll = useCallback(e => {
+    console.log("onScroll");
+    setPopupVisible(false);
+    window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
-    console.log("addEventListener");
     document.body.addEventListener("click", onClickBody);
+
     return function cleanup() {
+      window.removeEventListener("scroll", onScroll, { passive: true });
       document.body.removeEventListener("click", onClickBody);
     };
-  }, []);
+  }, [onScroll]);
+
+  useEffect(() => {
+    if (popupVisible)
+      window.addEventListener("scroll", onScroll, { passive: true });
+  }, [popupVisible, onScroll]);
 
   // the +1 offset makes the slider visually align to the date
   const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
