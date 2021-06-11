@@ -70,7 +70,7 @@ const PolicyPage = props => {
   // console.log(policyObject);
   // console.log(policy);
 
-  // debugger;
+  //
 
   return (
     <article className={styles.policyPage}>

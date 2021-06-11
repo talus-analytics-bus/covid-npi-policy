@@ -369,7 +369,7 @@ const MapboxMap = ({
       setData(newMapData);
       setDataIsLoading(false);
     },
-    [data, curMapOptions]
+    [setDataIsLoading, data, curMapOptions]
   );
 
   /**
@@ -415,7 +415,16 @@ const MapboxMap = ({
         mapId,
         policyResolution: plugins.policyResolution,
       });
-  }, [filters, date, circle, fill, plugins.policyResolution]);
+  }, [
+    filters,
+    date,
+    circle,
+    fill,
+    plugins.policyResolution,
+    mapIsChanging,
+    // getMapData,
+    // mapId,
+  ]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {

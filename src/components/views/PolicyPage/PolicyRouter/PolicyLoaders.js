@@ -324,7 +324,7 @@ export const loadPolicyDescriptions = async ({
 
 export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
   console.log("loadFullPolicy Called");
-  // debugger;
+  //
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
