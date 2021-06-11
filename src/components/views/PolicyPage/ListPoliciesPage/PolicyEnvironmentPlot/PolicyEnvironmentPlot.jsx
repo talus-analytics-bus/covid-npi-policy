@@ -279,102 +279,111 @@ const PolicyEnvironmentPlot = ({ path }) => {
       : 6.5;
 
   return (
-    <svg
-      viewBox={`0 0 ${dim.width} ${dim.height}`}
-      xmlns="http://www.w3.org/2000/svg"
-      className={styles.svg}
-      ref={svgElement}
-      style={{ overflow: "visible" }}
-    >
-      {/* <g className={styles.background}> */}
-      {/* Visualize padding zone for testing */}
-      {/* <rect */}
-      {/*   x={dim.paddingLeft} */}
-      {/*   y={dim.paddingTop} */}
-      {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
-      {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
-      {/*   style={{ */}
-      {/*     stroke: "grey", */}
-      {/*     strokeWidth: 1, */}
-      {/*     fill: "none", */}
-      {/*   }} */}
-      {/* /> */}
-      {/* <rect */}
-      {/*   x={0} */}
-      {/*   y={0} */}
-      {/*   width={dim.width} */}
-      {/*   height={dim.height} */}
-      {/*   style={{ */}
-      {/*     stroke: "grey", */}
-      {/*     strokeWidth: 1, */}
-      {/*     fill: "none", */}
-      {/*   }} */}
-      {/* /> */}
-      <g className={styles.dailyLines}>
-        {caseload &&
-          scale &&
-          caseload.map(day => (
-            <React.Fragment key={day.date}>
-              {day.value >= 0 && (
-                <line
-                  style={inlineStyles.dailyLines}
-                  x1={scale.x(day.date)}
-                  y1={dim.origin.y}
-                  x2={scale.x(day.date)}
-                  y2={scale.y(day.value)}
-                />
-              )}
-            </React.Fragment>
-          ))}
-      </g>
-      <Axes dim={dim} scale={scale} />
-      <path d={averageLinePath} className={styles.averageLine} />
-      {/* </g> */}
-
-      {scale &&
-        policiesByDate &&
-        Object.entries(policiesByDate)
-          .map(([date, categories]) => {
-            const rowDate = new Date(date);
-            const xPos = scale.x(rowDate);
-            let count = 0;
-
-            return Object.values(categories).map(policies =>
-              policies.map(policy => {
-                count = count + 1;
-                return (
-                  <circle
-                    key={count}
-                    style={{
-                      fill: "rgba(64, 147, 132, .5)",
-                      // stroke: "white",
-                      // strokeWidth: ".5",
-                    }}
-                    cx={xPos}
-                    cy={
-                      dim.yAxis.end.y - (count - 1) * vSpacing - circlePadding
-                    }
-                    r={3}
+    <>
+      <div className={styles.instructionSection}>
+        <p>
+          Move the blue line to show the Colorado state and county policies that
+          went into effect on each day and the 7-day average new cases on that
+          same day.
+        </p>
+      </div>
+      <svg
+        viewBox={`0 0 ${dim.width} ${dim.height}`}
+        xmlns="http://www.w3.org/2000/svg"
+        className={styles.svg}
+        ref={svgElement}
+        style={{ overflow: "visible" }}
+      >
+        {/* <g className={styles.background}> */}
+        {/* Visualize padding zone for testing */}
+        {/* <rect */}
+        {/*   x={dim.paddingLeft} */}
+        {/*   y={dim.paddingTop} */}
+        {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
+        {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
+        {/*   style={{ */}
+        {/*     stroke: "grey", */}
+        {/*     strokeWidth: 1, */}
+        {/*     fill: "none", */}
+        {/*   }} */}
+        {/* /> */}
+        {/* <rect */}
+        {/*   x={0} */}
+        {/*   y={0} */}
+        {/*   width={dim.width} */}
+        {/*   height={dim.height} */}
+        {/*   style={{ */}
+        {/*     stroke: "grey", */}
+        {/*     strokeWidth: 1, */}
+        {/*     fill: "none", */}
+        {/*   }} */}
+        {/* /> */}
+        <g className={styles.dailyLines}>
+          {caseload &&
+            scale &&
+            caseload.map(day => (
+              <React.Fragment key={day.date}>
+                {day.value >= 0 && (
+                  <line
+                    style={inlineStyles.dailyLines}
+                    x1={scale.x(day.date)}
+                    y1={dim.origin.y}
+                    x2={scale.x(day.date)}
+                    y2={scale.y(day.value)}
                   />
-                );
-              })
-            );
-          })
-          .flat()}
-      {scale && (
-        <Slider
-          {...{
-            dim,
-            svgElement,
-            policiesByDate,
-            scale,
-            vSpacing,
-            circlePadding,
-            avgCaseLoadByDate,
-          }}
-        />
-      )}
-    </svg>
+                )}
+              </React.Fragment>
+            ))}
+        </g>
+        <Axes dim={dim} scale={scale} />
+        <path d={averageLinePath} className={styles.averageLine} />
+        {/* </g> */}
+
+        {scale &&
+          policiesByDate &&
+          Object.entries(policiesByDate)
+            .map(([date, categories]) => {
+              const rowDate = new Date(date);
+              const xPos = scale.x(rowDate);
+              let count = 0;
+
+              return Object.values(categories).map(policies =>
+                policies.map(policy => {
+                  count = count + 1;
+                  return (
+                    <circle
+                      key={count}
+                      style={{
+                        fill: "rgba(64, 147, 132, .5)",
+                        // stroke: "white",
+                        // strokeWidth: ".5",
+                      }}
+                      cx={xPos}
+                      cy={
+                        dim.yAxis.end.y - (count - 1) * vSpacing - circlePadding
+                      }
+                      r={3}
+                    />
+                  );
+                })
+              );
+            })
+            .flat()}
+        {scale && (
+          <Slider
+            {...{
+              dim,
+              svgElement,
+              policiesByDate,
+              scale,
+              vSpacing,
+              circlePadding,
+              avgCaseLoadByDate,
+            }}
+          />
+        )}
+      </svg>
+    </>
   );
 };
 
