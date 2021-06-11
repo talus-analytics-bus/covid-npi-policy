@@ -344,12 +344,12 @@ const usSubGeoOptions: Option[] = [
     value: "us-county",
     description: "View policies at the county level",
   },
-  {
-    name: "State-level and county-level policies",
-    value: "us-county-plus-state",
-    description:
-      "View policies at the state and county levels on a map of counties",
-  },
+  // {
+  //   name: "State-level and county-level policies",
+  //   value: "us-county-plus-state",
+  //   description:
+  //     "View policies at the state and county levels on a map of counties",
+  // },
 ];
 /**
  * Given the ID of the map, returns the fill options drawer title to use
