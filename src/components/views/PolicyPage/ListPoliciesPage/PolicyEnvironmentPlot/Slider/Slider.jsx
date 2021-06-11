@@ -32,18 +32,26 @@ const Slider = ({
     const CTM = svgElement.current.getScreenCTM();
     const xPos = (e.clientX - CTM.e) / CTM.a;
     setDragStartX(xPos - sliderX);
+    document.body.addEventListener("mouseup", handleDragEnd);
   };
 
   const handleDrag = e => {
     if (dragStartX !== 0) {
       const CTM = svgElement.current.getScreenCTM();
       const xPos = (e.clientX - CTM.e) / CTM.a;
-      setSliderX(xPos - dragStartX);
+      const newPos = xPos - dragStartX;
+
+      if (
+        newPos + dim.xAxis.start.x >= dim.xAxis.start.x &&
+        newPos + dim.xAxis.start.x <= dim.xAxis.end.x
+      )
+        setSliderX(newPos);
     }
   };
 
   const handleDragEnd = e => {
     setDragStartX(0);
+    document.body.removeEventListener("mouseup", handleDragEnd);
   };
 
   const onClickBody = e => {
