@@ -835,6 +835,12 @@ export function getMapNouns(mapId) {
       return { plural: "States", singular: "State", level: "state" };
     case "us-county":
       return { plural: "Counties", singular: "County", level: "county" };
+    case "us-county-plus-state":
+      return {
+        plural: "Counties",
+        singular: "County",
+        level: "state + county",
+      };
     default:
       return {
         plural: "Countries",

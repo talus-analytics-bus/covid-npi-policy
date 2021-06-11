@@ -67,10 +67,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
           <DistancingBodySection
             {...{
               key: "distancingBody",
-              title:
-                mapId !== "us-county"
-                  ? "Distancing level"
-                  : "Distancing level of state",
+              title: getDistancingLevelLabelFromMapId(mapId),
               distancingLevel,
               modelLink,
               updating: updatingOrNotReady,
@@ -94,3 +91,20 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   );
 };
 export default AmpMapPopup;
+
+/**
+ * Given the ID of the currently displayed map, returns the label that
+ * describes the distancing levels shown on the map. For example, state-level
+ * distancing levels are used in county-level maps, so this is indicated.
+ * @param mapId The ID of the currently displayed map
+ * @returns The label describing the distancing levels shown on the map.
+ */
+function getDistancingLevelLabelFromMapId(mapId: string): string {
+  switch (mapId) {
+    case "us-county":
+    case "us-county-plus-state":
+      return "Distancing level of state";
+    default:
+      return "Distancing level";
+  }
+}

@@ -317,7 +317,8 @@ export const getDistancingMapMetric: Function = (
   mapId: MapId,
   allMapMetrics: Record<string, Array<MapMetric>>
 ): MapMetric[] => {
-  let key = mapId === "us-county" ? "us" : mapId;
+  const key: string = getDistancingMetricKeyFromMapId(mapId);
+
   // get state-level distancing level metric and query params
   const distancingMapMetric = allMapMetrics[key].find(
     d => d.id === "lockdown_level"
@@ -339,6 +340,7 @@ export const getLocationFilters = (
     case "us":
       return getUsStateLocationFilters(feature as StateFeature);
     case "us-county":
+    case "us-county-plus-state":
       return getUsCountyLocationFilters(feature as CountyFeature);
     case "global":
     default:
@@ -371,3 +373,21 @@ export const getLocationFilters = (
     };
   }
 };
+
+/**
+ * Given the ID of the currently displayed map, returns the metric key that
+ * should be used for distancing levels on the map. This is necessary because
+ * on the county-level map, distancing levels for states should be shown, since
+ * they are not calculated for counties.
+ * @param mapId The ID of the currently displayed map
+ * @returns The metric key that should be used for distancing levels on the map
+ */
+function getDistancingMetricKeyFromMapId(mapId: MapId): string {
+  switch (mapId) {
+    case "us-county":
+    case "us-county-plus-state":
+      return "us";
+    default:
+      return mapId;
+  }
+}

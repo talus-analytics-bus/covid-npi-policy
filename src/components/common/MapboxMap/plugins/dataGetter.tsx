@@ -191,7 +191,7 @@ export async function getDataQueryResults({
               state_name: stateName,
               iso3,
             })
-          : d.params;
+          : { ...d.params, mapId };
       // add base data query
       queryDefs[d.id] = {
         queryFunc: d.queryFunc,

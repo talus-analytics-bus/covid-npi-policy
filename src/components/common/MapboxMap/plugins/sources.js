@@ -86,6 +86,9 @@ export const mapSources = {
       },
     },
   },
+  get "us-county-plus-state"() {
+    return this["us-county"];
+  },
 
   // additional map types, layer types, and source defs...
   global: {
@@ -184,6 +187,9 @@ export const mapStyles = {
 
     // optional: info tooltip to display for map in radio selections
     tooltip: "View county-level data for the United States only",
+  },
+  get "us-county-plus-state"() {
+    return { ...this["us-county"], value: "us-county-plus-state" };
   },
   // additional maps...
   global: {

@@ -344,6 +344,12 @@ const usSubGeoOptions: Option[] = [
     value: "us-county",
     description: "View policies at the county level",
   },
+  {
+    name: "State-level and county-level policies",
+    value: "us-county-plus-state",
+    description:
+      "View policies at the state and county levels on a map of counties",
+  },
 ];
 /**
  * Given the ID of the map, returns the fill options drawer title to use
@@ -355,6 +361,7 @@ function getFillOptionsTitleFromMapId(mapId: MapId): string {
     case "us":
       return "View states by";
     case "us-county":
+    case "us-county-plus-state":
       return "View counties by";
     case "global":
       return "View countries by";

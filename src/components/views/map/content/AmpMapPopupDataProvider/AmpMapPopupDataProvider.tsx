@@ -99,13 +99,14 @@ const updateData: Function = async ({
     ),
     policyCount: PolicyStatusCounts({
       method: "post",
-      geo_res: mapStyles[mapId].geo_res,
+      geo_res: getPolicyCountGeoResFromMapId(mapId),
       count_sub: paramArgs.policyResolution === "subgeo",
       include_min_max: true,
       include_zeros: true,
       filters: { ...filtersWithDate, ...getLocationFilters(mapId, feature) },
       one: true,
       merge_like_policies: false,
+      counted_parent_geos: mapId === "us-county-plus-state" ? ["state"] : [],
     }),
     distancingLevel: fetchedDistancingLevel,
   };
@@ -211,3 +212,30 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
 };
 
 export default AmpMapPopupDataProvider;
+
+/**
+ * Given the ID of the currently displayed map, returns the geographic
+ * resolution that should be used in queries counting policies that affects
+ * areas displayed on the map. For example, the map of 'us-county-plus-state'
+ * should count at the 'county' geographic resolution, although it includes
+ * counts of state policies.
+ * @param mapId The ID of the currently displayed map
+ * @returns
+ * The geographic resolution that should be used for policy status
+ * count queries
+ */
+function getPolicyCountGeoResFromMapId(mapId: MapId): string | undefined {
+  let policyCountGeoRes;
+  switch (mapId) {
+    case "us-county":
+    case "us-county-plus-state":
+      policyCountGeoRes = mapStyles["us-county"].geo_res;
+      break;
+    default:
+      policyCountGeoRes = mapStyles[mapId].geo_res;
+      break;
+  }
+  if (policyCountGeoRes === undefined)
+    throw Error("Unexpected map ID: " + mapId);
+  return policyCountGeoRes;
+}

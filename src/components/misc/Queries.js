@@ -380,11 +380,23 @@ export const PolicyStatusCounts = async function({
   include_zeros = true,
   one = false,
   merge_like_policies = true,
+  counted_parent_geos = [],
+  mapId = undefined,
 }) {
   // prepare params
   const params = new URLSearchParams();
+
+  // // if mapId is defined, set counted_parent_geos accordingly
+  // if (mapId !== undefined && counted_parent_geos.length === 0) {
+  //   if (mapId === "us-county-plus-state") counted_parent_geos.push("state");
+  // }
+
+  // append list-like param values
   fields.forEach(d => {
     params.append("fields", d);
+  });
+  counted_parent_geos.forEach(d => {
+    params.append("counted_parent_geos", d);
   });
 
   params.append("count_sub", count_sub);

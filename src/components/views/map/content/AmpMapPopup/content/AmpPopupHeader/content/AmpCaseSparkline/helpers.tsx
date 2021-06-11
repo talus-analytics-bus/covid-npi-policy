@@ -42,6 +42,7 @@ function setLocationParam(
       baseParams.stateName = (feature as StateFeature).properties.state_name;
       break;
     case "us-county":
+    case "us-county-plus-state":
       baseParams.ansiFips = (feature as CountyFeature).id;
       break;
     case "global":

@@ -95,6 +95,9 @@ export const defaults = {
       zoom: 3.9432136288314994,
     },
   },
+  get "us-county-plus-state"() {
+    return this["us-county"];
+  },
   // defaults for additional maps...
   global: {
     circle: "77",
@@ -177,7 +180,7 @@ export const allMapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: {
-        func: ({ filters, policyResolution }) => {
+        func: ({ filters, policyResolution, mapId }) => {
           const countSub = policyResolution === "subgeo";
           return {
             method: "post",
@@ -185,6 +188,7 @@ export const allMapMetrics = {
             geo_res: "state",
             count_sub: countSub,
             include_min_max: true,
+            mapId,
           };
         },
       },
@@ -302,14 +306,15 @@ export const allMapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: {
-        func: ({ filters, policyResolution }) => {
+        func: ({ filters, policyResolution, mapId }) => {
           const countSub = policyResolution === "subgeo";
           return {
             method: "post",
             filters,
-            geo_res: "county",
+            geo_res: mapId === "us-county" ? "county" : "county_plus_state",
             count_sub: countSub,
             include_min_max: true,
+            mapId,
           };
         },
       },
@@ -351,6 +356,9 @@ export const allMapMetrics = {
       },
     },
   ],
+  get "us-county-plus-state"() {
+    return this["us-county"];
+  },
   global: [
     {
       // functions that, when passed `params`, returns the data for the map
@@ -412,7 +420,7 @@ export const allMapMetrics = {
 
       // params that must be passed to `queryFunc` as object
       params: {
-        func: ({ filters, policyResolution }) => {
+        func: ({ filters, policyResolution, mapId }) => {
           const countSub = policyResolution === "subgeo";
           return {
             method: "post",
@@ -420,6 +428,7 @@ export const allMapMetrics = {
             geo_res: "country",
             count_sub: countSub,
             include_min_max: true,
+            mapId,
           };
         },
       },
