@@ -51,7 +51,6 @@ const Slider = ({
   };
 
   const onScroll = useCallback(e => {
-    console.log("onScroll");
     setPopupVisible(false);
     window.removeEventListener("scroll", onScroll);
   }, []);

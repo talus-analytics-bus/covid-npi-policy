@@ -54,7 +54,6 @@ const earliestDate = (a, b) => {
 };
 
 const PolicyEnvironmentPlot = ({ path }) => {
-  console.count("PolicyEnvironmentPlot");
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload } = policyContextConsumer;

@@ -96,8 +96,6 @@ const IntroSection = props => {
     );
   }
 
-  console.log(policySummaryObject);
-
   return (
     <div className={styles.introSection}>
       <h2>Description of policy environment</h2>
