@@ -3,9 +3,9 @@ import { useLocation } from "react-router-dom";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
-import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocumentIcon.svg";
-import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
-import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
+// import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocumentIcon.svg";
+// import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
+// import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
 
 import styles from "./IntroSection.module.scss";
 
@@ -37,7 +37,7 @@ const IntroSection = props => {
   const {
     policySummaryObject,
     policyStatus,
-    caseload,
+    // caseload,
     status,
     locationName,
   } = policyContextConsumer;
@@ -61,17 +61,17 @@ const IntroSection = props => {
   const policyStatusName =
     status.policyStatus === "loaded" && policyStatus[0].value.toLowerCase();
 
-  const sevenDaySum =
-    status.caseload === "loaded" &&
-    caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
-
-  const lastSevenDaySum =
-    status.caseload === "loaded" &&
-    caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
-
-  const sevenDayChangePCT =
-    lastSevenDaySum &&
-    Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
+  //   const sevenDaySum =
+  //     status.caseload === "loaded" &&
+  //     caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
+  //
+  //   const lastSevenDaySum =
+  //     status.caseload === "loaded" &&
+  //     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
+  //
+  //   const sevenDayChangePCT =
+  //     lastSevenDaySum &&
+  //     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
   const policyCategoriesText =
     Object.keys(policySummaryObject).length === 1
