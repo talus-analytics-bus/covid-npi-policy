@@ -139,7 +139,7 @@ export const SVG = props => {
       paths = selectedCounties.map((geometry, index) => {
         const path = geoPath().projection(projection)(geometry);
         return (
-          <Tippy content={geometry.properties.name}>
+          <Tippy content={geometry.properties.name + " county"}>
             <path
               key={index}
               fill={
