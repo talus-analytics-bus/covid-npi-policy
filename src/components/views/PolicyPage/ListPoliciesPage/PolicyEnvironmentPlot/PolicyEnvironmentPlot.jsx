@@ -133,7 +133,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
 
     paddingTop: 19,
     paddingRight: 3,
-    paddingLeft: 25,
+    paddingLeft: 0,
     paddingBottom: 0,
 
     // yLabelWidth will be changed
