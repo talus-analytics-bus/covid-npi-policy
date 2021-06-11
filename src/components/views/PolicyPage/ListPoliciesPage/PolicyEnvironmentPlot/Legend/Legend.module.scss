@@ -1,0 +1,28 @@
+.container {
+  margin-left: 3em;
+  .entry {
+    display: flex;
+
+    .key {
+      position: relative;
+      top: 3px;
+      width: 1em;
+      height: 1em;
+      margin-right: 0.75em;
+    }
+
+    .label {
+      color: #828282;
+      font-family: Open Sans;
+      font-size: 16px;
+    }
+  }
+}
+
+.averageLine {
+  stroke: #bdbdbd;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}

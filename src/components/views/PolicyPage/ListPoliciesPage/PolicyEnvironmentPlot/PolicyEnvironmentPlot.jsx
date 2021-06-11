@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 import { useParams } from "react-router-dom";
 
+import Legend from "./Legend/Legend";
 import Axes from "./Axes/Axes";
 import Slider from "./Slider/Slider";
 
@@ -286,6 +287,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
           went into effect on each day and the 7-day average new cases on that
           same day.
         </p>
+        <Legend />
       </div>
       <svg
         viewBox={`0 0 ${dim.width} ${dim.height}`}
