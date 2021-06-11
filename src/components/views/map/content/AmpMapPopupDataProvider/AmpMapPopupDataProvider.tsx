@@ -227,10 +227,10 @@ export default AmpMapPopupDataProvider;
 function getPolicyCountGeoResFromMapId(mapId: MapId): string | undefined {
   let policyCountGeoRes;
   switch (mapId) {
-    case "us-county":
-    case "us-county-plus-state":
-      policyCountGeoRes = mapStyles["us-county"].geo_res;
-      break;
+    // case "us-county":
+    // case "us-county-plus-state":
+    //   policyCountGeoRes = mapStyles["us-county"].geo_res;
+    //   break;
     default:
       policyCountGeoRes = mapStyles[mapId].geo_res;
       break;

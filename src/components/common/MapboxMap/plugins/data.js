@@ -1189,6 +1189,8 @@ function getNounFromPolicyResolution({ mapId, policyResolution }) {
       else return "Sub-state";
     case "us-county":
       return "County";
+    case "us-county-plus-state":
+      return "State + county";
     default:
       if (policyResolution !== "subgeo") return "National";
       else return "Sub-national";

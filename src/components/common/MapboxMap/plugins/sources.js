@@ -189,7 +189,11 @@ export const mapStyles = {
     tooltip: "View county-level data for the United States only",
   },
   get "us-county-plus-state"() {
-    return { ...this["us-county"], value: "us-county-plus-state" };
+    return {
+      ...this["us-county"],
+      value: "us-county-plus-state",
+      geo_res: "county_plus_state",
+    };
   },
   // additional maps...
   global: {
