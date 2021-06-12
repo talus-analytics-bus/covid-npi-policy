@@ -66,13 +66,25 @@ const PolicyRouter = props => {
     key: "selection",
   });
   const [targets, setTargets] = React.useState({ all: [], selected: [] });
-  const [jurisdiction, setJurisdiction] = React.useState({
-    all: [
-      { id: 1, value: "State / Province", label: "State" },
-      { id: 2, value: "Local", label: "Local" },
-    ],
-    selected: [],
-  });
+
+  const [jurisdiction, setJurisdiction] = React.useState(
+    state === "national"
+      ? {
+          all: [
+            { id: 1, value: "Country", label: "Country" },
+            { id: 2, value: "State / Province", label: "State / Province" },
+          ],
+          selected: [],
+        }
+      : {
+          all: [
+            { id: 2, value: "State / Province", label: "State" },
+            { id: 3, value: "Local", label: "Local" },
+          ],
+          selected: [],
+        }
+  );
+
   const [searchTextInputValue, setSearchTextInputValue] = React.useState(
     (policyFilters._text && policyFilters._text[0]) || ""
   );
@@ -129,13 +141,23 @@ const PolicyRouter = props => {
       key: "selection",
     });
     setTargets({ all: [], selected: [] });
-    setJurisdiction({
-      all: [
-        { id: 1, value: "State / Province", label: "State" },
-        { id: 2, value: "Local", label: "Local" },
-      ],
-      selected: [],
-    });
+    setJurisdiction(
+      state === "national"
+        ? {
+            all: [
+              { id: 1, value: "Country", label: "Country" },
+              { id: 2, value: "State / Province", label: "State / Province" },
+            ],
+            selected: [],
+          }
+        : {
+            all: [
+              { id: 2, value: "State / Province", label: "State" },
+              { id: 3, value: "Local", label: "Local" },
+            ],
+            selected: [],
+          }
+    );
     setSearchTextInputValue("");
 
     // clear policyObject
