@@ -50,6 +50,8 @@ export const textBBox = ({ svg, string, font, fontSize }) => {
 };
 
 const earliestDate = (a, b) => {
+  if (!a) return b;
+  if (!b) return a;
   return new Date(Math.min(new Date(a).getTime(), new Date(b).getTime()));
 };
 
