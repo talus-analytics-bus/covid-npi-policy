@@ -21,6 +21,7 @@ const formatNumber = number =>
 
 const TooltipContent = ({
   sliderDate,
+  setCursorVisible,
   highlightPolicies,
   highlightCaseload,
 }) => {
@@ -28,7 +29,11 @@ const TooltipContent = ({
     highlightPolicies && Object.values(highlightPolicies).flat().length;
 
   return (
-    <div style={{ pointerEvents: "auto" }}>
+    <div
+      style={{ pointerEvents: "auto" }}
+      onMouseEnter={() => setCursorVisible(false)}
+      onMouseLeave={() => setCursorVisible(true)}
+    >
       <header className={styles.greySection}>
         <div className={styles.date}>
           {formatDate(sliderDate.toISOString().substring(0, 10))}
@@ -71,6 +76,7 @@ const Tooltip = ({
   handleYPos,
   dim,
   sliderDate,
+  setCursorVisible,
   highlightPolicies,
   highlightCaseload,
   popupVisible,
@@ -81,7 +87,12 @@ const Tooltip = ({
         visible={popupVisible}
         content={
           <TooltipContent
-            {...{ sliderDate, highlightPolicies, highlightCaseload }}
+            {...{
+              sliderDate,
+              setCursorVisible,
+              highlightPolicies,
+              highlightCaseload,
+            }}
           />
         }
         placement={"right-start"}

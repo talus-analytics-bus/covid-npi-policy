@@ -22,6 +22,9 @@ const Slider = ({
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
   const [popupVisible, setPopupVisible] = useState(false);
+  const [cursorX, setCursorX] = useState(0);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
   const sliderRef = useRef();
 
   const handleDragStart = e => {
@@ -36,16 +39,17 @@ const Slider = ({
   };
 
   const handleDrag = e => {
-    if (dragStartX !== 0) {
-      const CTM = svgElement.current.getScreenCTM();
-      const xPos = (e.clientX - CTM.e) / CTM.a;
-      const newPos = xPos - dragStartX;
+    // setCursorVisible(true);
+    const CTM = svgElement.current.getScreenCTM();
+    const xPos = (e.clientX - CTM.e) / CTM.a;
+    const newPos = xPos - dragStartX;
 
-      if (
-        newPos + dim.xAxis.start.x >= dim.xAxis.start.x &&
-        newPos + dim.xAxis.start.x <= dim.xAxis.end.x
-      )
-        setSliderX(newPos);
+    if (
+      newPos + dim.xAxis.start.x >= dim.xAxis.start.x &&
+      newPos + dim.xAxis.start.x <= dim.xAxis.end.x
+    ) {
+      if (dragStartX !== 0) setSliderX(newPos);
+      setCursorX(newPos - dim.xAxis.start.x + dragStartX);
     }
   };
 
@@ -87,18 +91,24 @@ const Slider = ({
 
   // the +1 offset makes the slider visually align to the date
   const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
+  const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
 
   const highlightPolicies =
     policiesByDate &&
     sliderDate &&
     policiesByDate[sliderDate.toISOString().substring(0, 10)];
 
+  const cursorPolicies =
+    policiesByDate &&
+    cursorDate &&
+    policiesByDate[cursorDate.toISOString().substring(0, 10)];
+
   const highlightCaseload =
     avgCaseLoadByDate &&
     sliderDate &&
     Math.round(avgCaseLoadByDate[sliderDate.toISOString().substring(0, 10)]);
 
-  const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.45;
+  const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.3;
 
   return (
     <g
@@ -106,6 +116,8 @@ const Slider = ({
       onClick={onClickChart}
       onMouseMove={handleDrag}
       onMouseUp={handleDragEnd}
+      onMouseLeave={() => setCursorVisible(false)}
+      onMouseEnter={() => setCursorVisible(true)}
     >
       <rect
         // this rect is what sizes the group
@@ -114,6 +126,44 @@ const Slider = ({
         // doesn't work with fill='none'
         style={{ fill: "rgba(0,0,0,0)" }}
       />
+      {cursorVisible && (
+        <g
+          style={{
+            transform: `translateX(${cursorX}px)`,
+          }}
+        >
+          <path
+            style={{
+              strokeWidth: 3,
+              stroke: "rgba(2, 63, 136, .25)",
+              // transform: `translateX(${cursorX}px)`,
+              cursor: "pointer",
+            }}
+            d={`M ${dim.xAxis.start.x},${0} 
+        L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
+          />
+          <rect
+            x={dim.xAxis.start.x - 30}
+            y={0}
+            width={60}
+            height={15}
+            rx={3}
+            style={{ fill: "rgb(229, 94, 55)" }}
+          />
+          <text
+            x={dim.xAxis.start.x}
+            y={3}
+            style={{
+              alignmentBaseline: "hanging",
+              textAnchor: "middle",
+              fill: "white",
+              fontSize: 9,
+            }}
+          >
+            {formatDate(cursorDate.toISOString().substring(0, 10))}
+          </text>
+        </g>
+      )}
       <g
         style={{
           transform: `translateX(${sliderX}px)`,
@@ -127,38 +177,57 @@ const Slider = ({
           d={`M ${dim.xAxis.start.x},${0} 
         L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
         />
-        <rect
-          x={dim.xAxis.start.x - 30}
-          y={0}
-          width={60}
-          height={15}
-          rx={3}
-          style={{ fill: "rgb(229, 94, 55)" }}
-        />
-        <text
-          x={dim.xAxis.start.x}
-          y={3}
-          style={{
-            alignmentBaseline: "hanging",
-            textAnchor: "middle",
-            fill: "white",
-            fontSize: 9,
-          }}
-        >
-          {formatDate(sliderDate.toISOString().substring(0, 10))}
-        </text>
+        {/* <rect */}
+        {/*   x={dim.xAxis.start.x - 30} */}
+        {/*   y={0} */}
+        {/*   width={60} */}
+        {/*   height={15} */}
+        {/*   rx={3} */}
+        {/*   style={{ fill: "rgb(229, 94, 55)" }} */}
+        {/* /> */}
+        {/* <text */}
+        {/*   x={dim.xAxis.start.x} */}
+        {/*   y={3} */}
+        {/*   style={{ */}
+        {/*     alignmentBaseline: "hanging", */}
+        {/*     textAnchor: "middle", */}
+        {/*     fill: "white", */}
+        {/*     fontSize: 9, */}
+        {/*   }} */}
+        {/* > */}
+        {/*   {formatDate(sliderDate.toISOString().substring(0, 10))} */}
+        {/* </text> */}
         <Tooltip
           {...{
             handleYPos,
             dim,
             sliderDate,
+            setCursorVisible,
             highlightPolicies,
             highlightCaseload,
             popupVisible,
           }}
         />
       </g>
-
+      {cursorVisible &&
+        cursorPolicies &&
+        Object.entries(cursorPolicies)
+          .map(([category, policies]) => policies)
+          .flat()
+          .map((_, index) => (
+            <circle
+              key={index}
+              style={{
+                fill: "#e59f37",
+                cursor: "pointer",
+                // stroke: "white",
+                // strokeWidth: ".5",
+              }}
+              cx={scale.x(new Date(cursorDate.toISOString().substring(0, 10)))}
+              cy={dim.yAxis.end.y - index * vSpacing - circlePadding}
+              r={3}
+            />
+          ))}
       {highlightPolicies &&
         Object.entries(highlightPolicies)
           .map(([category, policies]) => policies)
@@ -176,6 +245,7 @@ const Slider = ({
               r={3}
             />
           ))}
+
       <g
         style={{
           transform: `translateX(${sliderX}px)`,
@@ -195,11 +265,13 @@ const Slider = ({
           ref={sliderRef}
           onClick={e => e.stopPropagation()}
           onMouseDown={handleDragStart}
-          x={dim.xAxis.start.x - 10}
+          x={dim.xAxis.start.x - 2}
           y={0}
-          width={20}
+          width={4}
           height={dim.yAxis.height + dim.paddingTop}
-          style={{ fill: "rgba(0,0,0,0)" }}
+          onMouseEnter={() => setCursorVisible(false)}
+          onMouseLeave={() => setCursorVisible(true)}
+          style={{ fill: "rgba(0,0,0,0)", cursor: "pointer" }}
         />
       </g>
     </g>
