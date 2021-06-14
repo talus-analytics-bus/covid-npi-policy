@@ -159,7 +159,7 @@ export const getModelLink: Function = (
   featureName = (feature as CountryFeature).properties.NAME;
   if (featureName !== undefined) return null;
   else {
-    throw "Unknown feature type: " + feature;
+    throw Error("Unknown feature type: " + feature);
   }
 };
 
