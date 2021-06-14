@@ -2,31 +2,36 @@ import React from "react";
 
 import RemoveFilterButton from "../RemoveFilterButton/RemoveFilterButton";
 
-import styles from "./ActiveTargets.module.scss";
+import styles from "./ActiveJurisdiction.module.scss";
 
 import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
-const ActiveDateRange = props => {
+const ActiveJurisdiction = props => {
   const {
     setStatus,
-    setTargets,
+    setJurisdiction,
     policyFilters,
     setPolicyObject,
     setPolicyFilters,
   } = React.useContext(policyContext);
 
-  const removeTarget = target => {
+  console.log(policyFilters);
+
+  const removeTarget = jurisdiction => {
     setPolicyFilters(prev => {
-      const remainingTargets = prev.subtarget.filter(t => t !== target);
+      const remainingJurisdictions = prev.level.filter(t => t !== jurisdiction);
       return {
         ...prev,
-        subtarget: remainingTargets.length > 0 ? remainingTargets : undefined,
+        level:
+          remainingJurisdictions.length > 0
+            ? remainingJurisdictions
+            : undefined,
       };
     });
 
-    setTargets(prev => ({
+    setJurisdiction(prev => ({
       ...prev,
-      selected: prev.selected.filter(t => t.value !== target),
+      selected: prev.selected.filter(t => t.value !== jurisdiction),
     }));
 
     setPolicyObject({});
@@ -37,16 +42,20 @@ const ActiveDateRange = props => {
     }));
   };
 
-  if (policyFilters.subtarget)
+  console.log(policyFilters);
+
+  if (policyFilters.level)
     return (
       <>
-        {policyFilters.subtarget.map((filter, index) => (
+        {policyFilters.level.map((filter, index) => (
           <div key={filter} className={styles.activeTarget}>
             {/* {index === 0 ? ( */}
             {/*   <label> */}
             {/*     <strong> */}
             {/*       Policy{" "} */}
-            {/*       {policyFilters.subtarget.length === 1 ? "Target" : "Targets"} */}
+            {/*       {policyFilters.level.length === 1 */}
+            {/*         ? "Jurisdiction" */}
+            {/*         : "Jurisdictions"} */}
             {/*     </strong> */}
             {/*   </label> */}
             {/* ) : ( */}
@@ -56,7 +65,7 @@ const ActiveDateRange = props => {
               backgroundColor={"#4E8490"}
               onClick={() => removeTarget(filter)}
             >
-              Target: <strong>{filter}</strong>
+              Jurisdiction: <strong>{filter}</strong>
             </RemoveFilterButton>
           </div>
         ))}
@@ -66,4 +75,4 @@ const ActiveDateRange = props => {
   return <></>;
 };
 
-export default ActiveDateRange;
+export default ActiveJurisdiction;

@@ -29,6 +29,7 @@ const ActiveFilterBar = props => {
   const {
     setStatus,
     setTargets,
+    setJurisdiction,
     policyFilters,
     setPolicyFilters,
     policyObject,
@@ -62,9 +63,11 @@ const ActiveFilterBar = props => {
       ...prev,
       dates_in_effect: undefined,
       subtarget: undefined,
+      level: undefined,
       _text: undefined,
     }));
     setTargets(prev => ({ ...prev, selected: [] }));
+    setJurisdiction(prev => ({ ...prev, selected: [] }));
     setPolicyObject(policySummaryObject);
     setSearchTextInputValue("");
     setDateRangeControlValue({
@@ -91,10 +94,17 @@ const ActiveFilterBar = props => {
     </>
   );
 
-  if (policyFilters.subtarget || policyFilters.dates_in_effect || searchActive)
+  if (
+    policyFilters.level ||
+    policyFilters.subtarget ||
+    policyFilters.dates_in_effect ||
+    searchActive
+  )
     return (
       <div className={styles.activeFilterBar}>
-        {(policyFilters.subtarget || policyFilters.dates_in_effect) &&
+        {(policyFilters.level ||
+          policyFilters.subtarget ||
+          policyFilters.dates_in_effect) &&
           datesAndTargets}
         <div className={styles.summary}>
           {!searchActive && !isNaN(filteredPolicyCount.count) && (

@@ -9,6 +9,7 @@ import TargetFilter from "./TargetFilter/TargetFilter";
 import ActiveFilterBar from "./ActiveFilterBar/ActiveFilterBar";
 import ActiveDateRange from "./ActiveDateRange/ActiveDateRange";
 import ActiveTargets from "./ActiveTargets/ActiveTargets";
+import ActiveJurisdiction from "./ActiveJurisdiction/ActiveJurisdiction";
 
 import styles from "./PolicyFilters.module.scss";
 
@@ -24,6 +25,7 @@ const PolicyFilters = props => (
 
     <ActiveFilterBar>
       <ActiveDateRange />
+      <ActiveJurisdiction />
       <ActiveTargets />
     </ActiveFilterBar>
   </div>
