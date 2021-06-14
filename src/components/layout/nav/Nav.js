@@ -50,6 +50,7 @@ const Nav = ({ page, ...props }) => {
                 target="_blank"
                 href={COVID_LOCAL_URL}
                 className={styles.localBanner}
+                rel="noreferrer"
               >
                 <img src={localBanner} alt="COVID Local" />
               </a>
