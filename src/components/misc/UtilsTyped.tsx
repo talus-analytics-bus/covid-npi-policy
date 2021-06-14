@@ -57,3 +57,24 @@ export function getElWidth(ref: React.RefObject<HTMLDivElement>): number {
     return ref.current.getBoundingClientRect().width;
   } else return 0;
 }
+
+// /**
+//  * Given a 4- or 5-digit FIPS code, returns the code without any leading zeros.
+//  *
+//  * @param {string | number | undefined | null} v
+//  * The 4- or 5-digit FIPS code
+//  *
+//  * @returns {string} The 4- or 5-digit FIPS code without leading zeros
+//  */
+// export function getFipsNoLeadingZero(
+//   v: string | number | undefined | null
+// ): string {
+//   if (v === undefined || v === null) {
+//     throw Error("Argument cannot be undefined or null, received " + v);
+//   } else if (typeof v === "number") return v.toString();
+//   else if (v.length === 5) {
+//     if (v.charAt(0) === "0") return v.slice(1);
+//     else return v;
+//   } else if (v.length === 4) return v;
+//   else throw Error("Argument was unexpected value: " + v);
+// }
