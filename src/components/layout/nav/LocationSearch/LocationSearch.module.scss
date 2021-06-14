@@ -1,6 +1,6 @@
 @import "src/assets/styles/vars.module.scss";
 .searchContainer {
-  // width: 25rem;
+  width: 25rem;
   @media #{$phone} {
     width: 50vw;
     right: 0;

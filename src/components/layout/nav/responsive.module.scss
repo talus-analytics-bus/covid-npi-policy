@@ -70,6 +70,12 @@
       transition: opacity 0.25s;
       opacity: 1;
     }
+    &:not(.showMobileMenu) {
+      pointer-events: none;
+      .hamburger {
+        pointer-events: all;
+      }
+    }
     &.wide {
       + div {
         height: calc(100% - 21px);
