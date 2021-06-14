@@ -1,3 +1,4 @@
+import { Caret } from "components/common/MapOptions/OptionDrawer/content/Caret/Caret";
 import React from "react";
 
 import styles from "./ExpandingSection.module.scss";
@@ -16,40 +17,39 @@ const ExpandingSection = props => {
   // to open and stop rendering only after the animation finishes closing
   const [renderChildren, setRenderChildren] = React.useState(open || false);
 
+  // ref for measuring the height of the content inside the section
+  const contentContainer = React.useRef();
+
   // sets both the duration of the CSS animation and the JS cleanup
   // functions that need to run after the CSS animation is done
   const animDuration = 250;
-
-  // ref for measuring the height of the content inside the section
-  const contentContainer = React.useRef();
 
   // default state on component mount should match the open prop
   // so that the animation does not play when the component first
   // mounts either open or closed (like when it's opening or
   // closing as part of the scroll restoration process)
+  const commonStyles = {
+    overflow: "hidden",
+    right: 0,
+    transition: `${animDuration}ms ease`,
+    ...(props.floating && {
+      position: "absolute",
+      zIndex: props.zIndex || 10,
+      boxShadow:
+        props.useBoxShadow !== false
+          ? "0px 15px 30px -10px rgba(0, 0, 0, 0.25)"
+          : "",
+    }),
+  };
   const [animationHiderStyle, setAnimationHiderStyle] = React.useState(
     open
       ? {
           height: "auto",
-          transition: `${animDuration}ms ease`,
-          overflow: "hidden",
-          ...(props.floating && {
-            position: "absolute",
-            ...props.positioning,
-            zIndex: props.zIndex || 10,
-            boxShadow: "0px 15px 30px -10px rgba(0, 0, 0, 0.25)",
-          }),
+          ...commonStyles,
         }
       : {
           height: 0,
-          transition: `${animDuration}ms ease`,
-          overflow: "hidden",
-          ...(props.floating && {
-            zIndex: props.zIndex || 10,
-            position: "absolute",
-            ...props.positioning,
-            boxShadow: "0px 15px 30px -10px rgba(0, 0, 0, 0.25)",
-          }),
+          ...commonStyles,
         }
   );
 
@@ -161,9 +161,12 @@ const ExpandingSection = props => {
     >
       <button className={styles.expanderButton} onClick={onClickHandler}>
         {children[0]}
+        <Caret up={!open} />
       </button>
       <div style={animationHiderStyle}>
-        <div ref={contentContainer}>{childElements}</div>
+        <div ref={contentContainer} style={props.containerStyle}>
+          {childElements}
+        </div>
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       name: "US States",
       value: "us",
       description:
-        "View data for the United States at the state or county level",
+        "View data for the United States at the state and/or county level",
       child: (
         <OptionRadioSet
           key={"subGeoToggle"}

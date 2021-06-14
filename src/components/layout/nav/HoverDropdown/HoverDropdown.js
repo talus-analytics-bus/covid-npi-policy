@@ -11,10 +11,10 @@ const NavDropDown = props => {
     <ExpandingSection
       hover
       floating
-      positioning={{ right: "24rem" }}
       open={expanderOpen}
       onOpen={() => setExpanderOpen(true)}
       onClose={() => setExpanderOpen(false)}
+      containerStyle={{ borderRadius: "999px 5px 5px 5px" }}
     >
       <>{children[0]}</>
       <>{children.slice(1)}</>

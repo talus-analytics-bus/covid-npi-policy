@@ -1,12 +1,18 @@
+@import "src/assets/styles/vars.module.scss";
 .searchContainer {
-  width: 25rem;
-  margin-top: 1rem;
-
+  // width: 25rem;
+  @media #{$phone} {
+    width: 50vw;
+    right: 0;
+  }
   .searchBar {
     width: 100%;
     border: 1px solid #647f79;
     border-radius: 3px;
     padding: 0.33rem 0.5rem;
+    &::placeholder {
+      font-style: italic;
+    }
   }
 
   .results {
