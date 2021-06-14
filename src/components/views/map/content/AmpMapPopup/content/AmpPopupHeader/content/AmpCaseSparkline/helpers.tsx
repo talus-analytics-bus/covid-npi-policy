@@ -24,7 +24,7 @@ export async function updateData(
     stateName: undefined,
     ansiFips: undefined,
     stateId: undefined,
-    getAverage: true,
+    getAverage: false,
     isCumulative: getIsCumulative(circle),
   };
   setLocationParam(baseParams, mapId, feature);
