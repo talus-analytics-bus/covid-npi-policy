@@ -25,6 +25,7 @@
       }
       .hamburger {
         display: none;
+        pointer-events: none;
       }
     }
     a {
