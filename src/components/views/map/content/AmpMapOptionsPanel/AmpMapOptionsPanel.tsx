@@ -335,6 +335,12 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
  */
 const usSubGeoOptions: Option[] = [
   {
+    name: "State-level and county-level policies",
+    value: "us-county-plus-state",
+    description:
+      "View policies at the state and county levels on a map of counties",
+  },
+  {
     name: "State-level policies",
     value: "us",
     description: "View policies at the state level",
@@ -343,12 +349,6 @@ const usSubGeoOptions: Option[] = [
     name: "County-level policies",
     value: "us-county",
     description: "View policies at the county level",
-  },
-  {
-    name: "State-level and county-level policies",
-    value: "us-county-plus-state",
-    description:
-      "View policies at the state and county levels on a map of counties",
   },
 ];
 /**
