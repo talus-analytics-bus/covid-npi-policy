@@ -42,21 +42,27 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
 
   if (data !== null && data !== undefined && data.length > 0) {
     const curDatum: NumericObservation | undefined = getDatumByDate(data, date);
-    const curValue: number | Numeric =
+    const curValue: number | Numeric | null =
       curDatum !== undefined &&
       curDatum.value !== undefined &&
       curDatum.value !== null
         ? curDatum.value
-        : 0;
+        : null;
+    const dataAvail: boolean = curValue !== null;
     return (
       <div className={classNames(styles.sparkline, ...classes)}>
         <div className={styles.valueAndUnit}>
-          <span className={styles.value}>
-            <FMT.ExactNumber>{curValue}</FMT.ExactNumber>
-          </span>{" "}
-          <span className={styles.unit}>
-            {curValue === 1 ? unit[0] : unit[1]}
-          </span>
+          {dataAvail && (
+            <>
+              <span className={styles.value}>
+                <FMT.ExactNumber>{curValue}</FMT.ExactNumber>
+              </span>{" "}
+              <span className={styles.unit}>
+                {curValue === 1 ? unit[0] : unit[1]}
+              </span>
+            </>
+          )}
+          {!dataAvail && <span className={styles.value}>No data on date</span>}
         </div>
         <div className={styles.label}>{label}</div>
         <SparklineChart
