@@ -148,7 +148,11 @@ export const getModelLink: Function = (
     const stateFeature = feature as StateFeature;
     const url = "/model#" + stateFeature.properties.state_abbrev;
     const text = "View model";
-    return <Link to={url}>{text}</Link>;
+    return (
+      <Link target={"_blank"} to={url}>
+        {text}
+      </Link>
+    );
   }
 
   // countries
