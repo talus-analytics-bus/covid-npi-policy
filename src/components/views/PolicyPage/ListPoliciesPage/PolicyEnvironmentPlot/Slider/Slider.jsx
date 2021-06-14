@@ -58,6 +58,14 @@ const Slider = ({
     if (e.target !== sliderRef.current) setPopupVisible(false);
   };
 
+  const onClickChart = e => {
+    const CTM = svgElement.current.getScreenCTM();
+    const xPos = (e.clientX - CTM.e) / CTM.a;
+    const newPos = xPos - dim.xAxis.start.x;
+    setSliderX(newPos);
+    setPopupVisible(true);
+  };
+
   const onScroll = useCallback(e => {
     setPopupVisible(false);
     window.removeEventListener("scroll", onScroll);
@@ -93,7 +101,12 @@ const Slider = ({
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.45;
 
   return (
-    <g id="slider" onMouseMove={handleDrag} onMouseUp={handleDragEnd}>
+    <g
+      id="slider"
+      onClick={onClickChart}
+      onMouseMove={handleDrag}
+      onMouseUp={handleDragEnd}
+    >
       <rect
         // this rect is what sizes the group
         width={dim.width}
