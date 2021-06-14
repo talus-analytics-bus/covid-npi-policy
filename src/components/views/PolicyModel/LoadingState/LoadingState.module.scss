@@ -6,11 +6,12 @@
 }
 
 .state {
-  color: #00447c;
+  // color: #00447c;
   // padding: 1rem;
   padding-top: 0;
   padding-bottom: 1;
   margin-top: 1rem;
+  color: #409385;
 
   header {
     position: relative;
@@ -19,6 +20,7 @@
     align-items: flex-start;
     justify-content: space-between;
     background-color: #bde7ff;
+    background-color: #fff;
 
     &:after {
       content: "";
@@ -28,12 +30,18 @@
       right: 1rem;
       bottom: 0;
       background-color: #bde7ff;
+      background-color: #fff;
     }
     .stateHeader {
-      border-top: 4px solid #16467a;
+      // border-top: 4px solid #16467a;
       width: 100%;
       height: 12rem;
+      padding-left: 50px;
       display: grid;
+      h1 {
+        font-size: 32px;
+        color: #409385;
+      }
 
       grid-template-columns: auto 12rem 8rem min-content 15rem min-content 14rem;
       grid-template-rows: 1fr 1fr;

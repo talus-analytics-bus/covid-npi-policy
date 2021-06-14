@@ -318,10 +318,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
   return (
     <div className={styles.background}>
       <article className={styles.main}>
+        <h1 className={styles.title}>Policy model</h1>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>
-            COVID AMP <strong>Policy Model</strong>
-          </h1>
           <div className={styles.wrapContainer}>
             <div className={styles.visualize}>
               <img src={ampLogo} alt="COVID AMP Logo" />
@@ -653,6 +651,15 @@ const PolicyModel = ({ setLoading, setPage }) => {
             }
           })}
         </section>
+        <a href="/about/doc/" className={styles.documentationLink}>
+          <svg x="0px" y="0px" viewBox="0 0 10.5 11.1">
+            <path
+              d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
+          H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
+            />
+          </svg>
+          Documentation
+        </a>
       </article>
     </div>
   );
