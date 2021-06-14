@@ -1,4 +1,7 @@
-import { MapId } from "components/common/MapboxMap/plugins/mapTypes";
+import {
+  MapId,
+  validMapIds,
+} from "components/common/MapboxMap/plugins/mapTypes";
 import { History } from "history";
 
 /**
@@ -41,4 +44,39 @@ export function getMapHistoryState(mapId: string): BrowserHistoryRecord {
     pathname: "/policymaps",
     search: "?mapId=" + mapId,
   };
+}
+
+/**
+ * Returns the map ID currently defined as `mapId` in the URL parameters, or
+ * null if none is found.
+ *
+ * Throws an error if an unexpected map ID value is found.
+ *
+ * @param {MapId | null} defaultMapId
+ * Optional default map ID to return if none is defined in the URL search
+ * params. Defaults to null.
+ *
+ * @returns {MapId | null} The map ID defined in the URL search params, or null
+ * if none. Throws an error if an unexpected map ID value is found.
+ */
+export function getParamsMapId(
+  defaultMapId: MapId | null = null
+): MapId | null {
+  const params: Record<string, any> = new URLSearchParams(
+    window !== undefined ? window.location.search : ""
+  );
+  const paramsMapIdTmp: string | null = params.get("mapId");
+  const paramsMapId: MapId = (paramsMapIdTmp !== null
+    ? paramsMapIdTmp
+    : defaultMapId) as MapId;
+
+  // throw error if invalid
+  if (paramsMapId !== null && !validMapIds.includes(paramsMapId)) {
+    throw Error(
+      "Invalid map ID provided as url param, must be one of " +
+        validMapIds.join(", ") +
+        "; but found: " +
+        paramsMapId
+    );
+  } else return paramsMapId;
 }

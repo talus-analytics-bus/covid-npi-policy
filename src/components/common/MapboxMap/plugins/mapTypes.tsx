@@ -100,7 +100,13 @@ export type MapMetric = {
   };
 };
 
-export type MapId = "us-county-plus-state" | "us-county" | "us" | "global";
+export const validMapIds = [
+  "us-county-plus-state",
+  "us-county",
+  "us",
+  "global",
+] as const;
+export type MapId = typeof validMapIds[number];
 export type DistancingLevel =
   | "Lockdown"
   | "Stay at home"

@@ -42,7 +42,7 @@ import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
-import { replaceMapIdState } from "./helpers";
+import { replaceMapIdState, getParamsMapId } from "./helpers";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 
@@ -62,11 +62,8 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
 
   // unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
-  const params = new URLSearchParams(
-    window !== undefined ? window.location.search : ""
-  );
-  const paramsMapId = params.get("mapId");
-  const defaultMapId = paramsMapId !== null ? paramsMapId : defaults.mapId;
+  const defaultMapId = defaults.mapId;
+  const paramsMapId = getParamsMapId(defaultMapId);
   const [mapId, _setMapId] = useState(defaultMapId);
   const prevMapId = usePrevious(mapId);
   const history = useHistory();
