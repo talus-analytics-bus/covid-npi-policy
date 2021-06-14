@@ -22,8 +22,9 @@
     .action {
         color: $idea-primary-dark-blue;
         margin-top: auto;
+        text-decoration: underline;
+
         > {
-            text-decoration: underline;
             [data-disabled] {
                 color: $gray-2;
                 text-decoration: none;
