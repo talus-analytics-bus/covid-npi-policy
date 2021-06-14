@@ -54,7 +54,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
    */
   const geoOptions: Option[] = [
     {
-      name: "US States",
+      name: "United States",
       value: "us",
       description:
         "View data for the United States at the state and/or county level",
@@ -69,7 +69,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       ),
     },
     {
-      name: "Countries",
+      name: "World (country-level policies)",
       value: "global",
       description: "View data for the world at the country level",
     },

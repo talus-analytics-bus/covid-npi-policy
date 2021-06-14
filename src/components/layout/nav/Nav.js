@@ -128,7 +128,7 @@ const Nav = ({ page, ...props }) => {
                       to={"/policymaps?mapId=global"}
                     >
                       <div className={styles.linkWithTooltip}>
-                        <div>Countries</div>
+                        <div>World</div>
                         <InfoTooltip
                           text={"View data for the world at the country level"}
                           {...{ setInfoTooltipContent }}
