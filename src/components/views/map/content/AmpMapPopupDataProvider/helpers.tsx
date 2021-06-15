@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React from "react";
 import {
   CountryFeature,
   CountyFeature,
@@ -13,54 +13,20 @@ import { Link, LinkProps } from "react-router-dom";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";
 import { Place } from "components/misc/Queries";
 import { PlaceRecord } from "components/misc/dataTypes";
-import { InfoTooltip } from "components/common";
 import { Moment } from "moment";
-import InfoTooltipContext from "context/InfoTooltipContext";
+import { PolicyPageLink } from "./PolicyPageLink/PolicyPageLink";
 
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
 export const ZERO_POLICY_MSG: string =
   "No policies for location match currently selected options";
 
-type PoliciesLinkProps = {
+export type PoliciesLinkProps = {
   tooltip?: string;
   to?: string;
   target?: string;
   disabled?: boolean;
 };
-export const PolicyPageLink: FC<PoliciesLinkProps> = ({
-  tooltip,
-  to,
-  target,
-  disabled = false,
-  children,
-}): ReactElement => {
-  const { setInfoTooltipContent } = useContext(InfoTooltipContext);
-  if (!disabled && to !== undefined)
-    return (
-      <Link to={to} target={target}>
-        {children}
-      </Link>
-    );
-  else
-    return (
-      <>
-        <span data-disabled={true}>View policies</span>
-        {tooltip !== undefined && (
-          <InfoTooltip
-            wide={false}
-            {...{
-              id: "policyLinkTooltip",
-              text: tooltip,
-              place: undefined,
-              setInfoTooltipContent,
-            }}
-          />
-        )}
-      </>
-    );
-};
-
 type GetFeatureMetricProps = {
   feature: CountyFeature | StateFeature | CountryFeature;
   mapMetrics: Array<MapMetric>;
@@ -164,9 +130,9 @@ export const getModelLink: Function = (
 };
 
 /**
- * Returns a link to the policy page or data page for the feature.
+ * Returns a link to the policy page for the feature.
  * @param {MapFeature} feature
- * The feature for which the policies or data page link is to be determined.
+ * The feature for which the policies link is to be determined.
  * @returns {ActionLink}
  * The link component for the policies or data page.
  */

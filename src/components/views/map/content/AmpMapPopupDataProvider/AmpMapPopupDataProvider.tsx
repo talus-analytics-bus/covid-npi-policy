@@ -31,9 +31,9 @@ import {
   getLocationFilters,
   getModelLink,
   getPoliciesLink,
-  PolicyPageLink,
   ZERO_POLICY_MSG,
 } from "./helpers";
+import { PolicyPageLink } from "./PolicyPageLink/PolicyPageLink";
 import { execute, PolicyStatusCounts } from "components/misc/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
 import SettingsContext, { SettingsContextProps } from "context/SettingsContext";
