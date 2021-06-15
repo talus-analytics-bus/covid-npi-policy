@@ -2,7 +2,7 @@ import { MapId } from "components/common/MapboxMap/plugins/mapTypes";
 import { Option } from "components/common/OptionControls/types";
 import { Moment } from "moment";
 import React from "react";
-const MapOptionContext = React.createContext<{
+export type MapOptionContextProps = {
   circle?: string | null;
   prevCircle?: string | null;
   setCircle?(newCircle?: string | null): void;
@@ -14,6 +14,8 @@ const MapOptionContext = React.createContext<{
   date?: Moment;
   categoryOptions?: Option[];
   subcategoryOptions?: Option[];
-}>({});
+};
+
+const MapOptionContext = React.createContext<MapOptionContextProps>({});
 export const MapOptionProvider = MapOptionContext.Provider;
 export default MapOptionContext;

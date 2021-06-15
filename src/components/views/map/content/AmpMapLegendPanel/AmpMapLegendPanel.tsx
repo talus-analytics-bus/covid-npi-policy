@@ -13,7 +13,7 @@ import styles from "./AmpMapLegendPanel.module.scss";
 import { getAndListString, isEmpty, getInitCap } from "components/misc/Util";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
-import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/PolicyCount";
+import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/helpers";
 import { Option } from "components/common/OptionControls/types";
 import InfoTooltipContext from "context/InfoTooltipContext";
 

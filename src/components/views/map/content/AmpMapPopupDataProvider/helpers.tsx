@@ -16,6 +16,11 @@ import { PlaceRecord } from "components/misc/dataTypes";
 import { Moment } from "moment";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
+import { Option } from "components/common/OptionControls/types";
+import {
+  getPolicyCatSubcatPhrase,
+  includeSubcatFilters,
+} from "../AmpMapPopup/content/PoliciesBodySection/helpers";
 
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
@@ -142,12 +147,26 @@ export const getPolicyLink: Function = async (
   filters: Record<string, any>,
   policyResolution: PolicyResolution,
   page: "policy" | "data",
-  mapId: MapId
+  mapId: MapId,
+  subcategoryOptions?: Option[]
 ): Promise<ReactElement<LinkProps> | null> => {
+  // constants
+  const baseLinkFilters: Record<string, any> = { ...filters };
+
+  // streamline base link filters
+  if (page === "data" && subcategoryOptions !== undefined) {
+    const includeSubcats: boolean = includeSubcatFilters(
+      filters.primary_ph_measure || [],
+      filters.ph_measure_details || [],
+      subcategoryOptions
+    );
+    if (!includeSubcats) baseLinkFilters.ph_measure_details = [];
+  }
+
   // counties
   let featureName: string = (feature as CountyFeature).properties.county_name;
   if (featureName !== undefined) {
-    return await getCountyPoliciesLink(feature as CountyFeature, page, mapId);
+    return await getCountyPoliciesLink(feature as CountyFeature);
   }
 
   // states
@@ -157,8 +176,7 @@ export const getPolicyLink: Function = async (
     return await getStatePoliciesLink(
       filters,
       feature as StateFeature,
-      countSub,
-      page
+      countSub
     );
   }
 
@@ -166,19 +184,13 @@ export const getPolicyLink: Function = async (
   const countryFeature = feature as CountryFeature;
   featureName = countryFeature.properties.NAME;
   if (featureName !== undefined) {
-    return await getCountryPoliciesLink(
-      feature as CountryFeature,
-      countSub,
-      page
-    );
+    return await getCountryPoliciesLink(feature as CountryFeature, countSub);
   } else {
     throw Error("Unknown feature type: " + feature);
   }
 
   async function getCountyPoliciesLink(
-    countyFeature: CountyFeature,
-    page: "policy" | "data",
-    mapId: MapId
+    countyFeature: CountyFeature
   ): Promise<ReactElement> {
     if (page === "policy") {
       return (
@@ -206,7 +218,7 @@ export const getPolicyLink: Function = async (
       else {
         // otherwise, return the appropriate data page link
         const linkFilters: Record<string, any> = {
-          ...filters,
+          ...baseLinkFilters,
           country_name: [countyPlace.country_name],
           area1: [countyFeature.properties.state_name],
           area2: [countyPlace.area2],
@@ -232,8 +244,7 @@ export const getPolicyLink: Function = async (
   async function getStatePoliciesLink(
     filters: Record<string, any>,
     stateFeature: StateFeature,
-    countSub: boolean,
-    page: "policy" | "data"
+    countSub: boolean
   ): Promise<ReactElement> {
     if (page === "policy") {
       return (
@@ -265,8 +276,7 @@ export const getPolicyLink: Function = async (
 
   async function getCountryPoliciesLink(
     countryFeature: CountryFeature,
-    countSub: boolean,
-    page: "policy" | "data"
+    countSub: boolean
   ): Promise<ReactElement> {
     if (page === "policy") {
       return (
@@ -289,7 +299,7 @@ export const getPolicyLink: Function = async (
         return <PolicyPageLink tooltip={NO_POLICY_FOR_LOC_MSG} />;
       else {
         const filterStr: string = JSON.stringify({
-          ...filters,
+          ...baseLinkFilters,
           country_name: [countryPlace.country_name],
         });
         const url: string = "/data?type=policy&filters_policy=" + filterStr;

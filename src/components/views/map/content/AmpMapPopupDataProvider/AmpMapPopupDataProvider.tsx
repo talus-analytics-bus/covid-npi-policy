@@ -38,6 +38,10 @@ import { mapStyles } from "components/common/MapboxMap/plugins/sources";
 import SettingsContext, { SettingsContextProps } from "context/SettingsContext";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
+import MapOptionContext, {
+  MapOptionContextProps,
+} from "../../context/MapOptionContext";
+import { Option } from "components/common/OptionControls/types";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -55,6 +59,7 @@ type UpdateDataProps = {
   DISABLE_POLICY_LINK_IF_ZERO: boolean;
   circle: string | null;
   paramArgs: Record<string, any>;
+  subcategoryOptions: Option[];
 };
 const updateData: Function = async ({
   feature,
@@ -69,6 +74,7 @@ const updateData: Function = async ({
   mapId,
   DISABLE_POLICY_LINK_IF_ZERO,
   paramArgs,
+  subcategoryOptions,
 }: UpdateDataProps) => {
   if (ready) setUpdating(true);
   // if county map, get state `lockdown_level
@@ -104,7 +110,8 @@ const updateData: Function = async ({
       filtersWithDate,
       paramArgs.policyResolution,
       "data",
-      mapId
+      mapId,
+      subcategoryOptions
     ),
     policyCount: PolicyStatusCounts({
       method: "post",
@@ -177,6 +184,9 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   const { DISABLE_POLICY_LINK_IF_ZERO } = useContext<SettingsContextProps>(
     SettingsContext
   );
+  const { subcategoryOptions } = useContext<MapOptionContextProps>(
+    MapOptionContext
+  );
 
   useEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
@@ -195,6 +205,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       map,
       mapId,
       DISABLE_POLICY_LINK_IF_ZERO,
+      subcategoryOptions,
       paramArgs: {
         policyResolution,
         stateName,
