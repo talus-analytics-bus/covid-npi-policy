@@ -161,7 +161,10 @@ export const mapStyles = {
   },
   "us-county": {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
-    url: "mapbox://styles/nicoletalus/cknp3qduk57mx17l8hkw826st",
+    url: "mapbox://styles/nicoletalus/ckpygbhwn0uwr18p8wrqxf4hy", // gray state bounds, slightly thinner
+    // url: "mapbox://styles/nicoletalus/ckpybt26u6cum17mwgdj980kc", // gray state bounds, slightly thinner
+    // url: "mapbox://styles/nicoletalus/ckpyaxl630pmn17p63bdh4aov",  // white state bounds
+    // url: "mapbox://styles/nicoletalus/cknp3qduk57mx17l8hkw826st",
 
     // slug of map, should be map ID
     value: "us-county",
