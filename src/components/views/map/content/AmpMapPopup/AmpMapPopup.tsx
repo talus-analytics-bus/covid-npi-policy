@@ -27,7 +27,7 @@ type AmpMapPopupProps = {
   policySubcategories: string[];
   policyCount: number | null;
   modelLink?: ActionLink;
-  policiesLink?: ActionLink;
+  policyActionLinks?: ActionLink[];
   policyResolution: PolicyResolution;
   updating: boolean;
   ready: boolean;
@@ -43,7 +43,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   policySubcategories,
   policyCount,
   modelLink,
-  policiesLink,
+  policyActionLinks,
   policyResolution,
   updating,
   ready,
@@ -79,7 +79,7 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
               categories: policyCategories,
               subcategories: policySubcategories,
               count: policyCount,
-              policiesLink,
+              policyActionLinks,
               policyResolution,
               mapId,
               updating: updating || !ready,

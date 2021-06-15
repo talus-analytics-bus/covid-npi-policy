@@ -22,7 +22,7 @@ export const DistancingBodySection: FunctionComponent<DistancingBodySectionProps
       {...{
         title,
         content: <DistancingIcon {...{ value: distancingLevel }} />,
-        action: modelLink,
+        actions: modelLink ? [modelLink] : [],
         updating,
       }}
     />

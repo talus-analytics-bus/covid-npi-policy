@@ -13,7 +13,7 @@ type PoliciesBodySectionProps = {
   categories: string[];
   subcategories: string[];
   count: number | null;
-  policiesLink?: ActionLink;
+  policyActionLinks?: ActionLink[];
   policyResolution: PolicyResolution;
   mapId: MapId;
   updating: boolean;
@@ -22,7 +22,7 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
   categories,
   subcategories,
   count,
-  policiesLink,
+  policyActionLinks,
   policyResolution,
   mapId,
   updating,
@@ -39,7 +39,7 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
             {...{ categories, subcategories, count, subcategoryOptions }}
           />
         ),
-        action: policiesLink,
+        actions: policyActionLinks,
         updating,
       }}
     />

@@ -30,13 +30,14 @@ import {
   getFeatureName,
   getLocationFilters,
   getModelLink,
-  getPoliciesLink,
+  getPolicyLink,
   ZERO_POLICY_MSG,
 } from "./helpers";
-import { PolicyPageLink } from "./PolicyPageLink/PolicyPageLink";
 import { execute, PolicyStatusCounts } from "components/misc/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
 import SettingsContext, { SettingsContextProps } from "context/SettingsContext";
+import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
+import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -44,7 +45,7 @@ type UpdateDataProps = {
   ready: boolean;
   updating: boolean;
   mapMetrics: Record<string, any>;
-  setPoliciesLink: Function;
+  setActionLinks: Function;
   setPolicyCount: Function;
   setDistancingLevel: Function;
   setReady: Function;
@@ -59,8 +60,7 @@ const updateData: Function = async ({
   feature,
   dataDate,
   ready,
-  updating,
-  setPoliciesLink,
+  setActionLinks,
   setPolicyCount,
   setDistancingLevel,
   setReady,
@@ -92,10 +92,19 @@ const updateData: Function = async ({
     dates_in_effect: [dateStr, dateStr],
   };
   const queries: any = {
-    policiesLink: getPoliciesLink(
+    policiesLink: getPolicyLink(
       feature,
       filtersWithDate,
-      paramArgs.policyResolution
+      paramArgs.policyResolution,
+      "policy",
+      mapId
+    ),
+    dataLink: getPolicyLink(
+      feature,
+      filtersWithDate,
+      paramArgs.policyResolution,
+      "data",
+      mapId
     ),
     policyCount: PolicyStatusCounts({
       method: "post",
@@ -122,9 +131,15 @@ const updateData: Function = async ({
     ) : policyCount === null ? null : (
       res.policiesLink
     );
+  const dataLink: ActionLink =
+    policyCount === 0 ? (
+      <PolicyDataLink noData={true} />
+    ) : policyCount === null ? null : (
+      res.dataLink
+    );
   const distancingLevel: string | null = res.distancingLevel;
   setUpdating(false);
-  setPoliciesLink(policiesLink);
+  setActionLinks([policiesLink, dataLink]);
   setPolicyCount(policyCount);
   setDistancingLevel(distancingLevel);
   setReady(true);
@@ -151,7 +166,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   policyResolution,
   filters,
 }) => {
-  const [policiesLink, setPoliciesLink] = useState<ActionLink>(null);
+  const [actionLinks, setActionLinks] = useState<ActionLink[]>([]);
   const [ready, setReady] = useState<boolean>(false);
   const [updating, setUpdating] = useState<boolean>(false);
   const [distancingLevel, setDistancingLevel] = useState<DistancingLevel>(null);
@@ -172,8 +187,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       feature,
       dataDate,
       ready,
-      updating,
-      setPoliciesLink,
+      setActionLinks,
       setPolicyCount,
       setDistancingLevel,
       setReady,
@@ -202,7 +216,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
         policySubcategories,
         policyCount,
         modelLink: getModelLink(feature),
-        policiesLink,
+        policyActionLinks: actionLinks,
         policyResolution,
         updating,
         ready,

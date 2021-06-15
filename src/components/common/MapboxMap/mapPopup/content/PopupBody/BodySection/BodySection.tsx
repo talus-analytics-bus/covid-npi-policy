@@ -7,7 +7,7 @@ import styles from "./bodysection.module.scss";
 export interface BodySectionProps {
   title?: string;
   content?: ElementsOrNull;
-  action?: ActionLink;
+  actions?: ActionLink[];
   customContent?: ElementsOrNull;
   /**
    * True if component is currently updating and loading indicator should be
@@ -18,7 +18,7 @@ export interface BodySectionProps {
 export const BodySection: FunctionComponent<BodySectionProps> = ({
   title,
   content,
-  action,
+  actions = [],
   customContent = null,
   updating = false,
 }): JSX.Element => {
@@ -39,7 +39,7 @@ export const BodySection: FunctionComponent<BodySectionProps> = ({
       >
         <>
           <div className={styles.content}>{content}</div>
-          <div className={styles.action}>{action}</div>
+          <div className={styles.actions}>{actions}</div>
         </>
       </LoadingSpinner>
     </div>

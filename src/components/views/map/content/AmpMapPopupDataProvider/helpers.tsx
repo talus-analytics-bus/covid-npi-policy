@@ -14,15 +14,15 @@ import { ReactElement } from "react-transition-group/node_modules/@types/react";
 import { Place } from "components/misc/Queries";
 import { PlaceRecord } from "components/misc/dataTypes";
 import { Moment } from "moment";
-import { PolicyPageLink } from "./PolicyPageLink/PolicyPageLink";
+import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
+import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
 export const ZERO_POLICY_MSG: string =
   "No policies for location match currently selected options";
 export const DATA_PAGE_LINK_TEXT: string = "View selected policies";
-
-export type PoliciesLinkProps = {
+export type PolicyLinkBaseProps = {
   tooltip?: string;
   to?: string;
   target?: string;
@@ -137,15 +137,17 @@ export const getModelLink: Function = (
  * @returns {ActionLink}
  * The link component for the policies or data page.
  */
-export const getPoliciesLink: Function = async (
+export const getPolicyLink: Function = async (
   feature: MapFeature,
   filters: Record<string, any>,
-  policyResolution: PolicyResolution
+  policyResolution: PolicyResolution,
+  page: "policy" | "data",
+  mapId: MapId
 ): Promise<ReactElement<LinkProps> | null> => {
   // counties
   let featureName: string = (feature as CountyFeature).properties.county_name;
   if (featureName !== undefined) {
-    return await getCountyPoliciesLink(feature as CountyFeature);
+    return await getCountyPoliciesLink(feature as CountyFeature, page, mapId);
   }
 
   // states
@@ -155,7 +157,8 @@ export const getPoliciesLink: Function = async (
     return await getStatePoliciesLink(
       filters,
       feature as StateFeature,
-      countSub
+      countSub,
+      page
     );
   }
 
@@ -163,16 +166,21 @@ export const getPoliciesLink: Function = async (
   const countryFeature = feature as CountryFeature;
   featureName = countryFeature.properties.NAME;
   if (featureName !== undefined) {
-    return await getCountriesPoliciesLink(feature as CountryFeature, countSub);
+    return await getCountriesPoliciesLink(
+      feature as CountryFeature,
+      countSub,
+      page
+    );
   } else {
     throw Error("Unknown feature type: " + feature);
   }
 
   async function getCountyPoliciesLink(
     countyFeature: CountyFeature,
-    toPolicyPage: boolean = true
+    page: "policy" | "data",
+    mapId: MapId
   ): Promise<ReactElement> {
-    if (toPolicyPage) {
+    if (page === "policy") {
       return (
         <PolicyPageLink
           target={"_blank"}
@@ -181,7 +189,7 @@ export const getPoliciesLink: Function = async (
           Go to state page
         </PolicyPageLink>
       );
-    } else {
+    } else if (page === "data") {
       const countyPlace: PlaceRecord | null = await Place({
         one: true,
         ansiFips: countyFeature.id,
@@ -193,33 +201,41 @@ export const getPoliciesLink: Function = async (
       // if place not found in database, that means no policies, return null
       if (countyPlace === null)
         return (
-          <PolicyPageLink disabled={true} tooltip={NO_POLICY_FOR_LOC_MSG} />
+          <PolicyDataLink disabled={true} tooltip={NO_POLICY_FOR_LOC_MSG} />
         );
       else {
         // otherwise, return the appropriate data page link
-        const filterStr: string = JSON.stringify({
+        const linkFilters: Record<string, any> = {
           ...filters,
           country_name: [countyPlace.country_name],
           area1: [countyFeature.properties.state_name],
           area2: [countyPlace.area2],
-        });
+        };
+        if (mapId === "us-county-plus-state")
+          linkFilters["level"] = ["Local", "State / Province"];
+        else if (mapId === "us-county") linkFilters["level"] = ["Local"];
+
+        const filterStr: string = JSON.stringify(linkFilters);
+
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
         const label: string = DATA_PAGE_LINK_TEXT;
         return (
-          <PolicyPageLink target={"_blank"} to={url}>
+          <PolicyDataLink target={"_blank"} to={url}>
             {label}
-          </PolicyPageLink>
+          </PolicyDataLink>
         );
       }
+    } else {
+      throw Error("Unexpected value for `page`: " + page);
     }
   }
   async function getStatePoliciesLink(
     filters: Record<string, any>,
     stateFeature: StateFeature,
     countSub: boolean,
-    toPolicyPage: boolean = true
+    page: "policy" | "data"
   ): Promise<ReactElement> {
-    if (toPolicyPage) {
+    if (page === "policy") {
       return (
         <PolicyPageLink
           target={"_blank"}
@@ -228,7 +244,7 @@ export const getPoliciesLink: Function = async (
           Go to state page
         </PolicyPageLink>
       );
-    } else {
+    } else if (page === "data") {
       const filterStr: string = JSON.stringify({
         ...filters,
         country_name: ["United States of America (USA)"],
@@ -238,19 +254,21 @@ export const getPoliciesLink: Function = async (
       const url: string = "/data?type=policy&filters_policy=" + filterStr;
       const label: string = DATA_PAGE_LINK_TEXT;
       return (
-        <PolicyPageLink target={"_blank"} to={url}>
+        <PolicyDataLink target={"_blank"} to={url}>
           {label}
-        </PolicyPageLink>
+        </PolicyDataLink>
       );
+    } else {
+      throw Error("Unexpected value for `page`: " + page);
     }
   }
 
   async function getCountriesPoliciesLink(
     countryFeature: CountryFeature,
     countSub: boolean,
-    toPolicyPage: boolean = true
+    page: "policy" | "data"
   ): Promise<ReactElement> {
-    if (toPolicyPage) {
+    if (page === "policy") {
       return (
         <PolicyPageLink
           target={"_blank"}
@@ -259,7 +277,7 @@ export const getPoliciesLink: Function = async (
           Go to country page
         </PolicyPageLink>
       );
-    } else {
+    } else if (page === "data") {
       const countryPlace: PlaceRecord | null = await Place({
         one: true,
         ansiFips: undefined,
@@ -282,6 +300,8 @@ export const getPoliciesLink: Function = async (
           </Link>
         );
       }
+    } else {
+      throw Error("Unexpected value for `page`: " + page);
     }
   }
 };
