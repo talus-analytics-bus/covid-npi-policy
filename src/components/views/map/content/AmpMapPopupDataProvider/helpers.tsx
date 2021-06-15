@@ -118,7 +118,7 @@ export const getFeatureName: Function = (
   featureName = (feature as CountryFeature).properties.NAME;
   if (featureName !== undefined) return featureName;
   else {
-    throw "Unknown feature type: " + feature;
+    throw Error("Unknown feature type: " + feature);
   }
 };
 
