@@ -20,6 +20,7 @@ export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
 export const ZERO_POLICY_MSG: string =
   "No policies for location match currently selected options";
+export const DATA_PAGE_LINK_TEXT: string = "View selected policies";
 
 export type PoliciesLinkProps = {
   tooltip?: string;
@@ -113,7 +114,7 @@ export const getModelLink: Function = (
   if (featureName !== undefined) {
     const stateFeature = feature as StateFeature;
     const url = "/model#" + stateFeature.properties.state_abbrev;
-    const text = "View model";
+    const text = "Go to model page";
     return (
       <Link target={"_blank"} to={url}>
         {text}
@@ -177,7 +178,7 @@ export const getPoliciesLink: Function = async (
           target={"_blank"}
           to={"/policies/USA/" + countyFeature.properties.state_name}
         >
-          View state policies
+          Go to state page
         </PolicyPageLink>
       );
     } else {
@@ -203,7 +204,7 @@ export const getPoliciesLink: Function = async (
           area2: [countyPlace.area2],
         });
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
-        const label: string = "View policies";
+        const label: string = DATA_PAGE_LINK_TEXT;
         return (
           <PolicyPageLink target={"_blank"} to={url}>
             {label}
@@ -224,7 +225,7 @@ export const getPoliciesLink: Function = async (
           target={"_blank"}
           to={"/policies/USA/" + stateFeature.properties.state_name}
         >
-          View state policies
+          Go to state page
         </PolicyPageLink>
       );
     } else {
@@ -235,7 +236,7 @@ export const getPoliciesLink: Function = async (
         level: !countSub ? ["State / Province"] : ["Local"],
       });
       const url: string = "/data?type=policy&filters_policy=" + filterStr;
-      const label: string = "View policies";
+      const label: string = DATA_PAGE_LINK_TEXT;
       return (
         <PolicyPageLink target={"_blank"} to={url}>
           {label}
@@ -255,7 +256,7 @@ export const getPoliciesLink: Function = async (
           target={"_blank"}
           to={"/policies/" + countryFeature.properties.ISO_A3 + "/national"}
         >
-          View country policies
+          Go to country page
         </PolicyPageLink>
       );
     } else {
@@ -274,7 +275,7 @@ export const getPoliciesLink: Function = async (
           country_name: [countryPlace.country_name],
         });
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
-        const label: string = "View policies";
+        const label: string = DATA_PAGE_LINK_TEXT;
         return (
           <Link target={"_blank"} to={url}>
             {label}
