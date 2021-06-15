@@ -206,7 +206,7 @@ export const getPolicyLink: Function = async (
         one: true,
         ansiFips: countyFeature.id,
         fields: ["country_name", "area2"],
-        level: ["Local"],
+        level: ["Local", "Local plus state/province"],
         iso3: undefined,
       });
 
