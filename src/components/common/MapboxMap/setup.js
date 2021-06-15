@@ -501,24 +501,4 @@ const bindFeatureStatesForSource = ({
   });
 };
 
-// /**
-//  * Returns true if datum is 3 or more months old, false otherwise.
-//  * @method getStaleStatus
-//  */
-// const getStaleStatus = (obs, timeFrame = "month") => {
-//   if (obs["stale_flag"] === true) {
-//     const today = Util.today();
-//     const date_time = obs["date_time"].replace(/-/g, "/");
-//     const then = new Date(date_time);
-//     switch (timeFrame) {
-//       case "month":
-//         if (today.getUTCMonth() - then.getUTCMonth() > 3) return true;
-//         else return false;
-//       case "year":
-//         if (today.getUTCYear() - then.getUTCYear() > 3) return true;
-//         else return false;
-//     }
-//   } else return false;
-// };
-
 export default initMap;
