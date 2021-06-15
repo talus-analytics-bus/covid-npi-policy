@@ -63,7 +63,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
   const defaultMapId = defaults.mapId;
-  const paramsMapId = getParamsMapId(defaultMapId);
+  const paramsMapId = getParamsMapId();
   const [mapId, _setMapId] = useState(defaultMapId);
   const prevMapId = usePrevious(mapId);
   const history = useHistory();
