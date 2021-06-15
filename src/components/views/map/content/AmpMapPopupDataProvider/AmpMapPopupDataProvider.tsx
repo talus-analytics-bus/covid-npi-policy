@@ -31,7 +31,7 @@ import {
   getLocationFilters,
   getModelLink,
   getPoliciesLink,
-  PoliciesLink,
+  PolicyPageLink,
   ZERO_POLICY_MSG,
 } from "./helpers";
 import { execute, PolicyStatusCounts } from "components/misc/Queries";
@@ -118,7 +118,7 @@ const updateData: Function = async ({
     placeHasPoliciesToday && placeHasPolicies ? res.policyCount[0].value : null;
   const policiesLink: ActionLink =
     policyCount === 0 && DISABLE_POLICY_LINK_IF_ZERO ? (
-      <PoliciesLink tooltip={ZERO_POLICY_MSG} />
+      <PolicyPageLink tooltip={ZERO_POLICY_MSG} />
     ) : policyCount === null ? null : (
       res.policiesLink
     );

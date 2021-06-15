@@ -28,7 +28,7 @@ type PoliciesLinkProps = {
   target?: string;
   disabled?: boolean;
 };
-export const PoliciesLink: FC<PoliciesLinkProps> = ({
+export const PolicyPageLink: FC<PoliciesLinkProps> = ({
   tooltip,
   to,
   target,
@@ -207,12 +207,12 @@ export const getPoliciesLink: Function = async (
   ): Promise<ReactElement> {
     if (toPolicyPage) {
       return (
-        <PoliciesLink
+        <PolicyPageLink
           target={"_blank"}
           to={"/policies/USA/" + countyFeature.properties.state_name}
         >
           View state policies
-        </PoliciesLink>
+        </PolicyPageLink>
       );
     } else {
       const countyPlace: PlaceRecord | null = await Place({
@@ -225,7 +225,9 @@ export const getPoliciesLink: Function = async (
 
       // if place not found in database, that means no policies, return null
       if (countyPlace === null)
-        return <PoliciesLink disabled={true} tooltip={NO_POLICY_FOR_LOC_MSG} />;
+        return (
+          <PolicyPageLink disabled={true} tooltip={NO_POLICY_FOR_LOC_MSG} />
+        );
       else {
         // otherwise, return the appropriate data page link
         const filterStr: string = JSON.stringify({
@@ -237,9 +239,9 @@ export const getPoliciesLink: Function = async (
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
         const label: string = "View policies";
         return (
-          <PoliciesLink target={"_blank"} to={url}>
+          <PolicyPageLink target={"_blank"} to={url}>
             {label}
-          </PoliciesLink>
+          </PolicyPageLink>
         );
       }
     }
@@ -252,12 +254,12 @@ export const getPoliciesLink: Function = async (
   ): Promise<ReactElement> {
     if (toPolicyPage) {
       return (
-        <PoliciesLink
+        <PolicyPageLink
           target={"_blank"}
           to={"/policies/USA/" + stateFeature.properties.state_name}
         >
           View state policies
-        </PoliciesLink>
+        </PolicyPageLink>
       );
     } else {
       const filterStr: string = JSON.stringify({
@@ -269,9 +271,9 @@ export const getPoliciesLink: Function = async (
       const url: string = "/data?type=policy&filters_policy=" + filterStr;
       const label: string = "View policies";
       return (
-        <PoliciesLink target={"_blank"} to={url}>
+        <PolicyPageLink target={"_blank"} to={url}>
           {label}
-        </PoliciesLink>
+        </PolicyPageLink>
       );
     }
   }
@@ -283,12 +285,12 @@ export const getPoliciesLink: Function = async (
   ): Promise<ReactElement> {
     if (toPolicyPage) {
       return (
-        <PoliciesLink
+        <PolicyPageLink
           target={"_blank"}
           to={"/policies/" + countryFeature.properties.ISO_A3 + "/national"}
         >
           View country policies
-        </PoliciesLink>
+        </PolicyPageLink>
       );
     } else {
       const countryPlace: PlaceRecord | null = await Place({
@@ -299,7 +301,7 @@ export const getPoliciesLink: Function = async (
         level: !countSub ? ["Country"] : ["State / Province", "Local"],
       });
       if (countryPlace === null)
-        return <PoliciesLink tooltip={NO_POLICY_FOR_LOC_MSG} />;
+        return <PolicyPageLink tooltip={NO_POLICY_FOR_LOC_MSG} />;
       else {
         const filterStr: string = JSON.stringify({
           ...filters,
