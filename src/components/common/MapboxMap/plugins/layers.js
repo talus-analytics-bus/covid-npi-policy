@@ -58,7 +58,7 @@ const circleStyles = {
       circleColor: [
         "case",
         ["==", ["feature-state", key], 0],
-        "#333",
+        "white",
         ["==", ["feature-state", key], null],
         "transparent",
         "white",
@@ -98,7 +98,7 @@ const circleStyles = {
       circleColor: [
         "case",
         ["==", ["feature-state", key], 0],
-        "#333",
+        "transparent",
         ["==", ["feature-state", key], null],
         "transparent",
         "white",
@@ -140,7 +140,7 @@ const circleStyles = {
       circleColor: [
         "case",
         ["==", ["feature-state", key], 0],
-        "#333",
+        "white",
         ["==", ["feature-state", key], null],
         "transparent",
         "#e65d36",
@@ -179,7 +179,7 @@ const circleStyles = {
       circleColor: [
         "case",
         ["==", ["feature-state", key], 0],
-        "#333",
+        "white",
         ["==", ["feature-state", key], null],
         "transparent",
         "#e65d36",
