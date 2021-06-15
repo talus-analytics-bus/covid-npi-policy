@@ -166,7 +166,7 @@ export const getPolicyLink: Function = async (
   const countryFeature = feature as CountryFeature;
   featureName = countryFeature.properties.NAME;
   if (featureName !== undefined) {
-    return await getCountriesPoliciesLink(
+    return await getCountryPoliciesLink(
       feature as CountryFeature,
       countSub,
       page
@@ -263,7 +263,7 @@ export const getPolicyLink: Function = async (
     }
   }
 
-  async function getCountriesPoliciesLink(
+  async function getCountryPoliciesLink(
     countryFeature: CountryFeature,
     countSub: boolean,
     page: "policy" | "data"
