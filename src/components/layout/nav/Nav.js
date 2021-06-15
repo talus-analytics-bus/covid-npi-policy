@@ -23,7 +23,7 @@ const Nav = ({ page, ...props }) => {
   const hamburgerRef = useRef(null);
 
   // CONSTANTS // ---------------------------------------------------------- //
-  const curMapId = getParamsMapId();
+  const curMapId = getParamsMapId() || "";
 
   // CONTEXTS // ----------------------------------------------------------- //
   const { setInfoTooltipContent } = useContext(InfoTooltipContext);
