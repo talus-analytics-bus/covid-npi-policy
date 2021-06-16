@@ -131,46 +131,35 @@ const ListPoliciesPage = props => {
           {/* {status.caseload === "error" && ( */}
           {/*   <h3>No caseload data found for {locationName}</h3> */}
           {/* )} */}
-          {(status.caseload === "loading" || status.caseload === "loaded") && (
-            <>
-              {status.caseload === "loaded" ? (
-                <h2 className={styles.caseloadHeader}>
-                  Policy environment over time
-                </h2>
+          <figure>
+            <PolicyEnvironmentPlot />
+            {/* <CaseloadPlot /> */}
+            <figcaption>
+              Caseload Source:{" "}
+              {state === "national" ? (
+                <a
+                  target="_blank"
+                  href="https://github.com/CSSEGISandData/COVID-19"
+                >
+                  COVID-19 Data Repository by the Center for Systems Science and
+                  Engineering (CSSE) at Johns Hopkins University
+                </a>
               ) : (
-                <h2 className={styles.caseloadHeader}>
-                  Loading COVID-19 Cases
-                </h2>
+                <a
+                  target="_blank"
+                  href="https://github.com/nytimes/covid-19-data"
+                >
+                  New York Times COVID-19 Data
+                </a>
               )}
-              <figure>
-                <PolicyEnvironmentPlot />
-                {/* <CaseloadPlot /> */}
-                <figcaption>
-                  Caseload Source:{" "}
-                  {state === "national" ? (
-                    <a
-                      target="_blank"
-                      href="https://github.com/CSSEGISandData/COVID-19"
-                    >
-                      COVID-19 Data Repository by the Center for Systems Science
-                      and Engineering (CSSE) at Johns Hopkins University
-                    </a>
-                  ) : (
-                    <a
-                      target="_blank"
-                      href="https://github.com/nytimes/covid-19-data"
-                    >
-                      New York Times COVID-19 Data
-                    </a>
-                  )}
-                </figcaption>
-              </figure>
-            </>
-          )}
+            </figcaption>
+          </figure>
         </section>
       )}
-      <SnapshotChartSection />
-      <IntroSection />
+      <div className={styles.barChartAndParagraph}>
+        <SnapshotChartSection />
+        <IntroSection />
+      </div>
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
           {iso3 !== "Unspecified" && <h2>Find a policy</h2>}
