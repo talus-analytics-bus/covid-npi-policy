@@ -42,12 +42,7 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
 
   if (data !== null && data !== undefined && data.length > 0) {
     const curDatum: NumericObservation | undefined = getDatumByDate(data, date);
-    const curValue: number | Numeric | null =
-      curDatum !== undefined &&
-      curDatum.value !== undefined &&
-      curDatum.value !== null
-        ? curDatum.value
-        : null;
+    const curValue: number | Numeric | null = getCurValue(curDatum);
     const dataAvail: boolean = curValue !== null;
     return (
       <div className={classNames(styles.sparkline, ...classes)}>
@@ -86,3 +81,24 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
     );
 };
 export default Sparkline;
+
+/**
+ * Given the datum representing the current date in a temporal data series,
+ * returns its value attribute, or zero if it is negative, or null if the datum
+ * does not exist.
+ *
+ * @param curDatum The datum for the current date in the temporal data series
+ * @returns The value for the datum if it exists, set to zero if negative, or
+ * null if the datum does not exist.
+ */
+function getCurValue(
+  curDatum: NumericObservation | undefined
+): number | Numeric | null {
+  if (
+    curDatum !== undefined &&
+    curDatum.value !== undefined &&
+    curDatum.value !== null
+  ) {
+    return Math.max(curDatum.value as number, 0);
+  } else return null;
+}
