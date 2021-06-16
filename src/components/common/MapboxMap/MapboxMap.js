@@ -215,17 +215,30 @@ const MapboxMap = ({
       if (circLayers === undefined) return; // TODO handle elegantly
       circLayers.forEach(circLayer => {
         const featureLinkField = circLayer.featureLinkField;
-        const promoteId = mapSources[mapId].circle.def.promoteId;
+        const sortOrderSourceKey = getSourceKey(circLayer, "circle");
+        const promoteId = mapSources[mapId][sortOrderSourceKey].def.promoteId;
 
         // get sort order of circles based on covid caseload metric
         const sortOrderMetricId = circleIdStr;
-        const sortOrderSourceKey = getSourceKey(circLayer, "circle");
         if (sortOrderMetricId === undefined) return;
         else {
           const featureOrder = {};
-          if (data[sortOrderMetricId] === undefined) return;
+          if (
+            data[sortOrderMetricId] === undefined ||
+            data[sortOrderMetricId] === null
+          )
+            return;
           data[sortOrderMetricId].forEach(d => {
-            featureOrder[d[featureLinkField]] = -d.value;
+            if (
+              d[featureLinkField] === undefined ||
+              d[featureLinkField] === null ||
+              d.value === undefined ||
+              d.value === null
+            )
+              return;
+            else {
+              featureOrder[d[featureLinkField]] = -d.value;
+            }
           });
 
           // update circle ordering
@@ -585,6 +598,9 @@ const MapboxMap = ({
   }, [data]);
 
   // MAP EVENT CALLBACKS // -------------------------------------------------//
+  const sortByCircleValue = (a, b) => {
+    return a.state[circle] - b.state[circle];
+  };
   /**
    * Handle map clicks: Select or deselect fill and show / hide tooltips
    * @method handleMapClick
@@ -617,6 +633,8 @@ const MapboxMap = ({
             f.layer.type === "fill"
           );
         });
+
+        if (circle !== null) features.sort(sortByCircleValue);
         const circleFeature = features.find(f => {
           return (
             f["layer"]["source-layer"] === sources.circle.sourceLayer &&
@@ -682,6 +700,7 @@ const MapboxMap = ({
             const features = map.queryRenderedFeatures(e.point, {
               layers: layers,
             });
+            if (circle !== null) features.sort(sortByCircleValue);
 
             // unhover the currently hovered feature if any
             if (hoveredFeature !== null) {
