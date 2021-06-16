@@ -58,7 +58,7 @@ const earliestDate = (a, b) => {
 const PolicyEnvironmentPlot = ({ path }) => {
   const policyContextConsumer = React.useContext(policyContext);
 
-  const { caseload } = policyContextConsumer;
+  const { caseload, status } = policyContextConsumer;
 
   const caseloadMax = React.useMemo(
     () => caseload && Math.max(...caseload.map(day => day.value)),
@@ -282,6 +282,11 @@ const PolicyEnvironmentPlot = ({ path }) => {
 
   return (
     <>
+      {status.caseload === "loaded" ? (
+        <h2 className={styles.caseloadHeader}>Policy environment over time</h2>
+      ) : (
+        <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
+      )}
       <div className={styles.instructionSection}>
         <p>
           *Text might need to be edited* Move the blue line to show the state
@@ -291,102 +296,106 @@ const PolicyEnvironmentPlot = ({ path }) => {
         </p>
         <Legend />
       </div>
-      <svg
-        viewBox={`0 0 ${dim.width} ${dim.height}`}
-        xmlns="http://www.w3.org/2000/svg"
-        className={styles.svg}
-        ref={svgElement}
-        style={{ overflow: "visible" }}
-      >
-        {/* <g className={styles.background}> */}
-        {/* Visualize padding zone for testing */}
-        {/* <rect */}
-        {/*   x={dim.paddingLeft} */}
-        {/*   y={dim.paddingTop} */}
-        {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
-        {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
-        {/*   style={{ */}
-        {/*     stroke: "grey", */}
-        {/*     strokeWidth: 1, */}
-        {/*     fill: "none", */}
-        {/*   }} */}
-        {/* /> */}
-        {/* <rect */}
-        {/*   x={0} */}
-        {/*   y={0} */}
-        {/*   width={dim.width} */}
-        {/*   height={dim.height} */}
-        {/*   style={{ */}
-        {/*     stroke: "grey", */}
-        {/*     strokeWidth: 1, */}
-        {/*     fill: "none", */}
-        {/*   }} */}
-        {/* /> */}
-        <g className={styles.dailyLines}>
-          {caseload &&
-            scale &&
-            caseload.map(day => (
-              <React.Fragment key={day.date}>
-                {day.value >= 0 && (
-                  <line
-                    style={inlineStyles.dailyLines}
-                    x1={scale.x(day.date)}
-                    y1={dim.origin.y}
-                    x2={scale.x(day.date)}
-                    y2={scale.y(day.value)}
-                  />
-                )}
-              </React.Fragment>
-            ))}
-        </g>
-        <Axes dim={dim} scale={scale} />
-        <path d={averageLinePath} className={styles.averageLine} />
-        {/* </g> */}
-
-        {scale &&
-          policiesByDate &&
-          Object.entries(policiesByDate)
-            .map(([date, categories]) => {
-              const rowDate = new Date(date);
-              const xPos = scale.x(rowDate);
-              let count = 0;
-
-              return Object.values(categories).map(policies =>
-                policies.map(policy => {
-                  count = count + 1;
-                  return (
-                    <circle
-                      key={count}
-                      style={{
-                        fill: "rgba(64, 147, 132, .5)",
-                        // stroke: "white",
-                        // strokeWidth: ".5",
-                      }}
-                      cx={xPos}
-                      cy={
-                        dim.yAxis.end.y - (count - 1) * vSpacing - circlePadding
-                      }
-                      r={3}
+      {(status.caseload === "loading" || status.caseload === "loaded") && (
+        <svg
+          viewBox={`0 0 ${dim.width} ${dim.height}`}
+          xmlns="http://www.w3.org/2000/svg"
+          className={styles.svg}
+          ref={svgElement}
+          style={{ overflow: "visible" }}
+        >
+          {/* <g className={styles.background}> */}
+          {/* Visualize padding zone for testing */}
+          {/* <rect */}
+          {/*   x={dim.paddingLeft} */}
+          {/*   y={dim.paddingTop} */}
+          {/*   width={dim.width - dim.paddingLeft - dim.paddingRight} */}
+          {/*   height={dim.height - dim.paddingTop - dim.paddingBottom} */}
+          {/*   style={{ */}
+          {/*     stroke: "grey", */}
+          {/*     strokeWidth: 1, */}
+          {/*     fill: "none", */}
+          {/*   }} */}
+          {/* /> */}
+          {/* <rect */}
+          {/*   x={0} */}
+          {/*   y={0} */}
+          {/*   width={dim.width} */}
+          {/*   height={dim.height} */}
+          {/*   style={{ */}
+          {/*     stroke: "grey", */}
+          {/*     strokeWidth: 1, */}
+          {/*     fill: "none", */}
+          {/*   }} */}
+          {/* /> */}
+          <g className={styles.dailyLines}>
+            {caseload &&
+              scale &&
+              caseload.map(day => (
+                <React.Fragment key={day.date}>
+                  {day.value >= 0 && (
+                    <line
+                      style={inlineStyles.dailyLines}
+                      x1={scale.x(day.date)}
+                      y1={dim.origin.y}
+                      x2={scale.x(day.date)}
+                      y2={scale.y(day.value)}
                     />
-                  );
-                })
-              );
-            })
-            .flat()}
-        {scale && (
-          <Slider
-            {...{
-              dim,
-              svgElement,
-              policiesByDate,
-              scale,
-              vSpacing,
-              circlePadding,
-              avgCaseLoadByDate,
-            }}
-          />
-        )}
-      </svg>
+                  )}
+                </React.Fragment>
+              ))}
+          </g>
+          <Axes dim={dim} scale={scale} />
+          <path d={averageLinePath} className={styles.averageLine} />
+          {/* </g> */}
+
+          {scale &&
+            policiesByDate &&
+            Object.entries(policiesByDate)
+              .map(([date, categories]) => {
+                const rowDate = new Date(date);
+                const xPos = scale.x(rowDate);
+                let count = 0;
+
+                return Object.values(categories).map(policies =>
+                  policies.map(policy => {
+                    count = count + 1;
+                    return (
+                      <circle
+                        key={count}
+                        style={{
+                          fill: "rgba(64, 147, 132, .5)",
+                          // stroke: "white",
+                          // strokeWidth: ".5",
+                        }}
+                        cx={xPos}
+                        cy={
+                          dim.yAxis.end.y -
+                          (count - 1) * vSpacing -
+                          circlePadding
+                        }
+                        r={3}
+                      />
+                    );
+                  })
+                );
+              })
+              .flat()}
+          {scale && (
+            <Slider
+              {...{
+                dim,
+                svgElement,
+                policiesByDate,
+                scale,
+                vSpacing,
+                circlePadding,
+                avgCaseLoadByDate,
+              }}
+            />
+          )}
+        </svg>
+      )}
     </>
   );
 };
