@@ -740,8 +740,19 @@ const MapboxMap = ({
   const handleKeyPress = e => {
     if (e.keyCode === 27) {
       // escape
-      setShowMapPopup(false);
-      setSelectedFeature(null);
+      // deselect the currently selected feature
+      if (selectedFeature !== null) {
+        const map = mapRef.getMap();
+        map.setFeatureState(selectedFeature, {
+          clicked: false,
+        });
+        setShowMapPopup(false);
+        setSelectedFeature(null);
+      } else if (showReset) {
+        // reset zoom
+        resetViewport();
+      }
+      setHoveredFeature(null);
     }
   };
   useEventListener("keydown", handleKeyPress, window);
