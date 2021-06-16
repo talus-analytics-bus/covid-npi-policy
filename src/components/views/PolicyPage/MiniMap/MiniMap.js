@@ -146,7 +146,7 @@ export const SVG = props => {
                 propsCounties.includes(geometry.properties.name) ||
                 propsCounties[0] === "Unspecified"
                   ? "#4E8490"
-                  : "#ffffff"
+                  : "#F2F2F2"
               }
               stroke={
                 propsCounties.includes(geometry.properties.name) ||
