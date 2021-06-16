@@ -284,9 +284,10 @@ const PolicyEnvironmentPlot = ({ path }) => {
     <>
       <div className={styles.instructionSection}>
         <p>
-          Move the blue line to show the Colorado state and county policies that
-          went into effect on each day and the 7-day average new cases on that
-          same day.
+          *Text might need to be edited* Move the blue line to show the state
+          and county policies that went into effect on each day and the 7-day
+          average new cases. The bar chart below will show the policy breakdown
+          on that day.
         </p>
         <Legend />
       </div>
