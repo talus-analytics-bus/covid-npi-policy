@@ -29,6 +29,7 @@ import {
   getFeatureMetric,
   getFeatureName,
   getLocationFilters,
+  getMapIdFromFeature,
   getModelLink,
   getPolicyLink,
   ZERO_POLICY_MSG,
@@ -77,6 +78,7 @@ const updateData: Function = async ({
   subcategoryOptions,
 }: UpdateDataProps) => {
   if (ready) setUpdating(true);
+
   // if county map, get state `lockdown_level
   const distancingMapMetric: MapMetric[] = getDistancingMapMetric(
     mapId,
@@ -187,6 +189,8 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   const { subcategoryOptions } = useContext<MapOptionContextProps>(
     MapOptionContext
   );
+  // get map ID used for data requests based on the feature
+  const mapIdForData = getMapIdFromFeature(feature, mapId);
 
   useEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
@@ -203,7 +207,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       setReady,
       setUpdating,
       map,
-      mapId,
+      mapId: mapIdForData,
       DISABLE_POLICY_LINK_IF_ZERO,
       subcategoryOptions,
       paramArgs: {
@@ -218,7 +222,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   return (
     <AmpMapPopup
       {...{
-        mapId,
+        mapId: mapIdForData,
         feature,
         featureName,
         dataDate,

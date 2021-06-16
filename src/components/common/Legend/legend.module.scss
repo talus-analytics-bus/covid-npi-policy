@@ -108,6 +108,12 @@
   &.mapboxLegend {
     border: none;
   }
+
+  .nameAndTooltip {
+    img {
+      margin-left: 0.25rem;
+    }
+  }
 }
 
 // responsiveness

@@ -81,7 +81,9 @@ export const defaults = {
   "us-county": {
     // id of default circle metric
     circle: "104",
-    showCircle: false,
+    "circle-state": "104",
+    showCircle: true,
+    // showCircle: false,
     // allowCircle: false,
 
     // id of default fill metric
@@ -245,9 +247,8 @@ export const allMapMetrics = {
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       filter: ["==", ["get", "type"], "state"],
-      trend: true,
+      trend: false,
       styleOptions: { outline: true },
-      // styleOptions: { outline: true, pattern: true },
     },
     {
       queryFunc: ObservationQuery,
@@ -261,9 +262,8 @@ export const allMapMetrics = {
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "state"],
-      trend: true,
+      trend: false,
       styleOptions: { outline: true },
-      // styleOptions: { outline: true, pattern: true },
     },
   ],
   "us-county": [
@@ -280,7 +280,41 @@ export const allMapMetrics = {
       featureLinkField: "place_fips",
       styleId: { fill: "metric-transp", circle: "metric-test-transp" },
       filter: ["==", ["get", "type"], "county"],
-      trend: true,
+      trend: false,
+      styleOptions: { outline: true },
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle-state"],
+      params: {
+        metric_id: 74,
+        temporal_resolution: "daily",
+        spatial_resolution: "state",
+        fields: ["value", "date_time", "place_name", "place_id"],
+        transform: d => {
+          d.value = d.value / 7.0;
+        },
+      },
+      id: "104",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-transp" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: false,
+      styleOptions: { outline: true },
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle-state"],
+      params: {
+        metric_id: 72,
+        temporal_resolution: "daily",
+        spatial_resolution: "state",
+      },
+      id: "102",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: false,
       styleOptions: { outline: true },
     },
     {
@@ -296,7 +330,7 @@ export const allMapMetrics = {
       featureLinkField: "place_fips",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "county"],
-      trend: true,
+      trend: false,
       styleOptions: { outline: true },
     },
     {
@@ -485,7 +519,7 @@ export const allMapMetrics = {
         fill: "metric-test",
         circle: "metric-test-transp-global",
       },
-      trend: true,
+      trend: false,
       styleOptions: { outline: true, pattern: false },
     },
     {
@@ -503,7 +537,7 @@ export const allMapMetrics = {
         fill: "metric-test",
         circle: "metric-test-solid-global",
       },
-      trend: true,
+      trend: false,
       styleOptions: { outline: true, pattern: false },
     },
   ],
@@ -528,6 +562,7 @@ const getCovidLocalMetricLink = (v, color, style) => {
 // metric metadata used for display, tooltips, etc.
 export const metricMeta = {
   // unique ID of metric
+
   "74": {
     // metric definition
     metric_definition: (
@@ -704,7 +739,7 @@ export const metricMeta = {
       metric_definition: (
         <span>
           The total cumulative number of COVID-19 cases (confirmed and probable)
-          in the county as of the indicated date
+          as of the indicated date
           <br />
           <i style={{ fontSize: ".8em" }}>
             Source:{" "}
@@ -727,7 +762,7 @@ export const metricMeta = {
       metric_definition: (
         <span>
           The moving 7-day average number of new daily COVID-19 cases (confirmed
-          and probable) in the county.
+          and probable).
           <br />
           <i style={{ fontSize: ".8em" }}>
             Source: Calculated from{" "}
@@ -1097,7 +1132,11 @@ export const metricMeta = {
           gridTemplateColumns: "auto repeat(5, 1fr)",
           entryStyles: [
             // null,
-            { width: "auto", marginRight: 20, rectStyles: { width: "auto" } },
+            {
+              width: "auto",
+              marginRight: 20,
+              rectStyles: { width: "auto" },
+            },
             null,
             null,
             null,

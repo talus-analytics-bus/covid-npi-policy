@@ -124,7 +124,7 @@ const getMetricsToUpdateOrReuse = (
     // else if circle is different, update circle, reuse fill
   } else if (diffCircle) {
     visibleMetrics.forEach((d: MapMetric) => {
-      if (d.for.includes("circle") && d.id === circleStr) {
+      if (d.for.some(dd => dd.startsWith("circle")) && d.id === circleStr) {
         toUpdate.push(d);
       } else toReuse.push(d);
     });
@@ -179,44 +179,44 @@ export async function getDataQueryResults({
   const queryDefs: Record<string, any> = {};
   metricsToUpdate.forEach((d: MapMetric) => {
     // if the query for this metric hasn't been defined yet, define it
-    if (queryDefs[d.id] === undefined) {
-      // parse query params
-      const params =
-        d.params.func !== undefined
-          ? d.params.func({
-              date,
-              mapId,
-              filters: filtersWithDates,
-              policyResolution,
-              map,
-              state_name: stateName,
-              iso3,
-            })
-          : { ...d.params, mapId };
-      // add base data query
-      queryDefs[d.id] = {
-        queryFunc: d.queryFunc,
-        ...params,
-        ...dates,
-      };
+    if (queryDefs[d.id] === undefined) queryDefs[d.id] = [];
+    // parse query params
+    const params =
+      d.params.func !== undefined
+        ? d.params.func({
+            date,
+            mapId,
+            filters: filtersWithDates,
+            policyResolution,
+            map,
+            state_name: stateName,
+            iso3,
+          })
+        : { ...d.params, mapId };
+    // add base data query
+    queryDefs[d.id].push({
+      queryFunc: d.queryFunc,
+      ...params,
+      ...dates,
+    });
 
-      // add trend query if applicable
-      if (d.trend === true && d.params.metric_id !== undefined) {
-        const trendKey = d.params.metric_id.toString() + "-trend";
-        queryDefs[trendKey] = {
-          queryFunc: TrendQuery,
-          ...d.params,
-          end: dates.end_date,
-        };
-      }
+    // add trend query if applicable
+    if (d.trend === true && d.params.metric_id !== undefined) {
+      const trendKey = d.params.metric_id.toString() + "-trend";
+      if (queryDefs[trendKey] === undefined) queryDefs[trendKey] = [];
+      queryDefs[trendKey].push({
+        queryFunc: TrendQuery,
+        ...d.params,
+        end: dates.end_date,
+      });
     }
   });
 
   // collate queries in object to be called by the `execute method below`
   const queries: Record<string, Promise<Record<string, any>>> = {};
-  for (const [k, v] of Object.entries(queryDefs)) {
-    queries[k] = v.queryFunc({
-      ...v,
+  for (const [metricId, queryDefSet] of Object.entries(queryDefs)) {
+    queries[metricId] = queryDefSet.map((queryDef: Record<string, any>) => {
+      return queryDef.queryFunc({ ...queryDef });
     });
   }
 

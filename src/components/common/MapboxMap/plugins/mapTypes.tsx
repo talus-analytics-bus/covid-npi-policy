@@ -67,7 +67,7 @@ export type NumericObservation = {
 };
 
 export type MetricMetaEntry = {
-  metric_definition: ReactElement;
+  metric_definition: any;
   metric_displayname: string;
   shortName?: ReactElement;
   value: Function;
@@ -78,6 +78,36 @@ export type MetricMetaEntry = {
 };
 
 export type MetricMeta = Record<string, MetricMetaEntry>;
+
+export type MapStylesEntry = {
+  url: string;
+  value: string;
+  geo_res: string;
+  name: string;
+  defaultFitBounds: number[][];
+  tooltip?: string;
+  minZoom?: number;
+  maxZoom?: number;
+};
+
+export type MapStyles = Record<MapId, MapStylesEntry>;
+
+export type MapSourcesGeometry = {
+  name: string;
+  sourceLayer: string;
+  def: {
+    type: "vector";
+    url: string;
+    promoteId: string;
+    minzoom?: number;
+    maxzoom?: number;
+    zoomLabel?: string;
+  };
+};
+
+export type MapSourcesEntry = Record<string, MapSourcesGeometry>;
+
+export type MapSources = Record<MapId, MapSourcesEntry>;
 
 /**
  * Map metric attributes used to query for metrics.

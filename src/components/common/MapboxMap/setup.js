@@ -197,28 +197,34 @@ export const initMap = ({
      */
     const addCircleLayers = () => {
       // get all circle layers to add
-      const layers = allMapMetrics[mapId].filter(d => d.for.includes("circle"));
+      const circleLayers = allMapMetrics[mapId].filter(d =>
+        d.for.some(dd => dd.startsWith("circle"))
+      );
 
       // if there are none, return, otherwise continue adding
       const hasCircleLayers =
-        sources["circle"] !== undefined && layers.length > 0;
+        sources["circle"] !== undefined && circleLayers.length > 0;
       if (!hasCircleLayers) return;
       else {
-        // get source for centroids of circle
-        const source = sources["circle"];
-
-        // set layers
-        source.circleLayers = layers;
-
         // for each circle layer
-        layers.forEach(layer => {
+        circleLayers.forEach(layer => {
+          const sourceKey = layer.for.find(d => d.startsWith("circle"));
+          const source = sources[sourceKey];
+          // define min/max zoom settings to apply to layers
+          const zoomSettings = {
+            maxzoom: source.def.maxzoom || 22,
+            minzoom: source.def.minzoom || 0,
+          };
+          if (source.circleLayers === undefined) source.circleLayers = [layer];
+          else source.circleLayers.push(layer);
+
           // get style for this layer
           const layerStyleName =
             (layer.styleId && layer.styleId.circle) || layer.id;
           const layerStyle = layerStyles["circle"][layerStyleName](layer.id);
 
           // define key for layer (unique ID)
-          const layerKey = layer.id + "-circle";
+          const layerKey = layer.id + "-" + sourceKey;
 
           // if layer doesn't exist yet, add it, along with any applicable
           // auxiliary layers
@@ -278,9 +284,9 @@ export const initMap = ({
             };
 
             const defaultCircleIdStr =
-              defaults[mapId].circle !== null &&
-              defaults[mapId].circle !== undefined
-                ? defaults[mapId].circle.toString()
+              defaults[mapId][sourceKey] !== null &&
+              defaults[mapId][sourceKey] !== undefined
+                ? defaults[mapId][sourceKey].toString()
                 : null;
             // add circle shadow layer first
             map.addLayer(
@@ -296,6 +302,7 @@ export const initMap = ({
                   visibility:
                     defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
+                ...zoomSettings,
               },
               // insert this layer just behind the `priorLayer`
               defaults[mapId].priorLayer
@@ -315,6 +322,7 @@ export const initMap = ({
                   visibility:
                     defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
+                ...zoomSettings,
               },
               // insert this layer just behind the `priorLayer`
               defaults[mapId].priorLayer
@@ -383,17 +391,16 @@ export const bindFeatureStates = ({
   circle,
   fill,
 }) => {
-  const circleStr = circle !== null ? circle.toString() : circle;
-  const fillStr = fill !== null ? fill.toString() : fill;
+  const circleMetricId = circle !== null ? circle.toString() : circle;
+  const fillMetricId = fill !== null ? fill.toString() : fill;
   const curMapMetrics = allMapMetrics[mapId].filter(
-    d => d.id === circleStr || d.id === fillStr
+    d => d.id === circleMetricId || d.id === fillMetricId
   );
   bindFeatureStatesForSource({
     map,
-    newSources: mapSources[mapId],
+    sourcesToBind: mapSources[mapId],
     data,
     curMapMetrics,
-    selectedFeature,
   });
 };
 
@@ -411,24 +418,21 @@ export const bindFeatureStates = ({
  */
 const bindFeatureStatesForSource = ({
   map,
-  // sourceTypeKey,
-  // source,
-  newSources,
+  sourcesToBind,
   data,
   curMapMetrics,
-  selectedFeature,
 }) => {
-  for (const [_sourceTypeKey, source] of Object.entries(newSources)) {
+  for (const [_sourceTypeKey, source] of Object.entries(sourcesToBind)) {
     // first erase original feature state for all features
-    curMapMetrics.forEach(layer => {
+    curMapMetrics.forEach(metric => {
       // get all features from source, using filter if defined
       const feats = map.querySourceFeatures(source.name, {
         sourceLayer: source.sourceLayer,
-        filter: layer.filter,
+        filter: metric.filter,
       });
 
       // get trend key (only applicable if trend is being tracked)
-      const trendKey = layer.id.toString() + "-trend";
+      const trendKey = metric.id.toString() + "-trend";
       // iterate over features and erase feature state relevant to this layer
       feats.forEach(f => {
         map.setFeatureState(
@@ -437,7 +441,7 @@ const bindFeatureStatesForSource = ({
             sourceLayer: source.sourceLayer,
             id: f.id,
           },
-          { [layer.id]: null, [trendKey]: null }
+          { [metric.id]: null, [trendKey]: null }
         );
       });
     });
@@ -445,28 +449,30 @@ const bindFeatureStatesForSource = ({
 
   // for each layer defined for the source, get the data for that layer and
   // bind it to any matching features in the source
-  curMapMetrics.forEach(layer => {
+  curMapMetrics.forEach(metric => {
     // get data for layer features
-    const layerData = data[layer.id];
-    if (layerData === undefined) return; // TODO elegantly
-    layerData.forEach(dd => {
+    const metricData = data[metric.id];
+    if (metricData === undefined) return; // TODO elegantly
+    metricData.forEach(dd => {
+      const featureId = dd[metric.featureLinkField || "place_id"];
+      if (featureId === undefined) return;
       // bind null value to feature if no data
       const state = {};
       if (dd.value === undefined || dd.value === null) {
         state.nodata = true;
-        state[layer.id] = null;
+        state[metric.id] = null;
       } else {
         // otherwise, bind data
         state.nodata = false;
-        state[layer.id] = dd.value;
+        state[metric.id] = dd.value;
       }
 
       // if layer incorporates trends, then look for and bind any trend data
       // to the layer
-      const lookForTrendData = layer.trend === true;
+      const lookForTrendData = metric.trend === true;
       if (lookForTrendData) {
         // define standard trend key, e.g., "metric_name-trend"
-        const trendKey = layer.id + "-trend";
+        const trendKey = metric.id + "-trend";
 
         // get trend datum associated with this main datum, if any
         const trend = data[trendKey].find(
@@ -489,11 +495,11 @@ const bindFeatureStatesForSource = ({
 
       // bind updated feature state to any feature that matches the
       // feature props
-      for (const [sourceTypeKey, source] of Object.entries(newSources)) {
+      for (const [_sourceTypeKey, source] of Object.entries(sourcesToBind)) {
         const featureProps = {
           source: source.name,
           sourceLayer: source.sourceLayer,
-          id: dd[layer.featureLinkField || "place_id"],
+          id: featureId,
         };
         map.setFeatureState(featureProps, state);
       }

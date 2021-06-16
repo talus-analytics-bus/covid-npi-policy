@@ -77,12 +77,25 @@ export const mapSources = {
 
     // additional layer types and source defs...
     circle: {
-      name: "centroids-us",
+      name: "centroids-us-county",
       sourceLayer: "albersusa-points",
       def: {
         type: "vector",
         url: "mapbox://lobenichou.albersusa-points",
         promoteId: "county_fips",
+        minzoom: 6,
+        zoomLabel: "for counties",
+      },
+    },
+    "circle-state": {
+      name: "centroids-us-state",
+      sourceLayer: "albersusa-points",
+      def: {
+        type: "vector",
+        url: "mapbox://lobenichou.albersusa-points",
+        promoteId: "state_name",
+        maxzoom: 6,
+        zoomLabel: "for states",
       },
     },
   },
@@ -165,7 +178,6 @@ export const mapStyles = {
     // url: "mapbox://styles/nicoletalus/ckpygbhwn0uwr18p8wrqxf4hy", // white state bounds, slightly thinner
     // url: "mapbox://styles/nicoletalus/ckpybt26u6cum17mwgdj980kc", // gray state bounds, slightly thinner
     // url: "mapbox://styles/nicoletalus/ckpyaxl630pmn17p63bdh4aov",  // white state bounds
-    // url: "mapbox://styles/nicoletalus/cknp3qduk57mx17l8hkw826st",
 
     // slug of map, should be map ID
     value: "us-county",

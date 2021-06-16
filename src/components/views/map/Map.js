@@ -60,6 +60,9 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // is data being loaded?
   const [dataIsLoading, setDataIsLoading] = useState(false);
 
+  // track map zoom level
+  const [zoomLevel, setZoomLevel] = useState(0);
+
   // unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
   const defaultMapId = defaults.mapId;
@@ -95,8 +98,8 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
     ? moment(casesLastUpdated.last_datum_date)
     : moment();
   defaults.minMaxDate.maxDate = casesLastUpdatedDate;
-  const [date, setDate] = useState(casesLastUpdatedDate);
-  // const [date, setDate] = useState(new moment(defaults.date));
+  // const [date, setDate] = useState(casesLastUpdatedDate);
+  const [date, setDate] = useState(new moment("2021-06-09"));
   const prevDate = usePrevious(date);
 
   // name of metric to use as fill by default
@@ -371,6 +374,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
                 mapIsChanging,
                 setShowLoadingSpinner: setLoading,
                 setDataIsLoading,
+                setZoomLevel,
                 overlays: (
                   <>
                     <MapDrape
@@ -389,7 +393,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
                           gridTemplateColumns: "auto auto auto",
                         }}
                       >
-                        <AmpMapLegendPanel />
+                        <AmpMapLegendPanel {...{ zoomLevel }} />
                         <AmpMapDatePanel
                           {...{ date, setDate, ...defaults.minMaxDate }}
                         />

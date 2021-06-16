@@ -394,3 +394,22 @@ function getDistancingMetricKeyFromMapId(mapId: MapId): string {
       return mapId;
   }
 }
+
+/**
+ * Given a map feature, returns the map ID that corresponds to its feature
+ * type. This map ID is used to guide data requests for the feature's map
+ * popup content.
+ * @param feature The map feature
+ * @returns The map ID that corresponds to the feature type.
+ */
+export function getMapIdFromFeature(feature: MapFeature, mapId: MapId): MapId {
+  if ((feature as CountyFeature).properties.type === "county") {
+    if (mapId === "us-county-plus-state") return mapId;
+    else return "us-county";
+  } else if ((feature as StateFeature).properties.type === "state") return "us";
+  else if ((feature as CountryFeature).properties.ISO_A3 !== undefined)
+    return "global";
+  else {
+    throw Error("Unexpected feature: " + feature);
+  }
+}

@@ -70,7 +70,7 @@ const MapboxMap = ({
   mapIsChanging,
   setShowLoadingSpinner,
   setDataIsLoading,
-  ...props
+  setZoomLevel,
 }) => {
   // STATE // ---------------------------------------------------------------//
   // store map reference which is frequently invoked to get the current
@@ -119,10 +119,11 @@ const MapboxMap = ({
       circle !== null && mapSources[mapId].circle !== undefined;
 
     // if yes, update scale type of circle and its shadow
-    const circleLayers = mapSources[mapId].circle.circleLayers;
+    // const circleLayers = mapSources[mapId].circle.circleLayers;
+    const circleLayers = getSourceLayers(mapId, "circle", "circleLayers");
     if (hasVisibleCircleLayers) {
       circleLayers.forEach(layer => {
-        const layerId = layer.id + "-circle";
+        const layerId = layer.id + "-" + getSourceKey(layer, "circle");
 
         const circleStyle = layerStyles.circle[layer.styleId.circle](
           layer.id,
@@ -205,34 +206,36 @@ const MapboxMap = ({
 
     // if circle layers are being used, then order circles smallest to
     // biggest for optimal click-ability
-    const hasCircleLayers =
+    const hasVisibleCircleLayers =
       mapSources[mapId].circle !== undefined && circle !== null;
-    if (hasCircleLayers) {
+    if (hasVisibleCircleLayers) {
+      const circleLayers = getSourceLayers(mapId, "circle", "circleLayers");
       // get data fields to bind data to geo feature
-      const circLayer = mapSources[mapId].circle.circleLayers.find(
-        d => d.id === circleIdStr
-      );
-      if (circLayer === undefined) return; // TODO handle elegantly
-      const featureLinkField = circLayer.featureLinkField;
-      const promoteId = mapSources[mapId].circle.def.promoteId;
+      const circLayers = circleLayers.filter(d => d.id === circleIdStr);
+      if (circLayers === undefined) return; // TODO handle elegantly
+      circLayers.forEach(circLayer => {
+        const featureLinkField = circLayer.featureLinkField;
+        const promoteId = mapSources[mapId].circle.def.promoteId;
 
-      // get sort order of circles based on covid caseload metric
-      const sortOrderMetricId = circleIdStr;
-      if (sortOrderMetricId === undefined) return;
-      else {
-        const featureOrder = {};
-        if (data[sortOrderMetricId] === undefined) return;
-        data[sortOrderMetricId].forEach(d => {
-          featureOrder[d[featureLinkField]] = -d.value;
-        });
+        // get sort order of circles based on covid caseload metric
+        const sortOrderMetricId = circleIdStr;
+        const sortOrderSourceKey = getSourceKey(circLayer, "circle");
+        if (sortOrderMetricId === undefined) return;
+        else {
+          const featureOrder = {};
+          if (data[sortOrderMetricId] === undefined) return;
+          data[sortOrderMetricId].forEach(d => {
+            featureOrder[d[featureLinkField]] = -d.value;
+          });
 
-        // update circle ordering
-        map.setLayoutProperty(
-          sortOrderMetricId + "-circle",
-          "circle-sort-key",
-          ["get", ["get", promoteId], ["literal", featureOrder]]
-        );
-      }
+          // update circle ordering
+          map.setLayoutProperty(
+            sortOrderMetricId + "-" + sortOrderSourceKey,
+            "circle-sort-key",
+            ["get", ["get", promoteId], ["literal", featureOrder]]
+          );
+        }
+      });
     }
   };
 
@@ -281,6 +284,7 @@ const MapboxMap = ({
       // post-fly callback
       () => {
         setShowReset(false);
+        setZoomLevel(defaultViewport.zoom);
       }
     );
   };
@@ -470,15 +474,21 @@ const MapboxMap = ({
             mapSources[mapId][sourceTypeKey] !== undefined;
           if (hasLayersOfType) {
             // get layers of this type (circle, fill, ...)
-            const layersOfType = mapSources[mapId][sourceTypeKey][layerListKey];
+            let layersOfType = getSourceLayers(
+              mapId,
+              sourceTypeKey,
+              layerListKey
+            );
+            // const layersOfType = mapSources[mapId][sourceTypeKey][layerListKey];
 
             // for each layer determine whether it is visible
             layersOfType.forEach(layer => {
+              const sourceKey = getSourceKey(layer, sourceTypeKey);
               // if layer is current option, it's visible
               const visible = layer.id === curOption;
               const visibility = visible ? "visible" : "none";
               map.setLayoutProperty(
-                layer.id + "-" + sourceTypeKey,
+                layer.id + "-" + sourceKey,
                 "visibility",
                 visibility
               );
@@ -486,7 +496,7 @@ const MapboxMap = ({
               // same for any associated pattern layers this layer has
               if (layer.styleOptions.pattern === true) {
                 map.setLayoutProperty(
-                  layer.id + "-" + sourceTypeKey + "-pattern",
+                  layer.id + "-" + sourceKey + "-pattern",
                   "visibility",
                   visibility
                 );
@@ -495,7 +505,7 @@ const MapboxMap = ({
               // same for circle shadow layers
               if (sourceTypeKey === "circle") {
                 map.setLayoutProperty(
-                  layer.id + "-" + sourceTypeKey + "-shadow",
+                  layer.id + "-" + sourceKey + "-shadow",
                   "visibility",
                   visibility
                 );
@@ -729,6 +739,7 @@ const MapboxMap = ({
           onViewportChange={newViewport => {
             // set current viewport state variable to the new viewport
             setViewport(newViewport);
+            setZoomLevel(newViewport.zoom);
             const lngLatNotDefault =
               newViewport.longitude !== defaultViewport.longitude ||
               newViewport.latitude !== defaultViewport.latitude;
@@ -825,6 +836,23 @@ const MapboxMap = ({
 };
 
 export default MapboxMap;
+
+function getSourceKey(layer, sourceTypeKey) {
+  return layer.for.find(d => d.startsWith(sourceTypeKey));
+}
+
+function getSourceLayers(mapId, sourceTypeKey, layerListKey) {
+  let layersOfType = [];
+  const sourceKeys = Object.keys(mapSources[mapId]).filter(d =>
+    d.startsWith(sourceTypeKey)
+  );
+  sourceKeys.forEach(sourceKey => {
+    layersOfType = layersOfType.concat(
+      mapSources[mapId][sourceKey][layerListKey]
+    );
+  });
+  return layersOfType;
+}
 
 function getMinMaxVals(data, key) {
   const curSeries = data[key];

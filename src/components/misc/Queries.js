@@ -607,8 +607,17 @@ export const Caseload = async ({
 export const execute = async function({ queries }) {
   const results = {};
   for (const [k, v] of Object.entries(queries)) {
-    const res = await v;
-    results[k] = res;
+    if (v === undefined || v === null) continue;
+    if (typeof v !== "string" && v.length !== undefined) {
+      if (results[k] === undefined) results[k] = [];
+      for (let i = 0; i < v.length; i++) {
+        const res = await v[i];
+        results[k] = results[k].concat(res);
+      }
+    } else {
+      const res = await v;
+      results[k] = res;
+    }
   }
   return results;
 };

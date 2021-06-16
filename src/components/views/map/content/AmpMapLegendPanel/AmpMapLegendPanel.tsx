@@ -5,6 +5,9 @@ import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel"
 import { metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   MapId,
+  MapSources,
+  MapSourcesEntry,
+  MapSourcesGeometry,
   MetricMeta,
   MetricMetaEntry,
   PolicyResolution,
@@ -16,15 +19,18 @@ import { Moment } from "moment";
 import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/helpers";
 import { Option } from "components/common/OptionControls/types";
 import InfoTooltipContext from "context/InfoTooltipContext";
+import { mapSources } from "components/common/MapboxMap/plugins/sources";
 
 type ComponentProps = {
   linCircleScale: boolean;
   policyResolution: PolicyResolution;
+  zoomLevel: number;
   panelSetId?: number;
 };
 export const AmpMapLegendPanel: FC<ComponentProps> = ({
   linCircleScale,
   policyResolution,
+  zoomLevel,
   panelSetId = 0,
 }) => {
   const { circle, fill, mapId, filters, date } = useContext<{
@@ -42,7 +48,7 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
   const fillMeta: MetricMetaEntry | null =
     fill !== null ? (metricMeta as MetricMeta)[fill || ""] : null;
   const { subcategoryOptions } = useContext(MapOptionContext);
-
+  const metricDefNoun: string = getCircleZoomLabel(mapId, zoomLevel);
   return (
     <MapPanel tabName={"Legend"} {...{ panelSetId }}>
       <div className={styles.legend}>
@@ -63,8 +69,10 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
                     <span>
                       {circleMeta.metric_displayname}
                       {!linCircleScale ? " (log scale)" : ""}
+                      {metricDefNoun}
                     </span>
                   ),
+                  metricDefNoun,
                   ...circleMeta.legendInfo.circle,
                 }}
               />
@@ -163,4 +171,36 @@ const getFillLegendName: Function = ({
     }
   }
   return null;
+};
+
+const getCircleZoomLabel: Function = (mapId: MapId, zoom: number): string => {
+  // get all circle sources
+  if (mapSources[mapId] === null || mapSources[mapId] === undefined) return "";
+  const sourceIds: string[] = Object.keys(mapSources[mapId] as MapSourcesEntry);
+  let zoomLabelSources: MapSourcesGeometry[] = [];
+  let foundMultiple: boolean = false;
+  sourceIds
+    .filter(sourceId => sourceId.startsWith("circle"))
+    .forEach(sourceId => {
+      const circleSource: MapSourcesGeometry = (mapSources[
+        mapId
+      ] as MapSourcesEntry)[sourceId] as MapSourcesGeometry;
+      const overMin: boolean =
+        circleSource.def.minzoom === undefined ||
+        circleSource.def.minzoom <= zoom;
+      const underMax: boolean =
+        circleSource.def.maxzoom === undefined ||
+        circleSource.def.maxzoom >= zoom;
+      const hasZoomLabel: boolean = circleSource.def.zoomLabel !== undefined;
+      if (overMin && underMax && hasZoomLabel) {
+        zoomLabelSources.push(circleSource);
+      }
+    });
+  // get all sources visible at current zoom
+  // apply zoom label from first such source
+  if (zoomLabelSources.length > 1 || zoomLabelSources.length === 0) {
+    return "";
+  } else if (zoomLabelSources[0].def.zoomLabel !== undefined)
+    return " " + zoomLabelSources[0].def.zoomLabel;
+  else return "";
 };

@@ -323,13 +323,13 @@ const Legend = ({ ...props }) => {
       : entryName;
   } else {
     sectionHeader = (
-      <div>
+      <div className={styles.nameAndTooltip}>
         {entryName}
-        {props.metric_definition && (
+        {definition && (
           <InfoTooltip
             place={"top"}
             id={typeAndElement}
-            text={props.metric_definition}
+            text={definition}
             setInfoTooltipContent={props.setInfoTooltipContent}
             wide={props.wideDefinition === true}
           />
