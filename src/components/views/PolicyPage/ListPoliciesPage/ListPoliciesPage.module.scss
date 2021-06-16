@@ -5,6 +5,15 @@
     font-weight: bold;
     color: #303434;
   }
+  h2 {
+    font-family: Rawline;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #303434;
+  }
 }
 
 .pageHeader {
@@ -39,9 +48,9 @@
   }
 }
 
-.chartAndMap {
+.barChartAndParagraph {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
 }
 
