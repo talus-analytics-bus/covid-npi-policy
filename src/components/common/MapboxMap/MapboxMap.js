@@ -41,6 +41,7 @@ import ResetZoom from "./resetZoom/ResetZoom";
 import MapOptionContext from "../../views/map/context/MapOptionContext";
 import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
 import { elementIsMapCanvas } from "./plugins/helpers";
+import useEventListener from "components/views/PolicyPage/hooks/useEventListener";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -76,6 +77,7 @@ const MapboxMap = ({
   // store map reference which is frequently invoked to get the current
   // Mapbox map object in effect hooks
   let mapRef = useRef(null);
+
   // const [map, setMap] = useState(null);
   const curMapOptions = useContext(MapOptionContext);
   const { fill, circle, date } = curMapOptions;
@@ -730,6 +732,19 @@ const MapboxMap = ({
       }
     }
   };
+
+  /**
+   * When escape is pressed, close map popup and unselect feature.
+   * @param {Event} e The key press event
+   */
+  const handleKeyPress = e => {
+    if (e.keyCode === 27) {
+      // escape
+      setShowMapPopup(false);
+      setSelectedFeature(null);
+    }
+  };
+  useEventListener("keydown", handleKeyPress, window);
 
   // JSX // -----------------------------------------------------------------//
   // render map only after data initially load
