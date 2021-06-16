@@ -105,7 +105,8 @@ const ListPoliciesPage = props => {
 
   // if this array is re-created it will make the minimap
   // re-render so we only want to create it when this component mounts
-  const miniMapCounties = React.useRef(["Unspecified"]);
+  // const miniMapCounties = React.useRef(["Unspecified"]);
+  const miniMapCounties = React.useRef([]);
 
   return (
     <article className={styles.listPoliciesPage}>
@@ -115,24 +116,18 @@ const ListPoliciesPage = props => {
         ) : (
           <h1>&nbsp;</h1>
         )}
-      </header>
-      <section className={styles.chartAndMap}>
-        <SnapshotChartSection />
         {iso3 !== "Unspecified" && (
           <figure className={styles.miniMapHolder}>
-            <figcaption>{locationName}</figcaption>
             <MiniMap.SVG
               country={iso3}
               state={state}
               counties={miniMapCounties.current}
             />
-            <Link
-              to={`/policymaps?mapId=${state === "national" ? "global" : "us"}`}
-            >
-              View on the {state === "national" ? "world" : "United States"} map
-            </Link>
           </figure>
         )}
+      </header>
+      <section className={styles.chartAndMap}>
+        <SnapshotChartSection />
       </section>
       {iso3 !== "Unspecified" && status.caseload !== "error" && (
         <section className={styles.caseloadPlot}>

@@ -10,35 +10,37 @@
 .pageHeader {
   margin-top: 2rem;
   padding-bottom: 1rem;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.miniMapHolder {
+  width: 8em;
+
+  figcaption {
+    margin-bottom: 10px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    color: #303434;
+  }
+
+  > a {
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 .chartAndMap {
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-gap: 30px;
-
-  .miniMapHolder {
-    border: 1px solid #c4c4c4;
-    border-radius: 5px;
-    padding: 15px;
-    padding-bottom: 10px;
-
-    figcaption {
-      margin-bottom: 10px;
-      font-family: Open Sans;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 20px;
-      color: #303434;
-    }
-
-    > a {
-      margin-top: 10px;
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-  }
 }
 
 .caseloadPlot,

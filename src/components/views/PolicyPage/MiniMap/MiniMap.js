@@ -86,8 +86,8 @@ export const SVG = props => {
 
   // both 500 to make it square,
   // screen size will be set with CSS
-  const width = 500;
-  const height = 500;
+  const width = 250;
+  const height = 250;
 
   // let paths = null;
 
