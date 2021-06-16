@@ -33,7 +33,6 @@ const TooltipContent = ({
   const { setPolicyObject } = React.useContext(policyContext);
 
   const handleLink = (e, category) => {
-    e.preventDefault();
     setPolicyObject(prev => ({
       ...prev,
       [category]: { ...prev[category], open: true },
@@ -73,7 +72,7 @@ const TooltipContent = ({
             <a
               onClick={e => handleLink(e, category)}
               key={category}
-              href="/policymaps"
+              href={`#${category}`}
               className={styles.policyLink}
             >
               <PolicyCategoryIcon

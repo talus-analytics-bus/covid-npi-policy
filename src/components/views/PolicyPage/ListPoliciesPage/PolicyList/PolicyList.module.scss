@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .policyList {
   // margin-top: 10rem;
 
@@ -50,6 +54,13 @@
   border-radius: 5px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   background: #fff;
+
+  .sectionAnchor {
+    position: relative;
+    // to account for the height
+    // of the nav bar
+    top: -135px;
+  }
 
   .topLevelHeader {
     display: flex;

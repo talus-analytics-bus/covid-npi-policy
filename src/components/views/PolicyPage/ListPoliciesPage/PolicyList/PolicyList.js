@@ -103,6 +103,10 @@ const PolicyList = props => {
             <React.Fragment key={categoryName}>
               {categoryName !== "Unspecified" && (
                 <div className={styles.topLevelContainer}>
+                  <a
+                    className={styles.sectionAnchor}
+                    name={`${categoryName}`}
+                  />
                   <ExpandingSection
                     open={category.open}
                     onOpen={() => {

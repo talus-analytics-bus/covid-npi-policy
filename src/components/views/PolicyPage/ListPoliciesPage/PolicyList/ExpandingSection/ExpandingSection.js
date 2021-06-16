@@ -117,6 +117,12 @@ const ExpandingSection = props => {
     }
   };
 
+  const { onOpen } = props;
+  React.useEffect(() => {
+    console.log("open useEffect");
+    if (open) onOpen && onOpen();
+  }, [open]);
+
   const childElements = renderChildren && children.slice(1);
 
   // detect onBlur, set a no-time timer to close it next tick

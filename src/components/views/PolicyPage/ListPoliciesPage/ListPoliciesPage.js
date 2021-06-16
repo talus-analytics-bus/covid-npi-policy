@@ -212,6 +212,7 @@ const ListPoliciesPage = props => {
           )}
         </section>
       )}
+      <div className={styles.scrollOffSpacer} />
     </article>
   );
 };
