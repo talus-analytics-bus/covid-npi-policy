@@ -7,6 +7,8 @@ import "tippy.js/themes/light.css";
 import styles from "./Tooltip.module.scss";
 import PolicyCategoryIcon from "../../../../PolicyCategoryIcon/PolicyCategoryIcon";
 
+import { policyContext } from "../../../../PolicyRouter/PolicyRouter";
+
 const formatDate = date => {
   if (!date) return undefined;
   return new Date(date).toLocaleString("en-de", {
@@ -27,6 +29,16 @@ const TooltipContent = ({
 }) => {
   const newPolicyCount =
     highlightPolicies && Object.values(highlightPolicies).flat().length;
+
+  const { setPolicyObject } = React.useContext(policyContext);
+
+  const handleLink = (e, category) => {
+    e.preventDefault();
+    setPolicyObject(prev => ({
+      ...prev,
+      [category]: { ...prev[category], open: true },
+    }));
+  };
 
   return (
     <div
@@ -58,7 +70,12 @@ const TooltipContent = ({
       {highlightPolicies && (
         <section className={styles.policies}>
           {Object.entries(highlightPolicies).map(([category, policies]) => (
-            <a key={category} href="/policymaps" className={styles.policyLink}>
+            <a
+              onClick={e => handleLink(e, category)}
+              key={category}
+              href="/policymaps"
+              className={styles.policyLink}
+            >
               <PolicyCategoryIcon
                 category={category}
                 style={{ width: "1.5em", height: "1.5em" }}
