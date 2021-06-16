@@ -504,9 +504,8 @@ export const DownloadBtn = ({
   setButtonLoading = () => "",
 }) => {
   // define custom class names
-  const thisClassNames = {
-    [styles.loading]: buttonLoading || disabled,
-  };
+  const thisClassNames = {};
+  if (buttonLoading || disabled) thisClassNames[styles.inactive] = true;
   class_name.forEach(d => {
     thisClassNames[styles[d]] = true;
   });

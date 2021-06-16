@@ -179,6 +179,11 @@
       justify-content: center;
     }
   }
+  &.inactive {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.75;
+  }
 
   button {
     text-align: left;
