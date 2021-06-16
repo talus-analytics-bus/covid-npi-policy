@@ -126,9 +126,6 @@ const ListPoliciesPage = props => {
           </figure>
         )}
       </header>
-      <section className={styles.chartAndMap}>
-        <SnapshotChartSection />
-      </section>
       {iso3 !== "Unspecified" && status.caseload !== "error" && (
         <section className={styles.caseloadPlot}>
           {/* {status.caseload === "error" && ( */}
@@ -172,6 +169,7 @@ const ListPoliciesPage = props => {
           )}
         </section>
       )}
+      <SnapshotChartSection />
       <IntroSection />
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
