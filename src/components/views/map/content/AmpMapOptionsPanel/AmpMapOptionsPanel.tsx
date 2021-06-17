@@ -55,7 +55,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const geoOptions: Option[] = [
     {
       name: "United States",
-      value: "us",
+      value: "us-county-plus-state",
       description:
         "View data for the United States at the state and/or county level",
       child: (
