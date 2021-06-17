@@ -36,13 +36,13 @@ import {
 } from "./helpers";
 import { execute, PolicyStatusCounts } from "components/misc/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
-import SettingsContext, { SettingsContextProps } from "context/SettingsContext";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import MapOptionContext, {
   MapOptionContextProps,
 } from "../../context/MapOptionContext";
 import { Option } from "components/common/OptionControls/types";
+import Settings from "Settings";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -183,9 +183,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   const featureName: string = getFeatureName(feature);
 
   // context
-  const { DISABLE_POLICY_LINK_IF_ZERO } = useContext<SettingsContextProps>(
-    SettingsContext
-  );
+  const { DISABLE_POLICY_LINK_IF_ZERO } = Settings;
   const { subcategoryOptions } = useContext<MapOptionContextProps>(
     MapOptionContext
   );

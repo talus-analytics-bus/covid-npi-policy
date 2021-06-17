@@ -30,9 +30,7 @@ import { Version, Count, execute } from "./components/misc/Queries";
 // styles and assets
 import styles from "./App.module.scss";
 import classNames from "classnames";
-import loadingSvg from "./assets/images/loading.svg";
 import { InfoTooltipProvider } from "context/InfoTooltipContext";
-import { SettingsDefaults, SettingsProvider } from "context/SettingsContext";
 import { LoadingSpinner } from "components/common";
 
 //: React.FC
@@ -113,202 +111,198 @@ const App = () => {
   if (versions === null || counts === null) return <div />;
   else
     return (
-      <SettingsProvider value={SettingsDefaults}>
-        <InfoTooltipProvider value={{ setInfoTooltipContent }}>
-          <BrowserRouter>
-            <Nav {...{ page }} />
-            <Switch>
-              <React.Fragment>
-                <div className={classNames(styles.page, styles[page])}>
-                  {
-                    // Data page
-                    <Route
-                      exact
-                      path="/data"
-                      render={() => {
-                        const urlParams = new URLSearchParams(
-                          window.location.search
-                        );
-                        const type = urlParams.get("type");
-                        const filtersPolicyStrLegacy = urlParams.get("filters");
-                        const filtersPolicyStr = urlParams.get(
-                          "filters_policy"
-                        );
-                        const filtersChallengeStr = urlParams.get(
-                          "filters_challenge"
-                        );
-                        const filtersPlanStr = urlParams.get("filters_plan");
-                        const urlFilterParamsPolicy = JSON.parse(
-                          filtersPolicyStr
-                        );
-                        const urlFilterParamsPolicyLegacy = JSON.parse(
-                          filtersPolicyStrLegacy
-                        );
-                        const urlFilterParamsChallenge = JSON.parse(
-                          filtersChallengeStr
-                        );
-                        const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
-                        return (
-                          <Data
-                            {...{
-                              setLoading,
-                              loading,
-                              setPage,
-                              setInfoTooltipContent,
-                              urlFilterParamsPolicy:
-                                urlFilterParamsPolicyLegacy ||
-                                urlFilterParamsPolicy,
-                              urlFilterParamsPlan,
-                              urlFilterParamsChallenge,
-                              counts,
-                              type,
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  }
-                  {
-                    // Root: Landing Page
-                    <Route
-                      exact
-                      path="/"
-                      render={() => {
-                        return <Landing {...{ setPage, setLoading }} />;
-                      }}
-                    />
-                  }
-                  {
-                    // Map page
-                    <Route
-                      exact
-                      path="/policymaps"
-                      render={() => {
-                        return (
-                          <Map
-                            {...{
-                              versions,
-                              setPage,
-                              loading,
-                              setLoading,
-                              setInfoTooltipContent,
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  }
-                  {
-                    // About page
-                    <Route
-                      path="/about/:subpage"
-                      render={routeProps => {
-                        return (
-                          <About
-                            {...{
-                              setPage,
-                              setLoading,
-                              initTab: routeProps.match.params.subpage,
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  }
-                  {
-                    // Contact us page
-                    <Route
-                      exact
-                      path="/contact"
-                      render={() => {
-                        return <Contact {...{ setPage, setLoading }} />;
-                      }}
-                    />
-                  }
-                  {
-                    // // Documentation page
-                    // <Route
-                    //   exact
-                    //   path="/data/documentation"
-                    //   render={() => {
-                    //     return (
-                    //       <Documentation
-                    //         {...{
-                    //           setPage,
-                    //           setLoading
-                    //         }}
-                    //       />
-                    //     );
-                    //   }}
-                    // />
-                  }
-                  {
-                    // Model page
-                    <Route
-                      exact
-                      path="/model"
-                      render={() => {
-                        return <PolicyModel {...{ setPage, setLoading }} />;
-                      }}
-                    />
-                  }
-                  {/* { */}
-                  {/*   // policy page */}
-                  {/*   <Route */}
-                  {/*     path="/policy" */}
-                  {/*     render={() => { */}
-                  {/*       return ( */}
-                  {/*         <PolicyPage */}
-                  {/*           {...{ */}
-                  {/*             setPage, */}
-                  {/*             setLoading, */}
-                  {/*             policyPageCaseload, */}
-                  {/*             setPolicyPageCaseload, */}
-                  {/*           }} */}
-                  {/*         /> */}
-                  {/*       ); */}
-                  {/*     }} */}
-                  {/*   /> */}
-                  {/* } */}
-                  {
-                    // policy page
-                    <Route path="/policies/:iso3/:state">
-                      <PolicyRouter {...{ setPage, setLoading }} />
-                    </Route>
-                  }
-                </div>
-              </React.Fragment>
-            </Switch>
-            {page !== "policymaps" && page !== "landing" && (
-              <Footer {...{ page, versions }} />
-            )}
-            {
-              // // Loading spinner
-              // <div
-              //   className={classNames(styles.loading, { [styles.on]: loading })}
-              // >
-              //   <img src={loadingSvg} alt={"Loading spinner"} />
-              // </div>
-            }
-            {<LoadingSpinner ready={!loading} fullscreen={true} />}
-            {<BrowserDetection>{modalToShow}</BrowserDetection>}
-          </BrowserRouter>
+      <InfoTooltipProvider value={{ setInfoTooltipContent }}>
+        <BrowserRouter>
+          <Nav {...{ page }} />
+          <Switch>
+            <React.Fragment>
+              <div className={classNames(styles.page, styles[page])}>
+                {
+                  // Data page
+                  <Route
+                    exact
+                    path="/data"
+                    render={() => {
+                      const urlParams = new URLSearchParams(
+                        window.location.search
+                      );
+                      const type = urlParams.get("type");
+                      const filtersPolicyStrLegacy = urlParams.get("filters");
+                      const filtersPolicyStr = urlParams.get("filters_policy");
+                      const filtersChallengeStr = urlParams.get(
+                        "filters_challenge"
+                      );
+                      const filtersPlanStr = urlParams.get("filters_plan");
+                      const urlFilterParamsPolicy = JSON.parse(
+                        filtersPolicyStr
+                      );
+                      const urlFilterParamsPolicyLegacy = JSON.parse(
+                        filtersPolicyStrLegacy
+                      );
+                      const urlFilterParamsChallenge = JSON.parse(
+                        filtersChallengeStr
+                      );
+                      const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
+                      return (
+                        <Data
+                          {...{
+                            setLoading,
+                            loading,
+                            setPage,
+                            setInfoTooltipContent,
+                            urlFilterParamsPolicy:
+                              urlFilterParamsPolicyLegacy ||
+                              urlFilterParamsPolicy,
+                            urlFilterParamsPlan,
+                            urlFilterParamsChallenge,
+                            counts,
+                            type,
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // Root: Landing Page
+                  <Route
+                    exact
+                    path="/"
+                    render={() => {
+                      return <Landing {...{ setPage, setLoading }} />;
+                    }}
+                  />
+                }
+                {
+                  // Map page
+                  <Route
+                    exact
+                    path="/policymaps"
+                    render={() => {
+                      return (
+                        <Map
+                          {...{
+                            versions,
+                            setPage,
+                            loading,
+                            setLoading,
+                            setInfoTooltipContent,
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // About page
+                  <Route
+                    path="/about/:subpage"
+                    render={routeProps => {
+                      return (
+                        <About
+                          {...{
+                            setPage,
+                            setLoading,
+                            initTab: routeProps.match.params.subpage,
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                }
+                {
+                  // Contact us page
+                  <Route
+                    exact
+                    path="/contact"
+                    render={() => {
+                      return <Contact {...{ setPage, setLoading }} />;
+                    }}
+                  />
+                }
+                {
+                  // // Documentation page
+                  // <Route
+                  //   exact
+                  //   path="/data/documentation"
+                  //   render={() => {
+                  //     return (
+                  //       <Documentation
+                  //         {...{
+                  //           setPage,
+                  //           setLoading
+                  //         }}
+                  //       />
+                  //     );
+                  //   }}
+                  // />
+                }
+                {
+                  // Model page
+                  <Route
+                    exact
+                    path="/model"
+                    render={() => {
+                      return <PolicyModel {...{ setPage, setLoading }} />;
+                    }}
+                  />
+                }
+                {/* { */}
+                {/*   // policy page */}
+                {/*   <Route */}
+                {/*     path="/policy" */}
+                {/*     render={() => { */}
+                {/*       return ( */}
+                {/*         <PolicyPage */}
+                {/*           {...{ */}
+                {/*             setPage, */}
+                {/*             setLoading, */}
+                {/*             policyPageCaseload, */}
+                {/*             setPolicyPageCaseload, */}
+                {/*           }} */}
+                {/*         /> */}
+                {/*       ); */}
+                {/*     }} */}
+                {/*   /> */}
+                {/* } */}
+                {
+                  // policy page
+                  <Route path="/policies/:iso3/:state">
+                    <PolicyRouter {...{ setPage, setLoading }} />
+                  </Route>
+                }
+              </div>
+            </React.Fragment>
+          </Switch>
+          {page !== "policymaps" && page !== "landing" && (
+            <Footer {...{ page, versions }} />
+          )}
           {
-            // Info tooltip that is displayed whenever an info tooltip icon (i)
-            // is hovered on in the site. The content for this tooltip is set by
-            // `setInfoTooltipContent`.
-            <ReactTooltip
-              id={"infoTooltip"}
-              type="light"
-              effect="float"
-              place="right"
-              delayHide={250}
-              clickable={true}
-              getContent={() => infoTooltipContent}
-            />
+            // // Loading spinner
+            // <div
+            //   className={classNames(styles.loading, { [styles.on]: loading })}
+            // >
+            //   <img src={loadingSvg} alt={"Loading spinner"} />
+            // </div>
           }
-        </InfoTooltipProvider>
-      </SettingsProvider>
+          {<LoadingSpinner ready={!loading} fullscreen={true} />}
+          {<BrowserDetection>{modalToShow}</BrowserDetection>}
+        </BrowserRouter>
+        {
+          // Info tooltip that is displayed whenever an info tooltip icon (i)
+          // is hovered on in the site. The content for this tooltip is set by
+          // `setInfoTooltipContent`.
+          <ReactTooltip
+            id={"infoTooltip"}
+            type="light"
+            effect="float"
+            place="right"
+            delayHide={250}
+            clickable={true}
+            getContent={() => infoTooltipContent}
+          />
+        }
+      </InfoTooltipProvider>
     );
 };
 

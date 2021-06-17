@@ -42,6 +42,7 @@ import MapOptionContext from "../../views/map/context/MapOptionContext";
 import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
 import { elementIsMapCanvas } from "./plugins/helpers";
 import useEventListener from "components/views/PolicyPage/hooks/useEventListener";
+import Settings from "Settings";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
