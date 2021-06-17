@@ -303,9 +303,9 @@ export const initMap = ({
                     defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
                 ...zoomSettings,
-              },
-              // insert this layer just behind the `priorLayer`
-              defaults[mapId].priorLayer
+              }
+              // // insert this layer just behind the `priorLayer`
+              // defaults[mapId].priorLayer
             );
 
             // add circle layer
@@ -323,9 +323,9 @@ export const initMap = ({
                     defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
                 ...zoomSettings,
-              },
-              // insert this layer just behind the `priorLayer`
-              defaults[mapId].priorLayer
+              }
+              // // insert this layer just behind the `priorLayer`
+              // defaults[mapId].priorLayer
             );
 
             // apply filters to main circle and shadow if applicable
