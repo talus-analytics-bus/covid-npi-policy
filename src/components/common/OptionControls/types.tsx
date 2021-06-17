@@ -59,6 +59,13 @@ export interface Option {
    * rendered inside component.
    */
   setInfoTooltipContent?(): void;
+
+  /**
+   * Optional: Function called on an option value to determine whether this
+   * option is considered checked.
+   * @param v The value of the child option.
+   */
+  isChecked?(v: string | number): boolean;
 }
 
 export interface OptionWidget {

@@ -35,7 +35,7 @@ interface AmpMapOptionsPanelProps {
    * used for the map.
    * @param newMapId The new `mapId` to which the map component should be set.
    */
-  setMapId(newMapId: string): void;
+  setMapId(newMapId: MapId): void;
 
   categoryOptions: Option[];
   subcategoryOptions: Option[];
@@ -56,13 +56,16 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
     {
       name: "United States",
       value: "us-county-plus-state",
+      isChecked: v => {
+        return typeof v === "string" && v.startsWith("us");
+      },
       description:
         "View data for the United States at the state and/or county level",
       child: (
         <OptionRadioSet
           key={"subGeoToggle"}
           options={usSubGeoOptions}
-          callback={selected => setMapId(selected[0].value as string)}
+          callback={selected => setMapId(selected[0].value as MapId)}
           selectedOptions={usSubGeoOptions.filter(o => o.value === mapId)}
           {...{ setInfoTooltipContent }}
         />
@@ -72,6 +75,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
       name: "World (country-level policies)",
       value: "global",
       description: "View data for the world at the country level",
+      isChecked: v => v === "global",
     },
   ];
   const curMapOptions = useContext(MapOptionContext);
@@ -293,10 +297,10 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           key={"geoToggle"}
           options={geoOptions}
           callback={selected => {
-            setMapId(selected[0].value as string);
+            setMapId(selected[0].value as MapId);
           }}
-          selectedOptions={geoOptions.filter(o =>
-            mapId.startsWith(o.value as string)
+          selectedOptions={geoOptions.filter(
+            o => o.isChecked !== undefined && o.isChecked(mapId)
           )}
           {...{ setInfoTooltipContent }}
         />
