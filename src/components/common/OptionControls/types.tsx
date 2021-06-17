@@ -1,7 +1,4 @@
-import {
-  ChangeEvent,
-  ReactElement,
-} from "react-transition-group/node_modules/@types/react";
+import { ReactElement } from "react-transition-group/node_modules/@types/react";
 
 export interface Option {
   /**
