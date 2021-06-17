@@ -900,12 +900,34 @@ function getSourceLayers(mapId, sourceTypeKey, layerListKey) {
   return layersOfType;
 }
 
+/**
+ * Given the master data object and the key to the data series of interest,
+ * return the min and max observation vals. for that data series that should be
+ * used for relative comparisons in the visualization.
+ *
+ * If min/max are not explicitly set but required to be, an error is thrown. If
+ * they are not required to be explicitly set, the min/max are computed
+ * directly from the data series.
+ *
+ * @param {Object} data The master data object containing all data series.
+ * @param {string} key The key to the data series of interest.
+ */
 function getMinMaxVals(data, key) {
   const curSeries = data[key];
   if (curSeries.max_all_time !== undefined && curSeries.max_all_time !== null) {
+    // return explicitly determined min/max values
     return [curSeries.min_all_time.value, curSeries.max_all_time.value];
-  } else
+  } else if (Settings.REQUIRE_EXPLICIT_MIN_MAX) {
+    // throw error if explicit min/max required
+    throw Error(
+      "Min/Max observation data are missing from the data series for key = " +
+        key +
+        ". Please ensure the min/max is provided in the API response."
+    );
+  } else {
+    // compute min/max from data series directly
     return [d3.min(data[key], d => d.value), d3.max(data[key], d => d.value)];
+  }
 }
 
 /**

@@ -613,6 +613,20 @@ export const execute = async function({ queries }) {
       for (let i = 0; i < v.length; i++) {
         const res = await v[i];
         results[k] = results[k].concat(res);
+
+        // add min and max observations if any
+        ["max_all_time", "min_all_time"].forEach(minMaxField => {
+          if (res[minMaxField] !== undefined) {
+            if (results[k][minMaxField] !== undefined) {
+              throw Error(
+                `Field '${minMaxField}}' was already defined on results for ` +
+                  `metric with id = '${k}'. It can only be defined by one ` +
+                  `API response.`
+              );
+            }
+            results[k][minMaxField] = res[minMaxField];
+          }
+        });
       }
     } else {
       const res = await v;
