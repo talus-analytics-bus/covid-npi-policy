@@ -40,6 +40,7 @@ import {
   mapGreen6,
   noDataGray,
 } from "assets/styles/vars.module.scss";
+import ObservationReduxQuery from "components/misc/ObservationReduxQuery";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -318,7 +319,7 @@ export const allMapMetrics = {
       styleOptions: { outline: true },
     },
     {
-      queryFunc: ObservationQuery,
+      queryFunc: ObservationReduxQuery,
       for: ["circle"],
       params: {
         metric_id: 102,
