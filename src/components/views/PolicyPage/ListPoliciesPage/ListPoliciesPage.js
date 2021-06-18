@@ -9,8 +9,6 @@ import {
 
 import { MiniMap } from "../MiniMap/MiniMap";
 
-import SnapshotChartSection from "./SnapshotChart/SnapshotChartSection";
-import IntroParagraph from "./IntroParagraph/IntroParagraph.js";
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
 import SearchResults from "./SearchResults/SearchResults";
@@ -18,7 +16,6 @@ import SearchResults from "./SearchResults/SearchResults";
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./ListPoliciesPage.module.scss";
-import PolicyEnvironmentPlot from "./PolicyEnvironmentPlot/PolicyEnvironmentPlot";
 import IntroSection from "./IntroSection/IntroSection";
 
 const ListPoliciesPage = props => {
