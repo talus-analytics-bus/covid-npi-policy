@@ -12,8 +12,8 @@ import moment from "moment";
 
 const Footer = ({ page, versions }) => {
   // get last updated date
-  const lastUpdatedPolicy = versions.find(d => d.type === "Policy data");
-  const lastUpdatedCases = versions.find(d => d.type === "COVID-19 case data");
+  const lastUpdatedPolicy = versions.find(d => d.name === "Policy data");
+  const lastUpdatedCases = versions.find(d => d.name === "COVID-19 case data");
   const lastUpdatedDatePolicy =
     lastUpdatedPolicy !== undefined ? lastUpdatedPolicy.date : null;
   const lastUpdatedDateCases =
