@@ -19,6 +19,7 @@ import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./ListPoliciesPage.module.scss";
 import PolicyEnvironmentPlot from "./PolicyEnvironmentPlot/PolicyEnvironmentPlot";
+import IntroSection from "./IntroSection/IntroSection";
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
@@ -126,23 +127,11 @@ const ListPoliciesPage = props => {
           </figure>
         )}
       </header>
-      {iso3 !== "Unspecified" && status.caseload !== "error" && (
-        <section className={styles.caseloadPlot}>
-          {/* {status.caseload === "error" && ( */}
-          {/*   <h3>No caseload data found for {locationName}</h3> */}
-          {/* )} */}
-          <PolicyEnvironmentPlot />
-        </section>
-      )}
-      <div className={styles.barChartAndParagraph}>
-        <SnapshotChartSection />
-        <IntroParagraph />
-      </div>
+      {iso3 !== "Unspecified" && <IntroSection />}
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
           {iso3 !== "Unspecified" && <h2>Find a policy</h2>}
           <PolicyFilterBar />
-
           {!searchActive && (
             <>
               {status.policies === "loading" && (
