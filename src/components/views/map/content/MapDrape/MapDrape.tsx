@@ -48,7 +48,7 @@ export const MapDrape: FC<MapDrapeProps> = ({
                         return true;
                       } else if (
                         d.type === "COVID-19 county case data" &&
-                        mapId === "us-county"
+                        mapId.startsWith("us-county")
                       ) {
                         return true;
                       } else if (d.type === "Policy data") {
