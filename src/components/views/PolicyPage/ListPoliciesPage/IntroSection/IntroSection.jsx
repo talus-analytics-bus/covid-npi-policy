@@ -11,7 +11,7 @@ import { policyContext } from "../../PolicyRouter/PolicyRouter";
 const IntroSection = () => {
   const { policySummaryObject } = useContext(policyContext);
 
-  console.log(policySummaryObject);
+  // console.log(policySummaryObject);
   return (
     <section>
       <div className={styles.policyEnvironment}>

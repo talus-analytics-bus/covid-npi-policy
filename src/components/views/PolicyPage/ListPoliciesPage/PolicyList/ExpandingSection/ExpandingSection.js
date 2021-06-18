@@ -119,7 +119,6 @@ const ExpandingSection = props => {
 
   const { onOpen } = props;
   React.useEffect(() => {
-    console.log("open useEffect");
     if (open) onOpen && onOpen();
   }, [open]);
 

@@ -280,8 +280,6 @@ const PolicyEnvironmentPlot = () => {
       ? dim.yAxis.height / maxDay.count
       : 6.5;
 
-  console.log(policiesByDate);
-
   return (
     <figure>
       {status.caseload === "loaded" ? (
