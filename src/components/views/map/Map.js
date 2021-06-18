@@ -61,8 +61,8 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
   const casesLastUpdated =
     mapId === "us"
-      ? versions.find(d => d.type === "COVID-19 case data")
-      : versions.find(d => d.type === "COVID-19 case data (countries)");
+      ? versions.find(d => d.name === "COVID-19 case data")
+      : versions.find(d => d.name === "COVID-19 case data (countries)");
   const casesLastUpdatedDate = casesLastUpdated
     ? moment(casesLastUpdated.last_datum_date)
     : moment();
@@ -203,9 +203,9 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
 
   // last updated date of overall data
   const lastUpdatedDateOverall = versions.filter(d => {
-    if (d.type === "COVID-19 case data (countries)" && mapId === "us") {
+    if (d.name === "COVID-19 case data (countries)" && mapId === "us") {
       return false;
-    } else if (d.type === "COVID-19 case data" && mapId === "global") {
+    } else if (d.name === "COVID-19 case data" && mapId === "global") {
       return false;
     } else return true;
   })[0].date;
@@ -252,20 +252,20 @@ const Map = ({ setLoading, setPage, versions, ...props }) => {
                             {versions
                               .filter(d => {
                                 if (
-                                  d.type === "COVID-19 case data (countries)" &&
+                                  d.name === "COVID-19 case data (countries)" &&
                                   mapId === "us"
                                 ) {
                                   return false;
                                 } else if (
-                                  d.type === "COVID-19 case data" &&
+                                  d.name === "COVID-19 case data" &&
                                   mapId === "global"
                                 ) {
                                   return false;
                                 } else return true;
                               })
                               .map(d => (
-                                <p key={d.type}>
-                                  <b>{d.type}</b> last updated on{" "}
+                                <p key={d.name}>
+                                  <b>{d.name}</b> last updated on{" "}
                                   {moment(d.date).format("MMM D, YYYY")}
                                   {d.last_datum_date !== null && (
                                     <span>
