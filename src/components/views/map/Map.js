@@ -90,10 +90,9 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   const [policyResolution, setPolicyResolution] = useState("geo");
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
-  const casesLastUpdated =
-    mapId === "us"
-      ? versions.find(d => d.type === "COVID-19 case data")
-      : versions.find(d => d.type === "COVID-19 case data (countries)");
+  const casesLastUpdated = versions.find(
+    d => d.name.includes("COVID-19") && d.map_types.includes(mapId)
+  );
   const casesLastUpdatedDate = casesLastUpdated
     ? moment(casesLastUpdated.last_datum_date)
     : moment();
@@ -237,11 +236,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // CONSTANTS // -----------------------------------------------------------//
   // last updated date of overall data
   const lastUpdatedDateOverall = versions.filter(d => {
-    if (d.type === "COVID-19 case data (countries)" && mapId === "us") {
-      return false;
-    } else if (d.type === "COVID-19 case data" && mapId === "global") {
-      return false;
-    } else return true;
+    d.map_types.includes("all") || d.map_types.includes(mapId);
   })[0].date;
 
   // EFFECT HOOKS // -------------------------------------------------------------//
