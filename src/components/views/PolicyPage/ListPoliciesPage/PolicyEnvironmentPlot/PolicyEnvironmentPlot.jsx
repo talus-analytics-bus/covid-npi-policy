@@ -396,7 +396,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
           )}
         </svg>
       )}
-      <figcaption>
+      <figcaption className={styles.citation}>
         Caseload Source:{" "}
         {state === "national" ? (
           <a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">
