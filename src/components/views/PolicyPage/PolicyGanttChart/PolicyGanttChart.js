@@ -7,7 +7,7 @@ import GanttChartSVG from "./GanttChartSVG/GanttChartSVG";
 
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
-import styles from "./CaseloadPlot.module.scss";
+import styles from "./PolicyGanttChart.module.scss";
 
 const rollingAverage = (series, windowSize) => {
   const padded = [...Array(windowSize).fill(0), ...series];
