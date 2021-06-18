@@ -281,7 +281,7 @@ const PolicyEnvironmentPlot = ({ path }) => {
       : 6.5;
 
   return (
-    <>
+    <figure>
       {status.caseload === "loaded" ? (
         <h2 className={styles.caseloadHeader}>Policy environment over time</h2>
       ) : (
@@ -396,7 +396,20 @@ const PolicyEnvironmentPlot = ({ path }) => {
           )}
         </svg>
       )}
-    </>
+      <figcaption>
+        Caseload Source:{" "}
+        {state === "national" ? (
+          <a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">
+            COVID-19 Data Repository by the Center for Systems Science and
+            Engineering (CSSE) at Johns Hopkins University
+          </a>
+        ) : (
+          <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+            New York Times COVID-19 Data
+          </a>
+        )}
+      </figcaption>
+    </figure>
   );
 };
 

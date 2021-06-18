@@ -131,29 +131,7 @@ const ListPoliciesPage = props => {
           {/* {status.caseload === "error" && ( */}
           {/*   <h3>No caseload data found for {locationName}</h3> */}
           {/* )} */}
-          <figure>
-            <PolicyEnvironmentPlot />
-            {/* <CaseloadPlot /> */}
-            <figcaption>
-              Caseload Source:{" "}
-              {state === "national" ? (
-                <a
-                  target="_blank"
-                  href="https://github.com/CSSEGISandData/COVID-19"
-                >
-                  COVID-19 Data Repository by the Center for Systems Science and
-                  Engineering (CSSE) at Johns Hopkins University
-                </a>
-              ) : (
-                <a
-                  target="_blank"
-                  href="https://github.com/nytimes/covid-19-data"
-                >
-                  New York Times COVID-19 Data
-                </a>
-              )}
-            </figcaption>
-          </figure>
+          <PolicyEnvironmentPlot />
         </section>
       )}
       <div className={styles.barChartAndParagraph}>
