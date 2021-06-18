@@ -55,7 +55,7 @@ const earliestDate = (a, b) => {
   return new Date(Math.min(new Date(a).getTime(), new Date(b).getTime()));
 };
 
-const PolicyEnvironmentPlot = ({ path }) => {
+const PolicyEnvironmentPlot = () => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const { caseload, status } = policyContextConsumer;
@@ -279,6 +279,8 @@ const PolicyEnvironmentPlot = ({ path }) => {
     maxDay && dim.yAxis.height / maxDay.count < 6.5
       ? dim.yAxis.height / maxDay.count
       : 6.5;
+
+  console.log(policiesByDate);
 
   return (
     <figure>

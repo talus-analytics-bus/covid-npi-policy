@@ -1,6 +1,8 @@
 import { Policy } from "../../../misc/Queries";
 import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 
+import buildSummaryObject from "./buildSummaryObject.js";
+
 export const CATEGORY_FIELD_NAME = "primary_ph_measure";
 export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
 
@@ -20,7 +22,12 @@ export const loadPolicyCategories = async ({
     method: "post",
     filters: filters,
     ordering: [["date_start_effective", sort]],
-    fields: ["id", CATEGORY_FIELD_NAME, "date_end_actual"],
+    fields: [
+      "id",
+      CATEGORY_FIELD_NAME,
+      "date_end_actual",
+      "date_start_effective",
+    ],
   });
 
   // functional format of useEffect using previous value
@@ -76,6 +83,7 @@ export const loadPolicyCategories = async ({
     };
 
     if (summarySetter) {
+      buildSummaryObject(policyResponse.data);
       summarySetter(buildObject({}, policyResponse.data, true));
       setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
     }

@@ -92,8 +92,6 @@ const PolicyList = props => {
     }
   };
 
-  console.log(policyObject);
-
   return (
     <div className={styles.policyList}>
       {policyObject &&

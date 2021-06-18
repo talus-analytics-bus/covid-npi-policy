@@ -265,7 +265,7 @@ const PolicyRouter = props => {
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
   // console.log(status);
-  console.log(policyObject);
+  // console.log(policyObject);
 
   return (
     <MiniMap.Provider scope={miniMapScope}>
