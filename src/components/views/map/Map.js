@@ -233,11 +233,12 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
     setInitialized(true);
   }, [filterDefs]);
 
+  const applicableVersions = versions.filter(d => {
+    return d.map_types.includes("all") || d.map_types.includes(mapId);
+  });
   // CONSTANTS // -----------------------------------------------------------//
   // last updated date of overall data
-  const lastUpdatedDateOverall = versions.filter(d => {
-    d.map_types.includes("all") || d.map_types.includes(mapId);
-  })[0].date;
+  const lastUpdatedDateOverall = applicableVersions[0].date;
 
   // EFFECT HOOKS // -------------------------------------------------------------//
   // init

@@ -35,29 +35,14 @@ export const MapDrape: FC<MapDrapeProps> = ({
               text={
                 <div>
                   {versions
-                    .filter(d => {
-                      if (
-                        d.type === "COVID-19 case data (countries)" &&
-                        mapId === "global"
-                      ) {
-                        return true;
-                      } else if (
-                        d.type === "COVID-19 case data" &&
-                        mapId === "us"
-                      ) {
-                        return true;
-                      } else if (
-                        d.type === "COVID-19 county case data" &&
-                        mapId.startsWith("us-county")
-                      ) {
-                        return true;
-                      } else if (d.type === "Policy data") {
-                        return true;
-                      } else return false;
-                    })
+                    .filter(
+                      d =>
+                        d.map_types.includes(mapId) ||
+                        d.map_types.includes("all")
+                    )
                     .map(d => (
-                      <p key={d.type}>
-                        <b>{d.type}</b> last updated on{" "}
+                      <p key={d.name}>
+                        <b>{d.name}</b> last updated on{" "}
                         {moment(d.date).format("MMM D, YYYY")}
                         {d.last_datum_date !== null && (
                           <span>
