@@ -41,6 +41,7 @@ import {
   noDataGray,
 } from "assets/styles/vars.module.scss";
 import ObservationReduxQuery from "components/misc/ObservationReduxQuery";
+import { MapDefaults, MetricMeta } from "./mapTypes";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -48,7 +49,7 @@ import ObservationReduxQuery from "components/misc/ObservationReduxQuery";
 // define default parameters for MapboxMap
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
-export const defaults = {
+export const defaults: MapDefaults = {
   // default map ID
   mapId: "us-county-plus-state",
 
@@ -561,7 +562,7 @@ const getCovidLocalMetricLink = (v, color, style) => {
 };
 
 // metric metadata used for display, tooltips, etc.
-export const metricMeta = {
+export const metricMeta: MetricMeta = {
   // unique ID of metric
 
   "74": {

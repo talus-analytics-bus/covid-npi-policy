@@ -4,6 +4,8 @@ import { isEmpty } from "./Util";
 
 // local utility functions
 import ObservationQuery from "./ObservationQuery";
+import { FC } from "react-transition-group/node_modules/@types/react";
+import { OptionSetProps } from "./queryTypes";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -481,22 +483,17 @@ export const Export = async function({ method, filters = null, class_name }) {
 /**
  * Get optionset items data from API.
  */
-export const OptionSet = async function({
+export const OptionSet = async ({
   method,
   fields = null,
   class_name = null,
-  ...params
-}) {
+}: OptionSetProps): Promise<any> => {
   let req;
   if (method === "get") {
     if (fields === null) {
       console.log("Error: `fields` is required for method GET.");
       return false;
     }
-    // else if (entity_name === null) {
-    //   console.log("Error: `entity_name` is required for method GET.");
-    //   return false;
-    // }
 
     // collate fields
     const params = new URLSearchParams();
@@ -604,8 +601,12 @@ export const Caseload = async ({
  * @param  {[type]} queries [description]
  * @return {[type]}         [description]
  */
-export const execute = async function({ queries }) {
-  const results = {};
+export const execute = async function({
+  queries,
+}: {
+  queries: Record<string, Promise<any>> | Record<string, Promise<any>[]>;
+}) {
+  const results: Record<string, any> = {};
   for (const [k, v] of Object.entries(queries)) {
     if (v === undefined || v === null) continue;
     if (typeof v !== "string" && v.length !== undefined) {

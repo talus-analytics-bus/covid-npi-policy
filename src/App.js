@@ -13,7 +13,7 @@ import { Footer } from "./components/layout";
 
 // views
 import Data from "./components/views/data/Data.js";
-import Map from "./components/views/map/Map.js";
+import Map from "./components/views/map/Map.tsx";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";

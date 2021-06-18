@@ -1,5 +1,6 @@
 /**
  * Page for a Mapbox map and related controls.
+ *
  * All data elements are defined in `plugins` directory on a per-project basis.
  * `plugins/data.js` defines metric metadata, metric data getter methods, etc.,
  *    , and default settings
@@ -7,18 +8,16 @@
  * `plugins/layers.js` defines the layers and styles
  */
 
-// standard packages
+// 3rd party packages
 import React, { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom"; // @ts-ignore
+import moment from "moment";
 
 // custom hooks
 import { usePrevious } from "../../misc/UtilsTyped";
 
 // context
 import { MapOptionProvider } from "./context/MapOptionContext";
-
-// 3rd party packages
-import moment from "moment";
 
 // local packages
 import { defaults, metricMeta } from "../../common/MapboxMap/plugins/data";
@@ -34,19 +33,26 @@ import PlaceQuery from "../../misc/PlaceQuery";
 import MapDrape from "./content/MapDrape/MapDrape";
 
 // assets and styles
-import { style, dark } from "./map.module.scss";
+import styles from "./map.module.scss";
 
 // common components
 import { LoadingSpinner, MapboxMap } from "../../common";
-import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
 import { replaceMapIdState, getParamsMapId } from "./helpers";
+import { FC } from "react";
+import { MapProps } from "../../common/MapboxMap/plugins/mapTypes";
+import PanelSet from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-
-const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
+const Map: FC<MapProps> = ({
+  loading,
+  setLoading,
+  setPage,
+  versions,
+  ...props
+}) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -96,7 +102,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   const casesLastUpdatedDate = casesLastUpdated
     ? moment(casesLastUpdated.last_datum_date)
     : moment();
-  defaults.minMaxDate.maxDate = casesLastUpdatedDate;
+  defaults.minMaxDate.maxDate = casesLastUpdatedDate.format("YYYY-MM-DD");
   const [date, setDate] = useState(casesLastUpdatedDate);
   // const [date, setDate] = useState(new moment("2021-06-09"));
   const prevDate = usePrevious(date);
@@ -113,7 +119,10 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   const prevCircle = usePrevious(circle);
 
   // dynamic map title
-  const getMapTitle = ({ fill, circle }) => {
+  const getMapTitle: Function = (
+    fill: string | null,
+    circle: string | null
+  ): string => {
     let title = "";
     const useAltTitles = true;
     if (useAltTitles) {
@@ -172,7 +181,6 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
         radio: false,
         primary: "primary_ph_measure",
         entity_name: "Policy",
-        className: dark,
       },
     },
   ]);
@@ -194,7 +202,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
    * @return {Promise}              [description]
    */
   const getData = useCallback(async () => {
-    const queries = {};
+    const queries: Record<string, Promise<any>> = {};
     // get all country places for tooltip names, etc.
     queries.places = PlaceQuery({ place_type: ["country"] });
 
@@ -291,7 +299,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // when map data selection changes, update dynamic title
   useEffect(
     function updateDynamicMapTitle() {
-      setMapTitle(getMapTitle({ fill, circle }));
+      setMapTitle(getMapTitle(fill, circle));
     },
     [circle, fill]
   );
@@ -314,7 +322,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   if (!initialized) return <div />;
   else
     return (
-      <div className={style}>
+      <div className={styles.map}>
         {
           // Drawer: holds map options
         }

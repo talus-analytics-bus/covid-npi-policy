@@ -6,7 +6,7 @@ import moment from "moment";
 import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle, PrimaryButton } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import { Metadata, OptionSet, Export, execute } from "../../misc/Queries.js";
+import { Metadata, OptionSet, Export, execute } from "../../misc/Queries.tsx";
 import { isEmpty, comma } from "../../misc/Util.js";
 
 // styles and assets

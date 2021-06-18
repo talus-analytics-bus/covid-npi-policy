@@ -1,7 +1,160 @@
+/**
+ * TypeScript types used by the Map and MapboxMap components.
+ */
+import { VersionDataProps } from "components/misc/queryTypes";
 import { Numeric } from "d3";
-import { Moment } from "moment";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";
 
+/**
+ * Props taken by the `Map` component, which renders a Mapbox map.
+ */
+export type MapProps = {
+  /**
+   * Whether the map is currently loading or not.
+   */
+  loading: boolean;
+
+  /**
+   * Sets whether the map is currently loading or not.
+   * @param {boolean} v True if the map is loading, false otherwise.
+   */
+  setLoading(v: boolean): void;
+
+  /**
+   * Sets the current page of the app to the provided value.
+   *
+   * Mainly used to style the nav bar based on the current page.
+   *
+   * @param v The page to which to set the app.
+   */
+  setPage(v: string): void;
+
+  /**
+   * Array of version data describing the last datum dates and last update
+   * dates of different data sources used in the app.
+   */
+  versions: VersionDataProps[];
+
+  /**
+   * Additional props used by the Map component.
+   *
+   * TODO destructure
+   */
+  props: any;
+};
+
+/**
+ * A list of allowed map IDs corresponding to the types of maps that have
+ * been implemented.
+ */
+export const validMapIds = [
+  "us-county-plus-state",
+  "us-county",
+  "us",
+  "global",
+] as const;
+
+/**
+ * Allowed map IDs corresponding to the types of maps that have
+ * been implemented.
+ */
+export type MapId = typeof validMapIds[number];
+
+/**
+ * Defines a type consisting of each MapId value as a key and a
+ * MapDefaultsEntry as an object.
+ *
+ * This is used exclusively to define `MapDefaults`.
+ */
+type MapIdEntries = { [K in MapId]: MapDefaultsEntry };
+
+/**
+ * Defines general map default options and contains specific map default
+ * options indexed by map ID (e.g., 'us', 'global', ...).
+ */
+export interface MapDefaults extends MapIdEntries {
+  /**
+   * The ID of the default map to render.
+   */
+  mapId: MapId;
+
+  /**
+   * The minimum and maximum dates that should be toggle-able on the map, for
+   * maps that show temporal series.
+   */
+  minMaxDate: {
+    /**
+     * The earliest possible date to allow on the map.
+     */
+    minDate: string;
+    /**
+     * The latest possible date to allow on the map.
+     */
+    maxDate: string;
+  };
+}
+
+/**
+ * Default settings for a map, such as a map of world countries or of USA
+ * states, that will be used to initialize the map.
+ */
+export type MapDefaultsEntry = {
+  /**
+   * Default circle metric to show, or null if none.
+   */
+  circle: string | null;
+
+  /**
+   * True if the default circle metric should be visible by default,
+   * false otherwise.
+   */
+  showCircle?: boolean;
+
+  /**
+   * Default fill metric to show, or null if none.
+   */
+  fill: string | null;
+
+  /**
+   * Mapbox style layer in front of which data layers should be inserted.
+   *
+   * For instance, setting `priorLayer` to `state-points` will cause any fill
+   * or circle layers added to this Mapbox map that represent data to be
+   * displayed in front of the `state-points` layer, which must exist on the
+   * Mapbox style used in this map.
+   */
+  priorLayer: string;
+
+  /**
+   * The initial viewport center point for the map.
+   */
+  initViewport: {
+    /**
+     * Latitude of viewport center point.
+     */
+    latitude: number;
+    /**
+     * Longitude of viewport center point.
+     */
+    longitude: number;
+    /**
+     * Zoom level at viewport center point.
+     */
+    zoom: number;
+  };
+};
+
+/**
+ * The policy resolution requested or to be displayed, which can be one of two
+ * values:
+ *
+ * "geo" -- policies affecting the geographic resolution displayed on the map
+ *
+ * "subgeo" -- policies affecting areas within but not equal to the geographic
+ * resolution displayed on the map. For example, if a map of world countries is
+ * shown, the "subgeo" refers to any policies that affect states, provinces,
+ * or localities of the country, but not national-level policies.
+ */
 export type PolicyResolution = "geo" | "subgeo";
 export type FeatureState = Record<string, any>;
 
@@ -130,13 +283,6 @@ export type MapMetric = {
   };
 };
 
-export const validMapIds = [
-  "us-county-plus-state",
-  "us-county",
-  "us",
-  "global",
-] as const;
-export type MapId = typeof validMapIds[number];
 export type DistancingLevel =
   | "Lockdown"
   | "Stay at home"

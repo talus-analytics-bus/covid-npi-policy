@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { LabeledIcon } from "../LabeledIcon";
 import styles from "./distancingicon.module.scss";
-import { metricMeta } from "../../../../../plugins/data.js";
+import { metricMeta } from "../../../../../plugins/data";
 
 // assets
 import { CovidLocalBadge } from "../CovidLocalBadge/CovidLocalBadge";
