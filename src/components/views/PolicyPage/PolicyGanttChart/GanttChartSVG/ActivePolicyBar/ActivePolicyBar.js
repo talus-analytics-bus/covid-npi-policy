@@ -1,6 +1,6 @@
 import React from "react";
 
-import { textBBox } from "../../CaseloadPlot";
+import { textBBox } from "../../PolicyGanttChart";
 
 const ActivePolicyBar = ({ dim, scale, activePolicy, svgElement }) => {
   const dateIssuedPos = scale.x(new Date(activePolicy.date_issued));

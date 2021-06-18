@@ -8,7 +8,7 @@ import {
   SUBCATEGORY_FIELD_NAME,
 } from "../../PolicyRouter/PolicyLoaders";
 
-import CaseloadPlot from "../../CaseloadPlotD3/CaseloadPlot";
+import CaseloadPlot from "../../PolicyGanttChart/PolicyGanttChart";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
