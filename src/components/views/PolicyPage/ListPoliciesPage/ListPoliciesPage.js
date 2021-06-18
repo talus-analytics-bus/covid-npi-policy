@@ -10,7 +10,7 @@ import {
 import { MiniMap } from "../MiniMap/MiniMap";
 
 import SnapshotChartSection from "./SnapshotChart/SnapshotChartSection";
-import IntroSection from "./IntroSection/IntroSection.js";
+import IntroParagraph from "./IntroParagraph/IntroParagraph.js";
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
 import SearchResults from "./SearchResults/SearchResults";
@@ -158,7 +158,7 @@ const ListPoliciesPage = props => {
       )}
       <div className={styles.barChartAndParagraph}>
         <SnapshotChartSection />
-        <IntroSection />
+        <IntroParagraph />
       </div>
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>

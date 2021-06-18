@@ -7,7 +7,7 @@ import { policyContext } from "../../PolicyRouter/PolicyRouter";
 // import policyPageDocumentIconActive from "../../../../../assets/icons/policyPageDocumentIconActive.svg";
 // import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
 
-import styles from "./IntroSection.module.scss";
+import styles from "./IntroParagraph.module.scss";
 
 const numberFormat = new Intl.NumberFormat("en-us");
 
@@ -25,7 +25,7 @@ const numbersToWords = number =>
     9: "nine",
   }[number] || numberFormat.format(number));
 
-const IntroSection = props => {
+const IntroParagraph = props => {
   const location = useLocation();
   const [iso3, state] = location.pathname
     .replace(/\/$/, "")
@@ -146,4 +146,4 @@ const IntroSection = props => {
   );
 };
 
-export default IntroSection;
+export default IntroParagraph;
