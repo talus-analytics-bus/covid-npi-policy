@@ -39,7 +39,6 @@ const arrayFillDates = ({
 };
 
 const buildSummaryObjectFaster = data => {
-  console.log(data);
   console.time("buildSummaryObjectFaster");
 
   // start date of earliest policy
@@ -101,7 +100,7 @@ const buildSummaryObjectFaster = data => {
   }
 
   console.timeEnd("buildSummaryObjectFaster");
-  console.log(obj);
+  return obj;
 };
 
 export default buildSummaryObjectFaster;
