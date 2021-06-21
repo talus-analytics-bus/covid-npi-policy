@@ -1,4 +1,5 @@
 import React from "react";
+import { MapSources } from "./mapTypes";
 
 /**
  * Define Mapbox sources for geometries, centroids, etc. and styles.
@@ -10,7 +11,7 @@ import React from "react";
  */
 
 // define map sources to provide features for plotting on the map
-export const mapSources = {
+export const mapSources: MapSources = {
   // map ID
   us: {
     // layer type that will be driven by this source
@@ -124,10 +125,6 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://nicoletalus.3a8qy0w1",
-        // url: "mapbox://nicoletalus.527dlmpc",
-        // url: "mapbox://nicoletalus.8n43la7h",
-        //  url: "mapbox://nicoletalus.3hl37c3u",
-        // url: "mapbox://nicoletalus.5weuste2",
         promoteId: "ISO_A3",
         filter: [
           "==",

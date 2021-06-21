@@ -1,8 +1,13 @@
 /**
  * TypeScript types used by the Map and MapboxMap components.
  */
-import { VersionDataProps } from "components/misc/queryTypes";
+import {
+  MetricData,
+  OptionSetDataProps,
+  VersionDataProps,
+} from "components/misc/queryTypes";
 import { Numeric } from "d3";
+import { ReactNode } from "react-transition-group/node_modules/@types/react";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";
 
 /**
@@ -41,6 +46,12 @@ export type MapProps = {
    * TODO destructure
    */
   props: any;
+
+  /**
+   * Sets tooltip content.
+   * @param tooltipContent The new content for the tooltip
+   */
+  setInfoTooltipContent(tooltipContent: any): void;
 };
 
 /**
@@ -59,6 +70,7 @@ export const validMapIds = [
  * been implemented.
  */
 export type MapId = typeof validMapIds[number];
+export type MapIdOrAll = typeof validMapIds[number] | "all";
 
 /**
  * Defines a type consisting of each MapId value as a key and a
@@ -238,9 +250,10 @@ export type MapStylesEntry = {
   geo_res: string;
   name: string;
   defaultFitBounds: number[][];
-  tooltip?: string;
+  tooltip?: string | ReactNode;
   minZoom?: number;
   maxZoom?: number;
+  attribution?: boolean;
 };
 
 export type MapStyles = Record<MapId, MapStylesEntry>;
@@ -255,7 +268,10 @@ export type MapSourcesGeometry = {
     minzoom?: number;
     maxzoom?: number;
     zoomLabel?: string;
+    filter?: any[];
   };
+  circleLayers?: MapMetric[]; // TODO assign type
+  fillLayers?: MapMetric[]; // TODO assign type
 };
 
 export type MapSourcesEntry = Record<string, MapSourcesGeometry>;
@@ -273,7 +289,7 @@ export type MapMetric = {
   params: ObservationQueryParams;
   for: ("circle" | "fill")[];
   id: string;
-  featureLinkField: string;
+  featureLinkField: "place_name" | "place_iso";
   styleId: Record<string, string>;
   filter: Array<any>;
   trend: boolean;
@@ -291,3 +307,76 @@ export type DistancingLevel =
   | "Open"
   | null;
 export type ElementsOrNull = (JSX.Element | null)[] | JSX.Element | null;
+
+/**
+ * Filter option information derived from optionset API responses
+ */
+export type FilterDef = {
+  field: string;
+  entity_name: string;
+  label: string;
+  radio: boolean;
+  defaultRadioValue?: string;
+  items: OptionSetDataProps[]; // TODO list of optionsets
+  primary?: string;
+};
+
+/**
+ * Object dictionary of filter definitions
+ */
+export type FilterDefs = Record<string, FilterDef>;
+
+/**
+ * Circle styling parameters for a Mapbox map
+ */
+export type CircleStyle = (
+  key: string,
+  linCircleScale: boolean
+) => Record<string, any>;
+
+/**
+ * Set of circle styling parameters for a Mapbox map indexed by key
+ * (i.e., style's unique IDxs)
+ */
+export type CircleStyles = Record<string, CircleStyle>;
+
+/**
+ * Fill styling parameters for a Mapbox map
+ */
+export type FillStyle = (
+  key: string,
+  geoHaveData?: string[],
+  maxVal?: number,
+  minVal?: number
+) => Record<string, any>;
+
+/**
+ * Set of fill styling parameters for a Mapbox map indexed by key
+ * (i.e., style's unique IDxs)
+ */
+export type FillStyles = Record<string, FillStyle>;
+
+/**
+ * Data for display in map
+ */
+export type MapData = Record<string, MetricData> | null;
+
+/**
+ * Fields that may link a geographic feature in a Mapbox source to a
+ * Metrics response datum.
+ */
+export type FeatureLinkFields = "place_name" | "place_iso";
+
+/**
+ * Possible types for a feature link field.
+ */
+export type FeatureLinkValues = string | undefined | null | number;
+
+/**
+ * Mapbox viewport properties
+ */
+export type ViewportProps = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+};

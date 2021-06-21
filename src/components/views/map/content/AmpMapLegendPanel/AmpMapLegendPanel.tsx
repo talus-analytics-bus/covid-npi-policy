@@ -5,7 +5,6 @@ import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel"
 import { metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   MapId,
-  MapSources,
   MapSourcesEntry,
   MapSourcesGeometry,
   MetricMeta,
@@ -21,13 +20,13 @@ import { Option } from "components/common/OptionControls/types";
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { mapSources } from "components/common/MapboxMap/plugins/sources";
 
-type ComponentProps = {
+type AmpMapLegendPanelProps = {
   linCircleScale: boolean;
   policyResolution: PolicyResolution;
   zoomLevel: number;
   panelSetId?: number;
 };
-export const AmpMapLegendPanel: FC<ComponentProps> = ({
+export const AmpMapLegendPanel: FC<AmpMapLegendPanelProps> = ({
   linCircleScale,
   policyResolution,
   zoomLevel,
@@ -178,7 +177,6 @@ const getCircleZoomLabel: Function = (mapId: MapId, zoom: number): string => {
   if (mapSources[mapId] === null || mapSources[mapId] === undefined) return "";
   const sourceIds: string[] = Object.keys(mapSources[mapId] as MapSourcesEntry);
   let zoomLabelSources: MapSourcesGeometry[] = [];
-  let foundMultiple: boolean = false;
   sourceIds
     .filter(sourceId => sourceId.startsWith("circle"))
     .forEach(sourceId => {

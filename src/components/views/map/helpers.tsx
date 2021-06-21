@@ -22,11 +22,12 @@ type BrowserHistoryRecord = {
 /**
  * Replaces the current browser history record with one that represents the
  * map with the defined ID
- * @param {History} history The browser History API instance
+ * @param {Window} history The window object
  * @param {MapId} mapId The ID of a map
  */
-export function replaceMapIdState(history: History, mapId: MapId): void {
-  history.replace(getMapHistoryState(mapId));
+export function replaceMapIdState(history: any, mapId: MapId): void {
+  if (history !== undefined)
+    history.replaceState(getMapHistoryState(mapId), "");
 }
 
 /**

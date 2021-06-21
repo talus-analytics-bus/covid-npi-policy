@@ -8,21 +8,24 @@
  */
 
 // 3rd party packages
-import * as d3 from "d3/dist/d3.min";
+import * as d3 from "d3";
 
 // assets and styles
-import {
-  mapGreen1,
-  mapGreen2,
-  mapGreen3,
-  mapGreen4,
-  mapGreen5,
-  mapGreen6,
-  noDataGray,
-} from "assets/styles/vars.module.scss";
+import mapGreen1 from "assets/styles/vars.module.scss";
+import mapGreen2 from "assets/styles/vars.module.scss";
+import mapGreen3 from "assets/styles/vars.module.scss";
+import mapGreen4 from "assets/styles/vars.module.scss";
+import mapGreen5 from "assets/styles/vars.module.scss";
+import mapGreen6 from "assets/styles/vars.module.scss";
+import noDataGray from "assets/styles/vars.module.scss";
 
 // utilities
-import { getLog10Scale, getLinearScale, range } from "../../../misc/Util";
+import {
+  getLog10Scale,
+  getLinearScale,
+  range,
+} from "components/misc/UtilsTyped";
+import { CircleStyles, FillStyles } from "./mapTypes";
 // import { geoHaveData } from "../MapboxMap";
 
 // assets
@@ -30,7 +33,7 @@ import { getLog10Scale, getLinearScale, range } from "../../../misc/Util";
 
 // constants
 // define default pattern style used below
-const defaultPatternStyle = key => {
+const defaultPatternStyle = (key: string) => {
   return {
     // "fill-pattern": "dots",
     "fill-opacity": [
@@ -52,7 +55,7 @@ const defaultPatternStyle = key => {
 // The value of each key is a function that returns a data-driven style based
 // on the feature state defined by the `key` passed as an argument. Styles that
 // are not data-driven should be represented as functions without any arguments
-const circleStyles = {
+const circleStyles: CircleStyles = {
   "metric-test-transp": (key, linCircleScale = false) => {
     return {
       circleColor: [
@@ -226,9 +229,16 @@ const lightTeal = "#e0f4f3";
 // const medTeal = "#41beb6";
 const darkTeal = "#349891";
 export const greenStepsScale = d3
-  .scaleLinear()
+  .scaleLinear<string, number>()
   .domain([0, 1]) // TODO dynamically
   .range([lightTeal, darkTeal]);
+
+interface GetQuantizedColorStyleProps {
+  colors: string[];
+  maxVal: number;
+  minVal: number;
+  key: string;
+}
 
 /**
  * Given a series of colors, the max and min values of the data series, and the
@@ -244,7 +254,12 @@ export const greenStepsScale = d3
  * Mapbox expression styling values with quantized color scale using linear
  * and evenly-sized bins.
  */
-const getQuantizedColorStyle = ({ colors, maxVal, minVal, key }) => {
+const getQuantizedColorStyle: Function = ({
+  colors,
+  maxVal,
+  minVal,
+  key,
+}: GetQuantizedColorStyleProps): any[] => {
   const nBins = colors.length;
   const diff = maxVal - minVal;
   const binSize = diff / nBins;
@@ -285,7 +300,7 @@ const getQuantizedColorStyle = ({ colors, maxVal, minVal, key }) => {
 // };
 
 // similar for fill styles
-const fillStyles = {
+const fillStyles: FillStyles = {
   "metric-test-pattern": key => {
     return defaultPatternStyle(key);
   },

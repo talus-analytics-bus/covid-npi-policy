@@ -21,14 +21,13 @@ import { defaults, allMapMetrics } from "./plugins/data";
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-export const initMap = ({
+export const initMap = (
   map,
   mapId,
-  data,
   geoHaveData,
   setShowLoadingSpinner,
-  callback,
-}) => {
+  callback
+) => {
   // get sources for current map (see `plugins/sources.js`)
   const sources = mapSources[mapId];
 
@@ -383,14 +382,7 @@ export const addSources = (map, mapId) => {
  * @param  {[type]}          selectedFeature [description]
  * @return {[type]}                          [description]
  */
-export const bindFeatureStates = ({
-  map,
-  mapId,
-  data,
-  selectedFeature,
-  circle,
-  fill,
-}) => {
+export const bindFeatureStates = (map, mapId, data, circle, fill) => {
   const circleMetricId = circle !== null ? circle.toString() : circle;
   const fillMetricId = fill !== null ? fill.toString() : fill;
   const curMapMetrics = allMapMetrics[mapId].filter(
@@ -422,6 +414,7 @@ const bindFeatureStatesForSource = ({
   data,
   curMapMetrics,
 }) => {
+  // eslint-disable-next-line
   for (const [_sourceTypeKey, source] of Object.entries(sourcesToBind)) {
     // first erase original feature state for all features
     curMapMetrics.forEach(metric => {
@@ -495,6 +488,7 @@ const bindFeatureStatesForSource = ({
 
       // bind updated feature state to any feature that matches the
       // feature props
+      // eslint-disable-next-line
       for (const [_sourceTypeKey, source] of Object.entries(sourcesToBind)) {
         const featureProps = {
           source: source.name,

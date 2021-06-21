@@ -10,7 +10,7 @@
 
 // 3rd party packages
 import React, { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom"; // @ts-ignore
+// import { useHistory } from "react-router-dom"; // @ts-ignore
 import moment from "moment";
 
 // custom hooks
@@ -42,8 +42,15 @@ import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
 import { replaceMapIdState, getParamsMapId } from "./helpers";
 import { FC } from "react";
-import { MapProps } from "../../common/MapboxMap/plugins/mapTypes";
-import PanelSet from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
+import {
+  FilterDefs,
+  MapProps,
+  MapStyles,
+  PolicyResolution,
+} from "../../common/MapboxMap/plugins/mapTypes";
+import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
+import useHistory from "components/misc/useHistory";
+import { VersionDataProps } from "components/misc/queryTypes";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -51,7 +58,7 @@ const Map: FC<MapProps> = ({
   setLoading,
   setPage,
   versions,
-  ...props
+  setInfoTooltipContent,
 }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
@@ -75,7 +82,7 @@ const Map: FC<MapProps> = ({
   const paramsMapId = getParamsMapId();
   const [mapId, _setMapId] = useState(defaultMapId);
   const prevMapId = usePrevious(mapId);
-  const history = useHistory();
+  const history: History = useHistory();
 
   /**
    * Always set map status to "changing" when map ID is changed
@@ -93,7 +100,9 @@ const Map: FC<MapProps> = ({
   );
 
   // whether to show policies at the selected geo or below it
-  const [policyResolution, setPolicyResolution] = useState("geo");
+  const [policyResolution, setPolicyResolution] = useState<PolicyResolution>(
+    "geo"
+  );
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
   const casesLastUpdated = versions.find(
@@ -153,7 +162,7 @@ const Map: FC<MapProps> = ({
   const [geoHaveData, setGeoHaveData] = useState(null);
 
   // definition data for filters to display in drawer content section
-  const [filterDefs, setFilterDefs] = useState([
+  const [filterDefs, setFilterDefs] = useState<FilterDefs[]>([
     {
       // name of filter (should match `field` below)
       primary_ph_measure: {
@@ -172,6 +181,9 @@ const Map: FC<MapProps> = ({
 
         // default value of radio selections
         defaultRadioValue: "Social distancing",
+
+        // placeholder
+        items: [],
       },
 
       // additional filters
@@ -181,6 +193,7 @@ const Map: FC<MapProps> = ({
         radio: false,
         primary: "primary_ph_measure",
         entity_name: "Policy",
+        items: [],
       },
     },
   ]);
@@ -228,7 +241,7 @@ const Map: FC<MapProps> = ({
     const optionsets = results["optionsets"];
 
     // set options for filters
-    const newFilterDefs = [...filterDefs];
+    const newFilterDefs: FilterDefs[] = [...filterDefs];
     newFilterDefs.forEach(d => {
       for (const [k] of Object.entries(d)) {
         if (!k.startsWith("date") && d[k].items === undefined)
@@ -241,7 +254,7 @@ const Map: FC<MapProps> = ({
     setInitialized(true);
   }, [filterDefs]);
 
-  const applicableVersions = versions.filter(d => {
+  const applicableVersions: VersionDataProps[] = versions.filter(d => {
     return d.map_types.includes("all") || d.map_types.includes(mapId);
   });
   // CONSTANTS // -----------------------------------------------------------//
@@ -367,12 +380,12 @@ const Map: FC<MapProps> = ({
             />
             <MapboxMap
               {...{
-                setInfoTooltipContent: props.setInfoTooltipContent,
+                setInfoTooltipContent: setInfoTooltipContent,
                 mapId,
                 setMapId,
                 linCircleScale,
                 key: mapId,
-                mapStyle: mapStyles[mapId],
+                mapStyle: (mapStyles as MapStyles)[mapId],
                 filters,
                 geoHaveData,
                 mapIsChanging,
@@ -382,13 +395,13 @@ const Map: FC<MapProps> = ({
                 overlays: (
                   <>
                     <MapDrape
-                      setInfoTooltipContent={props.setInfoTooltipContent}
                       {...{
                         mapId,
                         mapTitle,
                         date,
                         lastUpdatedDateOverall,
                         versions,
+                        setInfoTooltipContent,
                       }}
                     />
                     {
@@ -397,7 +410,9 @@ const Map: FC<MapProps> = ({
                           gridTemplateColumns: "auto auto auto",
                         }}
                       >
-                        <AmpMapLegendPanel {...{ zoomLevel }} />
+                        <AmpMapLegendPanel
+                          {...{ zoomLevel, linCircleScale, policyResolution }}
+                        />
                         <AmpMapDatePanel
                           {...{ date, setDate, ...defaults.minMaxDate }}
                         />
