@@ -116,18 +116,6 @@ export const getLinearScale = ({
     ["*", metricZoom, scaleFactor],
   ];
 
-  return [
-    "interpolate",
-    ["linear"],
-    ["feature-state", featurePropertyKey],
-    0,
-    zeroSize,
-    1,
-    5,
-    maxValue,
-    75,
-  ];
-
   // Below: former way of doing linear scales without heuristic size fix
   // // return linear interpolation scale
   // return [
