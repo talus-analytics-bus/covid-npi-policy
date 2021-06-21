@@ -1,7 +1,9 @@
+import { ScaleQuantile } from "d3-scale";
 import moment from "moment";
 import React from "react";
 import { useEffect, useRef } from "react";
 import { MapContext } from "react-map-gl";
+// import * as d3 from "d3";
 /**
  * Parses a value as a string or, if it is null or undefined, returns itself.
  * @param v The value to be parsed as a string
@@ -79,6 +81,19 @@ export function getElWidth(ref: React.RefObject<HTMLDivElement>): number {
 //   else throw Error("Argument was unexpected value: " + v);
 // }
 
+// export const getQuantileScale: Function = (
+//   domain: number[],
+//   nQuantiles: number,
+//   colors: string[],
+//   maxVal: number
+// ): any[] => {
+//   const scale: ScaleQuantile<number, string> = d3
+//     .scaleQuantile<number, string>()
+//     .domain(domain)
+//     .range(range(0, nQuantiles - 1));
+//   // debugger;
+//   return []; // TODO complete
+// };
 
 /**
  * Returns the series of integers from `start` to `end`, inclusive.
