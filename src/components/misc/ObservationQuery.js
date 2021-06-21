@@ -1,5 +1,4 @@
 import axios from "axios";
-import Util from "./Util.js";
 
 const API_URL = process.env.REACT_APP_METRICS_API_URL;
 
@@ -19,6 +18,8 @@ const ObservationQuery = async function({
   place_name,
   place_iso3,
   fields,
+  transform,
+  fips,
 }) {
   end_date = typeof end_date !== "undefined" ? end_date : start_date;
 
@@ -39,7 +40,7 @@ const ObservationQuery = async function({
     params["place_name"] = place_name;
   } else if (place_iso3 !== undefined) {
     params["place_iso3"] = place_iso3;
-  }
+  } else if (fips !== undefined) params["fips"] = fips;
 
   const url = `${API_URL}/observations`;
 
@@ -49,6 +50,7 @@ const ObservationQuery = async function({
     headers: { "If-Modified-Since": new Date().toUTCString() },
   });
 
+  if (transform !== undefined) res.data.data.forEach(d => transform(d));
   return res.data.data;
 };
 

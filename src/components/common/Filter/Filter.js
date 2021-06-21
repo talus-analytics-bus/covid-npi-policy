@@ -369,8 +369,12 @@ const Filter = ({
               selectedItems: [vItem],
             });
 
-            // update filters
-            setFilters({ ...filters, [field]: [vItem.value] });
+            // update filters?
+            const doUpdate =
+              filters[field] === undefined ||
+              filters[field].length === 0 ||
+              filters[field][0] !== vItem.value;
+            if (doUpdate) setFilters({ ...filters, [field]: [vItem.value] });
           },
           label,
         }}

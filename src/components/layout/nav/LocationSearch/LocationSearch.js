@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import styles from "./LocationSearch.module.scss";
-import { removeParenthetical } from "../../../misc/UtilsTyped";
+import { removeParenthetical } from "components/misc/UtilsTyped";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

@@ -1,10 +1,8 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
-.infoTooltipContainer {
-}
 [class*="type-light"] {
   background-color: none;
-  max-width: 400px;
+  max-width: 600px;
   font-size: 0.9rem;
   opacity: 1 !important;
   display: flex;
@@ -12,7 +10,7 @@
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
   -webkit-box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.29);
   padding: 10px !important;
-  z-index: 10000;
+  z-index: 2;
   p:not(:last-child) {
     margin-bottom: 20px;
   }
@@ -25,16 +23,14 @@
 }
 .infoTooltip {
   display: inline-flex;
-  margin: 0 5px;
+  margin: 0 0.1em;
   position: relative;
   pointer-events: all;
 
   img {
-    $size: 15px;
+    $size: 10px;
     height: $size;
     width: $size;
-    top: 2px;
-    position: relative;
     cursor: default;
   }
 }

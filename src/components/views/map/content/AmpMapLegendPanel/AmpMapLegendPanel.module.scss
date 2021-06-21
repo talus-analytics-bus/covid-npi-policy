@@ -1,0 +1,24 @@
+@import "src/assets/styles/vars.module.scss";
+.legend {
+    .entries {
+        display: flex;
+        > div {
+            background-color: transparent;
+        }
+
+        @include borderItemsHoriz(20px);
+        > div:not(:first-child) {
+            padding-left: 0;
+            margin-left: 0;
+        }
+        @media screen and (max-width: 1500px) {
+            flex-flow: column;
+            > :not(:last-child) {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                margin-bottom: 10px;
+            }
+        }
+    }
+}

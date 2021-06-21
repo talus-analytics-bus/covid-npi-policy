@@ -1,5 +1,5 @@
 /**
- * Standard Mapbox map component for display metrics as fill and circle.
+ * Standard Mapbox map component for displaying metrics as fill and circle.
  * All data elements are defined in `plugins` directory on a per-project basis.
  * `plugins/data.js` defines metric metadata, metric data getter methods, etc.,
  *    , and default settings
@@ -9,27 +9,40 @@
  */
 
 // standard packages
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import styles from "./mapboxmap.module.scss";
+import classNames from "classnames";
+import { defaults } from "./plugins/data.js";
 
 // 3rd party packages
-import ReactMapGL, { NavigationControl, Popup } from "react-map-gl";
-import classNames from "classnames";
+import ReactMapGL, {
+  NavigationControl,
+  AttributionControl,
+  Popup,
+} from "react-map-gl";
 import * as d3 from "d3/dist/d3.min";
 
 // local modules
-import { metricMeta } from "./plugins/data";
-import { dataGetter } from "./plugins/dataGetter";
-import { tooltipGetter } from "./plugins/tooltipGetter";
+import { dataGetter } from "./plugins/dataGetter.tsx";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
-import { isEmpty, getAndListString } from "../../misc/Util";
+import { isEmpty } from "../../misc/Util";
+import { parseStringSafe } from "../../misc/UtilsTyped";
 import ResetZoom from "./resetZoom/ResetZoom";
-import MapTooltip from "./mapTooltip/MapTooltip";
 
-// common components
-import { Legend, ShowMore } from "..";
+// context
+import MapOptionContext from "../../views/map/context/MapOptionContext";
+import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
+import { elementIsMapCanvas } from "./plugins/helpers";
+import useEventListener from "components/views/PolicyPage/hooks/useEventListener";
+import Settings from "Settings";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -49,9 +62,6 @@ const MapboxMap = ({
   setMapId,
   mapId,
   mapStyle,
-  date,
-  circle,
-  fill,
   filters,
   // array of JSX components that should go on top of the map field, e.g.,
   // map options and legend components
@@ -59,12 +69,19 @@ const MapboxMap = ({
   geoHaveData,
   plugins,
   linCircleScale, // `log` or `lin`
-  ...props
+  mapIsChanging,
+  setShowLoadingSpinner,
+  setDataIsLoading,
+  setZoomLevel,
 }) => {
   // STATE // ---------------------------------------------------------------//
   // store map reference which is frequently invoked to get the current
   // Mapbox map object in effect hooks
   let mapRef = useRef(null);
+
+  // const [map, setMap] = useState(null);
+  const curMapOptions = useContext(MapOptionContext);
+  const { fill, circle, date } = curMapOptions;
 
   // is map initially loaded?
   const [loading, setLoading] = useState(true);
@@ -73,16 +90,15 @@ const MapboxMap = ({
   const [data, setData] = useState(null);
 
   // current viewport of map
-  const [viewport, setViewport] = useState({});
+  const [viewport, setViewport] = useState({
+    ...defaults[mapId].initViewport,
+  });
   const [defaultViewport, setDefaultViewport] = useState({});
-
-  // show or hide the legend
-  const [showLegend, setShowLegend] = useState(true);
 
   // state management for tooltips
   const [cursorLngLat, setCursorLngLat] = useState([0, 0]);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [mapTooltip, setMapTooltip] = useState(null);
+  const [showTooltip, setShowMapPopup] = useState(false);
+  const [mapPopup, setMapPopup] = useState(null);
 
   // state management for selected/hovered status of geometries
   const [selectedFeature, setSelectedFeature] = useState(null);
@@ -92,18 +108,25 @@ const MapboxMap = ({
   // default, false otherwise
   const [showReset, setShowReset] = useState(false);
 
+  // CONSTANTS // -----------------------------------------------------------//
+  // declare string versions of fill and circle IDs
+  const circleIdStr = parseStringSafe(circle);
+  const fillIdStr = parseStringSafe(fill);
+
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   const setLinLogCircleStyle = () => {
     const map = mapRef.getMap();
 
     // does map have circle layers?
-    const hasCircleLayers = mapSources[mapId].circle !== undefined;
+    const hasVisibleCircleLayers =
+      circle !== null && mapSources[mapId].circle !== undefined;
 
     // if yes, update scale type of circle and its shadow
-    const circleLayers = mapSources[mapId].circle.circleLayers;
-    if (hasCircleLayers) {
+    // const circleLayers = mapSources[mapId].circle.circleLayers;
+    const circleLayers = getSourceLayers(mapId, "circle", "circleLayers");
+    if (hasVisibleCircleLayers) {
       circleLayers.forEach(layer => {
-        const layerId = layer.id + "-circle";
+        const layerId = layer.id + "-" + getSourceKey(layer, "circle");
 
         const circleStyle = layerStyles.circle[layer.styleId.circle](
           layer.id,
@@ -127,115 +150,108 @@ const MapboxMap = ({
     }
   };
 
+  /**
+   * Initialize the vertical order of map shapes for certain metrics.
+   */
   const updateFillOrder = ({ map, f = null }) => {
-    // initialize the vertical order of shapes for certain metrics
-    if (mapId === "global") {
-      const hasFillLayers = mapSources[mapId].fill !== undefined;
-      if (hasFillLayers) {
-        // get data fields to bind data to geo feature
-        const featureLinkField = mapSources[mapId].fill.fillLayers.find(
-          d => d.id === fill
-        ).featureLinkField;
-        const promoteId = mapSources[mapId].fill.def.promoteId;
+    const hasFillLayers =
+      mapSources[mapId].fill !== undefined &&
+      mapSources[mapId].fill.fillLayers.length > 0;
+    if (hasFillLayers) {
+      // get data fields to bind data to geo feature
+      const featureLinkField = mapSources[mapId].fill.fillLayers.find(
+        d => d.id === fillIdStr
+      ).featureLinkField;
+      const promoteId = mapSources[mapId].fill.def.promoteId;
 
-        // get sort order of circles based on covid caseload metric
-        const sortOrderMetricId = fill;
-        if (sortOrderMetricId === undefined) return;
-        else {
-          const featureOrder = {};
-          data[sortOrderMetricId].forEach(d => {
-            const hasBorder =
-              d.value === "No restrictions" ||
-              // d.value === null ||
-              d.value === 0;
-            featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
-          });
-          if (mapId === "global") {
-            geoHaveData.forEach(d => {
-              // set any geographies that have no data to 2
-              if (featureOrder[d] === undefined) {
-                featureOrder[d] = 2;
-              }
-            });
-          }
+      // get sort order of circles based on covid caseload metric
+      const sortOrderMetricId = fillIdStr;
+      if (sortOrderMetricId === undefined) return;
+      else {
+        const featureOrder = {};
+        const dataToSort = data[sortOrderMetricId];
+        if (dataToSort === undefined) return;
+        dataToSort.forEach(d => {
+          const hasBorder =
+            d.value === "No restrictions" ||
+            // d.value === null ||
+            d.value === 0;
+          featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
+        });
 
-          // update circle ordering
-          map.setLayoutProperty(
-            sortOrderMetricId + "-fill-outline",
-            "line-sort-key",
-            ["get", ["get", promoteId], ["literal", featureOrder]]
-          );
-        }
-      }
-    } else if (mapId === "us") {
-      const hasFillLayers = mapSources[mapId].fill !== undefined;
-      if (hasFillLayers) {
-        // get data fields to bind data to geo feature
-        const featureLinkField = mapSources[mapId].fill.fillLayers.find(
-          d => d.id === fill
-        ).featureLinkField;
-        const promoteId = mapSources[mapId].fill.def.promoteId;
-
-        // get sort order of circles based on covid caseload metric
-        const sortOrderMetricId = fill;
-        if (sortOrderMetricId === undefined) return;
-        else {
-          const featureOrder = {};
-          data[sortOrderMetricId].forEach(d => {
-            const hasBorder =
-              d.value === "No restrictions" ||
-              // d.value === null ||
-              d.value === 0;
-            featureOrder[d[featureLinkField]] = hasBorder ? 2 : 1;
+        // for global maps only:
+        if (mapId === "global")
+          geoHaveData.forEach(d => {
+            // set any geographies that have no data to 2
+            if (featureOrder[d] === undefined) {
+              featureOrder[d] = 2;
+            }
           });
 
-          // update circle ordering
-          map.setLayoutProperty(
-            sortOrderMetricId + "-fill-outline",
-            "line-sort-key",
+        // update circle ordering
+        map.setLayoutProperty(
+          sortOrderMetricId + "-fill-outline",
+          "line-sort-key",
+          [
+            "case",
             [
-              "case",
-              [
-                "!=",
-                ["get", ["get", promoteId], ["literal", featureOrder]],
-                null, // if the feature appears in the order list...
-              ], // use its id to determine stack order
+              "!=",
               ["get", ["get", promoteId], ["literal", featureOrder]],
-              0, // otherwise put it on bottom
-              // 3, // otherwise put it on top
-            ]
-          );
-        }
+              null, // if the feature appears in the order list...
+            ], // use its id to determine stack order
+            ["get", ["get", promoteId], ["literal", featureOrder]],
+            0, // otherwise put it on bottom
+            // 3, // otherwise put it on top
+          ]
+        );
       }
     }
 
     // if circle layers are being used, then order circles smallest to
     // biggest for optimal click-ability
-    const hasCircleLayers =
+    const hasVisibleCircleLayers =
       mapSources[mapId].circle !== undefined && circle !== null;
-    if (hasCircleLayers) {
+    if (hasVisibleCircleLayers) {
+      const circleLayers = getSourceLayers(mapId, "circle", "circleLayers");
       // get data fields to bind data to geo feature
-      const featureLinkField = mapSources[mapId].circle.circleLayers.find(
-        d => d.id === circle
-      ).featureLinkField;
-      const promoteId = mapSources[mapId].circle.def.promoteId;
+      const circLayers = circleLayers.filter(d => d.id === circleIdStr);
+      if (circLayers === undefined) return; // TODO handle elegantly
+      circLayers.forEach(circLayer => {
+        const featureLinkField = circLayer.featureLinkField;
+        const sortOrderSourceKey = getSourceKey(circLayer, "circle");
+        const promoteId = mapSources[mapId][sortOrderSourceKey].def.promoteId;
 
-      // get sort order of circles based on covid caseload metric
-      const sortOrderMetricId = circle;
-      if (sortOrderMetricId === undefined) return;
-      else {
-        const featureOrder = {};
-        data[sortOrderMetricId].forEach(d => {
-          featureOrder[d[featureLinkField]] = -d.value;
-        });
+        // get sort order of circles based on covid caseload metric
+        const sortOrderMetricId = circleIdStr;
+        if (sortOrderMetricId === undefined) return;
+        else {
+          const featureOrder = {};
+          if (
+            data[sortOrderMetricId] === undefined ||
+            data[sortOrderMetricId] === null
+          )
+            return;
+          data[sortOrderMetricId].forEach(d => {
+            if (
+              d[featureLinkField] === undefined ||
+              d[featureLinkField] === null ||
+              d.value === undefined ||
+              d.value === null
+            )
+              return;
+            else {
+              featureOrder[d[featureLinkField]] = -d.value;
+            }
+          });
 
-        // update circle ordering
-        map.setLayoutProperty(
-          sortOrderMetricId + "-circle",
-          "circle-sort-key",
-          ["get", ["get", promoteId], ["literal", featureOrder]]
-        );
-      }
+          // update circle ordering
+          map.setLayoutProperty(
+            sortOrderMetricId + "-" + sortOrderSourceKey,
+            "circle-sort-key",
+            ["get", ["get", promoteId], ["literal", featureOrder]]
+          );
+        }
+      });
     }
   };
 
@@ -244,8 +260,7 @@ const MapboxMap = ({
     const toCheck = ["policy_status_counts"];
     toCheck.forEach(key => {
       if (data[key] !== undefined) {
-        const maxVal = d3.max(data[key], d => d.value);
-        const minVal = d3.min(data[key], d => d.value);
+        const [minVal, maxVal] = getMinMaxVals(data, key);
         const fillStylesFunc = layerStyles.fill[key];
         const newFillColorStyle = fillStylesFunc(
           key,
@@ -262,52 +277,6 @@ const MapboxMap = ({
     });
   };
 
-  const getFillLegendName = ({ filters, fill }) => {
-    const isLockdownLevel = fill === "lockdown_level";
-
-    const nouns = { plural: "States", singular: "State", level: "state" };
-    if (mapId === "global") {
-      nouns.plural = "Countries";
-      nouns.singular = "Country";
-      nouns.level = "national";
-    }
-    // prepend "sub-" if subgeo policies are being viewed
-    if (plugins.policyResolution === "subgeo")
-      nouns.level = "sub-" + nouns.level;
-
-    const isPolicyStatus = fill === "policy_status";
-    const isPolicyStatusCounts = fill === "policy_status_counts";
-
-    if (isLockdownLevel) {
-      return `Distancing level at ${nouns.level.toLowerCase()} level on ${date.format(
-        "MMM D, YYYY"
-      )}`;
-    } else if (isPolicyStatus) {
-      const category = filters["primary_ph_measure"][0].toLowerCase();
-      const subcategory = !isEmpty(filters["ph_measure_details"])
-        ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
-        : undefined;
-      const prefix = nouns.plural + " with at least one policy in effect for ";
-      const suffix = ` on ${date.format("MMM D, YYYY")}`;
-      if (subcategory !== undefined) {
-        return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
-      } else return prefix + category + suffix;
-    } else if (isPolicyStatusCounts) {
-      const category = filters["primary_ph_measure"][0].toLowerCase();
-      const subcategory = !isEmpty(filters["ph_measure_details"])
-        ? getAndListString(filters["ph_measure_details"], "or").toLowerCase()
-        : undefined;
-
-      const prefix = `Policies in effect at ${nouns.level} level (relative count) for `;
-      const suffix = ` on ${date.format("MMM D, YYYY")}`;
-      if (subcategory !== undefined) {
-        return (
-          <ShowMore text={prefix + subcategory + suffix} charLimit={120} />
-        );
-      } else return prefix + category + suffix;
-    }
-  };
-
   /**
    * Revert to default viewport
    * @method resetViewport
@@ -317,7 +286,7 @@ const MapboxMap = ({
     const map = mapRef.getMap();
 
     // hide tooltip and reset button and fly to original position
-    setShowTooltip(false);
+    setShowMapPopup(false);
     flyToLongLat(
       // lnglat
       [defaultViewport.longitude, defaultViewport.latitude],
@@ -331,6 +300,7 @@ const MapboxMap = ({
       // post-fly callback
       () => {
         setShowReset(false);
+        setZoomLevel(defaultViewport.zoom);
       }
     );
   };
@@ -408,65 +378,79 @@ const MapboxMap = ({
 
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
-  const getMapData = async dataArgs => {
-    const newMapData = await dataGetter(dataArgs);
-    setData(newMapData);
-  };
+  const getMapData = useCallback(
+    async dataArgs => {
+      setDataIsLoading(true);
+      const newMapData = await dataGetter({
+        data,
+        ...dataArgs,
+        ...curMapOptions,
+      });
+      setData(newMapData);
+      setDataIsLoading(false);
+    },
+    [setDataIsLoading, data, curMapOptions]
+  );
 
   /**
    * Update the current map tooltip
-   * @method updateMapTooltip
+   * @method updateMapPopup
    * @param  {[type]}         map [description]
    * @return {[type]}             [description]
    */
-  const updateMapTooltip = async ({ map }) => {
+  const updateMapPopup = async ({ map }) => {
     if (selectedFeature !== null) {
-      setShowTooltip(false);
-      const newMapTooltip = (
-        <MapTooltip
+      setShowMapPopup(false);
+      const newMapPopup = (
+        <AmpMapPopupDataProvider
           {...{
-            ...(await tooltipGetter({
-              mapId: mapId,
-              setMapId,
-              d: selectedFeature,
-              include: [circle, "lockdown_level"],
-              // include: [circle, fill],
-              geoHaveData:
-                geoHaveData.includes(selectedFeature.properties.BRK_A3) ||
-                geoHaveData.includes(selectedFeature.properties.ADM0_A3),
-              // include: [circle, fill],
-              date,
-              map,
-              data,
-              filters,
-              plugins,
-              callback: () => {
-                setShowTooltip(true);
-              },
-            })),
+            key: selectedFeature.id,
+            mapId,
+            feature: {
+              ...selectedFeature,
+              state: map.getFeatureState(selectedFeature),
+            },
+            dataDate: date,
+            policyCategories: filters["primary_ph_measure"],
+            policySubcategories: filters["ph_measure_details"],
+            map,
+            policyResolution: plugins.policyResolution,
+            filters,
+            circle,
           }}
         />
       );
-      setMapTooltip(newMapTooltip);
+      setShowMapPopup(true);
+      setMapPopup(newMapPopup);
     }
   };
 
   // EFFECT HOOKS // --------------------------------------------------------//
   // get latest map data if date, filters, or map ID are updated
   useEffect(() => {
-    getMapData({
-      date,
-      filters,
-      mapId,
-      policyResolution: plugins.policyResolution,
-    });
-  }, [filters, mapId, date, plugins.policyResolution]);
+    if (!mapIsChanging)
+      getMapData({
+        date,
+        filters,
+        mapId,
+        policyResolution: plugins.policyResolution,
+      });
+  }, [
+    filters,
+    date,
+    circle,
+    fill,
+    plugins.policyResolution,
+    mapIsChanging,
+    // getMapData,
+    // mapId,
+  ]);
 
   // update map tooltip if the selected feature or metric are updated
   useEffect(() => {
     if (mapRef.getMap !== undefined) {
       const map = mapRef.getMap();
-      updateMapTooltip({ map });
+      updateMapPopup({ map });
     }
   }, [selectedFeature, circle, fill]);
 
@@ -488,12 +472,12 @@ const MapboxMap = ({
           {
             sourceTypeKey: "circle",
             layerListKey: "circleLayers",
-            curOption: circle,
+            curOption: parseStringSafe(circle),
           },
           {
             sourceTypeKey: "fill",
             layerListKey: "fillLayers",
-            curOption: fill,
+            curOption: parseStringSafe(fill),
           },
         ];
 
@@ -506,15 +490,21 @@ const MapboxMap = ({
             mapSources[mapId][sourceTypeKey] !== undefined;
           if (hasLayersOfType) {
             // get layers of this type (circle, fill, ...)
-            const layersOfType = mapSources[mapId][sourceTypeKey][layerListKey];
+            let layersOfType = getSourceLayers(
+              mapId,
+              sourceTypeKey,
+              layerListKey
+            );
+            // const layersOfType = mapSources[mapId][sourceTypeKey][layerListKey];
 
             // for each layer determine whether it is visible
             layersOfType.forEach(layer => {
+              const sourceKey = getSourceKey(layer, sourceTypeKey);
               // if layer is current option, it's visible
               const visible = layer.id === curOption;
               const visibility = visible ? "visible" : "none";
               map.setLayoutProperty(
-                layer.id + "-" + sourceTypeKey,
+                layer.id + "-" + sourceKey,
                 "visibility",
                 visibility
               );
@@ -522,7 +512,7 @@ const MapboxMap = ({
               // same for any associated pattern layers this layer has
               if (layer.styleOptions.pattern === true) {
                 map.setLayoutProperty(
-                  layer.id + "-" + sourceTypeKey + "-pattern",
+                  layer.id + "-" + sourceKey + "-pattern",
                   "visibility",
                   visibility
                 );
@@ -531,7 +521,7 @@ const MapboxMap = ({
               // same for circle shadow layers
               if (sourceTypeKey === "circle") {
                 map.setLayoutProperty(
-                  layer.id + "-" + sourceTypeKey + "-shadow",
+                  layer.id + "-" + sourceKey + "-shadow",
                   "visibility",
                   visibility
                 );
@@ -548,9 +538,6 @@ const MapboxMap = ({
             });
           } else return;
         });
-
-        // update sort order of circles, etc.
-        updateFillOrder({ map, f: null });
       }
     }
   }, [circle, fill, mapId]);
@@ -560,9 +547,10 @@ const MapboxMap = ({
     // if no map data, do nothing
     if (data === null) return;
     else {
-      const map = mapRef.getMap();
+      // const map = mapRef.getMap();
 
       // if map has not yet loaded
+      const map = mapRef.getMap();
       if (loading) {
         // initialize the map
         initMap({
@@ -570,9 +558,16 @@ const MapboxMap = ({
           mapId,
           data,
           geoHaveData,
+          setShowLoadingSpinner,
           callback: function afterMapLoaded() {
             // bind feature states to support data driven styling
-            bindFeatureStates({ map, mapId, data });
+            bindFeatureStates({
+              map,
+              mapId,
+              data,
+              circle: plugins.circle,
+              fill: plugins.fill,
+            });
 
             // load layer images, if any, for pattern layers
             layerImages.forEach(({ asset, name }) => {
@@ -590,27 +585,37 @@ const MapboxMap = ({
       } else {
         // if map had already loaded, then just bind feature states using the
         // latest map data
-        bindFeatureStates({ map, mapId, data, selectedFeature });
+        bindFeatureStates({
+          map,
+          mapId,
+          data,
+          selectedFeature,
+          circle: plugins.circle,
+          fill: plugins.fill,
+        });
         updateFillOrder({ map, f: null });
         updateFillStyles({ map });
-        updateMapTooltip({ map });
+        updateMapPopup({ map });
       }
     }
   }, [data]);
 
   // MAP EVENT CALLBACKS // -------------------------------------------------//
+  const sortByCircleValue = (a, b) => {
+    return a.state[circle] - b.state[circle];
+  };
   /**
    * Handle map clicks: Select or deselect fill and show / hide tooltips
-   * @method handleClick
+   * @method handleMapClick
    * @param  {[type]}    e [description]
    * @return {[type]}      [description]
    */
-  const handleClick = e => {
+  const handleMapClick = e => {
     // allow no interaction until map exists
     if (mapRef.current === null) return;
     else {
       // was the cursor moving on the map?
-      const cursorOnMap = e.target.classList.contains("overlays");
+      const cursorOnMap = elementIsMapCanvas(e.target);
       if (!cursorOnMap) return;
 
       // Get map reference object and sources for map
@@ -631,6 +636,8 @@ const MapboxMap = ({
             f.layer.type === "fill"
           );
         });
+
+        if (circle !== null) features.sort(sortByCircleValue);
         const circleFeature = features.find(f => {
           return (
             f["layer"]["source-layer"] === sources.circle.sourceLayer &&
@@ -641,7 +648,6 @@ const MapboxMap = ({
         // choose one feature from among the detected features to use as target.
         // circle takes precedence over fill feature since it is drawn on top
         const feature = circleFeature || fillFeature;
-
         // deselect the currently selected feature
         if (selectedFeature !== null) {
           map.setFeatureState(selectedFeature, { clicked: false });
@@ -655,7 +661,7 @@ const MapboxMap = ({
 
           // otherwise, mark no feature as selected and hide the tooltip
         } else {
-          setShowTooltip(false);
+          setShowMapPopup(false);
           setSelectedFeature(null);
         }
       }
@@ -664,11 +670,11 @@ const MapboxMap = ({
 
   /**
    * Handle map mousemoves: highlight hovered fill
-   * @method handleMouseMove
+   * @method handleMapMouseMove
    * @param  {[type]}        e [description]
    * @return {[type]}          [description]
    */
-  const handleMouseMove = e => {
+  const handleMapMouseMove = e => {
     // allow no interaction until map exists
     if (mapRef.current === null) return;
     else {
@@ -678,7 +684,7 @@ const MapboxMap = ({
       else {
         // if the cursor is not hovering on the map itself, unhover
         // all features
-        const cursorOnMap = e.target.classList.contains("overlays");
+        const cursorOnMap = elementIsMapCanvas(e.target);
 
         if (!cursorOnMap) {
           if (hoveredFeature !== null) {
@@ -697,6 +703,7 @@ const MapboxMap = ({
             const features = map.queryRenderedFeatures(e.point, {
               layers: layers,
             });
+            if (circle !== null) features.sort(sortByCircleValue);
 
             // unhover the currently hovered feature if any
             if (hoveredFeature !== null) {
@@ -727,19 +734,49 @@ const MapboxMap = ({
     }
   };
 
+  /**
+   * When escape is pressed, close map popup and unselect feature.
+   * @param {Event} e The key press event
+   */
+  const handleKeyPress = e => {
+    if (e.keyCode === 27) {
+      // escape
+      // deselect the currently selected feature
+      if (selectedFeature !== null) {
+        const map = mapRef.getMap();
+        map.setFeatureState(selectedFeature, {
+          clicked: false,
+        });
+        setShowMapPopup(false);
+        setSelectedFeature(null);
+      } else if (showReset) {
+        // reset zoom
+        resetViewport();
+      }
+      setHoveredFeature(null);
+    }
+  };
+  useEventListener("keydown", handleKeyPress, window);
+
   // JSX // -----------------------------------------------------------------//
   // render map only after data initially load
-  if (data === null) return <div />;
+  if (data === null)
+    return (
+      <>
+        {overlays}
+        <div />
+      </>
+    );
   else
     return (
       <>
         {overlays}
-
         <ReactMapGL
           mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-          ref={map => {
-            mapRef = map;
+          ref={ref => {
+            if (ref) mapRef = ref;
           }}
+          attributionControl={false}
           captureClick={true}
           mapStyle={mapStyle.url}
           {...viewport}
@@ -748,6 +785,7 @@ const MapboxMap = ({
           onViewportChange={newViewport => {
             // set current viewport state variable to the new viewport
             setViewport(newViewport);
+            setZoomLevel(newViewport.zoom);
             const lngLatNotDefault =
               newViewport.longitude !== defaultViewport.longitude ||
               newViewport.latitude !== defaultViewport.latitude;
@@ -762,8 +800,8 @@ const MapboxMap = ({
               setShowReset(true);
             else setShowReset(false);
           }}
-          onClick={handleClick}
-          onMouseMove={handleMouseMove}
+          onClick={handleMapClick}
+          onMouseMove={handleMapMouseMove}
           onLoad={() => {
             // when map has loaded, add event listener to update the map data
             // whenever the map style, i.e., the type of map, is changed
@@ -776,7 +814,7 @@ const MapboxMap = ({
             // if default fit bounds are specified, center the viewport on them
             // (fly animation relative to default viewport)
             if (mapStyle.defaultFitBounds !== undefined) {
-              const test = () => {
+              const updateViewport = () => {
                 const center = map.getCenter();
                 setViewport({
                   ...viewport,
@@ -791,9 +829,9 @@ const MapboxMap = ({
                   latitude: center.lat,
                 });
                 setShowReset(false);
-                map.off("moveend", test);
+                map.off("moveend", updateViewport);
               };
-              map.on("moveend", test);
+              map.on("moveend", updateViewport);
               map.fitBounds(mapStyle.defaultFitBounds);
             }
 
@@ -803,6 +841,25 @@ const MapboxMap = ({
           }}
           doubleClickZoom={false} //remove 300ms delay on clicking
         >
+          {
+            // map legend
+          }
+          {
+            // map zoom plus and minus buttons
+          }
+          <div className={styles.navAndAttribControl}>
+            <div
+              className={classNames(styles.attributionControl, {
+                [styles.empty]: mapStyle.attribution !== true,
+              })}
+            >
+              <AttributionControl compact={false} />
+            </div>
+            <div className={styles.navigationControl}>
+              <NavigationControl />
+              {showReset && <ResetZoom handleClick={resetViewport} />}
+            </div>
+          </div>
           {// map tooltip component
           showTooltip && (
             <div className={styles.mapboxMap}>
@@ -815,120 +872,85 @@ const MapboxMap = ({
                 captureScroll={true}
                 interactive={true}
               >
-                {mapTooltip}
+                {mapPopup}
               </Popup>
             </div>
           )}
-          {
-            // map legend
-          }
-          <div
-            className={classNames(styles.legend, {
-              [styles.show]: showLegend,
-            })}
-          >
-            <button
-              onClick={e => {
-                // toggle legend show / hide on button click
-                e.stopPropagation();
-                e.preventDefault();
-                setShowLegend(!showLegend);
-              }}
-            >
-              {showLegend ? "hide legend" : "show legend"}
-              <i
-                className={classNames("material-icons", {
-                  [styles.flipped]: showLegend,
-                })}
-              >
-                play_arrow
-              </i>
-            </button>
-            {true && (
-              <div className={classNames(styles.entries, {})}>
-                {
-                  // fill legend entry
-                  // note: legend entries are listed in reverse order
-                }
-                {circle !== null && (
-                  <Legend
-                    {...{
-                      setInfoTooltipContent: props.setInfoTooltipContent,
-                      className: "mapboxLegend",
-                      key: "basemap - quantized - " + circle,
-                      metric_definition: metricMeta[circle].metric_definition,
-                      metric_displayname: (
-                        <span>
-                          {metricMeta[circle].metric_displayname}
-                          {!linCircleScale ? " (log scale)" : ""}
-                        </span>
-                      ),
-                      ...metricMeta[circle].legendInfo.circle,
-                    }}
-                  />
-                )}
-                {
-                  // circle legend entry
-                }
-                {fill !== null && (
-                  <Legend
-                    {...{
-                      setInfoTooltipContent: props.setInfoTooltipContent,
-                      className: "mapboxLegend",
-                      key: "bubble - linear - " + fill,
-                      metric_definition: metricMeta[fill].metric_definition,
-                      wideDefinition: metricMeta[fill].wideDefinition,
-                      metric_displayname: (
-                        <span>{getFillLegendName({ filters, fill })}</span>
-                      ),
-                      ...metricMeta[fill].legendInfo.fill(
-                        mapId,
-                        plugins.policyResolution
-                      ),
-                    }}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-          {showReset && <ResetZoom handleClick={resetViewport} />}
-          {
-            // map zoom plus and minus buttons
-          }
-          <div
-            style={{
-              position: "absolute",
-              bottom: "3px",
-              left: "5px",
-              padding: 0,
-            }}
-          >
-            <NavigationControl />
-          </div>
         </ReactMapGL>
       </>
     );
 };
 
-// export const geoHaveData = [
-//   "AUS",
-//   "BRA",
-//   "DJI",
-//   "EST",
-//   "FRA",
-//   "IND",
-//   "ITA",
-//   "JPN",
-//   "KOR",
-//   "MEX",
-//   "MHL",
-//   "NGA",
-//   "NZL",
-//   "PER",
-//   "PHL",
-//   "SOM",
-//   "THA",
-//   "USA",
-// ];
-
 export default MapboxMap;
+
+function getSourceKey(layer, sourceTypeKey) {
+  return layer.for.find(d => d.startsWith(sourceTypeKey));
+}
+
+function getSourceLayers(mapId, sourceTypeKey, layerListKey) {
+  let layersOfType = [];
+  const sourceKeys = Object.keys(mapSources[mapId]).filter(d =>
+    d.startsWith(sourceTypeKey)
+  );
+  sourceKeys.forEach(sourceKey => {
+    layersOfType = layersOfType.concat(
+      mapSources[mapId][sourceKey][layerListKey]
+    );
+  });
+  return layersOfType;
+}
+
+/**
+ * Given the master data object and the key to the data series of interest,
+ * return the min and max observation vals. for that data series that should be
+ * used for relative comparisons in the visualization.
+ *
+ * If min/max are not explicitly set but required to be, an error is thrown. If
+ * they are not required to be explicitly set, the min/max are computed
+ * directly from the data series.
+ *
+ * @param {Object} data The master data object containing all data series.
+ * @param {string} key The key to the data series of interest.
+ */
+function getMinMaxVals(data, key) {
+  const curSeries = data[key];
+  if (curSeries.max_all_time !== undefined && curSeries.max_all_time !== null) {
+    // return explicitly determined min/max values
+    return [curSeries.min_all_time.value, curSeries.max_all_time.value];
+  } else if (Settings.REQUIRE_EXPLICIT_MIN_MAX) {
+    // throw error if explicit min/max required
+    throw Error(
+      "Min/Max observation data are missing from the data series for key = " +
+        key +
+        ". Please ensure the min/max is provided in the API response."
+    );
+  } else {
+    // compute min/max from data series directly
+    return [d3.min(data[key], d => d.value), d3.max(data[key], d => d.value)];
+  }
+}
+
+/**
+ * Given the `mapId`, returns the appropriate set of nouns and the level with
+ * which geographic features in the map should be referred to.
+ */
+export function getMapNouns(mapId) {
+  switch (mapId) {
+    case "us":
+      return { plural: "States", singular: "State", level: "state" };
+    case "us-county":
+      return { plural: "Counties", singular: "County", level: "county" };
+    case "us-county-plus-state":
+      return {
+        plural: "Counties",
+        singular: "County",
+        level: "state + county",
+      };
+    default:
+      return {
+        plural: "Countries",
+        singular: "Country",
+        level: "national",
+      };
+  }
+}

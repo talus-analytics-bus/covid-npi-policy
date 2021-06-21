@@ -19,7 +19,7 @@ import courtChallengeIcon from "../../../../assets/icons/CourtChallengeIcon.svg"
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./PolicyPage.module.scss";
-import { removeParenthetical } from "../../../misc/UtilsTyped";
+import { removeParenthetical } from "components/misc/UtilsTyped";
 
 const formatDate = date => {
   if (!date) return undefined;
@@ -70,7 +70,7 @@ const PolicyPage = props => {
   // console.log(policyObject);
   // console.log(policy);
 
-  // debugger;
+  //
 
   return (
     <article className={styles.policyPage}>

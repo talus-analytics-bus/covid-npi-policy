@@ -1,0 +1,29 @@
+@import "src/assets/styles/vars.module.scss";
+.popupHeader {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    .left {
+        .title {
+            font-family: Rawline, serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 1.5rem;
+            line-height: 1.875rem;
+            color: $idea-black;
+            max-width: 8em;
+        }
+        .subtitle {
+            font-family: Open Sans, sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.875rem;
+            line-height: 1.5rem;
+            color: $orange;
+        }
+    }
+    .right {
+        margin-left: 5rem;
+        text-align: right;
+    }
+}

@@ -1,0 +1,45 @@
+@import "src/assets/styles/vars.module.scss";
+.optionDrawer {
+    font-size: 16px;
+    .title,
+    .body {
+        padding: 0.625em;
+    }
+    .title {
+        border: 1px solid $light-gray-4;
+        border-width: 1px 0;
+        font-family: "Open Sans", sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 0.875em;
+        line-height: 1.1875em;
+        color: $idea-gray-2;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .body {
+        // max-height: 250px;
+        overflow-y: scroll;
+    }
+    overflow-y: hidden;
+
+    &:first-child .title {
+        border-top-width: 0;
+    }
+
+    &.closed {
+        .body {
+            display: none;
+        }
+        &:not(:last-child) {
+            margin-bottom: 0;
+            .title {
+                border-bottom-width: 0;
+            }
+        }
+    }
+}

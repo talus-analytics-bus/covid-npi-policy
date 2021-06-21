@@ -348,9 +348,7 @@ export const DistancingLevel = async function({
     ["all_dates", false],
     ["deltas_only", false],
   ];
-  toAdd.forEach(([key, value]) => {
-    if (value !== undefined) params.append(key, value);
-  });
+  addParams(toAdd, params);
 
   // prepare request
   let req;
@@ -378,15 +376,34 @@ export const PolicyStatusCounts = async function({
   fields = [],
   filters = null,
   count_sub = false,
+  include_min_max = false,
+  include_zeros = true,
+  one = false,
+  merge_like_policies = true,
+  counted_parent_geos = [],
+  mapId = undefined,
 }) {
   // prepare params
   const params = new URLSearchParams();
+
+  // // if mapId is defined, set counted_parent_geos accordingly
+  // if (mapId !== undefined && counted_parent_geos.length === 0) {
+  //   if (mapId === "us-county-plus-state") counted_parent_geos.push("state");
+  // }
+
+  // append list-like param values
   fields.forEach(d => {
     params.append("fields", d);
   });
+  counted_parent_geos.forEach(d => {
+    params.append("counted_parent_geos", d);
+  });
 
   params.append("count_sub", count_sub);
-  params.append("include_zeros", true);
+  params.append("include_min_max", include_min_max);
+  params.append("one", one);
+  params.append("merge_like_policies", merge_like_policies);
+  params.append("include_zeros", include_zeros);
 
   // prepare request
   let req;
@@ -413,8 +430,12 @@ export const PolicyStatusCounts = async function({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data.data;
-  else return false;
+  if (res.data !== undefined) {
+    const formattedRes = res.data.data;
+    formattedRes.min_all_time = res.data.min_all_time;
+    formattedRes.max_all_time = res.data.max_all_time;
+    return formattedRes;
+  } else return false;
 };
 
 /**
@@ -506,30 +527,50 @@ export const Caseload = async ({
   countryIso3, // name for country, e.g., United States of America
   stateId, // place_id for state, e.g., 264
   stateName, // name for state, e.g., Alabama
+  ansiFips, // ansi / fips code of county, e.g., 06073 (for San Diego, CA)
   fields = ["date_time", "value"], // fields to return, return all if empty
   windowSizeDays = 7, // size of window over which to aggregate cases; only
+  isCumulative = false, // true if cumulative values needed
+  getAverage = false, // true if average for windowsize is needed
   // 1 and 7 are currently supported
 }) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
 
-  const getMetricId = ({ isState, windowSizeDays }) => {
+  const getMetricId = ({ isState, isCounty, windowSizeDays, isCumulative }) => {
     if (isState) {
-      if (windowSizeDays === 7) {
+      if (isCumulative) return 72;
+      else if (windowSizeDays === 7) {
         return 74;
       } else if (windowSizeDays === 1) return 73;
+    } else if (isCounty) {
+      if (isCumulative) return 102;
+      if (windowSizeDays === 7) {
+        return 104;
+      } else if (windowSizeDays === 1) return 103;
     } else {
+      if (isCumulative) return 75;
       if (windowSizeDays === 7) {
         return 77;
       } else if (windowSizeDays === 1) return 76;
     }
   };
   const isState = stateName !== undefined || stateId !== undefined;
-  const metric_id = getMetricId({ isState, windowSizeDays });
+  const isCounty = ansiFips !== undefined;
+  const metric_id = getMetricId({
+    isState,
+    isCounty,
+    windowSizeDays,
+    isCumulative,
+  });
 
   // define spatial resolution based on same
-  const spatial_resolution = isState ? "state" : "country";
+  const spatial_resolution = isState
+    ? "state"
+    : isCounty
+    ? "county"
+    : "country";
 
   // prepare parameters
   const params = {
@@ -547,9 +588,14 @@ export const Caseload = async ({
   if (stateId !== undefined) params.place_id = stateId;
   if (countryIso3 !== undefined) params.place_iso3 = countryIso3;
   if (stateName !== undefined) params.place_name = stateName;
-
+  if (ansiFips !== undefined) params.fips = ansiFips;
   // send request and return response data
-  return await ObservationQuery({ ...params });
+  const res = await ObservationQuery({ ...params });
+  if (getAverage && windowSizeDays !== 1)
+    res.forEach(d => {
+      d.value = Math.round(d.value / windowSizeDays);
+    });
+  return res;
 };
 
 /**
@@ -561,8 +607,31 @@ export const Caseload = async ({
 export const execute = async function({ queries }) {
   const results = {};
   for (const [k, v] of Object.entries(queries)) {
-    const res = await v;
-    results[k] = res;
+    if (v === undefined || v === null) continue;
+    if (typeof v !== "string" && v.length !== undefined) {
+      if (results[k] === undefined) results[k] = [];
+      for (let i = 0; i < v.length; i++) {
+        const res = await v[i];
+        results[k] = results[k].concat(res);
+
+        // add min and max observations if any
+        ["max_all_time", "min_all_time"].forEach(minMaxField => {
+          if (res[minMaxField] !== undefined) {
+            if (results[k][minMaxField] !== undefined) {
+              throw Error(
+                `Field '${minMaxField}}' was already defined on results for ` +
+                  `metric with id = '${k}'. It can only be defined by one ` +
+                  `API response.`
+              );
+            }
+            results[k][minMaxField] = res[minMaxField];
+          }
+        });
+      }
+    } else {
+      const res = await v;
+      results[k] = res;
+    }
   }
   return results;
 };
@@ -625,3 +694,38 @@ export const Deaths = async ({
   // send request and return response data
   return await ObservationQuery({ ...params });
 };
+
+export const Place = async ({ one = false, ansiFips, level, iso3, fields }) => {
+  // prepare params
+  const params = new URLSearchParams();
+  const toAdd = [
+    ["iso3", iso3],
+    ["ansi_fips", ansiFips],
+    ["level", level],
+    ["fields", fields],
+  ];
+  addParams(toAdd, params);
+  const req = await axios(`${API_URL}/get/place`, {
+    params,
+  });
+  const res = await req;
+  if (res.data !== undefined) {
+    if (one) {
+      if (res.data.data.length > 0) return res.data.data[0];
+      else return null;
+    }
+    return res.data.data;
+  } else return false;
+};
+
+function addParams(toAdd, params) {
+  toAdd.forEach(([key, value]) => {
+    if (value !== undefined) {
+      if (typeof value === "object" && value.length > 0) {
+        value.forEach(v => {
+          params.append(key, v);
+        });
+      } else params.append(key, value);
+    }
+  });
+}

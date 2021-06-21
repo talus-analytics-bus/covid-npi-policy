@@ -1,4 +1,4 @@
-@import "./vars.scss";
+@import "./vars.module.scss";
 
 body {
   font-size: 16px;
@@ -66,11 +66,7 @@ input[type="radio"] {
       .cc-btn {
         &.cc-allow {
           border: 2px solid #023f88;
-          background: linear-gradient(
-            180deg,
-            rgba(2, 63, 136, 0.85) 0%,
-            #023f88 100%
-          );
+          background: linear-gradient(180deg, rgba(2, 63, 136, 0.85) 0%, #023f88 100%);
           color: white;
           display: flex;
           justify-content: center;

@@ -31,18 +31,30 @@ import phase4 from "./assets/icons/phase-4.png";
 // import mixed from "./assets/icons/phase-mixed.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 
+import {
+  mapGreen1,
+  mapGreen2,
+  mapGreen3,
+  mapGreen4,
+  mapGreen5,
+  mapGreen6,
+  noDataGray,
+} from "assets/styles/vars.module.scss";
+import ObservationReduxQuery from "components/misc/ObservationReduxQuery";
+
 // utilities and local components
-import { greenStepsScale } from "./layers";
+// import { greenStepsScale } from "./layers";
+
 // define default parameters for MapboxMap
 const today = moment();
 const yesterday = moment(today).subtract(1, "days");
 export const defaults = {
   // default map ID
-  mapId: "us",
+  mapId: "us-county-plus-state",
 
   // default date for map to start on
-  // date: "2020-06-18",
-  date: yesterday.format("YYYY-MM-DD"),
+  // date: "2021-03-03",
+  // date: yesterday.format("YYYY-MM-DD"),
 
   // min/max dates for date selection -- if there are none, then provide
   // `undefined` as value for each
@@ -60,13 +72,46 @@ export const defaults = {
     // fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
     priorLayer: "state-points",
+    initViewport: {
+      latitude: -2.534888253109417,
+      longitude: 6.042008668434793,
+      zoom: 3.9432136288314994,
+    },
+  },
+  // defaults for map with ID `us-county`
+  "us-county": {
+    // id of default circle metric
+    circle: "104",
+    "circle-state": "104",
+    showCircle: true,
+    // showCircle: false,
+    // allowCircle: false,
+
+    // id of default fill metric
+    fill: "policy_status_counts",
+    // fill: "lockdown_level",
+    // base layer immediately behind which layers should be appended to map
+    priorLayer: "county-points",
+    initViewport: {
+      latitude: -2.534888253109417,
+      longitude: 6.042008668434793,
+      zoom: 3.9432136288314994,
+    },
+  },
+  get "us-county-plus-state"() {
+    return this["us-county"];
   },
   // defaults for additional maps...
   global: {
     circle: "77",
     // fill: "lockdown_level",
     fill: "policy_status_counts",
-    priorLayer: "state-label",
+    priorLayer: "country-label",
+    initViewport: {
+      latitude: 5.315112144927277,
+      longitude: 18.895843377706207,
+      zoom: 1.8386647937804286,
+    },
   },
 };
 
@@ -74,7 +119,7 @@ export const defaults = {
 export const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
 // define metrics to retrieve for each map
-export const mapMetrics = {
+export const allMapMetrics = {
   // map ID of map in which metrics are used
   us: [
     {
@@ -83,12 +128,16 @@ export const mapMetrics = {
       queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return {
-          method: "get",
-          geo_res: "state",
-          date: filters.dates_in_effect[0],
-        };
+      params: {
+        func: ({ filters, state_name }) => {
+          const baseParams = {
+            method: "get",
+            geo_res: "state",
+            date: filters.dates_in_effect[0],
+            state_name,
+          };
+          return baseParams;
+        },
       },
 
       // array of layer types for which this metric is used
@@ -133,14 +182,18 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters, policyResolution }) => {
-        const countSub = policyResolution === "subgeo";
-        return {
-          method: "post",
-          filters,
-          geo_res: "state",
-          count_sub: countSub,
-        };
+      params: {
+        func: ({ filters, policyResolution, mapId }) => {
+          const countSub = policyResolution === "subgeo";
+          return {
+            method: "post",
+            filters,
+            geo_res: "state",
+            count_sub: countSub,
+            include_min_max: true,
+            mapId,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -187,14 +240,16 @@ export const mapMetrics = {
         temporal_resolution: "daily",
         spatial_resolution: "state",
         fields: ["value", "date_time", "place_name", "place_id"],
+        transform: d => {
+          d.value = d.value / 7.0;
+        },
       },
       id: "74",
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-transp" },
       filter: ["==", ["get", "type"], "state"],
-      trend: true,
+      trend: false,
       styleOptions: { outline: true },
-      // styleOptions: { outline: true, pattern: true },
     },
     {
       queryFunc: ObservationQuery,
@@ -208,11 +263,137 @@ export const mapMetrics = {
       featureLinkField: "place_name",
       styleId: { fill: "metric-test", circle: "metric-test-solid" },
       filter: ["==", ["get", "type"], "state"],
-      trend: true,
+      trend: false,
       styleOptions: { outline: true },
-      // styleOptions: { outline: true, pattern: true },
     },
   ],
+  "us-county": [
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle"],
+      params: {
+        metric_id: 104,
+        temporal_resolution: "daily",
+        spatial_resolution: "county",
+        fields: ["value", "place_fips"],
+      },
+      id: "104",
+      featureLinkField: "place_fips",
+      styleId: { fill: "metric-transp", circle: "metric-test-transp" },
+      filter: ["==", ["get", "type"], "county"],
+      trend: false,
+      styleOptions: { outline: true },
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle-state"],
+      params: {
+        metric_id: 74,
+        temporal_resolution: "daily",
+        spatial_resolution: "state",
+        fields: ["value", "date_time", "place_name", "place_id"],
+        transform: d => {
+          d.value = d.value / 7.0;
+        },
+      },
+      id: "104",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-transp" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: false,
+      styleOptions: { outline: true },
+    },
+    {
+      queryFunc: ObservationQuery,
+      for: ["circle-state"],
+      params: {
+        metric_id: 72,
+        temporal_resolution: "daily",
+        spatial_resolution: "state",
+      },
+      id: "102",
+      featureLinkField: "place_name",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      filter: ["==", ["get", "type"], "state"],
+      trend: false,
+      styleOptions: { outline: true },
+    },
+    {
+      queryFunc: ObservationReduxQuery,
+      for: ["circle"],
+      params: {
+        metric_id: 102,
+        temporal_resolution: "daily",
+        spatial_resolution: "county",
+        fields: ["value", "place_fips"],
+      },
+      id: "102",
+      featureLinkField: "place_fips",
+      styleId: { fill: "metric-test", circle: "metric-test-solid" },
+      filter: ["==", ["get", "type"], "county"],
+      trend: false,
+      styleOptions: { outline: true },
+    },
+    {
+      // functions that, when passed `params`, returns the data for the map
+      // for this metric
+      queryFunc: PolicyStatusCounts,
+
+      // params that must be passed to `queryFunc` as object
+      params: {
+        func: ({ filters, policyResolution, mapId }) => {
+          const countSub = policyResolution === "subgeo";
+          return {
+            method: "post",
+            filters,
+            geo_res: mapId === "us-county" ? "county" : "county_plus_state",
+            count_sub: countSub,
+            include_min_max: true,
+            mapId,
+          };
+        },
+      },
+
+      // array of layer types for which this metric is used
+      for: ["fill"],
+
+      // unique ID of this metric
+      id: "policy_status_counts",
+
+      // data field with which to link metric to features;
+      // features potentially linking to this metric must have an ID that
+      // matches the value for this key for the datum
+      featureLinkField: "place_name",
+
+      // OPTIONAL:
+      // style IDs to use for the metric for each layer type -- if none are
+      // defined, then the metric's ID will be used to look up the appropriate
+      // style.
+      styleId: { fill: "policy_status_counts" },
+
+      // filter to control what features are returned for layers that are
+      // displaying this metric
+      filter: ["==", ["get", "type"], "county"],
+
+      // whether trend data should be retrieved for this metric
+      // NOTE: only applies to generalized metrics
+      trend: false,
+
+      // info about layers that use this metric
+      styleOptions: {
+        // whether layers that display this metric should be outlined
+        // NOTE: if true, an outline style must be defined in `./layers.js`
+        outline: true,
+
+        // whether layers that display this metric should have a pattern layers
+        // NOTE: if true, a pattern style must be defined in `./layers.js`
+        // pattern: true
+      },
+    },
+  ],
+  get "us-county-plus-state"() {
+    return this["us-county"];
+  },
   global: [
     {
       // functions that, when passed `params`, returns the data for the map
@@ -220,12 +401,15 @@ export const mapMetrics = {
       queryFunc: DistancingLevel,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters }) => {
-        return {
-          method: "get",
-          geo_res: "country",
-          date: filters.dates_in_effect[0],
-        };
+      params: {
+        func: ({ filters, iso3 }) => {
+          return {
+            method: "get",
+            geo_res: "country",
+            date: filters.dates_in_effect[0],
+            iso3,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -270,14 +454,18 @@ export const mapMetrics = {
       queryFunc: PolicyStatusCounts,
 
       // params that must be passed to `queryFunc` as object
-      params: ({ filters, policyResolution }) => {
-        const countSub = policyResolution === "subgeo";
-        return {
-          method: "post",
-          filters,
-          geo_res: "country",
-          count_sub: countSub,
-        };
+      params: {
+        func: ({ filters, policyResolution, mapId }) => {
+          const countSub = policyResolution === "subgeo";
+          return {
+            method: "post",
+            filters,
+            geo_res: "country",
+            count_sub: countSub,
+            include_min_max: true,
+            mapId,
+          };
+        },
       },
 
       // array of layer types for which this metric is used
@@ -332,7 +520,7 @@ export const mapMetrics = {
         fill: "metric-test",
         circle: "metric-test-transp-global",
       },
-      trend: true,
+      trend: false,
       styleOptions: { outline: true, pattern: false },
     },
     {
@@ -350,7 +538,7 @@ export const mapMetrics = {
         fill: "metric-test",
         circle: "metric-test-solid-global",
       },
-      trend: true,
+      trend: false,
       styleOptions: { outline: true, pattern: false },
     },
   ],
@@ -362,6 +550,7 @@ const getCovidLocalMetricLink = (v, color, style) => {
     <a
       style={{ color: color || "unset", ...style }}
       href={COVID_LOCAL_URL + "metrics/"}
+      rel="noopener noreferrer"
       target="_blank"
       key={v}
       id={v}
@@ -374,16 +563,21 @@ const getCovidLocalMetricLink = (v, color, style) => {
 // metric metadata used for display, tooltips, etc.
 export const metricMeta = {
   // unique ID of metric
+
   "74": {
     // metric definition
     metric_definition: (
       <span>
-        The number of new COVID-19 cases (confirmed and probable) in the state
-        in the past 7 days.
+        The moving 7-day average number of new daily COVID-19 cases (confirmed
+        and probable) in the state.
         <br />
-        <i style={{ fontSize: ".8rem" }}>
+        <i style={{ fontSize: ".8em" }}>
           Source: Calculated from{" "}
-          <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/nytimes/covid-19-data"
+          >
             New York Times compilation of data from state and local governments
             and health departments
           </a>
@@ -392,7 +586,7 @@ export const metricMeta = {
     ),
 
     // metric name displayed on front-end
-    metric_displayname: "New cases in past 7 days",
+    metric_displayname: "7-day average new cases",
 
     // Optional: Short name for metric where needed
     shortName: (
@@ -401,7 +595,7 @@ export const metricMeta = {
         <div
           style={{
             fontFamily: "'rawline', serif",
-            // fontSize: ".9rem",
+            // fontSize: ".9em",
             fontWeight: "normal",
             fontStyle: "italic",
             lineHeight: "1.1",
@@ -416,8 +610,7 @@ export const metricMeta = {
     value: v => comma(v),
 
     // unit label formatter for metric
-    unit: v =>
-      v === 1 ? "new case in past 7 days" : "new cases in past 7 days",
+    unit: v => "7-day avg. daily cases",
 
     // if metric has trends, the label describing timeframe of those trends
     trendTimeframe: (
@@ -448,7 +641,7 @@ export const metricMeta = {
           colorscale: d3
             .scaleOrdinal()
             .domain(["no data", "under 25", "25 - 49", "50 - 74", "75 or more"])
-            .range(["#eaeaea", "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
+            .range([noDataGray, "#BBDAF5", "#86BFEB", "#549FE2"]), // TODO dynamically
 
           // for non-quantized legend `type`: the labels that should be used for
           // each `for` category
@@ -474,6 +667,7 @@ export const metricMeta = {
       },
     },
   },
+
   // additional metric legend information...
   get "72"() {
     return {
@@ -484,9 +678,13 @@ export const metricMeta = {
           The total cumulative number of COVID-19 cases (confirmed and probable)
           in the state as of the indicated date
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source:{" "}
-            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/nytimes/covid-19-data"
+            >
               New York Times compilation of data from state and local
               governments and health departments
             </a>
@@ -508,7 +706,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              // fontSize: ".9rem",
+              // fontSize: ".9em",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -536,18 +734,65 @@ export const metricMeta = {
       },
     };
   },
+  get "102"() {
+    return {
+      ...this["72"],
+      metric_definition: (
+        <span>
+          The total cumulative number of COVID-19 cases (confirmed and probable)
+          as of the indicated date
+          <br />
+          <i style={{ fontSize: ".8em" }}>
+            Source:{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/nytimes/covid-19-data"
+            >
+              New York Times compilation of data from state and local
+              governments and health departments
+            </a>
+          </i>
+        </span>
+      ),
+    };
+  },
+  get "104"() {
+    return {
+      ...this["74"],
+      metric_definition: (
+        <span>
+          The moving 7-day average number of new daily COVID-19 cases (confirmed
+          and probable).
+          <br />
+          <i style={{ fontSize: ".8em" }}>
+            Source: Calculated from{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/nytimes/covid-19-data"
+            >
+              New York Times compilation of data from state and local
+              governments and health departments
+            </a>
+          </i>
+        </span>
+      ),
+    };
+  },
   get "77"() {
     return {
       ...this["74"],
       metric_definition: (
         <span>
-          The number of new COVID-19 cases (confirmed) in the country in the
-          past 7 days.
+          The moving 7-day average number of new daily COVID-19 cases
+          (confirmed) in the country.
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source: Calculated from{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://github.com/CSSEGISandData/COVID-19"
             >
               COVID-19 Data Repository by the Center for Systems Science and
@@ -563,7 +808,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              // fontSize: ".9rem",
+              // fontSize: ".9em",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -585,7 +830,7 @@ export const metricMeta = {
           <div
             style={{
               fontFamily: "'rawline', serif",
-              // fontSize: ".9rem",
+              // fontSize: ".9em",
               fontWeight: "normal",
               fontStyle: "italic",
               lineHeight: "1.1",
@@ -600,10 +845,11 @@ export const metricMeta = {
           The total cumulative number of COVID-19 cases (confirmed) in the
           country as of the indicated date
           <br />
-          <i style={{ fontSize: ".8rem" }}>
+          <i style={{ fontSize: ".8em" }}>
             Source:{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://github.com/CSSEGISandData/COVID-19"
             >
               COVID-19 Data Repository by the Center for Systems Science and
@@ -626,26 +872,27 @@ export const metricMeta = {
     unit: v => "",
     legendInfo: {
       fill: (mapId, policyResolution) => {
-        const noun = mapId === "us" ? "state" : "national";
         return {
           for: "basemap", // TODO dynamically
           type: "quantized",
           labelsInside: false,
           range: [
-            "#eaeaea",
+            noDataGray,
             "none",
-            greenStepsScale(0),
-            greenStepsScale(0.25),
-            greenStepsScale(0.5),
-            greenStepsScale(0.75),
-            greenStepsScale(1),
+            mapGreen6,
+            mapGreen5,
+            mapGreen4,
+            mapGreen3,
+            mapGreen2,
+            mapGreen1,
           ],
-          borders: [null, "2px solid gray", null, null, null, null, null],
-          width: [null, null, 40, 40, 40, 40, 40],
+          borders: [null, "2px solid gray", null, null, null, null, null, null],
+          width: [null, null, 40, 40, 40, 40, 40, 40],
           entryStyles: [
             undefined,
             { marginLeft: 10 },
             { marginLeft: 20, marginRight: 0 },
+            { marginRight: 0 },
             { marginRight: 0 },
             { marginRight: 0 },
             { marginRight: 0 },
@@ -656,16 +903,17 @@ export const metricMeta = {
             undefined,
             { position: "absolute", top: 20 },
             undefined,
-            { position: "absolute", top: 20 },
+            undefined,
+            undefined,
             undefined,
             { position: "absolute", top: 20 },
           ],
           domain: [
-            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            <div style={{ fontSize: ".8em", lineHeight: 1.1 }}>
               {getNounFromPolicyResolution({
                 mapId,
                 policyResolution,
-              }).toLowerCase()}{" "}
+              })}{" "}
               data
               <br />
               not available
@@ -673,11 +921,11 @@ export const metricMeta = {
             <div
               style={{
                 color: "#333",
-                fontSize: ".8rem",
+                fontSize: ".8em",
                 lineHeight: 1.1,
               }}
             >
-              no{" "}
+              No{" "}
               {getNounFromPolicyResolution({
                 mapId,
                 policyResolution,
@@ -686,71 +934,18 @@ export const metricMeta = {
               <br />
               policy in effect
             </div>,
-            "fewest",
+            "Fewest",
             "",
-            "some",
             "",
-            "most",
+            "",
+            "",
+            "Most",
           ],
           subLabels: [],
         };
       },
     },
   },
-  // policy_status: {
-  //   metric_definition: (
-  //     <span>
-  //       {
-  //         <table className={infostyles.distancingLevelTable}>
-  //           <tbody>
-  //             <tr>
-  //               <td>
-  //                 <div
-  //                   style={{
-  //                     backgroundColor: "#66CAC4",
-  //                     marginRight: "20px",
-  //                   }}
-  //                   className={infostyles.rect}
-  //                 >
-  //                   policy in effect
-  //                 </div>
-  //               </td>
-  //               <td style={{ display: "none" }} />
-  //               <td>
-  //                 At least one policy in effect with the given category /
-  //                 subcategories on the specified date.
-  //               </td>
-  //             </tr>
-  //           </tbody>
-  //         </table>
-  //       }
-  //     </span>
-  //   ),
-  //   metric_displayname: "Policy status",
-  //   value: v => v,
-  //   unit: v => "",
-  //   legendInfo: {
-  //     fill: {
-  //       for: "basemap", // TODO dynamically
-  //       type: "quantized",
-  //       labelsInside: true,
-  //       domain: [
-  //         <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
-  //           data not
-  //           <br />
-  //           available
-  //         </div>,
-  //         "no policy",
-  //         "policy in effect",
-  //       ],
-  //       // range: ["#eaeaea", "white", "#66CAC4"],
-  //       colorscale: d3
-  //         .scaleOrdinal()
-  //         .domain(["no policy", "policy in effect"])
-  //         .range(["#eaeaea", "white", "#66CAC4"]),
-  //     },
-  //   },
-  // },
   lockdown_level: {
     // last updated: 2020-06-24
     // MV via JK and GU
@@ -832,6 +1027,7 @@ export const metricMeta = {
       Open: {
         label: "Open",
         color: "#e9f3fc",
+        phase: null,
         def: <span>No active restrictions are in place.</span>,
       },
       // TODO elegantly
@@ -853,8 +1049,12 @@ export const metricMeta = {
               The level of distancing in the location on the specified date.{" "}
             </span>
             <br />
-            <a href={COVID_LOCAL_URL + "metrics/"} target="_blank">
-              <img src={localLogo} />
+            <a
+              href={COVID_LOCAL_URL + "metrics/"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img alt={"COVID Local logo"} src={localLogo} />
               <span>view metrics at COVID-Local</span>
             </a>
           </p>
@@ -922,7 +1122,7 @@ export const metricMeta = {
           layout: "grid",
           labelsInside: true,
           range: [
-            "#eaeaea",
+            noDataGray,
             // "#ffffff",
             "#2165a1",
             "#549FE2",
@@ -933,7 +1133,11 @@ export const metricMeta = {
           gridTemplateColumns: "auto repeat(5, 1fr)",
           entryStyles: [
             // null,
-            { width: "auto", marginRight: 20, rectStyles: { width: "auto" } },
+            {
+              width: "auto",
+              marginRight: 20,
+              rectStyles: { width: "auto" },
+            },
             null,
             null,
             null,
@@ -943,12 +1147,12 @@ export const metricMeta = {
           borders: [null, null, null, null, null, null],
           // borders: [null, "2px solid gray", null, null, null, null, null],
           domain: [
-            <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>
+            <div style={{ fontSize: ".8em", lineHeight: 1.1 }}>
               data not
               <br />
               available
             </div>,
-            // <div style={{ fontSize: ".8rem", lineHeight: 1.1 }}>no policy</div>,
+            // <div style={{ fontSize: ".8em", lineHeight: 1.1 }}>no policy</div>,
             getCovidLocalMetricLink("lockdown"),
             getCovidLocalMetricLink("stay-at-home"),
             getCovidLocalMetricLink("safer-at-home"),
@@ -983,7 +1187,7 @@ export const metricMeta = {
               "open",
             ])
             .range([
-              "#eaeaea",
+              noDataGray,
               // "#ffffff",
               "#2165a1",
               "#549FE2",
@@ -993,29 +1197,42 @@ export const metricMeta = {
             ]), // TODO dynamically
         };
       },
-      // circle: {
-      //   for: "bubble",
-      //   type: "continuous",
-      //   outline: "#e65d36",
-      //   colorscale: d3
-      //     .scaleLinear()
-      //     .domain([0, 100])
-      //     .range(["rgba(230, 93, 54, 0.6)", "rgba(230, 93, 54, 0.6)"]), // TODO dynamically
-      //   labels: {
-      //     bubble: { min: "Low", max: "High" },
-      //     basemap: { min: "Minimal", max: "High" }
-      //   }
-      // }
     },
   },
 };
 
+// /**
+//  * Given the `mapId` of a map return the appropriate lower case noun for the
+//  * geographic features shown in the map.
+//  */
+// function getMapNoun(mapId) {
+//   switch (mapId) {
+//     case "us":
+//       return "state";
+//     case "us-county":
+//       return "county";
+//     default:
+//       return "national";
+//   }
+// }
+
+/**
+ * Given the `mapId` and resolution of policies to view (`geo` meaning
+ * policies applicable to the visible geographic unit of the map, and `sub`
+ * meaning policies applicable to those beneath it), returns the correct noun
+ * to describe the policy level.
+ */
 function getNounFromPolicyResolution({ mapId, policyResolution }) {
-  if (mapId === "us") {
-    if (policyResolution === "geo") return "State";
-    else return "Sub-state";
-  } else {
-    if (policyResolution === "geo") return "National";
-    else return "Sub-national";
+  switch (mapId) {
+    case "us":
+      if (policyResolution !== "subgeo") return "State";
+      else return "Sub-state";
+    case "us-county":
+      return "County";
+    case "us-county-plus-state":
+      return "State + county";
+    default:
+      if (policyResolution !== "subgeo") return "National";
+      else return "Sub-national";
   }
 }

@@ -1,0 +1,73 @@
+@import "src/assets/styles/vars.module.scss";
+.optionRadioSet {
+    width: auto;
+}
+.optionWidget {
+    .title,
+    .titleAndTooltip > .title {
+        font-family: "Open Sans", sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 0.875em;
+        color: $idea-gray-2;
+        &.title {
+            text-transform: uppercase;
+        }
+    }
+    .titleAndTooltip {
+        margin-bottom: 0.5em;
+        display: flex;
+        flex-flow: auto;
+        align-items: center;
+    }
+    &:not(:last-of-type) {
+        margin-bottom: 0.5em;
+    }
+    .clearAll {
+        font-size: 0.875em;
+        margin-left: 0.5em;
+        cursor: pointer;
+        color: $selected-blue;
+        &:hover {
+            text-decoration: underline;
+            color: $dark-selected-blue;
+        }
+    }
+    &.optionRadio {
+        > span {
+            display: flex;
+            align-items: baseline;
+            > input,
+            label {
+                cursor: pointer;
+            }
+
+            > input {
+                margin-right: 0.5em;
+            }
+
+            > label {
+                margin: 0;
+                font-weight: normal;
+                color: $idea-black;
+            }
+            input:checked + label > span {
+                font-weight: 600;
+            }
+        }
+    }
+    &.optionSelect {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        select {
+            grid-column: 1/-1;
+            background: $idea-gray-4;
+            padding: 0.25em;
+            border-radius: 2px;
+            font-weight: 600;
+            @include selectStyling();
+        }
+    }
+}

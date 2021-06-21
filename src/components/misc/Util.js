@@ -116,18 +116,6 @@ export const getLinearScale = ({
     ["*", metricZoom, scaleFactor],
   ];
 
-  return [
-    "interpolate",
-    ["linear"],
-    ["feature-state", featurePropertyKey],
-    0,
-    zeroSize,
-    1,
-    5,
-    maxValue,
-    75,
-  ];
-
   // Below: former way of doing linear scales without heuristic size fix
   // // return linear interpolation scale
   // return [
@@ -227,6 +215,9 @@ export const isLightColor = color => {
 // Return init lower case version of input string
 export const getInitLower = str => {
   return str.charAt(0).toLowerCase() + str.slice(1, str.length);
+};
+export const getInitCap = str => {
+  return str.charAt(0).toUpperCase() + str.slice(1, str.length);
 };
 
 export default Util;

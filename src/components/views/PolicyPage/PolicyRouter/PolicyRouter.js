@@ -16,7 +16,7 @@ import PolicyPage from "../PolicyPage/PolicyPage";
 import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 
 // utilities
-import { removeParenthetical } from "../../../misc/UtilsTyped";
+import { removeParenthetical } from "components/misc/UtilsTyped";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
