@@ -220,18 +220,4 @@ export const getInitCap = str => {
   return str.charAt(0).toUpperCase() + str.slice(1, str.length);
 };
 
-/**
- * Returns the series of integers from `start` to `end`, inclusive.
- * @param {number} start The beginning of the integer range, 0 by default.
- * @param {number} end The end of the integer range.
- * @returns The array representing the integer series from the start to end of
- * the range, inclusive.
- */
-export const range = (start = 0, end) => {
-  const base = Array.from(Array(end).keys());
-  if (start !== 0) {
-    return base.map(v => v + start);
-  } else return base;
-};
-
 export default Util;
