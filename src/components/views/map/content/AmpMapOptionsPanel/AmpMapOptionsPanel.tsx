@@ -345,12 +345,12 @@ const usSubGeoOptions: Option[] = [
       "View policies at the state and county levels on a map of counties",
   },
   {
-    name: "State-level policies",
+    name: "State-level policies only",
     value: "us",
     description: "View policies at the state level",
   },
   {
-    name: "County-level policies",
+    name: "County-level policies only",
     value: "us-county",
     description: "View policies at the county level",
   },
