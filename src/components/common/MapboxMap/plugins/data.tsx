@@ -8,7 +8,7 @@
  */
 
 // standard packages
-import React from "react";
+import React, { ReactNode } from "react";
 
 // 3rd party packages
 import * as d3 from "d3";
@@ -43,7 +43,6 @@ import {
   PolicyResolution,
 } from "./mapTypes";
 import { GeoRes, MetricDatum } from "api/queryTypes";
-import { renderToString } from "react-dom/server";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -604,8 +603,8 @@ const getCovidLocalMetricLink = (
   v: string,
   color: string = "",
   style: CSS.Properties = {}
-): string => {
-  return renderToString(
+): any => {
+  return (
     <a
       style={{ color: color || "unset", ...style }}
       href={COVID_LOCAL_URL + "metrics/"}
