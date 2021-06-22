@@ -271,8 +271,10 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const updateCircle = (selected: Option[]): void => {
     if (selected.length > 0) {
       if (setCircle !== undefined) {
-        if (selected[0].value === "show")
-          setCircle(prevCircle || defaults[mapId].circle);
+        const circleToShow: string | null | undefined =
+          prevCircle || defaults[mapId].circle;
+        if (selected[0].value === "show" && circleToShow !== undefined)
+          setCircle(circleToShow);
         else {
           setPrevCircle(circle);
           setCircle(null);
@@ -345,12 +347,12 @@ const usSubGeoOptions: Option[] = [
       "View policies at the state and county levels on a map of counties",
   },
   {
-    name: "State-level policies",
+    name: "State-level policies only",
     value: "us",
     description: "View policies at the state level",
   },
   {
-    name: "County-level policies",
+    name: "County-level policies only",
     value: "us-county",
     description: "View policies at the county level",
   },

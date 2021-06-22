@@ -11,7 +11,9 @@ const NavDropDown = props => {
     <ExpandingSection
       hover
       floating
+      showCaret={true}
       open={expanderOpen}
+      side={"right"}
       onOpen={() => setExpanderOpen(true)}
       onClose={() => setExpanderOpen(false)}
       containerStyle={{ borderRadius: "999px 5px 5px 5px" }}

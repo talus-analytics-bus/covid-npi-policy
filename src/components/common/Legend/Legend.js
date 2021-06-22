@@ -13,7 +13,7 @@ import Util, { percentize, isLightColor } from "../../misc/Util.js";
 
 // assets and styles
 import styles from "./legend.module.scss";
-import { noDataGray } from "../../../assets/styles/vars.module.scss";
+import varsExports from "../../../assets/styles/vars.module.scss";
 
 /**
  * @method Legend
@@ -133,6 +133,7 @@ const Legend = ({ ...props }) => {
           </div>
         </div>
       );
+      const { noDataGray } = varsExports;
       const zero = (
         <div className={styles.entry}>
           <div
@@ -298,9 +299,9 @@ const Legend = ({ ...props }) => {
                       </div>
                     )}
                     {subLabels && (
-                      <a onClick={() => {}} className={styles.label}>
+                      <span onClick={() => {}} className={styles.label}>
                         {subLabels[i]}
-                      </a>
+                      </span>
                     )}
                   </div>
                 );

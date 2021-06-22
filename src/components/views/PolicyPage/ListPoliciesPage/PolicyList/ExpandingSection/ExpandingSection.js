@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./ExpandingSection.module.scss";
 
 const ExpandingSection = props => {
-  const { open } = props;
+  const { open, showCaret = false, side = "left" } = props;
 
   // store animTimer in a ref so that
   // canceling is reliable across render cycles
@@ -30,7 +30,7 @@ const ExpandingSection = props => {
   // closing as part of the scroll restoration process)
   const commonStyles = {
     overflow: "hidden",
-    right: 0,
+    right: side === "right" ? 0 : undefined,
     transition: `${animDuration}ms ease`,
     ...(props.floating && {
       position: "absolute",
@@ -161,7 +161,7 @@ const ExpandingSection = props => {
     >
       <button className={styles.expanderButton} onClick={onClickHandler}>
         {children[0]}
-        <Caret up={!open} />
+        {showCaret !== false && <Caret up={!open} />}
       </button>
       <div style={animationHiderStyle}>
         <div ref={contentContainer} style={props.containerStyle}>

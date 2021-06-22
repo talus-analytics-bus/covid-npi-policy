@@ -3,17 +3,6 @@ import * as d3 from "d3/dist/d3.min";
 const Util = {};
 
 /**
- * Returns true if the object has no keys, false otherwise.
- * @method isEmpty
- * @param  {[type]}  d [description]
- * @return {Boolean}   [description]
- */
-export const isEmpty = d => {
-  if (d === undefined || d === null || Object.keys(d).length === 0) return true;
-  else return false;
-};
-
-/**
  * Check to see if two arrays match
  * https://gomakethings.com/how-to-check-if-two-arrays-are-equal-with-vanilla-js/
  * @method

@@ -117,14 +117,14 @@ const Map: FC<MapProps> = ({
   const prevDate = usePrevious(date);
 
   // name of metric to use as fill by default
-  const [fill, setFill] = useState(defaults[mapId].fill);
+  const [fill, setFill] = useState<string | null>(defaults[mapId].fill);
   const prevFill = usePrevious(fill);
 
   const initialCircle = defaults[mapId].showCircle
-    ? defaults[mapId].circle
+    ? defaults[mapId].circle || null
     : null;
   // name of metric to use as circle by default
-  const [circle, setCircle] = useState(initialCircle);
+  const [circle, setCircle] = useState<string | null>(initialCircle);
   const prevCircle = usePrevious(circle);
 
   // dynamic map title
@@ -244,7 +244,7 @@ const Map: FC<MapProps> = ({
     const newFilterDefs: FilterDefs[] = [...filterDefs];
     newFilterDefs.forEach(d => {
       for (const [k] of Object.entries(d)) {
-        if (!k.startsWith("date") && d[k].items === undefined)
+        if (!k.startsWith("date") && d[k].items.length === 0)
           d[k].items = optionsets[k];
       }
     });
@@ -300,7 +300,7 @@ const Map: FC<MapProps> = ({
       setLoading(true);
 
       if (defaults[mapId].showCircle !== false)
-        setCircle(defaults[mapId].circle);
+        setCircle(defaults[mapId].circle || null);
       else setCircle(null);
       setFill(defaults[mapId].fill);
 

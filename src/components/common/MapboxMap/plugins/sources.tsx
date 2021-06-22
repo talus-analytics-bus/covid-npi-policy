@@ -1,5 +1,6 @@
 import React from "react";
 import { MapSources } from "./mapTypes";
+import { GeoRes } from "components/misc/queryTypes";
 
 /**
  * Define Mapbox sources for geometries, centroids, etc. and styles.
@@ -148,7 +149,7 @@ export const mapStyles = {
     value: "us",
 
     // geographic resolution for Metrics database
-    geo_res: "state",
+    geo_res: GeoRes.state,
 
     // name of map displayed to user
     name: "US states",
@@ -180,7 +181,7 @@ export const mapStyles = {
     value: "us-county",
 
     // geographic resolution for Metrics database
-    geo_res: "county",
+    geo_res: GeoRes.county,
 
     // name of map displayed to user
     name: "US counties",
@@ -205,14 +206,14 @@ export const mapStyles = {
     return {
       ...this["us-county"],
       value: "us-county-plus-state",
-      geo_res: "county_plus_state",
+      geo_res: GeoRes.county_plus_state,
     };
   },
   // additional maps...
   global: {
     url: process.env.REACT_APP_GLOBAL_MAP_STYLE_URL,
     value: "global",
-    geo_res: "country",
+    geo_res: GeoRes.country,
     name: "Countries",
     attribution: true,
     tooltip: <span>View national-level data for the world</span>,

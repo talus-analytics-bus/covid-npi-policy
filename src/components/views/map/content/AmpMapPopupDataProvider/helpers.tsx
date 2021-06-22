@@ -17,10 +17,7 @@ import { Moment } from "moment";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import { Option } from "components/common/OptionControls/types";
-import {
-  getPolicyCatSubcatPhrase,
-  includeSubcatFilters,
-} from "../AmpMapPopup/content/PoliciesBodySection/helpers";
+import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
 
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";

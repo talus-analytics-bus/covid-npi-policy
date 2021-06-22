@@ -11,13 +11,7 @@
 import * as d3 from "d3";
 
 // assets and styles
-import mapGreen1 from "assets/styles/vars.module.scss";
-import mapGreen2 from "assets/styles/vars.module.scss";
-import mapGreen3 from "assets/styles/vars.module.scss";
-import mapGreen4 from "assets/styles/vars.module.scss";
-import mapGreen5 from "assets/styles/vars.module.scss";
-import mapGreen6 from "assets/styles/vars.module.scss";
-import noDataGray from "assets/styles/vars.module.scss";
+import varsExports from "assets/styles/vars.module.scss";
 
 // utilities
 import {
@@ -32,6 +26,17 @@ import { CircleStyles, FillStyles } from "./mapTypes";
 // import dots from "./assets/images/dots.png";
 
 // constants
+// colors imported from vars.module.scss
+const {
+  mapGreen1,
+  mapGreen2,
+  mapGreen3,
+  mapGreen4,
+  mapGreen5,
+  mapGreen6,
+  noDataGray,
+} = varsExports;
+
 // define default pattern style used below
 const defaultPatternStyle = (key: string) => {
   return {

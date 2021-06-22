@@ -2,6 +2,7 @@
  * TypeScript types used by the Map and MapboxMap components.
  */
 import {
+  GeoRes,
   MetricData,
   OptionSetDataProps,
   VersionDataProps,
@@ -106,16 +107,18 @@ export interface MapDefaults extends MapIdEntries {
   };
 }
 
+export type MetricShape = "circle" | "circle-state" | "fill";
+
 /**
  * Default settings for a map, such as a map of world countries or of USA
  * states, that will be used to initialize the map.
  */
 export type MapDefaultsEntry = {
   /**
-   * Default circle metric to show, or null if none.
+   * Default metric to show, or null if none, for each metric shape.
    */
-  circle: string | null;
-
+  [K in MetricShape]?: string | null;
+} & {
   /**
    * True if the default circle metric should be visible by default,
    * false otherwise.
@@ -231,6 +234,9 @@ export type NumericObservation = {
   value: Numeric | number | null | undefined;
 };
 
+/**
+ * Entry defining metadata for a single metric
+ */
 export type MetricMetaEntry = {
   metric_definition: any;
   metric_displayname: string;
@@ -239,7 +245,19 @@ export type MetricMetaEntry = {
   unit: Function;
   trendTimeframe?: ReactElement;
   legendInfo: Record<string, any>;
+  valueStyling?: Record<string, ValueStyling>;
   wideDefinition?: boolean;
+};
+
+export type ValueStyling = {
+  label: string;
+  color: string;
+  icon?: string;
+  def: ReactNode;
+  phase?: string;
+  noLegendEntry?: boolean;
+  bordered?: boolean;
+  border?: string;
 };
 
 export type MetricMeta = Record<string, MetricMetaEntry>;
@@ -247,7 +265,7 @@ export type MetricMeta = Record<string, MetricMetaEntry>;
 export type MapStylesEntry = {
   url: string;
   value: string;
-  geo_res: string;
+  geo_res: GeoRes;
   name: string;
   defaultFitBounds: number[][];
   tooltip?: string | ReactNode;
@@ -307,6 +325,11 @@ export type DistancingLevel =
   | "Open"
   | null;
 export type ElementsOrNull = (JSX.Element | null)[] | JSX.Element | null;
+
+/**
+ * Filters to provide to API calls for AMP data.
+ */
+export type Filters = Record<string, string[]>;
 
 /**
  * Filter option information derived from optionset API responses

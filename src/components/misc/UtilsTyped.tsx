@@ -2,6 +2,7 @@ import moment from "moment";
 import React from "react";
 import { useEffect, useRef } from "react";
 import { MapContext } from "react-map-gl";
+// import * as d3 from "d3";
 /**
  * Parses a value as a string or, if it is null or undefined, returns itself.
  * @param v The value to be parsed as a string
@@ -221,4 +222,13 @@ export const range = (start: number = 0, end: number): number[] => {
   if (start !== 0) {
     return base.map(v => v + start);
   } else return base;
+};
+
+/**
+ * Returns true if the object has no keys, false otherwise.
+ * @method isEmpty
+ */
+export const isEmpty: Function = (d: any): boolean => {
+  if (d === undefined || d === null || Object.keys(d).length === 0) return true;
+  else return false;
 };

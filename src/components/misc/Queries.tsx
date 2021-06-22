@@ -1,24 +1,51 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import moment from "moment";
-import { isEmpty } from "./Util";
+import { isEmpty } from "./UtilsTyped";
 
 // local utility functions
 import ObservationQuery from "./ObservationQuery";
-import { FC } from "react-transition-group/node_modules/@types/react";
-import { OptionSetProps } from "./queryTypes";
+import {
+  CaseloadProps,
+  DeathsProps,
+  DistancingLevelProps,
+  ExportProps,
+  GeoRes,
+  MetadataProps,
+  MetricAPIRequestProps,
+  MetricData,
+  OptionSetProps,
+  PlaceProps,
+  PlanProps,
+  PolicyListProps,
+  PolicyProps,
+  PolicyStatusCountsProps,
+} from "./queryTypes";
+import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 
 const API_URL = process.env.REACT_APP_API_URL;
+
+interface GetMetricIdProps {
+  isState: boolean;
+  windowSizeDays: number;
+  isCounty?: boolean;
+  isCumulative?: boolean;
+}
 
 /**
  * Get glossary terms
  */
-export const Glossary = async function({ field }) {
-  let req;
-  req = await axios(`${API_URL}/get/glossary`);
-  const params = new URLSearchParams();
+export const Glossary = async function({
+  field,
+}: {
+  field: string;
+}): Promise<MetricData | boolean> {
+  let req: AxiosResponse<Record<string, any>> = await axios(
+    `${API_URL}/get/glossary`
+  );
+  const params: URLSearchParams = new URLSearchParams();
   params.append("field", field);
-  const res = await req;
-  if (res.data !== undefined) return res.data.data;
+  const res: Record<string, any> = await req;
+  if (res.data !== undefined) return res.data.data as MetricData;
   else return false;
 };
 
@@ -47,7 +74,11 @@ export const CountriesWithDistancingLevels = async function() {
 /**
  * Get counts of data instances
  */
-export const Count = async function({ class_names }) {
+export const Count = async function({
+  class_names,
+}: {
+  class_names: string[];
+}) {
   // prepare params
   const params = new URLSearchParams();
   class_names.forEach(d => {
@@ -69,9 +100,9 @@ export const Count = async function({ class_names }) {
  */
 export const Metadata = async function({
   method,
-  fields,
+  fields = [],
   entity_class_name = "Policy",
-}) {
+}: MetadataProps) {
   let req;
   if (method === "get") {
     const params = new URLSearchParams();
@@ -84,7 +115,7 @@ export const Metadata = async function({
     });
   }
   const res = await req;
-  if (res.data !== undefined) return res.data;
+  if (res !== undefined && res.data !== undefined) return res.data;
   else return false;
 };
 
@@ -94,28 +125,29 @@ let allPolicies = null;
  * Get policy data from API.
  */
 export const Policy = async function({
-  method,
+  method = "get",
   page = 1,
   pagesize = 1000000,
   fields = [],
   filters = null,
-  by_category = null,
+  by_category = false,
   ordering = [],
   count = false,
   random = false,
   merge_like_policies = true,
-}) {
+}: PolicyProps) {
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
   });
-  if (by_category !== null) params.append("by_category", by_category);
-  params.append("page", page);
-  params.append("pagesize", pagesize);
-  params.append("count", count);
-  params.append("random", random);
-  params.append("merge_like_policies", merge_like_policies);
+  if (by_category !== null)
+    params.append("by_category", by_category.toString());
+  params.append("page", page.toString());
+  params.append("pagesize", pagesize.toString());
+  params.append("count", count.toString());
+  params.append("random", random.toString());
+  params.append("merge_like_policies", merge_like_policies.toString());
 
   // prepare request
   let req;
@@ -156,17 +188,18 @@ export const PolicyList = async function({
   pagesize = 1000000,
   fields = [],
   filters = null,
-  by_category = null,
+  by_category = false,
   ordering = [],
-}) {
+}: PolicyListProps) {
   // prepare params
   const params = new URLSearchParams();
   fields.forEach(d => {
     params.append("fields", d);
   });
-  if (by_category !== null) params.append("by_category", by_category);
-  params.append("page", page);
-  params.append("pagesize", pagesize);
+  if (by_category !== null)
+    params.append("by_category", by_category.toString());
+  params.append("page", page.toString());
+  params.append("pagesize", pagesize.toString());
 
   // prepare request
   let req;
@@ -179,16 +212,17 @@ export const PolicyList = async function({
       console.log("Error: `filters` is required for method POST.");
     }
 
-    const filtersNoUndefined = {};
+    const filtersNoUndefined: Filters = {};
 
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value[0] !== undefined) {
-        filtersNoUndefined[key] = value;
-      }
-    });
+    if (filters !== null)
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value[0] !== undefined) {
+          filtersNoUndefined[key] = value;
+        }
+      });
 
-    console.log({ filters, ordering });
-    console.log({ filtersNoUndefined, ordering });
+    // console.log({ filters, ordering });
+    // console.log({ filtersNoUndefined, ordering });
     req = await axios.post(
       `${API_URL}/post/policy_number`,
       { filters: filtersNoUndefined, ordering },
@@ -203,7 +237,8 @@ export const PolicyList = async function({
   const res = await req;
   if (res.data !== undefined) {
     if (isEmpty(filters)) {
-      allPolicies = res.data;
+      // eslint-disable-next-line
+      allPolicies = res.data; // TODO ensure local caching works
     }
     return res.data;
   } else return false;
@@ -220,7 +255,7 @@ export const Challenge = async function({
   pagesize = 1000000,
   fields = [],
   filters = {},
-  by_category = null,
+  by_category = false,
   ordering = [],
 }) {
   // prepare params
@@ -228,9 +263,10 @@ export const Challenge = async function({
   fields.forEach(d => {
     params.append("fields", d);
   });
-  if (by_category !== null) params.append("by_category", by_category);
-  params.append("page", page);
-  params.append("pagesize", pagesize);
+  if (by_category !== null)
+    params.append("by_category", by_category.toString());
+  params.append("page", page.toString());
+  params.append("pagesize", pagesize.toString());
 
   // prepare request
   let req;
@@ -262,7 +298,7 @@ export const Challenge = async function({
   } else return false;
 };
 
-let allPlans = null;
+let allPlans: MetricData | null = null;
 
 /**
  * Get Plan data from API.
@@ -274,8 +310,7 @@ export const Plan = async function({
   fields = [],
   filters = null,
   ordering,
-  by_category = null,
-}) {
+}: PlanProps) {
   // return cached result if available
   if (isEmpty(filters) && allPlans !== null) {
     return allPlans;
@@ -286,8 +321,8 @@ export const Plan = async function({
   fields.forEach(d => {
     params.append("fields", d);
   });
-  params.append("page", page);
-  params.append("pagesize", pagesize);
+  params.append("page", page.toString());
+  params.append("pagesize", pagesize.toString());
   // TODO implement `by_category` in future if needed
   // if (by_category !== null) params.append("by_category", by_category);
 
@@ -329,20 +364,11 @@ export const DistancingLevel = async function({
   geo_res,
   iso3,
   state_name,
-  deltas_only = false,
-  all_dates = true,
-  fields = [],
-  filters = null,
   date,
-  // method,
-  // geo_res = "state",
-  // fields = [],
-  // filters = null,
-  // date,
-}) {
+}: DistancingLevelProps) {
   // prepare params
   const params = new URLSearchParams();
-  const toAdd = [
+  const toAdd: [string, any][] = [
     ["geo_res", geo_res],
     ["iso3", iso3],
     ["state_name", state_name],
@@ -374,7 +400,7 @@ export const DistancingLevel = async function({
  */
 export const PolicyStatusCounts = async function({
   method,
-  geo_res = "state",
+  geo_res = GeoRes.state,
   fields = [],
   filters = null,
   count_sub = false,
@@ -383,8 +409,7 @@ export const PolicyStatusCounts = async function({
   one = false,
   merge_like_policies = true,
   counted_parent_geos = [],
-  mapId = undefined,
-}) {
+}: PolicyStatusCountsProps) {
   // prepare params
   const params = new URLSearchParams();
 
@@ -398,22 +423,19 @@ export const PolicyStatusCounts = async function({
     params.append("fields", d);
   });
   counted_parent_geos.forEach(d => {
-    params.append("counted_parent_geos", d);
+    params.append("counted_parent_geos", GeoRes[d]);
   });
 
-  params.append("count_sub", count_sub);
-  params.append("include_min_max", include_min_max);
-  params.append("one", one);
-  params.append("merge_like_policies", merge_like_policies);
-  params.append("include_zeros", include_zeros);
+  params.append("count_sub", count_sub.toString());
+  params.append("include_min_max", include_min_max.toString());
+  params.append("one", one.toString());
+  params.append("merge_like_policies", merge_like_policies.toString());
+  params.append("include_zeros", include_zeros.toString());
 
   // prepare request
   let req;
   if (method === "get") {
-    console.error("GET not yet mplemented for PolicyStatusCounts");
-    // req = await axios(`${API_URL}/get/policy_status_counts/${geo_res}`, {
-    //   params,
-    // });
+    console.error("GET not yet implemented for PolicyStatusCounts");
   } else if (method === "post") {
     if (filters === null) {
       console.log("Error: `filters` is required for method POST.");
@@ -432,18 +454,24 @@ export const PolicyStatusCounts = async function({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) {
-    const formattedRes = res.data.data;
-    formattedRes.min_all_time = res.data.min_all_time;
-    formattedRes.max_all_time = res.data.max_all_time;
-    return formattedRes;
-  } else return false;
+  if (res !== undefined)
+    if (res.data !== undefined) {
+      const formattedRes = res.data.data;
+      formattedRes.min_all_time = res.data.min_all_time;
+      formattedRes.max_all_time = res.data.max_all_time;
+      return formattedRes;
+    } else return false;
+  else return false;
 };
 
 /**
  * Get export data from API.
  */
-export const Export = async function({ method, filters = null, class_name }) {
+export const Export = async function({
+  method,
+  filters = null,
+  class_name,
+}: ExportProps) {
   let req;
   if (method === "get") {
     req = await axios(`${API_URL}/export`);
@@ -529,13 +557,18 @@ export const Caseload = async ({
   windowSizeDays = 7, // size of window over which to aggregate cases; only
   isCumulative = false, // true if cumulative values needed
   getAverage = false, // true if average for windowsize is needed
-  // 1 and 7 are currently supported
-}) => {
+}: // 1 and 7 are currently supported
+CaseloadProps) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
 
-  const getMetricId = ({ isState, isCounty, windowSizeDays, isCumulative }) => {
+  const getMetricId: Function = ({
+    isState,
+    isCounty,
+    windowSizeDays,
+    isCumulative,
+  }: GetMetricIdProps): number | undefined => {
     if (isState) {
       if (isCumulative) return 72;
       else if (windowSizeDays === 7) {
@@ -551,6 +584,9 @@ export const Caseload = async ({
       if (windowSizeDays === 7) {
         return 77;
       } else if (windowSizeDays === 1) return 76;
+      else {
+        throw Error("Unexpected state reached");
+      }
     }
   };
   const isState = stateName !== undefined || stateId !== undefined;
@@ -570,7 +606,7 @@ export const Caseload = async ({
     : "country";
 
   // prepare parameters
-  const params = {
+  const params: MetricAPIRequestProps = {
     metric_id,
     spatial_resolution,
     temporal_resolution: "daily",
@@ -587,10 +623,10 @@ export const Caseload = async ({
   if (stateName !== undefined) params.place_name = stateName;
   if (ansiFips !== undefined) params.fips = ansiFips;
   // send request and return response data
-  const res = await ObservationQuery({ ...params });
+  const res: MetricData = await ObservationQuery({ ...params });
   if (getAverage && windowSizeDays !== 1)
     res.forEach(d => {
-      d.value = Math.round(d.value / windowSizeDays);
+      d.value = Math.round((d.value as number) / windowSizeDays);
     });
   return res;
 };
@@ -649,34 +685,38 @@ export const Deaths = async ({
   stateName, // name for state, e.g., Alabama
   fields = ["date_time", "value"], // fields to return, return all if empty
   windowSizeDays = 7, // size of window over which to aggregate cases; only
-  // 1 and 7 are currently supported
-}) => {
+}: // 1 and 7 are currently supported
+DeathsProps) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
 
-  const getMetricId = ({ isState, windowSizeDays }) => {
+  const getMetricId = ({
+    isState,
+    windowSizeDays,
+  }: GetMetricIdProps): number | undefined => {
     if (isState) {
       if (windowSizeDays === 7) {
         return 94;
       } else if (windowSizeDays === 1) return 93;
     } else {
-      console.error(
+      throw Error(
         "Not yet implemented: Country-level COVID deaths data. Only state-level deaths data are currently implemented."
       );
-      // if (windowSizeDays === 7) {
-      //   return 97;
-      // } else if (windowSizeDays === 1) return 96;
     }
   };
   const isState = stateName !== undefined || stateId !== undefined;
   const metric_id = getMetricId({ isState, windowSizeDays });
 
+  if (metric_id === undefined) {
+    throw Error("Could not find metric ID.");
+  }
+
   // define spatial resolution based on same
   const spatial_resolution = isState ? "state" : "country";
 
   // prepare parameters
-  const params = {
+  const params: MetricAPIRequestProps = {
     metric_id,
     spatial_resolution,
     temporal_resolution: "daily",
@@ -696,10 +736,16 @@ export const Deaths = async ({
   return await ObservationQuery({ ...params });
 };
 
-export const Place = async ({ one = false, ansiFips, level, iso3, fields }) => {
+export const Place = async ({
+  one = false,
+  ansiFips,
+  level,
+  iso3,
+  fields,
+}: PlaceProps) => {
   // prepare params
   const params = new URLSearchParams();
-  const toAdd = [
+  const toAdd: [string, any][] = [
     ["iso3", iso3],
     ["ansi_fips", ansiFips],
     ["level", level],
@@ -719,11 +765,11 @@ export const Place = async ({ one = false, ansiFips, level, iso3, fields }) => {
   } else return false;
 };
 
-function addParams(toAdd, params) {
+function addParams(toAdd: [string, any][], params: URLSearchParams): void {
   toAdd.forEach(([key, value]) => {
     if (value !== undefined) {
       if (typeof value === "object" && value.length > 0) {
-        value.forEach(v => {
+        value.forEach((v: any) => {
           params.append(key, v);
         });
       } else params.append(key, value);

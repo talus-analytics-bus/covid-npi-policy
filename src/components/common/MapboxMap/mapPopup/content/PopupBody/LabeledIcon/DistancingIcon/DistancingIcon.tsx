@@ -10,9 +10,6 @@ type DistancingIconProps = {
   value: string | null;
 };
 
-const distancing: Record<string, Record<string, any>> =
-  metricMeta.lockdown_level.valueStyling;
-
 const getDistancingLevelAndPhase: Function = (
   value: string
 ): (string | null)[] => {
@@ -21,7 +18,9 @@ const getDistancingLevelAndPhase: Function = (
     null,
     null,
   ];
-  if (value !== null) {
+  const distancing: Record<string, Record<string, any>> | undefined =
+    metricMeta.lockdown_level.valueStyling;
+  if (value !== null && distancing !== undefined) {
     const valueInfo: Record<string, any> = distancing[value];
     if (valueInfo === undefined) return UNDEFINED_DISTANCING_LEVEL;
     else {
@@ -40,7 +39,13 @@ export const DistancingIcon: FunctionComponent<DistancingIconProps> = ({
   return (
     <LabeledIcon
       {...{
-        icon: iconImgSrc && <img style={{ width: 30 }} src={iconImgSrc} />,
+        icon: iconImgSrc && (
+          <img
+            style={{ width: 30 }}
+            src={iconImgSrc}
+            alt={"Icon: " + labelText}
+          />
+        ),
         label: (
           <div>
             <strong className={styles.labelText}>{labelText}</strong>

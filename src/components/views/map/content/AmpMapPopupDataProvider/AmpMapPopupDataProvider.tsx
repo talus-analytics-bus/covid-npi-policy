@@ -43,6 +43,7 @@ import MapOptionContext, {
 } from "../../context/MapOptionContext";
 import { Option } from "components/common/OptionControls/types";
 import Settings from "Settings";
+import { GeoRes } from "components/misc/queryTypes";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -124,7 +125,8 @@ const updateData: Function = async ({
       filters: { ...filtersWithDate, ...getLocationFilters(mapId, feature) },
       one: true,
       merge_like_policies: false,
-      counted_parent_geos: mapId === "us-county-plus-state" ? ["state"] : [],
+      counted_parent_geos:
+        mapId === "us-county-plus-state" ? [GeoRes.state] : [],
     }),
     distancingLevel: fetchedDistancingLevel,
   };
@@ -215,6 +217,8 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
         filters,
       },
     });
+    // TODO fix dependencies
+    // eslint-disable-next-line
   }, [feature.state]);
 
   return (
@@ -251,17 +255,8 @@ export default AmpMapPopupDataProvider;
  * The geographic resolution that should be used for policy status
  * count queries
  */
-function getPolicyCountGeoResFromMapId(mapId: MapId): string | undefined {
-  let policyCountGeoRes;
-  switch (mapId) {
-    // case "us-county":
-    // case "us-county-plus-state":
-    //   policyCountGeoRes = mapStyles["us-county"].geo_res;
-    //   break;
-    default:
-      policyCountGeoRes = mapStyles[mapId].geo_res;
-      break;
-  }
+function getPolicyCountGeoResFromMapId(mapId: MapId): GeoRes {
+  const policyCountGeoRes: GeoRes = mapStyles[mapId].geo_res;
   if (policyCountGeoRes === undefined)
     throw Error("Unexpected map ID: " + mapId);
   return policyCountGeoRes;

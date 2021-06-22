@@ -38,7 +38,7 @@ import { dataGetter } from "./plugins/dataGetter";
 import { mapSources } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
-import { isEmpty } from "../../misc/Util";
+import { isEmpty } from "../../misc/UtilsTyped";
 import { parseStringSafe } from "../../misc/UtilsTyped";
 import ResetZoom from "./resetZoom/ResetZoom";
 

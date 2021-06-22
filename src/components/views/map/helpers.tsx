@@ -25,9 +25,16 @@ type BrowserHistoryRecord = {
  * @param {Window} history The window object
  * @param {MapId} mapId The ID of a map
  */
-export function replaceMapIdState(history: any, mapId: MapId): void {
-  if (history !== undefined)
-    history.replaceState(getMapHistoryState(mapId), "");
+export function replaceMapIdState(
+  history: any,
+  mapId: MapId,
+  title: string = ""
+): void {
+  if (history !== undefined) {
+    const stateObj: BrowserHistoryRecord = getMapHistoryState(mapId);
+    const url: string = stateObj.pathname + stateObj.search;
+    history.replaceState(stateObj, title, url);
+  }
 }
 
 /**

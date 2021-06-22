@@ -11,11 +11,7 @@ import styles from "./PolicyPage.module.scss";
 // local utility functions
 import {
   Policy, // requests policy data
-  Challenge, // court challenges associated with policies
-  Caseload, // ...caseload data
-  execute, // executes a set of API requests
 } from "../../../misc/Queries";
-import ObservationQuery from "../../../misc/ObservationQuery";
 
 const PolicyPage = props => {
   // STATE // -------------------------------------------------------------- //

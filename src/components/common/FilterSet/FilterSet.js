@@ -11,7 +11,8 @@ import { getInputLabel } from "../Filter/Filter.js";
 import { ShowMore } from "../";
 
 // misc
-import { isEmpty, comma } from "../../misc/Util";
+import { comma } from "../../misc/Util";
+import { isEmpty } from "../../misc/UtilsTyped";
 
 // assets and styles
 import styles from "./filterset.module.scss";
