@@ -331,7 +331,10 @@ export type DistancingLevel =
   | "Partially open"
   | "Open"
   | null;
-export type ElementsOrNull = (JSX.Element | null)[] | JSX.Element | null;
+export type ElementsOrNull =
+  | (JSX.Element | null | false)[]
+  | JSX.Element
+  | null;
 
 /**
  * Filters to provide to API calls for AMP data.

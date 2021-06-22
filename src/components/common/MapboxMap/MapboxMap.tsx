@@ -63,6 +63,7 @@ import {
   ViewportProps,
 } from "./plugins/mapTypes";
 import { MetricData, MetricDatum } from "api/queryTypes";
+import { MutableRefObject } from "react";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -496,6 +497,14 @@ const MapboxMap: FC<MapboxMapProps> = ({
       setShowMapPopup(false);
       const newMapPopup: ReactNode = (
         <AmpMapPopupDataProvider
+          onClose={(curPopupFeature: MapFeature) => {
+            closePopup(
+              mapRef,
+              curPopupFeature,
+              setShowMapPopup,
+              setSelectedFeature
+            );
+          }}
           {...{
             key: selectedFeature !== null ? selectedFeature.id : undefined,
             mapId,
@@ -1082,3 +1091,21 @@ export function getMapNouns(mapId: MapId) {
       };
   }
 }
+
+const closePopup = (
+  mapRef: MutableRefObject<MapRef | null>,
+  selectedFeature: MapFeature | null,
+  setShowMapPopup: Dispatch<SetStateAction<boolean>>,
+  setSelectedFeature: Dispatch<SetStateAction<MapFeature | null>>
+): void => {
+  if (mapRef === null || mapRef.current === null || selectedFeature === null)
+    return;
+  else {
+    const map = mapRef.current.getMap();
+    map.setFeatureState(selectedFeature, {
+      clicked: false,
+    });
+    setShowMapPopup(false);
+    setSelectedFeature(null);
+  }
+};

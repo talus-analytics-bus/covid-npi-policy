@@ -31,6 +31,11 @@ type AmpMapPopupProps = {
   policyResolution: PolicyResolution;
   updating: boolean;
   ready: boolean;
+
+  /**
+   * Function called when close button is clicked.
+   */
+  onClose(curPopupFeature: MapFeature): void;
 };
 
 export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
@@ -47,46 +52,48 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   policyResolution,
   updating,
   ready,
+  onClose,
 }) => {
+  // show loading spinner in body sections if updating or not initialized
   const updatingOrNotReady: boolean = updating || !ready;
   return (
     <MapPopup
-      {...{
-        headerTitle: featureName,
-        headerSub: (
-          <>
-            as of <FMT.LocalDate>{dataDate}</FMT.LocalDate>
-          </>
-        ),
-        headerRightContent: (
-          <AmpCaseSparkline
-            {...{ mapId, feature, dataDate, unit: "", label: "" }}
-          />
-        ),
-        bodySections: [
-          <DistancingBodySection
-            {...{
-              key: "distancingBody",
-              title: getDistancingLevelLabelFromMapId(mapId),
-              distancingLevel,
-              modelLink,
-              updating: updatingOrNotReady,
-            }}
-          />,
-          <PoliciesBodySection
-            {...{
-              key: "policiesBody",
-              categories: policyCategories,
-              subcategories: policySubcategories,
-              count: policyCount,
-              policyActionLinks,
-              policyResolution,
-              mapId,
-              updating: updating || !ready,
-            }}
-          />,
-        ],
-      }}
+      headerTitle={featureName}
+      headerSub={
+        <>
+          as of <FMT.LocalDate>{dataDate}</FMT.LocalDate>
+        </>
+      }
+      headerRightContent={
+        <AmpCaseSparkline
+          {...{ mapId, feature, dataDate, unit: "", label: "" }}
+        />
+      }
+      showClose={true}
+      onClose={() => onClose(feature)}
+      bodySections={[
+        <DistancingBodySection
+          {...{
+            key: "distancingBody",
+            title: getDistancingLevelLabelFromMapId(mapId),
+            distancingLevel,
+            modelLink,
+            updating: updatingOrNotReady,
+          }}
+        />,
+        <PoliciesBodySection
+          {...{
+            key: "policiesBody",
+            categories: policyCategories,
+            subcategories: policySubcategories,
+            count: policyCount,
+            policyActionLinks,
+            policyResolution,
+            mapId,
+            updating: updating || !ready,
+          }}
+        />,
+      ]}
     />
   );
 };

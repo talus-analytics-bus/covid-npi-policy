@@ -165,6 +165,11 @@ type ComponentProps = {
   map: Record<string, any>;
   filters: Record<string, any>;
   policyResolution: PolicyResolution;
+
+  /**
+   * Function called when close button is clicked.
+   */
+  onClose(curPopupFeature: MapFeature): void;
 };
 
 export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
@@ -176,6 +181,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   map,
   policyResolution,
   filters,
+  onClose,
 }) => {
   const [actionLinks, setActionLinks] = useState<ActionLink[]>([]);
   const [ready, setReady] = useState<boolean>(false);
@@ -235,6 +241,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
         policyResolution,
         updating,
         ready,
+        onClose,
       }}
     />
   );
