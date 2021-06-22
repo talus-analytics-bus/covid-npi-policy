@@ -1,5 +1,5 @@
 import React from "react";
-import { MapSources } from "./mapTypes";
+import { MapId, MapSources } from "./mapTypes";
 import { GeoRes } from "api/queryTypes";
 
 /**
@@ -141,7 +141,7 @@ export const mapSources: MapSources = {
 // each specified style represents a different map instance
 export const mapStyles = {
   // map ID (each of these will be rendered as a separate map)
-  us: {
+  [MapId.us]: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
     url: "mapbox://styles/nicoletalus/ckao8n13b0ftm1img9hnywt0f",
 
@@ -170,7 +170,7 @@ export const mapStyles = {
     // optional: info tooltip to display for map in radio selections
     tooltip: "View state-level data for the United States only",
   },
-  "us-county": {
+  [MapId.us_county]: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
     url: "mapbox://styles/nicoletalus/ckpygkon412h717pqisu5hi4h", // lighter gray state bounds, slightly thinner
     // url: "mapbox://styles/nicoletalus/ckpygbhwn0uwr18p8wrqxf4hy", // white state bounds, slightly thinner
@@ -202,7 +202,7 @@ export const mapStyles = {
     // optional: info tooltip to display for map in radio selections
     tooltip: "View county-level data for the United States only",
   },
-  get "us-county-plus-state"() {
+  get [MapId.us_county_plus_state]() {
     return {
       ...this["us-county"],
       value: "us-county-plus-state",
@@ -210,8 +210,8 @@ export const mapStyles = {
     };
   },
   // additional maps...
-  global: {
-    url: process.env.REACT_APP_GLOBAL_MAP_STYLE_URL,
+  [MapId.global]: {
+    url: process.env.REACT_APP_GLOBAL_MAP_STYLE_URL || "",
     value: "global",
     geo_res: GeoRes.country,
     name: "Countries",

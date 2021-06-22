@@ -35,7 +35,7 @@ import * as d3 from "d3";
 
 // local modules
 import { dataGetter } from "./plugins/dataGetter";
-import { mapSources } from "./plugins/sources";
+import { mapSources, mapStyles } from "./plugins/sources";
 import { layerImages, layerStyles } from "./plugins/layers";
 import { initMap, bindFeatureStates } from "./setup";
 import { isEmpty } from "../../misc/UtilsTyped";
@@ -67,8 +67,10 @@ import { MetricData, MetricDatum } from "api/queryTypes";
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 type MapboxMapProps = {
+  /**
+   * The unique ID of the type of map to be shown.
+   */
   mapId: MapId;
-  mapStyle: MapStylesEntry;
   filters: Record<string, any>;
   overlays: ReactNode[];
   geoHaveData: string[];
@@ -86,7 +88,6 @@ type MapboxMapProps = {
  */
 const MapboxMap: FC<MapboxMapProps> = ({
   mapId,
-  mapStyle,
   filters,
   overlays,
   geoHaveData,
@@ -138,6 +139,9 @@ const MapboxMap: FC<MapboxMapProps> = ({
   const [showReset, setShowReset] = useState(false);
 
   // CONSTANTS // -----------------------------------------------------------//
+  // get map style information
+  const mapStyle: MapStylesEntry = mapStyles[mapId];
+
   // declare string versions of fill and circle IDs
   const circleIdStr = parseStringSafe(circle);
   const fillIdStr = parseStringSafe(fill);

@@ -44,7 +44,6 @@ import MapDrape from "./content/MapDrape/MapDrape";
 
 // helper functions and data
 import { defaults } from "../../common/MapboxMap/plugins/data";
-import { mapStyles } from "../../common/MapboxMap/plugins/sources";
 import {
   replaceMapIdState,
   getParamsMapId,
@@ -317,7 +316,6 @@ const Map: FC<MapProps> = ({
           />
           <MapboxMap
             key={mapId}
-            mapStyle={mapStyles[mapId]}
             setShowLoadingSpinner={setLoading}
             {...{
               setInfoTooltipContent,
