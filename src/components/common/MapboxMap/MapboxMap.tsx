@@ -52,6 +52,7 @@ import { FC } from "react";
 import {
   FeatureLinkFields,
   FeatureLinkValues,
+  Filters,
   MapData,
   MapFeature,
   MapId,
@@ -66,25 +67,70 @@ import { MetricData, MetricDatum } from "api/queryTypes";
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
+/**
+ * Properties passed to the `Mapbox` component.
+ */
 type MapboxMapProps = {
   /**
    * The unique ID of the type of map to be shown.
    */
   mapId: MapId;
-  filters: Record<string, any>;
+
+  /**
+   * The filters applied to the map data.
+   */
+  filters: Filters;
+
+  /**
+   * Overlays shown on top of the map, such as controls.
+   */
   overlays: ReactNode[];
+
+  /**
+   * A list of ISO-3 codes of countries for which data are available.
+   */
   geoHaveData: string[];
-  plugins: Record<string, any>;
+
+  /**
+   * True if the scale used to set circle radii should be linear, false log.
+   */
   linCircleScale: boolean;
+
+  /**
+   * True if the type of map is currently being changed, i.e., from global to
+   * USA states, and false otherwise.
+   *
+   * This is used to block some re-renders while the map is changing.
+   */
   mapIsChanging: boolean;
+
+  /**
+   * Sets whether the loading spinner is shown.
+   */
   setShowLoadingSpinner: Dispatch<SetStateAction<boolean>>;
+
+  /**
+   * Sets whether data are being loaded (initialized, not updated).
+   */
   setDataIsLoading: Dispatch<SetStateAction<boolean>>;
+
+  /**
+   * Set the current map zoom level for tracking purposes (does not affect map)
+   */
   setZoomLevel: Dispatch<SetStateAction<number>>;
+
+  /**
+   * Additional parameters that are project-specific, such as parameters that
+   * should be passed to API requests.
+   */
+  plugins: Record<string, any>;
 };
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 /**
  * @method MapboxMap
+ * @param {Object} props Destructured properties
+ * @param {MapId} mapId The unique ID of the type of map to be shown.
  */
 const MapboxMap: FC<MapboxMapProps> = ({
   mapId,
