@@ -231,7 +231,7 @@ export const allMapMetrics = {
           policyResolution,
           mapId,
         }: PolicyCountsFuncArgs): Record<string, any> => {
-          const countSub = policyResolution === "subgeo";
+          const countSub = policyResolution === PolicyResolution.subgeo;
           return {
             method: "post",
             filters,
@@ -389,7 +389,7 @@ export const allMapMetrics = {
           policyResolution,
           mapId,
         }: PolicyCountsFuncArgs): Record<string, any> => {
-          const countSub = policyResolution === "subgeo";
+          const countSub = policyResolution === PolicyResolution.subgeo;
           return {
             method: "post",
             filters,
@@ -511,7 +511,7 @@ export const allMapMetrics = {
           policyResolution,
           mapId,
         }: PolicyCountsFuncArgs): Record<string, any> => {
-          const countSub = policyResolution === "subgeo";
+          const countSub = policyResolution === PolicyResolution.subgeo;
           return {
             method: "post",
             filters,
@@ -1282,14 +1282,14 @@ function getNounFromPolicyResolution(
 ): string {
   switch (mapId) {
     case "us":
-      if (policyResolution !== "subgeo") return "State";
+      if (policyResolution !== PolicyResolution.subgeo) return "State";
       else return "Sub-state";
     case "us-county":
       return "County";
     case "us-county-plus-state":
       return "State + county";
     default:
-      if (policyResolution !== "subgeo") return "National";
+      if (policyResolution !== PolicyResolution.subgeo) return "National";
       else return "Sub-national";
   }
 }

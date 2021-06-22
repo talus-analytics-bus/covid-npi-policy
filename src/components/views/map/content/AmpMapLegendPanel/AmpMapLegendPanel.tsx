@@ -133,7 +133,8 @@ const getFillLegendName: Function = ({
   const nouns = getMapNouns(mapId);
 
   // prepend "sub-" if subgeo policies are being viewed
-  if (policyResolution === "subgeo") nouns.level = "sub-" + nouns.level;
+  if (policyResolution === PolicyResolution.subgeo)
+    nouns.level = "sub-" + nouns.level;
 
   const isPolicyStatus = fill === "policy_status";
   const isPolicyStatusCounts = fill === "policy_status_counts";

@@ -93,15 +93,14 @@ const Map: FC<MapProps> = ({
       _setMapId(v);
 
       // update URL search params
-      // history.replace(getMapHistoryState(mapId));
       replaceMapIdState(history, v);
     },
     [history]
   );
 
-  // whether to show policies at the selected geo or below it
+  // track whether to show policies at the selected geo or below it
   const [policyResolution, setPolicyResolution] = useState<PolicyResolution>(
-    "geo"
+    PolicyResolution.geo
   );
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
@@ -289,8 +288,8 @@ const Map: FC<MapProps> = ({
   // When map ID is changed, update policy resolution to a supported one,
   // if needed
   useEffect(() => {
-    if (mapId === "us-county" && policyResolution !== "geo")
-      setPolicyResolution("geo");
+    if (mapId === "us-county" && policyResolution !== PolicyResolution.geo)
+      setPolicyResolution(PolicyResolution.geo);
   }, [mapId, policyResolution, setPolicyResolution]);
 
   // when map style changes, update default metrics selected

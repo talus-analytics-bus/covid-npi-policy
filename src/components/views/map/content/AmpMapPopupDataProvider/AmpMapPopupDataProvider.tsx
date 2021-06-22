@@ -119,7 +119,7 @@ const updateData: Function = async ({
     policyCount: PolicyStatusCounts({
       method: "post",
       geo_res: getPolicyCountGeoResFromMapId(mapId),
-      count_sub: paramArgs.policyResolution === "subgeo",
+      count_sub: paramArgs.policyResolution === PolicyResolution.subgeo,
       include_min_max: false,
       include_zeros: true,
       filters: { ...filtersWithDate, ...getLocationFilters(mapId, feature) },

@@ -29,7 +29,8 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
 }) => {
   const { subcategoryOptions } = useContext(MapOptionContext);
   const nouns: Record<string, string> = getMapNouns(mapId);
-  const prefix: string = policyResolution === "subgeo" ? "sub-" : "";
+  const prefix: string =
+    policyResolution === PolicyResolution.subgeo ? "sub-" : "";
   return (
     <BodySection
       {...{

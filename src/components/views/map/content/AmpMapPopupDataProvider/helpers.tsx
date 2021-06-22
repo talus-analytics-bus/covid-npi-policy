@@ -167,7 +167,7 @@ export const getPolicyLink: Function = async (
   }
 
   // states
-  const countSub: boolean = policyResolution === "subgeo";
+  const countSub: boolean = policyResolution === PolicyResolution.subgeo;
   featureName = (feature as StateFeature).properties.state_name;
   if (featureName !== undefined) {
     return await getStatePoliciesLink(

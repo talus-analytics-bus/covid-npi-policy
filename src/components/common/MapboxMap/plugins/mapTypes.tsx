@@ -170,7 +170,10 @@ export type MapDefaultsEntry = {
  * shown, the "subgeo" refers to any policies that affect states, provinces,
  * or localities of the country, but not national-level policies.
  */
-export type PolicyResolution = "geo" | "subgeo";
+export enum PolicyResolution {
+  geo,
+  subgeo,
+}
 export type FeatureState = Record<string, any>;
 
 export type CountyFeature = {
