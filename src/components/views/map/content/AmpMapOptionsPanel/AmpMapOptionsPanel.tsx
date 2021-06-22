@@ -201,7 +201,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                 o =>
                   filters &&
                   filters.ph_measure_details !== undefined &&
-                  filters.ph_measure_details.includes(o.value)
+                  filters.ph_measure_details.includes(o.value as string)
               )}
               callback={selected => {
                 updateFilters(
@@ -223,7 +223,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         o =>
           filters &&
           filters.primary_ph_measure !== undefined &&
-          filters.primary_ph_measure.includes(o.value)
+          filters.primary_ph_measure.includes(o.value as string)
       )}
       callback={selected => {
         updateFilters(
