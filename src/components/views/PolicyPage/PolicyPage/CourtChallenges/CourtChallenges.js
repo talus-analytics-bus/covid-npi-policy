@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Challenge } from "../../../../misc/Queries.tsx";
+import { Challenge } from "api/Queries";
 import courtChallengeIcon from "../../../../../assets/icons/CourtChallengeIcon.svg";
 
 import styles from "./CourtChallenges.module.scss";

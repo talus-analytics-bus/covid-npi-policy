@@ -18,8 +18,8 @@ import moment from "moment";
 import { comma, isLightColor } from "../../../misc/Util";
 
 // queries
-import ObservationQuery from "../../../misc/ObservationQuery";
-import { DistancingLevel, PolicyStatusCounts } from "../../../misc/Queries";
+import ObservationQuery from "api/ObservationQuery";
+import { DistancingLevel, PolicyStatusCounts } from "api/Queries";
 
 // assets and styles
 // import dots from "./assets/images/dots.png";
@@ -34,7 +34,7 @@ import localLogo from "./assets/icons/logo-local-pill.png";
 
 // assets and styles
 import varsExports from "assets/styles/vars.module.scss";
-import ObservationReduxQuery from "components/misc/ObservationReduxQuery";
+import ObservationReduxQuery from "api/ObservationReduxQuery";
 import {
   Filters,
   MapDefaults,
@@ -42,7 +42,7 @@ import {
   MetricMeta,
   PolicyResolution,
 } from "./mapTypes";
-import { GeoRes, MetricDatum } from "components/misc/queryTypes";
+import { GeoRes, MetricDatum } from "api/queryTypes";
 import { renderToString } from "react-dom/server";
 
 // utilities and local components

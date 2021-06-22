@@ -1,6 +1,6 @@
 import React from "react";
 import { MapSources } from "./mapTypes";
-import { GeoRes } from "components/misc/queryTypes";
+import { GeoRes } from "api/queryTypes";
 
 /**
  * Define Mapbox sources for geometries, centroids, etc. and styles.

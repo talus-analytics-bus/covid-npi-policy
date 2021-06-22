@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { Policy, PolicyStatusCounts } from "../../../misc/Queries";
+import { Policy, PolicyStatusCounts } from "api/queryTypes";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
 import styles from "../../../common/MapboxMap/mapPopup/maptooltip.module.scss";
 import localLogo from "./assets/icons/logo-local-pill.png";

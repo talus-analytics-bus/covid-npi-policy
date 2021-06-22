@@ -13,7 +13,7 @@ import {
   VictoryPortal,
 } from "victory";
 
-import { Caseload } from "../../../misc/Queries";
+import { Caseload } from "api/queryTypes";
 
 import styles from "./CaseloadPlot.module.scss";
 

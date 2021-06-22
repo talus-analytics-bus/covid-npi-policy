@@ -7,7 +7,7 @@ import {
   MapId,
   StateFeature,
 } from "components/common/MapboxMap/plugins/mapTypes";
-import { Caseload } from "components/misc/Queries";
+import { Caseload } from "api/Queries";
 
 export async function updateData(
   mapId: MapId,

@@ -1,4 +1,4 @@
-import { Policy } from "../../../misc/Queries";
+import { Policy } from "api/Queries";
 import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 
 export const CATEGORY_FIELD_NAME = "primary_ph_measure";

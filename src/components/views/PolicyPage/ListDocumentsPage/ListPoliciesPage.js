@@ -1,9 +1,9 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 
-import { Caseload } from "../../../misc/Queries";
+import { Caseload } from "api/queryTypes";
 
-import { PolicyList } from "../../../misc/Queries";
+import { PolicyList } from "api/queryTypes";
 import CaseloadPlot from "../CaseloadPlot/CaseloadPlot";
 import * as MiniMap from "../MiniMap/MiniMap";
 

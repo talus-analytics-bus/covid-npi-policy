@@ -25,7 +25,7 @@ import Landing from "./components/views/landing/Landing";
 import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
 
 // queries
-import { Version, Count, execute } from "./components/misc/Queries";
+import { Version, Count, execute } from "api/Queries";
 
 // styles and assets
 import styles from "./App.module.scss";

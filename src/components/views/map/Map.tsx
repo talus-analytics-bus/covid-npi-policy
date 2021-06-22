@@ -20,12 +20,8 @@ import useHistory from "components/common/hooks/useHistory";
 import { MapOptionProvider } from "./context/MapOptionContext";
 
 // data queries
-import {
-  OptionSet,
-  CountriesWithDistancingLevels,
-  execute,
-} from "../../misc/Queries";
-import PlaceQuery from "../../misc/PlaceQuery";
+import { OptionSet, CountriesWithDistancingLevels, execute } from "api/Queries";
+import PlaceQuery from "../../../api/PlaceQuery";
 
 // assets and styles
 import styles from "./map.module.scss";
@@ -43,7 +39,7 @@ import {
   PolicyResolution,
 } from "../../common/MapboxMap/plugins/mapTypes";
 import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
-import { VersionDataProps } from "components/misc/queryTypes";
+import { VersionDataProps } from "api/queryTypes";
 import { Option } from "components/common/OptionControls/types";
 import MapDrape from "./content/MapDrape/MapDrape";
 

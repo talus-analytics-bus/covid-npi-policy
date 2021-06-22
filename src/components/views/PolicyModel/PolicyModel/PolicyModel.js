@@ -13,7 +13,7 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
-import { Caseload, Deaths } from "../../../misc/Queries.tsx";
+import { Caseload, Deaths } from "api/Queries.tsx";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import moment from "moment";
-import { isEmpty } from "./UtilsTyped";
+import { isEmpty } from "components/misc/UtilsTyped";
 
 // local utility functions
 import ObservationQuery from "./ObservationQuery";

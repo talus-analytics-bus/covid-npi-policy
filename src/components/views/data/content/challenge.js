@@ -4,13 +4,12 @@
  * working with Plan instances.
  */
 import React from "react";
-import moment from "moment";
 
 // common compoments
 import { ShowMore } from "../../../common";
 
 // queries
-import { Challenge } from "../../../misc/Queries";
+import { Challenge } from "api/Queries";
 
 // assets and styles
 // use same styles as main Data page

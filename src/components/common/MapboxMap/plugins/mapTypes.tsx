@@ -6,7 +6,7 @@ import {
   MetricData,
   OptionSetDataProps,
   VersionDataProps,
-} from "components/misc/queryTypes";
+} from "api/queryTypes";
 import { Numeric } from "d3";
 import { ReactNode } from "react-transition-group/node_modules/@types/react";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";

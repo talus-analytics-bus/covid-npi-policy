@@ -11,7 +11,7 @@ import {
 import { getDataQueryResults } from "components/common/MapboxMap/plugins/dataGetter";
 import { Link, LinkProps } from "react-router-dom";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";
-import { Place } from "components/misc/Queries";
+import { Place } from "api/Queries";
 import { PlaceRecord } from "components/misc/dataTypes";
 import { Moment } from "moment";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";

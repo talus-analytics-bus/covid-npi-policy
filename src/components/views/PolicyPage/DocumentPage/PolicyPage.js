@@ -11,7 +11,7 @@ import styles from "./PolicyPage.module.scss";
 // local utility functions
 import {
   Policy, // requests policy data
-} from "../../../misc/Queries";
+} from "api/queryTypes";
 
 const PolicyPage = props => {
   // STATE // -------------------------------------------------------------- //

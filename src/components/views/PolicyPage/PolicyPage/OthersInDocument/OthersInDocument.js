@@ -5,7 +5,7 @@ import {
   SUBCATEGORY_FIELD_NAME,
 } from "../../PolicyRouter/PolicyLoaders";
 
-import { Policy } from "../../../../misc/Queries";
+import { Policy } from "api/Queries";
 
 import MiniPolicyBox from "../MiniPolicyBox/MiniPolicyBox";
 

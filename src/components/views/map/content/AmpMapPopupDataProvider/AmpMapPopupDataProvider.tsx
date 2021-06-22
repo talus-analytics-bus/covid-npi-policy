@@ -34,7 +34,7 @@ import {
   getPolicyLink,
   ZERO_POLICY_MSG,
 } from "./helpers";
-import { execute, PolicyStatusCounts } from "components/misc/Queries";
+import { execute, PolicyStatusCounts } from "api/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
@@ -43,7 +43,7 @@ import MapOptionContext, {
 } from "../../context/MapOptionContext";
 import { Option } from "components/common/OptionControls/types";
 import Settings from "Settings";
-import { GeoRes } from "components/misc/queryTypes";
+import { GeoRes } from "api/queryTypes";
 
 type UpdateDataProps = {
   feature: MapFeature;

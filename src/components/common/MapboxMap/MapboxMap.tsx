@@ -61,7 +61,7 @@ import {
   MapStylesEntry,
   ViewportProps,
 } from "./plugins/mapTypes";
-import { MetricData, MetricDatum } from "components/misc/queryTypes";
+import { MetricData, MetricDatum } from "api/queryTypes";
 
 // constants
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
