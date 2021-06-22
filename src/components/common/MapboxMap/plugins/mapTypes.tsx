@@ -70,8 +70,12 @@ export const validMapIds = [
  * Allowed map IDs corresponding to the types of maps that have
  * been implemented.
  */
-export type MapId = typeof validMapIds[number];
-export type MapIdOrAll = typeof validMapIds[number] | "all";
+export enum MapId {
+  us_county_plus_state = "us-county-plus-state",
+  us_county = "us-county",
+  us = "us",
+  global = "global",
+}
 
 /**
  * Defines a type consisting of each MapId value as a key and a
@@ -406,3 +410,5 @@ export type ViewportProps = {
   longitude: number;
   zoom: number;
 };
+
+export type MapDataShapeId = string | null | undefined;

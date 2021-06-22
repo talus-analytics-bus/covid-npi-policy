@@ -11,7 +11,7 @@
 // 3rd party packages
 import React, { useCallback, useEffect, useState } from "react";
 // import { useHistory } from "react-router-dom"; // @ts-ignore
-import moment from "moment";
+import moment, { Moment } from "moment";
 
 // custom hooks
 import { usePrevious } from "../../misc/UtilsTyped";
@@ -44,13 +44,15 @@ import { replaceMapIdState, getParamsMapId } from "./helpers";
 import { FC } from "react";
 import {
   FilterDefs,
+  MapDataShapeId,
+  MapId,
   MapProps,
-  MapStyles,
   PolicyResolution,
 } from "../../common/MapboxMap/plugins/mapTypes";
 import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 import useHistory from "components/misc/useHistory";
 import { VersionDataProps } from "components/misc/queryTypes";
+import { Option } from "components/common/OptionControls/types";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -76,12 +78,15 @@ const Map: FC<MapProps> = ({
   // track map zoom level
   const [zoomLevel, setZoomLevel] = useState(0);
 
-  // unique ID of map to display, e.g., 'us', 'global'
+  // get unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
-  const defaultMapId = defaults.mapId;
-  const paramsMapId = getParamsMapId();
-  const [mapId, _setMapId] = useState(defaultMapId);
-  const prevMapId = usePrevious(mapId);
+  // otherwise use the specified default map ID
+  const defaultMapId: MapId = defaults.mapId;
+  const paramsMapId: MapId | null = getParamsMapId();
+  const [mapId, _setMapId] = useState<MapId>(defaultMapId);
+  const prevMapId: MapId | undefined = usePrevious(mapId);
+
+  // get browser history object using custom hook
   const history: History = useHistory();
 
   /**
@@ -104,32 +109,39 @@ const Map: FC<MapProps> = ({
   );
 
   // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
-  const casesLastUpdated = versions.find(
+  const casesUpdatedDatum: VersionDataProps | undefined = versions.find(
     d => d.name.includes("COVID-19") && d.map_types.includes(mapId)
   );
-  const casesLastUpdatedDate = casesLastUpdated
-    ? moment(casesLastUpdated.last_datum_date)
+  const casesUpdatedMoment: Moment = casesUpdatedDatum
+    ? moment(casesUpdatedDatum.last_datum_date)
     : moment();
-  defaults.minMaxDate.maxDate = casesLastUpdatedDate.format("YYYY-MM-DD");
-  const [date, setDate] = useState(casesLastUpdatedDate);
-  // const [date, setDate] = useState(new moment("2021-06-09"));
-  const prevDate = usePrevious(date);
+  defaults.minMaxDate.maxDate = casesUpdatedMoment.format("YYYY-MM-DD");
+  const [date, setDate] = useState<Moment>(casesUpdatedMoment);
+  const prevDate: Moment | undefined = usePrevious(date);
 
   // name of metric to use as fill by default
-  const [fill, setFill] = useState<string | null>(defaults[mapId].fill);
-  const prevFill = usePrevious(fill);
+  const [fill, setFill] = useState<MapDataShapeId>(defaults[mapId].fill);
+  const prevFill: MapDataShapeId = usePrevious(fill);
 
-  const initialCircle = defaults[mapId].showCircle
+  const initialCircle: MapDataShapeId = defaults[mapId].showCircle
     ? defaults[mapId].circle || null
     : null;
+
   // name of metric to use as circle by default
-  const [circle, setCircle] = useState<string | null>(initialCircle);
+  const [circle, setCircle] = useState<MapDataShapeId>(initialCircle);
   const prevCircle = usePrevious(circle);
 
-  // dynamic map title
+  /**
+   * Returns the appropriate dynamic title for the map based on the data
+   * shapes currently displayed on it.
+   *
+   * @param fill The fill data shape ID
+   * @param circle The circle data shape ID
+   * @returns The appropriate dynamic title for the map
+   */
   const getMapTitle: Function = (
-    fill: string | null,
-    circle: string | null
+    fill: MapDataShapeId,
+    circle: MapDataShapeId
   ): string => {
     let title = "";
     const useAltTitles = true;
@@ -145,10 +157,10 @@ const Map: FC<MapProps> = ({
       }
       return title;
     } else {
-      if (fill !== null) {
+      if (fill !== undefined && fill !== null) {
         title += metricMeta[fill].metric_displayname;
       }
-      if (circle !== null) {
+      if (circle !== null && circle !== undefined) {
         title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
       }
       return title;
@@ -296,19 +308,25 @@ const Map: FC<MapProps> = ({
   // TODO persist selection across map types if it makes sense
   useEffect(
     function updateDefaultMetrics() {
+      // start loading spinner
       setLoading(true);
 
+      // if circles are shown in default map view, show the default circle,
+      // otherwise, set to null (show no circle)
       if (defaults[mapId].showCircle !== false)
         setCircle(defaults[mapId].circle || null);
       else setCircle(null);
+
+      // show default map fill
       setFill(defaults[mapId].fill);
 
+      // remove map changing flag
       if (mapIsChanging) setMapIsChanging(false);
     },
     [mapId, mapIsChanging, setLoading]
   );
 
-  // when map data selection changes, update dynamic title
+  // when map circle/fill data selection changes, update dynamic title
   useEffect(
     function updateDynamicMapTitle() {
       setMapTitle(getMapTitle(fill, circle));
@@ -316,6 +334,20 @@ const Map: FC<MapProps> = ({
     [circle, fill]
   );
 
+  const categoryOptions: Option[] = filterDefs[0].primary_ph_measure.items.map(
+    i => {
+      return { name: i.label, value: i.value };
+    }
+  );
+  const subcategoryOptions: Option[] = filterDefs[0].ph_measure_details.items.map(
+    i => {
+      return {
+        name: i.label,
+        value: i.value,
+        parent: i.group,
+      };
+    }
+  );
   // TODO implement history handling such that "forward" returns you to the
   // previously-selected map state
   // // handle history
@@ -335,121 +367,91 @@ const Map: FC<MapProps> = ({
   else
     return (
       <div className={styles.map}>
-        {
-          // Drawer: holds map options
-        }
-        {
-          // display map component(s)
-        }
-        {
-          <MapOptionProvider
-            value={{
-              fill,
-              circle,
-              date,
-              filters,
+        {/* Provide data for current and previous map options selections */}
+        <MapOptionProvider
+          value={{
+            fill,
+            circle,
+            date,
+            filters,
+            mapId,
+            prevFill,
+            prevCircle,
+            prevDate,
+            prevFilters,
+            prevMapId,
+            setCircle,
+            setFill,
+            setFilters,
+            categoryOptions,
+            subcategoryOptions,
+          }}
+        >
+          <LoadingSpinner
+            text={"Loading data"}
+            ready={!dataIsLoading || loading}
+            fill={true}
+            delay={500}
+          />
+          <MapboxMap
+            key={mapId}
+            mapStyle={mapStyles[mapId]}
+            setShowLoadingSpinner={setLoading}
+            {...{
+              setInfoTooltipContent,
               mapId,
-              prevFill,
-              prevCircle,
-              prevDate,
-              prevFilters,
-              prevMapId,
-              setCircle,
-              setFill,
-              setFilters,
-              categoryOptions: filterDefs[0].primary_ph_measure.items.map(i => {
-                return { name: i.label, value: i.value };
-              }),
-              subcategoryOptions: filterDefs[0].ph_measure_details.items.map(
-                i => {
-                  return {
-                    name: i.label,
-                    value: i.value,
-                    parent: i.group,
-                  };
-                }
-              ),
-            }}
-          >
-            <LoadingSpinner
-              text={"Loading data"}
-              ready={!dataIsLoading || loading}
-              fill={true}
-              delay={500}
-            />
-            <MapboxMap
-              {...{
-                setInfoTooltipContent: setInfoTooltipContent,
-                mapId,
-                setMapId,
-                linCircleScale,
-                key: mapId,
-                mapStyle: (mapStyles as MapStyles)[mapId],
-                filters,
-                geoHaveData,
-                mapIsChanging,
-                setShowLoadingSpinner: setLoading,
-                setDataIsLoading,
-                setZoomLevel,
-                overlays: (
-                  <>
-                    <MapDrape
-                      {...{
-                        mapId,
-                        mapTitle,
-                        date,
-                        lastUpdatedDateOverall,
-                        versions,
-                        setInfoTooltipContent,
+              setMapId,
+              linCircleScale,
+              filters,
+              geoHaveData,
+              mapIsChanging,
+              setDataIsLoading,
+              setZoomLevel,
+              overlays: (
+                <>
+                  <MapDrape
+                    {...{
+                      mapId,
+                      mapTitle,
+                      date,
+                      lastUpdatedDateOverall,
+                      versions,
+                      setInfoTooltipContent,
+                    }}
+                  />
+                  {
+                    <PanelSet
+                      style={{
+                        gridTemplateColumns: "auto auto auto",
                       }}
-                    />
-                    {
-                      <PanelSet
-                        style={{
-                          gridTemplateColumns: "auto auto auto",
+                    >
+                      <AmpMapLegendPanel
+                        {...{ zoomLevel, linCircleScale, policyResolution }}
+                      />
+                      <AmpMapDatePanel
+                        {...{ date, setDate, ...defaults.minMaxDate }}
+                      />
+                      <AmpMapOptionsPanel
+                        {...{
+                          mapId,
+                          setMapId,
+                          categoryOptions,
+                          subcategoryOptions,
                         }}
-                      >
-                        <AmpMapLegendPanel
-                          {...{ zoomLevel, linCircleScale, policyResolution }}
-                        />
-                        <AmpMapDatePanel
-                          {...{ date, setDate, ...defaults.minMaxDate }}
-                        />
-                        <AmpMapOptionsPanel
-                          {...{
-                            key: "mapOptions",
-                            mapId,
-                            setMapId,
-                            categoryOptions: filterDefs[0].primary_ph_measure.items.map(
-                              i => {
-                                return { name: i.label, value: i.value };
-                              }
-                            ),
-                            subcategoryOptions: filterDefs[0].ph_measure_details.items.map(
-                              i => {
-                                return {
-                                  name: i.label,
-                                  value: i.value,
-                                  parent: i.group,
-                                };
-                              }
-                            ),
-                          }}
-                        />
-                      </PanelSet>
-                    }
-                  </>
-                ),
-                plugins: {
-                  fill,
-                  circle,
-                  places,
-                  policyResolution,
-                },
-              }}
-            />
-          </MapOptionProvider>
-        }
+                      />
+                    </PanelSet>
+                  }
+                </>
+              ),
+              plugins: {
+                fill,
+                circle,
+                places,
+                policyResolution,
+              },
+            }}
+          />
+        </MapOptionProvider>
       </div>
     );
 };

@@ -1,7 +1,4 @@
-import {
-  Filters,
-  MapIdOrAll,
-} from "components/common/MapboxMap/plugins/mapTypes";
+import { Filters, MapId } from "components/common/MapboxMap/plugins/mapTypes";
 
 export interface DistancingLevelProps {
   method?: "get" | "post";
@@ -107,7 +104,7 @@ export type VersionDataProps = {
   /**
    * Last of map types for which the data are applicable.
    */
-  map_types: MapIdOrAll[];
+  map_types: (MapId | "all")[];
 };
 
 export type OptionSetDataProps = {

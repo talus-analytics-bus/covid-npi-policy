@@ -401,11 +401,12 @@ function getDistancingMetricKeyFromMapId(mapId: MapId): string {
  */
 export function getMapIdFromFeature(feature: MapFeature, mapId: MapId): MapId {
   if ((feature as CountyFeature).properties.type === "county") {
-    if (mapId === "us-county-plus-state") return mapId;
-    else return "us-county";
-  } else if ((feature as StateFeature).properties.type === "state") return "us";
+    if (mapId === MapId.us_county_plus_state) return mapId;
+    else return MapId.us_county;
+  } else if ((feature as StateFeature).properties.type === "state")
+    return MapId.us;
   else if ((feature as CountryFeature).properties.ISO_A3 !== undefined)
-    return "global";
+    return MapId.global;
   else {
     throw Error("Unexpected feature: " + feature);
   }

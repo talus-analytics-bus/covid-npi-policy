@@ -1,4 +1,7 @@
-import { MapId } from "components/common/MapboxMap/plugins/mapTypes";
+import {
+  MapDataShapeId,
+  MapId,
+} from "components/common/MapboxMap/plugins/mapTypes";
 import { Option } from "components/common/OptionControls/types";
 import { Moment } from "moment";
 import React, { Dispatch, SetStateAction } from "react";
@@ -7,8 +10,8 @@ export type MapOptionContextProps = {
   prevCircle?: string | null;
   prevFill?: string | null;
   prevDate?: Moment;
-  setCircle?: Dispatch<SetStateAction<string | null>>;
-  setFill?: Dispatch<SetStateAction<string | null>>;
+  setCircle?: Dispatch<SetStateAction<MapDataShapeId>>;
+  setFill?: Dispatch<SetStateAction<MapDataShapeId>>;
   fill?: string | null;
   mapId?: MapId;
   prevMapId?: MapId;

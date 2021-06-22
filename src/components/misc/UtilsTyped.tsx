@@ -232,3 +232,12 @@ export const isEmpty: Function = (d: any): boolean => {
   if (d === undefined || d === null || Object.keys(d).length === 0) return true;
   else return false;
 };
+
+// /**
+//  * Returns true if a value is considered valid, false otherwise.
+//  * @param v The value
+//  * @returns Whether the value is valid, i.e., not equal to undefined or null
+//  */
+// export const isValid = (v: any): boolean => {
+//   return v !== undefined && v !== null;
+// };

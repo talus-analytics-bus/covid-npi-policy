@@ -190,7 +190,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
     MapOptionContext
   );
   // get map ID used for data requests based on the feature
-  const mapIdForData = getMapIdFromFeature(feature, mapId);
+  const mapIdForData: MapId = getMapIdFromFeature(feature, mapId);
 
   useEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
