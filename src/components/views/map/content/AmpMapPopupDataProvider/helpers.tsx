@@ -145,17 +145,17 @@ export const getPolicyLink: Function = async (
   policyResolution: PolicyResolution,
   page: "policy" | "data",
   mapId: MapId,
-  subcategoryOptions?: Option[]
+  subcatOptions?: Option[]
 ): Promise<ReactElement<LinkProps> | null> => {
   // constants
   const baseLinkFilters: Record<string, any> = { ...filters };
 
   // streamline base link filters
-  if (page === "data" && subcategoryOptions !== undefined) {
+  if (page === "data" && subcatOptions !== undefined) {
     const includeSubcats: boolean = includeSubcatFilters(
       filters.primary_ph_measure || [],
       filters.ph_measure_details || [],
-      subcategoryOptions
+      subcatOptions
     );
     if (!includeSubcats) baseLinkFilters.ph_measure_details = [];
   }

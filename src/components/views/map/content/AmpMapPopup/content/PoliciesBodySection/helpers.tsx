@@ -14,7 +14,7 @@ import { Option } from "components/common/OptionControls/types";
 export const includeSubcatFilters: Function = (
   categories: string[] = [],
   subcategories: string[] = [],
-  subcategoryOptions: Option[]
+  subcatOptions: Option[]
 ): boolean => {
   const nSubcats: number = subcategories.length;
   const nCats: number = categories.length;
@@ -23,7 +23,7 @@ export const includeSubcatFilters: Function = (
   // if only one category and all subcats selected, show as if nCats is 1 and
   // subcats is zero
   const allSubcatsSelected = !categories.some(c => {
-    const subcatsPossible: string[] = subcategoryOptions
+    const subcatsPossible: string[] = subcatOptions
       .filter(sc => sc.parent === c)
       .map(sc => sc.value as string);
     const nCatSubcatsSelected: number = uniqueSubcats.filter(sc =>
@@ -59,25 +59,25 @@ export const includeSubcatFilters: Function = (
  * Returns string succinctly expressing categories and/or subcategories of
  * policy selected
  * @param categories Array of strings of policy categories selected
- * @param subcategories Array of strings of policy subcategories selected
+ * @param subcats Array of strings of policy subcategories selected
  * @param noun Plurality of policy noun to use
  * @returns {string} String expressing cats. / subcats. of policy selected
  */
 export const getPolicyCatSubcatPhrase: Function = (
   categories: string[] = [],
-  subcategories: string[] = [],
-  subcategoryOptions: Option[],
+  subcats: string[] = [],
+  subcatOptions: Option[],
   noun: "policies" | "policy"
 ): string => {
   const suffix: string = ` ${noun} in effect`;
-  const nSubcats: number = subcategories.length;
+  const nSubcats: number = subcats.length;
   const nCats: number = categories.length;
-  const uniqueSubcats = Array.from(new Set(subcategories));
+  const uniqueSubcats = Array.from(new Set(subcats));
 
   // if only one category and all subcats selected, show as if nCats is 1 and
   // subcats is zero
   const allSubcatsSelected = !categories.some(c => {
-    const subcatsPossible: string[] = subcategoryOptions
+    const subcatsPossible: string[] = subcatOptions
       .filter(sc => sc.parent === c)
       .map(sc => sc.value as string);
     const nCatSubcatsSelected: number = uniqueSubcats.filter(sc =>
@@ -97,7 +97,7 @@ export const getPolicyCatSubcatPhrase: Function = (
     return categories[0].toLowerCase() + suffix;
   } else if (nCats === 1 && nSubcats === 1) {
     // one category, one subcat
-    return subcategories[0].toLowerCase() + suffix;
+    return subcats[0].toLowerCase() + suffix;
   } else if (nCats === 1 && nSubcats > 1) {
     // one category, more than one subcat
     return (

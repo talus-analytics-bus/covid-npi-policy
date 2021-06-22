@@ -37,14 +37,14 @@ interface AmpMapOptionsPanelProps {
    */
   setMapId(newMapId: MapId): void;
 
-  categoryOptions: Option[];
-  subcategoryOptions: Option[];
+  catOptions: Option[];
+  subcatOptions: Option[];
 }
 export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   mapId,
   setMapId,
-  categoryOptions,
-  subcategoryOptions,
+  catOptions,
+  subcatOptions,
   panelSetId = 0,
 }) => {
   const { setInfoTooltipContent } = useContext(InfoTooltipContext);
@@ -186,8 +186,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const fillSubOptions: ReactElement = (
     <OptionCheckboxSet
       title={"Policy category"}
-      options={categoryOptions.map(o => {
-        const curCatSubcats: Option[] = subcategoryOptions.filter(
+      options={catOptions.map(o => {
+        const curCatSubcats: Option[] = subcatOptions.filter(
           so => so.parent === o.value
         );
 
@@ -208,7 +208,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                   "ph_measure_details",
                   selected,
                   curCatSubcats,
-                  subcategoryOptions
+                  subcatOptions
                 );
               }}
               field={"ph_measure_details-" + o.value}
@@ -219,7 +219,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         };
         return newChild;
       })}
-      selectedOptions={categoryOptions.filter(
+      selectedOptions={catOptions.filter(
         o =>
           filters &&
           filters.primary_ph_measure !== undefined &&
@@ -229,8 +229,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         updateFilters(
           "primary_ph_measure",
           selected,
-          categoryOptions,
-          subcategoryOptions
+          catOptions,
+          subcatOptions
         );
       }}
       field={"primary_ph_measure"}

@@ -27,7 +27,7 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
   mapId,
   updating,
 }) => {
-  const { subcategoryOptions } = useContext(MapOptionContext);
+  const { subcatOptions } = useContext(MapOptionContext);
   const nouns: Record<string, string> = getMapNouns(mapId);
   const prefix: string =
     policyResolution === PolicyResolution.subgeo ? "sub-" : "";
@@ -37,7 +37,12 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
         title: `Policies (${prefix}${nouns.level} level)`,
         content: (
           <PolicyCount
-            {...{ categories, subcategories, count, subcategoryOptions }}
+            {...{
+              categories,
+              subcategories,
+              count,
+              subcatOptions,
+            }}
           />
         ),
         actions: policyActionLinks,

@@ -19,8 +19,8 @@ export type MapOptionContextProps = {
   prevFilters?: Record<string, any>;
   setFilters?(newFilters: Record<string, any>): void;
   date?: Moment;
-  categoryOptions?: Option[];
-  subcategoryOptions?: Option[];
+  catOptions?: Option[];
+  subcatOptions?: Option[];
 };
 
 const MapOptionContext = React.createContext<MapOptionContextProps>({});

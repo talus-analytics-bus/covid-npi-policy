@@ -1,7 +1,11 @@
+import { metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
+  FilterDefs,
+  MapDataShapeId,
   MapId,
   validMapIds,
 } from "components/common/MapboxMap/plugins/mapTypes";
+import { getInitLower } from "components/misc/Util";
 import { History } from "history";
 
 /**
@@ -88,3 +92,75 @@ export function getParamsMapId(
     );
   } else return paramsMapId;
 }
+
+/**
+ * Returns the appropriate dynamic title for the map based on the data
+ * shapes currently displayed on it.
+ *
+ * @param {MapDataShapeId} fill The fill data shape ID
+ * @param {MapDataShapeId} circle The circle data shape ID
+ * @returns {string} The appropriate dynamic title for the map
+ */
+export const getMapTitle: Function = (
+  fill: MapDataShapeId,
+  circle: MapDataShapeId
+): string => {
+  let title = "";
+  const useAltTitles = true;
+  if (useAltTitles) {
+    title = "COVID-19";
+    if (fill === "lockdown_level") {
+      title += " distancing levels";
+    } else if (fill === "policy_status_counts") {
+      title += " mitigation policies";
+    }
+    if (circle !== null) {
+      title += " and cases";
+    }
+    return title;
+  } else {
+    if (fill !== undefined && fill !== null) {
+      title += metricMeta[fill].metric_displayname;
+    }
+    if (circle !== null && circle !== undefined) {
+      title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
+    }
+    return title;
+    // return title + ` at ${level} level`;
+  }
+};
+
+export const defaultAmpMapFilters: FilterDefs[] = [
+  {
+    primary_ph_measure: {
+      // data field
+      field: "primary_ph_measure",
+
+      // entity
+      entity_name: "Policy",
+
+      // display label
+      label: "Policy category",
+
+      // true if radio button selection, false if dropdown
+      // if radio is true, must also define defaultRadioValue
+      radio: true,
+
+      // default value of radio selections
+      defaultRadioValue: "Social distancing",
+
+      // placeholder
+      items: [],
+    },
+
+    // additional filters
+    ph_measure_details: {
+      field: "ph_measure_details",
+      label: "Policy subcategory filter",
+      radio: false,
+      primary: "primary_ph_measure",
+      entity_name: "Policy",
+      items: [],
+    },
+  },
+];

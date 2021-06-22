@@ -47,7 +47,7 @@ export const AmpMapLegendPanel: FC<AmpMapLegendPanelProps> = ({
     circle !== null ? (metricMeta as MetricMeta)[circle || ""] : null;
   const fillMeta: MetricMetaEntry | null =
     fill !== null ? (metricMeta as MetricMeta)[fill || ""] : null;
-  const { subcategoryOptions } = useContext(MapOptionContext);
+  const { subcatOptions } = useContext(MapOptionContext);
   const metricDefNoun: string = getCircleZoomLabel(mapId, zoomLevel);
   return (
     <MapPanel tabName={"Legend"} {...{ panelSetId }}>
@@ -96,7 +96,7 @@ export const AmpMapLegendPanel: FC<AmpMapLegendPanelProps> = ({
                         policyResolution,
                         mapId,
                         date,
-                        subcategoryOptions,
+                        subcatOptions,
                       })}
                     </span>
                   ),
@@ -117,7 +117,7 @@ type GetFillLegendNameArgs = {
   filters: Record<string, any>;
   date: Moment;
   policyResolution: PolicyResolution;
-  subcategoryOptions: Option[];
+  subcatOptions: Option[];
 };
 
 const getFillLegendName: Function = ({
@@ -126,7 +126,7 @@ const getFillLegendName: Function = ({
   policyResolution,
   mapId,
   date,
-  subcategoryOptions,
+  subcatOptions,
 }: GetFillLegendNameArgs): string | ReactElement | null => {
   const isLockdownLevel = fill === "lockdown_level";
 
@@ -165,7 +165,7 @@ const getFillLegendName: Function = ({
       const desc = getPolicyCatSubcatPhrase(
         filters["primary_ph_measure"] || [],
         filters["ph_measure_details"] || [],
-        subcategoryOptions,
+        subcatOptions,
         "policies"
       ).trim();
       return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);

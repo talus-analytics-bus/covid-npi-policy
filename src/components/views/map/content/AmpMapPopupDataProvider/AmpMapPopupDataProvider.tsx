@@ -61,7 +61,7 @@ type UpdateDataProps = {
   DISABLE_POLICY_LINK_IF_ZERO: boolean;
   circle: string | null;
   paramArgs: Record<string, any>;
-  subcategoryOptions: Option[];
+  subcatOptions: Option[];
 };
 const updateData: Function = async ({
   feature,
@@ -76,7 +76,7 @@ const updateData: Function = async ({
   mapId,
   DISABLE_POLICY_LINK_IF_ZERO,
   paramArgs,
-  subcategoryOptions,
+  subcatOptions,
 }: UpdateDataProps) => {
   if (ready) setUpdating(true);
 
@@ -114,7 +114,7 @@ const updateData: Function = async ({
       paramArgs.policyResolution,
       "data",
       mapId,
-      subcategoryOptions
+      subcatOptions
     ),
     policyCount: PolicyStatusCounts({
       method: "post",
@@ -186,9 +186,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
 
   // context
   const { DISABLE_POLICY_LINK_IF_ZERO } = Settings;
-  const { subcategoryOptions } = useContext<MapOptionContextProps>(
-    MapOptionContext
-  );
+  const { subcatOptions } = useContext<MapOptionContextProps>(MapOptionContext);
   // get map ID used for data requests based on the feature
   const mapIdForData: MapId = getMapIdFromFeature(feature, mapId);
 
@@ -209,7 +207,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       map,
       mapId: mapIdForData,
       DISABLE_POLICY_LINK_IF_ZERO,
-      subcategoryOptions,
+      subcatOptions,
       paramArgs: {
         policyResolution,
         stateName,

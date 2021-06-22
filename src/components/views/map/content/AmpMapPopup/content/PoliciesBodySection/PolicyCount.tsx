@@ -10,12 +10,12 @@ type ComponentProps = {
   categories: string[];
   subcategories: string[];
   count: number | null;
-  subcategoryOptions?: Option[];
+  subcatOptions?: Option[];
 };
 export const PolicyCount: FC<ComponentProps> = ({
   categories,
   subcategories,
-  subcategoryOptions = [],
+  subcatOptions = [],
   count,
 }): ReactElement => {
   if (count !== null) {
@@ -26,7 +26,7 @@ export const PolicyCount: FC<ComponentProps> = ({
     const categoryPhrase: string = getPolicyCatSubcatPhrase(
       categories,
       subcategories,
-      subcategoryOptions,
+      subcatOptions,
       noun
     );
 
