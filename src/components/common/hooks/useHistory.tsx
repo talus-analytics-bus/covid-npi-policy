@@ -7,7 +7,6 @@ export default function useHistory(): History {
   useEffect(() => {
     // update history state when window history changes
     setHistory(window.history);
-  }, [window.history]);
-  // TODO ignore above warning, if it works
+  }, []);
   return history;
 }

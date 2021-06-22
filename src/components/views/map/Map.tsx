@@ -10,37 +10,31 @@
 
 // 3rd party packages
 import React, { useCallback, useEffect, useState } from "react";
-// import { useHistory } from "react-router-dom"; // @ts-ignore
 import moment, { Moment } from "moment";
 
 // custom hooks
-import { usePrevious } from "../../misc/UtilsTyped";
+import usePrevious from "components/common/hooks/usePrevious";
+import useHistory from "components/common/hooks/useHistory";
 
 // context
 import { MapOptionProvider } from "./context/MapOptionContext";
 
-// local packages
-import { defaults, metricMeta } from "../../common/MapboxMap/plugins/data";
-import { mapStyles } from "../../common/MapboxMap/plugins/sources";
-import { getInitLower } from "../../misc/Util";
-// queries
+// data queries
 import {
   OptionSet,
   CountriesWithDistancingLevels,
   execute,
 } from "../../misc/Queries";
 import PlaceQuery from "../../misc/PlaceQuery";
-import MapDrape from "./content/MapDrape/MapDrape";
 
 // assets and styles
 import styles from "./map.module.scss";
 
-// common components
+// local components and helper functions
 import { LoadingSpinner, MapboxMap } from "../../common";
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
-import { replaceMapIdState, getParamsMapId } from "./helpers";
 import { FC } from "react";
 import {
   FilterDefs,
@@ -50,9 +44,15 @@ import {
   PolicyResolution,
 } from "../../common/MapboxMap/plugins/mapTypes";
 import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
-import useHistory from "components/misc/useHistory";
 import { VersionDataProps } from "components/misc/queryTypes";
 import { Option } from "components/common/OptionControls/types";
+import MapDrape from "./content/MapDrape/MapDrape";
+
+// helper functions and data
+import { defaults, metricMeta } from "../../common/MapboxMap/plugins/data";
+import { mapStyles } from "../../common/MapboxMap/plugins/sources";
+import { getInitLower } from "../../misc/Util";
+import { replaceMapIdState, getParamsMapId } from "./helpers";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
