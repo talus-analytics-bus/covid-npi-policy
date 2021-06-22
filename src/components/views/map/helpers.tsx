@@ -1,7 +1,8 @@
 /**
  * Helper functions for Map.tsx
  */
-import { metricMeta } from "components/common/MapboxMap/plugins/data";
+import { VersionDataProps } from "api/queryTypes";
+import { defaults, metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   FilterDefs,
   MapDataShapeId,
@@ -9,6 +10,7 @@ import {
   validMapIds,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import { getInitLower } from "components/misc/Util";
+import moment, { Moment } from "moment";
 
 /**
  * Record in browser history
@@ -171,3 +173,46 @@ export const ampMapFilterDefs: FilterDefs[] = [
     },
   },
 ];
+
+/**
+ * Given a list of data series versions, returns the most recent update date
+ * for a case count data series for the map with the given ID.
+ *
+ * @param versions The list of versions for the data series in the map
+ * @param mapId The ID of the map of interest
+ * @returns {Moment} The Moment object for the most recent date a data series
+ * in `versions` was last updated.
+ */
+export function getCaseDataUpdateDate(
+  versions: VersionDataProps[],
+  mapId: MapId
+): Moment {
+  const casesUpdatedDatum: VersionDataProps | undefined = versions.find(
+    d => d.name.includes("COVID-19") && d.map_types.includes(mapId)
+  );
+  const casesUpdatedMoment: Moment = casesUpdatedDatum
+    ? moment(casesUpdatedDatum.last_datum_date)
+    : moment();
+  defaults.minMaxDate.maxDate = casesUpdatedMoment.format("YYYY-MM-DD");
+  return casesUpdatedMoment;
+}
+
+/**
+ * Given a list of data series versions, returns the most recent update date
+ * for any data series for the map with the given ID.
+ *
+ * @param versions The list of versions for the data series in the map
+ * @param mapId The ID of the map of interest
+ * @returns {Moment} The Moment object for the most recent date a data series
+ * in `versions` was last updated.
+ */
+export function getOverallUpdateDate(
+  versions: VersionDataProps[],
+  mapId: MapId
+): Moment {
+  const applicableVersions: VersionDataProps[] = versions.filter(d => {
+    return d.map_types.includes("all") || d.map_types.includes(mapId);
+  });
+  const lastUpdatedDateOverall: Moment = moment(applicableVersions[0].date);
+  return lastUpdatedDateOverall;
+}

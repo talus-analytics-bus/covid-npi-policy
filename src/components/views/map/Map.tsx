@@ -10,7 +10,7 @@
 
 // 3rd party packages
 import React, { useCallback, useEffect, useState, FC } from "react";
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 
 // custom hooks
 import usePrevious from "components/common/hooks/usePrevious";
@@ -39,7 +39,6 @@ import {
   PolicyResolution,
 } from "../../common/MapboxMap/plugins/mapTypes";
 import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
-import { VersionDataProps } from "api/queryTypes";
 import { Option } from "components/common/OptionControls/types";
 import MapDrape from "./content/MapDrape/MapDrape";
 
@@ -51,6 +50,8 @@ import {
   getParamsMapId,
   getMapTitle,
   ampMapFilterDefs,
+  getCaseDataUpdateDate,
+  getOverallUpdateDate,
 } from "./helpers";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
@@ -111,13 +112,7 @@ const Map: FC<MapProps> = ({
   );
 
   // set default date of map based on most recent case data
-  const casesUpdatedDatum: VersionDataProps | undefined = versions.find(
-    d => d.name.includes("COVID-19") && d.map_types.includes(mapId)
-  );
-  const casesUpdatedMoment: Moment = casesUpdatedDatum
-    ? moment(casesUpdatedDatum.last_datum_date)
-    : moment();
-  defaults.minMaxDate.maxDate = casesUpdatedMoment.format("YYYY-MM-DD");
+  const casesUpdatedMoment: Moment = getCaseDataUpdateDate(versions, mapId);
   const [date, setDate] = useState<Moment>(casesUpdatedMoment);
   const prevDate: Moment | undefined = usePrevious(date);
 
@@ -211,10 +206,7 @@ const Map: FC<MapProps> = ({
   // CONSTANTS // ---------------------------------------------------------- //
   // get overal last updated date of data, using most recent data
   // series version
-  const applicableVersions: VersionDataProps[] = versions.filter(d => {
-    return d.map_types.includes("all") || d.map_types.includes(mapId);
-  });
-  const lastUpdatedDateOverall = applicableVersions[0].date;
+  const overallUpdateDate: Moment = getOverallUpdateDate(versions, mapId);
 
   // EFFECT HOOKS // ------------------------------------------------------- //
   // initialize page data
@@ -344,7 +336,7 @@ const Map: FC<MapProps> = ({
                       mapId,
                       mapTitle,
                       date,
-                      lastUpdatedDateOverall,
+                      overallUpdateDate,
                       versions,
                       setInfoTooltipContent,
                     }}
