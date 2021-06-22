@@ -54,7 +54,7 @@ import {
   replaceMapIdState,
   getParamsMapId,
   getMapTitle,
-  defaultAmpMapFilters,
+  ampMapFilterDefs,
 } from "./helpers";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
@@ -143,9 +143,7 @@ const Map: FC<MapProps> = ({
   const [geoHaveData, setGeoHaveData] = useState(null);
 
   // definition data for filters to display in drawer content section
-  const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(
-    defaultAmpMapFilters
-  );
+  const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(ampMapFilterDefs);
 
   // currently selected filters
   const [filters, setFilters] = useState({});

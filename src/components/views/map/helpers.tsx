@@ -1,3 +1,6 @@
+/**
+ * Helper functions for Map.tsx
+ */
 import { metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   FilterDefs,
@@ -6,7 +9,6 @@ import {
   validMapIds,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import { getInitLower } from "components/misc/Util";
-import { History } from "history";
 
 /**
  * Record in browser history
@@ -26,11 +28,13 @@ type BrowserHistoryRecord = {
 /**
  * Replaces the current browser history record with one that represents the
  * map with the defined ID
- * @param {Window} history The window object
+ *
+ * @param {History} history The window object
+ *
  * @param {MapId} mapId The ID of a map
  */
 export function replaceMapIdState(
-  history: any,
+  history: History,
   mapId: MapId,
   title: string = ""
 ): void {
@@ -74,6 +78,7 @@ export function getMapHistoryState(mapId: string): BrowserHistoryRecord {
 export function getParamsMapId(
   defaultMapId: MapId | null = null
 ): MapId | null {
+  // get map ID from URL parameters
   const params: Record<string, any> = new URLSearchParams(
     window !== undefined ? window.location.search : ""
   );
@@ -126,11 +131,13 @@ export const getMapTitle: Function = (
       title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
     }
     return title;
-    // return title + ` at ${level} level`;
   }
 };
 
-export const defaultAmpMapFilters: FilterDefs[] = [
+/**
+ * Definitions for AMP map filters shown in AMP map options panel.
+ */
+export const ampMapFilterDefs: FilterDefs[] = [
   {
     primary_ph_measure: {
       // data field
