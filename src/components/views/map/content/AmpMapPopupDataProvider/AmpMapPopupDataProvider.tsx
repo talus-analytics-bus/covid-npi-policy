@@ -2,7 +2,7 @@
 import React, {
   FunctionComponent as FC,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
 } from "react";
 
@@ -32,11 +32,9 @@ import {
   getMapIdFromFeature,
   getModelLink,
   getPolicyLink,
-  ZERO_POLICY_MSG,
 } from "./helpers";
 import { execute, PolicyStatusCounts } from "api/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
-import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import MapOptionContext, {
   MapOptionContextProps,
@@ -59,7 +57,6 @@ type UpdateDataProps = {
   setUpdating: Function;
   map: Record<string, any>;
   mapId: MapId;
-  DISABLE_POLICY_LINK_IF_ZERO: boolean;
   circle: string | null;
   paramArgs: Record<string, any>;
   subcatOptions: Option[];
@@ -75,7 +72,6 @@ const updateData: Function = async ({
   setUpdating,
   map,
   mapId,
-  DISABLE_POLICY_LINK_IF_ZERO,
   paramArgs,
   subcatOptions,
 }: UpdateDataProps) => {
@@ -137,14 +133,9 @@ const updateData: Function = async ({
   const placeHasPolicies: boolean = res.policyCount.max_all_time !== null;
   const policyCount: number | null =
     placeHasPoliciesToday && placeHasPolicies ? res.policyCount[0].value : null;
-  const policiesLink: ActionLink =
-    policyCount === 0 && DISABLE_POLICY_LINK_IF_ZERO ? (
-      <PolicyPageLink tooltip={ZERO_POLICY_MSG} />
-    ) : policyCount === null ? null : (
-      res.policiesLink
-    );
+  const policiesLink: ActionLink = res.policiesLink;
   const dataLink: ActionLink =
-    policyCount === 0 ? (
+    policyCount === 0 && Settings.DISABLE_POLICY_LINK_IF_ZERO ? (
       <PolicyDataLink noData={true} />
     ) : policyCount === null ? null : (
       res.dataLink
@@ -201,7 +192,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   // get map ID used for data requests based on the feature
   const mapIdForData: MapId = getMapIdFromFeature(feature, mapId);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
       .state_name;
     const iso3: string | undefined = (feature as CountryFeature).properties

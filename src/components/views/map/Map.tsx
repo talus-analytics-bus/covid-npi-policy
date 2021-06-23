@@ -33,6 +33,7 @@ import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
 import {
   FilterDefs,
+  Filters,
   MapDataShapeId,
   MapId,
   MapProps,
@@ -138,7 +139,7 @@ const Map: FC<MapProps> = ({
   const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(ampMapFilterDefs);
 
   // currently selected filters
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState<Filters>({});
   const prevFilters = usePrevious(filters);
 
   // country data for tooltip names
@@ -262,9 +263,20 @@ const Map: FC<MapProps> = ({
       // show default map fill
       setFill(defaults[mapId].fill);
 
-      // remove map changing flag
-      if (mapIsChanging) setMapIsChanging(false);
+      // if filters are in "none" state, reset them
+      if (getIsNoneState(filters)) {
+        setFilters({
+          ...filters,
+          primary_ph_measure: [],
+          ph_measure_details: [],
+        });
+      }
+      if (mapIsChanging)
+        // remove map changing flag
+        setMapIsChanging(false);
     },
+    // TODO fix dependencies
+    // eslint-disable-next-line
     [mapId, mapIsChanging, setLoading]
   );
 
@@ -390,3 +402,10 @@ const Map: FC<MapProps> = ({
 };
 
 export default Map;
+function getIsNoneState(filters: Filters) {
+  return (
+    filters.primary_ph_measure !== undefined &&
+    filters.primary_ph_measure.length === 1 &&
+    filters.primary_ph_measure[0] === "None"
+  );
+}

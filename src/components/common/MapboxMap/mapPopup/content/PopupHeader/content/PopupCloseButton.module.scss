@@ -1,0 +1,33 @@
+@import "src/assets/styles/vars.module.scss";
+.popupCloseButton {
+    position: absolute;
+    padding: 10px;
+    margin: 0;
+    line-height: 0;
+    top: -10px;
+    right: -10px;
+    background: $idea-gray-4;
+    color: $idea-gray-2;
+    border: 2px $idea-gray-2 solid;
+    border-radius: 100%;
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .character {
+        font-size: 1.33rem;
+        &:hover {
+            color: #333;
+        }
+        &:active {
+            color: black;
+        }
+    }
+    &:hover {
+        border-color: #333;
+    }
+    &:active {
+        border-color: black;
+    }
+}

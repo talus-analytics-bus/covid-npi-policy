@@ -1,10 +1,16 @@
+// 3rd party packages
 import React, { FC } from "react";
+
+// local components and objects
+import Settings from "Settings";
+import { PolicyLink } from "../PolicyLink";
 import {
   DATA_PAGE_LINK_TEXT,
   PolicyLinkBaseProps,
   ZERO_POLICY_MSG,
 } from "../../helpers";
-import { PolicyLink } from "../PolicyLink";
+
+// styles and assets
 import styles from "./PolicyDataLink.module.scss";
 
 interface PolicyPageLinkProps extends PolicyLinkBaseProps {
@@ -22,14 +28,14 @@ export const PolicyDataLink: FC<PolicyPageLinkProps> = ({
   noData = false,
   children,
 }) => {
+  const isNoDataMode: boolean = noData && Settings.DISABLE_POLICY_LINK_IF_ZERO;
   return (
     <PolicyLink
-      page={"data"}
       {...{
-        tooltip: noData ? ZERO_POLICY_MSG : tooltip,
+        tooltip: isNoDataMode ? ZERO_POLICY_MSG : tooltip,
         to,
         target,
-        disabled: noData,
+        disabled: isNoDataMode,
       }}
     >
       {children || (

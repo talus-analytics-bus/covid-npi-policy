@@ -29,9 +29,12 @@
             text-decoration: underline;
         }
         [data-disabled] {
-            a {
+            a,
+            button,
+            span {
                 color: $gray-2;
                 text-decoration: none;
+                cursor: default;
             }
         }
     }

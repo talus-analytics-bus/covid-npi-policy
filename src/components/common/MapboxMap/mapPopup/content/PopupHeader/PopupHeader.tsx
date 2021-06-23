@@ -4,6 +4,7 @@ import styles from "./popupheader.module.scss";
 // types
 import { ElementsOrNull } from "../../../plugins/mapTypes";
 import classNames from "classnames";
+import { PopupCloseButton } from "./content/PopupCloseButton";
 
 // component types
 type PopupHeaderProps = {
@@ -66,16 +67,7 @@ export const PopupHeader: FunctionComponent<PopupHeaderProps> = ({
           })}
         >
           {rightContent}
-          {showClose && (
-            <button
-              className={styles.close}
-              onClick={() => {
-                if (onClose !== undefined) onClose();
-              }}
-            >
-              ×
-            </button>
-          )}
+          {showClose && <PopupCloseButton {...{ onClose }} />}
         </div>
       </Container>
     );
