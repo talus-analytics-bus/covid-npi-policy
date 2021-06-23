@@ -35,6 +35,7 @@ const {
   mapGreen5,
   mapGreen6,
   noDataGray,
+  zeroGray,
 } = varsExports;
 
 // define default pattern style used below
@@ -75,7 +76,7 @@ const circleStyles: CircleStyles = {
       circleStrokeColor: [
         "case",
         ["==", ["feature-state", key], 0],
-        "#b3b3b3",
+        zeroGray,
         ["==", ["feature-state", key], null],
         "transparent",
         "#e65d36",

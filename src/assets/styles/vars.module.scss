@@ -28,6 +28,7 @@ $light-cyan: #d9edf8;
 $dark-navy-blue-button: #213561;
 $dark-selected-blue: $dark-blue;
 $no-data-gray: #b3b3b3;
+$zero-gray: #b3b3b3;
 
 // IDEA re-brand colors
 $idea-black: #303434;
@@ -81,6 +82,7 @@ $map-green-6: #c6dfda;
   mapGreen5: $map-green-5;
   mapGreen6: $map-green-6;
   noDataGray: #dedede;
+  zeroGray: $zero-gray;
   // noDataGray: #eaeaea;
   // noDataGray: #c4c4c4;
 }

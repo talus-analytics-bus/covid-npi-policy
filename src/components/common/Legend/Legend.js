@@ -70,11 +70,10 @@ const Legend = ({ ...props }) => {
             className={classNames(styles.circle)}
             style={{
               backgroundColor: "transparent",
-              border: "6px solid #A4A4A4",
+              border: "4px solid " + varsExports.zeroGray,
               height: radii[radii.length - 1],
               width: radii[radii.length - 1],
               transform: "scale(0.5)",
-              // transformOrigin: "left center",
             }}
           ></div>
           <div className={styles.labels}>
