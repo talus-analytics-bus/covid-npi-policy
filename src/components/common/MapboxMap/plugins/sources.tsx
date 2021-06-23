@@ -15,7 +15,7 @@ import { GeoRes } from "api/queryTypes";
 /**
  * Mapbox style ID of US map
  */
-const US_MAP_ID: string = "ckq9v60f50vap18ozazw0hkra";
+const US_MAP_ID: string = "ckq9vwu8t0w4w17k0nwj4z9kz";
 
 // define map sources to provide features for plotting on the map
 export const mapSources: MapSources = {
