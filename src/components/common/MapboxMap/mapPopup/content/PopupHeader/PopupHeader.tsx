@@ -7,10 +7,26 @@ import classNames from "classnames";
 
 // component types
 type PopupHeaderProps = {
+  /**
+   * Title of header that appears in upper-left corner.
+   */
   title: string | ElementsOrNull;
+
+  /**
+   * Optional: Subtitle of header that appears beneath the header text.
+   */
   subtitle?: string | ElementsOrNull;
+
+  /**
+   * Optional: Content appearing in the right side of the header.
+   */
   rightContent?: ElementsOrNull;
+
+  /**
+   * Optional: Custom content overriding template structure of header.
+   */
   customContent?: ElementsOrNull;
+
   /**
    * Optional: True if close button should be shown in upper-right corner,
    * false otherwise. Defaults to false.
