@@ -57,7 +57,7 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
               </span>
             </>
           )}
-          {!dataAvail && <span className={styles.value}>No data on date</span>}
+          {!dataAvail && <span className={styles.value}>No data for date</span>}
         </div>
         <div className={styles.label}>{label}</div>
         <SparklineChart
