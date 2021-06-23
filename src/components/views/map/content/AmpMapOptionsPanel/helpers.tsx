@@ -58,6 +58,9 @@ import { Dispatch, SetStateAction } from "react-transition-group/node_modules/@t
       // set updated category filters to equal selected values
       updatedFilters[filterKey] = selectedOps.map(o => o.value);
 
+      // make list of cats for which not to add all subcats if none selected
+      const catsDoNotAddChildren: string[] = filters.primary_ph_measure !== undefined ? possibleOps.filter(o => filters.primary_ph_measure?.includes(o.value as string)).map(o => o.value as string) : []
+
       // update subcategory filters
       // Set updated subcat filters equal to current subcat filters except
       // those whose cats aren't in selected values
@@ -76,6 +79,7 @@ import { Dispatch, SetStateAction } from "react-transition-group/node_modules/@t
       // For each updated cat filter, if no subcats for it are in updated
       // subcat filters, add every possible subcat
       updatedFilters.primary_ph_measure.forEach((v: string) => {
+        if (catsDoNotAddChildren.includes(v)) return;
         const possibleCatSubcats: string[] = allSubOps
           .filter(o => o.parent === v)
           .map(o => o.value as string);

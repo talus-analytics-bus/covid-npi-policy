@@ -22,6 +22,9 @@ export const PolicyCount: FC<ComponentProps> = ({
     // define plurality form of "policy" to use
     const noun = count !== 1 ? "policies" : "policy";
 
+    // special case: categories ["None"] --> subcat. filters need to be chosen
+    const isNone: boolean = categories.length === 1 && categories[0] === 'None';
+
     // get string to express categories
     const categoryPhrase: string = getPolicyCatSubcatPhrase(
       categories,
@@ -42,9 +45,9 @@ export const PolicyCount: FC<ComponentProps> = ({
           ),
           label: (
             <div>
-              <strong>
-                <FMT.ExactNumber>{count}</FMT.ExactNumber>
-              </strong>{" "}
+              {!isNone && <strong>
+                <FMT.ExactNumber>{count}</FMT.ExactNumber>{" "}
+              </strong>}
               {categoryPhrase}
             </div>
           ),

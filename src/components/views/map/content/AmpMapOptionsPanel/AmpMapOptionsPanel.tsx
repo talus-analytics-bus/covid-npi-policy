@@ -102,12 +102,21 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
 
   // remove any categories that don't have subcats checked from the API filters
   useEffect(() => {
+    const someCatsOrig: boolean =
+      filters.primary_ph_measure !== undefined &&
+      filters.primary_ph_measure.length > 0;
     const updatedFiltersForApi: Filters = { ...filters };
     if (updatedFiltersForApi.primary_ph_measure !== undefined) {
       updatedFiltersForApi.primary_ph_measure = updatedFiltersForApi.primary_ph_measure.filter(
         (v: string) => !noChildCats.map(o => o.value).includes(v)
       );
     }
+    // If some categories originally but none in updated, return no data
+    const someCatsUpdated: boolean =
+      updatedFiltersForApi.primary_ph_measure !== undefined &&
+      updatedFiltersForApi.primary_ph_measure.length > 0;
+    const returnNoData: boolean = someCatsOrig && !someCatsUpdated;
+    if (returnNoData) updatedFiltersForApi.primary_ph_measure = ["None"];
     // update filters for API
     if (setFiltersForApi !== undefined) setFiltersForApi(updatedFiltersForApi);
     // eslint-disable-next-line
@@ -117,7 +126,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
    * List of possible circle metric options.
    */
   const circleOptions: Option[] = getMetricsAsOptions(mapId, "circle");
-
 
   const fillSubOptions: ReactElement = (
     <OptionCheckboxSet
@@ -164,7 +172,11 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                 }
 
                 // if any cats selected but no subcats selected, mark as indet
-                const updatedNoChildCats: Option[] = [...noChildCats].filter((ncc: Option) => {return ncc.value !== o.value as string});
+                const updatedNoChildCats: Option[] = [...noChildCats].filter(
+                  (ncc: Option) => {
+                    return ncc.value !== (o.value as string);
+                  }
+                );
                 if (
                   selected.length === 0 &&
                   updatedFilters !== undefined &&

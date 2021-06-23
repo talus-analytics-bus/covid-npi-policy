@@ -61,13 +61,15 @@ export const includeSubcatFilters: Function = (
  * @param categories Array of strings of policy categories selected
  * @param subcats Array of strings of policy subcategories selected
  * @param noun Plurality of policy noun to use
+ * @param {boolean} forLegend True if phrase for legend, false otherwise
  * @returns {string} String expressing cats. / subcats. of policy selected
  */
 export const getPolicyCatSubcatPhrase: Function = (
   categories: string[] = [],
   subcats: string[] = [],
   subcatOptions: Option[],
-  noun: "policies" | "policy"
+  noun: "policies" | "policy",
+  forLegend: boolean = false
 ): string => {
   const suffix: string = ` ${noun} in effect`;
   const nSubcats: number = subcats.length;
@@ -87,7 +89,9 @@ export const getPolicyCatSubcatPhrase: Function = (
     return nCatSubcats !== nCatSubcatsSelected;
   });
 
-  if (nCats > 1 && (allSubcatsSelected || nSubcats === 0)) {
+  // special case: only cats selected and no subcats --> "none"
+  const isNone = categories.length === 1 && categories[0] === 'None';
+  if (isNone) {return forLegend ? 'Policies in effect' : 'Select subcategories to view data'} else if (nCats > 1 && (allSubcatsSelected || nSubcats === 0)) {
     // multi category, no subcat
     return ` ${noun} with selected categories in effect`;
   } else if (nCats === 0 && nSubcats === 0) {

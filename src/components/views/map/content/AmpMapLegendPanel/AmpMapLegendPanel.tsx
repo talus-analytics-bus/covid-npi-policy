@@ -166,7 +166,8 @@ const getFillLegendName: Function = ({
         filters["primary_ph_measure"] || [],
         filters["ph_measure_details"] || [],
         subcatOptions,
-        "policies"
+        "policies",
+        true  // for legend
       ).trim();
       return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
     }

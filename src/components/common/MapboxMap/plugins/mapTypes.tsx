@@ -339,7 +339,7 @@ export type ElementsOrNull =
 /**
  * Filters to provide to API calls for AMP data.
  */
-export type Filters = Record<string, string[]>;
+export type Filters = Record<string, string[]> & {primary_ph_measure?: string[]; ph_measure_details?: string[]};
 
 /**
  * Filter option information derived from optionset API responses
