@@ -57,7 +57,6 @@ type UpdateDataProps = {
   setUpdating: Function;
   map: Record<string, any>;
   mapId: MapId;
-  DISABLE_POLICY_LINK_IF_ZERO: boolean;
   circle: string | null;
   paramArgs: Record<string, any>;
   subcatOptions: Option[];
@@ -73,7 +72,6 @@ const updateData: Function = async ({
   setUpdating,
   map,
   mapId,
-  DISABLE_POLICY_LINK_IF_ZERO,
   paramArgs,
   subcatOptions,
 }: UpdateDataProps) => {
