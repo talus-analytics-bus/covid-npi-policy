@@ -135,14 +135,27 @@ export type MapDefaultsEntry = {
   fill: string | null;
 
   /**
-   * Mapbox style layer in front of which data layers should be inserted.
+   * Mapbox style layer in front of which circle data layers should
+   * be inserted.
    *
-   * For instance, setting `priorLayer` to `state-points` will cause any fill
+   * For instance, setting `priorCircleLayer` to `state-points` will cause any fill
    * or circle layers added to this Mapbox map that represent data to be
    * displayed in front of the `state-points` layer, which must exist on the
    * Mapbox style used in this map.
    */
-  priorLayer: string;
+  priorCircleLayer: string;
+
+  /**
+   * Mapbox style layer in front of which fill data layers should be inserted.
+   *
+   * For more information, see definition of `priorCircleLayer`.
+   */
+  priorFillLayer: string;
+
+  /**
+   * List of map layers that should always be hidden.
+   */
+  hiddenLayers?: string[];
 
   /**
    * The initial viewport center point for the map.
@@ -339,7 +352,10 @@ export type ElementsOrNull =
 /**
  * Filters to provide to API calls for AMP data.
  */
-export type Filters = Record<string, string[]> & {primary_ph_measure?: string[]; ph_measure_details?: string[]};
+export type Filters = Record<string, string[]> & {
+  primary_ph_measure?: string[];
+  ph_measure_details?: string[];
+};
 
 /**
  * Filter option information derived from optionset API responses

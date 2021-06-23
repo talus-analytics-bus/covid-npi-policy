@@ -8,7 +8,7 @@
  */
 
 // standard packages
-import React, { ReactNode } from "react";
+import React from "react";
 
 // 3rd party packages
 import * as d3 from "d3";
@@ -85,7 +85,9 @@ export const defaults: MapDefaults = {
     fill: "policy_status_counts",
     // fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
-    priorLayer: "state-points",
+    priorCircleLayer: "county-points",
+    priorFillLayer: "state-boundaries",
+    hiddenLayers: ["state-boundaries"],
     initViewport: {
       latitude: -2.534888253109417,
       longitude: 6.042008668434793,
@@ -105,7 +107,8 @@ export const defaults: MapDefaults = {
     fill: "policy_status_counts",
     // fill: "lockdown_level",
     // base layer immediately behind which layers should be appended to map
-    priorLayer: "county-points",
+    priorCircleLayer: "county-points",
+    priorFillLayer: "state-boundaries",
     initViewport: {
       latitude: -2.534888253109417,
       longitude: 6.042008668434793,
@@ -120,7 +123,8 @@ export const defaults: MapDefaults = {
     circle: "77",
     // fill: "lockdown_level",
     fill: "policy_status_counts",
-    priorLayer: "country-label",
+    priorCircleLayer: "country-label",
+    priorFillLayer: "country-label",
     initViewport: {
       latitude: 5.315112144927277,
       longitude: 18.895843377706207,
