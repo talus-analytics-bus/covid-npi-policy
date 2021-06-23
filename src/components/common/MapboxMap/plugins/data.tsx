@@ -986,7 +986,7 @@ export const metricMeta: MetricMeta = {
               ).toLowerCase()}
               -level
               <br />
-              policy in effect
+              policies in effect
             </div>,
             "Fewest",
             "",
