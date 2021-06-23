@@ -137,14 +137,9 @@ const updateData: Function = async ({
   const placeHasPolicies: boolean = res.policyCount.max_all_time !== null;
   const policyCount: number | null =
     placeHasPoliciesToday && placeHasPolicies ? res.policyCount[0].value : null;
-  const policiesLink: ActionLink =
-    policyCount === 0 && DISABLE_POLICY_LINK_IF_ZERO ? (
-      <PolicyPageLink tooltip={ZERO_POLICY_MSG} />
-    ) : policyCount === null ? null : (
-      res.policiesLink
-    );
+  const policiesLink: ActionLink = res.policiesLink;
   const dataLink: ActionLink =
-    policyCount === 0 ? (
+    policyCount === 0 && Settings.DISABLE_POLICY_LINK_IF_ZERO ? (
       <PolicyDataLink noData={true} />
     ) : policyCount === null ? null : (
       res.dataLink
