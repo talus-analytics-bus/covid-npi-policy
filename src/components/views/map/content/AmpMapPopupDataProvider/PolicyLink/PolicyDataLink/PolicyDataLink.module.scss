@@ -1,0 +1,10 @@
+.buttonAsLink {
+    padding: 0;
+    margin: 0;
+    border: none;
+    text-decoration: underline;
+    &,
+    &:hover {
+        background: none;
+    }
+}

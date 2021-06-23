@@ -1,4 +1,10 @@
+// 3rd party packages
 import React from "react";
+import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { Link, LinkProps } from "react-router-dom";
+import { Moment } from "moment";
+
+// types
 import {
   CountryFeature,
   CountyFeature,
@@ -8,22 +14,24 @@ import {
   PolicyResolution,
   StateFeature,
 } from "components/common/MapboxMap/plugins/mapTypes";
+
+// local components and functions
 import { getDataQueryResults } from "components/common/MapboxMap/plugins/dataGetter";
-import { Link, LinkProps } from "react-router-dom";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
 import { Place } from "api/Queries";
 import { PlaceRecord } from "components/misc/dataTypes";
-import { Moment } from "moment";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import { Option } from "components/common/OptionControls/types";
 import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
 
+// common language
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
 export const ZERO_POLICY_MSG: string =
   "No policies for location match currently selected options";
-export const DATA_PAGE_LINK_TEXT: string = "View selected policies";
+export const DATA_PAGE_LINK_TEXT: string = "View in data page";
+
+// type definitions
 export type PolicyLinkBaseProps = {
   tooltip?: string;
   to?: string;
