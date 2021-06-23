@@ -44,6 +44,7 @@ import MapOptionContext, {
 import { Option } from "components/common/OptionControls/types";
 import Settings from "Settings";
 import { GeoRes } from "api/queryTypes";
+import MapPlaceContext from "../../context/MapPlaceContext";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -188,7 +189,11 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   const [updating, setUpdating] = useState<boolean>(false);
   const [distancingLevel, setDistancingLevel] = useState<DistancingLevel>(null);
   const [policyCount, setPolicyCount] = useState<number | null>(null);
-  const featureName: string = getFeatureName(feature);
+
+  // context
+  const countyNamesByFips = useContext(MapPlaceContext)[0];
+
+  const featureName: string = getFeatureName(feature, countyNamesByFips);
 
   // context
   const { DISABLE_POLICY_LINK_IF_ZERO } = Settings;

@@ -77,14 +77,29 @@ export const getFeatureMetric: Function = async ({
 };
 
 export const getFeatureName: Function = (
-  feature: CountyFeature | StateFeature | CountryFeature
+  feature: CountyFeature | StateFeature | CountryFeature,
+  featureNameByCode?: Record<string, string>
 ): string => {
   // counties
   let featureName: string = (feature as CountyFeature).properties.county_name;
   if (featureName !== undefined) {
-    return (
-      featureName + ", " + (feature as CountyFeature).properties.state_abbrev
-    );
+    // define county feature object
+    const countyFeature: CountyFeature = feature as CountyFeature;
+
+    // return "state" name for DC (no locality)
+    if (countyFeature.properties.state_abbrev === "DC") return featureName;
+    else if (featureNameByCode !== undefined) {
+      // create name from name data obtained from Metrics database Place table
+      return `${featureNameByCode[countyFeature.id]}, ${
+        countyFeature.properties.state_name
+      }`;
+    }
+
+    // if no name data avail., create backup name from feature properties
+    else
+      return `${featureName}${getCountySuffix(countyFeature)}, ${
+        countyFeature.properties.state_name
+      }`;
   }
 
   // states
@@ -418,4 +433,19 @@ export function getMapIdFromFeature(feature: MapFeature, mapId: MapId): MapId {
   else {
     throw Error("Unexpected feature: " + feature);
   }
+}
+
+/**
+ * Returns the appropriate suffix for the county feature, e.g., "Parish" for
+ * Louisiana, none for DC, or "County" for all others.
+ *
+ * @param feature The county feature.
+ * @returns The appropriate suffix for the county feature.
+ */
+function getCountySuffix(feature: CountyFeature): string {
+  const stateFips: string = feature.properties.state_abbrev;
+  if (stateFips === "LA") return " Parish";
+  else if (stateFips === "AK") return " Borough";
+  else if (stateFips === "DC") return "";
+  else return " County";
 }

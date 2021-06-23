@@ -1,5 +1,4 @@
 import axios from "axios";
-import Util from "../components/misc/Util.js";
 
 const API_URL = process.env.REACT_APP_METRICS_API_URL;
 

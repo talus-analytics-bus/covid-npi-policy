@@ -90,8 +90,12 @@ export const getPolicyCatSubcatPhrase: Function = (
   });
 
   // special case: only cats selected and no subcats --> "none"
-  const isNone = categories.length === 1 && categories[0] === 'None';
-  if (isNone) {return forLegend ? 'Policies in effect' : 'Select subcategories to view data'} else if (nCats > 1 && (allSubcatsSelected || nSubcats === 0)) {
+  const isNone = categories.length === 1 && categories[0] === "None";
+  if (isNone) {
+    return forLegend
+      ? "Policies with selected subcategories in effect"
+      : "Select subcategories to view data";
+  } else if (nCats > 1 && (allSubcatsSelected || nSubcats === 0)) {
     // multi category, no subcat
     return ` ${noun} with selected categories in effect`;
   } else if (nCats === 0 && nSubcats === 0) {

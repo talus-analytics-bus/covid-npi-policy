@@ -52,6 +52,7 @@ import {
   getCaseDataUpdateDate,
   getOverallUpdateDate,
 } from "./helpers";
+import MapPlaceContext from "./context/MapPlaceContext";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -142,6 +143,9 @@ const Map: FC<MapProps> = ({
   // country data for tooltip names
   const [places, setPlaces] = useState(null);
 
+  // county-level places for maps that show counties
+  const [countyNamesByFips, setCountyNamesByFips] = useState([{}]);
+
   // define possible categories based on optionset API response
   const catOptions: Option[] = filterDefs[0].primary_ph_measure.items.map(i => {
     return { name: i.label, value: i.value };
@@ -166,6 +170,7 @@ const Map: FC<MapProps> = ({
     const queries: Record<string, Promise<any>> = {};
     // get all country places for tooltip names, etc.
     queries.places = PlaceQuery({ place_type: ["country"] });
+    queries.countyNamesByFips = PlaceQuery({ place_type: ["county"] });
 
     queries.optionsets = OptionSet({
       method: "get",
@@ -197,6 +202,7 @@ const Map: FC<MapProps> = ({
       }
     });
     setPlaces(results.places);
+    setCountyNamesByFips(results.countyNamesByFips);
     setFilterDefs(newFilterDefs);
     setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
@@ -289,93 +295,95 @@ const Map: FC<MapProps> = ({
     return (
       <div className={styles.map}>
         {/* Provide data for current and previous map options selections */}
-        <MapOptionProvider
-          value={{
-            fill,
-            circle,
-            date,
-            filters,
-            mapId,
-            prevFill,
-            prevCircle,
-            prevDate,
-            prevFilters,
-            prevMapId,
-            setCircle,
-            setFill,
-            setFilters,
-            catOptions,
-            subcatOptions,
-          }}
-        >
-          <LoadingSpinner
-            text={"Loading data"}
-            ready={!dataIsLoading || loading}
-            fill={true}
-            delay={500}
-          />
-          <MapboxMap
-            key={mapId}
-            setShowLoadingSpinner={setLoading}
-            {...{
-              setInfoTooltipContent,
-              mapId,
-              setMapId,
-              linCircleScale,
+        <MapPlaceContext.Provider value={countyNamesByFips}>
+          <MapOptionProvider
+            value={{
+              fill,
+              circle,
+              date,
               filters,
-              geoHaveData,
-              mapIsChanging,
-              setDataIsLoading,
-              setZoomLevel,
-              overlays: (
-                <>
-                  <MapDrape
-                    {...{
-                      mapId,
-                      mapTitle,
-                      date,
-                      overallUpdateDate,
-                      versions,
-                      setInfoTooltipContent,
-                    }}
-                  />
-                  {
-                    <PanelSet
-                      style={{
-                        gridTemplateColumns: "auto auto auto",
-                      }}
-                    >
-                      <AmpMapLegendPanel
-                        {...{
-                          zoomLevel,
-                          linCircleScale,
-                          policyResolution,
-                        }}
-                      />
-                      <AmpMapDatePanel
-                        {...{ date, setDate, ...defaults.minMaxDate }}
-                      />
-                      <AmpMapOptionsPanel
-                        {...{
-                          mapId,
-                          setMapId,
-                          catOptions,
-                          subcatOptions,
-                        }}
-                      />
-                    </PanelSet>
-                  }
-                </>
-              ),
-              plugins: {
-                fill,
-                circle,
-                places,
-                policyResolution,
-              },
+              mapId,
+              prevFill,
+              prevCircle,
+              prevDate,
+              prevFilters,
+              prevMapId,
+              setCircle,
+              setFill,
+              setFilters,
+              catOptions,
+              subcatOptions,
             }}
-          />
-        </MapOptionProvider>
+          >
+            <LoadingSpinner
+              text={"Loading data"}
+              ready={!dataIsLoading || loading}
+              fill={true}
+              delay={500}
+            />
+            <MapboxMap
+              key={mapId}
+              setShowLoadingSpinner={setLoading}
+              {...{
+                setInfoTooltipContent,
+                mapId,
+                setMapId,
+                linCircleScale,
+                filters,
+                geoHaveData,
+                mapIsChanging,
+                setDataIsLoading,
+                setZoomLevel,
+                overlays: (
+                  <>
+                    <MapDrape
+                      {...{
+                        mapId,
+                        mapTitle,
+                        date,
+                        overallUpdateDate,
+                        versions,
+                        setInfoTooltipContent,
+                      }}
+                    />
+                    {
+                      <PanelSet
+                        style={{
+                          gridTemplateColumns: "auto auto auto",
+                        }}
+                      >
+                        <AmpMapLegendPanel
+                          {...{
+                            zoomLevel,
+                            linCircleScale,
+                            policyResolution,
+                          }}
+                        />
+                        <AmpMapDatePanel
+                          {...{ date, setDate, ...defaults.minMaxDate }}
+                        />
+                        <AmpMapOptionsPanel
+                          {...{
+                            mapId,
+                            setMapId,
+                            catOptions,
+                            subcatOptions,
+                          }}
+                        />
+                      </PanelSet>
+                    }
+                  </>
+                ),
+                plugins: {
+                  fill,
+                  circle,
+                  places,
+                  policyResolution,
+                },
+              }}
+            />
+          </MapOptionProvider>
+        </MapPlaceContext.Provider>
       </div>
     );
 };

@@ -1,4 +1,4 @@
-// library components
+// 3rd party packages
 import React, { FunctionComponent } from "react";
 import { Moment } from "moment";
 
