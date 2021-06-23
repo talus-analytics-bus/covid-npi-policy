@@ -70,7 +70,7 @@ const Map: FC<MapProps> = ({
   const [mapIsChanging, setMapIsChanging] = useState(false);
 
   // map circle scale linear? otherwise log
-  const [linCircleScale] = useState(true);
+  const linCircleScale: boolean = true;
 
   // is data being loaded?
   const [dataIsLoading, setDataIsLoading] = useState(false);
@@ -113,6 +113,7 @@ const Map: FC<MapProps> = ({
 
   // set default date of map based on most recent case data
   const casesUpdatedMoment: Moment = getCaseDataUpdateDate(versions, mapId);
+  // const [date, setDate] = useState<Moment>(moment('2020-12-25'));
   const [date, setDate] = useState<Moment>(casesUpdatedMoment);
   const prevDate: Moment | undefined = usePrevious(date);
 

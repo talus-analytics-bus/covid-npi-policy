@@ -128,7 +128,7 @@ const circleStyles: CircleStyles = {
         if (linCircleScale)
           return getLinearScale({
             minSize: 1,
-            zeroSize: 1,
+            zeroSize: 0.5,
             maxValue: 150e3 / 7.0,
             maxSize: 15,
             featurePropertyKey: key,
@@ -156,7 +156,6 @@ const circleStyles: CircleStyles = {
             minSize: 5,
             zeroSize: 5,
             maxValue: 1.3e6,
-            // maxSize: 20,
             featurePropertyKey: key,
           });
         else
@@ -230,12 +229,10 @@ const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
 const lightTeal = "#e0f4f3";
-// const teal = "#66CAC4";
-// const medTeal = "#41beb6";
 const darkTeal = "#349891";
 export const greenStepsScale = d3
   .scaleLinear<string, number>()
-  .domain([0, 1]) // TODO dynamically
+  .domain([0, 1])
   .range([lightTeal, darkTeal]);
 
 interface GetQuantizedColorStyleProps {
@@ -282,34 +279,12 @@ const getQuantizedColorStyle: Function = ({
   return base;
 };
 
-// const getLinearColorBins = ({ scale, maxVal, minVal, key }) => {
-//   const diff = maxVal - minVal;
-//   const binSize = diff / 5;
-//   const breakpoints = [1, 2, 3, 4].map(d => {
-//     return binSize * d + minVal;
-//   });
-//   const colors = scale.range();
-//   const newColorScale = d3
-//     .scaleLinear()
-//     .domain([0, 1])
-//     .range(colors);
-
-//   // const base = ["case"];
-//   const base = ["case", ["==", ["feature-state", key], 0], "#ffffff"];
-//   breakpoints.forEach((v, i) => {
-//     base.push(["<=", ["feature-state", key], v]);
-//     base.push(newColorScale(i * 0.25));
-//   });
-//   base.push(newColorScale(1));
-//   return base;
-// };
-
 // similar for fill styles
 const fillStyles: FillStyles = {
-  "metric-test-pattern": key => {
+  "pattern-general": key => {
     return defaultPatternStyle(key);
   },
-  "metric-test-outline": (key, geoHaveData) => {
+  "outline-general": (key, geoHaveData) => {
     return {
       "line-color": [
         "case",
@@ -332,7 +307,6 @@ const fillStyles: FillStyles = {
     };
   },
 
-  // TODO redo all this based on new API responses for `include_zeros = true`
   policy_status_counts: (key, geoHaveData, maxVal = 1, minVal = 0) => {
     return {
       "fill-color": [
