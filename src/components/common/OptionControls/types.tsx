@@ -66,6 +66,11 @@ export interface Option {
    * @param v The value of the child option.
    */
   isChecked?(v: string | number): boolean;
+
+  /**
+   * Optional: Additional class names to apply to the option component.
+   */
+  readonly customClasses?: string[];
 }
 
 export interface OptionWidget {

@@ -33,6 +33,11 @@
             color: $dark-selected-blue;
         }
     }
+    // special option text: select all, clear all
+    .selectAll,
+    .clearAll {
+        font-style: italic;
+    }
     &.optionRadio {
         > span {
             display: flex;

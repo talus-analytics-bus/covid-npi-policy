@@ -120,6 +120,7 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
               callback(options);
             }}
             indeterminate={selectAllIndeterminate}
+            customClasses={[styles.selectAll]}
             {...{ setInfoTooltipContent }}
           />
         )}
