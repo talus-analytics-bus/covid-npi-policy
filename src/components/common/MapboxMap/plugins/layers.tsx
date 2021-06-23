@@ -61,26 +61,67 @@ const defaultPatternStyle = (key: string) => {
 // The value of each key is a function that returns a data-driven style based
 // on the feature state defined by the `key` passed as an argument. Styles that
 // are not data-driven should be represented as functions without any arguments
+
+// GENERAL CIRCLE PROPERTIES // -------------------------------------------- //
+const getCircleOpacity: (key: string) => any[] = (key: string) => [
+  "case",
+  ["==", ["feature-state", key], null],
+  1,
+  0.25,
+];
+
+// SOLID CIRCLE PROPERTIES // ---------------------------------------------- //
+function getSolidCircleColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    "white",
+    ["==", ["feature-state", key], null],
+    "transparent",
+    "#e65d36",
+  ];
+}
+
+function getSolidCircleStrokeColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    zeroGray,
+    ["==", ["feature-state", key], null],
+    "transparent",
+    "#e65d36",
+  ];
+}
+
+// TRANSP CIRCLE PROPERTIES // --------------------------------------------- //
+function getTranspCircleColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    "white",
+    ["==", ["feature-state", key], null],
+    noDataGray,
+    "white",
+  ];
+}
+
+function getTranspCircleStrokeColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    zeroGray,
+    ["==", ["feature-state", key], null],
+    "transparent",
+    "#e65d36",
+  ];
+}
+
 const circleStyles: CircleStyles = {
-  "metric-test-transp": (key, linCircleScale = false) => {
+  "circle-transp-usa": (key, linCircleScale = false) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "white",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "white",
-      ],
-      circleOpacity: 0.25,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        zeroGray,
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getTranspCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getTranspCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
@@ -102,25 +143,11 @@ const circleStyles: CircleStyles = {
       },
     };
   },
-  "metric-test-transp-global": (key, linCircleScale = true) => {
+  "circle-transp-global": (key, linCircleScale = true) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "transparent",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "white",
-      ],
-      circleOpacity: 0.25,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getTranspCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getTranspCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
@@ -144,25 +171,11 @@ const circleStyles: CircleStyles = {
   },
 
   // global
-  "metric-test-solid-global": (key, linCircleScale = true) => {
+  "circle-solid-global": (key, linCircleScale = true) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "white",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
-      circleOpacity: 0.25,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getSolidCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getSolidCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
@@ -183,25 +196,11 @@ const circleStyles: CircleStyles = {
       },
     };
   },
-  "metric-test-solid": (key, linCircleScale = false) => {
+  "circle-solid-usa": (key, linCircleScale = false) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "white",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
-      circleOpacity: 0.25,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getSolidCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getSolidCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
