@@ -71,7 +71,7 @@ const circleStyles: CircleStyles = {
         "transparent",
         "white",
       ],
-      circleOpacity: 0.5,
+      circleOpacity: 0.25,
       circleStrokeColor: [
         "case",
         ["==", ["feature-state", key], 0],
@@ -111,7 +111,7 @@ const circleStyles: CircleStyles = {
         "transparent",
         "white",
       ],
-      circleOpacity: 0.5,
+      circleOpacity: 0.25,
       circleStrokeColor: [
         "case",
         ["==", ["feature-state", key], 0],
@@ -153,7 +153,7 @@ const circleStyles: CircleStyles = {
         "transparent",
         "#e65d36",
       ],
-      circleOpacity: 0.5,
+      circleOpacity: 0.25,
       circleStrokeColor: [
         "case",
         ["==", ["feature-state", key], 0],
@@ -192,7 +192,7 @@ const circleStyles: CircleStyles = {
         "transparent",
         "#e65d36",
       ],
-      circleOpacity: 0.5,
+      circleOpacity: 0.25,
       circleStrokeColor: [
         "case",
         ["==", ["feature-state", key], 0],

@@ -242,7 +242,7 @@ export const initMap = (
                 "case",
                 ["==", ["feature-state", layer.id], null],
                 0,
-                0.25,
+                0.125,
               ],
               "circle-stroke-width": [
                 "case",
@@ -258,7 +258,7 @@ export const initMap = (
                 "transparent",
                 "black",
               ],
-              "circle-stroke-opacity": 0.25,
+              "circle-stroke-opacity": 0.125,
             };
 
             // define circle main style
