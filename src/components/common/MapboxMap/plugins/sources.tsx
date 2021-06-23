@@ -11,6 +11,12 @@ import { GeoRes } from "api/queryTypes";
  * `plugins/layers.js` defines the layers and styles
  */
 
+// constants
+/**
+ * Mapbox style ID of US map
+ */
+const US_MAP_ID: string = "ckq9olp1k0p0r17k0ug5l5gdw";
+
 // define map sources to provide features for plotting on the map
 export const mapSources: MapSources = {
   // map ID
@@ -143,7 +149,7 @@ export const mapStyles = {
   // map ID (each of these will be rendered as a separate map)
   [MapId.us]: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
-    url: "mapbox://styles/nicoletalus/ckao8n13b0ftm1img9hnywt0f",
+    url: `mapbox://styles/nicoletalus/${US_MAP_ID}`,
 
     // slug of map, should be map ID
     value: "us",
@@ -158,7 +164,7 @@ export const mapStyles = {
     minZoom: 3.5,
 
     // max zoom
-    maxZoom: 6,
+    maxZoom: 5.9,
 
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
@@ -172,10 +178,7 @@ export const mapStyles = {
   },
   [MapId.us_county]: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
-    url: "mapbox://styles/nicoletalus/ckpygkon412h717pqisu5hi4h", // lighter gray state bounds, slightly thinner
-    // url: "mapbox://styles/nicoletalus/ckpygbhwn0uwr18p8wrqxf4hy", // white state bounds, slightly thinner
-    // url: "mapbox://styles/nicoletalus/ckpybt26u6cum17mwgdj980kc", // gray state bounds, slightly thinner
-    // url: "mapbox://styles/nicoletalus/ckpyaxl630pmn17p63bdh4aov",  // white state bounds
+    url: `mapbox://styles/nicoletalus/${US_MAP_ID}`,
 
     // slug of map, should be map ID
     value: "us-county",
