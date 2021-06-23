@@ -2,7 +2,7 @@
 import React, {
   FunctionComponent as FC,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
 } from "react";
 
@@ -192,7 +192,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   // get map ID used for data requests based on the feature
   const mapIdForData: MapId = getMapIdFromFeature(feature, mapId);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
       .state_name;
     const iso3: string | undefined = (feature as CountryFeature).properties
