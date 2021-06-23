@@ -14,6 +14,7 @@ import Util, { percentize, isLightColor } from "../../misc/Util.js";
 // assets and styles
 import styles from "./legend.module.scss";
 import varsExports from "../../../assets/styles/vars.module.scss";
+import { getEvenSteps } from "components/misc/UtilsTyped";
 
 /**
  * @method Legend
@@ -37,17 +38,18 @@ const Legend = ({ ...props }) => {
     if (typeAndElement === "continuous - bubble") {
       const range = colorscale.range();
       const labels = Object.values(props.labels.bubble);
-      const radii = [5, 10, 15, 20];
+      const radii = getEvenSteps(10, 30, 4);
+      const { noDataGray } = varsExports;
       const noData = (
         <div className={styles.entry}>
           <div
             className={classNames(styles.circle)}
             style={{
-              backgroundColor: "#ccc",
-              height: radii[radii.length - 1],
-              width: radii[radii.length - 1],
-              transform: "scale(0.5)",
+              backgroundColor: noDataGray,
+              height: radii[0],
+              width: radii[0],
               transformOrigin: "center",
+              marginBottom: 10,
             }}
           ></div>
           <div className={styles.labels}>
@@ -70,10 +72,10 @@ const Legend = ({ ...props }) => {
             className={classNames(styles.circle)}
             style={{
               backgroundColor: "transparent",
-              border: "4px solid " + varsExports.zeroGray,
-              height: radii[radii.length - 1],
-              width: radii[radii.length - 1],
-              transform: "scale(0.5)",
+              border: "2px solid " + varsExports.zeroGray,
+              height: radii[0],
+              width: radii[0],
+              marginBottom: 10,
             }}
           ></div>
           <div className={styles.labels}>

@@ -210,6 +210,24 @@ export const range = (start: number = 0, end: number): number[] => {
   } else return base;
 };
 
+export const getEvenSteps = (
+  start: number,
+  end: number,
+  nSteps: number = 2
+): number[] => {
+  // calculate size of step
+  const diff: number = end - start;
+  const size: number = diff / nSteps;
+
+  // calculate steps
+  const steps: number[] = [];
+  for (let i: number = 0; i < nSteps - 1; i++) {
+    steps.push(i * size + start);
+  }
+  steps.push(end);
+  return steps; // TODO
+};
+
 /**
  * Returns true if the object has no keys, false otherwise.
  * @method isEmpty
