@@ -153,8 +153,8 @@ const circleStyles: CircleStyles = {
       get circleRadius() {
         if (linCircleScale)
           return getLinearScale({
-            minSize: 5,
-            zeroSize: 5,
+            minSize: 3,
+            zeroSize: 2,
             maxValue: 1.3e6,
             featurePropertyKey: key,
           });
@@ -180,8 +180,8 @@ const circleStyles: CircleStyles = {
       get circleRadius() {
         if (linCircleScale)
           return getLinearScale({
-            minSize: 5,
-            zeroSize: 5,
+            minSize: 3,
+            zeroSize: 2,
             maxValue: 15e6,
             featurePropertyKey: key,
           });
