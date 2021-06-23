@@ -1,4 +1,4 @@
-import PolicyCount from "./PolicyCount";
+import PolicyCount from "./content/PolicyCount";
 import BodySection from "components/common/MapboxMap/mapPopup/content/PopupBody/BodySection/BodySection";
 import React, { FunctionComponent, useContext } from "react";
 import { ActionLink } from "components/common/MapboxMap/mapPopup/MapPopup";
