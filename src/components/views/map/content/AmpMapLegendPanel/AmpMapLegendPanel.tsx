@@ -5,7 +5,6 @@ import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel"
 import { metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   MapId,
-  MapSources,
   MapSourcesEntry,
   MapSourcesGeometry,
   MetricMeta,
@@ -13,7 +12,8 @@ import {
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import styles from "./AmpMapLegendPanel.module.scss";
-import { getAndListString, isEmpty, getInitCap } from "components/misc/Util";
+import { getAndListString, getInitCap } from "components/misc/Util";
+import { isEmpty } from "components/misc/UtilsTyped";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
 import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/helpers";
@@ -21,13 +21,13 @@ import { Option } from "components/common/OptionControls/types";
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { mapSources } from "components/common/MapboxMap/plugins/sources";
 
-type ComponentProps = {
+type AmpMapLegendPanelProps = {
   linCircleScale: boolean;
   policyResolution: PolicyResolution;
   zoomLevel: number;
   panelSetId?: number;
 };
-export const AmpMapLegendPanel: FC<ComponentProps> = ({
+export const AmpMapLegendPanel: FC<AmpMapLegendPanelProps> = ({
   linCircleScale,
   policyResolution,
   zoomLevel,
@@ -47,7 +47,7 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
     circle !== null ? (metricMeta as MetricMeta)[circle || ""] : null;
   const fillMeta: MetricMetaEntry | null =
     fill !== null ? (metricMeta as MetricMeta)[fill || ""] : null;
-  const { subcategoryOptions } = useContext(MapOptionContext);
+  const { subcatOptions } = useContext(MapOptionContext);
   const metricDefNoun: string = getCircleZoomLabel(mapId, zoomLevel);
   return (
     <MapPanel tabName={"Legend"} {...{ panelSetId }}>
@@ -96,7 +96,7 @@ export const AmpMapLegendPanel: FC<ComponentProps> = ({
                         policyResolution,
                         mapId,
                         date,
-                        subcategoryOptions,
+                        subcatOptions,
                       })}
                     </span>
                   ),
@@ -117,7 +117,7 @@ type GetFillLegendNameArgs = {
   filters: Record<string, any>;
   date: Moment;
   policyResolution: PolicyResolution;
-  subcategoryOptions: Option[];
+  subcatOptions: Option[];
 };
 
 const getFillLegendName: Function = ({
@@ -126,14 +126,15 @@ const getFillLegendName: Function = ({
   policyResolution,
   mapId,
   date,
-  subcategoryOptions,
+  subcatOptions,
 }: GetFillLegendNameArgs): string | ReactElement | null => {
   const isLockdownLevel = fill === "lockdown_level";
 
   const nouns = getMapNouns(mapId);
 
   // prepend "sub-" if subgeo policies are being viewed
-  if (policyResolution === "subgeo") nouns.level = "sub-" + nouns.level;
+  if (policyResolution === PolicyResolution.subgeo)
+    nouns.level = "sub-" + nouns.level;
 
   const isPolicyStatus = fill === "policy_status";
   const isPolicyStatusCounts = fill === "policy_status_counts";
@@ -164,8 +165,9 @@ const getFillLegendName: Function = ({
       const desc = getPolicyCatSubcatPhrase(
         filters["primary_ph_measure"] || [],
         filters["ph_measure_details"] || [],
-        subcategoryOptions,
-        "policies"
+        subcatOptions,
+        "policies",
+        true  // for legend
       ).trim();
       return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
     }
@@ -178,7 +180,6 @@ const getCircleZoomLabel: Function = (mapId: MapId, zoom: number): string => {
   if (mapSources[mapId] === null || mapSources[mapId] === undefined) return "";
   const sourceIds: string[] = Object.keys(mapSources[mapId] as MapSourcesEntry);
   let zoomLabelSources: MapSourcesGeometry[] = [];
-  let foundMultiple: boolean = false;
   sourceIds
     .filter(sourceId => sourceId.startsWith("circle"))
     .forEach(sourceId => {

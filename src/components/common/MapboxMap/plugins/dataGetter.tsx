@@ -1,5 +1,5 @@
-import TrendQuery from "../../../misc/TrendQuery.js";
-import { execute } from "../../../misc/Queries";
+import TrendQuery from "api/TrendQuery.js";
+import { execute } from "api/Queries";
 import { parseStringSafe } from "../../../misc/UtilsTyped";
 import { allMapMetrics as _mapMetrics } from "./data";
 import { Moment } from "moment";

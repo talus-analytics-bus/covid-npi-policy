@@ -5,8 +5,15 @@ import {
   OptionCheckboxSet,
 } from "components/common/OptionControls";
 import { Option } from "components/common/OptionControls/types";
-import React, { FC, ReactElement, useContext, useState } from "react";
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
+  Filters,
   MapId,
   MapMetric,
   MetricMeta,
@@ -22,6 +29,7 @@ import {
 import styles from "./AmpMapOptionsPanel.module.scss";
 import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
 import InfoTooltipContext from "context/InfoTooltipContext";
+import { updateFilters } from "./helpers";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -37,18 +45,20 @@ interface AmpMapOptionsPanelProps {
    */
   setMapId(newMapId: MapId): void;
 
-  categoryOptions: Option[];
-  subcategoryOptions: Option[];
+  catOptions: Option[];
+  subcatOptions: Option[];
 }
 export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   mapId,
   setMapId,
-  categoryOptions,
-  subcategoryOptions,
+  catOptions,
+  subcatOptions,
   panelSetId = 0,
 }) => {
   const { setInfoTooltipContent } = useContext(InfoTooltipContext);
+  const [noChildCats, setNoChildCats] = useState<Option[]>([]);
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
+
   /**
    * The possible geographic resolutions of map that can be viewed.
    */
@@ -84,115 +94,50 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
     setCircle,
     fill,
     setFill,
-    filters,
-    setFilters,
+    filters: filtersForApi,
+    setFilters: setFiltersForApi,
   } = curMapOptions;
+
+  const [filters, setFilters] = useState<Filters>(filtersForApi || {});
+
+  // remove any categories that don't have subcats checked from the API filters
+  useEffect(() => {
+    const someCatsOrig: boolean =
+      filters.primary_ph_measure !== undefined &&
+      filters.primary_ph_measure.length > 0;
+    const updatedFiltersForApi: Filters = { ...filters };
+    if (updatedFiltersForApi.primary_ph_measure !== undefined) {
+      updatedFiltersForApi.primary_ph_measure = updatedFiltersForApi.primary_ph_measure.filter(
+        (v: string) => !noChildCats.map(o => o.value).includes(v)
+      );
+    }
+    // If some categories originally but none in updated, return no data
+    const someCatsUpdated: boolean =
+      updatedFiltersForApi.primary_ph_measure !== undefined &&
+      updatedFiltersForApi.primary_ph_measure.length > 0;
+    const returnNoData: boolean = someCatsOrig && !someCatsUpdated;
+    if (returnNoData) updatedFiltersForApi.primary_ph_measure = ["None"];
+    // update filters for API
+    if (setFiltersForApi !== undefined) setFiltersForApi(updatedFiltersForApi);
+    // eslint-disable-next-line
+  }, [filters, setFiltersForApi]);
 
   /**
    * List of possible circle metric options.
    */
   const circleOptions: Option[] = getMetricsAsOptions(mapId, "circle");
 
-  /**
-   * Update the filters for the specified key to consist of the
-   * specified options.
-   * @param {string} key The filter key
-   * @param {Option[]} selected
-   * The currently selected options for the optionset
-   * @param {Option[]} options
-   * The possible options for the optionset
-   * @param {Option[]} allSubOptions
-   * If applicable, all suboptions that could be used in the optionset that has
-   * the defined `key`
-   */
-  const updateFilters = (
-    key: "primary_ph_measure" | "ph_measure_details",
-    selected: Option[],
-    options: Option[],
-    allSubOptions: Option[]
-  ): void => {
-    // if filter state variables undefined, abort
-    if (filters === undefined || setFilters === undefined) return;
-
-    // initialized current and updated filters
-    const currentFilters: Record<string, any> = {
-      primary_ph_measure: [],
-      ph_measure_details: [],
-      ...filters,
-    };
-    const updatedFilters: Record<string, any> = {
-      primary_ph_measure: [],
-      ph_measure_details: [],
-    };
-
-    // if category filter being updated:
-    if (key === "primary_ph_measure") {
-      // update category filters
-      // set updated category filters to equal selected values
-      updatedFilters[key] = selected.map(o => o.value);
-
-      // update subcategory filters
-      // Set updated subcat filters equal to current subcat filters except
-      // those whose cats aren't in selected values
-      updatedFilters.ph_measure_details = currentFilters.ph_measure_details;
-      updatedFilters["ph_measure_details"] = currentFilters[
-        "ph_measure_details"
-      ].filter((v: string) => {
-        const subcatOption: Option | undefined = allSubOptions.find(
-          o => o.value === v
-        );
-        const keepSubcatFilter: boolean =
-          subcatOption !== undefined &&
-          updatedFilters.primary_ph_measure.includes(subcatOption.value);
-        return keepSubcatFilter;
-      });
-      // For each updated cat filter, if no subcats for it are in updated
-      // subcat filters, add every possible subcat
-      updatedFilters.primary_ph_measure.forEach((v: string) => {
-        const possibleCatSubcats: string[] = allSubOptions
-          .filter(o => o.parent === v)
-          .map(o => o.value as string);
-        const addAllCatSubcats = !updatedFilters.ph_measure_details.some(
-          (v: string) => {
-            return possibleCatSubcats.includes(v);
-          }
-        );
-        if (addAllCatSubcats) {
-          updatedFilters.ph_measure_details = updatedFilters.ph_measure_details.concat(
-            possibleCatSubcats
-          );
-        }
-      });
-
-      // if no
-    } else if (key === "ph_measure_details") {
-      // Remove all values from subcat filters that belong to the parent of
-      // this checkbox set
-      updatedFilters.primary_ph_measure = currentFilters.primary_ph_measure;
-      const possibleCatSubcats: string[] = options.map(o => o.value as string);
-      updatedFilters.ph_measure_details = currentFilters.ph_measure_details;
-      updatedFilters.ph_measure_details = updatedFilters.ph_measure_details.filter(
-        (v: string) => {
-          return !possibleCatSubcats.includes(v);
-        }
-      );
-      updatedFilters.ph_measure_details = updatedFilters.ph_measure_details.concat(
-        selected.map(o => o.value as string)
-      );
-    }
-    setFilters(updatedFilters);
-  };
-
   const fillSubOptions: ReactElement = (
     <OptionCheckboxSet
       title={"Policy category"}
-      options={categoryOptions.map(o => {
-        const curCatSubcats: Option[] = subcategoryOptions.filter(
+      options={catOptions.map(o => {
+        const curCatSubcats: Option[] = subcatOptions.filter(
           so => so.parent === o.value
         );
 
         const newChild: Option = {
           ...o,
+
           child: (
             <OptionCheckboxSet
               title={"Subcategory"}
@@ -201,36 +146,69 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                 o =>
                   filters &&
                   filters.ph_measure_details !== undefined &&
-                  filters.ph_measure_details.includes(o.value)
+                  filters.ph_measure_details.includes(o.value as string)
               )}
               callback={selected => {
-                updateFilters(
+                const updatedFilters: Filters = updateFilters(
                   "ph_measure_details",
+                  filters,
+                  setFilters,
                   selected,
                   curCatSubcats,
-                  subcategoryOptions
+                  subcatOptions
                 );
+
+                // if category missing for selected subcats, add it
+                if (
+                  updatedFilters.primary_ph_measure !== undefined &&
+                  selected.length > 0
+                ) {
+                  if (
+                    !updatedFilters.primary_ph_measure.includes(
+                      o.value as string
+                    )
+                  )
+                    updatedFilters.primary_ph_measure.push(o.value as string);
+                }
+
+                // if any cats selected but no subcats selected, mark as indet
+                const updatedNoChildCats: Option[] = [...noChildCats].filter(
+                  (ncc: Option) => {
+                    return ncc.value !== (o.value as string);
+                  }
+                );
+                if (
+                  selected.length === 0 &&
+                  updatedFilters !== undefined &&
+                  updatedFilters.primary_ph_measure !== undefined &&
+                  updatedFilters.primary_ph_measure.includes(o.value as string)
+                )
+                  updatedNoChildCats.push(o);
+
+                setNoChildCats(updatedNoChildCats);
               }}
               field={"ph_measure_details-" + o.value}
-              emptyMeansAll={true}
+              emptyMeansAll={false}
               selectAll={true}
             />
           ),
         };
         return newChild;
       })}
-      selectedOptions={categoryOptions.filter(
+      selectedOptions={catOptions.filter(
         o =>
           filters &&
           filters.primary_ph_measure !== undefined &&
-          filters.primary_ph_measure.includes(o.value)
+          filters.primary_ph_measure.includes(o.value as string)
       )}
       callback={selected => {
         updateFilters(
           "primary_ph_measure",
+          filters,
+          setFilters,
           selected,
-          categoryOptions,
-          subcategoryOptions
+          catOptions,
+          subcatOptions
         );
       }}
       field={"primary_ph_measure"}
@@ -271,8 +249,10 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const updateCircle = (selected: Option[]): void => {
     if (selected.length > 0) {
       if (setCircle !== undefined) {
-        if (selected[0].value === "show")
-          setCircle(prevCircle || defaults[mapId].circle);
+        const circleToShow: string | null | undefined =
+          prevCircle || defaults[mapId].circle;
+        if (selected[0].value === "show" && circleToShow !== undefined)
+          setCircle(circleToShow);
         else {
           setPrevCircle(circle);
           setCircle(null);

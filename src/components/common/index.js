@@ -6,7 +6,7 @@ import Table from "./Table/Table.js";
 import Filter from "./Filter/Filter.js";
 import FilterSet from "./FilterSet/FilterSet.js";
 import ShowMore from "./ShowMore/ShowMore.js";
-import MapboxMap from "./MapboxMap/MapboxMap.js";
+import MapboxMap from "./MapboxMap/MapboxMap.tsx";
 import Legend from "./Legend/Legend.js";
 import InfoTooltip from "./InfoTooltip/InfoTooltip.js";
 import DateSlider from "./DateSlider/DateSlider.js";

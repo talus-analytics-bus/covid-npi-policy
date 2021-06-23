@@ -1,12 +1,13 @@
 import classNames from "classnames";
 import React, { Children, FC, ReactElement, useState } from "react";
+import { ReactNode } from "react";
 import styles from "../PanelStyles.module.scss";
 
-type ComponentProps = {
-  children: ReactElement;
+type PanelSetProps = {
+  children: ReactNode;
   style?: Record<string, string | number | undefined>;
 };
-export const PanelSet: FC<ComponentProps> = ({
+export const PanelSet: FC<PanelSetProps> = ({
   children,
   style,
 }): ReactElement => {

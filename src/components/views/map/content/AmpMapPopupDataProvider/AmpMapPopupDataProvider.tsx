@@ -34,7 +34,7 @@ import {
   getPolicyLink,
   ZERO_POLICY_MSG,
 } from "./helpers";
-import { execute, PolicyStatusCounts } from "components/misc/Queries";
+import { execute, PolicyStatusCounts } from "api/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
@@ -43,6 +43,8 @@ import MapOptionContext, {
 } from "../../context/MapOptionContext";
 import { Option } from "components/common/OptionControls/types";
 import Settings from "Settings";
+import { GeoRes } from "api/queryTypes";
+import MapPlaceContext from "../../context/MapPlaceContext";
 
 type UpdateDataProps = {
   feature: MapFeature;
@@ -60,7 +62,7 @@ type UpdateDataProps = {
   DISABLE_POLICY_LINK_IF_ZERO: boolean;
   circle: string | null;
   paramArgs: Record<string, any>;
-  subcategoryOptions: Option[];
+  subcatOptions: Option[];
 };
 const updateData: Function = async ({
   feature,
@@ -75,7 +77,7 @@ const updateData: Function = async ({
   mapId,
   DISABLE_POLICY_LINK_IF_ZERO,
   paramArgs,
-  subcategoryOptions,
+  subcatOptions,
 }: UpdateDataProps) => {
   if (ready) setUpdating(true);
 
@@ -113,18 +115,19 @@ const updateData: Function = async ({
       paramArgs.policyResolution,
       "data",
       mapId,
-      subcategoryOptions
+      subcatOptions
     ),
     policyCount: PolicyStatusCounts({
       method: "post",
       geo_res: getPolicyCountGeoResFromMapId(mapId),
-      count_sub: paramArgs.policyResolution === "subgeo",
+      count_sub: paramArgs.policyResolution === PolicyResolution.subgeo,
       include_min_max: false,
       include_zeros: true,
       filters: { ...filtersWithDate, ...getLocationFilters(mapId, feature) },
       one: true,
       merge_like_policies: false,
-      counted_parent_geos: mapId === "us-county-plus-state" ? ["state"] : [],
+      counted_parent_geos:
+        mapId === "us-county-plus-state" ? [GeoRes.state] : [],
     }),
     distancingLevel: fetchedDistancingLevel,
   };
@@ -163,6 +166,11 @@ type ComponentProps = {
   map: Record<string, any>;
   filters: Record<string, any>;
   policyResolution: PolicyResolution;
+
+  /**
+   * Function called when close button is clicked.
+   */
+  onClose(curPopupFeature: MapFeature): void;
 };
 
 export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
@@ -174,21 +182,24 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
   map,
   policyResolution,
   filters,
+  onClose,
 }) => {
   const [actionLinks, setActionLinks] = useState<ActionLink[]>([]);
   const [ready, setReady] = useState<boolean>(false);
   const [updating, setUpdating] = useState<boolean>(false);
   const [distancingLevel, setDistancingLevel] = useState<DistancingLevel>(null);
   const [policyCount, setPolicyCount] = useState<number | null>(null);
-  const featureName: string = getFeatureName(feature);
+
+  // context
+  const countyNamesByFips = useContext(MapPlaceContext)[0];
+
+  const featureName: string = getFeatureName(feature, countyNamesByFips);
 
   // context
   const { DISABLE_POLICY_LINK_IF_ZERO } = Settings;
-  const { subcategoryOptions } = useContext<MapOptionContextProps>(
-    MapOptionContext
-  );
+  const { subcatOptions } = useContext<MapOptionContextProps>(MapOptionContext);
   // get map ID used for data requests based on the feature
-  const mapIdForData = getMapIdFromFeature(feature, mapId);
+  const mapIdForData: MapId = getMapIdFromFeature(feature, mapId);
 
   useEffect(() => {
     const stateName: string | undefined = (feature as StateFeature).properties
@@ -207,7 +218,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
       map,
       mapId: mapIdForData,
       DISABLE_POLICY_LINK_IF_ZERO,
-      subcategoryOptions,
+      subcatOptions,
       paramArgs: {
         policyResolution,
         stateName,
@@ -215,6 +226,8 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
         filters,
       },
     });
+    // TODO fix dependencies
+    // eslint-disable-next-line
   }, [feature.state]);
 
   return (
@@ -233,6 +246,7 @@ export const AmpMapPopupDataProvider: FC<ComponentProps> = ({
         policyResolution,
         updating,
         ready,
+        onClose,
       }}
     />
   );
@@ -251,17 +265,8 @@ export default AmpMapPopupDataProvider;
  * The geographic resolution that should be used for policy status
  * count queries
  */
-function getPolicyCountGeoResFromMapId(mapId: MapId): string | undefined {
-  let policyCountGeoRes;
-  switch (mapId) {
-    // case "us-county":
-    // case "us-county-plus-state":
-    //   policyCountGeoRes = mapStyles["us-county"].geo_res;
-    //   break;
-    default:
-      policyCountGeoRes = mapStyles[mapId].geo_res;
-      break;
-  }
+function getPolicyCountGeoResFromMapId(mapId: MapId): GeoRes {
+  const policyCountGeoRes: GeoRes = mapStyles[mapId].geo_res;
   if (policyCountGeoRes === undefined)
     throw Error("Unexpected map ID: " + mapId);
   return policyCountGeoRes;

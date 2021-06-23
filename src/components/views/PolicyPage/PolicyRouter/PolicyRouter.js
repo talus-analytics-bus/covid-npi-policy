@@ -8,7 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { Caseload } from "../../../misc/Queries";
+import { Caseload } from "api/Queries";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 

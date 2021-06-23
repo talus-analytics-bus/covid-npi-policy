@@ -1,6 +1,11 @@
 import React, { FC } from "react";
-import { PolicyLinkBaseProps, ZERO_POLICY_MSG } from "../../helpers";
+import {
+  DATA_PAGE_LINK_TEXT,
+  PolicyLinkBaseProps,
+  ZERO_POLICY_MSG,
+} from "../../helpers";
 import { PolicyLink } from "../PolicyLink";
+import styles from "./PolicyDataLink.module.scss";
 
 interface PolicyPageLinkProps extends PolicyLinkBaseProps {
   /**
@@ -27,7 +32,9 @@ export const PolicyDataLink: FC<PolicyPageLinkProps> = ({
         disabled: noData,
       }}
     >
-      {children || <a>View selected policies</a>}
+      {children || (
+        <button className={styles.buttonAsLink}>{DATA_PAGE_LINK_TEXT}</button>
+      )}
     </PolicyLink>
   );
 };

@@ -10,7 +10,7 @@ import moment from "moment";
 import { ShowMore } from "../../../common";
 
 // queries
-import { Plan } from "../../../misc/Queries";
+import { Plan } from "api/Queries";
 
 // assets and styles
 // use same styles as main Data page

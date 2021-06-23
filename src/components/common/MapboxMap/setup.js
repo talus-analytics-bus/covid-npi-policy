@@ -8,7 +8,7 @@
 
 // local components
 import { layerStyles } from "./plugins/layers";
-import { mapSources } from "./plugins/sources";
+import { mapSources, mapStyles } from "./plugins/sources";
 import { defaults, allMapMetrics } from "./plugins/data";
 
 /**
@@ -21,14 +21,13 @@ import { defaults, allMapMetrics } from "./plugins/data";
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-export const initMap = ({
+export const initMap = (
   map,
   mapId,
-  data,
   geoHaveData,
   setShowLoadingSpinner,
-  callback,
-}) => {
+  callback
+) => {
   // get sources for current map (see `plugins/sources.js`)
   const sources = mapSources[mapId];
 
@@ -104,6 +103,12 @@ export const initMap = ({
           // if layer hasn't been added yet, add it, along with auxiliary
           // layer for patterns (not necessarily used)
           if (!map.getLayer(layerKey)) {
+            // should this layer be hidden?
+            const mapStyle = mapStyles[mapId];
+            const layerIsHidden =
+              mapStyle.hiddenLayers !== undefined &&
+              mapStyle.hiddenLayers.includes(layer.id);
+
             // add main fill layer
             map.addLayer(
               {
@@ -116,11 +121,13 @@ export const initMap = ({
                 // hide layer initially unless it is the current one
                 layout: {
                   visibility:
-                    defaults[mapId].fill === layer.id ? "visible" : "none",
+                    !layerIsHidden && defaults[mapId].fill === layer.id
+                      ? "visible"
+                      : "none",
                 },
               },
-              // insert this layer just behind the `priorLayer`
-              defaults[mapId].priorLayer
+              // insert this layer just behind the `priorFillLayer`
+              defaults[mapId].priorFillLayer
             );
 
             // add auxiliary pattern layer so fill colors can be mixed with
@@ -143,12 +150,14 @@ export const initMap = ({
                   // hide layer initially unless it is the current one
                   layout: {
                     visibility:
-                      defaults[mapId].fill === layer.id ? "visible" : "none",
+                      !layerIsHidden && defaults[mapId].fill === layer.id
+                        ? "visible"
+                        : "none",
                   },
                 },
 
-                // insert this layer just behind the `priorLayer`
-                defaults[mapId].priorLayer
+                // insert this layer just behind the `priorFillLayer`
+                defaults[mapId].priorFillLayer
               );
             }
 
@@ -175,18 +184,26 @@ export const initMap = ({
                     // hide layer initially unless it is the current one
                     layout: {
                       visibility:
-                        defaults[mapId].fill === layer.id ? "visible" : "none",
-                      // "line-sort-key": 0,
+                        !layerIsHidden && defaults[mapId].fill === layer.id
+                          ? "visible"
+                          : "none",
                     },
                   },
-                  // insert this layer just behind the `priorLayer`
-                  defaults[mapId].priorLayer
+                  // insert this layer just behind the `priorFillLayer`
+                  defaults[mapId].priorFillLayer
                 );
                 if (layer.filter !== undefined)
                   map.setFilter(outlineId, layer.filter);
               }
             }
           }
+        });
+      }
+      // set visiblity of hidden layers to none
+      const mapDefaults = defaults[mapId];
+      if (mapDefaults.hiddenLayers !== undefined) {
+        mapDefaults.hiddenLayers.forEach(layerId => {
+          map.setLayoutProperty(layerId, "visibility", "none");
         });
       }
     };
@@ -243,7 +260,7 @@ export const initMap = ({
                 "case",
                 ["==", ["feature-state", layer.id], null],
                 0,
-                0.25,
+                0.125,
               ],
               "circle-stroke-width": [
                 "case",
@@ -259,7 +276,7 @@ export const initMap = ({
                 "transparent",
                 "black",
               ],
-              "circle-stroke-opacity": 0.25,
+              "circle-stroke-opacity": 0.125,
             };
 
             // define circle main style
@@ -303,9 +320,9 @@ export const initMap = ({
                     defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
                 ...zoomSettings,
-              }
-              // // insert this layer just behind the `priorLayer`
-              // defaults[mapId].priorLayer
+              },
+              // insert this layer just behind the `priorCircleLayer`
+              defaults[mapId].priorCircleLayer
             );
 
             // add circle layer
@@ -323,9 +340,9 @@ export const initMap = ({
                     defaultCircleIdStr === layer.id ? "visible" : "none",
                 },
                 ...zoomSettings,
-              }
-              // // insert this layer just behind the `priorLayer`
-              // defaults[mapId].priorLayer
+              },
+              // insert this layer just behind the `priorCircleLayer`
+              defaults[mapId].priorCircleLayer
             );
 
             // apply filters to main circle and shadow if applicable
@@ -383,14 +400,7 @@ export const addSources = (map, mapId) => {
  * @param  {[type]}          selectedFeature [description]
  * @return {[type]}                          [description]
  */
-export const bindFeatureStates = ({
-  map,
-  mapId,
-  data,
-  selectedFeature,
-  circle,
-  fill,
-}) => {
+export const bindFeatureStates = (map, mapId, data, circle, fill) => {
   const circleMetricId = circle !== null ? circle.toString() : circle;
   const fillMetricId = fill !== null ? fill.toString() : fill;
   const curMapMetrics = allMapMetrics[mapId].filter(
@@ -422,6 +432,7 @@ const bindFeatureStatesForSource = ({
   data,
   curMapMetrics,
 }) => {
+  // eslint-disable-next-line
   for (const [_sourceTypeKey, source] of Object.entries(sourcesToBind)) {
     // first erase original feature state for all features
     curMapMetrics.forEach(metric => {
@@ -495,6 +506,7 @@ const bindFeatureStatesForSource = ({
 
       // bind updated feature state to any feature that matches the
       // feature props
+      // eslint-disable-next-line
       for (const [_sourceTypeKey, source] of Object.entries(sourcesToBind)) {
         const featureProps = {
           source: source.name,

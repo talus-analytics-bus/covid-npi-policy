@@ -1,4 +1,6 @@
 import React from "react";
+import { MapId, MapSources } from "./mapTypes";
+import { GeoRes } from "api/queryTypes";
 
 /**
  * Define Mapbox sources for geometries, centroids, etc. and styles.
@@ -9,8 +11,14 @@ import React from "react";
  * `plugins/layers.js` defines the layers and styles
  */
 
+// constants
+/**
+ * Mapbox style ID of US map
+ */
+const US_MAP_ID: string = "ckq9v60f50vap18ozazw0hkra";
+
 // define map sources to provide features for plotting on the map
-export const mapSources = {
+export const mapSources: MapSources = {
   // map ID
   us: {
     // layer type that will be driven by this source
@@ -124,10 +132,6 @@ export const mapSources = {
       def: {
         type: "vector",
         url: "mapbox://nicoletalus.3a8qy0w1",
-        // url: "mapbox://nicoletalus.527dlmpc",
-        // url: "mapbox://nicoletalus.8n43la7h",
-        //  url: "mapbox://nicoletalus.3hl37c3u",
-        // url: "mapbox://nicoletalus.5weuste2",
         promoteId: "ISO_A3",
         filter: [
           "==",
@@ -143,15 +147,15 @@ export const mapSources = {
 // each specified style represents a different map instance
 export const mapStyles = {
   // map ID (each of these will be rendered as a separate map)
-  us: {
+  [MapId.us]: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
-    url: "mapbox://styles/nicoletalus/ckao8n13b0ftm1img9hnywt0f",
+    url: `mapbox://styles/nicoletalus/${US_MAP_ID}`,
 
     // slug of map, should be map ID
     value: "us",
 
     // geographic resolution for Metrics database
-    geo_res: "state",
+    geo_res: GeoRes.state,
 
     // name of map displayed to user
     name: "US states",
@@ -160,7 +164,7 @@ export const mapStyles = {
     minZoom: 3.5,
 
     // max zoom
-    maxZoom: 6,
+    maxZoom: 5.9,
 
     // default fit bounds -- the rectangle that should be optimally displayed
     // in the viewport; the viewport will fly to this position
@@ -172,18 +176,15 @@ export const mapStyles = {
     // optional: info tooltip to display for map in radio selections
     tooltip: "View state-level data for the United States only",
   },
-  "us-county": {
+  [MapId.us_county]: {
     // URL of map style, e.g., mapbox://styles/example_user/example_id
-    url: "mapbox://styles/nicoletalus/ckpygkon412h717pqisu5hi4h", // lighter gray state bounds, slightly thinner
-    // url: "mapbox://styles/nicoletalus/ckpygbhwn0uwr18p8wrqxf4hy", // white state bounds, slightly thinner
-    // url: "mapbox://styles/nicoletalus/ckpybt26u6cum17mwgdj980kc", // gray state bounds, slightly thinner
-    // url: "mapbox://styles/nicoletalus/ckpyaxl630pmn17p63bdh4aov",  // white state bounds
+    url: `mapbox://styles/nicoletalus/${US_MAP_ID}`,
 
     // slug of map, should be map ID
     value: "us-county",
 
     // geographic resolution for Metrics database
-    geo_res: "county",
+    geo_res: GeoRes.county,
 
     // name of map displayed to user
     name: "US counties",
@@ -204,18 +205,18 @@ export const mapStyles = {
     // optional: info tooltip to display for map in radio selections
     tooltip: "View county-level data for the United States only",
   },
-  get "us-county-plus-state"() {
+  get [MapId.us_county_plus_state]() {
     return {
       ...this["us-county"],
       value: "us-county-plus-state",
-      geo_res: "county_plus_state",
+      geo_res: GeoRes.county_plus_state,
     };
   },
   // additional maps...
-  global: {
-    url: process.env.REACT_APP_GLOBAL_MAP_STYLE_URL,
+  [MapId.global]: {
+    url: process.env.REACT_APP_GLOBAL_MAP_STYLE_URL || "",
     value: "global",
-    geo_res: "country",
+    geo_res: GeoRes.country,
     name: "Countries",
     attribution: true,
     tooltip: <span>View national-level data for the world</span>,

@@ -11,7 +11,7 @@
             font-size: 1.5rem;
             line-height: 1.875rem;
             color: $idea-black;
-            max-width: 8em;
+            max-width: 10em;
         }
         .subtitle {
             font-family: Open Sans, sans-serif;
@@ -23,7 +23,31 @@
         }
     }
     .right {
-        margin-left: 5rem;
+        display: flex;
+        margin-left: auto;
         text-align: right;
+        .close {
+            border: none;
+            align-self: flex-start;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            right: 5px;
+            top: 0px;
+            background-color: transparent;
+            color: gray;
+            &:hover {
+                color: #333;
+            }
+            &:active {
+                color: black;
+            }
+        }
+
+        // make room for absolutely positioned close button
+        // by adding right margin to penultimate right-side component
+        &.withClose > :nth-last-child(2) {
+            margin-right: 10px;
+        }
     }
 }

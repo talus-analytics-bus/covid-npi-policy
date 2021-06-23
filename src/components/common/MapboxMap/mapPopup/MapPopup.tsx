@@ -19,6 +19,18 @@ type MapPopupProps = {
   bodySections?: ElementsOrNull;
   bodyCustomContent?: ElementsOrNull;
   customClasses?: string[];
+
+  /**
+   * Optional: True if close button should be shown in upper-right corner,
+   * false otherwise. Defaults to true.
+   */
+  showClose?: boolean;
+
+  /**
+   * Optional: Function called when close button is clicked. Required if
+   * `showClose` is true.
+   */
+  onClose?(...args: any[]): void;
 };
 export type ActionLink = ReactElement<LinkProps> | null;
 
@@ -34,7 +46,15 @@ const MapPopup = ({
   bodySections = null,
   bodyCustomContent = null,
   customClasses = [],
+  showClose = false,
+  onClose,
 }: MapPopupProps) => {
+  // validate inputs
+  if (showClose && onClose === undefined) {
+    throw Error("Must define `onClose` if `showClose` is true.");
+  }
+
+  // JSX // ---------------------------------------------------------------- //
   return (
     <div className={classNames(styles.mapPopup, ...customClasses)}>
       <PopupHeader
@@ -43,6 +63,8 @@ const MapPopup = ({
           subtitle: headerSub,
           rightContent: headerRightContent,
           customContent: headerCustomContent,
+          showClose,
+          onClose,
         }}
       />
       <PopupBody

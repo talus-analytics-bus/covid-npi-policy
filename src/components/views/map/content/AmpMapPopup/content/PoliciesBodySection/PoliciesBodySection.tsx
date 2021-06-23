@@ -1,4 +1,4 @@
-import PolicyCount from "./PolicyCount";
+import PolicyCount from "./content/PolicyCount";
 import BodySection from "components/common/MapboxMap/mapPopup/content/PopupBody/BodySection/BodySection";
 import React, { FunctionComponent, useContext } from "react";
 import { ActionLink } from "components/common/MapboxMap/mapPopup/MapPopup";
@@ -27,16 +27,22 @@ export const PoliciesBodySection: FunctionComponent<PoliciesBodySectionProps> = 
   mapId,
   updating,
 }) => {
-  const { subcategoryOptions } = useContext(MapOptionContext);
+  const { subcatOptions } = useContext(MapOptionContext);
   const nouns: Record<string, string> = getMapNouns(mapId);
-  const prefix: string = policyResolution === "subgeo" ? "sub-" : "";
+  const prefix: string =
+    policyResolution === PolicyResolution.subgeo ? "sub-" : "";
   return (
     <BodySection
       {...{
         title: `Policies (${prefix}${nouns.level} level)`,
         content: (
           <PolicyCount
-            {...{ categories, subcategories, count, subcategoryOptions }}
+            {...{
+              categories,
+              subcategories,
+              count,
+              subcatOptions,
+            }}
           />
         ),
         actions: policyActionLinks,

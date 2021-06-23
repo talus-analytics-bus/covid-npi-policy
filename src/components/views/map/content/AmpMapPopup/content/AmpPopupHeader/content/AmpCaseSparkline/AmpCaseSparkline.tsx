@@ -27,19 +27,22 @@ export const AmpCaseSparkline: FC<ComponentProps> = ({
   mapId,
   feature,
   dataDate,
-}): ReactElement => {
+}): ReactElement | null => {
   const [data, setData] = useState<NumericObservation[] | null>(null);
   const [ready, setReady] = useState<boolean>(false);
   const { circle }: { circle: string | null } = useContext<any>(
     MapOptionContext
   );
-  const circleForUpdate: string | null = circle || defaults[mapId].circle;
-  const height: number = 30;
+  const metricIdForSparkline: string | null | undefined =
+    circle || defaults[mapId].circle;
 
   useEffect(() => {
     if (ready) setReady(false);
-    updateData(mapId, feature, setData, setReady, circleForUpdate);
-  }, [circleForUpdate]);
+    if (metricIdForSparkline !== undefined)
+      updateData(mapId, feature, setData, setReady, metricIdForSparkline);
+    // TODO fix dependency array
+    // eslint-disable-next-line
+  }, [metricIdForSparkline]);
 
   const margin: Margin = {
     top: 5,
@@ -48,29 +51,35 @@ export const AmpCaseSparkline: FC<ComponentProps> = ({
     right: 1,
   };
 
-  return (
-    <LoadingSpinner
-      style={{ height: height + margin.top + 42 }}
-      right={true}
-      delay={500}
-      {...{ ready }}
-    >
-      <Sparkline
-        {...{
-          width: 150,
-          height,
-          classes: [styles.caseSparkline],
-          data,
-          dataDate,
-          unit: ["case", "cases"],
-          label: getLabelFromMapMetricId(circleForUpdate),
-          customOptions: {
-            xMin: "2020-01-21",
-            margin,
-            noDataText: "No case data to show.",
-          },
-        }}
-      />
-    </LoadingSpinner>
-  );
+  // hardcode loading spinner height to fit well in popup header
+  const height: number = 30;
+
+  // JSX // ------------------------------------------------------------------ /
+  if (metricIdForSparkline !== undefined)
+    return (
+      <LoadingSpinner
+        style={{ height: height + margin.top + 42 }}
+        right={true}
+        delay={500}
+        {...{ ready }}
+      >
+        <Sparkline
+          {...{
+            width: 150,
+            height,
+            classes: [styles.caseSparkline],
+            data,
+            dataDate,
+            unit: ["case", "cases"],
+            label: getLabelFromMapMetricId(metricIdForSparkline),
+            customOptions: {
+              xMin: "2020-01-21",
+              margin,
+              noDataText: "No case data to show.",
+            },
+          }}
+        />
+      </LoadingSpinner>
+    );
+  else return null;
 };

@@ -1,19 +1,26 @@
-import { MapId } from "components/common/MapboxMap/plugins/mapTypes";
+import {
+  MapDataShapeId,
+  MapId,
+} from "components/common/MapboxMap/plugins/mapTypes";
 import { Option } from "components/common/OptionControls/types";
 import { Moment } from "moment";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 export type MapOptionContextProps = {
   circle?: string | null;
   prevCircle?: string | null;
-  setCircle?(newCircle?: string | null): void;
+  prevFill?: string | null;
+  prevDate?: Moment;
+  setCircle?: Dispatch<SetStateAction<MapDataShapeId>>;
+  setFill?: Dispatch<SetStateAction<MapDataShapeId>>;
   fill?: string | null;
-  setFill?(newFill?: string | null): void;
   mapId?: MapId;
+  prevMapId?: MapId;
   filters?: Record<string, any>;
+  prevFilters?: Record<string, any>;
   setFilters?(newFilters: Record<string, any>): void;
   date?: Moment;
-  categoryOptions?: Option[];
-  subcategoryOptions?: Option[];
+  catOptions?: Option[];
+  subcatOptions?: Option[];
 };
 
 const MapOptionContext = React.createContext<MapOptionContextProps>({});

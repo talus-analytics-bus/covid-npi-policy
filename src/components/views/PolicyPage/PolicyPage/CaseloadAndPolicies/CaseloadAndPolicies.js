@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 
-import { Policy } from "../../../../misc/Queries";
+import { Policy } from "api/queryTypes";
 // import { getObjectByPath } from "../../objectPathTools";
 import {
   CATEGORY_FIELD_NAME,

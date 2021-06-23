@@ -1,5 +1,6 @@
 /**
- * Page for a Mapbox map and related controls.
+ * Container for a Mapbox map and related controls.
+ *
  * All data elements are defined in `plugins` directory on a per-project basis.
  * `plugins/data.js` defines metric metadata, metric data getter methods, etc.,
  *    , and default settings
@@ -7,46 +8,60 @@
  * `plugins/layers.js` defines the layers and styles
  */
 
-// standard packages
-import React, { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+// 3rd party packages
+import React, { useCallback, useEffect, useState, FC } from "react";
+import { Moment } from "moment";
 
 // custom hooks
-import { usePrevious } from "../../misc/UtilsTyped";
+import usePrevious from "components/common/hooks/usePrevious";
+import useHistory from "components/common/hooks/useHistory";
 
-// context
+// contexts
 import { MapOptionProvider } from "./context/MapOptionContext";
 
-// 3rd party packages
-import moment from "moment";
-
-// local packages
-import { defaults, metricMeta } from "../../common/MapboxMap/plugins/data";
-import { mapStyles } from "../../common/MapboxMap/plugins/sources";
-import { getInitLower } from "../../misc/Util";
-// queries
-import {
-  OptionSet,
-  CountriesWithDistancingLevels,
-  execute,
-} from "../../misc/Queries";
-import PlaceQuery from "../../misc/PlaceQuery";
-import MapDrape from "./content/MapDrape/MapDrape";
+// data queries
+import { OptionSet, CountriesWithDistancingLevels, execute } from "api/Queries";
+import PlaceQuery from "../../../api/PlaceQuery";
 
 // assets and styles
-import { style, dark } from "./map.module.scss";
+import styles from "./map.module.scss";
 
-// common components
+// local components and helper functions
 import { LoadingSpinner, MapboxMap } from "../../common";
-import { PanelSet } from "components/common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 import { AmpMapOptionsPanel } from "./content/AmpMapOptionsPanel/AmpMapOptionsPanel";
 import { AmpMapLegendPanel } from "./content/AmpMapLegendPanel/AmpMapLegendPanel";
 import { AmpMapDatePanel } from "./content/AmpMapDatePanel/AmpMapDatePanel";
-import { replaceMapIdState, getParamsMapId } from "./helpers";
+import {
+  FilterDefs,
+  MapDataShapeId,
+  MapId,
+  MapProps,
+  PolicyResolution,
+} from "../../common/MapboxMap/plugins/mapTypes";
+import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
+import { Option } from "components/common/OptionControls/types";
+import MapDrape from "./content/MapDrape/MapDrape";
+
+// helper functions and data
+import { defaults } from "../../common/MapboxMap/plugins/data";
+import {
+  replaceMapIdState,
+  getParamsMapId,
+  getMapTitle,
+  ampMapFilterDefs,
+  getCaseDataUpdateDate,
+  getOverallUpdateDate,
+} from "./helpers";
+import MapPlaceContext from "./context/MapPlaceContext";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
-
-const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
+const Map: FC<MapProps> = ({
+  loading,
+  setLoading,
+  setPage,
+  versions,
+  setInfoTooltipContent,
+}) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
   const [initialized, setInitialized] = useState(false);
@@ -55,7 +70,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   const [mapIsChanging, setMapIsChanging] = useState(false);
 
   // map circle scale linear? otherwise log
-  const [linCircleScale] = useState(true);
+  const linCircleScale: boolean = true;
 
   // is data being loaded?
   const [dataIsLoading, setDataIsLoading] = useState(false);
@@ -63,140 +78,100 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // track map zoom level
   const [zoomLevel, setZoomLevel] = useState(0);
 
-  // unique ID of map to display, e.g., 'us', 'global'
+  // get unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
-  const defaultMapId = defaults.mapId;
-  const paramsMapId = getParamsMapId();
-  const [mapId, _setMapId] = useState(defaultMapId);
-  const prevMapId = usePrevious(mapId);
-  const history = useHistory();
+  // otherwise use the specified default map ID
+  const defaultMapId: MapId = defaults.mapId;
+  const paramsMapId: MapId | null = getParamsMapId();
+  const [mapId, _setMapId] = useState<MapId>(defaultMapId);
+  const prevMapId: MapId | undefined = usePrevious(mapId);
+
+  // get browser history object using custom hook
+  const history: History = useHistory();
 
   /**
    * Always set map status to "changing" when map ID is changed
    */
   const setMapId = useCallback(
     v => {
+      // mark map as in "changing" state (prevents API requests)
       setMapIsChanging(true);
+
+      // update map ID
       _setMapId(v);
 
       // update URL search params
-      // history.replace(getMapHistoryState(mapId));
       replaceMapIdState(history, v);
     },
     [history]
   );
 
-  // whether to show policies at the selected geo or below it
-  const [policyResolution, setPolicyResolution] = useState("geo");
-
-  // default date of the map viewer -- `defaults.date` must be YYYY-MM-DD str
-  const casesLastUpdated = versions.find(
-    d => d.name.includes("COVID-19") && d.map_types.includes(mapId)
+  // track whether to show policies at the selected geo or below it
+  const [policyResolution, setPolicyResolution] = useState<PolicyResolution>(
+    PolicyResolution.geo
   );
-  const casesLastUpdatedDate = casesLastUpdated
-    ? moment(casesLastUpdated.last_datum_date)
-    : moment();
-  defaults.minMaxDate.maxDate = casesLastUpdatedDate;
-  const [date, setDate] = useState(casesLastUpdatedDate);
-  // const [date, setDate] = useState(new moment("2021-06-09"));
-  const prevDate = usePrevious(date);
 
-  // name of metric to use as fill by default
-  const [fill, setFill] = useState(defaults[mapId].fill);
-  const prevFill = usePrevious(fill);
+  // set default date of map based on most recent case data
+  const casesUpdatedMoment: Moment = getCaseDataUpdateDate(versions, mapId);
+  // const [date, setDate] = useState<Moment>(moment('2020-12-25'));
+  const [date, setDate] = useState<Moment>(casesUpdatedMoment);
+  const prevDate: Moment | undefined = usePrevious(date);
 
-  const initialCircle = defaults[mapId].showCircle
+  // set default fill metric
+  const [fill, setFill] = useState<MapDataShapeId>(defaults[mapId].fill);
+  const prevFill: MapDataShapeId = usePrevious(fill);
+
+  // set default circle metric
+  const initialCircle: MapDataShapeId = defaults[mapId].showCircle
     ? defaults[mapId].circle
     : null;
-  // name of metric to use as circle by default
-  const [circle, setCircle] = useState(initialCircle);
+  const [circle, setCircle] = useState<MapDataShapeId>(initialCircle);
   const prevCircle = usePrevious(circle);
 
-  // dynamic map title
-  const getMapTitle = ({ fill, circle }) => {
-    let title = "";
-    const useAltTitles = true;
-    if (useAltTitles) {
-      title = "COVID-19";
-      if (fill === "lockdown_level") {
-        title += " distancing levels";
-      } else if (fill === "policy_status_counts") {
-        title += " mitigation policies";
-      }
-      if (circle !== null) {
-        title += " and cases";
-      }
-      return title;
-    } else {
-      if (fill !== null) {
-        title += metricMeta[fill].metric_displayname;
-      }
-      if (circle !== null) {
-        title += ` and ${getInitLower(metricMeta[circle].metric_displayname)}`;
-      }
-      return title;
-      // return title + ` at ${level} level`;
-    }
-  };
+  // track dynamic map title
   const [mapTitle, setMapTitle] = useState("");
 
   // list of ISO3 codes of countries for which distancing levels are available
   const [geoHaveData, setGeoHaveData] = useState(null);
 
   // definition data for filters to display in drawer content section
-  const [filterDefs, setFilterDefs] = useState([
-    {
-      // name of filter (should match `field` below)
-      primary_ph_measure: {
-        // data field
-        field: "primary_ph_measure",
-
-        // entity
-        entity_name: "Policy",
-
-        // display label
-        label: "Policy category",
-
-        // true if radio button selection, false if dropdown
-        // if radio is true, must also define defaultRadioValue
-        radio: true,
-
-        // default value of radio selections
-        defaultRadioValue: "Social distancing",
-      },
-
-      // additional filters
-      ph_measure_details: {
-        field: "ph_measure_details",
-        label: "Policy subcategory filter",
-        radio: false,
-        primary: "primary_ph_measure",
-        entity_name: "Policy",
-        className: dark,
-      },
-    },
-  ]);
+  const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(ampMapFilterDefs);
 
   // currently selected filters
-  const [filters, setFilters] = useState({
-    // primary_ph_measure: ["Social distancing"],
-  });
+  const [filters, setFilters] = useState({});
   const prevFilters = usePrevious(filters);
 
   // country data for tooltip names
   const [places, setPlaces] = useState(null);
 
+  // county-level places for maps that show counties
+  const [countyNamesByFips, setCountyNamesByFips] = useState([{}]);
+
+  // define possible categories based on optionset API response
+  const catOptions: Option[] = filterDefs[0].primary_ph_measure.items.map(i => {
+    return { name: i.label, value: i.value };
+  });
+
+  // define possible subcategories based on optionset API response
+  const subcatOptions: Option[] = filterDefs[0].ph_measure_details.items.map(
+    i => {
+      return {
+        name: i.label,
+        value: i.value,
+        parent: i.group,
+      };
+    }
+  );
+
   // UTILITY FUNCTIONS // ---------------------------------------------------//
   /**
    * Get data for page
-   * @method getData
-   * @param  {Object}  [filters={}] [description]
-   * @return {Promise}              [description]
    */
   const getData = useCallback(async () => {
-    const queries = {};
+    const queries: Record<string, Promise<any>> = {};
     // get all country places for tooltip names, etc.
     queries.places = PlaceQuery({ place_type: ["country"] });
+    queries.countyNamesByFips = PlaceQuery({ place_type: ["county"] });
 
     queries.optionsets = OptionSet({
       method: "get",
@@ -220,28 +195,27 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
     const optionsets = results["optionsets"];
 
     // set options for filters
-    const newFilterDefs = [...filterDefs];
+    const newFilterDefs: FilterDefs[] = [...filterDefs];
     newFilterDefs.forEach(d => {
       for (const [k] of Object.entries(d)) {
-        if (!k.startsWith("date") && d[k].items === undefined)
+        if (!k.startsWith("date") && d[k].items.length === 0)
           d[k].items = optionsets[k];
       }
     });
     setPlaces(results.places);
+    setCountyNamesByFips(results.countyNamesByFips);
     setFilterDefs(newFilterDefs);
     setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
   }, [filterDefs]);
 
-  const applicableVersions = versions.filter(d => {
-    return d.map_types.includes("all") || d.map_types.includes(mapId);
-  });
-  // CONSTANTS // -----------------------------------------------------------//
-  // last updated date of overall data
-  const lastUpdatedDateOverall = applicableVersions[0].date;
+  // CONSTANTS // ---------------------------------------------------------- //
+  // get overal last updated date of data, using most recent data
+  // series version
+  const overallUpdateDate: Moment = getOverallUpdateDate(versions, mapId);
 
-  // EFFECT HOOKS // -------------------------------------------------------------//
-  // init
+  // EFFECT HOOKS // ------------------------------------------------------- //
+  // initialize page data
   useEffect(
     function initializeOptionSets() {
       // set loading spinner to visible
@@ -268,30 +242,36 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   // When map ID is changed, update policy resolution to a supported one,
   // if needed
   useEffect(() => {
-    if (mapId === "us-county" && policyResolution !== "geo")
-      setPolicyResolution("geo");
+    if (mapId === "us-county" && policyResolution !== PolicyResolution.geo)
+      setPolicyResolution(PolicyResolution.geo);
   }, [mapId, policyResolution, setPolicyResolution]);
 
   // when map style changes, update default metrics selected
   // TODO persist selection across map types if it makes sense
   useEffect(
     function updateDefaultMetrics() {
+      // start loading spinner
       setLoading(true);
 
+      // if circles are shown in default map view, show the default circle,
+      // otherwise, set to null (show no circle)
       if (defaults[mapId].showCircle !== false)
-        setCircle(defaults[mapId].circle);
+        setCircle(defaults[mapId].circle || null);
       else setCircle(null);
+
+      // show default map fill
       setFill(defaults[mapId].fill);
 
+      // remove map changing flag
       if (mapIsChanging) setMapIsChanging(false);
     },
     [mapId, mapIsChanging, setLoading]
   );
 
-  // when map data selection changes, update dynamic title
+  // when map circle/fill data selection changes, update dynamic title
   useEffect(
     function updateDynamicMapTitle() {
-      setMapTitle(getMapTitle({ fill, circle }));
+      setMapTitle(getMapTitle(fill, circle));
     },
     [circle, fill]
   );
@@ -314,14 +294,9 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
   if (!initialized) return <div />;
   else
     return (
-      <div className={style}>
-        {
-          // Drawer: holds map options
-        }
-        {
-          // display map component(s)
-        }
-        {
+      <div className={styles.map}>
+        {/* Provide data for current and previous map options selections */}
+        <MapPlaceContext.Provider value={countyNamesByFips}>
           <MapOptionProvider
             value={{
               fill,
@@ -337,18 +312,8 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
               setCircle,
               setFill,
               setFilters,
-              categoryOptions: filterDefs[0].primary_ph_measure.items.map(i => {
-                return { name: i.label, value: i.value };
-              }),
-              subcategoryOptions: filterDefs[0].ph_measure_details.items.map(
-                i => {
-                  return {
-                    name: i.label,
-                    value: i.value,
-                    parent: i.group,
-                  };
-                }
-              ),
+              catOptions,
+              subcatOptions,
             }}
           >
             <LoadingSpinner
@@ -358,29 +323,28 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
               delay={500}
             />
             <MapboxMap
+              key={mapId}
+              setShowLoadingSpinner={setLoading}
               {...{
-                setInfoTooltipContent: props.setInfoTooltipContent,
+                setInfoTooltipContent,
                 mapId,
                 setMapId,
                 linCircleScale,
-                key: mapId,
-                mapStyle: mapStyles[mapId],
                 filters,
                 geoHaveData,
                 mapIsChanging,
-                setShowLoadingSpinner: setLoading,
                 setDataIsLoading,
                 setZoomLevel,
                 overlays: (
                   <>
                     <MapDrape
-                      setInfoTooltipContent={props.setInfoTooltipContent}
                       {...{
                         mapId,
                         mapTitle,
                         date,
-                        lastUpdatedDateOverall,
+                        overallUpdateDate,
                         versions,
+                        setInfoTooltipContent,
                       }}
                     />
                     {
@@ -389,29 +353,22 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
                           gridTemplateColumns: "auto auto auto",
                         }}
                       >
-                        <AmpMapLegendPanel {...{ zoomLevel }} />
+                        <AmpMapLegendPanel
+                          {...{
+                            zoomLevel,
+                            linCircleScale,
+                            policyResolution,
+                          }}
+                        />
                         <AmpMapDatePanel
                           {...{ date, setDate, ...defaults.minMaxDate }}
                         />
                         <AmpMapOptionsPanel
                           {...{
-                            key: "mapOptions",
                             mapId,
                             setMapId,
-                            categoryOptions: filterDefs[0].primary_ph_measure.items.map(
-                              i => {
-                                return { name: i.label, value: i.value };
-                              }
-                            ),
-                            subcategoryOptions: filterDefs[0].ph_measure_details.items.map(
-                              i => {
-                                return {
-                                  name: i.label,
-                                  value: i.value,
-                                  parent: i.group,
-                                };
-                              }
-                            ),
+                            catOptions,
+                            subcatOptions,
                           }}
                         />
                       </PanelSet>
@@ -427,7 +384,7 @@ const Map = ({ loading, setLoading, setPage, versions, ...props }) => {
               }}
             />
           </MapOptionProvider>
-        }
+        </MapPlaceContext.Provider>
       </div>
     );
 };

@@ -6,7 +6,7 @@ import styles from "./MapDrape.module.scss";
 interface MapDrapeProps {
   mapTitle: string;
   date: Moment;
-  lastUpdatedDateOverall: string;
+  overallUpdateDate: Moment;
   versions: any[];
   mapId: MapId;
   setInfoTooltipContent(arg: any): void;
@@ -15,7 +15,7 @@ export const MapDrape: FC<MapDrapeProps> = ({
   mapId,
   mapTitle,
   date,
-  lastUpdatedDateOverall,
+  overallUpdateDate,
   versions,
   setInfoTooltipContent,
 }) => {
@@ -28,8 +28,7 @@ export const MapDrape: FC<MapDrapeProps> = ({
             Data for {date.format("MMM D, YYYY")}
           </div>
           <div className={styles.secondary}>
-            Data last updated on{" "}
-            {moment(lastUpdatedDateOverall).format("MMM D, YYYY")}
+            Data last updated on {overallUpdateDate.format("MMM D, YYYY")}
             <InfoTooltip
               place={"left"}
               text={

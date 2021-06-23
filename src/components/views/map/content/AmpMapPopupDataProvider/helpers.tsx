@@ -1,4 +1,10 @@
+// 3rd party packages
 import React from "react";
+import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { Link, LinkProps } from "react-router-dom";
+import { Moment } from "moment";
+
+// types
 import {
   CountryFeature,
   CountyFeature,
@@ -8,25 +14,24 @@ import {
   PolicyResolution,
   StateFeature,
 } from "components/common/MapboxMap/plugins/mapTypes";
+
+// local components and functions
 import { getDataQueryResults } from "components/common/MapboxMap/plugins/dataGetter";
-import { Link, LinkProps } from "react-router-dom";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
-import { Place } from "components/misc/Queries";
+import { Place } from "api/Queries";
 import { PlaceRecord } from "components/misc/dataTypes";
-import { Moment } from "moment";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import { Option } from "components/common/OptionControls/types";
-import {
-  getPolicyCatSubcatPhrase,
-  includeSubcatFilters,
-} from "../AmpMapPopup/content/PoliciesBodySection/helpers";
+import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
 
+// common language
 export const NO_POLICY_FOR_LOC_MSG: string =
   "No policies currently available for location, data collection in progress";
 export const ZERO_POLICY_MSG: string =
   "No policies for location match currently selected options";
-export const DATA_PAGE_LINK_TEXT: string = "View selected policies";
+export const DATA_PAGE_LINK_TEXT: string = "View in data page";
+
+// type definitions
 export type PolicyLinkBaseProps = {
   tooltip?: string;
   to?: string;
@@ -72,14 +77,29 @@ export const getFeatureMetric: Function = async ({
 };
 
 export const getFeatureName: Function = (
-  feature: CountyFeature | StateFeature | CountryFeature
+  feature: CountyFeature | StateFeature | CountryFeature,
+  featureNameByCode?: Record<string, string>
 ): string => {
   // counties
   let featureName: string = (feature as CountyFeature).properties.county_name;
   if (featureName !== undefined) {
-    return (
-      featureName + ", " + (feature as CountyFeature).properties.state_abbrev
-    );
+    // define county feature object
+    const countyFeature: CountyFeature = feature as CountyFeature;
+
+    // return "state" name for DC (no locality)
+    if (countyFeature.properties.state_abbrev === "DC") return featureName;
+    else if (featureNameByCode !== undefined) {
+      // create name from name data obtained from Metrics database Place table
+      return `${featureNameByCode[countyFeature.id]}, ${
+        countyFeature.properties.state_name
+      }`;
+    }
+
+    // if no name data avail., create backup name from feature properties
+    else
+      return `${featureName}${getCountySuffix(countyFeature)}, ${
+        countyFeature.properties.state_name
+      }`;
   }
 
   // states
@@ -148,17 +168,17 @@ export const getPolicyLink: Function = async (
   policyResolution: PolicyResolution,
   page: "policy" | "data",
   mapId: MapId,
-  subcategoryOptions?: Option[]
+  subcatOptions?: Option[]
 ): Promise<ReactElement<LinkProps> | null> => {
   // constants
   const baseLinkFilters: Record<string, any> = { ...filters };
 
   // streamline base link filters
-  if (page === "data" && subcategoryOptions !== undefined) {
+  if (page === "data" && subcatOptions !== undefined) {
     const includeSubcats: boolean = includeSubcatFilters(
       filters.primary_ph_measure || [],
       filters.ph_measure_details || [],
-      subcategoryOptions
+      subcatOptions
     );
     if (!includeSubcats) baseLinkFilters.ph_measure_details = [];
   }
@@ -170,7 +190,7 @@ export const getPolicyLink: Function = async (
   }
 
   // states
-  const countSub: boolean = policyResolution === "subgeo";
+  const countSub: boolean = policyResolution === PolicyResolution.subgeo;
   featureName = (feature as StateFeature).properties.state_name;
   if (featureName !== undefined) {
     return await getStatePoliciesLink(
@@ -404,12 +424,28 @@ function getDistancingMetricKeyFromMapId(mapId: MapId): string {
  */
 export function getMapIdFromFeature(feature: MapFeature, mapId: MapId): MapId {
   if ((feature as CountyFeature).properties.type === "county") {
-    if (mapId === "us-county-plus-state") return mapId;
-    else return "us-county";
-  } else if ((feature as StateFeature).properties.type === "state") return "us";
+    if (mapId === MapId.us_county_plus_state) return mapId;
+    else return MapId.us_county;
+  } else if ((feature as StateFeature).properties.type === "state")
+    return MapId.us;
   else if ((feature as CountryFeature).properties.ISO_A3 !== undefined)
-    return "global";
+    return MapId.global;
   else {
     throw Error("Unexpected feature: " + feature);
   }
+}
+
+/**
+ * Returns the appropriate suffix for the county feature, e.g., "Parish" for
+ * Louisiana, none for DC, or "County" for all others.
+ *
+ * @param feature The county feature.
+ * @returns The appropriate suffix for the county feature.
+ */
+function getCountySuffix(feature: CountyFeature): string {
+  const stateFips: string = feature.properties.state_abbrev;
+  if (stateFips === "LA") return " Parish";
+  else if (stateFips === "AK") return " Borough";
+  else if (stateFips === "DC") return "";
+  else return " County";
 }

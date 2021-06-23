@@ -8,7 +8,8 @@ import moment from "moment";
 
 // misc and common components
 import { RadioToggle } from "../../common";
-import { isEmpty, arraysMatch } from "../../misc/Util";
+import { arraysMatch } from "../../misc/Util";
+import { isEmpty } from "../../misc/UtilsTyped";
 
 // assets and styles
 import calendarSvg from "../../../assets/icons/calendar.svg";

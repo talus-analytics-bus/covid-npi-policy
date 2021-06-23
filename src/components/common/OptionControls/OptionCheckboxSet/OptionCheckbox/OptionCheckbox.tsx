@@ -15,6 +15,7 @@ export const OptionCheckbox: FC<Option> = ({
   onClick = undefined,
   indeterminate = false,
   setInfoTooltipContent,
+  customClasses = [],
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());
@@ -25,8 +26,16 @@ export const OptionCheckbox: FC<Option> = ({
     // render indeterminate if applicable
     if (el !== null) el.indeterminate = indeterminate;
   }, [inputId, indeterminate]);
+
+  // JSX // ---------------------------------------------------------------- //
   return (
-    <div className={classNames(styles.optionRadio, styles.optionWidget)}>
+    <div
+      className={classNames(
+        styles.optionRadio,
+        styles.optionWidget,
+        ...customClasses
+      )}
+    >
       <span>
         <input
           id={inputId}

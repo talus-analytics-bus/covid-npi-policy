@@ -8,10 +8,26 @@
  */
 
 // 3rd party packages
-import * as d3 from "d3/dist/d3.min";
+import * as d3 from "d3";
 
 // assets and styles
+import varsExports from "assets/styles/vars.module.scss";
+
+// utilities
 import {
+  getLog10Scale,
+  getLinearScale,
+  range,
+} from "components/misc/UtilsTyped";
+import { CircleStyles, FillStyles } from "./mapTypes";
+// import { geoHaveData } from "../MapboxMap";
+
+// assets
+// import dots from "./assets/images/dots.png";
+
+// constants
+// colors imported from vars.module.scss
+const {
   mapGreen1,
   mapGreen2,
   mapGreen3,
@@ -19,19 +35,11 @@ import {
   mapGreen5,
   mapGreen6,
   noDataGray,
-} from "assets/styles/vars.module.scss";
+  zeroGray,
+} = varsExports;
 
-// utilities
-import { getLog10Scale, getLinearScale } from "../../../misc/Util";
-import { range } from "components/misc/UtilsTyped";
-// import { geoHaveData } from "../MapboxMap";
-
-// assets
-// import dots from "./assets/images/dots.png";
-
-// constants
 // define default pattern style used below
-const defaultPatternStyle = key => {
+const defaultPatternStyle = (key: string) => {
   return {
     // "fill-pattern": "dots",
     "fill-opacity": [
@@ -53,33 +61,74 @@ const defaultPatternStyle = key => {
 // The value of each key is a function that returns a data-driven style based
 // on the feature state defined by the `key` passed as an argument. Styles that
 // are not data-driven should be represented as functions without any arguments
-const circleStyles = {
-  "metric-test-transp": (key, linCircleScale = false) => {
+
+// GENERAL CIRCLE PROPERTIES // -------------------------------------------- //
+const getCircleOpacity: (key: string) => any[] = (key: string) => [
+  "case",
+  ["==", ["feature-state", key], null],
+  1,
+  0.25,
+];
+
+// SOLID CIRCLE PROPERTIES // ---------------------------------------------- //
+function getSolidCircleColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    "white",
+    ["==", ["feature-state", key], null],
+    "transparent",
+    "#e65d36",
+  ];
+}
+
+function getSolidCircleStrokeColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    zeroGray,
+    ["==", ["feature-state", key], null],
+    "transparent",
+    "#e65d36",
+  ];
+}
+
+// TRANSP CIRCLE PROPERTIES // --------------------------------------------- //
+function getTranspCircleColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    "white",
+    ["==", ["feature-state", key], null],
+    noDataGray,
+    "white",
+  ];
+}
+
+function getTranspCircleStrokeColor(key: string): any {
+  return [
+    "case",
+    ["==", ["feature-state", key], 0],
+    zeroGray,
+    ["==", ["feature-state", key], null],
+    "transparent",
+    "#e65d36",
+  ];
+}
+
+const circleStyles: CircleStyles = {
+  "circle-transp-usa": (key, linCircleScale = false) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "white",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "white",
-      ],
-      circleOpacity: 0.5,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getTranspCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getTranspCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
         if (linCircleScale)
           return getLinearScale({
             minSize: 1,
-            zeroSize: 1,
+            zeroSize: 0.5,
             maxValue: 150e3 / 7.0,
             maxSize: 15,
             featurePropertyKey: key,
@@ -94,34 +143,19 @@ const circleStyles = {
       },
     };
   },
-  "metric-test-transp-global": (key, linCircleScale = true) => {
+  "circle-transp-global": (key, linCircleScale = true) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "transparent",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "white",
-      ],
-      circleOpacity: 0.5,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getTranspCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getTranspCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
         if (linCircleScale)
           return getLinearScale({
-            minSize: 5,
-            zeroSize: 5,
+            minSize: 3,
+            zeroSize: 2,
             maxValue: 1.3e6,
-            // maxSize: 20,
             featurePropertyKey: key,
           });
         else
@@ -136,32 +170,18 @@ const circleStyles = {
   },
 
   // global
-  "metric-test-solid-global": (key, linCircleScale = true) => {
+  "circle-solid-global": (key, linCircleScale = true) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "white",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
-      circleOpacity: 0.5,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getSolidCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getSolidCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
         if (linCircleScale)
           return getLinearScale({
-            minSize: 5,
-            zeroSize: 5,
+            minSize: 3,
+            zeroSize: 2,
             maxValue: 15e6,
             featurePropertyKey: key,
           });
@@ -175,25 +195,11 @@ const circleStyles = {
       },
     };
   },
-  "metric-test-solid": (key, linCircleScale = false) => {
+  "circle-solid-usa": (key, linCircleScale = false) => {
     return {
-      circleColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "white",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
-      circleOpacity: 0.5,
-      circleStrokeColor: [
-        "case",
-        ["==", ["feature-state", key], 0],
-        "#b3b3b3",
-        ["==", ["feature-state", key], null],
-        "transparent",
-        "#e65d36",
-      ],
+      circleColor: getSolidCircleColor(key),
+      circleOpacity: getCircleOpacity(key),
+      circleStrokeColor: getSolidCircleStrokeColor(key),
       circleStrokeOpacity: 1,
       circleStrokeWidth: 3,
       get circleRadius() {
@@ -223,13 +229,18 @@ const noDataBorder = "#ffffff";
 const negColor = "#ffffff";
 const negBorder = "#808080";
 const lightTeal = "#e0f4f3";
-// const teal = "#66CAC4";
-// const medTeal = "#41beb6";
 const darkTeal = "#349891";
 export const greenStepsScale = d3
-  .scaleLinear()
-  .domain([0, 1]) // TODO dynamically
+  .scaleLinear<string, number>()
+  .domain([0, 1])
   .range([lightTeal, darkTeal]);
+
+interface GetQuantizedColorStyleProps {
+  colors: string[];
+  maxVal: number;
+  minVal: number;
+  key: string;
+}
 
 /**
  * Given a series of colors, the max and min values of the data series, and the
@@ -245,7 +256,12 @@ export const greenStepsScale = d3
  * Mapbox expression styling values with quantized color scale using linear
  * and evenly-sized bins.
  */
-const getQuantizedColorStyle = ({ colors, maxVal, minVal, key }) => {
+const getQuantizedColorStyle: Function = ({
+  colors,
+  maxVal,
+  minVal,
+  key,
+}: GetQuantizedColorStyleProps): any[] => {
   const nBins = colors.length;
   const diff = maxVal - minVal;
   const binSize = diff / nBins;
@@ -263,34 +279,12 @@ const getQuantizedColorStyle = ({ colors, maxVal, minVal, key }) => {
   return base;
 };
 
-// const getLinearColorBins = ({ scale, maxVal, minVal, key }) => {
-//   const diff = maxVal - minVal;
-//   const binSize = diff / 5;
-//   const breakpoints = [1, 2, 3, 4].map(d => {
-//     return binSize * d + minVal;
-//   });
-//   const colors = scale.range();
-//   const newColorScale = d3
-//     .scaleLinear()
-//     .domain([0, 1])
-//     .range(colors);
-
-//   // const base = ["case"];
-//   const base = ["case", ["==", ["feature-state", key], 0], "#ffffff"];
-//   breakpoints.forEach((v, i) => {
-//     base.push(["<=", ["feature-state", key], v]);
-//     base.push(newColorScale(i * 0.25));
-//   });
-//   base.push(newColorScale(1));
-//   return base;
-// };
-
 // similar for fill styles
-const fillStyles = {
-  "metric-test-pattern": key => {
+const fillStyles: FillStyles = {
+  "pattern-general": key => {
     return defaultPatternStyle(key);
   },
-  "metric-test-outline": (key, geoHaveData) => {
+  "outline-general": (key, geoHaveData) => {
     return {
       "line-color": [
         "case",
@@ -313,7 +307,6 @@ const fillStyles = {
     };
   },
 
-  // TODO redo all this based on new API responses for `include_zeros = true`
   policy_status_counts: (key, geoHaveData, maxVal = 1, minVal = 0) => {
     return {
       "fill-color": [
