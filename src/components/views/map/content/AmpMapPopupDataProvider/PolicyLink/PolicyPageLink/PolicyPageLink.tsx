@@ -13,8 +13,6 @@ export const PolicyPageLink: FC<PolicyPageLinkProps> = ({
   children,
 }) => {
   return (
-    <PolicyLink page={"policy"} {...{ tooltip, to, target, disabled }}>
-      {children}
-    </PolicyLink>
+    <PolicyLink {...{ tooltip, to, target, disabled }}>{children}</PolicyLink>
   );
 };

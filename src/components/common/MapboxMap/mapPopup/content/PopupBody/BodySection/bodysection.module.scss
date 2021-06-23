@@ -30,7 +30,8 @@
         }
         [data-disabled] {
             a,
-            button {
+            button,
+            span {
                 color: $gray-2;
                 text-decoration: none;
                 cursor: default;

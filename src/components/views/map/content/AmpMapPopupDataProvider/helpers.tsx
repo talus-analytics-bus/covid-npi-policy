@@ -8,6 +8,7 @@ import { Moment } from "moment";
 import {
   CountryFeature,
   CountyFeature,
+  Filters,
   MapFeature,
   MapId,
   MapMetric,
@@ -23,6 +24,7 @@ import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import { Option } from "components/common/OptionControls/types";
 import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
+import { PolicyLink } from "./PolicyLink/PolicyLink";
 
 // common language
 export const NO_POLICY_FOR_LOC_MSG: string =
@@ -30,6 +32,7 @@ export const NO_POLICY_FOR_LOC_MSG: string =
 export const ZERO_POLICY_MSG: string =
   "No policies for location match currently selected options";
 export const DATA_PAGE_LINK_TEXT: string = "View in data page";
+const NONE_STATE_MSG: string = "Select subcategories to enable data page link";
 
 // type definitions
 export type PolicyLinkBaseProps = {
@@ -164,14 +167,25 @@ export const getModelLink: Function = (
  */
 export const getPolicyLink: Function = async (
   feature: MapFeature,
-  filters: Record<string, any>,
+  filters: Filters,
   policyResolution: PolicyResolution,
   page: "policy" | "data",
   mapId: MapId,
   subcatOptions?: Option[]
 ): Promise<ReactElement<LinkProps> | null> => {
   // constants
-  const baseLinkFilters: Record<string, any> = { ...filters };
+  const baseLinkFilters: Filters = { ...filters };
+  const isNone: boolean =
+    filters.primary_ph_measure !== undefined &&
+    filters.primary_ph_measure.length === 1 &&
+    filters.primary_ph_measure[0] === "None";
+
+  if (isNone && page === "data")
+    return (
+      <PolicyLink disabled={true} tooltip={NONE_STATE_MSG}>
+        {DATA_PAGE_LINK_TEXT}
+      </PolicyLink>
+    );
 
   // streamline base link filters
   if (page === "data" && subcatOptions !== undefined) {
@@ -237,7 +251,7 @@ export const getPolicyLink: Function = async (
         );
       else {
         // otherwise, return the appropriate data page link
-        const linkFilters: Record<string, any> = {
+        const linkFilters: Filters = {
           ...baseLinkFilters,
           country_name: [countyPlace.country_name],
           area1: [countyFeature.properties.state_name],
@@ -246,14 +260,11 @@ export const getPolicyLink: Function = async (
         if (mapId === "us-county-plus-state")
           linkFilters["level"] = ["Local", "State / Province"];
         else if (mapId === "us-county") linkFilters["level"] = ["Local"];
-
         const filterStr: string = JSON.stringify(linkFilters);
-
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
-        const label: string = DATA_PAGE_LINK_TEXT;
         return (
           <PolicyDataLink target={"_blank"} to={url}>
-            {label}
+            {DATA_PAGE_LINK_TEXT}
           </PolicyDataLink>
         );
       }
@@ -262,7 +273,7 @@ export const getPolicyLink: Function = async (
     }
   }
   async function getStatePoliciesLink(
-    filters: Record<string, any>,
+    filters: Filters,
     stateFeature: StateFeature,
     countSub: boolean
   ): Promise<ReactElement> {
@@ -358,7 +369,7 @@ export const getDistancingMapMetric: Function = (
 export const getLocationFilters = (
   mapId: string,
   feature: MapFeature
-): Record<string, any> => {
+): Filters => {
   switch (mapId) {
     case "us":
       return getUsStateLocationFilters(feature as StateFeature);
@@ -369,18 +380,14 @@ export const getLocationFilters = (
     default:
       return getCountryLocationFilters(feature as CountryFeature);
   }
-  function getUsStateLocationFilters(
-    feature: StateFeature
-  ): Record<string, any> {
+  function getUsStateLocationFilters(feature: StateFeature): Filters {
     return {
       iso3: ["USA"],
       area1: [feature.properties.state_name],
     };
   }
 
-  function getUsCountyLocationFilters(
-    feature: StateFeature
-  ): Record<string, any> {
+  function getUsCountyLocationFilters(feature: StateFeature): Filters {
     return {
       iso3: ["USA"],
       area1: [feature.properties.state_name],
@@ -388,9 +395,7 @@ export const getLocationFilters = (
     };
   }
 
-  function getCountryLocationFilters(
-    feature: CountryFeature
-  ): Record<string, any> {
+  function getCountryLocationFilters(feature: CountryFeature): Filters {
     return {
       iso3: [feature.properties.ISO_A3],
     };

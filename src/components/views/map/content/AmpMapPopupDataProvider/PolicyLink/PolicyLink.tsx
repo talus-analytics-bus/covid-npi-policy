@@ -6,16 +6,13 @@ import InfoTooltipContext from "context/InfoTooltipContext";
 import { PolicyLinkBaseProps } from "../helpers";
 import styles from "./PolicyLink.module.scss";
 
-interface PolicyLinkProps extends PolicyLinkBaseProps {
-  page: "policy" | "data";
-}
+interface PolicyLinkProps extends PolicyLinkBaseProps {}
 
 export const PolicyLink: FC<PolicyLinkProps> = ({
   tooltip,
   to,
   target,
   disabled = false,
-  page,
   children,
 }): ReactElement => {
   const { setInfoTooltipContent } = useContext(InfoTooltipContext);
@@ -27,8 +24,8 @@ export const PolicyLink: FC<PolicyLinkProps> = ({
     );
   else
     return (
-      <div className={styles.labelAndTooltip}>
-        <span data-disabled={true}>{children}</span>
+      <div data-disabled={true} className={styles.labelAndTooltip}>
+        <span>{children}</span>
         {tooltip !== undefined && (
           <InfoTooltip
             wide={false}

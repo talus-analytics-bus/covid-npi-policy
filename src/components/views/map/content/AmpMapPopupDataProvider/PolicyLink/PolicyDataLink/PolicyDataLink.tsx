@@ -31,7 +31,6 @@ export const PolicyDataLink: FC<PolicyPageLinkProps> = ({
   const isNoDataMode: boolean = noData && Settings.DISABLE_POLICY_LINK_IF_ZERO;
   return (
     <PolicyLink
-      page={"data"}
       {...{
         tooltip: isNoDataMode ? ZERO_POLICY_MSG : tooltip,
         to,

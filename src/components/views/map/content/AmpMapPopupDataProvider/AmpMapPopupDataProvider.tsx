@@ -32,11 +32,9 @@ import {
   getMapIdFromFeature,
   getModelLink,
   getPolicyLink,
-  ZERO_POLICY_MSG,
 } from "./helpers";
 import { execute, PolicyStatusCounts } from "api/Queries";
 import { mapStyles } from "components/common/MapboxMap/plugins/sources";
-import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import MapOptionContext, {
   MapOptionContextProps,
