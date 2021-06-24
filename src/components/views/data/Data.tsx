@@ -515,7 +515,7 @@ const Data: FC<DataArgs> = ({
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>Data accessss</h1>
+        <h1>Data access</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
