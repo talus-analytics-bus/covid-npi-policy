@@ -31,6 +31,7 @@ import { OptionSetRecord } from "api/queryTypes";
 import { useCallback } from "react";
 import { DataColumnDef } from "components/common/Table/Table";
 import Settings from "Settings";
+import { safeGetFieldValsAsStrings } from "./content/helpers";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -253,14 +254,14 @@ const Data: FC<DataArgs> = ({
       // define min/max range of daterange pickers
       // TODO modularize and reuse repeated code
       if (results.instances !== undefined) {
-        const policyDatesStart = results.instances.data
-          .map(d => d.date_start_effective)
-          .filter(d => d)
-          .sort();
-        const policyDatesEnd = results.instances.data
-          .map(d => d.date_end_actual)
-          .filter(d => d)
-          .sort();
+        const policyDatesStart = safeGetFieldValsAsStrings(
+          results.instances.data,
+          "date_start_effective"
+        );
+        const policyDatesEnd: string[] = safeGetFieldValsAsStrings(
+          results.instances.data,
+          "date_end_actual"
+        );
         const minStartDate: string = moment(policyDatesStart[0])
           .utc()
           .format("YYYY/MM/DD");

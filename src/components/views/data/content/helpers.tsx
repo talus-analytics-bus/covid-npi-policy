@@ -1,4 +1,8 @@
-import { PlaceRecord, PolicyRecord } from "components/misc/dataTypes";
+import {
+  DataRecord,
+  PlaceRecord,
+  PolicyRecord,
+} from "components/misc/dataTypes";
 import { AuthEntityRecord } from "components/misc/dataTypes";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
@@ -68,3 +72,16 @@ export const getPolicyUrl: Function = (p: PolicyRecord): string | null => {
     }
   }
 };
+
+type DataRecordField = keyof DataRecord;
+export function safeGetFieldValsAsStrings(
+  data: DataRecord[],
+  field: DataRecordField
+): string[] {
+  return data
+    .filter(d => d[field] !== undefined && d[field] !== null)
+    .map(d => {
+      return (d[field] || "").toString();
+    })
+    .sort();
+}
