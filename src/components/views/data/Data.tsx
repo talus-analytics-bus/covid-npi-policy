@@ -33,19 +33,8 @@ import {
 } from "api/responseTypes";
 import { OptionSetRecord } from "api/queryTypes";
 import { useCallback } from "react";
-
-/**
- * Fields required for data column definitions.
- */
-type DataColumnDef = {
-  dataField: string;
-  defKey: string;
-  header: string;
-  onSort(field: string, order: number): void;
-  sort: boolean;
-  sortValue(cell: any, row: Object): any;
-  formatter(cell: any, row: Object): any;
-};
+import { DataColumnDef } from "components/common/Table/Table";
+import Settings from "Settings";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -488,12 +477,18 @@ const Data: FC<DataArgs> = ({
     // eslint-disable-next-line
   }, [ordering, curPage]);
 
-  // define which table component to show based on selected doc type
-  const getTable = ({ docType }: { docType: DataPageType }) => {
+  /**
+   * Returns a table with pagination that shows the data records matching the
+   * selected filters for policies, plans, or court challenges.
+   *
+   * @returns {ReactElement} Data table with pagination showing records
+   */
+  const getTable = () => {
     if (columns === null || data === null || filterDefs === null) return null;
     else
       return (
         <Table
+          showDefinitions={Settings.SHOW_TABLE_DEFINITIONS}
           {...{
             nTotalRecords: numInstances,
             curPage,
@@ -504,18 +499,15 @@ const Data: FC<DataArgs> = ({
             defaultSortedField: entityInfo.defaultSortedField,
             className: styles[entityInfo.nouns.s.toLowerCase()],
             setPagesize,
-            name: undefined,
-            dataGetter: undefined,
-            childGetter: undefined,
           }}
         />
       );
   };
 
-  const table = getTable({ docType });
+  const table = getTable();
 
   // have any filters or search text been applied?
-  const hasFilters = !(
+  const areFiltersDefined = !(
     isEmpty(filters) &&
     (searchText === null || searchText === "")
   );
@@ -562,7 +554,7 @@ const Data: FC<DataArgs> = ({
                 styles,
                 render: table !== null,
                 class_name: [nouns.s, "secondary"],
-                classNameForApi: hasFilters ? nouns.s : "All_data",
+                classNameForApi: areFiltersDefined ? nouns.s : "All_data",
                 buttonLoading,
                 setButtonLoading,
                 searchText,
@@ -576,7 +568,8 @@ const Data: FC<DataArgs> = ({
                     {data && data.length > 0 && (
                       <>
                         <span className={styles.primaryText}>
-                          Download {!hasFilters ? "all" : "filtered"} data
+                          Download {!areFiltersDefined ? "all" : "filtered"}{" "}
+                          data
                         </span>
                         <br />({comma(numInstances)}{" "}
                         {numInstances !== 1

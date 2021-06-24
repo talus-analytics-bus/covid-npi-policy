@@ -22,11 +22,18 @@ export type SettingsProps = {
    * inferred from the data series.
    */
   readonly REQUIRE_EXPLICIT_MIN_MAX: boolean;
+
+  /**
+   * True if definitions of columns in data tables should be shown in their
+   * column headers, false if they should be hidden and hover tooltips instead
+   */
+  readonly SHOW_TABLE_DEFINITIONS: boolean;
 };
 const Settings: SettingsProps = {
   ALLOW_SUB_GEOS: false,
   DISABLE_POLICY_LINK_IF_ZERO: false,
   REQUIRE_EXPLICIT_MIN_MAX: true,
+  SHOW_TABLE_DEFINITIONS: false,
 };
 
 export default Settings;

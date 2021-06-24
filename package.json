@@ -69,6 +69,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-bootstrap-table2-toolkit": "^2.1.4",
     "d3-scale": "^3.3.0",
     "d3-time": "^2.1.1",
     "node-sass": "^4.12.0",
