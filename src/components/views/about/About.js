@@ -8,10 +8,9 @@ import Documentation from "./content/Documentation";
 
 // local components
 import { AccessibilityNote } from "../../common";
-import { DownloadBtn } from "../data/Data";
+import { DownloadBtn } from "components/project";
 
 // assets
-import logo from "../../../assets/images/logo.svg";
 import talus from "../../../assets/images/logo-talus.png";
 import georgetown from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.png";
@@ -114,9 +113,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             <div className={styles.articles}>
               {contributors.map(d => (
                 <article>
-                  <a href={d.url} target="_blank">
+                  <a href={d.url} target="_blank" rel="noreferrer">
                     <div>
-                      <img src={d.imgSrc} />
+                      <img src={d.imgSrc} alt={"Contributor logo"} />
                     </div>
                   </a>
                   <p>{d.text}</p>
@@ -133,7 +132,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
     setLoading(false);
     setPage("about");
     window.scrollTo(0, 0);
-  }, []);
+  }, [setLoading, setPage]);
 
   useEffect(() => {
     setTab(initTab);
@@ -156,6 +155,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           </Link>
         ))}
         {DownloadBtn({
+          styles,
           message: <span>Download data (.xls)</span>,
           class_name: ["All_data"],
           classNameForApi: "All_data",

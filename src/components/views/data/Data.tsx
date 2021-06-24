@@ -4,14 +4,16 @@ import moment from "moment";
 
 // common components
 import Search from "../../common/Table/content/Search/Search";
-import { FilterSet, Table, RadioToggle, PrimaryButton } from "../../common";
-import Drawer from "../../layout/drawer/Drawer.js";
-import { Metadata, OptionSet, Export, execute } from "api/Queries";
+import { FilterSet, Table, RadioToggle } from "../../common";
+import { DownloadBtn } from "components/project";
+import Drawer from "../../layout/drawer/Drawer";
+import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
 
 // styles and assets
 import styles from "./data.module.scss";
+import colors from "assets/styles/vars.module.scss";
 
 // constants
 import policyInfo from "./content/policy";
@@ -30,7 +32,6 @@ import {
   MetadataRecord,
 } from "api/responseTypes";
 import { OptionSetRecord } from "api/queryTypes";
-import { ReactNode } from "react";
 import { useCallback } from "react";
 
 /**
@@ -556,8 +557,9 @@ const Data: FC<DataArgs> = ({
         <>
           <Drawer
             {...{
-              title: <h2>Search and filter</h2>,
+              title: <h2>Select data</h2>,
               label: DownloadBtn({
+                styles,
                 render: table !== null,
                 class_name: [nouns.s, "secondary"],
                 classNameForApi: hasFilters ? nouns.s : "All_data",
@@ -587,6 +589,7 @@ const Data: FC<DataArgs> = ({
                 ),
               }),
               noCollapse: false,
+              headerBackgroundColor: colors.mapGreen5,
               content: (
                 <>
                   <div className={styles.contentTop}>
@@ -659,75 +662,6 @@ const Data: FC<DataArgs> = ({
         </>
       )}
     </div>
-  );
-};
-
-interface DownloadBtnProps {
-  render: boolean;
-  message: string | ReactNode;
-  class_name: string[];
-  classNameForApi: string;
-  filters: Filters;
-  disabled: boolean | null;
-  searchText: string | null;
-  buttonLoading: boolean;
-  setButtonLoading?: Dispatch<SetStateAction<boolean>>;
-}
-
-export const DownloadBtn: FC<DownloadBtnProps> = ({
-  render = true,
-  message = "Download",
-  class_name = [],
-  classNameForApi,
-  filters,
-  disabled,
-  searchText,
-  buttonLoading = false,
-  setButtonLoading = () => "",
-}): any => {
-  // define custom class names
-  const thisClassNames: Record<string, boolean> = {};
-  if (buttonLoading || disabled) thisClassNames[styles.inactive] = true;
-  class_name.forEach(d => {
-    thisClassNames[styles[d]] = true;
-  });
-  // flag for whether the download button should say loading or not
-  return (
-    render && (
-      <PrimaryButton
-        iconName={"get_app"}
-        label={
-          <div>
-            {!buttonLoading && render && message}
-            {buttonLoading && (
-              <>
-                <span>Downloading, please wait...</span>
-              </>
-            )}
-          </div>
-        }
-        customClassNames={[styles.downloadBtn, ...Object.keys(thisClassNames)]}
-        onClick={(e: Event) => {
-          e.stopPropagation();
-          if (class_name[0] === "All_data") {
-            window.location.assign(
-              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
-            );
-          } else {
-            setButtonLoading(true);
-
-            Export({
-              method: "post",
-              filters: {
-                ...filters,
-                _text: searchText !== null ? [searchText] : [],
-              },
-              class_name: classNameForApi,
-            }).then(d => setButtonLoading(false));
-          }
-        }}
-      />
-    )
   );
 };
 
