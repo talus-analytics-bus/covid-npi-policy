@@ -25,12 +25,8 @@ import {
   Filters,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import { DataPageInfo } from "./content/types";
-import {
-  ApiResponse,
-  ApiResponseIndexed,
-  DataRecord,
-  MetadataRecord,
-} from "api/responseTypes";
+import { ApiResponse, ApiResponseIndexed } from "api/responseTypes";
+import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
 import { useCallback } from "react";
 import { DataColumnDef } from "components/common/Table/Table";

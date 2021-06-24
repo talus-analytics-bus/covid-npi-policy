@@ -253,9 +253,12 @@ export const getPolicyLink: Function = async (
         // otherwise, return the appropriate data page link
         const linkFilters: Filters = {
           ...baseLinkFilters,
-          country_name: [countyPlace.country_name],
+          country_name:
+            countyPlace.country_name !== undefined
+              ? [countyPlace.country_name]
+              : [],
           area1: [countyFeature.properties.state_name],
-          area2: [countyPlace.area2],
+          area2: countyPlace.area2 !== undefined ? [countyPlace.area2] : [],
         };
         if (mapId === "us-county-plus-state")
           linkFilters["level"] = ["Local", "State / Province"];
