@@ -527,15 +527,29 @@ const Data: FC<DataArgs> = ({
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
             access to a comprehensive list of policies and plans implemented
-            globally to address the COVID-19 pandemic. In many cases, response
-            efforts have been led by subnational governments or private and
-            non-profit organizations. For simple search, each policy or plan has
-            been categorized by the type of measure, in addition to
-            implementation date and authorizing agency. In addition, policies
-            can be identified by legal authority and plans by type of
-            organization. Where available, PDFs or links to the original
-            document or notice are included.
+            globally to address the COVID-19 pandemic.
           </p>
+          <ul>
+            <li>
+              In many cases response efforts have been led by subnational
+              governments or private and non-profit organizations.
+            </li>
+            <li>
+              Each policy or plan has been categorized by the type of measure,
+              in addition to implementation date and authorizing agency.
+            </li>
+            <li>
+              Policies can also be identified by legal authority and plans by
+              type of organization.
+            </li>
+            <li>
+              Where available, PDFs or links to the original document or notice
+              are included.{" "}
+            </li>
+            <li>
+              Click <a href={"false"}>here</a> to access the Airtable.
+            </li>
+          </ul>
         </div>
       </div>
       {!false && (
