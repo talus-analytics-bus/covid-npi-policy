@@ -11,13 +11,7 @@
   .columnText {
     display: flex;
     flex-flow: column;
-    p,
-    ul {
-      font-family: "Open Sans", sans-serif;
-      font-size: 1rem;
-    }
     p {
-      line-height: normal;
       max-width: 70rem;
     }
     ul {
