@@ -10,10 +10,10 @@ import {
   DistancingLevelProps,
   ExportProps,
   GeoRes,
-  MetadataProps,
-  MetricAPIRequestProps,
-  MetricData,
-  OptionSetProps,
+  MetadataQueryArgs,
+  ObservationQueryArgs,
+  MetricRecords,
+  OptionSetQueryArgs,
   PlaceProps,
   PlanProps,
   PolicyListProps,
@@ -38,14 +38,14 @@ export const Glossary = async function({
   field,
 }: {
   field: string;
-}): Promise<MetricData | boolean> {
+}): Promise<MetricRecords | boolean> {
   let req: AxiosResponse<Record<string, any>> = await axios(
     `${API_URL}/get/glossary`
   );
   const params: URLSearchParams = new URLSearchParams();
   params.append("field", field);
   const res: Record<string, any> = await req;
-  if (res.data !== undefined) return res.data.data as MetricData;
+  if (res.data !== undefined) return res.data.data as MetricRecords;
   else return false;
 };
 
@@ -102,7 +102,7 @@ export const Metadata = async function({
   method,
   fields = [],
   entity_class_name = "Policy",
-}: MetadataProps) {
+}: MetadataQueryArgs) {
   let req;
   if (method === "get") {
     const params = new URLSearchParams();
@@ -298,7 +298,7 @@ export const Challenge = async function({
   } else return false;
 };
 
-let allPlans: MetricData | null = null;
+let allPlans: MetricRecords | null = null;
 
 /**
  * Get Plan data from API.
@@ -515,7 +515,7 @@ export const OptionSet = async ({
   method,
   fields = null,
   class_name = null,
-}: OptionSetProps): Promise<any> => {
+}: OptionSetQueryArgs): Promise<any> => {
   let req;
   if (method === "get") {
     if (fields === null) {
@@ -538,7 +538,7 @@ export const OptionSet = async ({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data.data;
+  if (res.data !== undefined) return res.data;
   else return false;
 };
 
@@ -606,7 +606,7 @@ CaseloadProps) => {
     : "country";
 
   // prepare parameters
-  const params: MetricAPIRequestProps = {
+  const params: ObservationQueryArgs = {
     metric_id,
     spatial_resolution,
     temporal_resolution: "daily",
@@ -623,7 +623,7 @@ CaseloadProps) => {
   if (stateName !== undefined) params.place_name = stateName;
   if (ansiFips !== undefined) params.fips = ansiFips;
   // send request and return response data
-  const res: MetricData = await ObservationQuery({ ...params });
+  const res: MetricRecords = await ObservationQuery({ ...params });
   if (getAverage && windowSizeDays !== 1)
     res.forEach(d => {
       d.value = Math.round((d.value as number) / windowSizeDays);
@@ -642,7 +642,7 @@ export const execute = async function({
 }: {
   queries: Record<string, Promise<any>> | Record<string, Promise<any>[]>;
 }) {
-  const results: Record<string, any> = {};
+  const results: { [k: string]: any } = {};
   for (const [k, v] of Object.entries(queries)) {
     if (v === undefined || v === null) continue;
     if (typeof v !== "string" && v.length !== undefined) {
@@ -716,7 +716,7 @@ DeathsProps) => {
   const spatial_resolution = isState ? "state" : "country";
 
   // prepare parameters
-  const params: MetricAPIRequestProps = {
+  const params: ObservationQueryArgs = {
     metric_id,
     spatial_resolution,
     temporal_resolution: "daily",

@@ -1,5 +1,5 @@
 // 3rd party packages
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
 // third party packages
@@ -14,7 +14,7 @@ import styles from "./primarybutton.module.scss";
  */
 export const PrimaryButton = ({
   // button text
-  label = "Click here",
+  label = <>Click here</>,
 
   // if using icon: material icon name
   iconName = null,

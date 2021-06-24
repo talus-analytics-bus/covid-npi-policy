@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useState, useEffect } from "react";
 import moment from "moment";
 
@@ -17,187 +17,327 @@ import styles from "./data.module.scss";
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
 import challengeInfo from "./content/challenge.js";
+import { FC } from "react";
+import {
+  FilterDefs,
+  Filters,
+} from "components/common/MapboxMap/plugins/mapTypes";
+import { DataPageInfo } from "./content/types";
+import {
+  ApiResponse,
+  ApiResponseIndexed,
+  DataRecord,
+  MetadataRecord,
+} from "api/responseTypes";
+import { OptionSetRecord } from "api/queryTypes";
+import { ReactNode } from "react";
+import { useCallback } from "react";
+
+/**
+ * Fields required for data column definitions.
+ */
+type DataColumnDef = {
+  dataField: string;
+  defKey: string;
+  header: string;
+  onSort(field: string, order: number): void;
+  sort: boolean;
+  sortValue(cell: any, row: Object): any;
+  formatter(cell: any, row: Object): any;
+};
+
+/**
+ * The different types of data page that can be viewed: `policy`, `plan`, and
+ * `challenge`.
+ *
+ * NOTE: `challenge` is currently disabled.
+ */
+type DataPageType = "policy" | "plan" | "challenge";
+
+interface DataArgs {
+  /**
+   * True if the page is currently loading, false otherwise.
+   */
+  loading: boolean;
+
+  /**
+   * Sets whether the page is currently loading.
+   */
+  setLoading: Dispatch<SetStateAction<boolean>>;
+
+  /**
+   * Sets the stringified HTML of the currently displayed tooltip content.
+   */
+  setInfoTooltipContent: Dispatch<SetStateAction<string>>;
+
+  /**
+   * Sets the current page.
+   */
+  // TODO make page an enum
+  setPage: Dispatch<SetStateAction<string>>;
+
+  /**
+   * Defines the URL filter parameters for policy data.
+   */
+  urlFilterParamsPolicy: Filters;
+
+  /**
+   * Defines the URL filter parameters for plan data.
+   */
+  urlFilterParamsPlan: Filters;
+
+  /**
+   * Defines the URL filter parameters for court challenge data.
+   * @unused
+   */
+  urlFilterParamsChallenge: Filters;
+
+  /**
+   * The type, i.e., mode, of the data page, that determines what kind of data
+   * are being displayed.
+   */
+  type: DataPageType;
+}
 
 // primary data viewing and download page
-const Data = ({
-  setLoading,
+const Data: FC<DataArgs> = ({
   loading,
+  setLoading,
   setInfoTooltipContent,
   setPage,
   urlFilterParamsPolicy,
   urlFilterParamsPlan,
   urlFilterParamsChallenge,
   type,
-  counts,
 }) => {
-  const [docType, setDocType] = useState(type || "policy");
-  const [entityInfo, setEntityInfo] = useState(policyInfo);
-  const [curPage, setCurPage] = useState(1);
-  const [numInstances, setNumInstances] = useState(null);
-  const [ordering, setOrdering] = useState(
+  const [docType, setDocType] = useState<DataPageType>(type || "policy");
+
+  // TODO define type
+  const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
+    policyInfo as DataPageInfo
+  );
+  const [curPage, setCurPage] = useState<number>(1);
+  const [numInstances, setNumInstances] = useState<number | null>(null);
+  const [ordering, setOrdering] = useState<[string, string][]>(
     docType === "challenge"
       ? [["date_of_complaint", "desc"]]
       : [["date_start_effective", "desc"]]
   );
-  const [buttonLoading, setButtonLoading] = useState(false);
-  const [pagesize, setPagesize] = useState(5); // TODO dynamically
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [pagesize, setPagesize] = useState<number>(5);
 
   // set `unspecified` component, etc., from entity info
   const nouns = entityInfo.nouns;
 
   // define data and metadata for table
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<DataRecord[] | null>(null);
 
-  const [, setMetadata] = useState(null);
+  const [, setMetadata] = useState<MetadataRecord[] | null>(null);
 
   // define filters
-  const getFiltersFromUrlParams = () => {
+  const getFiltersFromUrlParams: Function = useCallback((): Filters => {
     // If filters are specific in the url params, and they are for the current
     // entity class, use them. Otherwise, clear them
-    const urlFilterParams = {
+    const urlFilterParams: Filters = {
       policy: urlFilterParamsPolicy,
       plan: urlFilterParamsPlan,
       challenge: urlFilterParamsChallenge,
     }[docType];
 
-    const useUrlFilters = urlFilterParams !== null;
-    const newFilters = useUrlFilters ? urlFilterParams : {};
+    const useUrlFilters: boolean = urlFilterParams !== null;
+    const newFilters: Filters = useUrlFilters ? urlFilterParams : {};
     return newFilters;
-  };
-  const initFilters = getFiltersFromUrlParams();
-  const [filters, setFilters] = useState(initFilters);
+  }, [
+    docType,
+    urlFilterParamsChallenge,
+    urlFilterParamsPlan,
+    urlFilterParamsPolicy,
+  ]);
 
-  const [searchText, setSearchText] = useState(
+  const initFilters: Filters = getFiltersFromUrlParams();
+  const [filters, setFilters] = useState<Filters>(initFilters);
+
+  const [searchText, setSearchText] = useState<string | null>(
     initFilters._text !== undefined ? initFilters._text[0] : null
   );
 
+  /**
+   * Minimum and maximum dates defining a range.
+   */
+  type MinMaxDates = {
+    min?: Date;
+    max?: Date;
+  };
+
   // min and max dates for date range pickers dynamically determined by data
-  const [, setMinMaxStartDate] = useState({
+  const [, setMinMaxStartDate] = useState<MinMaxDates>({
     min: undefined,
     max: undefined,
   });
-  const [, setMinMaxEndDate] = useState({
+  const [, setMinMaxEndDate] = useState<MinMaxDates>({
     min: undefined,
     max: undefined,
   });
 
   // define filters in groups
   // TODO make simpler, probably removing the `field` key
-  const [filterDefs, setFilterDefs] = useState(entityInfo.filters);
+  const [filterDefs, setFilterDefs] = useState<FilterDefs[] | null>(
+    entityInfo.filters
+  );
 
-  const [columns, setColumns] = useState(null);
+  const [columns, setColumns] = useState<DataColumnDef[] | null>(null);
+
+  /**
+   * Arguments for `getData` which retrieves data for the Data page.
+   */
+  interface GetDataArgs {
+    filtersForQuery: Filters;
+    entityInfoForQuery: DataPageInfo;
+    orderingForQuery?: [string, string][];
+    getOptionSets?: boolean;
+  }
 
   /**
    * Get data for page
    * @method getData
-   * @param  {Object}  [filters={}] [description]
-   * @return {Promise}              [description]
    */
-  const getData = async ({
-    filtersForQuery,
-    entityInfoForQuery,
-    orderingForQuery = ordering,
-    getOptionSets = false,
-  }) => {
-    const method = "post";
-    // const method = Object.keys(filtersForQuery).length === 0 ? "get" : "post";
-    const initColumns = entityInfoForQuery.getColumns({
-      metadata: {},
-      setOrdering,
-    });
-    const queries = {
-      instances: entityInfoForQuery.dataQuery({
-        method,
-        filters: filtersForQuery,
-        ordering: orderingForQuery,
-        page: curPage,
-        pagesize,
-      }),
-    };
-
-    if (getOptionSets) {
-      queries.optionsets = OptionSet({
-        method: "get",
-        class_name: entityInfoForQuery.nouns.s,
-        fields: entityInfoForQuery.filterDefs
-          .map(d => Object.values(d).map(dd => dd))
-          .flat()
-          .filter(d => !d.field.startsWith("date"))
-          .map(d => {
-            return d.entity_name + "." + d.field;
-          }),
-        entity_name: entityInfoForQuery.nouns.s,
+  const getData: Function = useCallback(
+    async ({
+      filtersForQuery,
+      entityInfoForQuery,
+      orderingForQuery = ordering,
+      getOptionSets = false,
+    }: GetDataArgs): Promise<void> => {
+      const method: string = "post";
+      const initColumns: DataColumnDef[] = entityInfoForQuery.getColumns({
+        metadata: {},
+        setOrdering,
       });
-      queries.metadata = Metadata({
-        method: "get",
-        fields: initColumns.map(d => {
-          const key = d.defKey || d.dataField;
-          if (!key.includes("."))
-            return entityInfoForQuery.nouns.s.toLowerCase() + "." + key;
-          else return key;
+      const queries: { [k: string]: Promise<any> } = {
+        instances: entityInfoForQuery.dataQuery({
+          method,
+          filters: filtersForQuery,
+          ordering: orderingForQuery,
+          page: curPage,
+          pagesize,
         }),
-        entity_class_name: entityInfoForQuery.nouns.s,
+      };
+
+      if (getOptionSets) {
+        queries.optionsets = OptionSet({
+          method: "get",
+          class_name: entityInfoForQuery.nouns.s,
+          fields: entityInfoForQuery.filterDefs
+            .map(d => Object.values(d).map(dd => dd))
+            .flat()
+            .filter(d => !d.field.startsWith("date"))
+            .map(d => {
+              return d.entity_name + "." + d.field;
+            }),
+          entity_name: entityInfoForQuery.nouns.s,
+        });
+        queries.metadata = Metadata({
+          method: "get",
+          fields: initColumns.map(d => {
+            const key = d.defKey || d.dataField;
+            if (!key.includes("."))
+              return entityInfoForQuery.nouns.s.toLowerCase() + "." + key;
+            else return key;
+          }),
+          entity_class_name: entityInfoForQuery.nouns.s,
+        });
+      }
+
+      // execute queries and collate results
+      const results: {
+        [k: string]: ApiResponse<any> | ApiResponseIndexed<any> | undefined;
+        instances?: ApiResponse<DataRecord>;
+        metadata?: ApiResponse<MetadataRecord>;
+        optionsets?: ApiResponseIndexed<OptionSetRecord>;
+      } = await execute({
+        queries,
       });
-    }
 
-    // execute queries and collate results
-    const results = await execute({
-      queries,
-    });
-
-    // set data and metadata with results
-    setData(results.instances.data);
-    setNumInstances(results.instances.n);
-
-    // define min/max range of daterange pickers
-    // TODO modularize and reuse repeated code
-    const policyDatesStart = results.instances.data
-      .map(d => d.date_start_effective)
-      .filter(d => d)
-      .sort();
-    const policyDatesEnd = results.instances.data
-      .map(d => d.date_end_actual)
-      .filter(d => d)
-      .sort();
-    const newMinMaxStartDate = {
-      min: new Date(moment(policyDatesStart[0]).utc()),
-      max: new Date(
-        moment(policyDatesStart[policyDatesStart.length - 1]).utc()
-      ),
-    };
-    const newMinMaxEndDate = {
-      min: new Date(moment(policyDatesEnd[0]).utc()),
-      max: new Date(moment(policyDatesEnd[policyDatesEnd.length - 1]).utc()),
-    };
-
-    setMinMaxStartDate(newMinMaxStartDate);
-    setMinMaxEndDate(newMinMaxEndDate);
-
-    // if page is first initializing, also retrieve filter optionset values for
-    // non-date filters
-    // TODO move this out of main code if possible
-    if (getOptionSets) {
-      setMetadata(results.metadata.data);
-
-      const optionsets = results["optionsets"];
-
-      // set options for filters
-      const newFilterDefs = [...entityInfoForQuery.filterDefs];
-      newFilterDefs.forEach(d => {
-        for (const [k] of Object.entries(d)) {
-          if (!k.startsWith("date")) d[k].items = optionsets[k];
-        }
-      });
-      setFilterDefs(newFilterDefs);
-      setColumns(
-        entityInfoForQuery.getColumns({
-          metadata: results.metadata.data,
-          setOrdering,
-        })
+      // set data and metadata with results
+      setData(results.instances?.data || null);
+      setNumInstances(
+        results.instances?.n !== undefined ? results.instances.n : null
       );
-    }
-    setLoading(false);
-  };
+
+      // define min/max range of daterange pickers
+      // TODO modularize and reuse repeated code
+      if (results.instances !== undefined) {
+        const policyDatesStart = results.instances.data
+          .map(d => d.date_start_effective)
+          .filter(d => d)
+          .sort();
+        const policyDatesEnd = results.instances.data
+          .map(d => d.date_end_actual)
+          .filter(d => d)
+          .sort();
+        const minStartDate: string = moment(policyDatesStart[0])
+          .utc()
+          .format("YYYY/MM/DD");
+        const maxStartDate: string = moment(
+          policyDatesStart[policyDatesStart.length - 1]
+        )
+          .utc()
+          .format("YYYY/MM/DD");
+        const newMinMaxStartDate = {
+          min: new Date(minStartDate),
+          max: new Date(maxStartDate),
+        };
+        const minEndDate: string = moment(policyDatesEnd[0])
+          .utc()
+          .format("YYYY/MM/DD");
+        const maxEndDate: string = moment(
+          policyDatesEnd[policyDatesEnd.length - 1]
+        )
+          .utc()
+          .format("YYYY/MM/DD");
+
+        const newMinMaxEndDate = {
+          min: new Date(minEndDate),
+          max: new Date(maxEndDate),
+        };
+
+        setMinMaxStartDate(newMinMaxStartDate);
+        setMinMaxEndDate(newMinMaxEndDate);
+      }
+
+      // if page is first initializing, also retrieve filter optionset values for
+      // non-date filters
+      // TODO move this out of main code if possible
+      if (
+        getOptionSets &&
+        results.metadata !== undefined &&
+        results.optionsets !== undefined
+      ) {
+        setMetadata(results.metadata.data);
+
+        const optionsets: { [k: string]: OptionSetRecord[] } =
+          results["optionsets"].data;
+
+        // set options for filters
+        const newFilterDefs: FilterDefs[] = [...entityInfoForQuery.filterDefs];
+        newFilterDefs.forEach((filterDef: FilterDefs) => {
+          for (const [filterName] of Object.entries(filterDef)) {
+            if (!filterName.startsWith("date"))
+              filterDef[filterName].items = optionsets[filterName];
+          }
+        });
+        setFilterDefs(newFilterDefs);
+        setColumns(
+          entityInfoForQuery.getColumns({
+            metadata: results.metadata.data,
+            setOrdering,
+          })
+        );
+      }
+      setLoading(false);
+    },
+    [curPage, ordering, pagesize, setLoading]
+  );
 
   // EFFECT HOOKS // ---------—---------—---------—---------—---------—------//
   // on initial page load, get all data and filter optionset values
@@ -225,10 +365,11 @@ const Data = ({
         : [["date_start_effective", "desc"]]
     );
 
-    const newEntityInfo = {
-      policy: policyInfo,
-      plan: planInfo,
-      challenge: challengeInfo,
+    // TODO review types
+    const newEntityInfo: DataPageInfo = {
+      policy: policyInfo as DataPageInfo,
+      plan: planInfo as DataPageInfo,
+      challenge: challengeInfo as DataPageInfo,
     }[docType];
 
     // get current URL params
@@ -237,10 +378,11 @@ const Data = ({
     // update which doc type is being viewed
     urlParams.set("type", docType);
 
-    const newState = {};
-    for (const [k, v] of urlParams.entries()) {
-      if (v !== null && v !== "") {
-        newState[k] = v;
+    const newState: Record<string, any> = {};
+    // TODO confirm use of Object.entries here is valid
+    for (const [paramName, paramVal] of Object.entries(urlParams)) {
+      if (paramVal !== null && paramVal !== "") {
+        newState[paramName] = paramVal;
       }
     }
     const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
@@ -262,9 +404,11 @@ const Data = ({
       initializingForQuery: true,
       getOptionSets: true,
     });
-  }, [docType]);
+    // TODO fix dependencies -- adding useCallback funcs. creates inf. loop
+    // eslint-disable-next-line
+  }, [docType, setLoading]);
 
-  const updateData = () => {
+  const updateData = useCallback(() => {
     if (!loading) {
       // update data
       setLoading(true);
@@ -292,8 +436,9 @@ const Data = ({
       const filtersUrlParamKey = "filters_" + docType;
 
       // TODO make the below work with two filter sets
+      // TODO create more specific types
       // Default state is the currently selected filters per the URL params
-      const newState = { type: docType };
+      const newState: Record<string, any> = { type: docType };
       if (curUrlFilterParamsPolicy !== null)
         newState.filters_policy = curUrlFilterParamsPolicy;
       if (curUrlFilterParamsPlan !== null)
@@ -325,21 +470,25 @@ const Data = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  };
+  }, [docType, entityInfo, filters, getData, loading, searchText, setLoading]);
 
   useEffect(() => {
     if (curPage !== 1) setCurPage(1);
     else updateData();
-    // updateData();
+    // TODO review dependencies
+    // eslint-disable-next-line
   }, [filters, pagesize, searchText]);
 
   // when filters are updated, update data
   useEffect(() => {
     updateData();
+    // TODO review dependencies -- including `updateData` causes infinite loop
+    // of calls
+    // eslint-disable-next-line
   }, [ordering, curPage]);
 
   // define which table component to show based on selected doc type
-  const getTable = ({ docType }) => {
+  const getTable = ({ docType }: { docType: DataPageType }) => {
     if (columns === null || data === null || filterDefs === null) return null;
     else
       return (
@@ -354,6 +503,9 @@ const Data = ({
             defaultSortedField: entityInfo.defaultSortedField,
             className: styles[entityInfo.nouns.s.toLowerCase()],
             setPagesize,
+            name: undefined,
+            dataGetter: undefined,
+            childGetter: undefined,
           }}
         />
       );
@@ -392,7 +544,7 @@ const Data = ({
             {...{
               title: <h2>Search and filter</h2>,
               label: DownloadBtn({
-                render: table,
+                render: table !== null,
                 class_name: [nouns.s, "secondary"],
                 classNameForApi: hasFilters ? nouns.s : "All_data",
                 buttonLoading,
@@ -436,6 +588,9 @@ const Data = ({
                       horizontal={true}
                       selectpicker={false}
                       setInfoTooltipContent={setInfoTooltipContent}
+                      onClick={undefined}
+                      className={undefined}
+                      children={undefined}
                     />
                     <Search
                       searchText={searchText}
@@ -493,7 +648,19 @@ const Data = ({
   );
 };
 
-export const DownloadBtn = ({
+interface DownloadBtnProps {
+  render: boolean;
+  message: string | ReactNode;
+  class_name: string[];
+  classNameForApi: string;
+  filters: Filters;
+  disabled: boolean | null;
+  searchText: string | null;
+  buttonLoading: boolean;
+  setButtonLoading?: Dispatch<SetStateAction<boolean>>;
+}
+
+export const DownloadBtn: FC<DownloadBtnProps> = ({
   render = true,
   message = "Download",
   class_name = [],
@@ -503,9 +670,9 @@ export const DownloadBtn = ({
   searchText,
   buttonLoading = false,
   setButtonLoading = () => "",
-}) => {
+}): any => {
   // define custom class names
-  const thisClassNames = {};
+  const thisClassNames: Record<string, boolean> = {};
   if (buttonLoading || disabled) thisClassNames[styles.inactive] = true;
   class_name.forEach(d => {
     thisClassNames[styles[d]] = true;
@@ -526,7 +693,7 @@ export const DownloadBtn = ({
           </div>
         }
         customClassNames={[styles.downloadBtn, ...Object.keys(thisClassNames)]}
-        onClick={e => {
+        onClick={(e: Event) => {
           e.stopPropagation();
           if (class_name[0] === "All_data") {
             window.location.assign(

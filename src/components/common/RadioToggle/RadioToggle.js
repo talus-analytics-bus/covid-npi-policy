@@ -9,10 +9,7 @@ import { InfoTooltip } from "..";
  * @method RadioToggle
  */
 const RadioToggle = ({
-  choices = [
-    { value: "a", label: "Sample choice A" },
-    { value: "b", label: "Sample choice B" },
-  ],
+  choices = [],
   curVal = "a",
   callback,
   onClick,

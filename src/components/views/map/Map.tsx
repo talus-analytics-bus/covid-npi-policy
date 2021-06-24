@@ -54,6 +54,7 @@ import {
   getOverallUpdateDate,
 } from "./helpers";
 import MapPlaceContext from "./context/MapPlaceContext";
+import { OptionSetRecord } from "api/queryTypes";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -193,7 +194,8 @@ const Map: FC<MapProps> = ({
 
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
-    const optionsets = results["optionsets"];
+    const optionsets: { [k: string]: OptionSetRecord[] } =
+      results["optionsets"].data;
 
     // set options for filters
     const newFilterDefs: FilterDefs[] = [...filterDefs];

@@ -3,9 +3,9 @@
  */
 import {
   GeoRes,
-  MetricData,
-  OptionSetDataProps,
-  VersionDataProps,
+  MetricRecords,
+  OptionSetRecord,
+  VersionRecord,
 } from "api/queryTypes";
 import { Numeric } from "d3";
 import { ReactNode } from "react-transition-group/node_modules/@types/react";
@@ -39,7 +39,7 @@ export type MapProps = {
    * Array of version data describing the last datum dates and last update
    * dates of different data sources used in the app.
    */
-  versions: VersionDataProps[];
+  versions: VersionRecord[];
 
   /**
    * Additional props used by the Map component.
@@ -366,7 +366,7 @@ export type FilterDef = {
   label: string;
   radio: boolean;
   defaultRadioValue?: string;
-  items: OptionSetDataProps[]; // TODO list of optionsets
+  items: OptionSetRecord[]; // TODO list of optionsets
   primary?: string;
 };
 
@@ -408,7 +408,7 @@ export type FillStyles = Record<string, FillStyle>;
 /**
  * Data for display in map
  */
-export type MapData = Record<string, MetricData> | null;
+export type MapData = Record<string, MetricRecords> | null;
 
 /**
  * Fields that may link a geographic feature in a Mapbox source to a

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MetricAPIRequestProps, MetricData } from "./queryTypes";
+import { ObservationQueryArgs, MetricRecords } from "./queryTypes";
 
 const API_URL = process.env.REACT_APP_METRICS_API_URL;
 
@@ -21,10 +21,10 @@ const ObservationQuery = async function({
   fields,
   transform,
   fips,
-}: MetricAPIRequestProps & { transform?(v: any): void }) {
+}: ObservationQueryArgs & { transform?(v: any): void }) {
   end_date = typeof end_date !== "undefined" ? end_date : start_date;
 
-  const params: MetricAPIRequestProps = {
+  const params: ObservationQueryArgs = {
     metric_id: metric_id,
     temporal_resolution: temporal_resolution,
     spatial_resolution: spatial_resolution,
@@ -51,7 +51,7 @@ const ObservationQuery = async function({
     headers: { "If-Modified-Since": new Date().toUTCString() },
   });
 
-  const formattedRes: MetricData = res.data.data;
+  const formattedRes: MetricRecords = res.data.data;
   if (transform !== undefined) formattedRes.forEach(d => transform(d));
   return formattedRes;
 };

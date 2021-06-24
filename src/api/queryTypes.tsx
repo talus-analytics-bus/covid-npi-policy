@@ -73,19 +73,20 @@ export interface PolicyListProps extends PaginatedProps {
   by_category?: boolean;
 }
 
-export interface MetadataProps {
+export interface MetadataQueryArgs {
   method: "get" | "post";
   fields?: string[];
   entity_class_name?: string;
 }
 
-export interface OptionSetProps {
+export interface OptionSetQueryArgs {
   method: "get" | "post";
   fields?: string[] | null;
   class_name?: string | null;
+  entity_name?: string | null;
 }
 
-export type VersionDataProps = {
+export type VersionRecord = {
   /**
    * The name of the data type.
    */
@@ -107,7 +108,7 @@ export type VersionDataProps = {
   map_types: (MapId | "all")[];
 };
 
-export type OptionSetDataProps = {
+export type OptionSetRecord = {
   id: number;
   value: string;
   label: string;
@@ -117,7 +118,7 @@ export type OptionSetDataProps = {
 /**
  * Element in array of data series returned by Metrics API
  */
-export type MetricDatum = {
+export type MetricRecord = {
   value: string | number | null;
   place_name?: string;
   place_iso?: string;
@@ -135,7 +136,7 @@ export interface PlaceProps {
   fields?: string[];
 }
 
-export interface MetricAPIRequestProps {
+export interface ObservationQueryArgs {
   metric_id: number;
   place_name?: string;
   place_iso?: string;
@@ -151,7 +152,7 @@ export interface MetricAPIRequestProps {
   end?: string;
 }
 
-export type MetricData = MetricDatum[] & {
-  max_all_time?: MetricDatum;
-  min_all_time?: MetricDatum;
+export type MetricRecords = MetricRecord[] & {
+  max_all_time?: MetricRecord;
+  min_all_time?: MetricRecord;
 };

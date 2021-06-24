@@ -206,7 +206,11 @@ export const policyInfo = {
                   key={localDownloadLink + "-" + i}
                   className={styles.linkIcon}
                 >
-                  <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
+                  <a
+                    target="_blank"
+                    href={`${API_URL}${localDownloadLink}`}
+                    rel="noreferrer"
+                  >
                     <i className={"material-icons"}>insert_drive_file</i>
                   </a>
                 </div>
@@ -214,7 +218,7 @@ export const policyInfo = {
             } else if (hasLink) {
               return (
                 <div className={styles.linkIcon}>
-                  <a target="_blank" href={link}>
+                  <a target="_blank" href={link} rel="noreferrer">
                     <i className={"material-icons"}>link</i>
                   </a>
                 </div>

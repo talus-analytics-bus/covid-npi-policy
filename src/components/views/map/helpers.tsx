@@ -1,7 +1,7 @@
 /**
  * Helper functions for Map.tsx
  */
-import { VersionDataProps } from "api/queryTypes";
+import { VersionRecord } from "api/queryTypes";
 import { defaults, metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   FilterDefs,
@@ -184,10 +184,10 @@ export const ampMapFilterDefs: FilterDefs[] = [
  * in `versions` was last updated.
  */
 export function getCaseDataUpdateDate(
-  versions: VersionDataProps[],
+  versions: VersionRecord[],
   mapId: MapId
 ): Moment {
-  const casesUpdatedDatum: VersionDataProps | undefined = versions.find(
+  const casesUpdatedDatum: VersionRecord | undefined = versions.find(
     d => d.name.includes("COVID-19") && d.map_types.includes(mapId)
   );
   const casesUpdatedMoment: Moment = casesUpdatedDatum
@@ -207,10 +207,10 @@ export function getCaseDataUpdateDate(
  * in `versions` was last updated.
  */
 export function getOverallUpdateDate(
-  versions: VersionDataProps[],
+  versions: VersionRecord[],
   mapId: MapId
 ): Moment {
-  const applicableVersions: VersionDataProps[] = versions.filter(d => {
+  const applicableVersions: VersionRecord[] = versions.filter(d => {
     return d.map_types.includes("all") || d.map_types.includes(mapId);
   });
   const lastUpdatedDateOverall: Moment = moment(applicableVersions[0].date);

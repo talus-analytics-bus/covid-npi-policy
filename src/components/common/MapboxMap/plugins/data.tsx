@@ -42,7 +42,7 @@ import {
   MetricMeta,
   PolicyResolution,
 } from "./mapTypes";
-import { GeoRes, MetricDatum } from "api/queryTypes";
+import { GeoRes, MetricRecord } from "api/queryTypes";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -138,11 +138,11 @@ export const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
 /**
  * Divides each value of a metric data series by 7 to yield the y-day average.
- * @param {MetricDatum} d
+ * @param {MetricRecord} d
  * The metric datum whose numeric value should be divided by 7
  * @returns {void}
  */
-const get7dayAvg = (d: MetricDatum): void => {
+const get7dayAvg = (d: MetricRecord): void => {
   d.value = (d.value as number) / 7.0;
 };
 
