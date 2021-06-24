@@ -15,6 +15,7 @@ import { Policy } from "api/Queries";
 // assets and styles
 // use same styles as main Data page
 import styles from "../data.module.scss";
+import { getLinkedPolicyTitle } from "./helpers";
 
 // constants
 const unspecified = (
@@ -146,14 +147,17 @@ export const policyInfo = {
           setOrdering([["name_and_desc", order]]);
         },
         formatter: (cell, row) => {
-          // const title =
-          //   row.policy_name !== "Unspecified" &&
-          //   row.policy_name !== "" &&
-          //   row.policy_name !== null &&
-          //   row.policy_name !== undefined
-          //     ? row.policy_name + ": "
-          //     : "";
-          return <ShowMore text={cell} charLimit={200} />;
+          const desc = row.desc;
+
+          return (
+            <p>
+              <span style={{ fontWeight: 600 }}>
+                {getLinkedPolicyTitle(row)}
+              </span>
+              {": "}
+              <ShowMore text={desc} charLimit={200} />
+            </p>
+          );
         },
       },
       {
@@ -282,9 +286,11 @@ export const policyInfo = {
       fields: [
         "id",
         "place",
+        "auth_entity",
         "primary_ph_measure",
         "authority_name",
-        "name_and_desc",
+        "policy_name",
+        "desc",
         "date_start_effective",
         "file",
       ],
