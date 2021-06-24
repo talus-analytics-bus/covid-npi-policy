@@ -515,7 +515,7 @@ const Data: FC<DataArgs> = ({
   return (
     <div className={styles.data}>
       <div className={styles.header}>
-        <h1>Data access</h1>
+        <h1>Data accessss</h1>
         <div className={styles.columnText}>
           <p>
             The COVID Analysis and Mapping of Policies (AMP) site provides
@@ -550,37 +550,6 @@ const Data: FC<DataArgs> = ({
           <Drawer
             {...{
               title: <h2>Select data</h2>,
-              label: DownloadBtn({
-                styles,
-                render: table !== null,
-                class_name: [nouns.s, "secondary"],
-                classNameForApi: areFiltersDefined ? nouns.s : "All_data",
-                buttonLoading,
-                setButtonLoading,
-                searchText,
-                filters,
-                disabled: data && data.length === 0,
-                message: (
-                  <span>
-                    {data && data.length === 0 && (
-                      <>No {nouns.p.toLowerCase()} found</>
-                    )}
-                    {data && data.length > 0 && (
-                      <>
-                        <span className={styles.primaryText}>
-                          Download {!areFiltersDefined ? "all" : "filtered"}{" "}
-                          data
-                        </span>
-                        <br />({comma(numInstances)}{" "}
-                        {numInstances !== 1
-                          ? nouns.p.toLowerCase()
-                          : nouns.s.toLowerCase().replace("_", " ")}
-                        , .xlsx)
-                      </>
-                    )}
-                  </span>
-                ),
-              }),
               noCollapse: false,
               headerBackgroundColor: colors.mapGreen5,
               content: (
@@ -649,7 +618,37 @@ const Data: FC<DataArgs> = ({
               ),
             }}
           />
-
+          {DownloadBtn({
+            render: table !== null,
+            class_name: [nouns.s, "secondary"],
+            classNameForApi: areFiltersDefined ? nouns.s : "All_data",
+            buttonLoading,
+            setButtonLoading,
+            searchText,
+            filters,
+            disabled: data && data.length === 0,
+            message: (
+              <span>
+                {data && data.length === 0 && (
+                  <>No {nouns.p.toLowerCase()} found</>
+                )}
+                {data && data.length > 0 && (
+                  <>
+                    <span style={{ fontWeight: 700 }}>
+                      Download {!areFiltersDefined ? "all" : "filtered"} data{" "}
+                    </span>
+                    <span style={{ fontWeight: 400 }}>
+                      ({comma(numInstances)}{" "}
+                      {numInstances !== 1
+                        ? nouns.p.toLowerCase()
+                        : nouns.s.toLowerCase().replace("_", " ")}
+                      , .xlsx)
+                    </span>
+                  </>
+                )}
+              </span>
+            ),
+          })}
           {table}
           {!table && <div style={{ height: "900px" }} />}
         </>

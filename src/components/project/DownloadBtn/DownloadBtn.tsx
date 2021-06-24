@@ -1,5 +1,5 @@
 import { Export } from "api/Queries";
-import { PrimaryButton } from "components/common";
+import { LoadingSpinner, PrimaryButton } from "components/common";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import React, {
   ReactNode,
@@ -9,8 +9,10 @@ import React, {
   ReactElement,
 } from "react";
 
+// styles and assets
+import styles from "./DownloadBtn.module.scss";
+
 interface DownloadBtnProps {
-  readonly styles: { [k: string]: string };
   render: boolean;
   message: string | ReactNode;
   class_name: string[];
@@ -23,7 +25,6 @@ interface DownloadBtnProps {
 }
 
 export const DownloadBtn: FC<DownloadBtnProps> = ({
-  styles,
   render = true,
   message = "Download",
   class_name = [],
@@ -38,20 +39,21 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
   const thisClassNames: Record<string, boolean> = {};
   if (buttonLoading || disabled) thisClassNames[styles.inactive] = true;
   class_name.forEach(d => {
-    thisClassNames[styles[d]] = true;
+    thisClassNames[d] = true;
   });
   // flag for whether the download button should say loading or not
   if (render)
     return (
       <PrimaryButton
-        iconName={"get_app"}
+        iconName={!buttonLoading ? "get_app" : undefined}
         label={
           <div>
             {!buttonLoading && render && message}
             {buttonLoading && (
-              <>
-                <span>Downloading, please wait...</span>
-              </>
+              <div className={styles.spinnerAndText}>
+                <LoadingSpinner inline small />
+                <div>Downloading, please wait...</div>
+              </div>
             )}
           </div>
         }
@@ -72,7 +74,9 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
                 _text: searchText !== null ? [searchText] : [],
               },
               class_name: classNameForApi,
-            }).then(d => setButtonLoading(false));
+            }).then(() => {
+              setButtonLoading(false);
+            });
           }
         }}
       />

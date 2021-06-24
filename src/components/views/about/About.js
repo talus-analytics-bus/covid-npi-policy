@@ -155,7 +155,6 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
           </Link>
         ))}
         {DownloadBtn({
-          styles,
           message: <span>Download data (.xls)</span>,
           class_name: ["All_data"],
           classNameForApi: "All_data",

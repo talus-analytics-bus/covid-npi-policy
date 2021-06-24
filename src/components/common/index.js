@@ -18,6 +18,7 @@ import OptionsMenu from "./OptionsMenu/OptionsMenu.js";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 import Axes from "./D3React/Axes/Axes";
 import Sparkline from "./Sparkline/Sparkline";
+import Caret from "./Caret/Caret";
 export {
   Selectpicker,
   CheckboxSet,
@@ -39,4 +40,5 @@ export {
   LoadingSpinner,
   Axes,
   Sparkline,
+  Caret,
 };

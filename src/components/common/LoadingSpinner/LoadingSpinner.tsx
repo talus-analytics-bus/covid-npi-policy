@@ -6,7 +6,7 @@ import loadingImg from "./assets/images/loading.svg";
 // import loadingImg from "./assets/images/loading.gif";
 import classNames from "classnames";
 
-type ComponentProps = {
+interface LoadingSpinnerProps {
   delay?: number;
   style?: Record<string, any>;
   children?: ReactElement;
@@ -17,6 +17,16 @@ type ComponentProps = {
    * True if spinner fills container and centers inside
    */
   fill?: boolean;
+
+  /**
+   * True if spinner appears inline, false otherwise.
+   */
+  inline?: boolean;
+
+  /**
+   * True if spinner should be half regular size, false for normal size.
+   */
+  small?: boolean;
 
   /**
    * True if spinner fills entire screen and prevents interactions
@@ -37,14 +47,16 @@ type ComponentProps = {
    * Inline CSS for children container
    */
   childrenStyle?: Record<string, any>;
-};
-export const LoadingSpinner: FC<ComponentProps> = ({
+}
+export const LoadingSpinner: FC<LoadingSpinnerProps> = ({
   delay = 0,
   style = {},
   childrenStyle = {},
   text,
   children = null,
   ready = false,
+  inline = false,
+  small = false,
   right = false,
   fill = false,
   fullscreen = false,
@@ -74,6 +86,8 @@ export const LoadingSpinner: FC<ComponentProps> = ({
       className={classNames(styles.loadingSpinner, {
         [styles.rightSide]: right,
         [styles.leftSide]: !right,
+        [styles.inline]: inline,
+        [styles.small]: small,
         [styles.fill]: fill,
         [styles.fullscreen]: fullscreen,
         [styles.instantFadeout]: instantFadeout,

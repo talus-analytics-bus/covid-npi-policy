@@ -1,4 +1,4 @@
-import { Caret } from "components/common/MapOptions/OptionDrawer/content/Caret/Caret";
+import { Caret } from "components/common";
 import React from "react";
 
 import styles from "./ExpandingSection.module.scss";

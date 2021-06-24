@@ -1,0 +1,15 @@
+.downloadBtn {
+    margin-left: auto;
+    &.inactive {
+        pointer-events: none;
+        cursor: default;
+        opacity: 0.75;
+    }
+    .spinnerAndText {
+        display: flex;
+        align-items: center;
+        > :first-child {
+            margin-right: 0.5rem;
+        }
+    }
+}

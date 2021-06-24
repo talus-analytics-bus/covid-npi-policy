@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { FC, ReactElement, useState } from "react";
-import { Caret } from "./content/Caret/Caret";
+import { Caret } from "components/common";
 import styles from "./OptionDrawer.module.scss";
 type ComponentProps = {
   readonly title: string;

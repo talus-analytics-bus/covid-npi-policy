@@ -1,13 +1,15 @@
 import classNames from "classnames";
 import React, { FC, ReactElement } from "react";
 import styles from "./Caret.module.scss";
+import CSS from "csstype";
 
 /**
- * Caret props type
+ * Caret props
  */
-type ComponentProps = {
+interface CaretProps {
   up: boolean;
-};
+  style?: CSS.Properties;
+}
 
 /**
  *
@@ -15,14 +17,16 @@ type ComponentProps = {
  * @param {boolean} o.up True if caret is facing up, false if down
  * @returns {ReactElement} A caret
  */
-export const Caret: FC<ComponentProps> = ({ up }): ReactElement => {
+export const Caret: FC<CaretProps> = ({ up, style }): ReactElement => {
   return (
     <i
       className={classNames(styles.caret, "material-icons", {
         [styles.up]: up,
       })}
+      {...{ style }}
     >
       play_arrow
     </i>
   );
 };
+export default Caret;

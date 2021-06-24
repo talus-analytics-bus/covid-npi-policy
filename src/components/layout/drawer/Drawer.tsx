@@ -4,6 +4,7 @@ import { useState } from "react";
 import CSS from "csstype";
 import styles from "./drawer.module.scss";
 import { FC } from "react";
+import { Caret } from "components/common";
 
 interface DrawerProps {
   title?: string | ReactElement;
@@ -36,13 +37,7 @@ const Drawer: FC<DrawerProps> = ({
       >
         {title}
 
-        {!noCollapse && (
-          <button
-            className={classNames(styles.toggle, { [styles.flip]: !open })}
-          >
-            <i className={"material-icons"}>expand_less</i>
-          </button>
-        )}
+        {!noCollapse && <Caret up={!open} style={{ fontSize: "2rem" }} />}
         {label}
       </div>
       {
