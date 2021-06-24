@@ -38,6 +38,7 @@ type PolicyCategoryIconProps = {
 const PolicyCategoryIcon: FunctionComponent<PolicyCategoryIconProps> = (
   props
 ): ReactElement | null => {
+  if (props.category === undefined) return null;
   const categories: string[] =
     typeof props.category === "string" ? [props.category] : props.category;
 
