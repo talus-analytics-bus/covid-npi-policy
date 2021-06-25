@@ -4,9 +4,10 @@ import {
   PolicyRecord,
 } from "components/misc/dataTypes";
 import { AuthEntityRecord } from "components/misc/dataTypes";
-import { getAndListString, getInitCap } from "components/misc/UtilsTyped";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
+
+import styles from "./Helpers.module.scss";
 
 const DEFAULT_POLICY_TITLE: string = "Policy";
 
@@ -94,13 +95,13 @@ export function safeGetFieldValsAsStrings(
  * @returns {string} List of categories, subcategories, and targets of
  * the policy.
  */
-export function getPolicyCatSubcatTarg(p: PolicyRecord): string | null {
+export function getPolicyCatSubcatTarg(p: PolicyRecord): ReactElement | null {
   if (p.primary_ph_measure === undefined || p.primary_ph_measure === null)
     return null;
   else {
     const cat: string = p.primary_ph_measure;
     if (p.ph_measure_details === undefined || p.ph_measure_details === null)
-      return cat;
+      return <p className={styles.category}>{cat}</p>;
     else {
       const subcat: string = p.ph_measure_details;
       if (
@@ -108,12 +109,24 @@ export function getPolicyCatSubcatTarg(p: PolicyRecord): string | null {
         p.subtarget === null ||
         p.subtarget.length === 0
       )
-        return `${cat} >> ${subcat}`;
-      else {
-        const subtargets: string = formatSubtargets(
-          getAndListString(p.subtarget)
+        return (
+          <p>
+            <p className={styles.category}>{cat}:</p>
+            <p className={styles.subcategory}>{subcat}</p>
+          </p>
         );
-        return `${cat} >> ${subcat} >> ${subtargets}`;
+      else {
+        return (
+          <p>
+            <p className={styles.category}>{cat}:</p>
+            <p className={styles.subcategory}>{subcat}:</p>
+            <ul className={styles.subtargets}>
+              {p.subtarget.map(s => (
+                <li>{formatSubtargets(s)}</li>
+              ))}
+            </ul>
+          </p>
+        );
       }
     }
   }
@@ -127,10 +140,5 @@ export function getPolicyCatSubcatTarg(p: PolicyRecord): string | null {
  * and lowercase
  */
 function formatSubtargets(s: string): string {
-  return getInitCap(
-    s
-      .replaceAll(" / ", "/")
-      .replaceAll("/", " / ")
-      .toLowerCase()
-  );
+  return s.replaceAll(" / ", "/").replaceAll("/", " / ");
 }
