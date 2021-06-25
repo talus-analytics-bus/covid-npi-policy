@@ -87,10 +87,15 @@ interface DataArgs {
 }
 
 /**
+ * Define valid place types for use in `PlaceType
+ */
+const validPlaceTypes = ["affected", "jurisdiction"] as const;
+
+/**
  * The type of place in the COVID AMP dataset, either `affected` for the place
  * affected by a policy, or `jurisdiction` for the place making the policy.
  */
-export type PlaceType = "affected" | "jurisdiction";
+export type PlaceType = typeof validPlaceTypes[number];
 
 // primary data viewing and download page
 const Data: FC<DataArgs> = ({
@@ -104,9 +109,11 @@ const Data: FC<DataArgs> = ({
   type,
 }) => {
   const [docType, setDocType] = useState<DataPageType>(type || "policy");
-  const [placeType, setPlaceType] = useState<PlaceType>("affected");
 
-  // TODO define type
+  const defaultPlaceType: PlaceType = getParamsPlaceType() || "affected";
+  const [placeType, setPlaceType] = useState<PlaceType>(defaultPlaceType);
+
+  // TODO update type assignment when policy.js is rewritten in TSX
   const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
     policyInfo as DataPageInfo
   );
@@ -374,6 +381,7 @@ const Data: FC<DataArgs> = ({
 
     // update which doc type is being viewed
     urlParams.set("type", docType);
+    urlParams.set("placeType", placeType);
 
     const newState: Record<string, any> = {};
     // TODO confirm use of Object.entries here is valid
@@ -457,6 +465,7 @@ const Data: FC<DataArgs> = ({
         newState[filtersUrlParamKey] = JSON.stringify(newFiltersForState);
       }
       const newUrlParams = new URLSearchParams();
+      newUrlParams.set("placeType", placeType);
       for (const [k, v] of Object.entries(newState)) {
         if (v !== null && v !== "") {
           newUrlParams.append(k, v);
@@ -467,7 +476,16 @@ const Data: FC<DataArgs> = ({
 
       window.history.replaceState(newState, "", newUrl);
     }
-  }, [docType, entityInfo, filters, getData, loading, searchText, setLoading]);
+  }, [
+    docType,
+    entityInfo,
+    filters,
+    getData,
+    loading,
+    placeType,
+    searchText,
+    setLoading,
+  ]);
 
   useEffect(() => {
     if (curPage !== 1) setCurPage(1);
@@ -689,3 +707,29 @@ const Data: FC<DataArgs> = ({
 };
 
 export default Data;
+
+/**
+ * Returns the place type defined in the URL parameters, or null if none.
+ * @returns {PlaceType | null} The place type defined in the URL parameters, or
+ * null if none.
+ */
+function getParamsPlaceType(): PlaceType | null {
+  // get URL search parameters
+  const params: URLSearchParams = new URLSearchParams(
+    window !== undefined ? window.location.search : ""
+  );
+
+  const placeTypeTmp: string | null = params.get("placeType");
+  if (placeTypeTmp !== null) {
+    if (validPlaceTypes.includes(placeTypeTmp as PlaceType)) {
+      return placeTypeTmp as PlaceType;
+    } else {
+      throw Error(
+        "Invalid place type provided as URL param, must be one of " +
+          validPlaceTypes.join(", ") +
+          "; but found: " +
+          placeTypeTmp
+      );
+    }
+  } else return null;
+}

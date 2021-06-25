@@ -81,7 +81,7 @@ export function getParamsMapId(
   defaultMapId: MapId | null = null
 ): MapId | null {
   // get map ID from URL parameters
-  const params: Record<string, any> = new URLSearchParams(
+  const params: URLSearchParams = new URLSearchParams(
     window !== undefined ? window.location.search : ""
   );
   const paramsMapIdTmp: string | null = params.get("mapId");
