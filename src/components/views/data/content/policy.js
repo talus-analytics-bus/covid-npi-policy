@@ -30,17 +30,10 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const policyInfo = {
   filterDefs: [
     {
-      level: {
-        entity_name: "Place",
-        field: "level",
-        label: "Level of government",
-      },
-    },
-    {
       country_name: {
         entity_name: "Place",
         field: "country_name",
-        label: "Country",
+        label: "Country / Tribal nation",
       },
       area1: {
         entity_name: "Place",
@@ -60,13 +53,6 @@ export const policyInfo = {
       },
     },
     {
-      relaxing_or_restricting: {
-        entity_name: "Policy",
-        field: "relaxing_or_restricting",
-        label: "Relaxing or restricting",
-      },
-    },
-    {
       primary_ph_measure: {
         entity_name: "Policy",
         field: "primary_ph_measure",
@@ -75,10 +61,17 @@ export const policyInfo = {
       ph_measure_details: {
         entity_name: "Policy",
         field: "ph_measure_details",
-        label: "Policy sub-category",
+        label: "Policy subcategory",
         withGrouping: true,
         primary: "primary_ph_measure",
         disabledText: "Choose a policy category",
+      },
+    },
+    {
+      subtarget: {
+        entity_name: "Policy",
+        field: "subtarget",
+        label: "Policy target",
       },
     },
     {
@@ -91,13 +84,13 @@ export const policyInfo = {
       },
     },
   ],
-  getColumns: ({ metadata, setOrdering }) => {
+  getColumns: ({ metadata, setOrdering, placeType = "affected" }) => {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       {
         dataField: "place.level",
         defKey: "place.level",
-        header: "Level of government",
+        header: "Type of affected location",
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
