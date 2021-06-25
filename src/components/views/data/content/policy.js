@@ -95,12 +95,12 @@ export const policyInfo = {
           setOrdering([[field, order]]);
         },
         sort: true,
-        sortValue: (cell, row) => {
+        sortValue: (_cell, row) => {
           if (row.place !== undefined)
             return row.place.map(d => d.level).join("; ");
           else return "zzz";
         },
-        formatter: (cell, row) => {
+        formatter: (_cell, row) => {
           if (row.place !== undefined && row.place.length > 0)
             return row.place[0].level;
           else return null;
@@ -115,12 +115,12 @@ export const policyInfo = {
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
-        sortValue: (cell, row) => {
+        sortValue: (_cell, row) => {
           if (row.place !== undefined)
             return row.place.map(d => d.loc).join("; ");
           else return "zzz";
         },
-        formatter: (cell, row) => {
+        formatter: (_cell, row) => {
           if (row.place !== undefined && row.place.length > 0)
             return (
               <ShowMore
@@ -136,10 +136,10 @@ export const policyInfo = {
         header: "Policy name and description",
         defCharLimit: 1000,
         sort: true,
-        onSort: (field, order) => {
+        onSort: (_field, order) => {
           setOrdering([["name_and_desc", order]]);
         },
-        formatter: (cell, row) => {
+        formatter: (_cell, row) => {
           const desc = row.desc;
 
           return (
