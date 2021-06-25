@@ -10,8 +10,12 @@
     border-right: $border;
   }
   .label {
-    font-weight: bold;
-    margin-bottom: 5px;
+    color: $idea-black;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    line-height: 1;
   }
   &.disabled {
     .label {

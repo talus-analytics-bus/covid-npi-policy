@@ -14,6 +14,8 @@ const RadioToggle = ({
   callback,
   onClick,
   label,
+  labelPos = "top",
+  theme,
   className,
   children,
   ...props
@@ -66,15 +68,18 @@ const RadioToggle = ({
         className={classNames(
           classNames(className !== undefined ? className : ""),
           styles.radioToggle,
+          styles[theme],
           {
             [styles.disabled]: props.disabled === true,
             [styles.horizontal]: props.horizontal === true,
+            [styles.labelPosInline]: labelPos === "inline",
+            [styles.labelPosTop]: labelPos === "top",
             [styles.right]: props.right === true,
             [styles.left]: props.left === true,
           }
         )}
       >
-        <div role="label">{label}</div>
+        <div className={styles.label}>{label}</div>
         <form className={classNames({ [styles.asGrid]: showRadiosAsCols })}>
           {choices.map(c => (
             <>

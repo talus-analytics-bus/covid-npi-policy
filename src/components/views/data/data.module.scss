@@ -110,9 +110,10 @@
   // content top section
   .contentTop {
     display: flex;
-    flex-flow: row;
-    align-items: center;
-    min-height: 50px; // TODO elegantly
+    // TODO elegantly
+    > :not(:last-child) {
+      margin-right: 5.6rem;
+    }
     @media #{$phone} {
       flex-flow: column;
       align-items: flex-start;

@@ -32,6 +32,7 @@ import { useCallback } from "react";
 import { DataColumnDef } from "components/common/Table/Table";
 import Settings from "Settings";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
+import { ControlLabel } from "components/common/OptionControls";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -574,33 +575,37 @@ const Data: FC<DataArgs> = ({
                 <>
                   <div className={styles.contentTop}>
                     <RadioToggle
-                      label={"Search for"}
+                      label={<ControlLabel>Search for</ControlLabel>}
                       choices={[
                         { name: "Policies", value: "policy" },
                         { name: "Plans", value: "plan" },
                         // { name: "Court challenges", value: "challenge" },
                       ]}
+                      labelPos={"top"}
                       curVal={docType}
                       callback={setDocType}
                       horizontal={true}
                       selectpicker={false}
                       setInfoTooltipContent={setInfoTooltipContent}
+                      theme={"slim"}
                       onClick={undefined}
                       className={undefined}
                       children={undefined}
                     />
                     {docType === "policy" && (
                       <RadioToggle
-                        label={"View by"}
+                        label={<ControlLabel>View by</ControlLabel>}
                         choices={[
                           { name: "Affected location", value: "affected" },
                           { name: "Jurisdiction", value: "jurisdiction" },
                         ]}
+                        horizontal={true}
                         curVal={placeType}
                         callback={setPlaceType}
-                        horizontal={true}
+                        labelPos={"top"}
                         selectpicker={false}
                         setInfoTooltipContent={setInfoTooltipContent}
+                        theme={"slim"}
                         onClick={undefined}
                         className={undefined}
                         children={undefined}
@@ -617,7 +622,6 @@ const Data: FC<DataArgs> = ({
                         <>
                           {" "}
                           <div className={styles.filtersHeader}>
-                            Select filters to apply to {nouns.p.toLowerCase()}.
                             {(Object.keys(filters).length > 0 ||
                               (searchText !== null && searchText !== "")) && (
                               <>

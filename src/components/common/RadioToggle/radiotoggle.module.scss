@@ -91,5 +91,31 @@
     &.left {
       margin-right: auto !important;
     }
+    &.labelPosTop {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      form {
+        margin: 0;
+        span:first-child > label {
+          padding: 0;
+        }
+      }
+    }
+  }
+
+  // inline label positioning
+  &.labelPosInline {
+    display: flex;
+    align-items: center;
+  }
+
+  // themes
+  &.slim {
+    label {
+      text-transform: uppercase;
+      color: $idea-black;
+      line-height: 1.125rem;
+    }
   }
 }
