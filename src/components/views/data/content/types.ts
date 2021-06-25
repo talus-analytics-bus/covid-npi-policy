@@ -7,4 +7,5 @@ export type DataPageInfo = {
         s: string;
         p: string;
     }
+    dataQuery(...args: any[]): any;
 }

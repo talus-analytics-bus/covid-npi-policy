@@ -15,7 +15,11 @@ import { Policy } from "api/Queries";
 // assets and styles
 // use same styles as main Data page
 import styles from "../data.module.scss";
-import { getLinkedPolicyTitle, getPolicyCatSubcatTarg } from "./helpers";
+import {
+  getLinkedPolicyTitle,
+  getPolicyCatSubcatTarg,
+  formatFiltersForPlaceType,
+} from "./helpers";
 
 // constants
 const unspecified = (
@@ -84,32 +88,34 @@ export const policyInfo = {
       },
     },
   ],
-  getColumns: ({ metadata, setOrdering, placeType = "affected" }) => {
+  getColumns: ({ metadata, setOrdering, placeType }) => {
     // define initial columns which will be updated using the metadata
     const newColumns = [
-      {
-        dataField: "place.level",
-        defKey: "place.level",
-        header: "Type of affected location",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (_cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        formatter: (_cell, row) => {
-          if (row.place !== undefined && row.place.length > 0)
-            return row.place[0].level;
-          else return null;
-        },
-      },
+      // {
+      //   dataField: "place.level",
+      //   defKey: "place.level",
+      //   header: "Type of affected location",
+      //   placeType: "affected",
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   sort: true,
+      //   sortValue: (_cell, row) => {
+      //     if (row.place !== undefined)
+      //       return row.place.map(d => d.level).join("; ");
+      //     else return "zzz";
+      //   },
+      //   formatter: (_cell, row) => {
+      //     if (row.place !== undefined && row.place.length > 0)
+      //       return row.place[0].level;
+      //     else return null;
+      //   },
+      // },
       {
         dataField: "place.loc",
         defKey: "place.loc",
         header: "Affected location",
+        placeType: "affected",
         defCharLimit: 1000,
         sort: true,
         onSort: (field, order) => {
@@ -128,6 +134,53 @@ export const policyInfo = {
                 charLimit={60}
               />
             );
+          else return null;
+        },
+      },
+
+      {
+        dataField: "auth_entity.place.loc",
+        defKey: "auth_entity.place.loc",
+        header: "Jurisdiction",
+        placeType: "jurisdiction",
+        defCharLimit: 1000,
+        sort: true,
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sortValue: (_cell, row) => {
+          if (row.auth_entity !== undefined)
+            return row.auth_entity.map(ae => ae.place.loc).join("; ");
+          else return "zzz";
+        },
+        formatter: (_cell, row) => {
+          if (row.auth_entity !== undefined)
+            return (
+              <ShowMore
+                text={row.auth_entity.map(ae => ae.place.loc).join("; ")}
+                charLimit={60}
+              />
+            );
+          else return null;
+        },
+      },
+      {
+        dataField: "auth_entity.place.level",
+        defKey: "auth_entity.place.level",
+        header: "Type of jurisdiction",
+        // placeType: "jurisdiction",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: (_cell, row) => {
+          if (row.auth_entity !== undefined)
+            return row.auth_entity.map(ae => ae.place.level).join("; ");
+          else return "zzz";
+        },
+        formatter: (_cell, row) => {
+          if (row.auth_entity !== undefined)
+            return row.auth_entity.map(ae => ae.place.level).join("; ");
           else return null;
         },
       },
@@ -230,7 +283,7 @@ export const policyInfo = {
           }
         },
       },
-    ];
+    ].filter(d => d.placeType === undefined || d.placeType === placeType);
 
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing
@@ -270,27 +323,39 @@ export const policyInfo = {
 
   // query to use when getting entity data
   // requires method and filters arguments
-  dataQuery: ({ method, filters, page = 1, pagesize = 5, ordering = [] }) => {
-    return Policy({
-      method,
-      filters,
-      page,
-      pagesize,
-      ordering,
-      fields: [
-        "id",
-        "place",
-        "auth_entity",
-        "primary_ph_measure",
-        "ph_measure_details",
-        "subtarget",
-        "authority_name",
-        "policy_name",
-        "desc",
-        "date_start_effective",
-        "file",
-      ],
-    });
+  dataQuery: ({
+    method,
+    filters,
+    page = 1,
+    pagesize = 5,
+    ordering = [],
+    placeType,
+  }) => {
+    if (placeType === undefined)
+      throw Error("Argument `placeType` is required.");
+    else {
+      const filtersForRequest = formatFiltersForPlaceType(filters, placeType);
+      return Policy({
+        method,
+        filters: filtersForRequest,
+        page,
+        pagesize,
+        ordering,
+        fields: [
+          "id",
+          "place",
+          "auth_entity",
+          "primary_ph_measure",
+          "ph_measure_details",
+          "subtarget",
+          "authority_name",
+          "policy_name",
+          "desc",
+          "date_start_effective",
+          "file",
+        ],
+      });
+    }
   },
 
   // default field to sort tabular data by

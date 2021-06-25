@@ -86,6 +86,12 @@ interface DataArgs {
   type: DataPageType;
 }
 
+/**
+ * The type of place in the COVID AMP dataset, either `affected` for the place
+ * affected by a policy, or `jurisdiction` for the place making the policy.
+ */
+export type PlaceType = "affected" | "jurisdiction";
+
 // primary data viewing and download page
 const Data: FC<DataArgs> = ({
   loading,
@@ -98,6 +104,7 @@ const Data: FC<DataArgs> = ({
   type,
 }) => {
   const [docType, setDocType] = useState<DataPageType>(type || "policy");
+  const [placeType, setPlaceType] = useState<PlaceType>("affected");
 
   // TODO define type
   const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
@@ -119,7 +126,7 @@ const Data: FC<DataArgs> = ({
   // define data and metadata for table
   const [data, setData] = useState<DataRecord[] | null>(null);
 
-  const [, setMetadata] = useState<MetadataRecord[] | null>(null);
+  const [metadata, setMetadata] = useState<MetadataRecord[] | null>(null);
 
   // define filters
   const getFiltersFromUrlParams: Function = useCallback((): Filters => {
@@ -199,6 +206,7 @@ const Data: FC<DataArgs> = ({
       const initColumns: DataColumnDef[] = entityInfoForQuery.getColumns({
         metadata: {},
         setOrdering,
+        placeType,
       });
       const queries: { [k: string]: Promise<any> } = {
         instances: entityInfoForQuery.dataQuery({
@@ -207,6 +215,7 @@ const Data: FC<DataArgs> = ({
           ordering: orderingForQuery,
           page: curPage,
           pagesize,
+          placeType,
         }),
       };
 
@@ -314,16 +323,17 @@ const Data: FC<DataArgs> = ({
           }
         });
         setFilterDefs(newFilterDefs);
-        setColumns(
-          entityInfoForQuery.getColumns({
-            metadata: results.metadata.data,
-            setOrdering,
-          })
-        );
       }
+      setColumns(
+        entityInfoForQuery.getColumns({
+          metadata: metadata || {},
+          setOrdering,
+          placeType,
+        })
+      );
       setLoading(false);
     },
-    [curPage, ordering, pagesize, setLoading]
+    [curPage, ordering, pagesize, setLoading, placeType]
   );
 
   // EFFECT HOOKS // ---------—---------—---------—---------—---------—------//
@@ -465,6 +475,7 @@ const Data: FC<DataArgs> = ({
     // TODO review dependencies
     // eslint-disable-next-line
   }, [filters, pagesize, searchText]);
+  // }, [filters, pagesize, searchText, placeType]);
 
   // when filters are updated, update data
   useEffect(() => {
@@ -472,42 +483,30 @@ const Data: FC<DataArgs> = ({
     // TODO review dependencies -- including `updateData` causes infinite loop
     // of calls
     // eslint-disable-next-line
-  }, [ordering, curPage]);
+  }, [ordering, curPage, placeType]);
 
-  /**
-   * Returns a table with pagination that shows the data records matching the
-   * selected filters for policies, plans, or court challenges.
-   *
-   * @returns {ReactElement} Data table with pagination showing records
-   */
-  const getTable = () => {
-    if (columns === null || data === null || filterDefs === null) return null;
-    else
-      return (
-        <Table
-          showDefinitions={Settings.SHOW_TABLE_DEFINITIONS}
-          {...{
-            nTotalRecords: numInstances,
-            curPage,
-            setCurPage,
-            pagesize,
-            columns,
-            data,
-            defaultSortedField: entityInfo.defaultSortedField,
-            className: styles[entityInfo.nouns.s.toLowerCase()],
-            setPagesize,
-          }}
-        />
-      );
-  };
-
-  const table = getTable();
+  // useEffect(() => {
+  //   // update table columns if `placeType` changed and metadata ready
+  //   if (metadata !== null)
+  //     setColumns(
+  //       entityInfo.getColumns({
+  //         metadata,
+  //         setOrdering,
+  //         placeType,
+  //       })
+  //     );
+  //   // TODO fix dependencies
+  //   // eslint-disable-next-line
+  // }, [placeType]);
 
   // have any filters or search text been applied?
   const areFiltersDefined = !(
     isEmpty(filters) &&
     (searchText === null || searchText === "")
   );
+
+  const tableIsReady: boolean =
+    columns !== null && data !== null && filterDefs !== null;
 
   return (
     <div className={styles.data}>
@@ -553,7 +552,7 @@ const Data: FC<DataArgs> = ({
                 <>
                   <div className={styles.contentTop}>
                     <RadioToggle
-                      label={"View"}
+                      label={"Search for"}
                       choices={[
                         { name: "Policies", value: "policy" },
                         { name: "Plans", value: "plan" },
@@ -568,6 +567,21 @@ const Data: FC<DataArgs> = ({
                       className={undefined}
                       children={undefined}
                     />
+                    <RadioToggle
+                      label={"View by"}
+                      choices={[
+                        { name: "Affected location", value: "affected" },
+                        { name: "Jurisdiction", value: "jurisdiction" },
+                      ]}
+                      curVal={placeType}
+                      callback={setPlaceType}
+                      horizontal={true}
+                      selectpicker={false}
+                      setInfoTooltipContent={setInfoTooltipContent}
+                      onClick={undefined}
+                      className={undefined}
+                      children={undefined}
+                    />
                     <Search
                       searchText={searchText}
                       onChangeFunc={setSearchText}
@@ -575,7 +589,7 @@ const Data: FC<DataArgs> = ({
                   </div>
                   {
                     <>
-                      {table && (
+                      {tableIsReady && (
                         <>
                           {" "}
                           <div className={styles.filtersHeader}>
@@ -616,7 +630,7 @@ const Data: FC<DataArgs> = ({
             }}
           />
           {DownloadBtn({
-            render: table !== null,
+            render: tableIsReady,
             class_name: [nouns.s, "secondary"],
             classNameForApi: areFiltersDefined ? nouns.s : "All_data",
             buttonLoading,
@@ -646,8 +660,28 @@ const Data: FC<DataArgs> = ({
               </span>
             ),
           })}
-          {table}
-          {!table && <div style={{ height: "900px" }} />}
+          {tableIsReady && (
+            <Table
+              showDefinitions={Settings.SHOW_TABLE_DEFINITIONS}
+              key={
+                (columns !== null ? columns.map(c => c.header) : placeType) +
+                entityInfo.nouns.s +
+                placeType
+              }
+              {...{
+                nTotalRecords: numInstances,
+                curPage,
+                setCurPage,
+                pagesize,
+                columns: columns !== null ? columns : [],
+                data: data !== null ? data : [],
+                defaultSortedField: entityInfo.defaultSortedField,
+                className: styles[entityInfo.nouns.s.toLowerCase()],
+                setPagesize,
+              }}
+            />
+          )}
+          {!tableIsReady && <div style={{ height: "900px" }} />}
         </>
       )}
     </div>

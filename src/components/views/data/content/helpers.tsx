@@ -1,3 +1,4 @@
+import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import {
   DataRecord,
   PlaceRecord,
@@ -6,6 +7,7 @@ import {
 import { AuthEntityRecord } from "components/misc/dataTypes";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
+import { PlaceType } from "../Data";
 
 import styles from "./Helpers.module.scss";
 
@@ -219,4 +221,33 @@ function getPolicyCatSubcatTargText(p: PolicyRecord): ReactElement | null {
       }
     }
   }
+}
+
+/**
+ * List of place record keys to format for API request filters.
+ */
+const placeRecordKeys: string[] = ["country_name", "level", "area1", "area2"];
+
+/**
+ * Given a set of filters and a place type, formats those filters to ensure
+ * the correct data fields are filtered on in the API request.
+ * @param filters The original filters
+ * @param placeType The place type for which filters should be formatted
+ * @returns The formatted filters that account for place type
+ */
+export function formatFiltersForPlaceType(
+  filters: Filters,
+  placeType: PlaceType
+): Filters {
+  if (placeType === "jurisdiction") {
+    const formattedFilters: Filters = { ...filters };
+    for (const [key, value] of Object.entries(filters)) {
+      // adjust keys/values as needed
+      if (placeRecordKeys.includes(key)) {
+        formattedFilters["auth_entity.place." + key] = value;
+        delete formattedFilters[key];
+      }
+    }
+    return formattedFilters;
+  } else return filters;
 }
