@@ -52,7 +52,11 @@
         }
         // set width of Description column
         &:nth-child(3) {
-          width: 35%;
+          width: 25%;
+        }
+        // set width of Category column
+        &:nth-child(4) {
+          width: 20%;
         }
       }
     }

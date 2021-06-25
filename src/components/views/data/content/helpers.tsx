@@ -95,7 +95,34 @@ export function safeGetFieldValsAsStrings(
  * @returns {string} List of categories, subcategories, and targets of
  * the policy.
  */
-export function getPolicyCatSubcatTarg(p: PolicyRecord): ReactElement | null {
+export function getPolicyCatSubcatTarg(
+  p: PolicyRecord,
+  indented: boolean = false
+): ReactElement | null {
+  if (indented) return getPolicyCatSubcatTargIndented(p);
+  else {
+    return getPolicyCatSubcatTargText(p);
+  }
+}
+
+/**
+ * Returns a formatted string of subtargets for presentation in the
+ * user interface.
+ * @param s The string of subtargets
+ * @returns A formatted string of subtargets with spaces padding frontslashes
+ * and lowercase
+ */
+function formatSubtargets(s: string): string {
+  return s.replaceAll(" / ", "/").replaceAll("/", " / ");
+}
+/**
+ * Returns categories, subcategories, and targets of a policy record as an
+ * indented list.
+ * @param p The policy record
+ * @returns The categories, subcategories, and targets of the policy record
+ * presented as an indented list.
+ */
+function getPolicyCatSubcatTargIndented(p: PolicyRecord): ReactElement | null {
   if (p.primary_ph_measure === undefined || p.primary_ph_measure === null)
     return null;
   else {
@@ -117,10 +144,10 @@ export function getPolicyCatSubcatTarg(p: PolicyRecord): ReactElement | null {
         );
       else {
         return (
-          <p>
+          <p className={styles.indented}>
             <p className={styles.category}>{cat}:</p>
             <p className={styles.subcategory}>{subcat}:</p>
-            <ul className={styles.subtargets}>
+            <ul className={styles.targets}>
               {p.subtarget.map(s => (
                 <li>{formatSubtargets(s)}</li>
               ))}
@@ -133,12 +160,63 @@ export function getPolicyCatSubcatTarg(p: PolicyRecord): ReactElement | null {
 }
 
 /**
- * Returns a formatted string of subtargets for presentation in the
- * user interface.
- * @param s The string of subtargets
- * @returns A formatted string of subtargets with spaces padding frontslashes
- * and lowercase
+ * Returns categories, subcategories, and targets of a policy record as a
+ * series of paragraphs.
+ * @param p The policy record
+ * @returns The categories, subcategories, and targets of the policy record
+ * presented as a series of paragraphs.
  */
-function formatSubtargets(s: string): string {
-  return s.replaceAll(" / ", "/").replaceAll("/", " / ");
+function getPolicyCatSubcatTargText(p: PolicyRecord): ReactElement | null {
+  if (p.primary_ph_measure === undefined || p.primary_ph_measure === null)
+    return null;
+  else {
+    const cat: string = p.primary_ph_measure;
+    if (p.ph_measure_details === undefined || p.ph_measure_details === null)
+      return (
+        <p className={styles.text}>
+          <p className={styles.category}>
+            <span className={styles.label}>Category: </span>
+            <span>{cat}</span>
+          </p>
+        </p>
+      );
+    else {
+      const subcat: string = p.ph_measure_details;
+      if (
+        p.subtarget === undefined ||
+        p.subtarget === null ||
+        p.subtarget.length === 0
+      )
+        return (
+          <p className={styles.text}>
+            <p className={styles.category}>
+              <span className={styles.label}>Category: </span>
+              <span>{cat}</span>
+            </p>
+            <p className={styles.subcategory}>
+              <span className={styles.label}>Subcategory: </span>
+              <span>{subcat}</span>
+            </p>
+          </p>
+        );
+      else {
+        return (
+          <p className={styles.text}>
+            <p className={styles.category}>
+              <span className={styles.label}>Category: </span>
+              <span>{cat}</span>
+            </p>
+            <p className={styles.subcategory}>
+              <span className={styles.label}>Subcategory: </span>
+              <span>{subcat}</span>
+            </p>
+            <p className={styles.targets}>
+              <p className={styles.label}>Targets: </p>
+              <p>{formatSubtargets(p.subtarget.join(" ∙ "))}</p>
+            </p>
+          </p>
+        );
+      }
+    }
+  }
 }
