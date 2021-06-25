@@ -377,11 +377,14 @@ const Data: FC<DataArgs> = ({
     }[docType];
 
     // get current URL params
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams: URLSearchParams = new URLSearchParams(
+      window.location.search
+    );
 
     // update which doc type is being viewed
     urlParams.set("type", docType);
-    urlParams.set("placeType", placeType);
+    if (docType === "policy") urlParams.set("placeType", placeType);
+    else urlParams.delete("placeType");
 
     const newState: Record<string, any> = {};
     // TODO confirm use of Object.entries here is valid
@@ -465,7 +468,8 @@ const Data: FC<DataArgs> = ({
         newState[filtersUrlParamKey] = JSON.stringify(newFiltersForState);
       }
       const newUrlParams = new URLSearchParams();
-      newUrlParams.set("placeType", placeType);
+      if (docType === "policy") newUrlParams.set("placeType", placeType);
+      else newUrlParams.delete("placeType");
       for (const [k, v] of Object.entries(newState)) {
         if (v !== null && v !== "") {
           newUrlParams.append(k, v);
@@ -585,21 +589,23 @@ const Data: FC<DataArgs> = ({
                       className={undefined}
                       children={undefined}
                     />
-                    <RadioToggle
-                      label={"View by"}
-                      choices={[
-                        { name: "Affected location", value: "affected" },
-                        { name: "Jurisdiction", value: "jurisdiction" },
-                      ]}
-                      curVal={placeType}
-                      callback={setPlaceType}
-                      horizontal={true}
-                      selectpicker={false}
-                      setInfoTooltipContent={setInfoTooltipContent}
-                      onClick={undefined}
-                      className={undefined}
-                      children={undefined}
-                    />
+                    {docType === "policy" && (
+                      <RadioToggle
+                        label={"View by"}
+                        choices={[
+                          { name: "Affected location", value: "affected" },
+                          { name: "Jurisdiction", value: "jurisdiction" },
+                        ]}
+                        curVal={placeType}
+                        callback={setPlaceType}
+                        horizontal={true}
+                        selectpicker={false}
+                        setInfoTooltipContent={setInfoTooltipContent}
+                        onClick={undefined}
+                        className={undefined}
+                        children={undefined}
+                      />
+                    )}
                     <Search
                       searchText={searchText}
                       onChangeFunc={setSearchText}
