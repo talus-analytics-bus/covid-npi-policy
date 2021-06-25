@@ -30,6 +30,8 @@ export type PolicyRecord = {
   place?: PlaceRecord[];
   auth_entity?: AuthEntityRecord[];
   primary_ph_measure?: string;
+  ph_measure_details?: string;
+  subtarget?: string[];
   authority_name?: string;
   name_and_desc?: string;
   date_start_effective?: string | null;

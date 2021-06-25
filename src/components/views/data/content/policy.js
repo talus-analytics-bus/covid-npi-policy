@@ -15,7 +15,7 @@ import { Policy } from "api/Queries";
 // assets and styles
 // use same styles as main Data page
 import styles from "../data.module.scss";
-import { getLinkedPolicyTitle } from "./helpers";
+import { getLinkedPolicyTitle, getPolicyCatSubcatTarg } from "./helpers";
 
 // constants
 const unspecified = (
@@ -162,11 +162,12 @@ export const policyInfo = {
       },
       {
         dataField: "primary_ph_measure",
-        header: "Policy category",
+        header: "Policy category, subcategory, and targets",
         sort: true,
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
+        formatter: (_cell, row) => getPolicyCatSubcatTarg(row),
       },
       {
         dataField: "date_start_effective",
@@ -194,9 +195,9 @@ export const policyInfo = {
       {
         dataField: "file",
         header: "PDF / Link",
-        formatter: (row, cell) => {
-          if (cell.file === undefined) return "";
-          const icons = cell.file.map((d, i) => {
+        formatter: (_cell, row) => {
+          if (row.file === undefined) return "";
+          const icons = row.file.map((d, i) => {
             const isLocalDownload = true;
             const link = undefined;
             const hasLink = link && link !== "";
@@ -229,7 +230,7 @@ export const policyInfo = {
               );
             } else return unspecified;
           });
-          if (cell.file && cell.file.length > 0) {
+          if (row.file && row.file.length > 0) {
             return <div className={styles.linkIcons}>{icons}</div>;
           } else {
             return unspecified;
@@ -288,6 +289,8 @@ export const policyInfo = {
         "place",
         "auth_entity",
         "primary_ph_measure",
+        "ph_measure_details",
+        "subtarget",
         "authority_name",
         "policy_name",
         "desc",

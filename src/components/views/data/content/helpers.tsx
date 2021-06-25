@@ -4,6 +4,7 @@ import {
   PolicyRecord,
 } from "components/misc/dataTypes";
 import { AuthEntityRecord } from "components/misc/dataTypes";
+import { getAndListString, getInitCap } from "components/misc/UtilsTyped";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
@@ -84,4 +85,52 @@ export function safeGetFieldValsAsStrings(
       return (d[field] || "").toString();
     })
     .sort();
+}
+
+/**
+ * Returns a list of categories, subcategories, and targets of a policy from
+ * its record (API response datum).
+ * @param p The policy record
+ * @returns {string} List of categories, subcategories, and targets of
+ * the policy.
+ */
+export function getPolicyCatSubcatTarg(p: PolicyRecord): string | null {
+  if (p.primary_ph_measure === undefined || p.primary_ph_measure === null)
+    return null;
+  else {
+    const cat: string = p.primary_ph_measure;
+    if (p.ph_measure_details === undefined || p.ph_measure_details === null)
+      return cat;
+    else {
+      const subcat: string = p.ph_measure_details;
+      if (
+        p.subtarget === undefined ||
+        p.subtarget === null ||
+        p.subtarget.length === 0
+      )
+        return `${cat} >> ${subcat}`;
+      else {
+        const subtargets: string = formatSubtargets(
+          getAndListString(p.subtarget)
+        );
+        return `${cat} >> ${subcat} >> ${subtargets}`;
+      }
+    }
+  }
+}
+
+/**
+ * Returns a formatted string of subtargets for presentation in the
+ * user interface.
+ * @param s The string of subtargets
+ * @returns A formatted string of subtargets with spaces padding frontslashes
+ * and lowercase
+ */
+function formatSubtargets(s: string): string {
+  return getInitCap(
+    s
+      .replaceAll(" / ", "/")
+      .replaceAll("/", " / ")
+      .toLowerCase()
+  );
 }

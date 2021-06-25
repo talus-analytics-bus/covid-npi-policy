@@ -12,8 +12,11 @@ import {
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import styles from "./AmpMapLegendPanel.module.scss";
-import { getAndListString, getInitCap } from "components/misc/Util";
-import { isEmpty } from "components/misc/UtilsTyped";
+import {
+  isEmpty,
+  getAndListString,
+  getInitCap,
+} from "components/misc/UtilsTyped";
 import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
 import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/helpers";
@@ -167,7 +170,7 @@ const getFillLegendName: Function = ({
         filters["ph_measure_details"] || [],
         subcatOptions,
         "policies",
-        true  // for legend
+        true // for legend
       ).trim();
       return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
     }
