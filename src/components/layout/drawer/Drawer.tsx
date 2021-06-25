@@ -36,8 +36,7 @@ const Drawer: FC<DrawerProps> = ({
         onClick={() => !noCollapse && setOpen(!open)}
       >
         {title}
-
-        {!noCollapse && <Caret up={!open} style={{ fontSize: "2rem" }} />}
+        {!noCollapse && <Caret up={!open} style={{ fontSize: "1.25rem" }} />}
         {label}
       </div>
       {

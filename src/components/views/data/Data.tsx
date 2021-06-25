@@ -563,11 +563,11 @@ const Data: FC<DataArgs> = ({
           </ul>
         </div>
       </div>
-      {!false && (
+      {
         <>
           <Drawer
             {...{
-              title: <h2>Select data</h2>,
+              title: <span>Select data</span>,
               noCollapse: false,
               headerBackgroundColor: colors.mapGreen5,
               content: (
@@ -707,7 +707,7 @@ const Data: FC<DataArgs> = ({
           )}
           {!tableIsReady && <div style={{ height: "900px" }} />}
         </>
-      )}
+      }
     </div>
   );
 };
