@@ -111,7 +111,11 @@ export const Search: FC<SearchProps> = ({
       />
       <div className={styles.icons}>
         <XCloseBtn
-          style={{ visibility: searchText === "" ? "hidden" : "visible" }}
+          style={{
+            visibility: ["", null, undefined].includes(searchText)
+              ? "hidden"
+              : "visible",
+          }}
           onClick={() => clearSearch()}
         />
         <i className={"material-icons"}>search</i>

@@ -9,13 +9,12 @@
 
   input {
     border: none;
+    // prevent outline on focus
+    outline: none;
     &::placeholder {
       color: $idea-gray-2;
       font-size: 1rem;
     }
-
-    // prevent outline on focus
-    outline: none;
   }
 
   // close and search icons
