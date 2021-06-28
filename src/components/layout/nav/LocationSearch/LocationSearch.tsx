@@ -31,13 +31,13 @@ const LocationSearch: FC = (): ReactElement => {
       params.append("fields", "loc");
       params.append("fields", "iso3");
       params.append("include_policy_count", "true");
-      params.append("level", "country");
-      // params.append("level", "Tribal area");
+      params.append("levels", "country");
+      params.append("levels", "Tribal nation");
 
       const countries = await axios(`${API_URL}/get/place`, { params });
 
       params.append("fields", "level");
-      params.set("level", "state / province");
+      params.set("levels", "state / province");
       params.append("iso3", "usa");
 
       const states = await axios(`${API_URL}/get/place`, { params });
