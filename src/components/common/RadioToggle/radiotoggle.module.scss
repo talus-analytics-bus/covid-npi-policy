@@ -19,6 +19,14 @@
     grid-template-columns: auto auto;
     grid-gap: 0 10px;
   }
+
+  // tooltip text displayed beneath form rather than as hoverable icon
+  .footnote {
+    font-size: 0.875rem;
+    font-style: italic;
+    line-height: 1.2rem;
+  }
+
   span.hasChildren + div {
     // indent children
     form {

@@ -596,8 +596,18 @@ const Data: FC<DataArgs> = ({
                       <RadioToggle
                         label={<ControlLabel>View by</ControlLabel>}
                         choices={[
-                          { name: "Affected location", value: "affected" },
-                          { name: "Jurisdiction", value: "jurisdiction" },
+                          {
+                            name: "Affected location",
+                            value: "affected",
+                            tooltip:
+                              "View all policies affecting the selected location",
+                          },
+                          {
+                            name: "Jurisdiction",
+                            value: "jurisdiction",
+                            tooltip:
+                              "View all policies created by the selected jurisdiction",
+                          },
                         ]}
                         horizontal={true}
                         curVal={placeType}
@@ -606,6 +616,7 @@ const Data: FC<DataArgs> = ({
                         selectpicker={false}
                         setInfoTooltipContent={setInfoTooltipContent}
                         theme={"slim"}
+                        tooltipMode={"footnote"}
                         onClick={undefined}
                         className={undefined}
                         children={undefined}
