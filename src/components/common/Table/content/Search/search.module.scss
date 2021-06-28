@@ -17,10 +17,17 @@
     // prevent outline on focus
     outline: none;
   }
-  // icon for magnifying glass
-  i {
-    color: $idea-black;
-    font-size: 1.33rem;
-    width: 18px;
+
+  // close and search icons
+  .icons {
+    display: flex;
+    align-items: center;
+
+    // icon for magnifying glass
+    i {
+      color: $idea-black;
+      font-size: 1.33rem;
+      width: 18px;
+    }
   }
 }

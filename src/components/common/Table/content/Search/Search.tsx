@@ -10,7 +10,12 @@ import React, {
   KeyboardEventHandler,
 } from "react";
 import { KeyboardEvent } from "react";
+
+// local helper functions
 import { getHandleKeyPress } from "./helpers";
+
+// local components
+import { XCloseBtn } from "components/common";
 
 // assets and styles
 import styles from "./search.module.scss";
@@ -48,6 +53,16 @@ export const Search: FC<SearchProps> = ({
   const [curTimeout, setCurTimeout] = useState<NodeJS.Timeout | null>(null);
   let searchRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * Clears the search text and triggers any needed callbacks.
+   */
+  const clearSearch: Function = useCallback((): void => {
+    if (searchRef.current !== null) {
+      searchRef.current.value = "";
+      onChangeFunc("");
+    }
+  }, [onChangeFunc]);
+
   // when search text changes, update search text shown in search bar input
   useEffect(() => {
     if (searchRef.current === null) return;
@@ -57,6 +72,10 @@ export const Search: FC<SearchProps> = ({
       } else searchRef.current.value = searchText;
     }
   }, [searchText]);
+
+  /**
+   * Update search text with a delay and trigger any needed callbacks.
+   */
   const onChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
       if (curTimeout !== null) clearTimeout(curTimeout);
@@ -76,12 +95,12 @@ export const Search: FC<SearchProps> = ({
         e.preventDefault();
         return;
       } else if (e.key === "Escape") {
-        searchRef.current.value = "";
-        onChangeFunc("");
+        clearSearch();
       }
     }
   );
 
+  // JSX // ---------------------------------------------------------------- //
   return (
     <div className={styles.search}>
       <input
@@ -90,7 +109,13 @@ export const Search: FC<SearchProps> = ({
         ref={searchRef}
         {...{ onKeyDown, onChange }}
       />
-      <i className={"material-icons"}>search</i>
+      <div className={styles.icons}>
+        <XCloseBtn
+          style={{ visibility: searchText === "" ? "hidden" : "visible" }}
+          onClick={() => clearSearch()}
+        />
+        <i className={"material-icons"}>search</i>
+      </div>
     </div>
   );
 };

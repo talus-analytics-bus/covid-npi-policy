@@ -44,26 +44,6 @@
             .value {
                 font-weight: 700;
             }
-            .close {
-                margin-left: 1em;
-                > button {
-                    display: flex;
-
-                    cursor: pointer;
-
-                    border: none;
-
-                    background: none;
-                    background-color: none;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: contain;
-
-                    $size: 0.75rem;
-                    height: $size;
-                    width: $size;
-                }
-            }
         }
     }
 }

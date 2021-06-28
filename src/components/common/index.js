@@ -19,6 +19,7 @@ import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 import Axes from "./D3React/Axes/Axes";
 import Sparkline from "./Sparkline/Sparkline";
 import Caret from "./Caret/Caret";
+import XCloseBtn from "./XCloseBtn/XCloseBtn";
 export {
   Selectpicker,
   CheckboxSet,
@@ -41,4 +42,5 @@ export {
   Axes,
   Sparkline,
   Caret,
+  XCloseBtn,
 };

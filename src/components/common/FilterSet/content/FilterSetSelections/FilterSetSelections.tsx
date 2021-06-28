@@ -3,7 +3,6 @@ import React, { ReactElement, FC, SetStateAction } from "react";
 
 // styles and assets
 import styles from "./FilterSetSelections.module.scss";
-import crossSvg from "assets/icons/cross.svg";
 import funnelSvg from "assets/icons/funnel.svg";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 
@@ -12,9 +11,9 @@ import { comma } from "components/misc/Util";
 import { getInputLabel } from "components/common/Filter/Filter";
 
 // local components
-import { ShowMore } from "components/common";
+import { ShowMore, XCloseBtn } from "components/common";
 import { Dispatch } from "react";
-import { ClearFiltersBtn } from "./content/ClearFiltersBtn";
+import { ClearFiltersBtn } from "./content/ClearFiltersBtn/ClearFiltersBtn";
 
 /**
  * Properties for the `FilterSetSelections` function component.
@@ -160,8 +159,8 @@ function getBadge({
           {<ShowMore text={value} charLimit={60} />}
         </span>
       </span>
-      <div
-        className={styles.close}
+      <XCloseBtn
+        style={{ marginLeft: "1em" }}
         onClick={() => {
           if (field !== "Text") {
             const newFilters = { ...filters };
@@ -180,12 +179,7 @@ function getBadge({
             setSearchText(null);
           }
         }}
-      >
-        <button
-          style={{ backgroundImage: `url(${crossSvg})` }}
-          type="button"
-        ></button>
-      </div>
+      />
     </div>
   );
 }
