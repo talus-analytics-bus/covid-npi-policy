@@ -1,24 +1,23 @@
 @import "src/assets/styles/vars.module.scss";
 .selectedFilters {
     padding: 10px;
-    padding-bottom: 0;
+    padding-bottom: 5px;
     background-color: white;
-    border: 1px solid #999;
+    border-radius: 5px;
     margin-top: 1.75rem;
     @include spaceItemsVert(20px);
     .header {
         display: flex;
         align-items: center;
         .filterIcon {
-            @include btn-primary();
             margin-right: 10px;
             padding: 3px;
             pointer-events: none;
             div {
                 background-repeat: no-repeat;
                 background-position: center;
-                height: 15px;
-                width: 16px;
+                height: 18px;
+                width: 18px;
                 background-size: contain;
             }
         }
@@ -26,7 +25,6 @@
     .badges {
         display: flex;
         flex-flow: wrap;
-        margin-bottom: 10px;
 
         .badge {
             font-family: "Open Sans", sans-serif;
