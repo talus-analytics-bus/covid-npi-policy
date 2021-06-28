@@ -1,20 +1,23 @@
+@import "src/assets/styles/vars.module.scss";
 .search {
+  // format search bar similar to filter dropdowns
   margin-left: auto;
   position: relative;
+  display: flex;
+  align-items: center;
+  @include dropdownAndSearchStyling();
+
   input {
-    padding: 5px 30px 5px 10px;
     border: none;
     &::placeholder {
-      font-style: italic;
+      color: $idea-gray-2;
+      font-size: 1rem;
     }
   }
-
-  // magnifying glass
+  // icon for magnifying glass
   i {
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    color: #4682b4;
-    font-weight: bold;
+    color: $idea-black;
+    font-size: 1.33rem;
+    width: 18px;
   }
 }

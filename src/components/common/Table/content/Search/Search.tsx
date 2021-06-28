@@ -63,7 +63,7 @@ export const Search: FC<SearchProps> = ({
       <input
         onChange={onChange}
         type="text"
-        placeholder="search for..."
+        placeholder="Search"
         ref={searchRef}
       />
       <i className={"material-icons"}>search</i>

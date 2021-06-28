@@ -113,6 +113,14 @@ $map-green-6: #c6dfda;
   }
 }
 
+@mixin dropdownAndSearchStyling() {
+  background-color: white;
+
+  padding: 5px 10px;
+  border: 1px solid $idea-black;
+  border-radius: 5px;
+}
+
 @mixin selectStyling() {
   // for styling select lists
   // custom caret appearance with gradient included

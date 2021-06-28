@@ -26,12 +26,7 @@
     .filterButton {
       display: flex;
 
-      padding: 5px 10px;
-      border: 1px solid $idea-black;
-      border-radius: 5px;
-
-      $background-color: white;
-      background-color: $background-color;
+      @include dropdownAndSearchStyling();
 
       cursor: pointer;
 
@@ -56,12 +51,12 @@
       }
       &:hover,
       &.shown {
-        background-color: darken($background-color, 10%);
+        background-color: darken(white, 10%);
         transition: background-color 0.125s;
       }
 
       &:active {
-        background-color: darken($background-color, 20%);
+        background-color: darken(white, 20%);
         @include boxShadow();
       }
       &.disabled {
