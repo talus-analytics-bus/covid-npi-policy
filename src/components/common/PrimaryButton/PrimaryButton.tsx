@@ -1,5 +1,5 @@
 // 3rd party packages
-import React from "react";
+import React, { FC, ReactElement } from "react";
 import classNames from "classnames";
 
 // third party packages
@@ -8,11 +8,26 @@ import { Link } from "react-router-dom";
 // assets and styles
 import styles from "./primarybutton.module.scss";
 
+interface PrimaryButtonProps {
+  label: string | ReactElement;
+  iconName: string | null;
+  onClick?(...args: any[]): void;
+  url?: string | null;
+  urlIsExternal?: boolean;
+  isSecondary?: boolean;
+  isSmall?: boolean;
+  isLink?: boolean;
+  isIcon?: boolean;
+  isRight?: boolean;
+  disabled?: boolean;
+  customClassNames?: string[];
+}
+
 /**
- * @method PrimaryButton
  * Standard primary button for frontends.
+ * @method PrimaryButton
  */
-export const PrimaryButton = ({
+export const PrimaryButton: FC<PrimaryButtonProps> = ({
   // button text
   label = "Click here",
 

@@ -45,7 +45,7 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
   if (render)
     return (
       <PrimaryButton
-        iconName={!buttonLoading ? "get_app" : undefined}
+        iconName={!buttonLoading ? "get_app" : null}
         label={
           <div>
             {!buttonLoading && render && message}
