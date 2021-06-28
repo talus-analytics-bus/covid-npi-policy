@@ -24,15 +24,18 @@
   }
   .input {
     .filterButton {
+      display: flex;
+
+      padding: 5px 10px;
+      border: 1px solid $idea-black;
+      border-radius: 5px;
+
       $background-color: white;
       background-color: $background-color;
-      padding: 5px 20px;
+
       cursor: pointer;
-      line-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-width: 250px;
+
+      // states
       span {
         white-space: nowrap;
       }
@@ -42,11 +45,13 @@
       span.selections {
         font-style: italic;
       }
+
+      // caret icon
       i,
       img {
         vertical-align: middle;
-        margin-left: 20px;
-        width: 20px;
+        margin-left: auto;
+        width: 15px;
         height: 24px;
       }
       &:hover,
@@ -89,7 +94,7 @@
 
       .filterMenuWrapper {
         &.disabled * {
-          background-color: red !important;
+          // background-color: red !important;
         }
       }
 

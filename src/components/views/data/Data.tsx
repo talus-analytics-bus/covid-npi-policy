@@ -629,9 +629,15 @@ const Data: FC<DataArgs> = ({
                   </section>
                   {tableIsReady && (
                     <section className={styles.filterSet}>
-                      <ControlLabel>Location and policy details</ControlLabel>
+                      <ControlLabel>
+                        {placeType === "affected"
+                          ? "Affected location"
+                          : "Jurisdiction"}{" "}
+                        and policy details
+                      </ControlLabel>
                       <FilterSet
                         alignBottom
+                        vertical
                         onClearAll={() => {
                           setSearchText(null);
                           setFilters({});

@@ -5,9 +5,13 @@
   display: flex;
   flex-flow: wrap;
   &.vertical {
+    @include spaceItemsHoriz(2.5rem);
+
     > .filterGroup {
-      @include spaceItemsVert(10px);
       flex-flow: column;
+      &.dropdowns {
+        @include spaceItemsVert(1rem);
+      }
     }
   }
   &:not(.vertical) {
@@ -15,18 +19,18 @@
     .filterGroup {
       @include spaceItemsHoriz(50px);
     }
+    &.dropdowns {
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
+    }
   }
   .filterGroup {
     display: flex;
 
     &.dropdowns {
-      &:not(:first-child) {
-        margin-top: 20px;
-      }
-
       > div {
         min-width: 250px;
-        margin: 0 !important;
       }
     }
   }
@@ -38,13 +42,18 @@
 @media #{$small-laptop} {
   .filterSet {
     margin: 0;
+    > :not(:last-child),
+    &.vertical > :not(:last-child) {
+      margin-right: 0;
+    }
 
     @include borderItemsVert(20px);
 
     .filterGroup {
       width: 100%;
       flex-flow: column;
-      margin: 0;
+
+      margin-bottom: 20px;
       @include spaceItemsVert(20px);
       > div {
         width: 100%;

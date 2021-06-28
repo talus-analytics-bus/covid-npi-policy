@@ -221,7 +221,7 @@ $map-green-6: #c6dfda;
 }
 
 @mixin disabled() {
-  color: gray;
+  color: $idea-gray-2;
   pointer-events: none;
 }
 

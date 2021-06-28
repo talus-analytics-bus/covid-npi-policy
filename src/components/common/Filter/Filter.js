@@ -241,12 +241,9 @@ const Filter = ({
           [styles.alignBottom]: props.alignBottom === true,
         })}
       >
-        <div role={"label"} className={styles.label}>
-          {label}
-        </div>
+        <div className={styles.label}>{label}</div>
         <div className={styles.input}>
           <div
-            role="filterButton"
             className={classNames(styles.filterButton, className, {
               [styles.shown]: show,
               [styles.selected]: nCur > 0,
@@ -260,7 +257,7 @@ const Filter = ({
               setShow(!show);
             }}
           >
-            <span>
+            <div>
               <span className={styles.field}>
                 {getInputLabel({
                   dateRange,
@@ -280,7 +277,7 @@ const Filter = ({
                   </span>
                 )}
               </span>
-            </span>
+            </div>
             {dateRange && <img src={calendarSvg} />}
             {!dateRange && <i className={"material-icons"}>arrow_drop_down</i>}
           </div>
