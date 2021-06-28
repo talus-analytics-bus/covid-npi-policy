@@ -110,6 +110,7 @@
   // content top section
   .contentTop {
     display: flex;
+    align-items: flex-start;
     // TODO elegantly
     > :not(:last-child) {
       margin-right: 5.6rem;
