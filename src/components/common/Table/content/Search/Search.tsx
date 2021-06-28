@@ -7,7 +7,10 @@ import React, {
   ChangeEventHandler,
   FC,
   ReactElement,
+  KeyboardEventHandler,
 } from "react";
+import { KeyboardEvent } from "react";
+import { getHandleKeyPress } from "./helpers";
 
 // assets and styles
 import styles from "./search.module.scss";
@@ -25,6 +28,12 @@ interface SearchProps {
    * The search text.
    */
   searchText: string | null;
+
+  /**
+   * True if the page is currently loading and interactions with the search
+   * bar should be paused.
+   */
+  loading: boolean;
 }
 
 /**
@@ -34,6 +43,7 @@ interface SearchProps {
 export const Search: FC<SearchProps> = ({
   onChangeFunc,
   searchText,
+  loading,
 }): ReactElement => {
   const [curTimeout, setCurTimeout] = useState<NodeJS.Timeout | null>(null);
   let searchRef = useRef<HTMLInputElement>(null);
@@ -58,13 +68,27 @@ export const Search: FC<SearchProps> = ({
     },
     [curTimeout, onChangeFunc]
   );
+
+  // define onKeyPress function programatically
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = getHandleKeyPress(
+    (e: KeyboardEvent) => {
+      if (loading || searchRef.current === null) {
+        e.preventDefault();
+        return;
+      } else if (e.key === "Escape") {
+        searchRef.current.value = "";
+        onChangeFunc("");
+      }
+    }
+  );
+
   return (
     <div className={styles.search}>
       <input
-        onChange={onChange}
         type="text"
         placeholder="Search"
         ref={searchRef}
+        {...{ onKeyDown, onChange }}
       />
       <i className={"material-icons"}>search</i>
     </div>

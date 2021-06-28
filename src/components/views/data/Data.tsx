@@ -628,6 +628,7 @@ const Data: FC<DataArgs> = ({
                     <Search
                       searchText={searchText}
                       onChangeFunc={setSearchText}
+                      {...{ loading }}
                     />
                   </section>
                   {tableIsReady && (
