@@ -12,6 +12,8 @@ import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
 import { Policy } from "../../../../misc/Queries";
 
+const msPerDay = 86400000;
+
 const rollingAverage = (series, windowSize) => {
   const padded = [...Array(windowSize).fill(0), ...series];
   return series.map((day, index) => {
@@ -58,7 +60,7 @@ const earliestDate = (a, b) => {
 const PolicyEnvironmentPlot = () => {
   const policyContextConsumer = React.useContext(policyContext);
 
-  const { caseload, status } = policyContextConsumer;
+  const { caseload, status, policySummaryObject } = policyContextConsumer;
 
   const caseloadMax = React.useMemo(
     () => caseload && Math.max(...caseload.map(day => day.value)),
@@ -66,49 +68,6 @@ const PolicyEnvironmentPlot = () => {
   );
 
   const { iso3, state } = useParams();
-
-  const [policiesByDate, setPoliciesByDate] = useState();
-
-  useEffect(() => {
-    const getPolicies = async () => {
-      const policyResponse = await Policy({
-        method: "post",
-        filters: {
-          iso3: [iso3],
-          ...(state !== "national" && { area1: [state] }),
-          ...(state !== "national" && { level: ["State / Province"] }),
-        },
-        ordering: [["date_start_effective", "asc"]],
-        fields: ["id", "primary_ph_measure", "date_start_effective"],
-      });
-
-      const byDate = {};
-      policyResponse.data.forEach(policy => {
-        if (!byDate[policy.date_start_effective])
-          byDate[policy.date_start_effective] = {
-            [policy.primary_ph_measure]: [policy.id],
-          };
-        else if (
-          !byDate[policy.date_start_effective][policy.primary_ph_measure]
-        )
-          byDate[policy.date_start_effective][policy.primary_ph_measure] = [
-            policy.id,
-          ];
-        else
-          byDate[policy.date_start_effective] = {
-            ...byDate[policy.date_start_effective],
-            [policy.primary_ph_measure]: [
-              ...byDate[policy.date_start_effective][policy.primary_ph_measure],
-              policy.id,
-            ],
-          };
-      });
-
-      setPoliciesByDate(byDate);
-    };
-
-    getPolicies();
-  }, [iso3, state]);
 
   const [avgCaseLoadByDate, setAvgCaseloadByDate] = useState();
 
@@ -201,10 +160,13 @@ const PolicyEnvironmentPlot = () => {
   const scale = React.useMemo(
     () =>
       caseloadMax &&
-      policiesByDate && {
+      policySummaryObject && {
         x: scaleTime()
           .domain([
-            earliestDate(caseload[0].date, Object.keys(policiesByDate)[0]),
+            earliestDate(
+              caseload[0].date,
+              Object.keys(policySummaryObject)[0] * msPerDay
+            ),
             caseload.slice(-1)[0].date,
           ])
           .range([dim.xAxis.start.x, dim.xAxis.end.x]),
@@ -212,7 +174,7 @@ const PolicyEnvironmentPlot = () => {
           .domain([0, caseloadMax])
           .range([dim.yAxis.end.y, dim.yAxis.start.y]),
       },
-    [caseload, caseloadMax, policiesByDate, dim.yAxis, dim.xAxis]
+    [caseload, caseloadMax, policySummaryObject, dim.yAxis, dim.xAxis]
   );
 
   const svgElement = React.useRef();
@@ -260,18 +222,21 @@ const PolicyEnvironmentPlot = () => {
 
   const maxDay = React.useMemo(
     () =>
-      policiesByDate &&
-      Object.entries(policiesByDate).reduce(
-        (acc, [date, categories]) => {
-          const count = Object.values(categories).reduce(
-            (acc, cat) => cat.length + acc,
-            0
-          );
+      policySummaryObject &&
+      Object.entries(policySummaryObject).reduce(
+        (acc, [date, policies]) => {
+          console.log(policies.enacted);
+          const count =
+            policies.enacted &&
+            Object.values(policies.enacted).reduce(
+              (acc, cat) => [...cat].length + acc,
+              0
+            );
           return count > acc.count ? { date, count } : acc;
         },
-        { date: "", count: 0 }
+        { date: 0, count: 0 }
       ),
-    [policiesByDate]
+    [policySummaryObject]
   );
 
   const circlePadding = 2;
@@ -279,6 +244,8 @@ const PolicyEnvironmentPlot = () => {
     maxDay && dim.yAxis.height / maxDay.count < 6.5
       ? dim.yAxis.height / maxDay.count
       : 6.5;
+
+  // console.log(policiesByDate);
 
   return (
     <figure>
@@ -350,34 +317,37 @@ const PolicyEnvironmentPlot = () => {
           {/* </g> */}
 
           {scale &&
-            policiesByDate &&
-            Object.entries(policiesByDate)
-              .map(([date, categories]) => {
-                const rowDate = new Date(date);
+            policySummaryObject &&
+            Object.entries(policySummaryObject)
+              .map(([date, policies]) => {
+                const rowDate = new Date(date * msPerDay);
                 const xPos = scale.x(rowDate);
                 let count = 0;
 
-                return Object.values(categories).map(policies =>
-                  policies.map(policy => {
-                    count = count + 1;
-                    return (
-                      <circle
-                        key={count}
-                        style={{
-                          fill: "rgba(64, 147, 132, .5)",
-                          // stroke: "white",
-                          // strokeWidth: ".5",
-                        }}
-                        cx={xPos}
-                        cy={
-                          dim.yAxis.end.y -
-                          (count - 1) * vSpacing -
-                          circlePadding
-                        }
-                        r={3}
-                      />
-                    );
-                  })
+                return (
+                  policies.enacted &&
+                  Object.values(policies.enacted).map(category =>
+                    [...category].map(_ => {
+                      count = count + 1;
+                      return (
+                        <circle
+                          key={count}
+                          style={{
+                            fill: "rgba(64, 147, 132, .5)",
+                            // stroke: "white",
+                            // strokeWidth: ".5",
+                          }}
+                          cx={xPos}
+                          cy={
+                            dim.yAxis.end.y -
+                            (count - 1) * vSpacing -
+                            circlePadding
+                          }
+                          r={3}
+                        />
+                      );
+                    })
+                  )
                 );
               })
               .flat()}
@@ -386,7 +356,7 @@ const PolicyEnvironmentPlot = () => {
               {...{
                 dim,
                 svgElement,
-                policiesByDate,
+                policySummaryObject,
                 scale,
                 vSpacing,
                 circlePadding,

@@ -85,7 +85,7 @@ export const loadPolicyCategories = async ({
 
     if (summarySetter) {
       // buildSummaryObject(policyResponse.data);
-      buildSummaryObjectFaster(policyResponse.data);
+      // buildSummaryObjectFaster(policyResponse.data);
       // summarySetter(buildObject({}, policyResponse.data, true));
       summarySetter(buildSummaryObjectFaster(policyResponse.data));
       setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));

@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Tooltip from "./Tooltip/Tooltip";
 
+const msPerDay = 86400000;
+
 const formatDate = date => {
   if (!date) return undefined;
   return new Date(date).toLocaleString("en-de", {
@@ -13,7 +15,7 @@ const formatDate = date => {
 const Slider = ({
   dim,
   svgElement,
-  policiesByDate,
+  policySummaryObject,
   scale,
   vSpacing,
   circlePadding,
@@ -94,14 +96,14 @@ const Slider = ({
   const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
 
   const highlightPolicies =
-    policiesByDate &&
+    policySummaryObject &&
     sliderDate &&
-    policiesByDate[sliderDate.toISOString().substring(0, 10)];
+    policySummaryObject[Math.floor(sliderDate.getTime() / msPerDay)];
 
   const cursorPolicies =
-    policiesByDate &&
+    policySummaryObject &&
     cursorDate &&
-    policiesByDate[cursorDate.toISOString().substring(0, 10)];
+    policySummaryObject[Math.floor(cursorDate.getTime() / msPerDay)];
 
   const highlightCaseload =
     avgCaseLoadByDate &&
@@ -109,6 +111,8 @@ const Slider = ({
     Math.round(avgCaseLoadByDate[sliderDate.toISOString().substring(0, 10)]);
 
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.3;
+
+  console.log(cursorPolicies);
 
   return (
     <g
@@ -211,8 +215,9 @@ const Slider = ({
       </g>
       {cursorVisible &&
         cursorPolicies &&
-        Object.entries(cursorPolicies)
-          .map(([category, policies]) => policies)
+        cursorPolicies.enacted &&
+        Object.values(cursorPolicies.enacted)
+          .map(category => [...category])
           .flat()
           .map((_, index) => (
             <circle
@@ -229,8 +234,9 @@ const Slider = ({
             />
           ))}
       {highlightPolicies &&
-        Object.entries(highlightPolicies)
-          .map(([category, policies]) => policies)
+        highlightPolicies.enacted &&
+        Object.values(highlightPolicies.enacted)
+          .map(category => [...category])
           .flat()
           .map((_, index) => (
             <circle

@@ -42,6 +42,8 @@ const IntroParagraph = props => {
     locationName,
   } = policyContextConsumer;
 
+  console.log(policySummaryObject[props.introDate]);
+
   const policyCount = Object.values(policySummaryObject).reduce(
     (acc, cur) => ({
       count: cur.count + acc.count,

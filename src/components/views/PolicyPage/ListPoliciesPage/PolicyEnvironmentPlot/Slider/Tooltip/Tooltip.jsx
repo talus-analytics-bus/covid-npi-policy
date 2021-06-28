@@ -28,7 +28,11 @@ const TooltipContent = ({
   highlightCaseload,
 }) => {
   const newPolicyCount =
-    highlightPolicies && Object.values(highlightPolicies).flat().length;
+    highlightPolicies &&
+    highlightPolicies.enacted &&
+    Object.values(highlightPolicies.enacted)
+      .map(category => [...category])
+      .flat().length;
 
   const { setPolicyObject } = React.useContext(policyContext);
 
@@ -68,20 +72,24 @@ const TooltipContent = ({
       </section>
       {highlightPolicies && (
         <section className={styles.policies}>
-          {Object.entries(highlightPolicies).map(([category, policies]) => (
-            <a
-              onClick={e => handleLink(e, category)}
-              key={category}
-              href={`#${category}`}
-              className={styles.policyLink}
-            >
-              <PolicyCategoryIcon
-                category={category}
-                style={{ width: "1.5em", height: "1.5em" }}
-              />
-              {category}: ({policies.length})
-            </a>
-          ))}
+          {highlightPolicies &&
+            highlightPolicies.enacted &&
+            Object.entries(highlightPolicies.enacted).map(
+              ([category, policies]) => (
+                <a
+                  onClick={e => handleLink(e, category)}
+                  key={category}
+                  href={`#${category}`}
+                  className={styles.policyLink}
+                >
+                  <PolicyCategoryIcon
+                    category={category}
+                    style={{ width: "1.5em", height: "1.5em" }}
+                  />
+                  {category}: ({[...policies].length})
+                </a>
+              )
+            )}
         </section>
       )}
     </div>
