@@ -68,7 +68,7 @@ export const FilterSetSelections: FC<FilterSetSelectionsProps> = ({
             </span>
           )}
         </span>
-        <ClearFiltersBtn right onClick={onClearAll} theme={"amp"} />
+        <ClearFiltersBtn right onClick={onClearAll} />
       </div>
 
       <div className={styles.badges}>

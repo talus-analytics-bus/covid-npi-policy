@@ -8,6 +8,10 @@
       text-decoration: none;
     }
   }
+  // float right
+  &.right {
+    margin-left: auto;
+  }
   .button {
     color: white;
     &:not(.link) {
@@ -23,16 +27,6 @@
       position: relative;
       margin-right: 5px;
       left: -3px;
-    }
-
-    // secondary buttons have different and less emphasizing styling
-    &.secondary {
-      background: white;
-      color: $dark-navy-blue-button;
-      border-color: $dark-navy-blue-button;
-      &:hover {
-        background-color: lighten($light-gray, 3%);
-      }
     }
 
     // smaller size

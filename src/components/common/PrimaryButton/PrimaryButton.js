@@ -14,7 +14,7 @@ import styles from "./primarybutton.module.scss";
  */
 export const PrimaryButton = ({
   // button text
-  label = <>Click here</>,
+  label = "Click here",
 
   // if using icon: material icon name
   iconName = null,
@@ -39,6 +39,9 @@ export const PrimaryButton = ({
 
   // if true: button is simply the icon itself with no other styling
   isIcon = false,
+
+  // if true: right-justify button
+  isRight = false,
 
   // if true: disabled class applied
   disabled = false,
@@ -89,7 +92,13 @@ export const PrimaryButton = ({
   });
 
   return (
-    <div className={classNames(styles.wrapper, wrapperClasses)}>{button}</div>
+    <div
+      className={classNames(styles.wrapper, wrapperClasses, {
+        [styles.right]: isRight,
+      })}
+    >
+      {button}
+    </div>
   );
 };
 

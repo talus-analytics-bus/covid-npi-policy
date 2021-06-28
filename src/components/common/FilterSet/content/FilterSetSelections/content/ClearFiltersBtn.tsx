@@ -1,5 +1,6 @@
 // 3rd party packages
 import classNames from "classnames";
+import PrimaryButton from "components/common/PrimaryButton/PrimaryButton";
 import React, { ReactElement, FC } from "react";
 import styles from "./ClearFiltersBtn.module.scss";
 
@@ -10,11 +11,6 @@ interface ClearFiltersBtnProps {
    * True if button should right-justify, false if button should left-justify.
    */
   right?: boolean;
-
-  /**
-   * Theme to use, or undefined if default.
-   */
-  theme?: string;
 }
 /**
  * "Clear filters" button that calls a function to clear filters when clicked.
@@ -24,19 +20,16 @@ interface ClearFiltersBtnProps {
 export const ClearFiltersBtn: FC<ClearFiltersBtnProps> = ({
   onClick,
   right = false,
-  theme,
 }): ReactElement | null => {
   if (onClick === undefined) return null;
   else
     return (
-      <button
+      <PrimaryButton
+        isSecondary
+        isSmall
+        isRight={right}
+        label={"Clear filters"}
         onClick={onClick}
-        className={classNames(styles.clearFiltersBtn, {
-          [styles.right]: right,
-          [styles["theme-" + theme]]: theme !== undefined,
-        })}
-      >
-        Clear filters
-      </button>
+      />
     );
 };
