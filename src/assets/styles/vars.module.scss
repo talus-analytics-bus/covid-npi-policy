@@ -121,7 +121,7 @@ $map-green-6: #c6dfda;
   appearance: none;
   padding: 9px 40px 9px 9px;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 216 216'%3E%3Cpath fill='%23fff' fill-opacity='0' d='M0 0h216v216H0z'/%3E%3Cpath fill='%2358595b' d='M72 92.25h72l-36 40.5z'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom, #ffffff 0%, #e4e4e4 100%);
+    linear-gradient(to bottom, #ffffff 0%, #a86b6b 100%);
   background-repeat: no-repeat;
   background-position: right, 100%;
   border: 1px solid #ccc;
@@ -171,13 +171,17 @@ $map-green-6: #c6dfda;
   -webkit-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
 }
 
-@mixin btn-primary() {
-  border: 2px solid transparent;
-  border-radius: 4px;
+@mixin gradient-primary() {
   background: -moz-linear-gradient(top, #425379 0%, #213561 100%);
   background: -ms-linear-gradient(top, #425379 0%, #213561 100%);
   background: -o-linear-gradient(top, #425379 0%, #213561 100%);
   background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
+}
+
+@mixin btn-primary() {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  @include gradient-primary();
 
   &:hover,
   &:active {
@@ -191,21 +195,18 @@ $map-green-6: #c6dfda;
 }
 
 @mixin btn-secondary() {
-  background: -moz-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  background: -ms-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  background: -o-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  background: -webkit-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  &:hover {
-    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+  @include btn-primary();
+  background: none;
+  border: 2px solid $idea-black;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.5rem;
+  &:hover:not(:active) {
+    background-color: #b7c4db;
   }
   &:active {
-    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    color: white;
+    @include gradient-primary();
   }
 }
 

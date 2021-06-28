@@ -627,47 +627,27 @@ const Data: FC<DataArgs> = ({
                       onChangeFunc={setSearchText}
                     />
                   </section>
-                  {
-                    <>
-                      {tableIsReady && (
-                        <>
-                          <section className={styles.filtersHeader}>
-                            {(Object.keys(filters).length > 0 ||
-                              (searchText !== null && searchText !== "")) && (
-                              <>
-                                &nbsp;
-                                <button
-                                  onClick={() => {
-                                    setSearchText(null);
-                                    setFilters({});
-                                  }}
-                                >
-                                  Clear filters
-                                </button>
-                              </>
-                            )}
-                          </section>
-                          <section className={styles.filterSet}>
-                            <ControlLabel>
-                              Location and policy details
-                            </ControlLabel>
-                            <FilterSet
-                              {...{
-                                filterDefs,
-                                filters,
-                                setFilters,
-                                searchText,
-                                setSearchText,
-                                alignBottom: true,
-                                numInstances,
-                                instanceNouns: nouns,
-                              }}
-                            ></FilterSet>
-                          </section>
-                        </>
-                      )}
-                    </>
-                  }
+                  {tableIsReady && (
+                    <section className={styles.filterSet}>
+                      <ControlLabel>Location and policy details</ControlLabel>
+                      <FilterSet
+                        alignBottom
+                        onClearAll={() => {
+                          setSearchText(null);
+                          setFilters({});
+                        }}
+                        instanceNouns={nouns}
+                        {...{
+                          filterDefs,
+                          filters,
+                          setFilters,
+                          searchText,
+                          setSearchText,
+                          numInstances,
+                        }}
+                      ></FilterSet>
+                    </section>
+                  )}
                 </>
               ),
             }}

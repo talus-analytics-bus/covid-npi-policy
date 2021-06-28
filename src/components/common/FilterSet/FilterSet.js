@@ -28,6 +28,7 @@ const FilterSet = ({
   vertical = false,
   numInstances = null,
   instanceNouns = null,
+  onClearAll,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -97,6 +98,7 @@ const FilterSet = ({
           instanceNouns,
           setFilters,
           setSearchText,
+          onClearAll,
         }}
       />
     );

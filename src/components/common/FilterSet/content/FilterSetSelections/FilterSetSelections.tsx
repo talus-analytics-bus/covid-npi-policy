@@ -14,6 +14,7 @@ import { getInputLabel } from "components/common/Filter/Filter";
 // local components
 import { ShowMore } from "components/common";
 import { Dispatch } from "react";
+import { ClearFiltersBtn } from "./content/ClearFiltersBtn";
 
 /**
  * Properties for the `FilterSetSelections` function component.
@@ -30,6 +31,13 @@ interface FilterSetSelectionsProps {
   } | null;
   setFilters: Dispatch<SetStateAction<Filters>>;
   setSearchText: Dispatch<SetStateAction<string | null>>;
+
+  /**
+   * Function called when "Clear filters" button clicked. If undefined, the
+   * button will never be shown.
+   * @param args Optional arguments for function
+   */
+  onClearAll?(...args: any[]): void;
 }
 export const FilterSetSelections: FC<FilterSetSelectionsProps> = ({
   filters,
@@ -40,6 +48,7 @@ export const FilterSetSelections: FC<FilterSetSelectionsProps> = ({
   instanceNouns,
   setFilters,
   setSearchText,
+  onClearAll,
 }): ReactElement => {
   return (
     <div className={styles.selectedFilters}>
@@ -59,6 +68,7 @@ export const FilterSetSelections: FC<FilterSetSelectionsProps> = ({
             </span>
           )}
         </span>
+        <ClearFiltersBtn right onClick={onClearAll} theme={"amp"} />
       </div>
 
       <div className={styles.badges}>
