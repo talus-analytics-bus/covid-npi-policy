@@ -10,7 +10,7 @@ import styles from "./primarybutton.module.scss";
 
 interface PrimaryButtonProps {
   label: string | ReactElement;
-  iconName: string | null;
+  iconName?: string | null;
   onClick?(...args: any[]): void;
   url?: string | null;
   urlIsExternal?: boolean;
