@@ -13,31 +13,48 @@ import styles from "./Helpers.module.scss";
 
 const DEFAULT_POLICY_TITLE: string = "Policy";
 
+/**
+ * If a policy has any of these titles then replace it with the default
+ */
+const INVALID_POLICY_TITLES: string[] = ["", "Unspecified"];
+
+/**
+ * Returns a version of the policy title that links to the appropriate policy
+ * page, given a policy record.
+ * @param {PolicyRecord} p The policy record
+ * @returns {string | ReactElement} The linked policy title
+ */
 export const getLinkedPolicyTitle: Function = (
   p: PolicyRecord
 ): string | ReactElement => {
   const name = p.policy_name;
   if (name === undefined || name === null) return DEFAULT_POLICY_TITLE;
   else {
-    const nameTrimmed: string = name.trim();
-    const nameForLink: string =
-      nameTrimmed !== "" ? nameTrimmed : DEFAULT_POLICY_TITLE;
+    const titleTrimmed: string = name.trim();
+    const titleForLink: string = !INVALID_POLICY_TITLES.includes(titleTrimmed)
+      ? titleTrimmed
+      : DEFAULT_POLICY_TITLE;
     const id = p.id;
-    if (id === undefined || id === null) return nameForLink;
+    if (id === undefined || id === null) return titleForLink;
     else {
       // get policy URL from place data
       const url: string = getPolicyUrl(p);
       if (url !== null)
         return (
           <Link to={url} title={"Click link to go to policy details page"}>
-            {nameForLink}
+            {titleForLink}
           </Link>
         );
-      else return nameForLink;
+      else return titleForLink;
     }
   }
 };
 
+/**
+ * Returns the URL for the policy page of the given policy record.
+ * @param {PolicyRecord} p The policy record
+ * @returns {string | null} The URL to the policy page
+ */
 export const getPolicyUrl: Function = (p: PolicyRecord): string | null => {
   if (
     p.id === undefined ||
@@ -77,7 +94,18 @@ export const getPolicyUrl: Function = (p: PolicyRecord): string | null => {
   }
 };
 
+/**
+ * Any property on the data record type.
+ */
 type DataRecordField = keyof DataRecord;
+
+/**
+ *
+ * @param {DataRecord[]} data An array of data records
+ * @param {DataRecordField} field Any field on the data record type
+ * @returns {string[]} All values (as strings) assigned to the data field --
+ * not a unique list.
+ */
 export function safeGetFieldValsAsStrings(
   data: DataRecord[],
   field: DataRecordField
@@ -117,6 +145,7 @@ export function getPolicyCatSubcatTarg(
 function formatSubtargets(s: string): string {
   return s.replaceAll(" / ", "/").replaceAll("/", " / ");
 }
+
 /**
  * Returns categories, subcategories, and targets of a policy record as an
  * indented list.
