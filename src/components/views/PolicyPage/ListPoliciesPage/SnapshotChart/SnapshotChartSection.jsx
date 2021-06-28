@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+// import { useLocation } from "react-router-dom";
+
+import { useRecoilState } from "recoil";
 
 import SnapshotChart from "./SnapshotChart";
 
@@ -7,33 +9,46 @@ import styles from "./SnapshotChartSection.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
+// import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
+
 const SnapshotChartSection = () => {
-  const location = useLocation();
-  const [iso3, state] = location.pathname
-    .replace(/\/$/, "")
-    .split("/")
-    .slice(-2);
+  // const location = useLocation();
+  // const [iso3, state] = location.pathname
+  //   .replace(/\/$/, "")
+  //   .split("/")
+  //   .slice(-2);
 
   const { policySummaryObject } = React.useContext(policyContext);
 
-  const policyScope =
-    state !== "national" ? "state and county" : "national and local";
+  // const [introDate, setIntroDate] = useRecoilState(introDateState);
 
-  const policyCount = Object.values(policySummaryObject).reduce(
-    (acc, cur) => ({
-      count: cur.count + acc.count,
-      active: cur.active + acc.active,
-    }),
-    { count: 0, active: 0 }
-  );
+  // useEffect(() => {
+  //   if (policySummaryObject) {
+  //     const dates = Object.keys(policySummaryObject);
+  //     setIntroDate(dates[dates.length - 1]);
+  //   }
+  // }, [policySummaryObject]);
+
+  // const policyScope =
+  //   state !== "national" ? "state and county" : "national and local";
+
+  // const policyCount =
+  //   policySummaryObject[introDate] &&
+  //   Object.values(policySummaryObject[introDate]).reduce(
+  //     (acc, cur) => ({
+  //       count: cur.count + acc.count,
+  //       active: cur.active + acc.active,
+  //     }),
+  //     { count: 0, active: 0 }
+  //   );
 
   return (
     <div className={styles.sectionContainer}>
-      <h2 className={styles.header2}>Policy snapshot</h2>
-      <span className={styles.asOfDate}>As of TODO DATE</span>
-      <div className={styles.chartContainer}>
-        <SnapshotChart {...{ policySummaryObject }} />
-        <div className={styles.legend}>
+      {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
+      {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
+      {/* <div className={styles.chartContainer}> */}
+      <SnapshotChart {...{ policySummaryObject }} />
+      {/* <div className={styles.legend}>
           {policySummaryObject && (
             <>
               <div className={styles.entry}>
@@ -58,8 +73,8 @@ const SnapshotChartSection = () => {
               </div>
             </>
           )}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   );
 };

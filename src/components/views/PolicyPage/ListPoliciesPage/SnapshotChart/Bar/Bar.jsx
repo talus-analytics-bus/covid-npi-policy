@@ -12,18 +12,32 @@ const Bar = ({ category, bar, index, dim }) => {
   return (
     <g style={{ transform: `translateX(${dim.axes.x.scale(index)}px)` }}>
       <path
+        className={styles.barPath}
+        key="activeExpired"
         style={{ fill: "#409384" }}
         d={`M 0,${dim.axes.y.scale(0)}
-         L 0,${dim.axes.y.scale(bar.count + bar.active)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(bar.count + bar.active)}
+         L 0,${dim.axes.y.scale(bar.active + bar.expired || 0)}
+         L ${dim.barWidth}, ${dim.axes.y.scale(bar.active + bar.expired || 0)}
          L ${dim.barWidth}, ${dim.axes.y.scale(0)}
         `}
       />
       <path
+        className={styles.barPath}
+        key="active"
         style={{ fill: "#96C4BB" }}
         d={`M 0,${dim.axes.y.scale(0)}
-         L 0,${dim.axes.y.scale(bar.count)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(bar.count)}
+         L 0,${dim.axes.y.scale(bar.active || 0)}
+         L ${dim.barWidth}, ${dim.axes.y.scale(bar.active || 0)}
+         L ${dim.barWidth}, ${dim.axes.y.scale(0)}
+        `}
+      />
+      <path
+        className={styles.barPath}
+        key="enacted"
+        style={{ fill: "#E55E37" }}
+        d={`M 0,${dim.axes.y.scale(0)}
+         L 0,${dim.axes.y.scale(bar.enacted || 0)}
+         L ${dim.barWidth}, ${dim.axes.y.scale(bar.enacted || 0)}
          L ${dim.barWidth}, ${dim.axes.y.scale(0)}
         `}
       />

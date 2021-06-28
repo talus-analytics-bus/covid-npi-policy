@@ -1,4 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+
+import { atom, useRecoilState } from "recoil";
+
 import Tooltip from "./Tooltip/Tooltip";
 
 const msPerDay = 86400000;
@@ -12,6 +15,11 @@ const formatDate = date => {
   });
 };
 
+export const introDateState = atom({
+  key: "introDate",
+  default: 0,
+});
+
 const Slider = ({
   dim,
   svgElement,
@@ -21,6 +29,8 @@ const Slider = ({
   circlePadding,
   avgCaseLoadByDate,
 }) => {
+  const [introDate, setIntroDate] = useRecoilState(introDateState);
+
   const [sliderX, setSliderX] = useState(0);
   const [dragStartX, setDragStartX] = useState(0);
   const [popupVisible, setPopupVisible] = useState(false);
@@ -52,6 +62,9 @@ const Slider = ({
     ) {
       if (dragStartX !== 0) setSliderX(newPos);
       setCursorX(newPos - dim.xAxis.start.x + dragStartX);
+
+      const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+      setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
     }
   };
 
@@ -111,8 +124,6 @@ const Slider = ({
     Math.round(avgCaseLoadByDate[sliderDate.toISOString().substring(0, 10)]);
 
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.3;
-
-  console.log(cursorPolicies);
 
   return (
     <g

@@ -1,37 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import IntroParagraph from "../IntroParagraph/IntroParagraph";
+// need recoil for rendering straight from the slider
+// to the snapshotChart without re-rendering
+// everything in between.
+import { RecoilRoot } from "recoil";
+
+// import IntroParagraph from "../IntroParagraph/IntroParagraph";
 import PolicyEnvironmentPlot from "../PolicyEnvironmentPlot/PolicyEnvironmentPlot";
 import SnapshotChartSection from "../SnapshotChart/SnapshotChartSection";
 
 import styles from "./IntroSection.module.scss";
 
-import { policyContext } from "../../PolicyRouter/PolicyRouter";
-
-const IntroSection = () => {
-  const { policySummaryObject } = useContext(policyContext);
-
-  const [introDate, setIntroDate] = useState();
-
-  useEffect(() => {
-    if (policySummaryObject) {
-      const dates = Object.keys(policySummaryObject);
-      setIntroDate(dates[dates.length - 1]);
-    }
-  }, [policySummaryObject]);
-
-  console.log(policySummaryObject);
-  return (
-    <section>
+const IntroSection = () => (
+  <section>
+    <RecoilRoot>
       <div className={styles.policyEnvironment}>
         <PolicyEnvironmentPlot />
       </div>
       <div className={styles.barChartAndParagraph}>
         <SnapshotChartSection />
-        {/* <IntroParagraph {...{ introDate }} /> */}
+        {/* <IntroParagraph /> */}
       </div>
-    </section>
-  );
-};
+    </RecoilRoot>
+  </section>
+);
 
 export default IntroSection;

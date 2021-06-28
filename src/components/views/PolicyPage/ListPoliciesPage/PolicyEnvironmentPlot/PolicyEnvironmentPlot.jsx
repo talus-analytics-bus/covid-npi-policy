@@ -225,7 +225,6 @@ const PolicyEnvironmentPlot = () => {
       policySummaryObject &&
       Object.entries(policySummaryObject).reduce(
         (acc, [date, policies]) => {
-          console.log(policies.enacted);
           const count =
             policies.enacted &&
             Object.values(policies.enacted).reduce(
