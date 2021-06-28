@@ -561,7 +561,8 @@ const Data: FC<DataArgs> = ({
               are included.{" "}
             </li>
             <li>
-              Click <a href={"false"}>here</a> to access the Airtable.
+              Click <a href={"false"}>here</a> to access the data in Airtable
+              format.
             </li>
           </ul>
         </div>
