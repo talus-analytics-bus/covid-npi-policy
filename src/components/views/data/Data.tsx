@@ -341,6 +341,8 @@ const Data: FC<DataArgs> = ({
       );
       setLoading(false);
     },
+    // TODO fix dependencies
+    // eslint-disable-next-line
     [curPage, ordering, pagesize, setLoading, placeType]
   );
 
