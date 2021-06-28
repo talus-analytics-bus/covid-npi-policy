@@ -8,7 +8,7 @@ import Documentation from "./content/Documentation";
 
 // local components
 import { AccessibilityNote } from "../../common";
-import { DownloadBtn } from "components/project";
+import { DownloadBtn, PageHeader } from "components/project";
 
 // assets
 import talus from "../../../assets/images/logo-talus.png";
@@ -140,7 +140,7 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
 
   return (
     <div className={styles.about}>
-      <h2 className={styles.title}>About</h2>
+      <PageHeader>About</PageHeader>
       <AccessibilityNote />
       <div className={styles.tabs}>
         {tabs.map(d => (

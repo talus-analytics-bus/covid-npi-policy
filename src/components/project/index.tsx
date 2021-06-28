@@ -1,2 +1,3 @@
 import DownloadBtn from "./DownloadBtn/DownloadBtn";
-export { DownloadBtn };
+import PageHeader from "./PageHeader/PageHeader";
+export { DownloadBtn, PageHeader };
