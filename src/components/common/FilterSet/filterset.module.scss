@@ -16,12 +16,13 @@
       @include spaceItemsHoriz(50px);
     }
   }
-  margin-top: 0 !important;
   .filterGroup {
     display: flex;
 
     &.dropdowns {
-      margin-top: 20px;
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
 
       > div {
         min-width: 250px;
@@ -31,8 +32,6 @@
   }
   &.disabled {
     display: none;
-    // opacity: 0.5;
-    // pointer-events: none;
   }
 }
 .selectedFilters {
@@ -40,6 +39,7 @@
   padding-bottom: 0;
   background-color: white;
   border: 1px solid #999;
+  margin-top: 1.75rem;
   @include spaceItemsVert(20px);
   .header {
     display: flex;

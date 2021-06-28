@@ -573,7 +573,7 @@ const Data: FC<DataArgs> = ({
               headerBackgroundColor: colors.mapGreen5,
               content: (
                 <>
-                  <div className={styles.contentTop}>
+                  <section className={styles.contentTop}>
                     <RadioToggle
                       label={<ControlLabel>Search for</ControlLabel>}
                       choices={[
@@ -626,13 +626,12 @@ const Data: FC<DataArgs> = ({
                       searchText={searchText}
                       onChangeFunc={setSearchText}
                     />
-                  </div>
+                  </section>
                   {
                     <>
                       {tableIsReady && (
                         <>
-                          {" "}
-                          <div className={styles.filtersHeader}>
+                          <section className={styles.filtersHeader}>
                             {(Object.keys(filters).length > 0 ||
                               (searchText !== null && searchText !== "")) && (
                               <>
@@ -647,19 +646,24 @@ const Data: FC<DataArgs> = ({
                                 </button>
                               </>
                             )}
-                          </div>
-                          <FilterSet
-                            {...{
-                              filterDefs,
-                              filters,
-                              setFilters,
-                              searchText,
-                              setSearchText,
-                              alignBottom: true,
-                              numInstances,
-                              instanceNouns: nouns,
-                            }}
-                          ></FilterSet>
+                          </section>
+                          <section className={styles.filterSet}>
+                            <ControlLabel>
+                              Location and policy details
+                            </ControlLabel>
+                            <FilterSet
+                              {...{
+                                filterDefs,
+                                filters,
+                                setFilters,
+                                searchText,
+                                setSearchText,
+                                alignBottom: true,
+                                numInstances,
+                                instanceNouns: nouns,
+                              }}
+                            ></FilterSet>
+                          </section>
                         </>
                       )}
                     </>

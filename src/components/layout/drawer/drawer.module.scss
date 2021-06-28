@@ -46,7 +46,11 @@
     padding: $padding;
     font-size: 1rem;
     background-color: $light-gray-2;
-    @include spaceItemsVert(20px);
+    > {
+      @include spaceItemsVert(1.25rem);
+    }
+    @include spaceItemsVert(1.75rem);
+
     min-height: 190px;
 
     &.hidden {
