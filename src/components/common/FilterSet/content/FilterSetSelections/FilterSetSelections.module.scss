@@ -5,7 +5,7 @@
     background-color: white;
     border-radius: 5px;
     margin-top: 1.75rem;
-    @include spaceItemsVert(20px);
+    @include spaceItemsVert(15px);
     .header {
         display: flex;
         align-items: center;
