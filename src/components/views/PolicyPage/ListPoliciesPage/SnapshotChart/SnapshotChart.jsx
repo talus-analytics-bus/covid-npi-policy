@@ -9,12 +9,12 @@ import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
 const SnapshotChart = ({ policySummaryObject }) => {
   const dim = {
     width: 200,
-    height: 80,
+    height: 200,
 
     padding: {
       top: 5,
       bottom: 20,
-      left: 5,
+      left: 25,
       right: 5,
       axis: 3,
     },
@@ -75,7 +75,6 @@ const SnapshotChart = ({ policySummaryObject }) => {
   // calculate the max for the last day of the chart
   const [maxBar, setMaxBar] = useState(0);
   useEffect(() => {
-    console.log("maxBar");
     const lastStatus =
       policySummaryObject &&
       Object.values(policySummaryObject)[
@@ -86,7 +85,6 @@ const SnapshotChart = ({ policySummaryObject }) => {
       const maxObj = {};
       Object.entries(lastStatus).forEach(([status, categories]) => {
         Object.entries(categories).map(([category, policies]) => {
-          console.log(category, status);
           if (!maxObj[category]) maxObj[category] = { [status]: policies.size };
           else if (!maxObj[category][status])
             maxObj[category][status] = policies.size;
@@ -105,14 +103,14 @@ const SnapshotChart = ({ policySummaryObject }) => {
 
   dim.axes.y.scale = d3
     .scaleLinear()
-    .domain([0, maxBar])
+    .domain([0, barCount - 1])
     .range([dim.axes.y.start, dim.axes.y.end]);
 
   // just using the x scale here to get
   // evenly spaced bars between the padding
   dim.axes.x.scale = d3
     .scaleLinear()
-    .domain([0, barCount - 1])
+    .domain([0, maxBar])
     .range([dim.axes.x.start, dim.axes.x.end]);
 
   window.dim = dim;
@@ -120,20 +118,24 @@ const SnapshotChart = ({ policySummaryObject }) => {
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
-      style={{ overflow: "visible", border: "1px solid black" }}
+      style={{
+        overflow: "visible",
+        height: 400,
+        // border: "1px solid black"
+      }}
     >
-      {Object.entries(byCategory)
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(([category, bar], index) => (
-          <Bar key={category} {...{ category, bar, index, dim }} />
-        ))}
       <path
         style={{ stroke: "#C4C4C4", strokeWidth: 0.5 }}
         d={`
-        M ${dim.axes.x.start - 2}, ${dim.axes.y.start}
-        L ${dim.axes.x.end + dim.barWidth + 2}, ${dim.axes.y.start}
+        M ${dim.axes.x.start}, ${dim.axes.y.start + dim.barWidth + 2}
+        L ${dim.axes.x.start}, ${dim.axes.y.end - 2}
         `}
       />
+      {Object.entries(byCategory)
+        .sort((a, b) => b[0].localeCompare(a[0]))
+        .map(([category, bar], index) => (
+          <Bar key={category} {...{ category, bar, index, dim }} />
+        ))}
     </svg>
   );
 };

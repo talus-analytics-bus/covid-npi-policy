@@ -10,40 +10,40 @@ import styles from "./Bar.module.scss";
 
 const Bar = ({ category, bar, index, dim }) => {
   return (
-    <g style={{ transform: `translateX(${dim.axes.x.scale(index)}px)` }}>
+    <g style={{ transform: `translateY(${dim.axes.y.scale(index)}px)` }}>
       <path
         className={styles.barPath}
         key="activeExpired"
         style={{ fill: "#409384" }}
-        d={`M 0,${dim.axes.y.scale(0)}
-         L 0,${dim.axes.y.scale(bar.active + bar.expired || 0)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(bar.active + bar.expired || 0)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(0)}
+        d={`M ${dim.axes.x.scale(0)}, 0
+         L ${dim.axes.x.scale(bar.active + bar.expired || 0)}, 0
+         L ${dim.axes.x.scale(bar.active + bar.expired || 0)}, ${dim.barWidth}
+         L ${dim.axes.x.scale(0)}, ${dim.barWidth}
         `}
       />
       <path
         className={styles.barPath}
         key="active"
         style={{ fill: "#96C4BB" }}
-        d={`M 0,${dim.axes.y.scale(0)}
-         L 0,${dim.axes.y.scale(bar.active || 0)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(bar.active || 0)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(0)}
+        d={`M ${dim.axes.x.scale(0)}, 0
+         L ${dim.axes.x.scale(bar.active || 0)}, 0
+         L ${dim.axes.x.scale(bar.active || 0)}, ${dim.barWidth}
+         L ${dim.axes.x.scale(0)}, ${dim.barWidth}
         `}
       />
       <path
         className={styles.barPath}
         key="enacted"
         style={{ fill: "#E55E37" }}
-        d={`M 0,${dim.axes.y.scale(0)}
-         L 0,${dim.axes.y.scale(bar.enacted || 0)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(bar.enacted || 0)}
-         L ${dim.barWidth}, ${dim.axes.y.scale(0)}
+        d={`M ${dim.axes.x.scale(0)}, 0
+         L ${dim.axes.x.scale(bar.enacted || 0)}, 0
+         L ${dim.axes.x.scale(bar.enacted || 0)}, ${dim.barWidth}
+         L ${dim.axes.x.scale(0)}, ${dim.barWidth}
         `}
       />
       <foreignObject
-        x={0}
-        y={dim.axes.y.scale(0) + dim.padding.axis}
+        x={dim.axes.x.scale(0) - dim.padding.axis - 15}
+        y={0}
         width={dim.barWidth}
         height={dim.barWidth}
       >
