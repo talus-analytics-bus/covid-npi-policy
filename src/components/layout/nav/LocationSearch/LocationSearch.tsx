@@ -18,6 +18,10 @@ import { KeyboardEvent } from "react";
 // constants
 const API_URL = process.env.REACT_APP_API_URL;
 
+/**
+ * Provide a search bar and results list to find and select places.
+ * @returns {ReactElement} LocationSearch function component
+ */
 const LocationSearch: FC = (): ReactElement => {
   const [places, setPlaces] = React.useState<PlaceRecord[]>();
   const [searchValue, setSearchValue] = React.useState("");
@@ -26,7 +30,7 @@ const LocationSearch: FC = (): ReactElement => {
 
   React.useEffect(() => {
     const getPlaces = async () => {
-      let params = new URLSearchParams();
+      const params = new URLSearchParams();
       params.append("fields", "id");
       params.append("fields", "loc");
       params.append("fields", "iso3");
