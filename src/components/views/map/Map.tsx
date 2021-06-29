@@ -151,14 +151,14 @@ const Map: FC<MapProps> = ({
 
   // define possible categories based on optionset API response
   const catOptions: Option[] = filterDefs[0].primary_ph_measure.items.map(i => {
-    return { name: i.label, value: i.value };
+    return { name: i.label !== undefined ? i.label : i.value, value: i.value };
   });
 
   // define possible subcategories based on optionset API response
   const subcatOptions: Option[] = filterDefs[0].ph_measure_details.items.map(
     i => {
       return {
-        name: i.label,
+        name: i.label !== undefined ? i.label : i.value,
         value: i.value,
         parent: i.group,
       };
