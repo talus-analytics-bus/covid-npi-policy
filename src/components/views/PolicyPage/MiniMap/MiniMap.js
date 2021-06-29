@@ -10,10 +10,6 @@ import {
   // geoCentroid,
 } from "d3-geo";
 
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
-
 import styles from "./MiniMap.module.scss";
 
 // API:
@@ -139,24 +135,22 @@ export const SVG = props => {
       paths = selectedCounties.map((geometry, index) => {
         const path = geoPath().projection(projection)(geometry);
         return (
-          <Tippy content={geometry.properties.name + " county"}>
-            <path
-              key={index}
-              fill={
-                propsCounties.includes(geometry.properties.name) ||
-                propsCounties[0] === "Unspecified"
-                  ? "#4E8490"
-                  : "#F2F2F2"
-              }
-              stroke={
-                propsCounties.includes(geometry.properties.name) ||
-                propsCounties[0] === "Unspecified"
-                  ? "#ffffff"
-                  : "#707070"
-              }
-              d={path}
-            />
-          </Tippy>
+          <path
+            key={index}
+            fill={
+              propsCounties.includes(geometry.properties.name) ||
+              propsCounties[0] === "Unspecified"
+                ? "#4E8490"
+                : "#F2F2F2"
+            }
+            stroke={
+              propsCounties.includes(geometry.properties.name) ||
+              propsCounties[0] === "Unspecified"
+                ? "#ffffff"
+                : "#707070"
+            }
+            d={path}
+          />
         );
       });
     }
