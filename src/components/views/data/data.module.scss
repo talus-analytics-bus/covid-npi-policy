@@ -53,6 +53,30 @@
         &:nth-child(4) {
           width: 20%;
         }
+        @media #{$small-laptop} {
+          // hide jurisdiction type
+          &:nth-child(2) {
+            display: none;
+          }
+
+          @media #{$phone} {
+            // hide cat, subcat, targets
+            &:nth-child(4) {
+              display: none;
+            }
+            @media #{$phone-narrow} {
+              // hide date and authority
+              &:nth-child(6),
+              &:nth-child(7) {
+                display: none;
+              }
+              // allow more width for desc.
+              &:nth-child(3) {
+                width: 50% !important;
+              }
+            }
+          }
+        }
       }
     }
     &.plan {
@@ -65,6 +89,24 @@
         // set width of Description column
         &:nth-child(4) {
           width: 35%;
+        }
+        @media #{$small-laptop} {
+          // hide org. type
+          &:nth-child(2) {
+            display: none;
+          }
+
+          @media #{$phone-narrow} {
+            // hide date and authority
+            &:nth-child(5),
+            &:nth-child(6) {
+              display: none;
+            }
+            // allow more width for desc.
+            &:nth-child(4) {
+              width: 50% !important;
+            }
+          }
         }
       }
     }
@@ -110,34 +152,12 @@
     > :not(:last-child) {
       margin-right: 5.6rem;
     }
-    @media #{$phone} {
+    @media #{$small-laptop} {
       flex-flow: column;
       align-items: flex-start;
       > div {
-        margin-left: 0;
         margin-bottom: 10px;
-        &:first-child {
-          margin-top: 10px;
-        }
       }
-    }
-  }
-
-  // responsiveness
-  // TODO move to separate file
-  @media #{$phone} {
-    table {
-      th,
-      td {
-        &:nth-child(4) {
-          width: unset;
-        }
-      }
-    }
-  }
-  @media #{$phone} {
-    h1 {
-      margin-top: 0 !important;
     }
   }
 }

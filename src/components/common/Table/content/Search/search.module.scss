@@ -26,4 +26,11 @@
       width: 18px;
     }
   }
+  @media #{$small-laptop} {
+    &,
+    input {
+      width: 100%;
+    }
+    justify-content: space-between;
+  }
 }
