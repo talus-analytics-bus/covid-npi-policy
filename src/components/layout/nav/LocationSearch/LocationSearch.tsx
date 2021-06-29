@@ -94,7 +94,7 @@ const LocationSearch: FC = (): ReactElement => {
           : `/policies/${r.iso3}/national`;
 
       // update history state and navigate to URL
-      history.pushState(undefined, "", url);
+      history.pushState({}, "", url);
       dispatchEvent(new PopStateEvent("popstate"));
 
       if (inputRef.current !== null && inputRef.current !== undefined)
