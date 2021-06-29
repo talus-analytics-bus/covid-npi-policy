@@ -42,13 +42,29 @@ const SnapshotChartSection = () => {
   //     { count: 0, active: 0 }
   //   );
 
+  const lastStatus =
+    policySummaryObject &&
+    policySummaryObject[
+      Object.keys(policySummaryObject)[
+        Object.keys(policySummaryObject).length - 1
+      ]
+    ];
+
+  const categories =
+    lastStatus &&
+    Object.keys(lastStatus.expired).sort((a, b) => a.localeCompare(b));
+
   return (
     <div className={styles.sectionContainer}>
       {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
       {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
-      {/* <div className={styles.chartContainer}> */}
-      <SnapshotChart {...{ policySummaryObject }} />
-      {/* <div className={styles.legend}>
+      <div className={styles.labels}>
+        {lastStatus &&
+          categories.map(category => <p key={category}>{category}</p>)}
+      </div>
+      <div className={styles.chartContainer}>
+        <SnapshotChart {...{ policySummaryObject }} />
+        {/* <div className={styles.legend}>
           {policySummaryObject && (
             <>
               <div className={styles.entry}>
@@ -74,7 +90,7 @@ const SnapshotChartSection = () => {
             </>
           )}
         </div> */}
-      {/* </div> */}
+      </div>
     </div>
   );
 };
