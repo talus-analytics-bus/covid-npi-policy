@@ -44,14 +44,6 @@ const IntroParagraph = props => {
 
   console.log(policySummaryObject[props.introDate]);
 
-  const policyCount = Object.values(policySummaryObject).reduce(
-    (acc, cur) => ({
-      count: cur.count + acc.count,
-      active: cur.active + acc.active,
-    }),
-    { count: 0, active: 0 }
-  );
-
   const policyStatusDate =
     status.policyStatus === "loaded" &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
@@ -75,20 +67,40 @@ const IntroParagraph = props => {
   //     lastSevenDaySum &&
   //     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
+  const lastDate =
+    policySummaryObject &&
+    Object.keys(policySummaryObject)[
+      Object.keys(policySummaryObject).length - 1
+    ];
+
+  const lastStatus = lastDate && policySummaryObject[lastDate];
+
+  console.log(policySummaryObject);
+  console.log(lastDate);
+  console.log(lastStatus);
+
   const policyCategoriesText =
-    Object.keys(policySummaryObject).length === 1
-      ? Object.keys(policySummaryObject)
+    lastStatus &&
+    lastStatus.active &&
+    (Object.keys(lastStatus.active).length === 1
+      ? Object.keys(lastStatus.active)
           .join("")
           .toLowerCase()
-      : Object.keys(policySummaryObject)
+      : Object.keys(lastStatus.active)
           .map(pm => pm.toLowerCase())
           .slice(0, -1)
           .join(", ") +
         " and " +
-        Object.keys(policySummaryObject)
+        Object.keys(lastStatus.active)
           .slice(-1)
           .join("")
-          .toLowerCase();
+          .toLowerCase());
+
+  const policyCount =
+    lastStatus &&
+    Object.values(lastStatus.active).reduce((acc, cur) => cur.size + acc, 0);
+
+  console.log(policyCount);
 
   if (iso3 === "Unspecified") {
     return (
@@ -130,8 +142,8 @@ const IntroParagraph = props => {
             status.policyStatus === "loading") && (
             <>COVID-AMP is currently tracking </>
           )}
-          {numbersToWords(policyCount.active)} active{" "}
-          {policyCount.active > 1 &&
+          {numbersToWords(policyCount)} active{" "}
+          {policyCount > 1 &&
             (state !== "national"
               ? "state and county"
               : "national and local")}{" "}

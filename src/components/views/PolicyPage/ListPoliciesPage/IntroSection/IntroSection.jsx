@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 // everything in between.
 import { RecoilRoot } from "recoil";
 
-// import IntroParagraph from "../IntroParagraph/IntroParagraph";
+import IntroParagraph from "../IntroParagraph/IntroParagraph";
 import PolicyEnvironmentPlot from "../PolicyEnvironmentPlot/PolicyEnvironmentPlot";
 import SnapshotChartSection from "../SnapshotChart/SnapshotChartSection";
 
@@ -19,7 +19,7 @@ const IntroSection = () => (
       </div>
       <div className={styles.barChartAndParagraph}>
         <SnapshotChartSection />
-        {/* <IntroParagraph /> */}
+        <IntroParagraph />
       </div>
     </RecoilRoot>
   </section>
