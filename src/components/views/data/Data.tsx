@@ -33,6 +33,7 @@ import { DataColumnDef } from "components/common/Table/Table";
 import Settings from "Settings";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
+import { Link } from "react-router-dom";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -583,9 +584,14 @@ const Data: FC<DataArgs> = ({
               Where available, PDFs or links to the original document or notice
               are included.{" "}
             </li>
+            {
+              // TODO decide whether to add Airtable link and
+              // update accordingly
+            }
             <li>
-              Click <a href={"false"}>here</a> to access the data in Airtable
-              format.
+              Click{" "}
+              <Link to={"/data?type=policy&placeType=affected"}>here</Link> to
+              access the data in Airtable format.
             </li>
           </ul>
         </div>
