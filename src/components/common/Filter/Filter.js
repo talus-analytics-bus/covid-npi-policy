@@ -57,7 +57,14 @@ const Filter = ({
   const disabled = primaryFiltersOff;
 
   // sort items so selected items are first
-  const sortedItems = items !== undefined ? [...items] : [];
+  const labeledItems =
+    items !== undefined
+      ? items.map(d => {
+          if (d.label === undefined) d.label = d.value;
+          return d;
+        })
+      : [];
+  const sortedItems = labeledItems !== undefined ? [...labeledItems] : [];
   if (initSelectedItems.length > 0 && props.radio !== true) {
     const selectedIds = initSelectedItems.map(d => d.id);
     sortedItems.sort(function selectedFirst(a, b) {
