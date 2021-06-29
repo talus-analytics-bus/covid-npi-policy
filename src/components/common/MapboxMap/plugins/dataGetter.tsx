@@ -113,6 +113,8 @@ const getMetricsToUpdateOrReuse = (
     diffDate ||
     (diffCircle && diffFill) ||
     allSame;
+  // TODO check that allSame is right here, perhaps it should be
+  // && !allSame?
 
   const toUpdate: Array<MapMetric> = [];
   const toReuse: Array<MapMetric> = [];
