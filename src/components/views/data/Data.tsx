@@ -494,12 +494,35 @@ const Data: FC<DataArgs> = ({
     setLoading,
   ]);
 
+  // update filters to contain latest search text
+  useEffect(() => {
+    // if filters already contain this search text, do nothing
+    if (
+      filters._text !== undefined &&
+      filters._text.length > 0 &&
+      filters._text[0] === searchText
+    )
+      return;
+    else {
+      // add search text to filters if it's not null or blank, otherwise delete
+      // its field from the filters
+      const updatedFilters: Filters = { ...filters };
+      if (searchText !== null && searchText !== "") {
+        updatedFilters._text = [searchText];
+        setFilters(updatedFilters);
+      } else if (updatedFilters._text !== undefined) {
+        delete updatedFilters._text;
+        setFilters(updatedFilters);
+      }
+    }
+  }, [filters, searchText]);
+
   useEffect(() => {
     if (curPage !== 1) setCurPage(1);
     else updateData();
     // TODO review dependencies
     // eslint-disable-next-line
-  }, [filters, pagesize, searchText]);
+  }, [filters, pagesize]);
   // }, [filters, pagesize, searchText, placeType]);
 
   // when filters are updated, update data
