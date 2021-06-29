@@ -88,10 +88,14 @@ const LocationSearch: FC = (): ReactElement => {
       if (results === undefined) return;
       const r = results[0];
       if (r === undefined || r.loc === undefined) return;
-      const url: string = r.level
-        ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
-        : `/policies/${r.iso3}/national`;
+      const url: string =
+        r.level !== "Country"
+          ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
+          : `/policies/${r.iso3}/national`;
+
+      // update history state and navigate to URL
       history.pushState(undefined, "", url);
+      dispatchEvent(new PopStateEvent("popstate"));
 
       if (inputRef.current !== null && inputRef.current !== undefined)
         inputRef.current.blur();
