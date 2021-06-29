@@ -14,6 +14,7 @@ import { removeParenthetical } from "components/misc/UtilsTyped";
 import useHistory from "components/common/hooks/useHistory";
 import { PlaceRecord } from "components/misc/dataTypes";
 import { KeyboardEvent } from "react";
+import { XCloseBtn } from "components/common";
 
 // constants
 const API_URL = process.env.REACT_APP_API_URL;
@@ -81,9 +82,13 @@ const LocationSearch: FC = (): ReactElement => {
 
   const history = useHistory();
 
-  const handleKeyPress: KeyboardEventHandler<HTMLInputElement> = (
+  /**
+   * Navigate to first result's location page when "Enter" is pressed.
+   * @param e Keyboard event
+   */
+  const onKeyPress: KeyboardEventHandler<HTMLInputElement> = (
     e: KeyboardEvent
-  ) => {
+  ): void => {
     if (e.key === "Enter") {
       if (results === undefined) return;
       const r = results[0];
@@ -102,21 +107,44 @@ const LocationSearch: FC = (): ReactElement => {
     }
   };
 
+  /**
+   * Clear search input when "Escape" pressed.
+   * @param e Keyboard event
+   */
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    e: KeyboardEvent
+  ): void => {
+    if (e.key === "Escape") {
+      setSearchValue("");
+    }
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(e.target.value);
   };
   return (
     <div className={styles.searchContainer}>
-      <input
-        autoFocus
-        ref={inputRef}
-        onKeyPress={handleKeyPress}
-        className={styles.searchBar}
-        type="text"
-        value={searchValue}
-        onChange={onChange}
-        placeholder="Search for location"
-      />
+      <div className={styles.searchBarAndIcons}>
+        <input
+          autoFocus
+          ref={inputRef}
+          className={styles.searchBar}
+          type="text"
+          value={searchValue}
+          placeholder="Search for location"
+          {...{ onKeyPress, onKeyDown, onChange }}
+        />
+        <div className={styles.icons}>
+          <XCloseBtn
+            show={!["", null, undefined].includes(searchValue)}
+            onClick={() => {
+              setSearchValue("");
+            }}
+          />
+          <i className={"material-icons"}>search</i>
+        </div>
+      </div>
+
       {results && (
         <div className={styles.results}>
           {results.length > 0 && (
@@ -154,3 +182,13 @@ const LocationSearch: FC = (): ReactElement => {
 };
 
 export default LocationSearch;
+
+/**
+ * Focuses on the location search input element.
+ * @param inputRef The React ref for the input DOM element
+ */
+function focusInput(inputRef: React.RefObject<HTMLInputElement>): void {
+  if (inputRef.current !== null) {
+    inputRef.current.focus();
+  }
+}

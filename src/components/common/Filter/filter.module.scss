@@ -26,7 +26,7 @@
     .filterButton {
       display: flex;
 
-      @include dropdownAndSearchStyling();
+      @include dropdownAndSearchStyle();
 
       cursor: pointer;
 

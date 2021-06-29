@@ -113,12 +113,19 @@ $map-green-6: #c6dfda;
   }
 }
 
-@mixin dropdownAndSearchStyling() {
+@mixin dropdownAndSearchStyle() {
   background-color: white;
 
   padding: 5px 10px;
   border: 1px solid $idea-black;
   border-radius: 5px;
+}
+
+@mixin searchPlaceholderStyle() {
+  &::placeholder {
+    color: $idea-gray-2;
+    font-size: 1rem;
+  }
 }
 
 @mixin selectStyling() {

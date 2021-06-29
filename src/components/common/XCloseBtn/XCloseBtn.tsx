@@ -1,6 +1,7 @@
 // 3rd party packages
 import React, { FC } from "react";
 import CSS from "csstype";
+import classNames from "classnames";
 
 // styles and assets
 import styles from "./XCloseBtn.module.scss";
@@ -10,6 +11,7 @@ interface XCloseBtnProps {
   onClick?(...args: any[]): void;
   title?: string;
   style?: CSS.Properties;
+  show?: boolean;
 }
 
 /**
@@ -21,10 +23,11 @@ export const XCloseBtn: FC<XCloseBtnProps> = ({
   onClick,
   title = "Close",
   style = {},
+  show = true,
 }) => {
   return (
     <button
-      className={styles.xCloseBtn}
+      className={classNames(styles.xCloseBtn, { [styles.show]: show })}
       style={{ backgroundImage: `url(${crossSvg})`, ...style }}
       type="button"
       {...{ onClick, title }}

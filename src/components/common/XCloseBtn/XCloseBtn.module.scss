@@ -1,7 +1,9 @@
 .xCloseBtn {
     display: flex;
+    visibility: hidden;
 
     cursor: pointer;
+    pointer-events: none;
 
     border: none;
 
@@ -16,4 +18,9 @@
     width: $size;
 
     margin: 0 0.5rem;
+
+    &.show {
+        visibility: visible;
+        pointer-events: all;
+    }
 }

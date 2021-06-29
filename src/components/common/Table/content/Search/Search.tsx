@@ -88,17 +88,20 @@ export const Search: FC<SearchProps> = ({
     [curTimeout, onChangeFunc]
   );
 
-  // define onKeyPress function programatically
-  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = getHandleKeyPress(
-    (e: KeyboardEvent) => {
-      if (loading || searchRef.current === null) {
-        e.preventDefault();
-        return;
-      } else if (e.key === "Escape") {
-        clearSearch();
-      }
+  /**
+   * Clear search input when "Escape" pressed.
+   * @param e Keyboard event
+   */
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    e: KeyboardEvent
+  ) => {
+    if (loading || searchRef.current === null) {
+      e.preventDefault();
+      return;
+    } else if (e.key === "Escape") {
+      clearSearch();
     }
-  );
+  };
 
   // JSX // ---------------------------------------------------------------- //
   return (
