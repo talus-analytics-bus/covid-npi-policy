@@ -134,9 +134,10 @@ const LocationSearch: FC = (): ReactElement => {
                     r.level ? styles.stateResult : styles.countryResult
                   }
                   to={{
-                    pathname: r.level
-                      ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
-                      : `/policies/${r.iso3}/national`,
+                    pathname:
+                      r.level !== "Country"
+                        ? `/policies/${r.iso3}/${r.loc.split(",")[0]}`
+                        : `/policies/${r.iso3}/national`,
                     state: undefined,
                   }}
                   key={r.loc + r.level}
