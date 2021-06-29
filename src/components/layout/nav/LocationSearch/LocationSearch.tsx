@@ -30,6 +30,7 @@ const LocationSearch: FC = (): ReactElement => {
       params.append("fields", "id");
       params.append("fields", "loc");
       params.append("fields", "iso3");
+      params.append("fields", "level");
       params.append("include_policy_count", "true");
       params.append("levels", "country");
       params.append("levels", "Tribal nation");
