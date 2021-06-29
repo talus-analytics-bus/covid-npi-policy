@@ -59,7 +59,7 @@ export const Search: FC<SearchProps> = ({
   const clearSearch: Function = useCallback((): void => {
     if (searchRef.current !== null) {
       searchRef.current.value = "";
-      onChangeFunc("");
+      onChangeFunc(null);
     }
   }, [onChangeFunc]);
 
