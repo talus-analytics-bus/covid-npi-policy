@@ -27,10 +27,12 @@
           @include boxShadow();
           > a,
           > div {
-            line-height: 2;
-            position: relative;
-            top: 5px;
-            // margin-right: 0 !important;
+            &:not(:first-child) {
+              line-height: 2;
+              position: relative;
+              top: 5px;
+              margin-left: 0;
+            }
           }
           > a:last-child,
           > div:last-child {

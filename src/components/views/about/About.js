@@ -16,7 +16,7 @@ import georgetown from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.png";
 import can from "../../../assets/images/logo-can.png";
 
-const About = ({ setLoading, setPage, initTab, ...props }) => {
+const About = ({ setLoading, setPage, initTab }) => {
   // display text and image for each contributor
   const contributors = [
     {
@@ -130,9 +130,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
   const [tab, setTab] = useState(initTab);
   useEffect(() => {
     setLoading(false);
-    setPage("about");
+    setPage("about-" + tab);
     window.scrollTo(0, 0);
-  }, [setLoading, setPage]);
+  }, [setLoading, setPage, tab]);
 
   useEffect(() => {
     setTab(initTab);
