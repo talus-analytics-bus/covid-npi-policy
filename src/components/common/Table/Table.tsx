@@ -187,22 +187,5 @@ const Table = ({
       />
     </>
   );
-  // const defaultSorted = [
-  //   {
-  //     dataField: "date_issued",
-  //     order: "desc"
-  //   }
-  // ];
-  // // main jsx for Bootstrap table
-  // return (
-  //   <div className={styles.table}>
-  //     <BootstrapTable
-  // defaultSorted={defaultSorted}
-  //       keyField={"id"}
-  //       data={data}
-  //       columns={columns}
-  //     />
-  //   </div>
-  // );
 };
 export default Table;
