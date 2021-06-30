@@ -59,10 +59,12 @@ const SnapshotChartSection = () => {
       {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
       {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
       <div className={styles.labels}>
+        <h3>Policy category</h3>
         {lastStatus &&
           categories.map(category => <p key={category}>{category}</p>)}
       </div>
       <div className={styles.chartContainer}>
+        <h3>Number of policies</h3>
         <SnapshotChart {...{ policySummaryObject }} />
         {/* <div className={styles.legend}>
           {policySummaryObject && (

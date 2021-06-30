@@ -1,5 +1,4 @@
 .sectionContainer {
-  padding-top: 1rem;
   display: flex;
 }
 
@@ -16,9 +15,9 @@
   color: #e55e37;
 }
 .chartContainer {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-
+  > h3 {
+    margin-left: 3rem;
+  }
   .legend {
     display: flex;
     flex-direction: column;

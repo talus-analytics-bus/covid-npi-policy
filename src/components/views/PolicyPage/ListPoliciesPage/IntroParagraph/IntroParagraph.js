@@ -104,7 +104,7 @@ const IntroParagraph = props => {
 
   return (
     <div className={styles.introSection}>
-      <h2>Description of policy environment</h2>
+      <h3>Description of policy environment</h3>
 
       {status.policiesSummary === "error" && (
         <>
