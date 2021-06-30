@@ -1,8 +1,15 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { useState, useEffect } from "react";
+import React, {
+  FC,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
-// common components
+// common components and functions
 import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle } from "../../common";
 import { DownloadBtn, PageHeader } from "components/project";
@@ -10,16 +17,17 @@ import Drawer from "../../layout/drawer/Drawer";
 import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
+import { safeGetFieldValsAsStrings } from "./content/helpers";
 
 // styles and assets
 import styles from "./data.module.scss";
 import colors from "assets/styles/vars.module.scss";
 
-// constants
+// constants, types, etc.
+import Settings from "Settings";
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
 import challengeInfo from "./content/challenge.js";
-import { FC } from "react";
 import {
   FilterDefs,
   Filters,
@@ -28,12 +36,8 @@ import { DataPageInfo } from "./content/types";
 import { ApiResponse, ApiResponseIndexed } from "api/responseTypes";
 import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
-import { useCallback } from "react";
 import { DataColumnDef } from "components/common/Table/Table";
-import Settings from "Settings";
-import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
-import { Link } from "react-router-dom";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -515,7 +519,6 @@ const Data: FC<DataArgs> = ({
     // TODO review dependencies
     // eslint-disable-next-line
   }, [filters, pagesize]);
-  // }, [filters, pagesize, searchText, placeType]);
 
   // when filters are updated, update data
   useEffect(() => {
@@ -524,20 +527,6 @@ const Data: FC<DataArgs> = ({
     // of calls
     // eslint-disable-next-line
   }, [ordering, curPage, placeType]);
-
-  // useEffect(() => {
-  //   // update table columns if `placeType` changed and metadata ready
-  //   if (metadata !== null)
-  //     setColumns(
-  //       entityInfo.getColumns({
-  //         metadata,
-  //         setOrdering,
-  //         placeType,
-  //       })
-  //     );
-  //   // TODO fix dependencies
-  //   // eslint-disable-next-line
-  // }, [placeType]);
 
   // have any filters or search text been applied?
   const areFiltersDefined = !(
