@@ -210,7 +210,9 @@ const Map: FC<MapProps> = ({
     setFilterDefs(newFilterDefs);
     setGeoHaveData(results.countriesWithDistancingLevels);
     setInitialized(true);
-  }, [filterDefs]);
+    // TODO fix dependencies -- adding `filterDefs` causes double call
+    // eslint-disable-next-line
+  }, []);
 
   // CONSTANTS // ---------------------------------------------------------- //
   // get overal last updated date of data, using most recent data
