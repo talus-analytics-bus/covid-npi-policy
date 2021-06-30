@@ -10,7 +10,14 @@ import styles from "./Bar.module.scss";
 
 const Bar = ({ category, bar, index, dim }) => {
   return (
-    <g style={{ transform: `translateY(${dim.axes.y.scale(index)}px)` }}>
+    <g
+      key={category}
+      id={category}
+      style={{
+        transform: `translateY(${dim.axes.y.scale(index)}px)`,
+        transition: "250ms ease",
+      }}
+    >
       <path
         className={styles.barPath}
         key="activeExpired"

@@ -113,8 +113,6 @@ const SnapshotChart = ({ policySummaryObject }) => {
     .domain([0, maxBar])
     .range([dim.axes.x.start, dim.axes.x.end]);
 
-  window.dim = dim;
-
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
@@ -132,7 +130,12 @@ const SnapshotChart = ({ policySummaryObject }) => {
         `}
       />
       {Object.entries(byCategory)
-        .sort((a, b) => b[0].localeCompare(a[0]))
+        .sort(
+          (a, b) =>
+            (a[1].active || 0) +
+            (a[1].expired || 0) -
+            ((b[1].active || 0) + (b[1].expired || 0))
+        )
         .map(([category, bar], index) => (
           <Bar key={category} {...{ category, bar, index, dim }} />
         ))}

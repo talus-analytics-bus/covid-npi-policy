@@ -42,8 +42,6 @@ const IntroParagraph = props => {
     locationName,
   } = policyContextConsumer;
 
-  console.log(policySummaryObject[props.introDate]);
-
   const policyStatusDate =
     status.policyStatus === "loaded" &&
     new Date(policyStatus[0].datestamp).toLocaleString("en-us", {
@@ -75,10 +73,6 @@ const IntroParagraph = props => {
 
   const lastStatus = lastDate && policySummaryObject[lastDate];
 
-  console.log(policySummaryObject);
-  console.log(lastDate);
-  console.log(lastStatus);
-
   const policyCategoriesText =
     lastStatus &&
     lastStatus.active &&
@@ -99,8 +93,6 @@ const IntroParagraph = props => {
   const policyCount =
     lastStatus &&
     Object.values(lastStatus.active).reduce((acc, cur) => cur.size + acc, 0);
-
-  console.log(policyCount);
 
   if (iso3 === "Unspecified") {
     return (
