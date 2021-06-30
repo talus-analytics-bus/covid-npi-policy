@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-// need recoil for rendering straight from the slider
+// need recoil for triggering a render from the slider
 // to the snapshotChart without re-rendering
 // everything in between.
 import { RecoilRoot } from "recoil";
@@ -12,7 +12,7 @@ import SnapshotChartSection from "../SnapshotChart/SnapshotChartSection";
 import styles from "./IntroSection.module.scss";
 
 const IntroSection = () => (
-  <section>
+  <section className={styles.introSection}>
     <RecoilRoot>
       <div className={styles.policyEnvironment}>
         <PolicyEnvironmentPlot />
