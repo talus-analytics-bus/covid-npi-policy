@@ -61,6 +61,12 @@ export interface PolicyStatusCountsProps {
   merge_like_policies?: boolean;
   counted_parent_geos?: GeoRes[];
 }
+export interface PolicyStatusCountsForMapProps {
+  geo_res: GeoRes;
+  cats: string[];
+  subcats: string[];
+  date: string;
+}
 
 export interface PlanProps extends PolicyProps {}
 export interface PolicyProps extends PaginatedProps {

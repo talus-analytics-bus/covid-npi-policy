@@ -19,6 +19,7 @@ import {
   PolicyListProps,
   PolicyProps,
   PolicyStatusCountsProps,
+  PolicyStatusCountsForMapProps,
 } from "./queryTypes";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 
@@ -392,6 +393,47 @@ export const DistancingLevel = async function({
   }
   const res = await req;
   if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
+ * Get policy status counts data from API specifically for Map page use.
+ */
+export const PolicyStatusCountsForMap = async function({
+  geo_res,
+  cats = [],
+  subcats = [],
+  date,
+}: PolicyStatusCountsForMapProps) {
+  if (date === undefined) throw Error("Must define `date`");
+
+  // prepare params
+  const params = new URLSearchParams();
+
+  // append list-like param values
+  cats.forEach(d => {
+    params.append("categories", d);
+  });
+  subcats.forEach(d => {
+    params.append("subcategories", d);
+  });
+  params.append("date", date);
+
+  // prepare request
+  const req = await axios.get(
+    `${API_URL}/get/policy_status_counts_for_map/${geo_res}`,
+    {
+      params,
+    }
+  );
+  const res = await req;
+  if (res !== undefined)
+    if (res.data !== undefined) {
+      const formattedRes = res.data.data;
+      formattedRes.min_all_time = res.data.min_all_time;
+      formattedRes.max_all_time = res.data.max_all_time;
+      return formattedRes;
+    } else return false;
   else return false;
 };
 

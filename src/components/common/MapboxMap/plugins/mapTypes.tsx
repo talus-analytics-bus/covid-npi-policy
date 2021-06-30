@@ -355,6 +355,7 @@ export type ElementsOrNull =
 export type Filters = Record<string, string[]> & {
   primary_ph_measure?: string[];
   ph_measure_details?: string[];
+  dates_in_effect?: [string, string];
 };
 
 /**
