@@ -232,14 +232,7 @@ const Data: FC<DataArgs> = ({
         queries.optionsets = OptionSet({
           method: "get",
           class_name: entityInfoForQuery.nouns.s,
-          fields: entityInfoForQuery.filterDefs
-            .map(d => Object.values(d).map(dd => dd))
-            .flat()
-            .filter(d => !d.field.startsWith("date"))
-            .map(d => {
-              return d.entity_name + "." + d.field;
-            }),
-          entity_name: entityInfoForQuery.nouns.s,
+          optimized: true,
         });
         if (Settings.SHOW_TABLE_DEFINITIONS)
           queries.metadata = Metadata({

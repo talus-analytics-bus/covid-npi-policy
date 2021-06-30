@@ -555,24 +555,26 @@ export const Export = async function({
  */
 export const OptionSet = async ({
   method,
+  optimized = false,
   fields = null,
   class_name = null,
 }: OptionSetQueryArgs): Promise<any> => {
   let req;
   if (method === "get") {
-    if (fields === null) {
+    if (!optimized && fields === null) {
       console.log("Error: `fields` is required for method GET.");
       return false;
     }
 
     // collate fields
     const params = new URLSearchParams();
-    fields.forEach(d => {
-      params.append("fields", d);
-    });
+    if (fields !== null)
+      fields.forEach(d => {
+        params.append("fields", d);
+      });
     params.set("class_name", class_name || "Policy");
-
-    req = await axios.get(`${API_URL}/get/optionset`, {
+    const route: string = optimized ? "optionset_for_data" : "optionset";
+    req = await axios.get(`${API_URL}/get/${route}`, {
       params,
     });
   } else {

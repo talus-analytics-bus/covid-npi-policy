@@ -90,6 +90,7 @@ export interface OptionSetQueryArgs {
   fields?: string[] | null;
   class_name?: string | null;
   entity_name?: string | null;
+  optimized?: boolean;
 }
 
 export type VersionRecord = {
