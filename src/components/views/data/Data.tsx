@@ -241,16 +241,17 @@ const Data: FC<DataArgs> = ({
             }),
           entity_name: entityInfoForQuery.nouns.s,
         });
-        queries.metadata = Metadata({
-          method: "get",
-          fields: initColumns.map(d => {
-            const key = d.defKey || d.dataField;
-            if (!key.includes("."))
-              return entityInfoForQuery.nouns.s.toLowerCase() + "." + key;
-            else return key;
-          }),
-          entity_class_name: entityInfoForQuery.nouns.s,
-        });
+        if (Settings.SHOW_TABLE_DEFINITIONS)
+          queries.metadata = Metadata({
+            method: "get",
+            fields: initColumns.map(d => {
+              const key = d.defKey || d.dataField;
+              if (!key.includes("."))
+                return entityInfoForQuery.nouns.s.toLowerCase() + "." + key;
+              else return key;
+            }),
+            entity_class_name: entityInfoForQuery.nouns.s,
+          });
       }
 
       // execute queries and collate results
@@ -310,16 +311,13 @@ const Data: FC<DataArgs> = ({
         setMinMaxEndDate(newMinMaxEndDate);
       }
 
+      // if applicable, update metadata
+      if (results.metadata !== undefined) setMetadata(results.metadata.data);
+
       // if page is first initializing, also retrieve filter optionset values for
       // non-date filters
       // TODO move this out of main code if possible
-      if (
-        getOptionSets &&
-        results.metadata !== undefined &&
-        results.optionsets !== undefined
-      ) {
-        setMetadata(results.metadata.data);
-
+      if (getOptionSets && results.optionsets !== undefined) {
         const optionsets: { [k: string]: OptionSetRecord[] } =
           results["optionsets"].data;
 
