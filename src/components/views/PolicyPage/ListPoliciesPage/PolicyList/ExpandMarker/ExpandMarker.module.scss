@@ -4,7 +4,7 @@
   border-radius: 20px;
   // background-color: #7fb0b4;
   margin-right: 8px;
-  margin-top: 5px;
+  margin-top: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,5 +16,6 @@
     transition: 250ms ease;
     background-position: 50% 30%;
     background-repeat: no-repeat;
+    transform: scaleY(1);
   }
 }

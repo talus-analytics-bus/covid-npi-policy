@@ -55,13 +55,22 @@
   width: 100%;
   border-top: 1px solid #c4c4c4;
 
+  h2 {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
   > h2 {
-    // margin-top: 1.5rem;
-    // margin-top: 4rem;
+    margin-top: 2rem;
     margin-bottom: 1rem;
-    color: #29334b;
+    color: #303434;
     font-family: "rawline";
     text-transform: none;
+    font-weight: bold;
     font-size: 28px;
   }
 }
