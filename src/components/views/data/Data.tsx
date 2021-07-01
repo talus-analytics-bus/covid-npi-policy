@@ -116,7 +116,7 @@ const Data: FC<DataArgs> = ({
 }) => {
   const [docType, setDocType] = useState<DataPageType>(type || "policy");
 
-  const defaultPlaceType: PlaceType = getParamsPlaceType() || "affected";
+  const defaultPlaceType: PlaceType = getPlaceTypeFromURLParams() || "affected";
   const [placeType, setPlaceType] = useState<PlaceType>(defaultPlaceType);
 
   // TODO update type assignment when policy.js is rewritten in TSX
@@ -643,10 +643,8 @@ const Data: FC<DataArgs> = ({
                   {tableIsReady && (
                     <section className={styles.filterSet}>
                       <ControlLabel>
-                        {placeType === "affected"
-                          ? "Affected location"
-                          : "Jurisdiction"}{" "}
-                        and policy details
+                        {getLocationTypeLabel(placeType, entityInfo)} and{" "}
+                        {nouns.s.toLowerCase()} details
                       </ControlLabel>
                       <FilterSet
                         alignBottom
@@ -671,6 +669,7 @@ const Data: FC<DataArgs> = ({
               ),
             }}
           />
+          {/* TODO Refactor the DownloadBtn below */}
           {DownloadBtn({
             render: tableIsReady,
             class_name: [nouns.s, "secondary"],
@@ -733,11 +732,25 @@ const Data: FC<DataArgs> = ({
 export default Data;
 
 /**
+ * Returns the label to use for the location type based on the data being
+ * viewed in the table, e.g., "affected location" or "jurisdiction" for policy
+ * data, and "organization" for plan data.
+ *
+ * @param placeType The type of place selected, "affected" or "jurisdiction".
+ * @param entityInfo The entity info object for the data type being viewed.
+ * @returns {string} The label to use for the location type.
+ */
+function getLocationTypeLabel(placeType: string, entityInfo: any): string {
+  if (entityInfo.nouns.s === "Plan") return "Organization";
+  else return placeType === "affected" ? "Affected location" : "Jurisdiction";
+}
+
+/**
  * Returns the place type defined in the URL parameters, or null if none.
  * @returns {PlaceType | null} The place type defined in the URL parameters, or
  * null if none.
  */
-function getParamsPlaceType(): PlaceType | null {
+function getPlaceTypeFromURLParams(): PlaceType | null {
   // get URL search parameters
   const params: URLSearchParams = new URLSearchParams(
     window !== undefined ? window.location.search : ""
