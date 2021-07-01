@@ -135,7 +135,7 @@ export type MetricRecord = {
   temporal_resolution?: string;
 };
 
-export interface PlaceProps {
+export interface PlaceQueryProps {
   level: string[];
   one?: boolean;
   ansiFips?: string;

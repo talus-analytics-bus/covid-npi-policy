@@ -14,7 +14,7 @@ import {
   ObservationQueryArgs,
   MetricRecords,
   OptionSetQueryArgs,
-  PlaceProps,
+  PlaceQueryProps,
   PlanProps,
   PolicyListProps,
   PolicyProps,
@@ -786,7 +786,7 @@ export const Place = async ({
   level,
   iso3,
   fields,
-}: PlaceProps) => {
+}: PlaceQueryProps) => {
   // prepare params
   const params = new URLSearchParams();
   const toAdd: [string, any][] = [
