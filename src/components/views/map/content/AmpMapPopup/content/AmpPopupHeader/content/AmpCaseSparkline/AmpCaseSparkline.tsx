@@ -61,7 +61,7 @@ export const AmpCaseSparkline: FC<ComponentProps> = ({
         style={{ height: height + margin.top + 42 }}
         right={true}
         delay={500}
-        {...{ ready }}
+        {...{ isReady: ready }}
       >
         <Sparkline
           {...{

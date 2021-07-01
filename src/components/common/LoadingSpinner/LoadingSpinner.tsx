@@ -10,13 +10,13 @@ interface LoadingSpinnerProps {
   delay?: number;
   style?: Record<string, any>;
   children?: ReactElement;
-  ready?: boolean;
+  isReady?: boolean;
   right?: boolean;
 
   /**
    * True if spinner fills container and centers inside
    */
-  fill?: boolean;
+  isFill?: boolean;
 
   /**
    * True if spinner appears inline, false otherwise.
@@ -54,11 +54,11 @@ export const LoadingSpinner: FC<LoadingSpinnerProps> = ({
   childrenStyle = {},
   text,
   children = null,
-  ready = false,
+  isReady: ready = false,
   inline = false,
   small = false,
   right = false,
-  fill = false,
+  isFill: fill = false,
   fullscreen = false,
   instantFadeout = true,
 }) => {

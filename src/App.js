@@ -285,7 +285,7 @@ const App = () => {
             //   <img src={loadingSvg} alt={"Loading spinner"} />
             // </div>
           }
-          {<LoadingSpinner ready={!loading} fullscreen={true} />}
+          {<LoadingSpinner isReady={!loading} fullscreen={true} />}
           {<BrowserDetection>{modalToShow}</BrowserDetection>}
         </BrowserRouter>
         {

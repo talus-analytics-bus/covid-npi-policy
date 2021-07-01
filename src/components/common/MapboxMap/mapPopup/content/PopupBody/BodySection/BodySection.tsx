@@ -26,7 +26,7 @@ export const BodySection: FunctionComponent<BodySectionProps> = ({
     <div className={styles.bodySection}>
       <div className={styles.title}>{title}</div>
       <LoadingSpinner
-        ready={!updating}
+        isReady={!updating}
         delay={250}
         style={{
           height: "100%",
