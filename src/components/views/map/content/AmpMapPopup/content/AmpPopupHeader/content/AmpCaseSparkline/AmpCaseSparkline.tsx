@@ -18,12 +18,12 @@ import MapOptionContext from "components/views/map/context/MapOptionContext";
 import { Margin } from "components/common/D3React/types";
 import { defaults } from "components/common/MapboxMap/plugins/data";
 
-type ComponentProps = {
+interface AmpCaseSparklineProps {
   mapId: MapId;
   feature: MapFeature;
   dataDate: Moment;
-};
-export const AmpCaseSparkline: FC<ComponentProps> = ({
+}
+export const AmpCaseSparkline: FC<AmpCaseSparklineProps> = ({
   mapId,
   feature,
   dataDate,
