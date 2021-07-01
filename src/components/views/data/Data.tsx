@@ -47,7 +47,18 @@ import { ControlLabel } from "components/common/OptionControls";
  */
 type DataPageType = "policy" | "plan" | "challenge";
 
-interface DataArgs {
+/**
+ * Minimum and maximum dates defining a range.
+ */
+type MinMaxDates = {
+  min?: Date;
+  max?: Date;
+};
+
+/**
+ * Properties for Data function component.
+ */
+interface DataProps {
   /**
    * True if the page is currently loading, false otherwise.
    */
@@ -103,8 +114,12 @@ const validPlaceTypes = ["affected", "jurisdiction"] as const;
  */
 export type PlaceType = typeof validPlaceTypes[number];
 
-// primary data viewing and download page
-const Data: FC<DataArgs> = ({
+/**
+ * Primary data viewing and download page for COVID AMP.
+ * @param param0 Properties
+ * @returns Function component
+ */
+const Data: FC<DataProps> = ({
   loading,
   setLoading,
   setInfoTooltipContent,
@@ -116,32 +131,40 @@ const Data: FC<DataArgs> = ({
 }) => {
   const [docType, setDocType] = useState<DataPageType>(type || "policy");
 
+  // track the type of place being viewed in the data table policies: the
+  // place the policy "affected", or the "jurisdiction" that made the policy
   const defaultPlaceType: PlaceType = getPlaceTypeFromURLParams() || "affected";
   const [placeType, setPlaceType] = useState<PlaceType>(defaultPlaceType);
 
   // TODO update type assignment when policy.js is rewritten in TSX
+  // track info about the entity (policy, plan, court challenge) viewed
   const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
     policyInfo as DataPageInfo
   );
+
+  // track table pagination-relevant variables including current page, number
+  // of instances (rows) in table, the ordering settings, and page size
   const [curPage, setCurPage] = useState<number>(1);
+  const [pagesize, setPagesize] = useState<number>(5);
   const [numInstances, setNumInstances] = useState<number | null>(null);
   const [ordering, setOrdering] = useState<[string, string][]>(
     docType === "challenge"
       ? [["date_of_complaint", "desc"]]
       : [["date_start_effective", "desc"]]
   );
-  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [pagesize, setPagesize] = useState<number>(5);
 
-  // set `unspecified` component, etc., from entity info
+  // track whether the download button is currently in a loading state
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+
+  // CONSTANTS // ---------------------------------------------------------- //
+  // define nouns used to refer to entity type viewed in table
   const nouns = entityInfo.nouns;
 
   // define data and metadata for table
   const [data, setData] = useState<DataRecord[] | null>(null);
-
   const [metadata, setMetadata] = useState<MetadataRecord[] | null>(null);
 
-  // define filters
+  // define filters to apply to data that will be retrieved for the table
   const getFiltersFromUrlParams: Function = useCallback((): Filters => {
     // If filters are specific in the url params, and they are for the current
     // entity class, use them. Otherwise, clear them
@@ -168,14 +191,6 @@ const Data: FC<DataArgs> = ({
     initFilters._text !== undefined ? initFilters._text[0] : null
   );
 
-  /**
-   * Minimum and maximum dates defining a range.
-   */
-  type MinMaxDates = {
-    min?: Date;
-    max?: Date;
-  };
-
   // min and max dates for date range pickers dynamically determined by data
   const [, setMinMaxStartDate] = useState<MinMaxDates>({
     min: undefined,
@@ -195,9 +210,9 @@ const Data: FC<DataArgs> = ({
   const [columns, setColumns] = useState<DataColumnDef[] | null>(null);
 
   /**
-   * Arguments for `getData` which retrieves data for the Data page.
+   * Properties for `getData` which retrieves data for the Data page.
    */
-  interface GetDataArgs {
+  interface GetDataProps {
     filtersForQuery: Filters;
     entityInfoForQuery: DataPageInfo;
     orderingForQuery?: [string, string][];
@@ -205,16 +220,21 @@ const Data: FC<DataArgs> = ({
   }
 
   /**
-   * Get data for page
-   * @method getData
+   * Get data for page.
+   *
+   * This function is memoized with `useCallback`.
    */
   const getData: Function = useCallback(
+    /**
+     * Get data for page.
+     * @param param0 Properties
+     */
     async ({
       filtersForQuery,
       entityInfoForQuery,
       orderingForQuery = ordering,
       getOptionSets = false,
-    }: GetDataArgs): Promise<void> => {
+    }: GetDataProps): Promise<void> => {
       const method: string = "post";
       const initColumns: DataColumnDef[] = entityInfoForQuery.getColumns({
         metadata: {},
@@ -356,7 +376,7 @@ const Data: FC<DataArgs> = ({
   }, [setLoading, setPage]);
 
   // when doc type changes, nullify columns / data / filter defs, then update
-  // entity info
+  // those state variables based on URL params
   useEffect(() => {
     setLoading(true);
     setColumns(null);
@@ -415,6 +435,11 @@ const Data: FC<DataArgs> = ({
     // eslint-disable-next-line
   }, [docType, setLoading]);
 
+  /**
+   * Update data in page and URL params.
+   *
+   * NOTE This function is memoized with `useCallback`.
+   */
   const updateData = useCallback(() => {
     if (!loading) {
       // update data
