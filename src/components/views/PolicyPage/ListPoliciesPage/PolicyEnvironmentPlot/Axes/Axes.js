@@ -22,7 +22,15 @@ const Axes = props => {
       label: {
         fontSize: dim.yLabelFontSize,
         textAnchor: "end",
-        dominantBaseline: "middle",
+        dominantBaseline: "bottom",
+        fontFamily: "rawline",
+        fill: "rgba(130, 130, 130, 1)",
+        pointerEvents: "none",
+      },
+      scaleLabel: {
+        fontSize: dim.yLabelFontSize,
+        textAnchor: "start",
+        dominantBaseline: "bottom",
         fontFamily: "rawline",
         fill: "rgba(130, 130, 130, 1)",
         pointerEvents: "none",
@@ -56,14 +64,25 @@ const Axes = props => {
           gridlines.map((tick, index) => (
             <React.Fragment key={tick}>
               {index % 2 === 1 && (
-                <text
-                  x={dim.yLabelWidth + dim.paddingLeft}
-                  y={scale.y(tick)}
-                  style={styles.yAxis.label}
-                >
-                  {formatNumber(tick)}
-                  {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
-                </text>
+                <>
+                  <text
+                    x={dim.yLabelWidth + dim.paddingLeft}
+                    y={scale.y(tick) - 4}
+                    style={styles.yAxis.label}
+                  >
+                    {formatNumber(tick)}
+                    {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
+                  </text>
+                  {index === 3 && (
+                    <text
+                      x={dim.xAxis.start.x}
+                      y={scale.y(tick) - 4}
+                      style={styles.yAxis.scaleLabel}
+                    >
+                      new daily cases
+                    </text>
+                  )}
+                </>
               )}
             </React.Fragment>
           ))}
@@ -73,18 +92,12 @@ const Axes = props => {
             <line
               key={tick}
               style={styles.yAxis.gridline}
-              x1={dim.xAxis.start.x}
+              x1={0}
               y1={scale.y(tick)}
-              x2={dim.xAxis.end.x}
+              x2={dim.width}
               y2={scale.y(tick)}
             />
           ))}
-        {/* <line */}
-        {/*   x1={dim.yAxis.start.x} */}
-        {/*   y1={dim.yAxis.start.y} */}
-        {/*   x2={dim.yAxis.end.x} */}
-        {/*   y2={dim.yAxis.end.y} */}
-        {/* /> */}
       </g>
       <g id="x-axis">
         {scale &&
