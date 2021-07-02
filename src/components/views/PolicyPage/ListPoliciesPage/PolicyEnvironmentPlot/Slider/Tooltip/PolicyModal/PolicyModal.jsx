@@ -94,7 +94,7 @@ const PolicyModal = ({ children, category, policies, sliderDate }) => {
       return (
         <div onClick={() => setModalOpen(false)} key={path}>
           <PolicySummary
-            // showAllMetadata
+            showAllMetadata
             path={path}
             // location={[iso3, state]}
             policy={policy}
