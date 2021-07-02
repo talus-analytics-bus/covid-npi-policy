@@ -13,10 +13,7 @@ const Bar = ({ category, bar, index, dim }) => {
     <g
       key={category}
       id={category}
-      style={{
-        transform: `translateY(${dim.axes.y.scale(index)}px)`,
-        transition: "250ms ease",
-      }}
+      style={{ transform: `translateY(${dim.axes.y.scale(index)}px)` }}
     >
       <path
         className={styles.barPath}
