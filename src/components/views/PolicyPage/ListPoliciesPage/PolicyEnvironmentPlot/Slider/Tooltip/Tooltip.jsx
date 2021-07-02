@@ -128,7 +128,7 @@ const Tooltip = ({
               name: "offset",
               options: {
                 // the 10 accounts for the height of the little arrow
-                offset: ({ reference }) => [-68, 17],
+                offset: ({ reference }) => [-60, 17],
               },
             },
           ],
