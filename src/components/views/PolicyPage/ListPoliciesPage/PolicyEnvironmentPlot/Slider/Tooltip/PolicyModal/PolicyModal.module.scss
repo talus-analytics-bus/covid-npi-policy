@@ -10,3 +10,19 @@
     text-decoration: underline;
   }
 }
+
+.policyModal {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+
+  > h2 {
+    font-family: Rawline;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    color: #303434;
+    margin-bottom: 3rem;
+  }
+}

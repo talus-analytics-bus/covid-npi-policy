@@ -110,14 +110,13 @@ const PolicyModal = ({ children, category, policies, sliderDate }) => {
         {children}
       </button>
       <Modal open={modalOpen} setOpen={setModalOpen}>
-        <h3>
-          {category} policies enacted on{" "}
-          {formatDate(sliderDate.toISOString().substring(0, 10))}
-        </h3>
-        {summaries}
-        {/* {[...policies].map(p => (
-          <p key={p}>{p}</p>
-        ))} */}
+        <section className={styles.policyModal}>
+          <h2>
+            {category} policies enacted on{" "}
+            {formatDate(sliderDate.toISOString().substring(0, 10))}
+          </h2>
+          <div className={styles.summaries}>{summaries}</div>
+        </section>
       </Modal>
     </>
   );
