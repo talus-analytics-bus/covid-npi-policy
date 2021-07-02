@@ -1,0 +1,10 @@
+.button {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: #023f88;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

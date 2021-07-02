@@ -77,7 +77,7 @@ const TooltipContent = ({
             highlightPolicies.enacted &&
             Object.entries(highlightPolicies.enacted).map(
               ([category, policies]) => (
-                <PolicyModal>
+                <PolicyModal {...{ category, policies, sliderDate }}>
                   <PolicyCategoryIcon
                     category={category}
                     style={{ width: "1.5em", height: "1.5em" }}
