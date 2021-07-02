@@ -192,26 +192,30 @@ const Slider = ({
           d={`M ${dim.xAxis.start.x},${0} 
         L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
         />
-        {/* <rect */}
-        {/*   x={dim.xAxis.start.x - 30} */}
-        {/*   y={0} */}
-        {/*   width={60} */}
-        {/*   height={15} */}
-        {/*   rx={3} */}
-        {/*   style={{ fill: "rgb(229, 94, 55)" }} */}
-        {/* /> */}
-        {/* <text */}
-        {/*   x={dim.xAxis.start.x} */}
-        {/*   y={3} */}
-        {/*   style={{ */}
-        {/*     alignmentBaseline: "hanging", */}
-        {/*     textAnchor: "middle", */}
-        {/*     fill: "white", */}
-        {/*     fontSize: 9, */}
-        {/*   }} */}
-        {/* > */}
-        {/*   {formatDate(sliderDate.toISOString().substring(0, 10))} */}
-        {/* </text> */}
+        {!cursorVisible && !popupVisible && (
+          <>
+            <rect
+              x={dim.xAxis.start.x - 30}
+              y={0}
+              width={60}
+              height={15}
+              rx={3}
+              style={{ fill: "rgb(229, 94, 55)" }}
+            />
+            <text
+              x={dim.xAxis.start.x}
+              y={3}
+              style={{
+                alignmentBaseline: "hanging",
+                textAnchor: "middle",
+                fill: "white",
+                fontSize: 9,
+              }}
+            >
+              {formatDate(sliderDate.toISOString().substring(0, 10))}
+            </text>
+          </>
+        )}
         <Tooltip
           {...{
             handleYPos,
