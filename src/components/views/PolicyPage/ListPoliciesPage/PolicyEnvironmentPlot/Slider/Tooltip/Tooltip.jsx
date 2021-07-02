@@ -35,14 +35,14 @@ const TooltipContent = ({
       .map(category => [...category])
       .flat().length;
 
-  const { setPolicyObject } = React.useContext(policyContext);
+  // const { setPolicyObject } = React.useContext(policyContext);
 
-  const handleLink = (e, category) => {
-    setPolicyObject(prev => ({
-      ...prev,
-      [category]: { ...prev[category], open: true },
-    }));
-  };
+  // const handleLink = (e, category) => {
+  //   setPolicyObject(prev => ({
+  //     ...prev,
+  //     [category]: { ...prev[category], open: true },
+  //   }));
+  // };
 
   return (
     <div
@@ -77,7 +77,10 @@ const TooltipContent = ({
             highlightPolicies.enacted &&
             Object.entries(highlightPolicies.enacted).map(
               ([category, policies]) => (
-                <PolicyModal {...{ category, policies, sliderDate }}>
+                <PolicyModal
+                  key={category}
+                  {...{ category, policies, sliderDate }}
+                >
                   <PolicyCategoryIcon
                     category={category}
                     style={{ width: "1.5em", height: "1.5em" }}
