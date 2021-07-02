@@ -6,7 +6,7 @@ import Bar from "./Bar/Bar";
 import { useRecoilState } from "recoil";
 import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
 
-const SnapshotChart = ({ policySummaryObject }) => {
+const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   const dim = {
     width: 200,
     height: 200,
@@ -113,6 +113,10 @@ const SnapshotChart = ({ policySummaryObject }) => {
     .domain([0, maxBar])
     .range([dim.axes.x.start, dim.axes.x.end]);
 
+  const sortedBars = Object.entries(byCategory).sort(
+    (a, b) => chartLabels.indexOf(b[0]) - chartLabels.indexOf(a[0])
+  );
+
   return (
     <svg
       viewBox={`0 0 ${dim.width} ${dim.height}`}
@@ -129,13 +133,8 @@ const SnapshotChart = ({ policySummaryObject }) => {
         L ${dim.axes.x.start}, ${dim.axes.y.end - 2}
         `}
       />
-      {Object.entries(byCategory)
-        .sort(
-          (a, b) =>
-            (a[1].active || 0) +
-            (a[1].expired || 0) -
-            ((b[1].active || 0) + (b[1].expired || 0))
-        )
+      {sortedBars
+        .sort((a, b) => chartLabels.indexOf(b) - chartLabels.indexOf(a))
         .map(([category, bar], index) => (
           <Bar key={category} {...{ category, bar, index, dim }} />
         ))}
