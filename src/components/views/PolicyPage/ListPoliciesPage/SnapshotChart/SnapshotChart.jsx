@@ -8,7 +8,7 @@ import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
 
 const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   const dim = {
-    width: 200,
+    width: 275,
     height: 200,
 
     padding: {

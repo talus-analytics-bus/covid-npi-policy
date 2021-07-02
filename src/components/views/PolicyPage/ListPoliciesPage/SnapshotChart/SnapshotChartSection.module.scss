@@ -18,6 +18,9 @@
   > h3 {
     margin-left: 3rem;
   }
+  h3 {
+    margin-bottom: 1em;
+  }
   .legend {
     display: flex;
     flex-direction: column;
@@ -42,6 +45,10 @@
   flex-direction: column;
   justify-content: space-between;
   text-align: right;
+
+  h3 {
+    margin-bottom: 1em;
+  }
 
   > p {
     height: 3rem;
