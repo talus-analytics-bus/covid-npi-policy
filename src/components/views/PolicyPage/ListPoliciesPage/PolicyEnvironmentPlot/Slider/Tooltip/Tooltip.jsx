@@ -106,7 +106,7 @@ const Tooltip = ({
   popupVisible,
 }) => {
   return (
-    <foreignObject x={dim.xAxis.start.x} y={handleYPos} width={0} height={0}>
+    <foreignObject x={0} y={handleYPos} width={0} height={0}>
       <Tippy
         visible={popupVisible}
         content={

@@ -31,7 +31,7 @@ const Slider = ({
 }) => {
   const [introDate, setIntroDate] = useRecoilState(introDateState);
 
-  const [sliderX, setSliderX] = useState(0);
+  const [sliderX, setSliderX] = useState(dim.xAxis.end.x);
   const [dragStartX, setDragStartX] = useState(0);
   const [popupVisible, setPopupVisible] = useState(false);
   const [cursorX, setCursorX] = useState(0);
@@ -56,20 +56,17 @@ const Slider = ({
     const xPos = (e.clientX - CTM.e) / CTM.a;
     const newPos = xPos - dragStartX;
 
-    if (
-      newPos + dim.xAxis.start.x >= dim.xAxis.start.x &&
-      newPos + dim.xAxis.start.x <= dim.xAxis.end.x
-    ) {
+    if (newPos >= dim.xAxis.start.x && newPos <= dim.xAxis.end.x) {
       if (dragStartX !== 0) {
         setSliderX(newPos);
-        const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+        const cursorDate = scale.x.invert(cursorX + 1);
         setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
       }
 
-      setCursorX(newPos - dim.xAxis.start.x + dragStartX);
+      setCursorX(newPos + dragStartX);
 
       if (cursorVisible && !popupVisible) {
-        const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+        const cursorDate = scale.x.invert(cursorX + 1);
         setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
       }
     }
@@ -87,10 +84,10 @@ const Slider = ({
   const onClickChart = e => {
     const CTM = svgElement.current.getScreenCTM();
     const xPos = (e.clientX - CTM.e) / CTM.a;
-    const newPos = xPos - dim.xAxis.start.x;
+    const newPos = xPos;
     setSliderX(newPos);
     setPopupVisible(true);
-    const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+    const cursorDate = scale.x.invert(cursorX + 1);
     setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
   };
 
@@ -114,8 +111,8 @@ const Slider = ({
   }, [popupVisible, onScroll]);
 
   // the +1 offset makes the slider visually align to the date
-  const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
-  const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+  const sliderDate = scale.x.invert(sliderX + 1);
+  const cursorDate = scale.x.invert(cursorX + 1);
 
   const highlightPolicies =
     policySummaryObject &&
@@ -142,7 +139,7 @@ const Slider = ({
       onMouseUp={handleDragEnd}
       onMouseLeave={() => {
         setCursorVisible(false);
-        const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
+        const sliderDate = scale.x.invert(sliderX + 1);
         setIntroDate(Math.floor(sliderDate.getTime() / msPerDay));
       }}
       onMouseEnter={() => setCursorVisible(true)}
@@ -167,11 +164,11 @@ const Slider = ({
               // transform: `translateX(${cursorX}px)`,
               cursor: "pointer",
             }}
-            d={`M ${dim.xAxis.start.x},${0} 
-        L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
+            d={`M ${0},${0} 
+        L ${0},${dim.yAxis.end.y}`}
           />
           <rect
-            x={dim.xAxis.start.x - 30}
+            x={-30}
             y={0}
             width={60}
             height={15}
@@ -179,7 +176,7 @@ const Slider = ({
             style={{ fill: "rgb(229, 94, 55)" }}
           />
           <text
-            x={dim.xAxis.start.x}
+            x={0}
             y={3}
             style={{
               alignmentBaseline: "hanging",
@@ -202,13 +199,13 @@ const Slider = ({
             strokeWidth: 3,
             stroke: "rgba(2, 63, 136, 1)",
           }}
-          d={`M ${dim.xAxis.start.x},${0} 
-        L ${dim.xAxis.start.x},${dim.yAxis.end.y}`}
+          d={`M ${0},${0} 
+        L ${0},${dim.yAxis.end.y}`}
         />
         {!cursorVisible && !popupVisible && (
           <>
             <rect
-              x={dim.xAxis.start.x - 30}
+              x={-30}
               y={0}
               width={60}
               height={15}
@@ -216,7 +213,7 @@ const Slider = ({
               style={{ fill: "rgb(229, 94, 55)" }}
             />
             <text
-              x={dim.xAxis.start.x}
+              x={0}
               y={3}
               style={{
                 alignmentBaseline: "hanging",
@@ -291,7 +288,7 @@ const Slider = ({
             stroke: "white",
             strokeWidth: "1",
           }}
-          cx={dim.xAxis.start.x}
+          cx={0}
           cy={handleYPos}
           r={6}
         />
@@ -299,7 +296,7 @@ const Slider = ({
           ref={sliderRef}
           onClick={e => e.stopPropagation()}
           onMouseDown={handleDragStart}
-          x={dim.xAxis.start.x - 2}
+          x={-2}
           y={0}
           width={4}
           height={dim.yAxis.height + dim.paddingTop}
