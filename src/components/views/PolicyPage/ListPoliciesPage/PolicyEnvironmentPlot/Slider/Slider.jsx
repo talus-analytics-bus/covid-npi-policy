@@ -85,10 +85,12 @@ const Slider = ({
     const CTM = svgElement.current.getScreenCTM();
     const xPos = (e.clientX - CTM.e) / CTM.a;
     const newPos = xPos;
-    setSliderX(newPos);
-    setPopupVisible(true);
-    const cursorDate = scale.x.invert(cursorX + 1);
-    setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
+    if (newPos >= dim.xAxis.start.x && newPos <= dim.xAxis.end.x) {
+      setSliderX(newPos);
+      setPopupVisible(true);
+      const cursorDate = scale.x.invert(cursorX + 1);
+      setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
+    }
   };
 
   const onScroll = useCallback(e => {
