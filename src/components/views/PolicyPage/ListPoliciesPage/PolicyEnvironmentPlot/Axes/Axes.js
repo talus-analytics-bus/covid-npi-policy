@@ -5,7 +5,7 @@ const formatNumber = number =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 const Axes = props => {
-  const { dim, scale } = props;
+  const { dim, scale, policyHeight } = props;
 
   const styles = {
     xAxis: {
@@ -71,6 +71,15 @@ const Axes = props => {
                     style={styles.yAxis.label}
                   >
                     {formatNumber(tick)}
+                    {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
+                  </text>
+                  <text
+                    x={dim.width}
+                    y={scale.y(tick) - 4}
+                    style={styles.yAxis.label}
+                  >
+                    {Math.round((dim.height - scale.y(tick)) / policyHeight)}
+                    {index === 3 && " policies"}
                     {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
                   </text>
                   {index === 3 && (

@@ -92,8 +92,8 @@ const PolicyEnvironmentPlot = () => {
     width: 800,
     caseloadHeight: 180,
 
-    paddingTop: 19,
-    paddingRight: 3,
+    paddingTop: 30,
+    paddingRight: 52,
     paddingLeft: 0,
     paddingBottom: 0,
 
@@ -311,7 +311,11 @@ const PolicyEnvironmentPlot = () => {
                 </React.Fragment>
               ))}
           </g>
-          <Axes dim={dim} scale={scale} />
+          <Axes
+            dim={dim}
+            scale={scale}
+            policyHeight={vSpacing + circlePadding}
+          />
           <path d={averageLinePath} className={styles.averageLine} />
           {/* </g> */}
 
