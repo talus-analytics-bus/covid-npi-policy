@@ -8,6 +8,7 @@ import styles from "./Tooltip.module.scss";
 import PolicyCategoryIcon from "../../../../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import { policyContext } from "../../../../PolicyRouter/PolicyRouter";
+import PolicyModal from "./PolicyModal/PolicyModal";
 
 const formatDate = date => {
   if (!date) return undefined;
@@ -76,18 +77,25 @@ const TooltipContent = ({
             highlightPolicies.enacted &&
             Object.entries(highlightPolicies.enacted).map(
               ([category, policies]) => (
-                <a
-                  onClick={e => handleLink(e, category)}
-                  key={category}
-                  href={`#${category}`}
-                  className={styles.policyLink}
-                >
+                <PolicyModal>
                   <PolicyCategoryIcon
                     category={category}
                     style={{ width: "1.5em", height: "1.5em" }}
                   />
                   {category}: ({[...policies].length})
-                </a>
+                </PolicyModal>
+                // <a
+                //   onClick={e => handleLink(e, category)}
+                //   key={category}
+                //   href={`#${category}`}
+                //   className={styles.policyLink}
+                // >
+                //   <PolicyCategoryIcon
+                //     category={category}
+                //     style={{ width: "1.5em", height: "1.5em" }}
+                //   />
+                //   {category}: ({[...policies].length})
+                // </a>
               )
             )}
         </section>
