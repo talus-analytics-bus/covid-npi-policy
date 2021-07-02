@@ -1,6 +1,6 @@
 import React from "react";
 
-import Modal from "./Modal/Modal";
+import Modal from "../Modal/Modal";
 import SourceSummary from "./SourceSummary/SourceSummary";
 
 import styles from "./ExploreSource.module.scss";
