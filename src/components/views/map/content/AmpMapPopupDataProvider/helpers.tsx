@@ -15,14 +15,14 @@ import {
   PolicyResolution,
   StateFeature,
 } from "components/common/MapboxMap/plugins/mapTypes";
+import { PlaceRecord } from "components/misc/dataTypes";
+import { Option } from "components/common/OptionControls/types";
 
 // local components and functions
 import { getDataQueryResults } from "components/common/MapboxMap/plugins/dataGetter";
 import { Place } from "api/Queries";
-import { PlaceRecord } from "components/misc/dataTypes";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
-import { Option } from "components/common/OptionControls/types";
 import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
 import { PolicyLink } from "./PolicyLink/PolicyLink";
 
