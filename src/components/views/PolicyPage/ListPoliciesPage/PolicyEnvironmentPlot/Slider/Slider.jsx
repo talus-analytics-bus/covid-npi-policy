@@ -60,11 +60,18 @@ const Slider = ({
       newPos + dim.xAxis.start.x >= dim.xAxis.start.x &&
       newPos + dim.xAxis.start.x <= dim.xAxis.end.x
     ) {
-      if (dragStartX !== 0) setSliderX(newPos);
+      if (dragStartX !== 0) {
+        setSliderX(newPos);
+        const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+        setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
+      }
+
       setCursorX(newPos - dim.xAxis.start.x + dragStartX);
 
-      const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
-      setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
+      if (cursorVisible && !popupVisible) {
+        const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+        setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
+      }
     }
   };
 
@@ -83,6 +90,8 @@ const Slider = ({
     const newPos = xPos - dim.xAxis.start.x;
     setSliderX(newPos);
     setPopupVisible(true);
+    const cursorDate = scale.x.invert(cursorX + dim.xAxis.start.x + 1);
+    setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
   };
 
   const onScroll = useCallback(e => {
@@ -131,7 +140,11 @@ const Slider = ({
       onClick={onClickChart}
       onMouseMove={handleDrag}
       onMouseUp={handleDragEnd}
-      onMouseLeave={() => setCursorVisible(false)}
+      onMouseLeave={() => {
+        setCursorVisible(false);
+        const sliderDate = scale.x.invert(sliderX + dim.xAxis.start.x + 1);
+        setIntroDate(Math.floor(sliderDate.getTime() / msPerDay));
+      }}
       onMouseEnter={() => setCursorVisible(true)}
     >
       <rect
