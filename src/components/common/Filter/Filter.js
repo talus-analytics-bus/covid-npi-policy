@@ -42,7 +42,7 @@ const Filter = ({
 }) => {
   const [show, setShow] = useState(false);
   let initSelectedItems;
-  if (!dateRange) {
+  if (!dateRange && items !== undefined) {
     initSelectedItems =
       filters[field] !== undefined
         ? items.filter(d => filters[field].includes(d.value))

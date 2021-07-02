@@ -29,6 +29,7 @@ const FilterSet = ({
   numInstances = null,
   instanceNouns = null,
   onClearAll,
+  toHide = [],
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -51,31 +52,32 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
-      filterGroupComponents.push(
-        <Filter
-          {...{
-            key: v.field,
-            field: v.field,
-            label: v.label,
-            items: items,
-            radio: v.radio,
-            className: v.className,
-            defaultRadioValue: v.defaultRadioValue,
-            dateRange: v.dateRange,
-            minMaxDate: v.minMaxDate,
-            primary: v.primary,
-            disabledText: v.disabledText,
-            filters,
-            setFilters,
-            activeFilter,
-            setActiveFilter,
-            withGrouping: v.withGrouping,
-            params: v.params,
-            alignBottom,
-            ...props,
-          }}
-        />
-      );
+      if (!toHide.includes(v.field))
+        filterGroupComponents.push(
+          <Filter
+            {...{
+              key: v.field,
+              field: v.field,
+              label: v.label,
+              items: items,
+              radio: v.radio,
+              className: v.className,
+              defaultRadioValue: v.defaultRadioValue,
+              dateRange: v.dateRange,
+              minMaxDate: v.minMaxDate,
+              primary: v.primary,
+              disabledText: v.disabledText,
+              filters,
+              setFilters,
+              activeFilter,
+              setActiveFilter,
+              withGrouping: v.withGrouping,
+              params: v.params,
+              alignBottom,
+              ...props,
+            }}
+          />
+        );
     }
     filterGroupComponents.dropdowns = !filterGroupComponents.some(
       d => d.props.radio

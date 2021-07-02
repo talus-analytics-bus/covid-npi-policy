@@ -18,6 +18,7 @@ import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
+import { ControlLabel, ControlLink } from "components/common/OptionControls";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -37,7 +38,6 @@ import { ApiResponse, ApiResponseIndexed } from "api/responseTypes";
 import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
 import { DataColumnDef } from "components/common/Table/Table";
-import { ControlLabel } from "components/common/OptionControls";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -186,6 +186,9 @@ const Data: FC<DataProps> = ({
 
   const initFilters: Filters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState<Filters>(initFilters);
+  const [showAdvanced, setShowAdvanced] = useState(
+    initFilters["level"] !== undefined
+  );
 
   const [searchText, setSearchText] = useState<string | null>(
     initFilters._text !== undefined ? initFilters._text[0] : null
@@ -669,7 +672,15 @@ const Data: FC<DataProps> = ({
                     <section className={styles.filterSet}>
                       <ControlLabel>
                         {getLocationTypeLabel(placeType, entityInfo)} and{" "}
-                        {nouns.s.toLowerCase()} details
+                        {nouns.s.toLowerCase()} details{" "}
+                        {showAdvanced && (
+                          <ControlLink
+                            style={{ marginLeft: "1rem" }}
+                            onClick={() => setShowAdvanced(false)}
+                          >
+                            hide advanced filters
+                          </ControlLink>
+                        )}
                       </ControlLabel>
                       <FilterSet
                         alignBottom
@@ -679,6 +690,7 @@ const Data: FC<DataProps> = ({
                           setFilters({});
                         }}
                         instanceNouns={nouns}
+                        toHide={showAdvanced ? [] : ["level"]}
                         {...{
                           filterDefs,
                           filters,
