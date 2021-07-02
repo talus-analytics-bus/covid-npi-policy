@@ -50,7 +50,6 @@ type GetFeatureMetricProps = {
   paramArgs: Record<string, any>;
 };
 
-// TODO abstract filters and policy resolution
 export const getFeatureMetric: Function = async ({
   feature,
   mapMetrics,
@@ -160,9 +159,11 @@ export const getModelLink: Function = (
 
 /**
  * Returns a link to the policy page for the feature.
+ *
  * @param {MapFeature} feature
  * The feature for which the policies link is to be determined.
- * @returns {ActionLink}
+ *
+ *  @returns {ActionLink}
  * The link component for the policies or data page.
  */
 export const getPolicyLink: Function = async (
@@ -261,7 +262,7 @@ export const getPolicyLink: Function = async (
           area2: countyPlace.area2 !== undefined ? [countyPlace.area2] : [],
         };
         if (mapId === "us-county-plus-state")
-          linkFilters["level"] = ["Local", "State / Province"];
+          linkFilters["level"] = ["Local plus state/province"];
         else if (mapId === "us-county") linkFilters["level"] = ["Local"];
         const filterStr: string = JSON.stringify(linkFilters);
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
@@ -322,12 +323,15 @@ export const getPolicyLink: Function = async (
         </PolicyPageLink>
       );
     } else if (page === "data") {
+      const level: string[] = !countSub
+        ? ["Country"]
+        : ["State / Province", "Local"];
       const countryPlace: PlaceRecord | null = await Place({
         one: true,
         ansiFips: undefined,
         iso3: countryFeature.properties.ISO_A3,
         fields: ["country_name"],
-        level: !countSub ? ["Country"] : ["State / Province", "Local"],
+        level,
       });
       if (countryPlace === null)
         return <PolicyPageLink tooltip={NO_POLICY_FOR_LOC_MSG} />;
@@ -335,6 +339,7 @@ export const getPolicyLink: Function = async (
         const filterStr: string = JSON.stringify({
           ...baseLinkFilters,
           country_name: [countryPlace.country_name],
+          level,
         });
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
         const label: string = DATA_PAGE_LINK_TEXT;

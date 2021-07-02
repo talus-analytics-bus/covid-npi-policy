@@ -14,6 +14,7 @@ import { getInputLabel } from "components/common/Filter/Filter";
 import { ShowMore, XCloseBtn } from "components/common";
 import { Dispatch } from "react";
 import { ClearFiltersBtn } from "./content/ClearFiltersBtn/ClearFiltersBtn";
+import { getInitCap } from "components/misc/UtilsTyped";
 
 /**
  * Properties for the `FilterSetSelections` function component.
@@ -72,45 +73,29 @@ export const FilterSetSelections: FC<FilterSetSelectionsProps> = ({
 
       <div className={styles.badges}>
         {!noNonTextFilters &&
-          Object.entries(filters).map(([field, values]) => (
-            <React.Fragment key={field + "-" + values.join("-")}>
-              {field !== "_text" &&
-                filterDefsObj[field] !== undefined &&
-                !filterDefsObj[field].dateRange &&
-                values.map(value =>
-                  getBadge({
-                    filters,
-                    filterDefsObj,
-                    label:
-                      filterDefsObj[field].labelShort ||
-                      filterDefsObj[field].label,
-                    field,
-                    value,
-                    setFilters,
-                    setSearchText,
-                  })
-                )}
-              {field !== "_text" &&
-                filterDefsObj[field] !== undefined &&
-                filterDefsObj[field].dateRange &&
-                getBadge({
-                  filters,
-                  filterDefsObj,
-                  label:
-                    filterDefsObj[field].labelShort ||
-                    filterDefsObj[field].label,
-                  field,
-                  value: getInputLabel({
-                    dateRange: true,
-                    dateRangeState: [
-                      { startDate: values[0], endDate: values[1] },
-                    ],
-                  } as any),
-                  setFilters,
-                  setSearchText,
-                })}
-            </React.Fragment>
-          ))}
+          Object.entries(filters).map(([fField, fVals]) => {
+            const fIsDefined: boolean = filterDefsObj[fField] !== undefined;
+            const fIsDate: boolean =
+              fIsDefined && filterDefsObj[fField].dateRange;
+            const fIsText: boolean = fField === "_text";
+            return (
+              !fIsText && (
+                <React.Fragment key={fField + "-" + fVals.join("-")}>
+                  {fVals.map(val =>
+                    getBadge({
+                      field: fField,
+                      label: getFilterDisplayLabel(filterDefsObj, fField),
+                      value: getFilterDisplayVals(fVals, val, fIsDate),
+                      filters,
+                      filterDefsObj,
+                      setFilters,
+                      setSearchText,
+                    })
+                  )}
+                </React.Fragment>
+              )
+            );
+          })}
         {searchText !== null &&
           searchText !== "" &&
           getBadge({
@@ -135,6 +120,26 @@ interface GetBadgeProps {
   value: any;
   setFilters: Dispatch<SetStateAction<Filters>>;
   setSearchText: Dispatch<SetStateAction<string | null>>;
+}
+
+function getFilterDisplayLabel(filterDefsObj: any, fField: string): string {
+  const fIsDefined: boolean = filterDefsObj[fField] !== undefined;
+  if (fIsDefined)
+    return filterDefsObj[fField].labelShort || filterDefsObj[fField].label;
+  else return getInitCap(fField);
+}
+
+function getFilterDisplayVals(
+  fVals: string[],
+  val: string,
+  isDateRange: boolean
+): any {
+  if (!isDateRange) return val;
+  else
+    return getInputLabel({
+      dateRange: true,
+      dateRangeState: [{ startDate: fVals[0], endDate: fVals[1] }],
+    } as any);
 }
 
 /**
@@ -166,10 +171,10 @@ function getBadge({
             const newFilters = { ...filters };
             newFilters[field] = newFilters[field].filter(v => v !== value);
 
-            if (
-              filterDefsObj[field].dateRange ||
-              newFilters[field].length === 0
-            ) {
+            const fIsDefined: boolean = filterDefsObj[field] !== undefined;
+            const fIsDate: boolean =
+              fIsDefined && filterDefsObj[field].dateRange;
+            if (fIsDate || newFilters[field].length === 0) {
               delete newFilters[field];
               setFilters(newFilters);
             } else {
