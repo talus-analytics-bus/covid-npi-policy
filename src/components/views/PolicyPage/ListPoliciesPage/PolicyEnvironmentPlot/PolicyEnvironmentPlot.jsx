@@ -248,18 +248,22 @@ const PolicyEnvironmentPlot = () => {
 
   return (
     <figure>
-      {status.caseload === "loaded" ? (
-        <h2 className={styles.caseloadHeader}>Policy environment over time</h2>
-      ) : (
-        <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
-      )}
       <div className={styles.instructionSection}>
-        <p>
-          *Text might need to be edited* Move the blue line to show the state
-          and county policies that went into effect on each day and the 7-day
-          average new cases. The bar chart below will show the policy breakdown
-          on that day.
-        </p>
+        <div>
+          {status.caseload === "loaded" ? (
+            <h2 className={styles.caseloadHeader}>
+              Policy environment over time
+            </h2>
+          ) : (
+            <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
+          )}
+          <p>
+            *Text might need to be edited* Move the blue line to show the state
+            and county policies that went into effect on each day and the 7-day
+            average new cases. The bar chart below will show the policy
+            breakdown on that day.
+          </p>
+        </div>
         <Legend />
       </div>
       {(status.caseload === "loading" || status.caseload === "loaded") && (

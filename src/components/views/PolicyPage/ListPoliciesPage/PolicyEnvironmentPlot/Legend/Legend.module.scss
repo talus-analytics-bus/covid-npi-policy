@@ -2,6 +2,7 @@
   margin-left: 3em;
   .entry {
     display: flex;
+    margin-top: 1em;
 
     .key {
       position: relative;
@@ -15,6 +16,7 @@
       color: #828282;
       font-family: Open Sans;
       font-size: 16px;
+      font-style: normal;
     }
   }
 }

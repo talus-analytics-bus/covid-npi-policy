@@ -26,7 +26,6 @@ const Legend = () => (
           r={5}
           style={{ fill: "rgba(64, 147, 132, .5)" }}
         />
-        />
       </svg>
       <span className={styles.label}>
         Policies that went into effect on this date
