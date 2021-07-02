@@ -187,7 +187,8 @@ const Data: FC<DataProps> = ({
   const initFilters: Filters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState<Filters>(initFilters);
   const [showAdvanced, setShowAdvanced] = useState(
-    initFilters["level"] !== undefined
+    false
+    // initFilters["level"] !== undefined
   );
 
   const [searchText, setSearchText] = useState<string | null>(
