@@ -103,32 +103,33 @@ const SnapshotChartSection = () => {
       <div className={styles.chartContainer}>
         <h3>Number of policies</h3>
         <SnapshotChart {...{ policySummaryObject, chartLabels }} />
-        {/* <div className={styles.legend}>
+        <div className={styles.legend}>
           {policySummaryObject && (
             <>
               <div className={styles.entry}>
                 <div
                   className={styles.active}
+                  style={{ background: "#E55E37" }}
+                />
+                <span>Newly enacted</span>
+              </div>
+              <div className={styles.entry}>
+                <div
+                  className={styles.active}
                   style={{ background: "#409384" }}
                 />
-                <span>
-                  <strong>{policyCount.active}</strong> active {policyScope}{" "}
-                  policies as of TODO DATE
-                </span>
+                <span>Enacted</span>
               </div>
               <div className={styles.entry}>
                 <div
                   className={styles.total}
                   style={{ background: "#96C4BB" }}
                 />
-                <span>
-                  <strong>{policyCount.count}</strong> total {policyScope}{" "}
-                  policies as of TODO DATE
-                </span>
+                <span>Expired</span>
               </div>
             </>
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   );
