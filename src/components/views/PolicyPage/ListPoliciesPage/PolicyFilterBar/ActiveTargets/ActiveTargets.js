@@ -53,7 +53,8 @@ const ActiveDateRange = props => {
             {/*   <label>&nbsp;</label> */}
             {/* )} */}
             <RemoveFilterButton
-              backgroundColor={"#4E8490"}
+              light
+              backgroundColor={"#C6DFDA"}
               onClick={() => removeTarget(filter)}
             >
               Target: <strong>{filter}</strong>

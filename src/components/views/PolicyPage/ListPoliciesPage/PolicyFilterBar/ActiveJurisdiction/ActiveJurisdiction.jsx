@@ -62,7 +62,8 @@ const ActiveJurisdiction = props => {
             {/*   <label>&nbsp;</label> */}
             {/* )} */}
             <RemoveFilterButton
-              backgroundColor={"#4E8490"}
+              light
+              backgroundColor={"#C6DFDA"}
               onClick={() => removeTarget(filter)}
             >
               Jurisdiction: <strong>{filter}</strong>

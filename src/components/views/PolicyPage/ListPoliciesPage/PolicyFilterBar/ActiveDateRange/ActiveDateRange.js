@@ -40,12 +40,18 @@ const ActiveDateRange = props => {
         {/* <label> */}
         {/* <strong>Dates Policy in Effect</strong> */}
         {/* </label> */}
-        <RemoveFilterButton onClick={resetDateRange}>
+        <RemoveFilterButton
+          light
+          backgroundColor={"#C6DFDA"}
+          onClick={resetDateRange}
+        >
           Active During:{" "}
-          {dateRangeLabel({
-            startDate: policyFilters.dates_in_effect[0],
-            endDate: policyFilters.dates_in_effect[1],
-          })}
+          <strong>
+            {dateRangeLabel({
+              startDate: policyFilters.dates_in_effect[0],
+              endDate: policyFilters.dates_in_effect[1],
+            })}
+          </strong>
         </RemoveFilterButton>
       </div>
     );
