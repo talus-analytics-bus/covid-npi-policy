@@ -12,14 +12,11 @@ import { Nav } from "./components/layout";
 import { Footer } from "./components/layout";
 
 // views
-import Data from "./components/views/data/Data";
+import Data, { DataPageType } from "./components/views/data/Data";
 import Map from "./components/views/map/Map";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
-// import Documentation from "./components/views/documentation/Documentation.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
-// import PolicyPage from "./components/views/PolicyPage/PolicyPage/PolicyPage";
-// import ListPoliciesPage from "./components/views/PolicyPage/ListPoliciesPage/ListPoliciesPage";
 import Landing from "./components/views/landing/Landing";
 
 import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
@@ -32,14 +29,20 @@ import styles from "./App.module.scss";
 import classNames from "classnames";
 import { InfoTooltipProvider } from "context/InfoTooltipContext";
 import { LoadingSpinner } from "components/common";
+import { AmpPage } from "types";
+import { VersionRecord } from "api/queryTypes";
+import { CountRecords } from "components/misc/dataTypes";
+import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 
 //: React.FC
 const App = () => {
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(null);
-  const [infoTooltipContent, setInfoTooltipContent] = useState(null);
-  const [versions, setVersions] = useState(null);
-  const [counts, setCounts] = useState(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<AmpPage | null>(null);
+  const [infoTooltipContent, setInfoTooltipContent] = useState<string | null>(
+    null
+  );
+  const [versions, setVersions] = useState<VersionRecord[] | null>(null);
+  const [counts, setCounts] = useState<CountRecords | null>(null);
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -48,15 +51,15 @@ const App = () => {
   const modalToShow = {
     chrome: () => null,
     firefox: () => null,
-    safari: browser => browserModal("Safari"),
-    edge: browser => browserModal("Edge"),
-    ie: browser => browserModal("Internet Explorer"),
-    opera: browser => browserModal("Opera"),
+    safari: () => browserModal(),
+    edge: () => browserModal(),
+    ie: () => browserModal(),
+    opera: () => browserModal(),
     default: () => null,
   };
 
   // function to return modal content for unsupported browser modal
-  const browserModal = browser => (
+  const browserModal = () => (
     <Modal
       position="top center"
       on="click"
@@ -116,33 +119,42 @@ const App = () => {
           <Nav {...{ page }} />
           <Switch>
             <React.Fragment>
-              <div className={classNames(styles.page, styles[page])}>
+              <div
+                className={classNames(
+                  styles.page,
+                  styles[page !== null ? page : ""]
+                )}
+              >
                 {
                   // Data page
                   <Route
                     exact
                     path="/data"
                     render={() => {
+                      // get URL parameters as strings and JSONs, or null
                       const urlParams = new URLSearchParams(
                         window.location.search
                       );
-                      const type = urlParams.get("type");
-                      const filtersPolicyStrLegacy = urlParams.get("filters");
-                      const filtersPolicyStr = urlParams.get("filters_policy");
-                      const filtersChallengeStr = urlParams.get(
+                      const type: DataPageType =
+                        urlParams.get("type") !== null
+                          ? (urlParams.get("type") as DataPageType)
+                          : "policy";
+                      const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
+                        urlParams,
+                        "filters_policy"
+                      );
+                      const urlFilterParamsPolicyLegacy: Filters | null = getUrlParamAsFilters(
+                        urlParams,
+                        "filters"
+                      );
+                      const urlFilterParamsChallenge: Filters | null = getUrlParamAsFilters(
+                        urlParams,
                         "filters_challenge"
                       );
-                      const filtersPlanStr = urlParams.get("filters_plan");
-                      const urlFilterParamsPolicy = JSON.parse(
-                        filtersPolicyStr
+                      const urlFilterParamsPlan: Filters | null = getUrlParamAsFilters(
+                        urlParams,
+                        "filters_plan"
                       );
-                      const urlFilterParamsPolicyLegacy = JSON.parse(
-                        filtersPolicyStrLegacy
-                      );
-                      const urlFilterParamsChallenge = JSON.parse(
-                        filtersChallengeStr
-                      );
-                      const urlFilterParamsPlan = JSON.parse(filtersPlanStr);
                       return (
                         <Data
                           {...{
@@ -307,3 +319,30 @@ const App = () => {
 };
 
 export default App;
+
+/**
+ * Returns the value of a URL parameter as JSON.
+ * @param urlParams The URL search parameters
+ * @param paramKey The name of the param to return as JSON
+ * @returns {Object | null} Returns param val as JSON if it exists and is
+ * valid JSON, otherwise null
+ */
+function getUrlParamAsFilters(
+  urlParams: URLSearchParams,
+  paramKey: string
+): Filters | null {
+  // get param value from URL, possibly null
+  const v: string | null = urlParams.get(paramKey);
+
+  // if null, return null
+  if (v === null) return v;
+
+  // otherwise parse param value as JSON and return it
+  try {
+    return JSON.parse(v);
+  } catch (e) {
+    throw Error(`URL param named '${paramKey}' was invalid JSON: ${v}`);
+  } finally {
+    return null;
+  }
+}

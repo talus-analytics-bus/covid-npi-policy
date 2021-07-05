@@ -10,6 +10,7 @@ import {
 import { Numeric } from "d3";
 import { ReactNode } from "react-transition-group/node_modules/@types/react";
 import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { AmpPage } from "types";
 
 /**
  * Props taken by the `Map` component, which renders a Mapbox map.
@@ -33,20 +34,13 @@ export type MapProps = {
    *
    * @param v The page to which to set the app.
    */
-  setPage(v: string): void;
+  setPage(v: AmpPage): void;
 
   /**
    * Array of version data describing the last datum dates and last update
    * dates of different data sources used in the app.
    */
   versions: VersionRecord[];
-
-  /**
-   * Additional props used by the Map component.
-   *
-   * TODO destructure
-   */
-  props: any;
 
   /**
    * Sets tooltip content.
