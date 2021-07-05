@@ -27,6 +27,14 @@ const Axes = props => {
         fill: "rgba(130, 130, 130, 1)",
         pointerEvents: "none",
       },
+      zeroLabel: {
+        fontSize: dim.yLabelFontSize,
+        textAnchor: "start",
+        dominantBaseline: "bottom",
+        fontFamily: "rawline",
+        fill: "rgba(130, 130, 130, 1)",
+        pointerEvents: "none",
+      },
       scaleLabel: {
         fontSize: dim.yLabelFontSize,
         textAnchor: "start",
@@ -39,6 +47,10 @@ const Axes = props => {
         stroke: "lightgrey",
         strokeWidth: 0.8,
         strokeDasharray: 1,
+      },
+      spine: {
+        stroke: "lightgrey",
+        strokeWidth: 1,
       },
     },
   };
@@ -123,12 +135,25 @@ const Axes = props => {
               })}
             </text>
           ))}
-        {/* <line */}
-        {/*   x1={dim.xAxis.start.x} */}
-        {/*   y1={dim.xAxis.start.y} */}
-        {/*   x2={dim.xAxis.end.x} */}
-        {/*   y2={dim.xAxis.end.y} */}
-        {/* /> */}
+        <line
+          style={styles.yAxis.spine}
+          x1={0}
+          y1={dim.xAxis.start.y}
+          x2={dim.width}
+          y2={dim.xAxis.end.y}
+        />
+        <text x={0} y={dim.xAxis.start.y - 4} style={styles.yAxis.zeroLabel}>
+          {0}
+          {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
+        </text>
+        <text
+          x={dim.width}
+          y={dim.xAxis.start.y - 4}
+          style={styles.yAxis.label}
+        >
+          {0}
+          {/* {tick > 999 ? `${Math.round(tick / 1000)}k` : tick} */}
+        </text>
       </g>
     </g>
   );
