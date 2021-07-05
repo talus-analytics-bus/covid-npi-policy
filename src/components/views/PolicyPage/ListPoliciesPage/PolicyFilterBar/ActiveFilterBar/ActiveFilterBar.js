@@ -109,9 +109,9 @@ const ActiveFilterBar = props => {
 
   const datesAndTargets = (
     <>
-      <p>
+      {/* <p>
         <strong>Filters</strong>
-      </p>
+      </p> */}
       <div className={styles.activeFilters}>{props.children}</div>
     </>
   );
