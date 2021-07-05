@@ -3,8 +3,11 @@ import { useLocation } from "react-router-dom";
 
 import RemoveFilterButton from "../RemoveFilterButton/RemoveFilterButton";
 
-import styles from "./ActiveFilterBar.module.scss";
+import filterIcon from "./filterIcon.svg";
+
 import { policyContext } from "../../../PolicyRouter/PolicyRouter";
+
+import styles from "./ActiveFilterBar.module.scss";
 
 const numbersToWords = number =>
   ({
@@ -126,14 +129,19 @@ const ActiveFilterBar = props => {
       <div className={styles.activeFilterBar}>
         <div className={styles.summary}>
           {!searchActive && !isNaN(filteredPolicyCount.count) && (
-            <p className={styles.filterSummary}>
-              Showing <strong>{filteredPolicyCount.count}</strong> out of{" "}
-              <strong>{totalPolicyCount.count}</strong>{" "}
-              {state !== "national" ? "state and county" : "national and local"}{" "}
-              policies, of which{" "}
-              <strong>{numbersToWords(filteredPolicyCount.active)}</strong> are
-              currently active.
-            </p>
+            <>
+              <img className={styles.filterIcon} src={filterIcon} />
+              <p className={styles.filterSummary}>
+                Showing <strong>{filteredPolicyCount.count}</strong> out of{" "}
+                <strong>{totalPolicyCount.count}</strong>{" "}
+                {state !== "national"
+                  ? "state and county"
+                  : "national and local"}{" "}
+                policies, of which{" "}
+                <strong>{numbersToWords(filteredPolicyCount.active)}</strong>{" "}
+                are currently active.
+              </p>
+            </>
           )}
           {searchActive && (
             <p className={styles.filterSummary}>
