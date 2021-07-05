@@ -80,6 +80,7 @@ const TargetFilter = props => {
 
   return (
     <div className={styles.filter}>
+      <span className={styles.label}>POLICY TARGET</span>
       <ExpandingSection
         floating
         open={filterOpen}

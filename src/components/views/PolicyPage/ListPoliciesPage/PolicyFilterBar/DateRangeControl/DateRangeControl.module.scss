@@ -2,6 +2,8 @@
   margin-top: 0.75rem;
   margin-right: 0.5em;
   min-width: 14rem;
+  display: flex;
+  flex-direction: column;
 
   .buttonLabel {
     display: block;
@@ -30,4 +32,9 @@
       color: #333 !important;
     }
   }
+}
+
+.label {
+  font-family: "Open Sans";
+  padding-bottom: 0.5em;
 }

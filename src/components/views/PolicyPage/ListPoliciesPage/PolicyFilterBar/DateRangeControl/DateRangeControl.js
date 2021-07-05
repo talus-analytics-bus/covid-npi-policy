@@ -62,6 +62,7 @@ const DateRangeControl = props => {
 
   return (
     <div className={styles.datePicker}>
+      <span className={styles.label}>DATES POLICY IN EFFECT</span>
       <ExpandingSection
         floating
         open={datePickerOpen}

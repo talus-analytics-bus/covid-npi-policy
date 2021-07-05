@@ -40,6 +40,7 @@ const TargetFilter = props => {
 
   return (
     <div className={styles.filter}>
+      <span className={styles.label}>JURISDICTION</span>
       <ExpandingSection
         floating
         open={filterOpen}
