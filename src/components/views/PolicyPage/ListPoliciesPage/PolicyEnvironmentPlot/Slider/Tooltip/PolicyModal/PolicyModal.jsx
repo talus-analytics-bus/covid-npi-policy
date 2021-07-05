@@ -72,22 +72,22 @@ const PolicyModal = ({ children, category, policies, sliderDate }) => {
     policyData.map(policy => {
       let path = [
         policy[CATEGORY_FIELD_NAME],
-        "children",
-        policy.auth_entity[0].place.level,
+        // "children",
+        // policy.auth_entity[0].place.level,
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
       const place = policy.auth_entity[0].place;
 
-      if (
-        (policyFilters.iso3[0] === "USA" && place.level === "Local") ||
-        (policyFilters.iso3[0] !== "USA" &&
-          place.level === "State / Province") ||
-        policyFilters.iso3[0] === "Unspecified"
-      ) {
-        path = [...path, "children", policy.auth_entity[0].place.loc];
-      }
+      // if (
+      //   (policyFilters.iso3[0] === "USA" && place.level === "Local") ||
+      //   (policyFilters.iso3[0] !== "USA" &&
+      //     place.level === "State / Province") ||
+      //   policyFilters.iso3[0] === "Unspecified"
+      // ) {
+      //   path = [...path, "children", policy.auth_entity[0].place.loc];
+      // }
 
       path = [...path, "children", `ID${policy.id}`];
 
