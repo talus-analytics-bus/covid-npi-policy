@@ -124,10 +124,6 @@ const ActiveFilterBar = props => {
   )
     return (
       <div className={styles.activeFilterBar}>
-        {(policyFilters.level ||
-          policyFilters.subtarget ||
-          policyFilters.dates_in_effect) &&
-          datesAndTargets}
         <div className={styles.summary}>
           {!searchActive && !isNaN(filteredPolicyCount.count) && (
             <p className={styles.filterSummary}>
@@ -163,13 +159,17 @@ const ActiveFilterBar = props => {
           )}
           <RemoveFilterButton
             light
-            backgroundColor={"#eeeeee"}
+            backgroundColor={"#ffffff"}
             className={styles.reset}
             onClick={resetFilters}
           >
-            Reset All Filters
+            Clear filters
           </RemoveFilterButton>
         </div>
+        {(policyFilters.level ||
+          policyFilters.subtarget ||
+          policyFilters.dates_in_effect) &&
+          datesAndTargets}
       </div>
     );
   else return <></>;
