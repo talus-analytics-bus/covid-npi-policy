@@ -87,7 +87,9 @@ const TargetFilter = props => {
         onOpen={() => setFilterOpen(true)}
         onClose={() => setFilterOpen(false)}
       >
-        <span className={styles.buttonLabel}>Filter by Target</span>
+        <span className={styles.buttonLabel}>
+          {targets.selected.length} selected
+        </span>
         <div className={styles.filterFrame}>
           <MultiSelect
             showSelectedItems={false}
