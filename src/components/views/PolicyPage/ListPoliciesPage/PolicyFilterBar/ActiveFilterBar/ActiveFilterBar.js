@@ -90,7 +90,7 @@ const ActiveFilterBar = props => {
     }));
     setTargets(prev => ({ ...prev, selected: [] }));
     setJurisdiction(prev => ({ ...prev, selected: [] }));
-    setPolicyObject(policySummaryObject);
+    setPolicyObject({});
     setSearchTextInputValue("");
     setDateRangeControlValue({
       startDate: null,

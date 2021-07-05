@@ -79,17 +79,17 @@ const SnapshotChartSection = () => {
   //     { count: 0, active: 0 }
   //   );
 
-  const lastStatus =
-    policySummaryObject &&
-    policySummaryObject[
-      Object.keys(policySummaryObject)[
-        Object.keys(policySummaryObject).length - 1
-      ]
-    ];
+  // const lastStatus =
+  //   policySummaryObject &&
+  //   policySummaryObject[
+  //     Object.keys(policySummaryObject)[
+  //       Object.keys(policySummaryObject).length - 1
+  //     ]
+  //   ];
 
-  const categories =
-    lastStatus &&
-    Object.keys(lastStatus.expired).sort((a, b) => a.localeCompare(b));
+  // const categories =
+  //   lastStatus &&
+  //   Object.keys(lastStatus.expired).sort((a, b) => a.localeCompare(b));
 
   return (
     <div className={styles.sectionContainer}>
