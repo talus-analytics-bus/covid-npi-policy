@@ -10,7 +10,7 @@ import styles from "./PolicyEnvironmentPlot.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
-import { Policy } from "../../../../misc/Queries";
+// import { Policy } from "../../../../misc/Queries";
 
 const msPerDay = 86400000;
 
