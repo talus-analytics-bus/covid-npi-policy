@@ -15,7 +15,7 @@ import ExpandingSection from "./ExpandingSection/ExpandingSection";
 import ExpandMarker from "./ExpandMarker/ExpandMarker";
 import PolicyCategory from "./PolicyCategory/PolicyCategory";
 import PolicySummary from "../../PolicySummary/PolicySummary";
-import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIcon";
+import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIconOLD";
 
 import NDepthList from "./NDepthList/NDepthList";
 

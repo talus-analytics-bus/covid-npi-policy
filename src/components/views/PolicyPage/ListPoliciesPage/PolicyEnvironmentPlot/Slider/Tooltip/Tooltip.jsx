@@ -5,7 +5,7 @@ import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
 import styles from "./Tooltip.module.scss";
-import PolicyCategoryIcon from "../../../../PolicyCategoryIcon/PolicyCategoryIcon";
+import PolicyCategoryIcon from "../../../../PolicyCategoryIcon/PolicyCategoryIconOLD";
 
 import { policyContext } from "../../../../PolicyRouter/PolicyRouter";
 import PolicyModal from "./PolicyModal/PolicyModal";
