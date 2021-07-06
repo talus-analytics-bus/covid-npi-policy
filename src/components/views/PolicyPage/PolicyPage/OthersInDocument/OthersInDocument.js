@@ -62,7 +62,7 @@ const OthersInDocument = ({ policy, path }) => {
         </div>
       </div>
     );
-  else return false;
+  else return <ExploreSource {...{ policy }} />;
 };
 
 export default OthersInDocument;

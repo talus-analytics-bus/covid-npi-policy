@@ -22,6 +22,8 @@ import LocationAndOfficials from "./LocationAndOfficials/LocationAndOfficials";
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./PolicyPage.module.scss";
+import DocumentPreview from "./DocumentPreview/DocumentPreview";
+import ExploreSource from "./ExploreSource/ExploreSource";
 
 const PolicyPage = props => {
   const location = useLocation();
@@ -59,13 +61,21 @@ const PolicyPage = props => {
   return (
     <article className={styles.policyPage}>
       <header>
-        <h1>Policy details</h1>
+        <h1>{state} policy details</h1>
         <PolicyBreadcrumbs {...{ iso3, state, policyObjectPath }} />
       </header>
       <main className={styles.mainSection}>
+        <div className={styles.section}>
+          <div className={styles.left}>
+            <PolicyTitle {...{ policy }} />
+            <PolicyDates {...{ policy }} />
+          </div>
+          <div className={styles.right}>
+            <DocumentPreview />
+            <ExploreSource {...{ policy }} />
+          </div>
+        </div>
         <div className={styles.left}>
-          <PolicyTitle {...{ policy }} />
-          <PolicyDates {...{ policy }} />
           <PolicyDetails {...{ policy }} />
           <LocationAndOfficials {...{ policy, policyPlace }} />
         </div>
@@ -74,7 +84,6 @@ const PolicyPage = props => {
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
           )}
-          <OthersInDocument path={policyObjectPath} policy={policy} />
         </div>
       </main>
       <RelatedPolicies path={policyObjectPath} policy={policy} />
