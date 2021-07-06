@@ -1,4 +1,4 @@
-import { Policy } from "../../../misc/Queries";
+import { Policy } from "api/Queries";
 import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 
 import buildSummaryObject from "./buildSummaryObject.js";
@@ -335,7 +335,7 @@ export const loadPolicyDescriptions = async ({
 
 export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
   console.log("loadFullPolicy Called");
-  // debugger;
+  //
   const policyResponse = await Policy({
     method: "post",
     filters: filters,

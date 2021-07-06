@@ -1,0 +1,18 @@
+@import "src/assets/styles/vars.module.scss";
+.popupBody {
+    padding: 10px;
+    background-color: white;
+    border-radius: 0 0 $border-radius $border-radius;
+    border-top: 2px $idea-gray-2 solid;
+    height: 100%;
+    .bodySections {
+        height: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        > :not(:last-child) {
+            margin-right: 1.5rem;
+            padding-right: 1.5rem;
+            border-right: 1px solid $light-gray-4;
+        }
+    }
+}

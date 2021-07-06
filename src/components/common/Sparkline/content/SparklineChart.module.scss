@@ -1,0 +1,18 @@
+@import "src/assets/styles/vars.module.scss";
+.sparklineChart {
+    .chartAreaRect {
+        fill: transparent;
+    }
+    .line {
+        stroke: #828282;
+        stroke-width: 1px;
+        fill: rgba(130, 130, 130, 0.4);
+        width: auto;
+    }
+    .xAxisMarker {
+        transition: transform 0.5s ease;
+        stroke: $orange;
+        stroke-width: 1px;
+        fill: none;
+    }
+}

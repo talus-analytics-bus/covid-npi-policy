@@ -8,7 +8,8 @@ import moment from "moment";
 
 // misc and common components
 import { RadioToggle } from "../../common";
-import { isEmpty, arraysMatch } from "../../misc/Util";
+import { arraysMatch } from "../../misc/Util";
+import { isEmpty } from "../../misc/UtilsTyped";
 
 // assets and styles
 import calendarSvg from "../../../assets/icons/calendar.svg";
@@ -369,8 +370,12 @@ const Filter = ({
               selectedItems: [vItem],
             });
 
-            // update filters
-            setFilters({ ...filters, [field]: [vItem.value] });
+            // update filters?
+            const doUpdate =
+              filters[field] === undefined ||
+              filters[field].length === 0 ||
+              filters[field][0] !== vItem.value;
+            if (doUpdate) setFilters({ ...filters, [field]: [vItem.value] });
           },
           label,
         }}

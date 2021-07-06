@@ -1,8 +1,8 @@
 import React from "react";
 import classNames from "classnames";
-import { Policy, PolicyStatusCounts } from "../../../misc/Queries";
+import { Policy, PolicyStatusCounts } from "api/queryTypes";
 import infostyles from "../../../common/InfoTooltip/plugins.module.scss";
-import styles from "../../../common/MapboxMap/mapTooltip/maptooltip.module.scss";
+import styles from "../../../common/MapboxMap/mapPopup/maptooltip.module.scss";
 import localLogo from "./assets/icons/logo-local-pill.png";
 import { percentize } from "../../../misc/Util";
 import { PrimaryButton } from "../../../common";
@@ -47,30 +47,7 @@ export const tooltipGetter = async ({
   };
   // for each map type, return the appropriate tooltip formation
   const formattedDate = date.format("MMM D, YYYY");
-  if (mapId === "us") {
-    // get tooltip header
-    tooltip.tooltipHeader = {
-      title: d.properties.state_name,
-      subtitle: null,
-    };
-  } else {
-    // get tooltip header
-    // find place match or use geo properties
-    const matchingPlace = plugins.places.find(
-      dd => dd.iso === d.properties.ISO_A3
-    );
-    if (matchingPlace) {
-      tooltip.tooltipHeader = {
-        title: matchingPlace.name,
-        subtitle: null,
-      };
-    } else {
-      tooltip.tooltipHeader = {
-        title: d.properties.NAME,
-        subtitle: null,
-      };
-    }
-  }
+  setTooltipHeader({ mapId, tooltip, d, plugins });
   tooltip.actions = [];
   tooltip.tooltipHeaderMetric = null;
 
@@ -346,6 +323,55 @@ export const tooltipGetter = async ({
   tooltip.tooltipMainContent.reverse();
   if (callback) callback();
   return tooltip;
+};
+
+/**
+ * Sets the value of the tooltip header given the type of map and data for the
+ * feature that is tooltipped.
+ * @param {string} mapId The ID of the map, one of us, us-county, or global
+ * @param {Object} tooltip The tooltip info, which as a field `header` that
+ * this function sets.
+ * @param {Object} d The datum for the geographic feature to which this
+ * tooltip applies, containing all relevant metrics data.
+ * @param {Object} plugins Any additional key/value data for this
+ * implementation of the MapboxMap component that is used for this project
+ */
+const setTooltipHeader = ({ mapId, tooltip, d, plugins }) => {
+  switch (mapId) {
+    case "us":
+      tooltip.tooltipHeader = {
+        title: d.properties.state_name,
+        subtitle: null,
+      };
+      break;
+    case "us-county":
+      tooltip.tooltipHeader = {
+        title: `${d.properties.county_name}, ${d.properties.state_name}`,
+        subtitle: null,
+      };
+      // tooltip.tooltipHeader = {
+      //   title: d.properties.state_name,
+      //   subtitle: null,
+      // };
+      break;
+    default:
+      // find place match or use geo properties
+      const matchingPlace = plugins.places.find(
+        dd => dd.iso === d.properties.ISO_A3
+      );
+      if (matchingPlace) {
+        tooltip.tooltipHeader = {
+          title: matchingPlace.name,
+          subtitle: null,
+        };
+      } else {
+        tooltip.tooltipHeader = {
+          title: d.properties.NAME,
+          subtitle: null,
+        };
+      }
+      break;
+  }
 };
 
 async function setNoDataMessages(

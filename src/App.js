@@ -13,7 +13,7 @@ import { Footer } from "./components/layout";
 
 // views
 import Data from "./components/views/data/Data.js";
-import Map from "./components/views/map/Map.js";
+import Map from "./components/views/map/Map.tsx";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";
@@ -25,12 +25,13 @@ import Landing from "./components/views/landing/Landing";
 import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
 
 // queries
-import { Version, Count, execute } from "./components/misc/Queries";
+import { Version, Count, execute } from "api/Queries";
 
 // styles and assets
 import styles from "./App.module.scss";
 import classNames from "classnames";
-import loadingSvg from "./assets/images/loading.svg";
+import { InfoTooltipProvider } from "context/InfoTooltipContext";
+import { LoadingSpinner } from "components/common";
 
 //: React.FC
 const App = () => {
@@ -110,7 +111,7 @@ const App = () => {
   if (versions === null || counts === null) return <div />;
   else
     return (
-      <React.Fragment>
+      <InfoTooltipProvider value={{ setInfoTooltipContent }}>
         <BrowserRouter>
           <Nav {...{ page }} />
           <Switch>
@@ -183,6 +184,7 @@ const App = () => {
                           {...{
                             versions,
                             setPage,
+                            loading,
                             setLoading,
                             setInfoTooltipContent,
                           }}
@@ -276,13 +278,14 @@ const App = () => {
             <Footer {...{ page, versions }} />
           )}
           {
-            // Loading spinner
-            <div
-              className={classNames(styles.loading, { [styles.on]: loading })}
-            >
-              <img src={loadingSvg} />
-            </div>
+            // // Loading spinner
+            // <div
+            //   className={classNames(styles.loading, { [styles.on]: loading })}
+            // >
+            //   <img src={loadingSvg} alt={"Loading spinner"} />
+            // </div>
           }
+          {<LoadingSpinner ready={!loading} fullscreen={true} />}
           {<BrowserDetection>{modalToShow}</BrowserDetection>}
         </BrowserRouter>
         {
@@ -299,7 +302,7 @@ const App = () => {
             getContent={() => infoTooltipContent}
           />
         }
-      </React.Fragment>
+      </InfoTooltipProvider>
     );
 };
 

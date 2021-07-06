@@ -1,0 +1,271 @@
+// VARIABLES
+// colors currently used
+$light-blue: #95cbee;
+$light-blue-2: #abdaf4;
+$light-blue-3: #d4eef9;
+$cyan: #d4eef9;
+$blue: #4682b4;
+$dark-blue: #11315d;
+$darker-blue: #24365b;
+$light-gray-2: #f2f2f2;
+$light-gray-3: #f7f7f7;
+$selected-blue: #0096c2;
+$dark-navy-blue: #233343;
+$amp-green: #409385;
+
+// general colors
+$gray: #999999;
+$gray-2: #b3b3b3;
+$light-gray: #efefef;
+$dark-gray: #333;
+$light-red: #dcc4cb;
+$red: #67001f;
+$green: darkgreen;
+$white: #fff;
+$light-cyan: #d9edf8;
+
+// functional colors
+$dark-navy-blue-button: #213561;
+$dark-selected-blue: $dark-blue;
+$no-data-gray: #b3b3b3;
+$zero-gray: #b3b3b3;
+
+// IDEA re-brand colors
+$idea-black: #303434;
+$idea-primary-dark-blue: #023f88;
+$idea-gray-2: #828282;
+$idea-gray-4: #f2f2f2;
+$idea-primary-light-blue: #009bdf;
+$light-gray-4: #c4c4c4;
+
+// figma colors
+$orange: #e55e37;
+
+// general styles
+$border: 1px solid #ccc;
+$border-radius: 5px;
+$light-bg: #f0f3f9;
+$lighter-bg: #f6f9ff;
+$darker-bg: darken($light-bg, 4%);
+$even-darker-bg: darken($light-bg, 20%);
+
+// Fonts
+$large-font: 2.4rem;
+$medium-font: 1.4rem;
+$smallish-font: 1.2rem;
+$small-font: 1rem;
+$very-small-font: 0.9rem;
+
+// Map colors
+$map-green-1: #116858;
+$map-green-2: #1a7c6b;
+$map-green-3: #409384;
+$map-green-4: #66a99d;
+$map-green-5: #96c4bb;
+$map-green-6: #c6dfda;
+
+// make colors available to JS
+:export {
+  red: $red;
+  lightred: $light-red;
+  darkblue: $dark-blue;
+  white: $white;
+  cyan: $cyan;
+  lightcyan: $light-cyan;
+  noDataGray: $no-data-gray;
+  gray: $gray;
+  darkSelectedBlue: $dark-selected-blue;
+  mapGreen1: $map-green-1;
+  mapGreen2: $map-green-2;
+  mapGreen3: $map-green-3;
+  mapGreen4: $map-green-4;
+  mapGreen5: $map-green-5;
+  mapGreen6: $map-green-6;
+  noDataGray: #dedede;
+  zeroGray: $zero-gray;
+  // noDataGray: #eaeaea;
+  // noDataGray: #c4c4c4;
+}
+
+// MIXINS
+@mixin spaceItemsVert($size, $top: true, $padding: false) {
+  @if $padding {
+    @if $top {
+      > :not(:first-child) {
+        padding-top: $size;
+      }
+    } @else {
+      > :not(:last-child) {
+        padding-bottom: $size;
+      }
+    }
+  } @else {
+    @if $top {
+      > :not(:first-child) {
+        margin-top: $size;
+      }
+    } @else {
+      > :not(:last-child) {
+        margin-bottom: $size;
+      }
+    }
+  }
+}
+
+@mixin selectStyling() {
+  // for styling select lists
+  // custom caret appearance with gradient included
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 9px 40px 9px 9px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 216 216'%3E%3Cpath fill='%23fff' fill-opacity='0' d='M0 0h216v216H0z'/%3E%3Cpath fill='%2358595b' d='M72 92.25h72l-36 40.5z'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, #ffffff 0%, #e4e4e4 100%);
+  background-repeat: no-repeat;
+  background-position: right, 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+@mixin spaceItemsHoriz($size, $side-right: true) {
+  @if $side-right {
+    > :not(:last-child) {
+      margin-right: $size;
+    }
+  } @else {
+    > :not(:first-child) {
+      margin-left: $size;
+    }
+  }
+}
+
+@mixin borderItemsVert($size) {
+  > :not(:first-child) {
+    margin-top: $size;
+    padding-top: $size;
+    border-top: $border;
+  }
+}
+
+@mixin borderItemsHoriz($size, $border-to-use: $border) {
+  > :not(:last-child) {
+    margin-right: $size;
+    padding-right: $size;
+    border-right: $border-to-use;
+  }
+}
+
+@mixin horiz() {
+  display: flex;
+  flex-flow: row;
+}
+
+@mixin boxShadow() {
+  box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.25);
+}
+
+@mixin boxShadowStrong() {
+  box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
+}
+
+@mixin btn-primary() {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background: -moz-linear-gradient(top, #425379 0%, #213561 100%);
+  background: -ms-linear-gradient(top, #425379 0%, #213561 100%);
+  background: -o-linear-gradient(top, #425379 0%, #213561 100%);
+  background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
+
+  &:hover,
+  &:active {
+    background: white;
+    color: #213561;
+    border-color: #213561;
+  }
+  &:active {
+    @include boxShadow();
+  }
+}
+
+@mixin btn-secondary() {
+  background: -moz-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+  &:hover {
+    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+  }
+  &:active {
+    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+  }
+}
+
+@mixin sticky($top: 0) {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: $top;
+  // position: -webkit-sticky; /* Safari */
+  // position: sticky;
+  // top: $top;
+}
+
+@mixin disabled() {
+  color: gray;
+  pointer-events: none;
+}
+
+// ensure rawline looks lined up with other UI elements
+// TODO elegantly
+@mixin rawlineFix() {
+  line-height: 1;
+  position: relative;
+  top: -2px;
+}
+
+@mixin noShadow() {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+@mixin indented() {
+  padding-left: 13px;
+  margin-left: 15px;
+  border-left: 1px solid lightgray;
+  font-size: 0.9rem;
+  margin-top: 5px !important;
+}
+
+@mixin slidingFontSize() {
+  // scale font between 16px and 10px at different screen widths
+  $max-font-size: 16px;
+  $min-font-size: 10px;
+  $diff: 6;
+  $lower-thresh: 320px;
+  $upper-thresh: 2400px;
+  $diff-thresh: 2080;
+  font-size: $max-font-size;
+  $factor: calc(calc(100vw - #{$lower-thresh}) / #{$diff-thresh});
+  $offset: calc(#{$diff} * #{$factor});
+  @media screen and (min-width: $lower-thresh) {
+    font-size: calc(#{$min-font-size} + #{$offset});
+  }
+  @media screen and (min-width: $upper-thresh) {
+    font-size: $max-font-size;
+  }
+}
+
+// globals
+$small-laptop: "screen and (max-width : 1220px)";
+$breakpoint-one: "screen and (max-width: 1150px)";
+$phone: "screen and (max-width: 812px)";
+$phone-narrow: "screen and (max-width: 500px)";
+$not-phone: "screen and (min-width: 813px)";
+$max-width: 1300px;

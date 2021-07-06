@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 //IDEA rebrand button styles
 .wrapper {
@@ -26,11 +26,7 @@
     }
     cursor: pointer;
     &:not(.link) {
-      background: linear-gradient(
-        180deg,
-        rgba(2, 63, 136, 0.85) 0%,
-        #023f88 100%
-      );
+      background: linear-gradient(180deg, rgba(2, 63, 136, 0.85) 0%, #023f88 100%);
       color: white;
       &:hover {
         background: white;

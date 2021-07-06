@@ -11,7 +11,7 @@ const CheckboxSet = ({ label, choices, callback, curVal, ...props }) => {
   // Trigger callback when all values change
   React.useEffect(() => {
     callback([...new Set(allValues.join(",").split(","))]);
-  }, [allValues]);
+  }, [allValues, callback]);
 
   const updateAllValues = v => {
     const oldAllValues = JSON.parse(JSON.stringify(allValues));
@@ -35,15 +35,13 @@ const CheckboxSet = ({ label, choices, callback, curVal, ...props }) => {
         callback: v => {
           updateAllValues(v);
         },
-        curChecked: allValues.includes(d.value.join(","))
+        curChecked: allValues.includes(d.value.join(",")),
       }}
     />
   ));
   return (
     <div className={styles.checkboxSet}>
-      <div role="label" className={styles.label}>
-        {label}
-      </div>
+      <div className={styles.label}>{label}</div>
       <div className={styles.checkboxContainer}>{checkboxes}</div>
     </div>
   );

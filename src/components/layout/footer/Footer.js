@@ -4,7 +4,6 @@ import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";
 import idea from "../../../assets/images/logo-title.png";
-import Util from "../../misc/Util.js";
 import classNames from "classnames";
 
 // 3rd party packages
@@ -13,7 +12,9 @@ import moment from "moment";
 const Footer = ({ page, versions }) => {
   // get last updated date
   const lastUpdatedPolicy = versions.find(d => d.name === "Policy data");
-  const lastUpdatedCases = versions.find(d => d.name === "COVID-19 case data");
+  const lastUpdatedCases = versions.find(
+    d => d.name === "COVID-19 state case data"
+  );
   const lastUpdatedDatePolicy =
     lastUpdatedPolicy !== undefined ? lastUpdatedPolicy.date : null;
   const lastUpdatedDateCases =

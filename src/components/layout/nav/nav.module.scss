@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 .navWrapper {
   font-family: "Rawline", serif;
   border-bottom: 1px solid $amp-green;
@@ -19,6 +19,9 @@
         display: flex;
         font-size: 1rem;
         @include spaceItemsHoriz(2rem);
+        > div {
+          position: relative;
+        }
       }
       .hamburger {
         display: none;
@@ -28,16 +31,16 @@
       color: $dark-navy-blue;
     }
     .active {
-      font-weight: bold;
+      font-weight: 600;
     }
     > a:first-child {
       margin-right: auto;
       display: flex;
       align-items: center;
     }
-    img {
-      height: 50px;
-    }
+    // img {
+    // height: 50px;
+    // }
   }
   &.wide {
     position: fixed;
@@ -49,14 +52,12 @@
       + div {
         height: calc(100% - 116px);
         top: 116px;
-        // height: calc(100% - 90px);
       }
     }
     &[data-page="model"] {
       border-bottom: 2px solid $amp-green;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
     }
-    border-bottom: none;
   }
   &:not(.wide) {
     position: fixed;
@@ -72,12 +73,80 @@
 .hoverTarget {
   margin: -15px;
   padding: 15px;
+  &.withSubmenu {
+    padding-right: 0;
+    + i {
+      top: 2px;
+      position: relative;
+    }
+  }
 }
 
 .navSubmenu {
-  padding: 15px;
   border: 1px solid #647f7966;
   border-radius: 5px;
   border-top-right-radius: 0;
-  background-color: #fff;
+  background-color: white;
+  margin-top: 5px;
+
+  // flow
+  display: flex;
+  flex-flow: column;
+  white-space: nowrap;
+
+  > a,
+  > div {
+    border-radius: 0;
+    &:first-child {
+      border-top-left-radius: 5px;
+    }
+    &:last-child {
+      border-radius: 0 0 5px 5px;
+    }
+  }
+
+  .active {
+    background-color: $light-gray-3;
+
+    > a,
+    > div,
+    span {
+      color: $selected-blue;
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+  > a {
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+  // submenu item
+  > a,
+  > div {
+    padding: 10px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.9rem;
+  }
+  > a {
+    cursor: pointer;
+    &:hover {
+      background-color: $light-gray-2;
+      color: $selected-blue;
+    }
+  }
+}
+.linkWithTooltip {
+  display: flex;
+  align-items: center;
+  > :not(:last-child) {
+    margin-right: 0.25rem;
+  }
 }

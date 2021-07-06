@@ -1,22 +1,20 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 .style {
   display: flex;
   flex-flow: column;
-  background-color: white;
   width: max-content;
-  padding: 5px;
-  margin: 5px;
   @include spaceItemsVert(10px);
   z-index: 1000;
   cursor: default;
   .name {
-    max-width: 420px;
+    max-width: 550px;
   }
   .content {
     display: flex;
+    align-items: baseline;
     @include spaceItemsHoriz(30px);
-    // justify-content: center;
+
     .entry {
       display: flex;
       flex-flow: column;
@@ -65,16 +63,20 @@
           flex-flow: column;
           position: relative;
           align-items: center;
+          font-size: 0.9em;
+          // max-width: 90px;
           .rect {
             width: 3 * $height;
             margin-bottom: 2px;
             &.labelsInside {
+              max-width: 90px;
               width: auto;
               height: 100%;
               padding: 5px 10px;
               display: flex;
               align-items: center;
               text-align: center;
+              line-height: 1.2;
               .label {
                 margin: 0 auto;
               }
@@ -98,27 +100,20 @@
           width: $height;
         }
         &.hatched {
-          background: repeating-linear-gradient(
-            -45deg,
-            #bfbfbf,
-            #bfbfbf,
-            1px,
-            #fff 1px,
-            #fff 6px
-          );
+          background: repeating-linear-gradient(-45deg, #bfbfbf, #bfbfbf, 1px, #fff 1px, #fff 6px);
           border: 1px solid #bfbfbf;
         }
       }
     }
   }
   &.mapboxLegend {
-    background-color: white;
     border: none;
+  }
 
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
-    // width: 100%;
+  .nameAndTooltip {
+    img {
+      margin-left: 0.25rem;
+    }
   }
 }
 

@@ -6,8 +6,9 @@ import moment from "moment";
 import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle, PrimaryButton } from "../../common";
 import Drawer from "../../layout/drawer/Drawer.js";
-import { Metadata, OptionSet, Export, execute } from "../../misc/Queries.js";
-import { isEmpty, comma } from "../../misc/Util.js";
+import { Metadata, OptionSet, Export, execute } from "api/Queries";
+import { comma } from "../../misc/Util.js";
+import { isEmpty } from "components/misc/UtilsTyped";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -209,7 +210,7 @@ const Data = ({
 
     // set current page
     setPage("data");
-  }, []);
+  }, [setLoading, setPage]);
 
   // when doc type changes, nullify columns / data / filter defs, then update
   // entity info
