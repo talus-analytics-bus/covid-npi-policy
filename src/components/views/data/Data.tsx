@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { Helmet } from "react-helmet";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
@@ -568,6 +569,10 @@ const Data: FC<DataProps> = ({
 
   return (
     <div className={styles.data}>
+      <Helmet>
+        <title>Data</title>
+        <meta name="Access COVID AMP data" />
+      </Helmet>
       <div className={styles.header}>
         <PageHeader>Data access</PageHeader>
         <div className={styles.columnText}>

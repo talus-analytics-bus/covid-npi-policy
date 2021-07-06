@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-
+import { Helmet } from "react-helmet";
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
 import policyPageDocumentIcon from "../../../../../assets/icons/policyPageDocumentIcon.svg";
@@ -92,14 +92,29 @@ const IntroSection = props => {
   if (iso3 === "Unspecified") {
     return (
       <div className={styles.introSection}>
+        <Helmet>
+          <title>{locationName} COVID-19 policies</title>
+          <meta description={`COVID AMP policies for ${locationName}}`} />
+        </Helmet>
         <PageHeader>{locationName} COVID-19 Policies</PageHeader>
       </div>
     );
   }
 
+  const showLocName = locationName !== iso3;
   return (
     <div className={styles.introSection}>
-      {locationName !== iso3 ? (
+      <Helmet>
+        <title>
+          {showLocName ? `${locationName} policies` : "COVID-19 policies"}
+        </title>
+        <meta
+          description={
+            "COVID AMP policies" + showLocName ? ` for ${locationName}}` : ""
+          }
+        />
+      </Helmet>
+      {showLocName ? (
         <PageHeader>{locationName} COVID-19 Policies</PageHeader>
       ) : (
         <PageHeader>&nbsp;</PageHeader>
