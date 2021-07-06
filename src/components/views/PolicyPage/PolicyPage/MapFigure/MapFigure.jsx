@@ -10,23 +10,28 @@ const MapFigure = ({ state, policy, policyPlace }) => {
 
   return (
     <figure className={styles.miniMapHolder}>
+      <div className={styles.mapHolder}>
+        <MiniMap.SVG
+          country={
+            policy && policy.place && policy.place.map(place => place.iso3)
+          }
+          state={state && state}
+          counties={
+            policy
+              ? policy.place
+                ? [
+                    ...policy.place.map(
+                      place => place.area2.split(" County")[0]
+                    ),
+                  ]
+                : []
+              : []
+          }
+        />
+      </div>
       <figcaption>
-        <h4>{locationTitle}</h4>
         This policy was authorized by {locationTitle} and affects ....
       </figcaption>
-      <MiniMap.SVG
-        country={
-          policy && policy.place && policy.place.map(place => place.iso3)
-        }
-        state={state && state}
-        counties={
-          policy
-            ? policy.place
-              ? [...policy.place.map(place => place.area2.split(" County")[0])]
-              : []
-            : []
-        }
-      />
     </figure>
   );
 };

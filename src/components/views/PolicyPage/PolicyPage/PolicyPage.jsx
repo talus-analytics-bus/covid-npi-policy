@@ -60,6 +60,8 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
+  console.log(policy);
+
   return (
     <article className={styles.policyPage}>
       <header>
@@ -102,8 +104,7 @@ const PolicyPage = props => {
           </div>
         </div>
         <div className={styles.section}>
-          <MapFigure {...{ policy, state, policyPlace }} />
-          <LocationAndOfficials {...{ policy, policyPlace }} />
+          <LocationAndOfficials {...{ state, policy, policyPlace }} />
         </div>
         <div className={styles.right}>
           {iso3 === "USA" && (
