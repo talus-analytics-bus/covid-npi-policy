@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import styles from "./about.module.scss";
@@ -141,6 +142,10 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
 
   return (
     <div className={styles.about}>
+      <Helmet>
+        <title>{tab === "amp" ? "What is COVID AMP?" : "Documentation"}</title>
+        <meta name="About COVID AMP" />
+      </Helmet>
       <h2 className={styles.title}>About</h2>
       <AccessibilityNote />
       <div className={styles.tabs}>

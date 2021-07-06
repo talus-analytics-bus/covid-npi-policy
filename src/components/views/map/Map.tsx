@@ -9,8 +9,15 @@
  */
 
 // 3rd party packages
-import React, { useCallback, useEffect, useState, FC } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  FC,
+  ReactElement,
+} from "react";
 import { Moment } from "moment";
+import { Helmet } from "react-helmet";
 
 // custom hooks
 import usePrevious from "components/common/hooks/usePrevious";
@@ -302,11 +309,28 @@ const Map: FC<MapProps> = ({
   //   };
   // }, []);
 
+  // page title and metadata
+  const helmet: ReactElement = (
+    <Helmet>
+      <title>Policy maps</title>
+      <meta name="Maps of policies in COVID AMP" />
+    </Helmet>
+  );
+
   // JSX // -----------------------------------------------------------------//
-  if (!initialized) return <div />;
+  if (!initialized)
+    return (
+      <div>
+        <Helmet>
+          <title>Policy maps</title>
+          <meta name="Maps of policies in COVID AMP" />
+        </Helmet>
+      </div>
+    );
   else
     return (
       <div className={styles.map}>
+        {helmet}
         {/* Provide data for current and previous map options selections */}
         <MapPlaceContext.Provider value={countyNamesByFips}>
           <MapOptionProvider

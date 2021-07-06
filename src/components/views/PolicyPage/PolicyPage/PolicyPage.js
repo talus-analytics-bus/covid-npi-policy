@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import { Helmet } from "react-helmet";
 import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
 
 import { getFirstPathFromObject, getObjectByPath } from "../objectPathTools";
@@ -66,14 +66,15 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  // console.log(policyObjectPath);
-  // console.log(policyObject);
-  // console.log(policy);
-
-  //
+  const policyName = policy && policy.policy_name;
+  const pageTitle = getPageTitle(policyName);
 
   return (
     <article className={styles.policyPage}>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="Access COVID AMP data" />
+      </Helmet>
       <div className={styles.breadCrumbs}>
         {iso3 !== "Unspecified" && (
           <>
@@ -137,7 +138,7 @@ const PolicyPage = props => {
               <div className={styles.col}>
                 <h3>Published in</h3>
                 <p>
-                  <strong>{policy && policy.policy_name}</strong>
+                  <strong>{policyName}</strong>
                 </p>
               </div>
             </div>
@@ -326,3 +327,16 @@ const PolicyPage = props => {
 };
 
 export default PolicyPage;
+/**
+ * Returns the title of the page to use based on the policy name.
+ * @param {string | null | undefined} policyName The name of the policy
+ * @returns {string} The page title
+ */
+function getPageTitle(policyName) {
+  const hasName = policyName !== undefined && policyName !== null;
+  if (hasName) {
+    const nMax = 15;
+    if (policyName.length > nMax) return policyName.slice(0, nMax) + "...";
+    else return policyName;
+  } else return "Policy page";
+}
