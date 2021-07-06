@@ -22,7 +22,7 @@ const iconDictionary: Record<string, string> = {
   "Authorization and enforcement": authorizationEnforcementIcon,
   "Enabling and relief measures": reliefMeasuresIcon,
   "Travel restrictions": travelRestrictionsIcon,
-  Vaccine: vaccineIcon,
+  Vaccinations: vaccineIcon,
   "Military mobilization": militaryMobilizationIcon,
 };
 
