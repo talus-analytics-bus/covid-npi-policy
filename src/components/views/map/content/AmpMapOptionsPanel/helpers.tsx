@@ -1,9 +1,6 @@
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import { Option } from "components/common/OptionControls/types";
-import {
-  Dispatch,
-  SetStateAction,
-} from "react-transition-group/node_modules/@types/react";
+import { Dispatch, SetStateAction } from "react";
 
 /**
  * Update the filters for the specified key to consist of the
