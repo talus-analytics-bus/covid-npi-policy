@@ -8,7 +8,7 @@ build/
 launch.json
 .vscode/
 
-*.DS_STORE
+.DS_Store
 
 # VSCode files
 .vscode
