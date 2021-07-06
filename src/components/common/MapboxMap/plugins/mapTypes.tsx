@@ -1,6 +1,7 @@
 /**
  * TypeScript types used by the Map and MapboxMap components.
  */
+import { ReactNode, ReactElement } from "react";
 import {
   GeoRes,
   MetricRecords,
@@ -8,8 +9,6 @@ import {
   VersionRecord,
 } from "api/queryTypes";
 import { Numeric } from "d3";
-import { ReactNode } from "react-transition-group/node_modules/@types/react";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
 
 /**
  * Props taken by the `Map` component, which renders a Mapbox map.
