@@ -46,13 +46,14 @@
     "victory": "^35.0.3"
   },
   "scripts": {
-    "start": "env-cmd -f .env.staging react-scripts start",
-    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-    "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test",
+    "withenv": "env-cmd -f $npm_config_envpath echo \"Environment variables loaded from $npm_config_envpath\"",
+    "start": "npm run withenv --envpath=.env.development; react-scripts start",
+    "build": "npm run withenv --envpath=.env.production; react-scripts build",
+    "build:staging": "npm run withenv --envpath=.env.staging; react-scripts build",
     "eject": "react-scripts eject",
     "tslint": "./node_modules/.bin/tslint",
-    "deploy": "CI=false REACT_APP_GLOBAL_MAP_STYLE_URL=mapbox://styles/nicoletalus/ckp8qyvy55atc18mlkmw80ebq REACT_APP_API_URL=https://api.covidamp.org REACT_APP_COVID_LOCAL_URL=https://covid-local.org/ REACT_APP_MODEL_API_URL=https://amp-model-api.covidamp.org/ yarn build && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete",
-    "deploy-test": "CI=false REACT_APP_GLOBAL_MAP_STYLE_URL=mapbox://styles/nicoletalus/ckp5qwi392djb18qbvlf0hiku REACT_APP_API_URL=https://api-test.covidamp.org REACT_APP_COVID_LOCAL_URL=https://test.covid-local.org/ REACT_APP_MODEL_API_URL=https://test-amp-model-api.covidamp.org/ yarn build && aws s3 sync build/ s3://covid-npi-policy-test --acl public-read --delete"
+    "deploy": "CI=false yarn build && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete",
+    "deploy-test": "CI=false yarn build:staging && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete"
   },
   "eslintConfig": {
     "extends": "react-app"
