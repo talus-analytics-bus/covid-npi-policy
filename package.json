@@ -49,13 +49,15 @@
   },
   "scripts": {
     "withenv": "env-cmd -f $npm_config_envpath echo \"Environment variables loaded from $npm_config_envpath\"",
-    "start": "npm run withenv --envpath=.env.development; react-scripts start",
-    "build": "npm run withenv --envpath=.env.production; react-scripts build",
+    "start": "react-scripts start",
+    "start:dev": "npm run withenv --envpath=.env.development; react-scripts start",
+    "build": "react-scripts build",
+    "build:production": "npm run withenv --envpath=.env.production; react-scripts build",
     "build:staging": "npm run withenv --envpath=.env.staging; react-scripts build",
     "eject": "react-scripts eject",
     "tslint": "./node_modules/.bin/tslint",
-    "deploy": "CI=false yarn build && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete",
-    "deploy-test": "CI=false yarn build:staging && aws s3 sync build/ s3://covid-npi-policy-test --acl public-read --delete"
+    "deploy": "CI=false npm run build:production && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete",
+    "deploy-test": "CI=false npm run build:staging && aws s3 sync build/ s3://covid-npi-policy-test --acl public-read --delete"
   },
   "eslintConfig": {
     "extends": "react-app"
