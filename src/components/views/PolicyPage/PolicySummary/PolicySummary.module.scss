@@ -11,6 +11,8 @@
   border: 1px solid #dbdbdb;
   border-radius: 5px;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  padding-top: 30px;
 
   &:hover {
     text-decoration: none;
@@ -34,10 +36,6 @@
     transition: 150ms ease;
   }
 
-  .header {
-    display: flex;
-  }
-
   .breadcrumbs {
     width: 100%;
     text-align: right;
@@ -45,9 +43,13 @@
   }
 
   .metadata {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    width: 30%;
+    flex-shrink: 0;
+    grid-template-columns: auto auto;
+    column-gap: 15px;
     margin-bottom: 0.5em;
+    align-items: baseline;
 
     div {
       padding-right: 2em;
@@ -59,7 +61,8 @@
       font-weight: 500;
       font-size: 0.9em;
       text-transform: uppercase;
-      margin-top: 30px;
+      // margin-top: 30px;
+      text-align: right;
     }
 
     h2 {
@@ -69,10 +72,6 @@
       text-transform: none;
       line-height: 1.25;
       color: #29334b;
-    }
-
-    h1,
-    a {
     }
   }
 
@@ -87,7 +86,6 @@
     font-weight: 500;
     line-height: 1.4;
     font-size: 1.1em;
-    margin-top: 1em;
     margin-bottom: 1em;
     color: #29334b;
 
