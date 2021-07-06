@@ -1,6 +1,8 @@
 import React from "react";
 import { removeParenthetical } from "../../../../misc/UtilsTyped.tsx";
 
+import styles from "./PolicyTitle.module.scss";
+
 // TODO: replace with <FMT.Date> component
 const formatDate = date => {
   if (!date) return undefined;
@@ -13,7 +15,7 @@ const formatDate = date => {
 };
 
 const PolicyTitle = ({ policy }) => (
-  <h2>
+  <h2 className={styles.h2alt}>
     {policy ? (
       <>
         {`${removeParenthetical(policy.auth_entity[0].place.loc.split(",")[0])}

@@ -20,41 +20,31 @@ const PolicyDates = ({ policy }) => (
     <div className={styles.row}>
       <div className={styles.col}>
         <h3>Published in</h3>
-        <p>
-          <strong>{policy && policy.policy_name}</strong>
-        </p>
+        <p>{policy && policy.policy_name}</p>
       </div>
     </div>
 
     <div className={styles.headerInfoRow}>
       <div className={styles.col}>
         <h3>Effective from</h3>
-        <p>
-          <strong>
-            {policy && formatDate(new Date(policy.date_start_effective))}
-          </strong>
-        </p>
+        <p>{policy && formatDate(new Date(policy.date_start_effective))}</p>
       </div>
       <div className={styles.col}>
         <h3>Ended</h3>
         <p>
-          <strong>
-            {policy &&
-              ((policy.date_end_actual &&
-                formatDate(new Date(policy.date_end_actual))) ||
-                "Active")}
-          </strong>
+          {policy &&
+            ((policy.date_end_actual &&
+              formatDate(new Date(policy.date_end_actual))) ||
+              "Active")}
         </p>
       </div>
       <div className={styles.col}>
         <h3>Date Issued</h3>
         <p>
-          <strong>
-            {policy &&
-              (policy.date_issued
-                ? formatDate(new Date(policy.date_issued))
-                : "Not Specified")}
-          </strong>
+          {policy &&
+            (policy.date_issued
+              ? formatDate(new Date(policy.date_issued))
+              : "Not Specified")}
         </p>
       </div>
       {policy && policy.court_challenges && (
