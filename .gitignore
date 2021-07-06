@@ -14,4 +14,4 @@ launch.json
 .vscode
 
 # dotenv files
-.env
+.env.*local
