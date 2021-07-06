@@ -51,6 +51,7 @@
     "withenv": "env-cmd -f $npm_config_envpath env-cmd -f $npm_config_envpath.local --silent echo \"Environment variables loaded from $npm_config_envpath\"",
     "start": "react-scripts start",
     "start:dev": "npm run withenv --envpath=.env.development; react-scripts start",
+    "start:staging": "npm run withenv --envpath=.env.staging; react-scripts start",
     "build": "react-scripts build",
     "build:production": "npm run withenv --envpath=.env.production; react-scripts build",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
