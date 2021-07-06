@@ -47,6 +47,8 @@ const PolicySummary = props => {
 
   const idNumber = props.path.slice(-1)[0].replace("ID", "");
 
+  console.log(props.policy);
+
   return (
     <Link
       className={styles.policySummary}
@@ -78,11 +80,11 @@ const PolicySummary = props => {
       )}
       <header className={styles.metadata}>
         <h1>Jurisdiction</h1>
-        <h2>PLACEHOLDER</h2>
+        <h2>{props.policy.auth_entity[0].place.level}</h2>
         <h1>
           Authorizing <br /> Location
         </h1>
-        <h2>PLACEHOLDER</h2>
+        <h2>{props.policy.auth_entity[0].place.loc.split(",")[0]}</h2>
         <h1>Effective from</h1>
         <h2>{formatDate(new Date(props.policy.date_start_effective))}</h2>
         <h1>Ended</h1>
