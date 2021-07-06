@@ -12,10 +12,7 @@
   border-radius: 5px;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-
-  @media screen and (max-width: 800px) {
-    flex-wrap: wrap;
-  }
+  flex-direction: column;
 
   &:hover {
     text-decoration: none;
@@ -43,6 +40,14 @@
     width: 100%;
     text-align: right;
     margin-bottom: -0.5rem;
+  }
+
+  .main {
+    display: flex;
+
+    @media screen and (max-width: 800px) {
+      flex-wrap: wrap;
+    }
   }
 
   .metadata {
