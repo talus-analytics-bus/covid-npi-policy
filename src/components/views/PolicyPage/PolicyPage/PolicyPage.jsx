@@ -58,6 +58,8 @@ const PolicyPage = props => {
   const policyPlace =
     policy && policy.auth_entity && policy.auth_entity[0].place;
 
+  const policyTargetList = policy && policy.subtarget;
+
   return (
     <article className={styles.policyPage}>
       <header>
@@ -75,12 +77,35 @@ const PolicyPage = props => {
             <ExploreSource {...{ policy }} />
           </div>
         </div>
-        <div className={styles.left}>
-          <PolicyDetails {...{ policy }} />
+        <div className={styles.section}>
+          <div className={styles.left}>
+            {/* <PolicyDetails {...{ policy }} /> */}
+            <h2>POLICY DETAILS</h2>
+            <h3>Relevant Authority</h3>
+            <p>{policy && policy.authority_name}</p>
+            <h3>Description</h3>
+            <p>{policy && policy.desc}</p>
+          </div>
+          <div className={styles.right}>
+            <h3>Policy Category</h3>
+            <p>{policy && policy.primary_ph_measure}</p>
+            <h3>Policy Subcategory</h3>
+            <p>{policy && policy.ph_measure_details}</p>
+            <h3>
+              Policy{" "}
+              {policyTargetList && policyTargetList.length > 1
+                ? "Targets"
+                : "Target"}
+            </h3>
+            {policyTargetList &&
+              policyTargetList.map(target => <p key={target}>{target}</p>)}
+          </div>
+        </div>
+        <div className={styles.section}>
+          <MapFigure {...{ policy, state, policyPlace }} />
           <LocationAndOfficials {...{ policy, policyPlace }} />
         </div>
         <div className={styles.right}>
-          <MapFigure {...{ policy, state, policyPlace }} />
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
           )}
