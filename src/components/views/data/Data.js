@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import { Helmet } from "react-helmet";
 
 // common components
 import Search from "../../common/Table/content/Search/Search";
@@ -369,6 +370,10 @@ const Data = ({
 
   return (
     <div className={styles.data}>
+      <Helmet>
+        <title>Data</title>
+        <meta name="Access COVID AMP data" />
+      </Helmet>
       <div className={styles.header}>
         <h1>COVID AMP data access</h1>
         <div className={styles.columnText}>

@@ -1,6 +1,7 @@
 // standard modules
 import React, { useState, useEffect } from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
@@ -112,6 +113,10 @@ const App = () => {
   else
     return (
       <InfoTooltipProvider value={{ setInfoTooltipContent }}>
+        <Helmet titleTemplate={"%s | COVID AMP"}>
+          <title>COVID AMP</title>
+          <meta name="COVID AMP" />
+        </Helmet>
         <BrowserRouter>
           <Nav {...{ page }} />
           <Switch>
