@@ -1,6 +1,6 @@
 import React from "react";
 
-import PolicyCategoryIcon from "../../../PolicyCategoryIcon/PolicyCategoryIcon.js";
+import PolicyCategoryIcon from "../../../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
