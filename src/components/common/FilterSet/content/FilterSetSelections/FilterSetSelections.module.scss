@@ -1,0 +1,49 @@
+@import "src/assets/styles/vars.module.scss";
+.selectedFilters {
+    padding: 10px;
+    padding-bottom: 5px;
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 1.75rem;
+    @include spaceItemsVert(15px);
+    .header {
+        display: flex;
+        align-items: center;
+        .filterIcon {
+            margin-right: 10px;
+            padding: 3px;
+            pointer-events: none;
+            div {
+                background-repeat: no-repeat;
+                background-position: center;
+                height: 18px;
+                width: 18px;
+                background-size: contain;
+            }
+        }
+    }
+    .badges {
+        display: flex;
+        flex-flow: wrap;
+
+        .badge {
+            font-family: "Open Sans", sans-serif;
+            font-size: 1rem;
+            color: #333;
+
+            background-color: $map-green-6;
+
+            display: flex;
+            align-items: center;
+
+            border-radius: 8px;
+            padding: 5px 10px;
+            margin-bottom: 0.5em;
+            margin-right: 0.5em;
+
+            .value {
+                font-weight: 700;
+            }
+        }
+    }
+}

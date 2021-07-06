@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import styles from "./about.module.scss";
@@ -8,16 +9,15 @@ import Documentation from "./content/Documentation";
 
 // local components
 import { AccessibilityNote } from "../../common";
-import { DownloadBtn } from "../data/Data";
+import { DownloadBtn, PageHeader } from "components/project";
 
 // assets
-import logo from "../../../assets/images/logo.svg";
 import talus from "../../../assets/images/logo-talus.png";
 import georgetown from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.png";
 import can from "../../../assets/images/logo-can.png";
 
-const About = ({ setLoading, setPage, initTab, ...props }) => {
+const About = ({ setLoading, setPage, initTab }) => {
   // display text and image for each contributor
   const contributors = [
     {
@@ -114,9 +114,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
             <div className={styles.articles}>
               {contributors.map(d => (
                 <article>
-                  <a href={d.url} target="_blank">
+                  <a href={d.url} target="_blank" rel="noreferrer">
                     <div>
-                      <img src={d.imgSrc} />
+                      <img src={d.imgSrc} alt={"Contributor logo"} />
                     </div>
                   </a>
                   <p>{d.text}</p>
@@ -131,9 +131,9 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
   const [tab, setTab] = useState(initTab);
   useEffect(() => {
     setLoading(false);
-    setPage("about");
+    setPage("about-" + tab);
     window.scrollTo(0, 0);
-  }, []);
+  }, [setLoading, setPage, tab]);
 
   useEffect(() => {
     setTab(initTab);
@@ -141,7 +141,11 @@ const About = ({ setLoading, setPage, initTab, ...props }) => {
 
   return (
     <div className={styles.about}>
-      <h2 className={styles.title}>About</h2>
+      <Helmet>
+        <title>{tab === "amp" ? "What is COVID AMP?" : "Documentation"}</title>
+        <meta name="About COVID AMP" />
+      </Helmet>
+      <PageHeader>About</PageHeader>
       <AccessibilityNote />
       <div className={styles.tabs}>
         {tabs.map(d => (

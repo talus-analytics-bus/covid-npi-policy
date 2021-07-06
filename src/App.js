@@ -1,6 +1,7 @@
 // standard modules
 import React, { useState, useEffect } from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
@@ -12,8 +13,8 @@ import { Nav } from "./components/layout";
 import { Footer } from "./components/layout";
 
 // views
-import Data from "./components/views/data/Data.js";
-import Map from "./components/views/map/Map.js";
+import Data from "./components/views/data/Data";
+import Map from "./components/views/map/Map";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 // import Documentation from "./components/views/documentation/Documentation.js";
@@ -25,12 +26,13 @@ import Landing from "./components/views/landing/Landing";
 import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
 
 // queries
-import { Version, Count, execute } from "./components/misc/Queries";
+import { Version, Count, execute } from "api/Queries";
 
 // styles and assets
 import styles from "./App.module.scss";
 import classNames from "classnames";
-import loadingSvg from "./assets/images/loading.svg";
+import { InfoTooltipProvider } from "context/InfoTooltipContext";
+import { LoadingSpinner } from "components/common";
 
 //: React.FC
 const App = () => {
@@ -110,7 +112,11 @@ const App = () => {
   if (versions === null || counts === null) return <div />;
   else
     return (
-      <React.Fragment>
+      <InfoTooltipProvider value={{ setInfoTooltipContent }}>
+        <Helmet titleTemplate={"%s | COVID AMP"}>
+          <title>COVID AMP</title>
+          <meta name="COVID AMP" />
+        </Helmet>
         <BrowserRouter>
           <Nav {...{ page }} />
           <Switch>
@@ -183,6 +189,7 @@ const App = () => {
                           {...{
                             versions,
                             setPage,
+                            loading,
                             setLoading,
                             setInfoTooltipContent,
                           }}
@@ -276,13 +283,14 @@ const App = () => {
             <Footer {...{ page, versions }} />
           )}
           {
-            // Loading spinner
-            <div
-              className={classNames(styles.loading, { [styles.on]: loading })}
-            >
-              <img src={loadingSvg} />
-            </div>
+            // // Loading spinner
+            // <div
+            //   className={classNames(styles.loading, { [styles.on]: loading })}
+            // >
+            //   <img src={loadingSvg} alt={"Loading spinner"} />
+            // </div>
           }
+          {<LoadingSpinner isReady={!loading} fullscreen={true} />}
           {<BrowserDetection>{modalToShow}</BrowserDetection>}
         </BrowserRouter>
         {
@@ -299,7 +307,7 @@ const App = () => {
             getContent={() => infoTooltipContent}
           />
         }
-      </React.Fragment>
+      </InfoTooltipProvider>
     );
 };
 

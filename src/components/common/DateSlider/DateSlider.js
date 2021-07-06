@@ -3,7 +3,7 @@
  */
 
 // standard packages
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./dateslider.module.scss";
 
 // common components
@@ -62,10 +62,10 @@ const DateSlider = ({
   const sliderMaxValue = sliderMax.diff(sliderMin, "days");
 
   // EFFECT HOOKS // --------------------------------------------------------//
-  // when slider date changes, update all data
+  // when slider date changes while playing, update all data
   useEffect(() => {
-    setDate(curSliderDate);
-  }, [curSliderDate]);
+    if (playing) setDate(curSliderDate);
+  }, [setDate, curSliderDate, playing]);
 
   // date slider and styles
   // wrapper style: optional
@@ -102,8 +102,17 @@ const DateSlider = ({
     const unit = (height - 3) / 3;
 
     const grooveYs = [0, 1, 2].map((d, i) => unit / 2 + unit * i);
+
     return (
-      <Handle data-tip={true} data-for={"sliderTooltip"} {...restProps}>
+      <Handle
+        onDrag={e => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        data-tip={true}
+        data-for={"sliderTooltip"}
+        {...restProps}
+      >
         {
           <div className={classNames(styles.dateLabel, styles[labelPos])}>
             {curSliderDate.format("MMM D")}
@@ -130,9 +139,18 @@ const DateSlider = ({
     // update slider numeric value and date based on latest numeric value
     // on slider
     setCurSliderVal(valNumeric);
-    const newCurSliderDate = moment(sliderMin);
-    newCurSliderDate.add(valNumeric, "days");
+    const newCurSliderDate = getSliderDateFromNumeric(sliderMin, valNumeric);
     setCurSliderDate(newCurSliderDate);
+  };
+
+  const handleSliderAfterChange = valNumeric => {
+    // update slider numeric value and date based on latest numeric value
+    // on slider
+    setCurSliderVal(valNumeric);
+    const newCurSliderDate = getSliderDateFromNumeric(sliderMin, valNumeric);
+    setCurSliderDate(newCurSliderDate);
+    setDate(newCurSliderDate);
+    if (playing) handlePause();
   };
 
   /**
@@ -177,15 +195,15 @@ const DateSlider = ({
     setPlayTimeouts(newPlayTimeouts);
   };
 
-  /**
-   * Stop playing after playing after slider is changed
-   * @method handleSliderAfterChange
-   * @return {[type]}                [description]
-   */
-  const handleSliderAfterChange = () => {
-    // Stop playing if playing
-    if (playing) handlePause();
-  };
+  // /**
+  //  * Stop playing after playing after slider is changed
+  //  * @method handleSliderAfterChange
+  //  * @return {[type]}                [description]
+  //  */
+  // const handleSliderAfterChange = () => {
+  //   // Stop playing if playing
+  //   if (playing) handlePause();
+  // };
 
   /**
    * If paused, stop playing and clear all playing timeouts (events that
@@ -215,7 +233,7 @@ const DateSlider = ({
     // Update slider value by incrementing or decrementing as appropriate
     const newSliderVal = curSliderVal + change;
     if (newSliderVal < sliderMinValue || newSliderVal > sliderMaxValue) return;
-    handleSliderChange(newSliderVal);
+    handleSliderAfterChange(newSliderVal);
   };
 
   /**
@@ -278,6 +296,38 @@ const DateSlider = ({
       {
         // main content of slider component
       }
+      <div className={styles.sliderControls}>
+        {
+          <i
+            onClick={() => handleBackForward(-1)}
+            className={classNames("material-icons", {
+              [styles.disabled]: curSliderVal <= sliderMinValue,
+            })}
+          >
+            fast_rewind
+          </i>
+        }
+        {// Show play button if not playing, pause button otherwise
+        !playing ? (
+          <i onClick={handlePlay} className={classNames("material-icons")}>
+            play_arrow
+          </i>
+        ) : (
+          <i onClick={handlePause} className={classNames("material-icons")}>
+            pause
+          </i>
+        )}
+        {
+          <i
+            onClick={() => handleBackForward(+1)}
+            className={classNames("material-icons", {
+              [styles.disabled]: curSliderVal >= sliderMaxValue,
+            })}
+          >
+            fast_forward
+          </i>
+        }
+      </div>
       <div className={styles.content}>
         {
           // bar
@@ -302,38 +352,6 @@ const DateSlider = ({
         {
           // play, pause, ffwd, rewind
         }
-        <div className={styles.sliderControls}>
-          {
-            <i
-              onClick={() => handleBackForward(-1)}
-              className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal <= sliderMinValue,
-              })}
-            >
-              fast_rewind
-            </i>
-          }
-          {// Show play button if not playing, pause button otherwise
-          !playing ? (
-            <i onClick={handlePlay} className={classNames("material-icons")}>
-              play_arrow
-            </i>
-          ) : (
-            <i onClick={handlePause} className={classNames("material-icons")}>
-              pause
-            </i>
-          )}
-          {
-            <i
-              onClick={() => handleBackForward(+1)}
-              className={classNames("material-icons", {
-                [styles.disabled]: curSliderVal >= sliderMaxValue,
-              })}
-            >
-              fast_forward
-            </i>
-          }
-        </div>
       </div>
       {
         // calendar datepicker
@@ -348,7 +366,10 @@ const DateSlider = ({
                 })}
               >
                 <button>{date.format("MMM D, 'YY")}</button>{" "}
-                <img src={open ? calendarSelectedSvg : calendarSvg} />
+                <img
+                  alt={"Calendar icon"}
+                  src={open ? calendarSelectedSvg : calendarSvg}
+                />
               </div>
             ),
           }}
@@ -387,3 +408,8 @@ const DateSlider = ({
 };
 
 export default DateSlider;
+function getSliderDateFromNumeric(sliderMin, valNumeric) {
+  const newCurSliderDate = moment(sliderMin);
+  newCurSliderDate.add(valNumeric, "days");
+  return newCurSliderDate;
+}

@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,

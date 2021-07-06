@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import styles from "./radiotoggle.module.scss";
-import { darkSelectedBlue } from "../../../assets/styles/vars.scss";
+import { darkSelectedBlue } from "../../../assets/styles/vars.module.scss";
 import { InfoTooltip } from "..";
 
 /**
@@ -9,15 +9,15 @@ import { InfoTooltip } from "..";
  * @method RadioToggle
  */
 const RadioToggle = ({
-  choices = [
-    { value: "a", label: "Sample choice A" },
-    { value: "b", label: "Sample choice B" },
-  ],
+  choices = [],
   curVal = "a",
   callback,
   onClick,
   label,
+  labelPos = "top",
+  theme,
   className,
+  tooltipMode = "icon", // 'icon' or 'footnote'
   children,
   ...props
 }) => {
@@ -64,76 +64,92 @@ const RadioToggle = ({
       </div>
     );
   } else {
+    const curValChoice = choices.find(c => getIsChecked(curVal, c));
+    // get checked value's tooltip if any and display beneath form if tooltip
+    // mode is "footnote"
+    const footnote =
+      tooltipMode === "footnote" &&
+      curValChoice !== undefined &&
+      curValChoice.tooltip !== undefined ? (
+        <span className={styles.footnote}>{curValChoice.tooltip}</span>
+      ) : null;
     return (
       <div
         className={classNames(
           classNames(className !== undefined ? className : ""),
           styles.radioToggle,
+          styles[theme],
           {
             [styles.disabled]: props.disabled === true,
             [styles.horizontal]: props.horizontal === true,
+            [styles.labelPosInline]: labelPos === "inline",
+            [styles.labelPosTop]: labelPos === "top",
             [styles.right]: props.right === true,
             [styles.left]: props.left === true,
           }
         )}
       >
-        <div role="label">{label}</div>
+        <div className={styles.label}>{label}</div>
         <form className={classNames({ [styles.asGrid]: showRadiosAsCols })}>
-          {choices.map(c => (
-            <>
-              <span
-                key={c.value}
-                className={classNames({
-                  [styles.hasChildren]: c.children !== undefined,
-                })}
-              >
-                {onClick(
-                  c.value,
-                  <label
-                    style={{
-                      color:
-                        curVal.toString() === c.value.toString()
-                          ? darkSelectedBlue
-                          : "",
-                    }}
-                    disabled={
-                      props.disabled === true || c.disabled === true
-                        ? "disabled"
-                        : ""
-                    }
-                    onClick={callback ? onChange : undefined}
-                  >
-                    <input
+          {choices.map(c => {
+            const isChecked = getIsChecked(curVal, c);
+            return (
+              <>
+                <span
+                  key={c.value}
+                  className={classNames({
+                    [styles.hasChildren]: c.children !== undefined,
+                  })}
+                >
+                  {onClick(
+                    c.value,
+                    <label
+                      style={{
+                        color:
+                          curVal.toString() === c.value.toString()
+                            ? darkSelectedBlue
+                            : "",
+                      }}
                       disabled={
                         props.disabled === true || c.disabled === true
                           ? "disabled"
                           : ""
                       }
-                      type="radio"
-                      name={c.name || c.label}
-                      value={c.value}
-                      checked={getIsChecked(curVal, c)}
-                      readOnly
-                    />
-                    <span>
-                      {getLabelJsx(c.name || c.label)}
-                      {c.tooltip && (
-                        <InfoTooltip
-                          id={c.value}
-                          text={c.tooltip}
-                          setInfoTooltipContent={props.setInfoTooltipContent}
-                          wide={c.wideTooltip === true}
-                          place={props.tooltipPlace}
-                        />
-                      )}
-                    </span>
-                  </label>
-                )}
-              </span>
-              {getIsChecked(curVal, c) && c.children}
-            </>
-          ))}
+                      onClick={callback ? onChange : undefined}
+                    >
+                      <input
+                        disabled={
+                          props.disabled === true || c.disabled === true
+                            ? "disabled"
+                            : ""
+                        }
+                        type="radio"
+                        name={c.name || c.label}
+                        value={c.value}
+                        checked={isChecked}
+                        readOnly
+                      />
+                      <span>
+                        {getLabelJsx(c.name || c.label)}
+                        {c.tooltip && tooltipMode === "icon" && (
+                          <InfoTooltip
+                            id={c.value}
+                            text={c.tooltip}
+                            setInfoTooltipContent={props.setInfoTooltipContent}
+                            wide={c.wideTooltip === true}
+                            place={props.tooltipPlace}
+                          />
+                        )}
+                      </span>
+                    </label>
+                  )}
+                </span>
+                {isChecked && c.children}
+              </>
+            );
+          })}
         </form>
+        {footnote}
       </div>
     );
   }

@@ -1,0 +1,27 @@
+@import "src/assets/styles/vars.module.scss";
+.sparkline {
+    text-align: right;
+    .valueAndUnit {
+        font-family: Open Sans, sans-serif;
+        font-weight: 600;
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+        .value {
+        }
+        .unit {
+        }
+    }
+    .label {
+        font-family: Open Sans;
+        font-style: italic;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 19px;
+        color: $idea-black;
+    }
+}
+
+.noData {
+    font-style: italic;
+    color: gray;
+}

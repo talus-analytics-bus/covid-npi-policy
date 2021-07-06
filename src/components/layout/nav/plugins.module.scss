@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 .navWrapper {
   border-bottom: 1px solid $idea-black;
   .nav {
@@ -9,7 +9,7 @@
         > a {
           &:not(:last-child) {
             font-family: "Open Sans";
-            margin-right: 30px;
+            // margin-right: 30px;
           }
           &:hover {
             color: $idea-primary-light-blue;

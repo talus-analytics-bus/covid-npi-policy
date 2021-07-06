@@ -2,13 +2,12 @@ $border-radius: 50%;
 
 .mapOverlay {
   position: absolute;
-  z-index: 2;
+  z-index: 1;
 }
 
 .resetButton {
   $icon-size: 40px;
-  left: 5px;
-  bottom: 100px;
+  top: calc(calc(#{$icon-size} * 2) + 10px);
   position: absolute;
 
   > button {

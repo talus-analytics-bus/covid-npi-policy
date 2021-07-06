@@ -10,7 +10,7 @@ import moment from "moment";
 import { ShowMore } from "../../../common";
 
 // queries
-import { Plan } from "../../../misc/Queries";
+import { Plan } from "api/Queries";
 
 // assets and styles
 // use same styles as main Data page
@@ -46,9 +46,12 @@ export const planInfo = {
         field: "area1",
         label: "State / Province",
         withGrouping: true,
-        // primary: "country_name",
         disabledText: "Choose a country",
       },
+      // NOTE The `area2` filter has limited values because the plan local area
+      // data field is often blank. Additionally, its units do not match those
+      // of the policy local area data field, e.g., some plans have a local
+      // area of "Office of the Chancellor" rather than a county or city.
       area2: {
         entity_name: "Place",
         field: "area2",

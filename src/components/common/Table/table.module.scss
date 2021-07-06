@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 .table {
   > [role="subheader"] {
@@ -56,6 +56,7 @@
         }
       }
     }
+
     td,
     th {
       @include spaceItemsVert(10px);
@@ -64,30 +65,15 @@
         border-right: 1px solid $gray-2 !important;
       }
 
-      // TODO media query for mobile friendliness should hide some cols
-      @media #{$phone} {
+      @media #{$small-laptop} {
         font-size: 0.9em;
+        .definition {
+          display: none;
+        }
 
         i {
           font-size: 1.25rem;
           position: relative;
-        }
-        &:nth-child(1),
-        &:nth-child(5) {
-          display: none;
-        }
-        @media #{$phone-narrow} {
-          .definition {
-            display: none;
-          }
-          &:nth-child(3),
-          &:nth-child(6) {
-            display: none;
-          }
-          &:nth-child(6) {
-            width: 60px;
-            // white-space: nowrap;
-          }
         }
       }
     }

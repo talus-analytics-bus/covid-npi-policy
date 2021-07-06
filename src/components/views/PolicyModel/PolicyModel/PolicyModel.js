@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
@@ -13,7 +14,7 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
-import { Caseload, Deaths } from "../../../misc/Queries.js";
+import { Caseload, Deaths } from "api/Queries.tsx";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";
@@ -317,6 +318,10 @@ const PolicyModel = ({ setLoading, setPage }) => {
 
   return (
     <div className={styles.background}>
+      <Helmet>
+        <title>Policy model</title>
+        <meta name="COVID AMP policy model for United States states and the District of Columbia" />
+      </Helmet>
       <article className={styles.main}>
         <h1 className={styles.title}>Policy model</h1>
         <div className={styles.titleContainer}>

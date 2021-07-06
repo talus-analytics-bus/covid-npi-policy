@@ -1,9 +1,26 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 .mapboxMap {
   // override mapbox popup defaults
   width: auto;
   // min-height: 50vh;
+}
+.navAndAttribControl {
+  position: absolute;
+  top: 103px;
+  left: 10px;
+  padding: 0;
+  .attributionControl {
+    position: relative;
+    top: 5px;
+    &.empty + .navigationControl {
+      top: 10px;
+    }
+  }
+  .navigationControl {
+    position: relative;
+    top: 50px;
+  }
 }
 // MAPBOX LEGEND
 .legend {
@@ -86,21 +103,30 @@
 }
 
 // override default mapbox styles
-[class*="mapboxgl-ctrl-attrib-inner"] > a {
-  color: #1e3e6e !important;
+div[class^="mapboxgl-popup "] {
+  z-index: 1;
+  div[class*="mapboxgl-popup-content"] {
+    padding: 0;
+  }
 }
+[class*="mapboxgl-ctrl-attrib"] a {
+  font-size: 0.6rem;
+  width: max-content;
+}
+
 [class*="overlays"] {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
   position: absolute;
   display: flex;
   flex-flow: column;
   width: 100%;
   height: 100%;
-  justify-content: flex-end;
   overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+  * {
+    pointer-events: all;
+  }
 }
 
 // override default mapbox controls
@@ -160,6 +186,9 @@
       box-shadow: none !important;
       -webkit-box-shadow: none !important;
     }
+  }
+  [class*="mapboxgl-ctrl-attrib-button"] {
+    display: none;
   }
 }
 

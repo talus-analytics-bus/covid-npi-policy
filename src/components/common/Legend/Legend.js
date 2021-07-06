@@ -13,7 +13,8 @@ import Util, { percentize, isLightColor } from "../../misc/Util.js";
 
 // assets and styles
 import styles from "./legend.module.scss";
-import { noDataGray } from "../../../assets/styles/vars.scss";
+import varsExports from "../../../assets/styles/vars.module.scss";
+import { getEvenSteps } from "components/misc/UtilsTyped";
 
 /**
  * @method Legend
@@ -37,17 +38,18 @@ const Legend = ({ ...props }) => {
     if (typeAndElement === "continuous - bubble") {
       const range = colorscale.range();
       const labels = Object.values(props.labels.bubble);
-      const radii = [5, 10, 15, 20];
+      const radii = getEvenSteps(10, 30, 4);
+      const { noDataGray } = varsExports;
       const noData = (
         <div className={styles.entry}>
           <div
             className={classNames(styles.circle)}
             style={{
-              backgroundColor: "#ccc",
-              height: radii[radii.length - 1],
-              width: radii[radii.length - 1],
-              transform: "scale(0.5)",
+              backgroundColor: noDataGray,
+              height: radii[0],
+              width: radii[0],
               transformOrigin: "center",
+              marginBottom: 10,
             }}
           ></div>
           <div className={styles.labels}>
@@ -70,11 +72,10 @@ const Legend = ({ ...props }) => {
             className={classNames(styles.circle)}
             style={{
               backgroundColor: "transparent",
-              border: "6px solid #A4A4A4",
-              height: radii[radii.length - 1],
-              width: radii[radii.length - 1],
-              transform: "scale(0.5)",
-              // transformOrigin: "left center",
+              border: "2px solid " + varsExports.zeroGray,
+              height: radii[0],
+              width: radii[0],
+              marginBottom: 10,
             }}
           ></div>
           <div className={styles.labels}>
@@ -133,6 +134,7 @@ const Legend = ({ ...props }) => {
           </div>
         </div>
       );
+      const { noDataGray } = varsExports;
       const zero = (
         <div className={styles.entry}>
           <div
@@ -238,7 +240,7 @@ const Legend = ({ ...props }) => {
       const subLabels = props.subLabels || null;
       // prep style entries
       const styleEntries = range.map((d, i) => {
-        if (!d.startsWith("data:image")) {
+        if (d !== undefined && !d.startsWith("data:image")) {
           return {
             width: props.width !== undefined ? props.width[i] : undefined,
             border: borders !== null ? borders[i] : undefined,
@@ -298,9 +300,9 @@ const Legend = ({ ...props }) => {
                       </div>
                     )}
                     {subLabels && (
-                      <a onClick={() => {}} className={styles.label}>
+                      <span onClick={() => {}} className={styles.label}>
                         {subLabels[i]}
-                      </a>
+                      </span>
                     )}
                   </div>
                 );
@@ -323,13 +325,13 @@ const Legend = ({ ...props }) => {
       : entryName;
   } else {
     sectionHeader = (
-      <div>
+      <div className={styles.nameAndTooltip}>
         {entryName}
-        {props.metric_definition && (
+        {definition && (
           <InfoTooltip
             place={"top"}
             id={typeAndElement}
-            text={props.metric_definition}
+            text={definition}
             setInfoTooltipContent={props.setInfoTooltipContent}
             wide={props.wideDefinition === true}
           />

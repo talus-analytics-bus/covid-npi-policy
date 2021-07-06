@@ -1,26 +1,18 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 .data {
-  @include spaceItemsVert(40px);
-  .header {
-    max-width: 70rem;
-    h1 {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
-    }
-  }
+  // header with page title and introduction text
+  @include spaceItemsVert(1rem);
+
   .columnText {
-    max-width: 60rem;
     display: flex;
-    flex-flow: row;
-    font-family: "Rawline", serif;
-    * {
-      line-height: 1.5;
-    }
+    flex-flow: column;
     p {
-      font-size: 1.25rem;
-      color: #333;
+      max-width: 70rem;
     }
-    @include spaceItemsHoriz(40px);
+    ul {
+      margin-top: 1rem;
+      line-height: 2;
+    }
   }
   .unspecified {
     font-style: italic;
@@ -55,7 +47,35 @@
         }
         // set width of Description column
         &:nth-child(3) {
-          width: 35%;
+          width: 25%;
+        }
+        // set width of Category column
+        &:nth-child(4) {
+          width: 20%;
+        }
+        @media #{$small-laptop} {
+          // hide jurisdiction type
+          &:nth-child(2) {
+            display: none;
+          }
+
+          @media #{$phone} {
+            // hide cat, subcat, targets
+            &:nth-child(4) {
+              display: none;
+            }
+            @media #{$phone-narrow} {
+              // hide date and authority
+              &:nth-child(6),
+              &:nth-child(7) {
+                display: none;
+              }
+              // allow more width for desc.
+              &:nth-child(3) {
+                width: 50% !important;
+              }
+            }
+          }
         }
       }
     }
@@ -69,6 +89,24 @@
         // set width of Description column
         &:nth-child(4) {
           width: 35%;
+        }
+        @media #{$small-laptop} {
+          // hide org. type
+          &:nth-child(2) {
+            display: none;
+          }
+
+          @media #{$phone-narrow} {
+            // hide date and authority
+            &:nth-child(5),
+            &:nth-child(6) {
+              display: none;
+            }
+            // allow more width for desc.
+            &:nth-child(4) {
+              width: 50% !important;
+            }
+          }
         }
       }
     }
@@ -109,144 +147,17 @@
   // content top section
   .contentTop {
     display: flex;
-    flex-flow: row;
-    align-items: center;
-    min-height: 50px; // TODO elegantly
-    @media #{$phone} {
+    align-items: flex-start;
+    // TODO elegantly
+    > :not(:last-child) {
+      margin-right: 5.6rem;
+    }
+    @media #{$small-laptop} {
       flex-flow: column;
       align-items: flex-start;
       > div {
-        margin-left: 0;
         margin-bottom: 10px;
-        &:first-child {
-          margin-top: 10px;
-        }
-      }
-      // @include spaceItemsVert(10px);
-    }
-  }
-
-  // responsiveness
-  // TODO move to separate file
-  @media #{$phone} {
-    table {
-      th,
-      td {
-        &:nth-child(4) {
-          width: unset;
-        }
       }
     }
   }
-  @media #{$phone} {
-    h1 {
-      margin-top: 0 !important;
-    }
-  }
-}
-
-// TODO move to a component
-.downloadBtn {
-  margin-left: auto;
-
-  // data download buttons
-  &.all,
-  &.All_data,
-  &.secondary,
-  &.Court_Challenge,
-  &.Policy,
-  &.Plan {
-    img {
-      height: 30px;
-      margin-right: 10px;
-    }
-    span {
-      font-weight: normal;
-      .primaryText {
-        font-weight: 600;
-      }
-    }
-    span:first-child {
-      font-size: 1rem;
-      + span {
-        margin-top: 3px;
-      }
-    }
-    div {
-      display: flex;
-      // align-items: center;
-      flex-flow: column;
-      justify-content: center;
-    }
-  }
-  &.inactive {
-    pointer-events: none;
-    cursor: default;
-    opacity: 0.75;
-  }
-
-  button {
-    text-align: left;
-  }
-
-  // // master download button
-  // &.secondary,
-  // &.All_data,
-  // &.all {
-  //   &,
-  //   &:hover {
-  //     background-color: transparent;
-  //     color: $dark-navy-blue;
-  //   }
-  //   &:active {
-  //     color: black;
-  //     background-color: darken($light-blue-3, 5%);
-  //   }
-  // }
-
-  // // entity-specific download buttons
-  // &.Policy,
-  // &.Plan {
-  //   padding: 10px;
-  // }
-  //
-  // span {
-  //   line-height: 1.5;
-  // }
-  // @media #{$phone} {
-  //   display: none;
-  //   div {
-  //     font-size: 1rem;
-  //     span:last-child {
-  //       display: none;
-  //     }
-  //   }
-  //   img {
-  //     height: 30px;
-  //   }
-  // }
-  //
-  // &:hover {
-  //   background-color: darken($dark-blue, 10%);
-  // }
-  // &:active {
-  //   @include boxShadow();
-  // }
-  // &.loading {
-  //   opacity: 0.75;
-  //   pointer-events: none;
-  // }
-  //
-  // img {
-  //   margin-right: 20px;
-  // }
-  // div {
-  //   font-weight: 300;
-  //   line-height: 1;
-  //   text-align: left;
-  //   span:last-child {
-  //     font-size: 1rem;
-  //     font-weight: 200;
-  //   }
-  // }
 }

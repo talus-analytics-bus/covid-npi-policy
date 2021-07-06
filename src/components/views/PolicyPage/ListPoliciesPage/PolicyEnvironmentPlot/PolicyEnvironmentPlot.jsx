@@ -9,9 +9,6 @@ import Slider from "./Slider/Slider";
 import styles from "./PolicyEnvironmentPlot.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
-
-import { Policy } from "../../../../misc/Queries";
-
 const msPerDay = 86400000;
 
 const rollingAverage = (series, windowSize) => {

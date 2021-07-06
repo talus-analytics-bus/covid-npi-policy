@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 .filter {
   display: flex;
@@ -10,8 +10,12 @@
     border-right: $border;
   }
   .label {
-    font-weight: bold;
-    margin-bottom: 5px;
+    color: $idea-black;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    line-height: 1;
   }
   &.disabled {
     .label {
@@ -20,15 +24,13 @@
   }
   .input {
     .filterButton {
-      $background-color: white;
-      background-color: $background-color;
-      padding: 5px 20px;
-      cursor: pointer;
-      line-height: 0;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-width: 250px;
+
+      @include dropdownAndSearchStyle();
+
+      cursor: pointer;
+
+      // states
       span {
         white-space: nowrap;
       }
@@ -38,21 +40,23 @@
       span.selections {
         font-style: italic;
       }
+
+      // caret icon
       i,
       img {
         vertical-align: middle;
-        margin-left: 20px;
-        width: 20px;
+        margin-left: auto;
+        width: 15px;
         height: 24px;
       }
       &:hover,
       &.shown {
-        background-color: darken($background-color, 10%);
+        background-color: darken(white, 10%);
         transition: background-color 0.125s;
       }
 
       &:active {
-        background-color: darken($background-color, 20%);
+        background-color: darken(white, 20%);
         @include boxShadow();
       }
       &.disabled {
@@ -85,7 +89,7 @@
 
       .filterMenuWrapper {
         &.disabled * {
-          background-color: red !important;
+          // background-color: red !important;
         }
       }
 

@@ -1,4 +1,4 @@
-@import "../../assets/styles/vars.scss";
+@import "../../assets/styles/vars.module.scss";
 
 .infoTooltipContainer {
   max-width: 200px;
@@ -32,11 +32,11 @@
   position: relative;
 
   img {
-    $size: 15px;
+    $size: 10px;
     height: $size;
     width: $size;
-    top: 1px;
-    position: relative;
+    // top: 1px;
+    // position: relative;
     cursor: default;
   }
 }

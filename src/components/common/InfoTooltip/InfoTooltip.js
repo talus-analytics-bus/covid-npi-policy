@@ -9,27 +9,30 @@ import classNames from "classnames";
  * Generic info tooltip
  * @method InfoTooltip
  */
-const InfoTooltip = ({ id, text, place, ...props }) => {
+const InfoTooltip = ({ id, text, place, setInfoTooltipContent, wide }) => {
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer}>{text}</div>
   );
-  const bindWithFunction = props.setInfoTooltipContent !== undefined;
-  useEffect(ReactTooltip.rebuild, []);
+  const bindWithFunction = setInfoTooltipContent !== undefined;
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  }, []);
   ReactTooltip.rebuild();
   return (
     <div
-      className={classNames(styles.infoTooltip, { [styles.wide]: props.wide })}
+      className={classNames(styles.infoTooltip, { [styles.wide]: wide })}
       data-for={bindWithFunction ? "infoTooltip" : id}
       data-tip={dataHtml}
-      data-class={props.wide ? styles.wide : ""}
+      data-class={wide ? styles.wide : ""}
       data-place={place ? place : undefined}
       data-html={true}
     >
       <img
         src={imgSrc}
+        alt={"Info tooltip icon"}
         onMouseOver={() => {
           if (bindWithFunction) {
-            props.setInfoTooltipContent(dataHtml);
+            setInfoTooltipContent(dataHtml);
           }
         }}
       />

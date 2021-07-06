@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Helmet } from "react-helmet";
 import styles from "./Landing.module.scss";
 import { Link } from "react-router-dom";
 
@@ -20,6 +20,10 @@ const Landing = ({ setPage, setLoading }, props) => {
 
   return (
     <div className={styles.ampLanding}>
+      <Helmet titleTemplate={"%s"}>
+        <title>COVID AMP</title>
+        <meta name="COVID AMP" />
+      </Helmet>
       <div className={styles.curtainRod}>
         <div className={styles.drapes}>
           <a href="https://covid-local.org">

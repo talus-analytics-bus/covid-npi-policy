@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import classNames from "classnames";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./nav.module.scss";
-import ReactTooltip from "react-tooltip";
 
 // assets
 import logo from "../../../assets/images/full-amp-logo.png";
@@ -10,16 +9,26 @@ import localBanner from "../../../assets/images/local-banner.svg";
 
 import HoverDropdown from "./HoverDropdown/HoverDropdown";
 import LocationSearch from "./LocationSearch/LocationSearch";
+import { getParamsMapId } from "components/views/map/helpers";
+
+import InfoTooltipContext from "context/InfoTooltipContext";
+import { InfoTooltip } from "components/common";
 
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
-const Nav = ({ page, ...props }) => {
+const Nav = ({ page }) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const linksRef = useRef(null);
   const hamburgerRef = useRef(null);
 
-  // EFFECT HOOKS // --------------------------------------------------------//
+  // CONSTANTS // ---------------------------------------------------------- //
+  const curMapId = getParamsMapId() || "";
+
+  // CONTEXTS // ----------------------------------------------------------- //
+  const { setInfoTooltipContent } = useContext(InfoTooltipContext);
+
+  // EFFECT HOOKS // ------------------------------------------------------- //
   // on click anywhere but in menu, and menu is shown, close menu; otherwise
   // do nothing
   useEffect(() => {
@@ -34,6 +43,10 @@ const Nav = ({ page, ...props }) => {
     };
   }, [showMobileMenu]);
 
+  const dropdownMenuClasses = classNames(
+    styles.hoverTarget,
+    styles.withSubmenu
+  );
   return (
     <>
       {page !== "landing" && (
@@ -50,6 +63,7 @@ const Nav = ({ page, ...props }) => {
                 target="_blank"
                 href={COVID_LOCAL_URL}
                 className={styles.localBanner}
+                rel="noreferrer"
               >
                 <img src={localBanner} alt="COVID Local" />
               </a>
@@ -71,27 +85,61 @@ const Nav = ({ page, ...props }) => {
                 </i>
               </button>
               <div ref={linksRef} className={styles.links}>
-                {/* <Link */}
-                {/*   onClick={() => { */}
-                {/*     setShowMobileMenu(false); */}
-                {/*   }} */}
-                {/*   className={page === "policymaps" ? styles.active : ""} */}
-                {/*   to={"/policymaps"} */}
-                {/* > */}
-                {/*   Map */}
-                {/* </Link> */}
                 <HoverDropdown>
-                  <span className={styles.hoverTarget}>Location</span>
+                  <span
+                    className={classNames(
+                      dropdownMenuClasses,
+                      page === "policymaps" ? styles.active : ""
+                    )}
+                  >
+                    Map
+                  </span>
                   <div className={styles.navSubmenu}>
                     <Link
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
-                      className={page === "policymaps" ? styles.active : ""}
-                      to={"/policymaps"}
+                      className={
+                        page === "policymaps" && curMapId.startsWith("us")
+                          ? styles.active
+                          : ""
+                      }
+                      to={"/policymaps?mapId=us-county-plus-state"}
                     >
-                      View US and Global Map
+                      <div className={styles.linkWithTooltip}>
+                        <span>United States</span>
+                        <InfoTooltip
+                          text={
+                            "View data for the United States at the state and/or county level"
+                          }
+                          {...{ setInfoTooltipContent }}
+                        />
+                      </div>
                     </Link>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={
+                        page === "policymaps" && curMapId === "global"
+                          ? styles.active
+                          : ""
+                      }
+                      to={"/policymaps?mapId=global"}
+                    >
+                      <div className={styles.linkWithTooltip}>
+                        <div>World</div>
+                        <InfoTooltip
+                          text={"View data for the world at the country level"}
+                          {...{ setInfoTooltipContent }}
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                </HoverDropdown>
+                <HoverDropdown>
+                  <span className={dropdownMenuClasses}>Location</span>
+                  <div className={styles.navSubmenu}>
                     <LocationSearch />
                   </div>
                 </HoverDropdown>
@@ -113,24 +161,38 @@ const Nav = ({ page, ...props }) => {
                 >
                   Data
                 </Link>
-                <NavLink
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  activeClassName={styles.active}
-                  to={"/about/doc"}
-                >
-                  Documentation
-                </NavLink>
-                <NavLink
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  activeClassName={styles.active}
-                  to={"/about/amp"}
-                >
-                  About
-                </NavLink>
+                <HoverDropdown>
+                  <span
+                    className={classNames(
+                      dropdownMenuClasses,
+                      page !== null && page.startsWith("about")
+                        ? styles.active
+                        : ""
+                    )}
+                  >
+                    About
+                  </span>
+                  <div className={styles.navSubmenu}>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "about-doc" ? styles.active : ""}
+                      to={"/about/doc"}
+                    >
+                      Documentation
+                    </Link>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "about-amp" ? styles.active : ""}
+                      to={"/about/amp"}
+                    >
+                      What is COVID AMP?
+                    </Link>
+                  </div>
+                </HoverDropdown>
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);

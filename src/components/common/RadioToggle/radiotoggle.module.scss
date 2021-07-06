@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vars.scss";
+@import "../../../assets/styles/vars.module.scss";
 
 .radioToggle {
   // max-width: 200px;
@@ -7,7 +7,6 @@
   }
   > div {
     font-weight: bold;
-    margin-bottom: 5px;
   }
   form:not(.asGrid) {
     display: flex;
@@ -19,14 +18,24 @@
     grid-template-columns: auto auto;
     grid-gap: 0 10px;
   }
+
+  // tooltip text displayed beneath form rather than as hoverable icon
+  .footnote {
+    font-size: 0.875rem;
+    font-style: italic;
+    line-height: 1.2rem;
+  }
+
   span.hasChildren + div {
-      // indent children
-      form {
-        @include indented;
-        margin-left: 5px;
-      }
-      // space between children and next radio toggle, if present
-      + span {margin-top: 10px;}
+    // indent children
+    form {
+      @include indented;
+      margin-left: 5px;
+    }
+    // space between children and next radio toggle, if present
+    + span {
+      margin-top: 10px;
+    }
   }
   span:last-child label {
     margin-bottom: 0;
@@ -89,7 +98,31 @@
     &.left {
       margin-right: auto !important;
     }
+    &.labelPosTop {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      form {
+        margin: 0;
+        span:first-child > label {
+          padding: 0;
+        }
+      }
+    }
   }
 
-  
+  // inline label positioning
+  &.labelPosInline {
+    display: flex;
+    align-items: center;
+  }
+
+  // themes
+  &.slim {
+    label {
+      text-transform: uppercase;
+      color: $idea-black;
+      line-height: 1.125rem;
+    }
+  }
 }

@@ -1,20 +1,36 @@
+@import "src/assets/styles/vars.module.scss";
 .search {
+  // format search bar similar to filter dropdowns
   margin-left: auto;
   position: relative;
+  display: flex;
+  align-items: center;
+  @include dropdownAndSearchStyle();
+
   input {
-    padding: 5px 30px 5px 10px;
     border: none;
-    &::placeholder {
-      font-style: italic;
-    }
+    // prevent outline on focus
+    outline: none;
+    @include searchPlaceholderStyle();
   }
 
-  // magnifying glass
-  i {
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    color: #4682b4;
-    font-weight: bold;
+  // close and search icons
+  .icons {
+    display: flex;
+    align-items: center;
+
+    // icon for magnifying glass
+    i {
+      color: $idea-black;
+      font-size: 1.33rem;
+      width: 18px;
+    }
+  }
+  @media #{$small-laptop} {
+    &,
+    input {
+      width: 100%;
+    }
+    justify-content: space-between;
   }
 }

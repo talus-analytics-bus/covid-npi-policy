@@ -8,7 +8,8 @@ import moment from "moment";
 
 // misc and common components
 import { RadioToggle } from "../../common";
-import { isEmpty, arraysMatch } from "../../misc/Util";
+import { arraysMatch } from "../../misc/Util";
+import { isEmpty } from "../../misc/UtilsTyped";
 
 // assets and styles
 import calendarSvg from "../../../assets/icons/calendar.svg";
@@ -41,7 +42,7 @@ const Filter = ({
 }) => {
   const [show, setShow] = useState(false);
   let initSelectedItems;
-  if (!dateRange) {
+  if (!dateRange && items !== undefined) {
     initSelectedItems =
       filters[field] !== undefined
         ? items.filter(d => filters[field].includes(d.value))
@@ -56,7 +57,14 @@ const Filter = ({
   const disabled = primaryFiltersOff;
 
   // sort items so selected items are first
-  const sortedItems = items !== undefined ? [...items] : [];
+  const labeledItems =
+    items !== undefined
+      ? items.map(d => {
+          if (d.label === undefined) d.label = d.value;
+          return d;
+        })
+      : [];
+  const sortedItems = labeledItems !== undefined ? [...labeledItems] : [];
   if (initSelectedItems.length > 0 && props.radio !== true) {
     const selectedIds = initSelectedItems.map(d => d.id);
     sortedItems.sort(function selectedFirst(a, b) {
@@ -240,12 +248,9 @@ const Filter = ({
           [styles.alignBottom]: props.alignBottom === true,
         })}
       >
-        <div role={"label"} className={styles.label}>
-          {label}
-        </div>
+        <div className={styles.label}>{label}</div>
         <div className={styles.input}>
           <div
-            role="filterButton"
             className={classNames(styles.filterButton, className, {
               [styles.shown]: show,
               [styles.selected]: nCur > 0,
@@ -259,7 +264,7 @@ const Filter = ({
               setShow(!show);
             }}
           >
-            <span>
+            <div>
               <span className={styles.field}>
                 {getInputLabel({
                   dateRange,
@@ -279,7 +284,7 @@ const Filter = ({
                   </span>
                 )}
               </span>
-            </span>
+            </div>
             {dateRange && <img src={calendarSvg} />}
             {!dateRange && <i className={"material-icons"}>arrow_drop_down</i>}
           </div>
@@ -369,8 +374,12 @@ const Filter = ({
               selectedItems: [vItem],
             });
 
-            // update filters
-            setFilters({ ...filters, [field]: [vItem.value] });
+            // update filters?
+            const doUpdate =
+              filters[field] === undefined ||
+              filters[field].length === 0 ||
+              filters[field][0] !== vItem.value;
+            if (doUpdate) setFilters({ ...filters, [field]: [vItem.value] });
           },
           label,
         }}
