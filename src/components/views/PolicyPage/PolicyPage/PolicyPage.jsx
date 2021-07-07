@@ -38,7 +38,9 @@ const PolicyPage = props => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const { policyObject, setPolicyObject } = React.useContext(policyContext);
+  const { policyObject, setPolicyObject, locationName } = React.useContext(
+    policyContext
+  );
 
   const policyObjectPath = location.state
     ? location.state.path
@@ -72,7 +74,7 @@ const PolicyPage = props => {
         <meta name={`Information about policy "${policyName}"`} />
       </Helmet>
       <header>
-        <h1>{state} policy details</h1>
+        <h1>{locationName} policy details</h1>
         <PolicyBreadcrumbs {...{ iso3, state, policyObjectPath }} />
       </header>
       <main className={styles.mainSection}>

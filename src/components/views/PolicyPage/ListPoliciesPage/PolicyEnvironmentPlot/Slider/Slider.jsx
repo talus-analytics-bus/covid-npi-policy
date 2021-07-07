@@ -169,26 +169,6 @@ const Slider = ({
             d={`M ${0},${0} 
         L ${0},${dim.yAxis.end.y}`}
           />
-          <rect
-            x={-30}
-            y={0}
-            width={60}
-            height={15}
-            rx={3}
-            style={{ fill: "rgb(229, 94, 55)" }}
-          />
-          <text
-            x={0}
-            y={3}
-            style={{
-              alignmentBaseline: "hanging",
-              textAnchor: "middle",
-              fill: "white",
-              fontSize: 9,
-            }}
-          >
-            {formatDate(cursorDate.toISOString().substring(0, 10))}
-          </text>
         </g>
       )}
       <g
@@ -240,6 +220,34 @@ const Slider = ({
           }}
         />
       </g>
+      {cursorVisible && (
+        <g
+          style={{
+            transform: `translateX(${cursorX}px)`,
+          }}
+        >
+          <rect
+            x={-30}
+            y={0}
+            width={60}
+            height={15}
+            rx={3}
+            style={{ fill: "rgb(229, 94, 55)" }}
+          />
+          <text
+            x={0}
+            y={3}
+            style={{
+              alignmentBaseline: "hanging",
+              textAnchor: "middle",
+              fill: "white",
+              fontSize: 9,
+            }}
+          >
+            {formatDate(cursorDate.toISOString().substring(0, 10))}
+          </text>
+        </g>
+      )}
       {cursorVisible &&
         cursorPolicies &&
         cursorPolicies.enacted &&
