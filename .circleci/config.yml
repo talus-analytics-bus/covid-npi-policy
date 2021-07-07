@@ -89,4 +89,4 @@ workflows:
             branches:
               only:
                 - dev-not-whole-timeseries
-                # - policypages
+                - policypages

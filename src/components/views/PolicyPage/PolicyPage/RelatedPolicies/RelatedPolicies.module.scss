@@ -3,6 +3,11 @@
   margin-bottom: 3rem;
   border-top: 1px solid #c4c4c4;
 
+  > h2 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+  }
+
   .others {
     display: flex;
     // justify-content: space-between;
