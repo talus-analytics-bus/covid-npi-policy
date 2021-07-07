@@ -122,7 +122,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
       viewBox={`0 0 ${dim.width} ${dim.height}`}
       style={{
         overflow: "visible",
-        height: 400,
+        // height: 400,
         // border: "1px solid black"
       }}
     >
