@@ -85,7 +85,7 @@ const PolicyPage = props => {
           </div>
           <div className={styles.right}>
             <DocumentPreview />
-            <ExploreSource {...{ policy }} />
+            <ExploreSource {...{ policy }}>View source document</ExploreSource>
           </div>
         </div>
         <div className={styles.section}>
@@ -115,11 +115,14 @@ const PolicyPage = props => {
         <div className={styles.section}>
           <LocationAndOfficials {...{ state, policy, policyPlace }} />
         </div>
-        <div className={styles.right}>
+        <div className={styles.section}>
+          <OthersInDocument {...{ policy }} path={policyObjectPath} />
+        </div>
+        {/* <div className={styles.right}>
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
           )}
-        </div>
+        </div> */}
       </main>
       <RelatedPolicies path={policyObjectPath} policy={policy} />
     </article>
