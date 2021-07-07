@@ -135,6 +135,7 @@ const NAME_MAX_CHARS = 15;
  * @returns {string} The name to use in the page title
  */
 function getPolicyDisplayName(policy) {
+  if (!policy) return "Policy details";
   const policyName = policy.policy_name;
   const nameIsDefined =
     policy !== undefined &&
