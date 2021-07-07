@@ -46,7 +46,7 @@ const Bar = ({ category, bar, index, dim }) => {
         `}
       />
       <foreignObject
-        x={dim.axes.x.scale(0) - dim.padding.axis - 15}
+        x={dim.axes.x.scale(0) - dim.padding.axis - 17}
         y={0}
         width={dim.barWidth}
         height={dim.barWidth}

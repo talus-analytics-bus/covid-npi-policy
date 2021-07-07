@@ -83,7 +83,11 @@ const TooltipContent = ({
                 >
                   <PolicyCategoryIcon
                     category={category}
-                    style={{ width: "1.5em", height: "1.5em" }}
+                    style={{
+                      width: "1.5em",
+                      height: "1.5em",
+                      marginRight: ".5em",
+                    }}
                   />
                   {category}: ({[...policies].length})
                 </PolicyModal>
