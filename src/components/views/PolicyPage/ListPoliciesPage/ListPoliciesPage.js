@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import {
   loadPolicySearch,
@@ -107,6 +108,10 @@ const ListPoliciesPage = props => {
 
   return (
     <article className={styles.listPoliciesPage}>
+      <Helmet>
+        <title>{locationName}</title>
+        <meta name={`COVID-19 policies for ${locationName}`} />
+      </Helmet>
       <header className={styles.pageHeader}>
         {locationName !== iso3 ? (
           <h1>{locationName} COVID-19 Policies</h1>

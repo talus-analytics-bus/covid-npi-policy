@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
 
 import { loadFullPolicy } from "../PolicyRouter/PolicyLoaders";
@@ -62,8 +63,14 @@ const PolicyPage = props => {
 
   console.log(policy);
 
+  // display name for policy
+  const policyName = getPolicyDisplayName(policy);
   return (
     <article className={styles.policyPage}>
+      <Helmet>
+        <title>{policyName}</title>
+        <meta name={`Information about policy "${policyName}"`} />
+      </Helmet>
       <header>
         <h1>{state} policy details</h1>
         <PolicyBreadcrumbs {...{ iso3, state, policyObjectPath }} />
@@ -118,3 +125,23 @@ const PolicyPage = props => {
 };
 
 export default PolicyPage;
+
+const NAME_MAX_CHARS = 15;
+/**
+ * Returns the policy name to use in the title of a policy details page.
+ * @param {PolicyRecord} policy The policy
+ * @returns {string} The name to use in the page title
+ */
+function getPolicyDisplayName(policy) {
+  const policyName = policy.policy_name;
+  const nameIsDefined =
+    policy !== undefined &&
+    policyName !== undefined &&
+    policyName !== null &&
+    policyName.trim() !== "";
+  if (nameIsDefined) {
+    if (policyName.length > NAME_MAX_CHARS) {
+      return policyName.slice(0, NAME_MAX_CHARS) + "...";
+    } else return policyName;
+  } else return "Policy details";
+}
