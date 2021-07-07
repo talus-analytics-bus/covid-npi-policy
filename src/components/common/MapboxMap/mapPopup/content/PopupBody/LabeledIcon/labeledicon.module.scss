@@ -3,9 +3,13 @@
     display: flex;
     flex-flow: row;
 
-    .iconContainer:not(:empty) {
-        + .labelContainer {
-            margin-left: 1rem;
+    .iconContainer {
+        display: grid;
+        grid-auto-flow: column;
+        &:not(:empty) {
+            + .labelContainer {
+                margin-left: 1rem;
+            }
         }
     }
 

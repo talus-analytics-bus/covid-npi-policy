@@ -129,7 +129,10 @@ const PolicyList = props => {
                     }}
                   >
                     <div className={styles.topLevelHeader}>
-                      <PolicyCategoryIcon category={categoryName} />
+                      <PolicyCategoryIcon
+                        category={categoryName}
+                        style={{ marginRight: "0.5rem" }}
+                      />
                       <ExpandMarker
                         arrowColor={"#29334B"}
                         backgroundColor={"#ffffff"}
