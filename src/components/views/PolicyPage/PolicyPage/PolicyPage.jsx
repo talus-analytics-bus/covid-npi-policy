@@ -115,9 +115,9 @@ const PolicyPage = props => {
         <div className={styles.section}>
           <LocationAndOfficials {...{ state, policy, policyPlace }} />
         </div>
-        <div className={styles.section}>
-          <OthersInDocument {...{ policy }} path={policyObjectPath} />
-        </div>
+        {/* <div className={styles.section}> */}
+        <OthersInDocument {...{ policy }} path={policyObjectPath} />
+        {/* </div> */}
         {/* <div className={styles.right}>
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
