@@ -3,6 +3,10 @@
   border-radius: 100%;
   background-color: #96d6db;
   margin-right: 8px;
+  // icon SVG image displayed in circle
+  img {
+    height: 100%;
+  }
 }
 
 // if multiple icons, display in grid
