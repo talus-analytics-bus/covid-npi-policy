@@ -25,7 +25,13 @@ const formatDate = date => {
   });
 };
 
-const PolicyModal = ({ children, category, policies, sliderDate }) => {
+const PolicyModal = ({
+  children,
+  category,
+  policies,
+  sliderDate,
+  popupVisible,
+}) => {
   const { policyFilters } = React.useContext(policyContext);
   const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -64,8 +70,8 @@ const PolicyModal = ({ children, category, policies, sliderDate }) => {
       setPolicyData(policyResponse.data);
     };
 
-    getPoliciesByIds();
-  }, []);
+    if (popupVisible) getPoliciesByIds();
+  }, [popupVisible]);
 
   const summaries =
     policyData &&

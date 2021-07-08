@@ -27,6 +27,7 @@ const TooltipContent = ({
   setCursorVisible,
   highlightPolicies,
   highlightCaseload,
+  popupVisible,
 }) => {
   const newPolicyCount =
     highlightPolicies &&
@@ -95,7 +96,7 @@ const TooltipContent = ({
               ([category, policies]) => (
                 <PolicyModal
                   key={category}
-                  {...{ category, policies, sliderDate }}
+                  {...{ category, policies, sliderDate, popupVisible }}
                 >
                   <PolicyCategoryIcon
                     category={category}
@@ -147,6 +148,7 @@ const Tooltip = ({
               setCursorVisible,
               highlightPolicies,
               highlightCaseload,
+              popupVisible,
             }}
           />
         }
