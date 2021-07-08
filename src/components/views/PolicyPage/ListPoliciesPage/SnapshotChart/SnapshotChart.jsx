@@ -48,11 +48,9 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
 
   const byCategory = {};
   let selectedDate = introDate;
-
   if (lastDate && !policySummaryObject[introDate]) selectedDate = lastDate;
 
   if (policySummaryObject && policySummaryObject[selectedDate]) {
-    console.count("_____build byCategory");
     // get the categories from the most recent date
     Object.entries(
       Object.values(policySummaryObject)[
@@ -68,17 +66,14 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
     Object.entries(policySummaryObject[selectedDate]).forEach(
       ([status, categories]) => {
         Object.entries(categories).map(([category, policies]) => {
-          console.log(category, status);
           if (!byCategory[category][status])
             byCategory[category][status] = policies.size;
           else byCategory[category][status] += policies.size;
         });
       }
     );
-    console.log(byCategory);
   }
 
-  console.log(byCategory);
   const barCount = Object.keys(byCategory).length;
 
   // calculate the max for the last day of the chart

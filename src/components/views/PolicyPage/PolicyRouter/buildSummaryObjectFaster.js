@@ -38,7 +38,7 @@ const arrayFillDates = ({
     });
 };
 
-const buildSummaryObjectFaster = data => {
+const buildSummaryObjectFaster = ({ data, filterDate }) => {
   console.time("buildSummaryObjectFaster");
 
   // start date of earliest policy
@@ -63,40 +63,42 @@ const buildSummaryObjectFaster = data => {
 
   const obj = {};
   for (const policy of data) {
-    // enacted
-    addPolicyAtDate({
-      obj,
-      policy,
-      type: "enacted",
-      date: getTimestamp(policy.date_start_effective),
-    });
+    if (new Date(policy.date_start_effective) > filterDate) {
+      // enacted
+      addPolicyAtDate({
+        obj,
+        policy,
+        type: "enacted",
+        date: getTimestamp(policy.date_start_effective),
+      });
 
-    // active
-    arrayFillDates({
-      obj,
-      dateArray,
-      arrayOffset,
-      policy,
-      type: "active",
-      start: getTimestamp(policy.date_start_effective),
-      stop: policy.date_end_actual
-        ? new Date(policy.date_end_actual) <= new Date()
-          ? getTimestamp(policy.date_end_actual)
-          : timestampToday
-        : timestampToday,
-    });
-
-    // expired
-    if (policy.date_end_actual)
+      // active
       arrayFillDates({
         obj,
         dateArray,
         arrayOffset,
         policy,
-        type: "expired",
-        start: getTimestamp(policy.date_end_actual),
-        stop: timestampToday,
+        type: "active",
+        start: getTimestamp(policy.date_start_effective),
+        stop: policy.date_end_actual
+          ? new Date(policy.date_end_actual) <= new Date()
+            ? getTimestamp(policy.date_end_actual)
+            : timestampToday
+          : timestampToday,
       });
+
+      // expired
+      if (policy.date_end_actual)
+        arrayFillDates({
+          obj,
+          dateArray,
+          arrayOffset,
+          policy,
+          type: "expired",
+          start: getTimestamp(policy.date_end_actual),
+          stop: timestampToday,
+        });
+    }
   }
 
   console.timeEnd("buildSummaryObjectFaster");

@@ -10,6 +10,8 @@ export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
 const checkPolicyActive = policy =>
   policy.date_end_actual ? new Date(policy.date_end_actual) > new Date() : true;
 
+const filterDate = new Date(2019, 12, 31);
+
 // Top-Level policy categories
 export const loadPolicyCategories = async ({
   filters,
@@ -47,6 +49,7 @@ export const loadPolicyCategories = async ({
 
     const buildObject = (prev, data, count) => {
       data.forEach(policy => {
+        if (new Date(policy.date_start_effective) < filterDate) return;
         if (count) {
           const active = checkPolicyActive(policy) ? 1 : 0;
 
@@ -87,7 +90,9 @@ export const loadPolicyCategories = async ({
       // buildSummaryObject(policyResponse.data);
       // buildSummaryObjectFaster(policyResponse.data);
       // summarySetter(buildObject({}, policyResponse.data, true));
-      summarySetter(buildSummaryObjectFaster(policyResponse.data));
+      summarySetter(
+        buildSummaryObjectFaster({ data: policyResponse.data, filterDate })
+      );
       setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
     }
 
@@ -145,6 +150,7 @@ export const loadPolicySubCategories = async ({
 
     stateSetter(prev => {
       policyResponse.data.forEach(policy => {
+        if (new Date(policy.date_start_effective) < filterDate) return;
         if (policy.auth_entity[0]) {
           let path = [
             policy[CATEGORY_FIELD_NAME],
@@ -278,6 +284,7 @@ export const loadPolicyDescriptions = async ({
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
+      if (new Date(policy.date_start_effective) < filterDate) return;
       let path = [
         policy[CATEGORY_FIELD_NAME],
         // "children",
@@ -361,6 +368,7 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
 
   stateSetter(prev => {
     policyResponse.data.forEach(policy => {
+      if (new Date(policy.date_start_effective) < filterDate) return;
       let path = [
         policy[CATEGORY_FIELD_NAME],
         // "children",
@@ -457,6 +465,7 @@ export const loadPolicySearch = async ({
 
     setPolicyObject(prev => {
       policyResponse.data.forEach(policy => {
+        if (new Date(policy.date_start_effective) < filterDate) return;
         let path = [
           policy[CATEGORY_FIELD_NAME],
           // "children",
