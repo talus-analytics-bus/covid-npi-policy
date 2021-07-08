@@ -5,6 +5,7 @@ import Modal from "../../../../../Modal/Modal";
 
 import {
   CATEGORY_FIELD_NAME,
+  loadFullPolicy,
   SUBCATEGORY_FIELD_NAME,
 } from "../../../../../PolicyRouter/PolicyLoaders";
 
@@ -32,7 +33,7 @@ const PolicyModal = ({
   sliderDate,
   popupVisible,
 }) => {
-  const { policyFilters } = React.useContext(policyContext);
+  const { setPolicyObject, policySort } = React.useContext(policyContext);
   const [modalOpen, setModalOpen] = React.useState(false);
 
   const buttonClick = e => {
@@ -72,6 +73,18 @@ const PolicyModal = ({
 
     if (popupVisible) getPoliciesByIds();
   }, [popupVisible]);
+
+  React.useEffect(() => {
+    const preloadPolicies = async () => {
+      loadFullPolicy({
+        filters: { id: [...policies] },
+        stateSetter: setPolicyObject,
+        sort: policySort,
+      });
+    };
+
+    if (modalOpen) preloadPolicies();
+  }, [modalOpen]);
 
   const summaries =
     policyData &&
