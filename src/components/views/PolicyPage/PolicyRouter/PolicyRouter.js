@@ -54,6 +54,7 @@ const PolicyRouter = props => {
   const [policyFilters, setPolicyFilters] = React.useState({
     iso3: [iso3],
     ...(state !== "national" && { area1: [state] }),
+    dates_in_effect: ["2020-01-01", new Date().toISOString().split("T")[0]],
   });
 
   const [policySort, setPolicySort] = React.useState("desc");
@@ -134,6 +135,11 @@ const PolicyRouter = props => {
     setPolicyFilters({
       iso3: [iso3],
       ...(state !== "national" && { area1: [state] }),
+      date_start_effective: [
+        "2020-01-01",
+        "2021-07-08",
+        // new Date().toISOString().split("T")[0],
+      ],
     });
 
     // reset filters internal state
