@@ -72,11 +72,18 @@ const TargetFilter = props => {
         },
       });
 
-      setTargets(prev => ({ ...prev, all: request.data.data.subtarget }));
+      setTargets(prev => ({
+        ...prev,
+        all: request.data.data.subtarget.map(subtarget => ({
+          ...subtarget,
+          label: subtarget.value,
+        })),
+      }));
     };
 
     getOptions();
   }, [location, setTargets]);
+
 
   return (
     <div className={styles.filter}>
