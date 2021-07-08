@@ -2,9 +2,13 @@
 .style {
   $padding: 20px;
   width: 100%;
-
   > div {
     background-color: white;
+  }
+
+  // section dividers
+  hr {
+    border-top: $border;
   }
 
   // drawer text and open/close toggle

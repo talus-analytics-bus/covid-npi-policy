@@ -609,7 +609,7 @@ const Data: FC<DataProps> = ({
                 <>
                   <section className={styles.contentTop}>
                     <RadioToggle
-                      label={<ControlLabel>Search for</ControlLabel>}
+                      label={<ControlLabel>Choose</ControlLabel>}
                       choices={[
                         { name: "Policies", value: "policy" },
                         { name: "Plans", value: "plan" },
@@ -694,8 +694,8 @@ const Data: FC<DataProps> = ({
                   {tableIsReady && (
                     <section className={styles.filterSet}>
                       <ControlLabel>
-                        {getLocationTypeLabel(placeType, entityInfo)} and{" "}
-                        {nouns.s.toLowerCase()} details{" "}
+                        {/* {getLocationTypeLabel(placeType, entityInfo)} and{" "} */}
+                        {/* {nouns.s.toLowerCase()} details{" "} */}
                         {showAdvanced && (
                           <ControlLink
                             style={{ marginLeft: "1rem" }}
@@ -705,6 +705,7 @@ const Data: FC<DataProps> = ({
                           </ControlLink>
                         )}
                       </ControlLabel>
+                      <hr />
                       <FilterSet
                         alignBottom
                         vertical
