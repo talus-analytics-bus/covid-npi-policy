@@ -255,10 +255,9 @@ const PolicyEnvironmentPlot = () => {
             <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
           )}
           <p>
-            *Text might need to be edited* Move the blue line to show the state
-            and county policies that went into effect on each day and the 7-day
-            average new cases. The bar chart below will show the policy
-            breakdown on that day.
+            Click on chart to show policies that went into effect on each day
+            and the 7 day average new cases for date. Bar chart below shows
+            policies by category for selected day
           </p>
         </div>
         <Legend />
