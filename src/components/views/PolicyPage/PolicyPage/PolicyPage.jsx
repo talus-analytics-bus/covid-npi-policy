@@ -63,8 +63,6 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  console.log(policy);
-
   // display name for policy
   const policyName = getPolicyDisplayName(policy);
   return (

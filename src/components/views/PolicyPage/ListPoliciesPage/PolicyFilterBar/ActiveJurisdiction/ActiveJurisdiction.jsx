@@ -15,8 +15,6 @@ const ActiveJurisdiction = props => {
     setPolicyFilters,
   } = React.useContext(policyContext);
 
-  console.log(policyFilters);
-
   const removeTarget = jurisdiction => {
     setPolicyFilters(prev => {
       const remainingJurisdictions = prev.level.filter(t => t !== jurisdiction);
@@ -41,8 +39,6 @@ const ActiveJurisdiction = props => {
       searchResults: "initial",
     }));
   };
-
-  console.log(policyFilters);
 
   if (policyFilters.level)
     return (
