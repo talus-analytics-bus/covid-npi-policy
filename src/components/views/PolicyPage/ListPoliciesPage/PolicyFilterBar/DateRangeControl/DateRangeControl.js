@@ -13,7 +13,7 @@ import styles from "./DateRangeControl.module.scss";
 import { policyContext } from "../../../PolicyRouter/PolicyRouter";
 
 export const dateRangeLabel = dateRange => {
-  if (!dateRange.startDate || !dateRange.endDate) return "Select Date Range";
+  if (!dateRange.startDate || !dateRange.endDate) return "—";
 
   const start = moment(dateRange.startDate).utc();
   const end = moment(dateRange.endDate).utc();

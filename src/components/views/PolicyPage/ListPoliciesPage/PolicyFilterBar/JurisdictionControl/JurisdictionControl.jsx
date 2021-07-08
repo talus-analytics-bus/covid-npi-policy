@@ -48,7 +48,9 @@ const TargetFilter = props => {
         onClose={() => setFilterOpen(false)}
       >
         <span className={styles.buttonLabel}>
-          {jurisdiction.selected.length} selected
+          {jurisdiction.selected.length > 0
+            ? `${jurisdiction.selected.length} selected`
+            : `—`}
         </span>
         <div className={styles.filterFrame}>
           <MultiSelect

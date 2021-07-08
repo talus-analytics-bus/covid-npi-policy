@@ -88,7 +88,9 @@ const TargetFilter = props => {
         onClose={() => setFilterOpen(false)}
       >
         <span className={styles.buttonLabel}>
-          {targets.selected.length} selected
+          {targets.selected.length > 0
+            ? `${targets.selected.length} selected`
+            : `—`}
         </span>
         <div className={styles.filterFrame}>
           <MultiSelect
