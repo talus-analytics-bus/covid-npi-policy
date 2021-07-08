@@ -9,9 +9,18 @@ import classNames from "classnames";
  * Generic info tooltip
  * @method InfoTooltip
  */
-const InfoTooltip = ({ id, text, place, setInfoTooltipContent, wide }) => {
+const InfoTooltip = ({
+  id,
+  text,
+  place,
+  setInfoTooltipContent,
+  wide,
+  style = {},
+}) => {
   const dataHtml = renderToString(
-    <div className={styles.infoTooltipContainer}>{text}</div>
+    <div className={styles.infoTooltipContainer} style={style}>
+      {text}
+    </div>
   );
   const bindWithFunction = setInfoTooltipContent !== undefined;
   useEffect(() => {
