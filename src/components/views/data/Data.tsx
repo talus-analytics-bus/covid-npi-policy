@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import CSS from "csstype";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
@@ -566,6 +567,7 @@ const Data: FC<DataProps> = ({
   const tableIsReady: boolean =
     columns !== null && data !== null && filterDefs !== null;
 
+  const tooltipStyle: CSS.Properties = { maxWidth: "18em" };
   return (
     <div className={styles.data}>
       <Helmet>
@@ -633,14 +635,44 @@ const Data: FC<DataProps> = ({
                           {
                             name: "Affected location",
                             value: "affected",
-                            tooltip:
-                              "View all policies affecting the selected location",
+                            tooltipStyle,
+                            tooltip: (
+                              <>
+                                <p>
+                                  When <em>"Affected location"</em> is selected,
+                                  the places listed in the table below will be
+                                  the places affected by each policy, rather
+                                  than the jurisdictions that authorized each
+                                  policy, which could be different.
+                                </p>
+                                <p>
+                                  Any location filters you select will filter
+                                  policies by the affected locations that match
+                                  those filters.
+                                </p>
+                              </>
+                            ),
                           },
                           {
                             name: "Jurisdiction",
                             value: "jurisdiction",
-                            tooltip:
-                              "View all policies created by the selected jurisdiction",
+                            tooltipStyle,
+                            tooltip: (
+                              <>
+                                <p>
+                                  When <em>"Jurisdiction"</em> is selected, the
+                                  places listed in the table below will be the
+                                  jurisdictions that authorized each policy,
+                                  rather than the places affected by each
+                                  policy, which could be different.
+                                </p>
+                                <p>
+                                  Any location filters you select will filter
+                                  policies by the jurisdictions that match those
+                                  filters.
+                                </p>
+                              </>
+                            ),
                           },
                         ]}
                         curVal={placeType}
