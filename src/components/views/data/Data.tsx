@@ -577,37 +577,24 @@ const Data: FC<DataProps> = ({
         <PageHeader>Data access</PageHeader>
         <div className={styles.columnText}>
           <p>
-            The COVID Analysis and Mapping of Policies (AMP) site provides
-            access to a comprehensive list of policies and plans implemented
-            globally to address the COVID-19 pandemic.
+            Contact us at{" "}
+            <a
+              href="mailto:outbreaks@georgetown.edu"
+              target="_blank"
+              rel="noreferrer"
+            >
+              outbreaks@georgetown.edu
+            </a>{" "}
+            or{" "}
+            <a
+              href="mailto:info@talusanalytics.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              info@talusanalytics.com
+            </a>{" "}
+            for complete or automated access to the data.
           </p>
-          <ul>
-            <li>
-              In many cases response efforts have been led by subnational
-              governments or private and non-profit organizations.
-            </li>
-            <li>
-              Each policy or plan has been categorized by the type of measure,
-              in addition to implementation date and authorizing agency.
-            </li>
-            <li>
-              Policies can also be identified by legal authority and plans by
-              type of organization.
-            </li>
-            <li>
-              Where available, PDFs or links to the original document or notice
-              are included.{" "}
-            </li>
-            {
-              // TODO decide whether to add Airtable link and
-              // update accordingly
-            }
-            <li>
-              Click{" "}
-              <Link to={"/data?type=policy&placeType=affected"}>here</Link> to
-              access the data in Airtable format.
-            </li>
-          </ul>
         </div>
       </div>
       {
