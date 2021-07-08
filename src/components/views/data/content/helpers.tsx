@@ -11,7 +11,7 @@ import { PlaceType } from "../Data";
 
 import styles from "./Helpers.module.scss";
 
-const DEFAULT_POLICY_TITLE: string = "Policy";
+const DEFAULT_POLICY_TITLE: string = "Untitled policy";
 
 /**
  * If a policy has any of these titles then replace it with the default
