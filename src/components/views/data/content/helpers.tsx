@@ -273,7 +273,7 @@ function getPolicyCatSubcatTargDeclarative(
  * Returns a string representation of the policy's category, subcategory,
  * and target(s).
  *
- * @param p {PolicyRecord} The policy
+ * @param {PolicyRecord} p The policy
  *
  * @returns {string} A string representation of the policy's category,
  * subcategory, and target(s).
