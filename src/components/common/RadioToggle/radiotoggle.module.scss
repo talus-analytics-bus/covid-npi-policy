@@ -91,7 +91,11 @@
         padding: 0 10px;
         width: max-content;
       }
+      > span:not(:last-child) > label {
+        margin-right: 1.5em;
+      }
     }
+
     &.right {
       margin-left: auto !important;
     }
