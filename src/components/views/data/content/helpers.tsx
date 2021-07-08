@@ -41,7 +41,11 @@ export const getLinkedPolicyTitle: Function = (
       const url: string = getPolicyUrl(p);
       if (url !== null)
         return (
-          <Link to={url} title={"Click link to go to policy details page"}>
+          <Link
+            to={url}
+            title={"Click link to go to policy details page"}
+            target="_blank"
+          >
             {titleForLink}
           </Link>
         );
