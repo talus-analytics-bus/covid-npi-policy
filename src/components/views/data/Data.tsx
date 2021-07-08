@@ -580,14 +580,6 @@ const Data: FC<DataProps> = ({
           <p>
             Contact us at{" "}
             <a
-              href="mailto:outbreaks@georgetown.edu"
-              target="_blank"
-              rel="noreferrer"
-            >
-              outbreaks@georgetown.edu
-            </a>{" "}
-            or{" "}
-            <a
               href="mailto:info@talusanalytics.com"
               target="_blank"
               rel="noreferrer"
