@@ -626,6 +626,8 @@ const Data: FC<DataProps> = ({
                     />
                     {docType === "policy" && (
                       <RadioToggle
+                        horizontal
+                        selectpicker={false}
                         label={<ControlLabel>View by</ControlLabel>}
                         choices={[
                           {
@@ -641,14 +643,11 @@ const Data: FC<DataProps> = ({
                               "View all policies created by the selected jurisdiction",
                           },
                         ]}
-                        horizontal={true}
                         curVal={placeType}
                         callback={setPlaceType}
                         labelPos={"top"}
-                        selectpicker={false}
                         setInfoTooltipContent={setInfoTooltipContent}
                         theme={"slim"}
-                        tooltipMode={"footnote"}
                         onClick={undefined}
                         className={undefined}
                         children={undefined}
