@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import CSS from "csstype";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
@@ -19,7 +18,7 @@ import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
-import { ControlLabel, ControlLink } from "components/common/OptionControls";
+import { ControlLabel } from "components/common/OptionControls";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -187,7 +186,7 @@ const Data: FC<DataProps> = ({
 
   const initFilters: Filters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState<Filters>(initFilters);
-  const [showAdvanced, setShowAdvanced] = useState(
+  const [showAdvanced] = useState(
     false
     // initFilters["level"] !== undefined
   );
@@ -781,19 +780,22 @@ const Data: FC<DataProps> = ({
 
 export default Data;
 
-/**
- * Returns the label to use for the location type based on the data being
- * viewed in the table, e.g., "affected location" or "jurisdiction" for policy
- * data, and "organization" for plan data.
- *
- * @param placeType The type of place selected, "affected" or "jurisdiction".
- * @param entityInfo The entity info object for the data type being viewed.
- * @returns {string} The label to use for the location type.
- */
-function getLocationTypeLabel(placeType: string, entityInfo: any): string {
-  if (entityInfo.nouns.s === "Plan") return "Organization";
-  else return placeType === "affected" ? "Affected location" : "Jurisdiction";
-}
+// NOTE: The function below is no longer used as of Fri Jul 9 2021 because
+// dynamic location type-based labeling has been removed.
+
+// /**
+//  * Returns the label to use for the location type based on the data being
+//  * viewed in the table, e.g., "affected location" or "jurisdiction" for policy
+//  * data, and "organization" for plan data.
+//  *
+//  * @param placeType The type of place selected, "affected" or "jurisdiction".
+//  * @param entityInfo The entity info object for the data type being viewed.
+//  * @returns {string} The label to use for the location type.
+//  */
+// function getLocationTypeLabel(placeType: string, entityInfo: any): string {
+//   if (entityInfo.nouns.s === "Plan") return "Organization";
+//   else return placeType === "affected" ? "Affected location" : "Jurisdiction";
+// }
 
 /**
  * Returns the place type defined in the URL parameters, or null if none.
