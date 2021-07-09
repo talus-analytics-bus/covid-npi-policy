@@ -14,6 +14,7 @@ interface DrawerProps {
   noCollapse?: boolean;
   headerColor?: CSS.ColorProperty;
   headerBackgroundColor?: CSS.BackgroundColorProperty;
+  contentStyle?: CSS.Properties;
 }
 
 const Drawer: FC<DrawerProps> = ({
@@ -23,6 +24,7 @@ const Drawer: FC<DrawerProps> = ({
   headerColor,
   headerBackgroundColor,
   style = {},
+  contentStyle = {},
   noCollapse = false,
 }): ReactElement => {
   const [open, setOpen] = useState(true);
@@ -40,7 +42,10 @@ const Drawer: FC<DrawerProps> = ({
         {label}
       </div>
       {
-        <div className={classNames(styles.content, { [styles.hidden]: !open })}>
+        <div
+          style={contentStyle}
+          className={classNames(styles.content, { [styles.hidden]: !open })}
+        >
           {content}
         </div>
       }

@@ -160,4 +160,61 @@
       }
     }
   }
+
+  // custom grid layout for drawer content
+  // TODO fix class
+  [class*="drawer_content"] {
+    display: grid;
+    grid-gap: 1.25em;
+    align-items: flex-start;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "top top top top"
+      "sep sep sep sep"
+      "filter filter filter filter"
+      "selected selected selected selected";
+
+    // second radio button bay
+    [class^="radiotoggle_radioToggle"]:nth-child(2) {
+      grid-area: top;
+      grid-column: 2/4;
+    }
+
+    // divider
+    hr {
+      grid-area: sep;
+      width: 100%;
+      margin: 0;
+    }
+
+    // search
+    [class*="search_search"] {
+      grid-row: "top";
+      grid-column: 4;
+      margin: unset;
+    }
+
+    // filters
+    [class*="filterset_filterGroup"] {
+      grid-row: filter;
+      @include spaceItemsVert(1.25em);
+      width: 100%;
+    }
+
+    // selected filters
+    [class^="FilterSetSelections_selectedFilters"] {
+      grid-area: selected;
+      grid-column: 1/-1;
+    }
+  }
+
+  // basic responsiveness
+  @media #{$small-laptop} {
+    // TODO fix class
+    [class*="drawer_content"] {
+      display: flex;
+      flex-flow: column;
+      align-items: flex-start;
+    }
+  }
 }
