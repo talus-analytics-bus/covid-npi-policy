@@ -4,6 +4,8 @@
     font-style: normal;
     font-weight: bold;
     color: #303434;
+    font-size: 32px;
+    padding-top: 2px;
   }
   h2 {
     font-family: Rawline;
@@ -17,8 +19,8 @@
 }
 
 .pageHeader {
-  // margin-top: 2rem;
-  padding-bottom: 1rem;
+  margin-top: -20px;
+  // padding-bottom: 1rem;
 
   width: 100%;
   display: flex;
@@ -29,7 +31,9 @@
 }
 
 .miniMapHolder {
-  width: 8em;
+  width: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   figcaption {
     margin-bottom: 10px;
