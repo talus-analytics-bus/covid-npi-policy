@@ -12,8 +12,8 @@ interface DrawerProps {
   content?: ReactElement;
   style?: CSS.Properties;
   noCollapse?: boolean;
-  headerColor?: CSS.ColorProperty;
-  headerBackgroundColor?: CSS.BackgroundColorProperty;
+  headerColor?: string;
+  headerBackgroundColor?: string;
   contentStyle?: CSS.Properties;
 }
 

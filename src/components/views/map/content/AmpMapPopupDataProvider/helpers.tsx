@@ -1,5 +1,5 @@
 // 3rd party packages
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { Link, LinkProps } from "react-router-dom";
 import { Moment } from "moment";
 

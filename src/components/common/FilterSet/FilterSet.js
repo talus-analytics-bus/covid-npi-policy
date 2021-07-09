@@ -27,7 +27,7 @@ const FilterSet = ({
   alignBottom = false,
   vertical = false,
   numInstances = null,
-  instanceNouns = null,
+  instanceNouns = {},
   onClearAll,
   toHide = [],
   customLayout = false,

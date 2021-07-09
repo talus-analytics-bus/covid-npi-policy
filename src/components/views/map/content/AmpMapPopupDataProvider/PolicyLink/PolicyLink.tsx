@@ -1,4 +1,4 @@
-import React, { FC, useContext, ReactElement } from "react";
+import { FC, useContext, ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { InfoTooltip } from "components/common";
 import InfoTooltipContext from "context/InfoTooltipContext";

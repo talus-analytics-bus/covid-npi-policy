@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import CSS from "csstype";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
@@ -19,7 +18,7 @@ import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
-import { ControlLabel, ControlLink } from "components/common/OptionControls";
+import { ControlLabel } from "components/common/OptionControls";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -39,6 +38,7 @@ import { ApiResponse, ApiResponseIndexed } from "api/responseTypes";
 import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
 import { DataColumnDef } from "components/common/Table/Table";
+import { AmpPage } from "types";
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -46,7 +46,7 @@ import { DataColumnDef } from "components/common/Table/Table";
  *
  * NOTE: `challenge` is currently disabled.
  */
-type DataPageType = "policy" | "plan" | "challenge";
+export type DataPageType = "policy" | "plan" | "challenge";
 
 /**
  * Minimum and maximum dates defining a range.
@@ -73,29 +73,28 @@ interface DataProps {
   /**
    * Sets the stringified HTML of the currently displayed tooltip content.
    */
-  setInfoTooltipContent: Dispatch<SetStateAction<string>>;
+  setInfoTooltipContent: Dispatch<SetStateAction<string | null>>;
 
   /**
    * Sets the current page.
    */
-  // TODO make page an enum
-  setPage: Dispatch<SetStateAction<string>>;
+  setPage: Dispatch<SetStateAction<AmpPage | null>>;
 
   /**
    * Defines the URL filter parameters for policy data.
    */
-  urlFilterParamsPolicy: Filters;
+  urlFilterParamsPolicy: Filters | null;
 
   /**
    * Defines the URL filter parameters for plan data.
    */
-  urlFilterParamsPlan: Filters;
+  urlFilterParamsPlan: Filters | null;
 
   /**
    * Defines the URL filter parameters for court challenge data.
    * @unused
    */
-  urlFilterParamsChallenge: Filters;
+  urlFilterParamsChallenge: Filters | null;
 
   /**
    * The type, i.e., mode, of the data page, that determines what kind of data
@@ -130,7 +129,7 @@ const Data: FC<DataProps> = ({
   urlFilterParamsChallenge,
   type,
 }) => {
-  const [docType, setDocType] = useState<DataPageType>(type || "policy");
+  const [docType, setDocType] = useState<DataPageType>(type);
 
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
@@ -159,7 +158,7 @@ const Data: FC<DataProps> = ({
 
   // CONSTANTS // ---------------------------------------------------------- //
   // define nouns used to refer to entity type viewed in table
-  const nouns = entityInfo.nouns;
+  const nouns = entityInfo.nouns || { s: "Policy", p: "Policies" };
 
   // define data and metadata for table
   const [data, setData] = useState<DataRecord[] | null>(null);
@@ -170,9 +169,9 @@ const Data: FC<DataProps> = ({
     // If filters are specific in the url params, and they are for the current
     // entity class, use them. Otherwise, clear them
     const urlFilterParams: Filters = {
-      policy: urlFilterParamsPolicy,
-      plan: urlFilterParamsPlan,
-      challenge: urlFilterParamsChallenge,
+      policy: urlFilterParamsPolicy || {},
+      plan: urlFilterParamsPlan || {},
+      challenge: urlFilterParamsChallenge || {},
     }[docType];
 
     const useUrlFilters: boolean = urlFilterParams !== null;
@@ -187,7 +186,7 @@ const Data: FC<DataProps> = ({
 
   const initFilters: Filters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState<Filters>(initFilters);
-  const [showAdvanced, setShowAdvanced] = useState(
+  const [showAdvanced] = useState(
     false
     // initFilters["level"] !== undefined
   );
@@ -781,19 +780,22 @@ const Data: FC<DataProps> = ({
 
 export default Data;
 
-/**
- * Returns the label to use for the location type based on the data being
- * viewed in the table, e.g., "affected location" or "jurisdiction" for policy
- * data, and "organization" for plan data.
- *
- * @param placeType The type of place selected, "affected" or "jurisdiction".
- * @param entityInfo The entity info object for the data type being viewed.
- * @returns {string} The label to use for the location type.
- */
-function getLocationTypeLabel(placeType: string, entityInfo: any): string {
-  if (entityInfo.nouns.s === "Plan") return "Organization";
-  else return placeType === "affected" ? "Affected location" : "Jurisdiction";
-}
+// NOTE: The function below is no longer used as of Fri Jul 9 2021 because
+// dynamic location type-based labeling has been removed.
+
+// /**
+//  * Returns the label to use for the location type based on the data being
+//  * viewed in the table, e.g., "affected location" or "jurisdiction" for policy
+//  * data, and "organization" for plan data.
+//  *
+//  * @param placeType The type of place selected, "affected" or "jurisdiction".
+//  * @param entityInfo The entity info object for the data type being viewed.
+//  * @returns {string} The label to use for the location type.
+//  */
+// function getLocationTypeLabel(placeType: string, entityInfo: any): string {
+//   if (entityInfo.nouns.s === "Plan") return "Organization";
+//   else return placeType === "affected" ? "Affected location" : "Jurisdiction";
+// }
 
 /**
  * Returns the place type defined in the URL parameters, or null if none.
