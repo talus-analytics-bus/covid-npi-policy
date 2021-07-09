@@ -137,7 +137,7 @@ type PolicyCatSubcatTargMode = "indented" | "declarative" | "simple";
  */
 export function getPolicyCatSubcatTarg(
   p: PolicyRecord,
-  mode: PolicyCatSubcatTargMode = "simple"
+  mode: PolicyCatSubcatTargMode = "declarative"
 ): ReactElement | null {
   switch (mode) {
     case "indented":
@@ -259,8 +259,8 @@ function getPolicyCatSubcatTargDeclarative(
               <span>{subcat}</span>
             </p>
             <p className={styles.targets}>
-              <p className={styles.label}>Targets: </p>
-              <p>{formatSubtargets(p.subtarget.join(" ∙ "))}</p>
+              <span className={styles.label}>Targets: </span>
+              <span>{formatSubtargets(p.subtarget.join(" ∙ "))}</span>
             </p>
           </p>
         );
