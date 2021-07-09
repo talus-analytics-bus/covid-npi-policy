@@ -18,6 +18,7 @@ import classNames from "classnames";
 import "@kenshooui/react-multi-select/dist/style.css";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { getFilterDisplayVals } from "../FilterSet/content/FilterSetSelections/FilterSetSelections";
 
 /**
  * @method Filter
@@ -125,10 +126,14 @@ const Filter = ({
   useEffect(() => {
     if (show) setActiveFilter(field);
     else if (activeFilter === field) setActiveFilter(null);
+    // TODO fix dependencies below
+    // eslint-disable-next-line
   }, [show]);
 
   useEffect(() => {
     if (activeFilter !== field) setShow(false);
+    // TODO fix dependencies below
+    // eslint-disable-next-line
   }, [activeFilter]);
 
   useEffect(() => {
@@ -226,7 +231,10 @@ const Filter = ({
         setFilters({ ...filters, [field]: v });
       }
     }
+    // TODO fix dependencies below
+    // eslint-disable-next-line
   }, [dateRangeState]);
+
   const showSelectAll = sortedItems && sortedItems.length > 4;
   let responsiveHeight = 0;
   if (sortedItems !== undefined) {
@@ -265,27 +273,37 @@ const Filter = ({
             }}
           >
             <div>
-              <span className={styles.field}>
-                {getInputLabel({
-                  dateRange,
-                  items: sortedItems,
-                  nMax,
-                  dateRangeState,
-                  selectedItems: filterState.selectedItems,
-                  disabledText,
-                  disabled,
-                })}
-              </span>
-              <span className={styles.selections}>
-                {" "}
-                {!dateRange && !disabled && !noItems && (
-                  <span>
-                    ({nCur} of {nMax})
-                  </span>
-                )}
-              </span>
+              {
+                // // Show label of single selected items
+                // <span className={styles.field}>
+                //   {getInputLabel({
+                //     dateRange,
+                //     items: sortedItems,
+                //     nMax,
+                //     dateRangeState,
+                //     selectedItems: filterState.selectedItems,
+                //     disabledText,
+                //     disabled,
+                //   })}
+                // </span>
+              }
+              {// show hyphen if no selections
+              nCur === 0 && <>-</>}
+              {// show number of selections if more than zero
+              nCur > 0 && (
+                <span className={styles.selections}>
+                  {!dateRange && !disabled && !noItems && (
+                    <span>
+                      {nCur} of {nMax}
+                    </span>
+                  )}
+                  {dateRange && (
+                    <span>{getInputLabel({ dateRange, dateRangeState })}</span>
+                  )}
+                </span>
+              )}
             </div>
-            {dateRange && <img src={calendarSvg} />}
+            {dateRange && <img src={calendarSvg} alt={"calendar icon"} />}
             {!dateRange && <i className={"material-icons"}>arrow_drop_down</i>}
           </div>
           <div
@@ -388,6 +406,7 @@ const Filter = ({
   }
 };
 
+const NO_SELECTION_TEXT = "-";
 /**
  * Given input parameters returns the label that should be shown for the
  * filter dropdown.
@@ -414,28 +433,37 @@ export const getInputLabel = ({
     } else if (disabled) {
       return disabledText;
     }
-    if (selectedItems.length === 1) {
-      if (selectedItems[0].label.length < 15) return selectedItems[0].label;
-      else return "1 selected";
-    } else if (selectedItems.length === nMax) return "All selected";
-    else if (selectedItems.length > 0) return "Multiple selected";
-    else return "None selected";
+
+    // // if there is one selection, show its label
+    // if (selectedItems.length === 1) {
+    //   // return label no matter how long
+    //   return selectedItems[0].label;
+
+    //   // // return label if it below 15 characters
+    //   // const labelWillFit = selectedItems[0].label.length < 15;
+    //   // if (labelWillFit) return selectedItems[0].label;
+    //   // else return "1 selected";
+    // }
+    // // return descriptions of all or multiple selected, if applicable
+    // } else if (selectedItems.length === nMax) return "All selected";
+    // else if (selectedItems.length > 0) return "Multiple selected";
+    else return NO_SELECTION_TEXT;
   } else {
     const startRaw = dateRangeState[0].startDate;
     const endRaw = dateRangeState[0].endDate;
     if (startRaw === undefined && endRaw === undefined) {
-      return "None selected";
-    }
-
-    const start = moment(dateRangeState[0].startDate).utc();
-    const end = moment(dateRangeState[0].endDate).utc();
-
-    if (start.isSame(end, "day")) {
-      return `${end.format("MMM D, YYYY")}`;
-    } else if (start.isSame(end, "year")) {
-      return `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+      return NO_SELECTION_TEXT;
     } else {
-      return `${start.format("MMM D, YYYY")} - ${end.format("MMM D, YYYY")}`;
+      const start = moment(dateRangeState[0].startDate).utc();
+      const end = moment(dateRangeState[0].endDate).utc();
+
+      if (start.isSame(end, "day")) {
+        return `${end.format("MMM D, YYYY")}`;
+      } else if (start.isSame(end, "year")) {
+        return `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+      } else {
+        return `${start.format("MMM D, YYYY")} - ${end.format("MMM D, YYYY")}`;
+      }
     }
   }
 };

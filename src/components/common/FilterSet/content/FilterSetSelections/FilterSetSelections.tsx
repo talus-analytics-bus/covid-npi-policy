@@ -78,10 +78,11 @@ export const FilterSetSelections: FC<FilterSetSelectionsProps> = ({
             const fIsDate: boolean =
               fIsDefined && filterDefsObj[fField].dateRange;
             const fIsText: boolean = fField === "_text";
+            const fValsBadge = fIsDate ? [fVals[0]] : fVals;
             return (
               !fIsText && (
-                <React.Fragment key={fField + "-" + fVals.join("-")}>
-                  {fVals.map(val =>
+                <React.Fragment key={fField + "-" + fValsBadge.join("-")}>
+                  {fValsBadge.map(val =>
                     getBadge({
                       field: fField,
                       label: getFilterDisplayLabel(filterDefsObj, fField),
@@ -129,7 +130,23 @@ function getFilterDisplayLabel(filterDefsObj: any, fField: string): string {
   else return getInitCap(fField);
 }
 
-function getFilterDisplayVals(
+/**
+ * Returns the display value for the badge corresponding to this filter value.
+ *
+ * @param {string[]} fVals
+ * The filter values
+ *
+ * @param {string} val
+ * The filter value for this badge
+ *
+ * @param {boolean} isDateRange
+ * True if this filter is a date range, false otherwise
+ *
+ * @returns {any}
+ * The string or element that should be displayed as the value of the
+ * filter badge
+ */
+export function getFilterDisplayVals(
   fVals: string[],
   val: string,
   isDateRange: boolean

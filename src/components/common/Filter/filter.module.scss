@@ -21,6 +21,11 @@
     .label {
       @include disabled();
     }
+    .input {
+      .filterButton {
+        border-color: $idea-gray-2;
+      }
+    }
   }
   .input {
     .filterButton {
@@ -38,7 +43,7 @@
         font-weight: bold;
       }
       span.selections {
-        font-style: italic;
+        font-weight: bold;
       }
 
       // caret icon

@@ -6,13 +6,13 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import CSS from "csstype";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
-import { FilterSet, Table, RadioToggle } from "../../common";
+import { FilterSet, Table, RadioToggle, InfoTooltip } from "../../common";
 import { DownloadBtn, PageHeader } from "components/project";
 import Drawer from "../../layout/drawer/Drawer";
 import { Metadata, OptionSet, execute } from "api/Queries";
@@ -559,7 +559,7 @@ const Data: FC<DataProps> = ({
   }, [ordering, curPage, placeType]);
 
   // have any filters or search text been applied?
-  const areFiltersDefined = !(
+  const filtersAreDefined = !(
     isEmpty(filters) &&
     (searchText === null || searchText === "")
   );
@@ -567,6 +567,12 @@ const Data: FC<DataProps> = ({
   const tableIsReady: boolean =
     columns !== null && data !== null && filterDefs !== null;
 
+  // grid template areas that always apply to the drawer content
+  const defaultGridTemplateAreas = `
+      "top top top top"
+      "sep sep sep sep"
+      "filter filter filter filter"
+    `;
   return (
     <div className={styles.data}>
       <Helmet>
@@ -577,51 +583,34 @@ const Data: FC<DataProps> = ({
         <PageHeader>Data access</PageHeader>
         <div className={styles.columnText}>
           <p>
-            The COVID Analysis and Mapping of Policies (AMP) site provides
-            access to a comprehensive list of policies and plans implemented
-            globally to address the COVID-19 pandemic.
+            Contact us at{" "}
+            <a
+              href="mailto:info@talusanalytics.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              info@talusanalytics.com
+            </a>{" "}
+            for complete or automated access to the data.
           </p>
-          <ul>
-            <li>
-              In many cases response efforts have been led by subnational
-              governments or private and non-profit organizations.
-            </li>
-            <li>
-              Each policy or plan has been categorized by the type of measure,
-              in addition to implementation date and authorizing agency.
-            </li>
-            <li>
-              Policies can also be identified by legal authority and plans by
-              type of organization.
-            </li>
-            <li>
-              Where available, PDFs or links to the original document or notice
-              are included.{" "}
-            </li>
-            {
-              // TODO decide whether to add Airtable link and
-              // update accordingly
-            }
-            <li>
-              Click{" "}
-              <Link to={"/data?type=policy&placeType=affected"}>here</Link> to
-              access the data in Airtable format.
-            </li>
-          </ul>
         </div>
       </div>
       {
         <>
           <Drawer
+            contentStyle={{
+              gridTemplateAreas: `${defaultGridTemplateAreas}
+      ${filtersAreDefined ? '"selected selected selected selected"' : ""}`,
+            }}
             {...{
               title: <span>Select data</span>,
               noCollapse: false,
               headerBackgroundColor: colors.mapGreen5,
               content: (
                 <>
-                  <section className={styles.contentTop}>
+                  <>
                     <RadioToggle
-                      label={<ControlLabel>Search for</ControlLabel>}
+                      label={<ControlLabel>Choose</ControlLabel>}
                       choices={[
                         { name: "Policies", value: "policy" },
                         { name: "Plans", value: "plan" },
@@ -640,29 +629,55 @@ const Data: FC<DataProps> = ({
                     />
                     {docType === "policy" && (
                       <RadioToggle
-                        label={<ControlLabel>View by</ControlLabel>}
+                        horizontal
+                        selectpicker={false}
+                        label={
+                          <ControlLabel>
+                            View by{" "}
+                            <InfoTooltip
+                              id={"locationTypeTooltip"}
+                              text={
+                                <>
+                                  <p>
+                                    When <em>"Affected location"</em> is
+                                    selected, the places listed in the table
+                                    below will be the places affected by each
+                                    policy, rather than the jurisdictions that
+                                    authorized each policy, which could be
+                                    different.
+                                  </p>
+                                  <p>
+                                    When <em>"Jurisdiction"</em> is selected,
+                                    places listed will be the jurisdictions that
+                                    authorized each policy.
+                                  </p>
+                                  <p>
+                                    Any location filters you select will filter
+                                    policies by the affected locations or the
+                                    jurisdictions, whichever is selected.
+                                  </p>
+                                </>
+                              }
+                              style={{ maxWidth: "18em" }}
+                              {...{ setInfoTooltipContent }}
+                            />
+                          </ControlLabel>
+                        }
                         choices={[
                           {
                             name: "Affected location",
                             value: "affected",
-                            tooltip:
-                              "View all policies affecting the selected location",
                           },
                           {
                             name: "Jurisdiction",
                             value: "jurisdiction",
-                            tooltip:
-                              "View all policies created by the selected jurisdiction",
                           },
                         ]}
-                        horizontal={true}
                         curVal={placeType}
                         callback={setPlaceType}
                         labelPos={"top"}
-                        selectpicker={false}
                         setInfoTooltipContent={setInfoTooltipContent}
                         theme={"slim"}
-                        tooltipMode={"footnote"}
                         onClick={undefined}
                         className={undefined}
                         children={undefined}
@@ -673,12 +688,10 @@ const Data: FC<DataProps> = ({
                       onChangeFunc={setSearchText}
                       {...{ loading }}
                     />
-                  </section>
+                  </>
                   {tableIsReady && (
-                    <section className={styles.filterSet}>
-                      <ControlLabel>
-                        {getLocationTypeLabel(placeType, entityInfo)} and{" "}
-                        {nouns.s.toLowerCase()} details{" "}
+                    <>
+                      {/* <ControlLabel>
                         {showAdvanced && (
                           <ControlLink
                             style={{ marginLeft: "1rem" }}
@@ -687,10 +700,12 @@ const Data: FC<DataProps> = ({
                             hide advanced filters
                           </ControlLink>
                         )}
-                      </ControlLabel>
+                      </ControlLabel> */}
+                      <hr />
                       <FilterSet
                         alignBottom
                         vertical
+                        customLayout
                         onClearAll={() => {
                           setSearchText(null);
                           setFilters({});
@@ -706,7 +721,7 @@ const Data: FC<DataProps> = ({
                           numInstances,
                         }}
                       ></FilterSet>
-                    </section>
+                    </>
                   )}
                 </>
               ),
@@ -716,7 +731,7 @@ const Data: FC<DataProps> = ({
           {DownloadBtn({
             render: tableIsReady,
             class_name: [nouns.s, "secondary"],
-            classNameForApi: areFiltersDefined ? nouns.s : "All_data",
+            classNameForApi: filtersAreDefined ? nouns.s : "All_data",
             buttonLoading,
             setButtonLoading,
             searchText,
@@ -730,14 +745,14 @@ const Data: FC<DataProps> = ({
                 {data && data.length > 0 && (
                   <>
                     <span style={{ fontWeight: 700 }}>
-                      Download {!areFiltersDefined ? "all" : "filtered"} data{" "}
+                      Download {!filtersAreDefined ? "all" : "filtered"} data{" "}
                     </span>
-                    <span style={{ fontWeight: 400 }}>
+                    <span style={{ fontStyle: "italic", fontWeight: 400 }}>
                       ({comma(numInstances)}{" "}
                       {numInstances !== 1
                         ? nouns.p.toLowerCase()
-                        : nouns.s.toLowerCase().replace("_", " ")}
-                      , .xlsx)
+                        : nouns.s.toLowerCase().replace("_", " ")}{" "}
+                      .xlsx)
                     </span>
                   </>
                 )}

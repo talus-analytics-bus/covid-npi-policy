@@ -21,7 +21,7 @@
     }
     &.dropdowns {
       &:not(:first-child) {
-        margin-top: 20px;
+        margin-top: 1.25em;
       }
     }
   }
@@ -47,14 +47,14 @@
       margin-right: 0;
     }
 
-    @include borderItemsVert(20px);
+    @include borderItemsVert(1.25em);
 
     .filterGroup {
       width: 100%;
       flex-flow: column;
 
-      margin-bottom: 20px;
-      @include spaceItemsVert(20px);
+      margin-bottom: 1.25em;
+      @include spaceItemsVert(1.25em);
       > div {
         width: 100%;
       }

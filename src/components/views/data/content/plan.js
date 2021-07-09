@@ -81,7 +81,6 @@ export const planInfo = {
         dataField: "name_and_desc",
         header: "Plan name and description",
         defCharLimit: 1000,
-        sort: true,
         formatter: (cell, row) => {
           return <ShowMore text={cell} charLimit={200} />;
         },
@@ -134,7 +133,9 @@ export const planInfo = {
           }
         },
       },
-    ];
+    ].map(d => {
+      return { ...d, sortValue: () => 0 };
+    });
 
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing

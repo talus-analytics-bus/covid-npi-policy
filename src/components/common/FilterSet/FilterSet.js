@@ -30,6 +30,7 @@ const FilterSet = ({
   instanceNouns = null,
   onClearAll,
   toHide = [],
+  customLayout = false,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -105,25 +106,33 @@ const FilterSet = ({
       />
     );
 
+  const filterGroupsElement = filterGroups.map(d => (
+    <div
+      key={d.map(dd => dd.key).join("-")}
+      className={classNames(styles.filterGroup, {
+        [styles.dropdowns]: d.dropdowns,
+      })}
+    >
+      {d}
+    </div>
+  ));
+  const getWrappedElement = el => {
+    if (customLayout) return el;
+    else
+      return (
+        <div
+          className={classNames(styles.filterSet, {
+            [styles.disabled]: disabled,
+            [styles.vertical]: vertical,
+          })}
+        >
+          {el}
+        </div>
+      );
+  };
   return (
     <React.Fragment>
-      <div
-        className={classNames(styles.filterSet, {
-          [styles.disabled]: disabled,
-          [styles.vertical]: vertical,
-        })}
-      >
-        {filterGroups.map(d => (
-          <div
-            key={d.map(dd => dd.key).join("-")}
-            className={classNames(styles.filterGroup, {
-              [styles.dropdowns]: d.dropdowns,
-            })}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
+      {getWrappedElement(filterGroupsElement)}
       {children}
       {badgesToShow && selectedFilters}
     </React.Fragment>
