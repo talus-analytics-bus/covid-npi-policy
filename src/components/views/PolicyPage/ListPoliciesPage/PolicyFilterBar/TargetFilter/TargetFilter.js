@@ -72,11 +72,18 @@ const TargetFilter = props => {
         },
       });
 
-      setTargets(prev => ({ ...prev, all: request.data.data.subtarget }));
+      setTargets(prev => ({
+        ...prev,
+        all: request.data.data.subtarget.map(subtarget => ({
+          ...subtarget,
+          label: subtarget.value,
+        })),
+      }));
     };
 
     getOptions();
   }, [location, setTargets]);
+
 
   return (
     <div className={styles.filter}>
@@ -88,7 +95,9 @@ const TargetFilter = props => {
         onClose={() => setFilterOpen(false)}
       >
         <span className={styles.buttonLabel}>
-          {targets.selected.length} selected
+          {targets.selected.length > 0
+            ? `${targets.selected.length} selected`
+            : `—`}
         </span>
         <div className={styles.filterFrame}>
           <MultiSelect

@@ -63,8 +63,6 @@ const PolicyPage = props => {
 
   const policyTargetList = policy && policy.subtarget;
 
-  console.log(policy);
-
   // display name for policy
   const policyName = getPolicyDisplayName(policy);
   return (
@@ -85,7 +83,7 @@ const PolicyPage = props => {
           </div>
           <div className={styles.right}>
             <DocumentPreview />
-            <ExploreSource {...{ policy }} />
+            <ExploreSource {...{ policy }}>View source document</ExploreSource>
           </div>
         </div>
         <div className={styles.section}>
@@ -115,11 +113,14 @@ const PolicyPage = props => {
         <div className={styles.section}>
           <LocationAndOfficials {...{ state, policy, policyPlace }} />
         </div>
-        <div className={styles.right}>
+        {/* <div className={styles.section}> */}
+        <OthersInDocument {...{ policy }} path={policyObjectPath} />
+        {/* </div> */}
+        {/* <div className={styles.right}>
           {iso3 === "USA" && (
             <HomeRuleDillonsRule {...{ policyPlace, policy }} />
           )}
-        </div>
+        </div> */}
       </main>
       <RelatedPolicies path={policyObjectPath} policy={policy} />
     </article>
@@ -135,6 +136,7 @@ const NAME_MAX_CHARS = 15;
  * @returns {string} The name to use in the page title
  */
 function getPolicyDisplayName(policy) {
+  if (!policy) return "Policy details";
   const policyName = policy.policy_name;
   const nameIsDefined =
     policy !== undefined &&

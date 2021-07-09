@@ -29,9 +29,9 @@ const MapFigure = ({ state, policy, policyPlace }) => {
           }
         />
       </div>
-      <figcaption>
+      {/* <figcaption>
         This policy was authorized by {locationTitle} and affects ....
-      </figcaption>
+      </figcaption> */}
     </figure>
   );
 };

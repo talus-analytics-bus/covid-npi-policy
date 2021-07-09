@@ -141,7 +141,6 @@ const Slider = ({
       onMouseUp={handleDragEnd}
       onMouseLeave={() => {
         setCursorVisible(false);
-        const sliderDate = scale.x.invert(sliderX + 1);
         setIntroDate(Math.floor(sliderDate.getTime() / msPerDay));
       }}
       onMouseEnter={() => setCursorVisible(true)}
@@ -154,6 +153,7 @@ const Slider = ({
         style={{ fill: "rgba(0,0,0,0)" }}
       />
       {cursorVisible && (
+        // vertical line for the cursor
         <g
           style={{
             transform: `translateX(${cursorX}px)`,
@@ -171,7 +171,7 @@ const Slider = ({
           />
         </g>
       )}
-      <g
+      <g // Slider vertical line and date
         style={{
           transform: `translateX(${sliderX}px)`,
         }}
@@ -220,7 +220,7 @@ const Slider = ({
           }}
         />
       </g>
-      {cursorVisible && (
+      {cursorVisible && ( // date and orange box for cursor
         <g
           style={{
             transform: `translateX(${cursorX}px)`,
@@ -248,7 +248,7 @@ const Slider = ({
           </text>
         </g>
       )}
-      {cursorVisible &&
+      {cursorVisible && // The cursor-highlighted policies
         cursorPolicies &&
         cursorPolicies.enacted &&
         Object.values(cursorPolicies.enacted)

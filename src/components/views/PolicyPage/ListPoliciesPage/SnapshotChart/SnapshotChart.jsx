@@ -36,17 +36,21 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   };
 
   const [introDate, setIntroDate] = useRecoilState(introDateState);
+  const [lastDate, setLastDate] = useState();
 
   useEffect(() => {
     if (policySummaryObject) {
       const dates = Object.keys(policySummaryObject);
       setIntroDate(dates[dates.length - 1]);
+      setLastDate(dates[dates.length - 1]);
     }
   }, [policySummaryObject]);
 
   const byCategory = {};
+  let selectedDate = introDate;
+  if (lastDate && !policySummaryObject[introDate]) selectedDate = lastDate;
 
-  if (policySummaryObject && policySummaryObject[introDate]) {
+  if (policySummaryObject && policySummaryObject[selectedDate]) {
     // get the categories from the most recent date
     Object.entries(
       Object.values(policySummaryObject)[
@@ -59,7 +63,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
     });
 
     // fill the counts based on the intro section date
-    Object.entries(policySummaryObject[introDate]).forEach(
+    Object.entries(policySummaryObject[selectedDate]).forEach(
       ([status, categories]) => {
         Object.entries(categories).map(([category, policies]) => {
           if (!byCategory[category][status])
@@ -122,7 +126,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
       viewBox={`0 0 ${dim.width} ${dim.height}`}
       style={{
         overflow: "visible",
-        height: 400,
+        // height: 400,
         // border: "1px solid black"
       }}
     >

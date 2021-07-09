@@ -27,6 +27,7 @@ const TooltipContent = ({
   setCursorVisible,
   highlightPolicies,
   highlightCaseload,
+  popupVisible,
 }) => {
   const newPolicyCount =
     highlightPolicies &&
@@ -49,6 +50,22 @@ const TooltipContent = ({
       style={{ pointerEvents: "auto" }}
       onMouseEnter={() => setCursorVisible(false)}
       onMouseLeave={() => setCursorVisible(true)}
+      onClick={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onMouseDown={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onMouseMove={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onMouseUp={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
       <header className={styles.greySection}>
         <div className={styles.date}>
@@ -79,7 +96,7 @@ const TooltipContent = ({
               ([category, policies]) => (
                 <PolicyModal
                   key={category}
-                  {...{ category, policies, sliderDate }}
+                  {...{ category, policies, sliderDate, popupVisible }}
                 >
                   <PolicyCategoryIcon
                     category={category}
@@ -131,6 +148,7 @@ const Tooltip = ({
               setCursorVisible,
               highlightPolicies,
               highlightCaseload,
+              popupVisible,
             }}
           />
         }

@@ -446,8 +446,6 @@ export const loadPolicySearch = async ({
     ],
   });
 
-  console.log(policyResponse);
-
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, searchResults: "error" }));
     stateSetter(policyResponse);

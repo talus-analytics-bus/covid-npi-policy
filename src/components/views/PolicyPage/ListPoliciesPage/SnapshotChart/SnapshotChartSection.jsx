@@ -92,17 +92,28 @@ const SnapshotChartSection = () => {
   //   Object.keys(lastStatus.expired).sort((a, b) => a.localeCompare(b));
 
   return (
-    <div className={styles.sectionContainer}>
-      {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
-      {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
-      <div className={styles.labels}>
-        <h3>Policy category</h3>
-        {chartLabels &&
-          chartLabels.map(category => <p key={category}>{category}</p>)}
+    <div>
+      <div className={styles.headerContainer}>
+        <div className={styles.labelsHeader}>
+          <h3>Policy category</h3>
+        </div>
+        <div className={styles.chartHeader}>
+          <h3>Number of policies</h3>
+        </div>
       </div>
-      <div className={styles.chartContainer}>
-        <h3>Number of policies</h3>
+      <div className={styles.sectionContainer}>
+        {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
+        {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
+        <div className={styles.labels}>
+          {chartLabels &&
+            chartLabels.map(category => <p key={category}>{category}</p>)}
+        </div>
+        {/* <div className={styles.chartContainer}> */}
         <SnapshotChart {...{ policySummaryObject, chartLabels }} />
+
+        {/* </div> */}
+      </div>
+      <div className={styles.legendContainer}>
         <div className={styles.legend}>
           {policySummaryObject && (
             <>
