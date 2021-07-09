@@ -11,7 +11,7 @@ export const OptionRadio: FC<Option> = ({
   selectedOptions = [],
   description,
   child,
-  setInfoTooltipContent,
+  setInfoTooltipContent = () => {},
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());

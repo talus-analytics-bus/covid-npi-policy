@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 
 export interface Option {
   /**
@@ -58,7 +58,9 @@ export interface Option {
    * Optional: Function to set tooltip content. If undefined, tooltip will be
    * rendered inside component.
    */
-  setInfoTooltipContent?(): void;
+  setInfoTooltipContent?:
+    | Dispatch<SetStateAction<string | null>>
+    | (() => void);
 
   /**
    * Optional: Function called on an option value to determine whether this
@@ -106,7 +108,9 @@ export interface OptionWidget {
    * Optional: Function to set tooltip content. If undefined, tooltip will be
    * rendered inside component.
    */
-  setInfoTooltipContent?(): void;
+  setInfoTooltipContent?:
+    | Dispatch<SetStateAction<string | null>>
+    | (() => void);
 }
 
 export type OptionSetEntry = {

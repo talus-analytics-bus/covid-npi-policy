@@ -11,7 +11,7 @@ import { PlaceType } from "../Data";
 
 import styles from "./Helpers.module.scss";
 
-const DEFAULT_POLICY_TITLE: string = "Policy";
+const DEFAULT_POLICY_TITLE: string = "Untitled policy";
 
 /**
  * If a policy has any of these titles then replace it with the default
@@ -41,7 +41,11 @@ export const getLinkedPolicyTitle: Function = (
       const url: string = getPolicyUrl(p);
       if (url !== null)
         return (
-          <Link to={url} title={"Click link to go to policy details page"}>
+          <Link
+            to={url}
+            title={"Click link to go to policy details page"}
+            target="_blank"
+          >
             {titleForLink}
           </Link>
         );
@@ -119,6 +123,12 @@ export function safeGetFieldValsAsStrings(
 }
 
 /**
+ * Different modes of policy category, subcategory, and target text that may
+ * be displayed.
+ */
+type PolicyCatSubcatTargMode = "indented" | "declarative" | "simple";
+
+/**
  * Returns a list of categories, subcategories, and targets of a policy from
  * its record (API response datum).
  * @param p The policy record
@@ -127,11 +137,16 @@ export function safeGetFieldValsAsStrings(
  */
 export function getPolicyCatSubcatTarg(
   p: PolicyRecord,
-  indented: boolean = false
+  mode: PolicyCatSubcatTargMode = "declarative"
 ): ReactElement | null {
-  if (indented) return getPolicyCatSubcatTargIndented(p);
-  else {
-    return getPolicyCatSubcatTargText(p);
+  switch (mode) {
+    case "indented":
+      return getPolicyCatSubcatTargIndented(p);
+    case "declarative":
+      return getPolicyCatSubcatTargDeclarative(p);
+    case "simple":
+    default:
+      return getPolicyCatSubcatTargSimple(p);
   }
 }
 
@@ -197,7 +212,9 @@ function getPolicyCatSubcatTargIndented(p: PolicyRecord): ReactElement | null {
  * @returns The categories, subcategories, and targets of the policy record
  * presented as a series of paragraphs.
  */
-function getPolicyCatSubcatTargText(p: PolicyRecord): ReactElement | null {
+function getPolicyCatSubcatTargDeclarative(
+  p: PolicyRecord
+): ReactElement | null {
   if (p.primary_ph_measure === undefined || p.primary_ph_measure === null)
     return null;
   else {
@@ -242,8 +259,53 @@ function getPolicyCatSubcatTargText(p: PolicyRecord): ReactElement | null {
               <span>{subcat}</span>
             </p>
             <p className={styles.targets}>
-              <p className={styles.label}>Targets: </p>
-              <p>{formatSubtargets(p.subtarget.join(" ∙ "))}</p>
+              <span className={styles.label}>Targets: </span>
+              <span>{formatSubtargets(p.subtarget.join(" ∙ "))}</span>
+            </p>
+          </p>
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Returns a string representation of the policy's category, subcategory,
+ * and target(s).
+ *
+ * @param {PolicyRecord} p The policy
+ *
+ * @returns {string} A string representation of the policy's category,
+ * subcategory, and target(s).
+ */
+function getPolicyCatSubcatTargSimple(p: PolicyRecord): ReactElement | null {
+  if (p.primary_ph_measure === undefined || p.primary_ph_measure === null)
+    // no data: show nothing
+    return null;
+  else {
+    const cat: string = p.primary_ph_measure;
+    if (p.ph_measure_details === undefined || p.ph_measure_details === null)
+      // display category only
+      return <p className={styles.text}>{cat}</p>;
+    else {
+      const subcat: string = p.ph_measure_details;
+      if (
+        p.subtarget === undefined ||
+        p.subtarget === null ||
+        p.subtarget.length === 0
+      )
+        // as above but with subcategory
+        return (
+          <p className={styles.text}>
+            {cat}: {subcat}
+          </p>
+        );
+      else {
+        // as above but with list of subtargets
+        return (
+          <p className={styles.text}>
+            <p className={styles.text}>
+              {cat}: {subcat}: {formatSubtargets(p.subtarget.join(" ∙ "))}
             </p>
           </p>
         );
