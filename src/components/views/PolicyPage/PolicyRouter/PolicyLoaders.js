@@ -19,6 +19,22 @@ export const loadPolicyCategories = async ({
   summarySetter = false,
 }) => {
   console.log("loadPolicyCategories Called");
+
+  let summaryResponse;
+  if (summarySetter) {
+    summaryResponse = await Policy({
+      method: "post",
+      filters: { ...filters, level: ["State / Province"] },
+      ordering: [["date_start_effective", sort]],
+      fields: [
+        "id",
+        CATEGORY_FIELD_NAME,
+        "date_end_actual",
+        "date_start_effective",
+      ],
+    });
+  }
+
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
@@ -84,10 +100,7 @@ export const loadPolicyCategories = async ({
     };
 
     if (summarySetter) {
-      // buildSummaryObject(policyResponse.data);
-      // buildSummaryObjectFaster(policyResponse.data);
-      // summarySetter(buildObject({}, policyResponse.data, true));
-      summarySetter(buildSummaryObjectFaster(policyResponse.data));
+      summarySetter(buildSummaryObjectFaster(summaryResponse.data));
       setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
     }
 
