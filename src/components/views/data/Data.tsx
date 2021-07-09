@@ -640,21 +640,13 @@ const Data: FC<DataProps> = ({
                                 <>
                                   <p>
                                     When <em>"Affected location"</em> is
-                                    selected, the places listed in the table
-                                    below will be the places affected by each
-                                    policy, rather than the jurisdictions that
-                                    authorized each policy, which could be
-                                    different.
+                                    selected, the locations listed are those
+                                    where the policy applies.
                                   </p>
                                   <p>
                                     When <em>"Jurisdiction"</em> is selected,
-                                    places listed will be the jurisdictions that
-                                    authorized each policy.
-                                  </p>
-                                  <p>
-                                    Any location filters you select will filter
-                                    policies by the affected locations or the
-                                    jurisdictions, whichever is selected.
+                                    the locations listed refer to jurisdictions
+                                    that authorized the policy.
                                   </p>
                                 </>
                               }
