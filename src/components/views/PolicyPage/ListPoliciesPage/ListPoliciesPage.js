@@ -5,6 +5,7 @@ import {
   loadPolicySearch,
   loadPolicyCategories,
   loadPolicySubCategories,
+  requestSummaryObject,
 } from "../PolicyRouter/PolicyLoaders";
 
 import { MiniMap } from "../MiniMap/MiniMap";
@@ -43,15 +44,20 @@ const ListPoliciesPage = props => {
     if (!searchActive && status.policies && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
+      if (status.policiesSummary === "initial")
+        requestSummaryObject({
+          filters: policyFilters,
+          sort: policySort,
+          summarySetter: setPolicySummaryObject,
+          setStatus,
+        });
+
       if (!policyFilters.subtarget)
         loadPolicyCategories({
           setStatus,
           filters: policyFilters,
           stateSetter: setPolicyObject,
           sort: policySort,
-          ...(status.policiesSummary === "initial" && {
-            summarySetter: setPolicySummaryObject,
-          }),
         });
 
       loadPolicySubCategories({

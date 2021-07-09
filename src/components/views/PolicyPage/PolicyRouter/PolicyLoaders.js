@@ -10,6 +10,29 @@ export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
 const checkPolicyActive = policy =>
   policy.date_end_actual ? new Date(policy.date_end_actual) > new Date() : true;
 
+export const requestSummaryObject = async ({
+  filters,
+  sort,
+  summarySetter,
+  setStatus,
+}) => {
+  console.log("requestSummaryObject called");
+  const summaryResponse = await Policy({
+    method: "post",
+    filters: { ...filters, level: ["State / Province"] },
+    ordering: [["date_start_effective", sort]],
+    fields: [
+      "id",
+      CATEGORY_FIELD_NAME,
+      "date_end_actual",
+      "date_start_effective",
+    ],
+  });
+
+  summarySetter(buildSummaryObjectFaster(summaryResponse.data));
+  setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
+  console.log("requestSummaryObject done");
+};
 // Top-Level policy categories
 export const loadPolicyCategories = async ({
   filters,
@@ -20,19 +43,8 @@ export const loadPolicyCategories = async ({
 }) => {
   console.log("loadPolicyCategories Called");
 
-  let summaryResponse;
   if (summarySetter) {
-    summaryResponse = await Policy({
-      method: "post",
-      filters: { ...filters, level: ["State / Province"] },
-      ordering: [["date_start_effective", sort]],
-      fields: [
-        "id",
-        CATEGORY_FIELD_NAME,
-        "date_end_actual",
-        "date_start_effective",
-      ],
-    });
+    requestSummaryObject({ filters, sort, summarySetter, setStatus });
   }
 
   const policyResponse = await Policy({
@@ -98,11 +110,6 @@ export const loadPolicyCategories = async ({
       // copy which will trigger re-render
       return { ...prev };
     };
-
-    if (summarySetter) {
-      summarySetter(buildSummaryObjectFaster(summaryResponse.data));
-      setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
-    }
 
     // this duplication means that the policies are fully
     // parsed twice on page load... because I can't guarantee
