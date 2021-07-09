@@ -129,7 +129,12 @@ const Documentation = ({ ...props }) => {
         <div className={styles.downloads}>
           <PrimaryButton
             {...{
-              label: "Download data dictionary (.xls)",
+              label: (
+                <span>
+                  Download data dictionary&nbsp;
+                  <em>(.xls)</em>
+                </span>
+              ),
               iconName: "get_app",
               isSmall: true,
               isSecondary: true,
@@ -141,7 +146,12 @@ const Documentation = ({ ...props }) => {
           />
           <PrimaryButton
             {...{
-              label: "Download documentation (.pdf)",
+              label: (
+                <span>
+                  Download documentation&nbsp;
+                  <em>(.pdf)</em>
+                </span>
+              ),
               iconName: "get_app",
               isSmall: true,
               isSecondary: true,
