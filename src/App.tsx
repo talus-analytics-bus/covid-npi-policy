@@ -5,7 +5,6 @@ import { Helmet } from "react-helmet";
 
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
-import BrowserDetection from "react-browser-detection";
 import Modal from "reactjs-popup";
 
 // layout
@@ -34,6 +33,7 @@ import { AmpPage } from "types";
 import { VersionRecord } from "api/queryTypes";
 import { CountRecords } from "components/misc/dataTypes";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
+import { BrowserProvider } from "components/misc/Util";
 
 //: React.FC
 const App = () => {
@@ -303,7 +303,7 @@ const App = () => {
             // </div>
           }
           {<LoadingSpinner isReady={!loading} fullscreen={true} />}
-          {<BrowserDetection>{modalToShow}</BrowserDetection>}
+          {<BrowserProvider>{modalToShow}</BrowserProvider>}
         </BrowserRouter>
         {
           // Info tooltip that is displayed whenever an info tooltip icon (i)

@@ -1,4 +1,5 @@
 import * as d3 from "d3/dist/d3.min";
+import BrowserDetection from "react-browser-detection";
 
 const Util = {};
 
@@ -77,5 +78,9 @@ export const isLightColor = color => {
 export const getInitLower = str => {
   return str.charAt(0).toLowerCase() + str.slice(1, str.length);
 };
+
+export const BrowserProvider = children => (
+  <BrowserDetection>{children}</BrowserDetection>
+);
 
 export default Util;
