@@ -12,9 +12,9 @@ import classNames from "classnames";
 const InfoTooltip = ({
   id,
   text,
-  place,
+  place = undefined,
   setInfoTooltipContent,
-  wide,
+  wide = false,
   style = {},
 }) => {
   const dataHtml = renderToString(
