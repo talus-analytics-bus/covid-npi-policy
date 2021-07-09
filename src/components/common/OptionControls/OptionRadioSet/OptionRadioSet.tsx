@@ -1,8 +1,8 @@
+import { FC } from "react";
 import classNames from "classnames";
-import React, { FC, useEffect, useState } from "react";
-import styles from "../OptionControls.module.scss";
 import { Option, OptionWidget } from "../types";
 import { OptionRadio } from "./OptionRadio/OptionRadio";
+import styles from "../OptionControls.module.scss";
 
 interface OptionRadioSetProps extends OptionWidget {}
 
@@ -11,7 +11,7 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
   options,
   selectedOptions,
   callback,
-  setInfoTooltipContent,
+  setInfoTooltipContent = () => {},
 }) => {
   return (
     <div className={classNames(styles.optionRadioSet, styles.optionWidget)}>

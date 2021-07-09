@@ -1,6 +1,5 @@
 // 3rd party packages
-import React from "react";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { ReactElement } from "react";
 import { Link, LinkProps } from "react-router-dom";
 import { Moment } from "moment";
 

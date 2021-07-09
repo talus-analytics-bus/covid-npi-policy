@@ -1,6 +1,5 @@
-import React, { FC, useContext } from "react";
+import { FC, useContext, ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
 import { InfoTooltip } from "components/common";
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { PolicyLinkBaseProps } from "../helpers";
