@@ -183,13 +183,8 @@ export const policyInfo = {
         dataField: "name_and_desc",
         header: "Policy name and description",
         defCharLimit: 1000,
-        sort: true,
-        onSort: (_field, order) => {
-          setOrdering([["name_and_desc", order]]);
-        },
         formatter: (_cell, row) => {
           const desc = row.desc;
-
           return (
             <p>
               <span style={{ fontWeight: 600 }}>
@@ -204,11 +199,6 @@ export const policyInfo = {
       {
         dataField: "primary_ph_measure",
         header: "Policy category, subcategory, and targets",
-        sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sortValue: () => 0,
         formatter: (_cell, row) => getPolicyCatSubcatTarg(row),
       },
       {
@@ -225,11 +215,6 @@ export const policyInfo = {
       {
         dataField: "authority_name",
         header: "Relevant authority",
-        sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sortValue: () => 0,
         formatter: v => {
           // TODO REPLACE ALL
           if (v === undefined) return "";
