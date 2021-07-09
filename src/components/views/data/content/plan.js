@@ -133,7 +133,9 @@ export const planInfo = {
           }
         },
       },
-    ];
+    ].map(d => {
+      return { ...d, sortValue: () => 0 };
+    });
 
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing
