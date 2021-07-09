@@ -29,13 +29,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const planInfo = {
   filterDefs: [
     {
-      org_type: {
-        entity_name: "Plan",
-        field: "org_type",
-        label: "Organization type",
-      },
-    },
-    {
       // country_name: {
       //   entity_name: "Place",
       //   field: "country_name",
@@ -62,6 +55,13 @@ export const planInfo = {
       },
     },
     {
+      org_type: {
+        entity_name: "Plan",
+        field: "org_type",
+        label: "Organization type",
+      },
+    },
+    {
       date_issued: {
         entity_name: "Plan",
         field: "date_issued",
@@ -75,8 +75,8 @@ export const planInfo = {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       { dataField: "org_name", header: "Organization name", sort: true },
-      { dataField: "org_type", header: "Org. type", sort: true },
       { dataField: "primary_loc", header: "Org. location", sort: true },
+      { dataField: "org_type", header: "Org. type", sort: true },
       {
         dataField: "name_and_desc",
         header: "Plan name and description",
