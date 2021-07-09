@@ -21,6 +21,11 @@
     .label {
       @include disabled();
     }
+    .input {
+      .filterButton {
+        border-color: $idea-gray-2;
+      }
+    }
   }
   .input {
     .filterButton {
