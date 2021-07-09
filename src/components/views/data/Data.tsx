@@ -739,12 +739,12 @@ const Data: FC<DataProps> = ({
                     <span style={{ fontWeight: 700 }}>
                       Download {!areFiltersDefined ? "all" : "filtered"} data{" "}
                     </span>
-                    <span style={{ fontWeight: 400 }}>
+                    <span style={{ fontStyle: "italic", fontWeight: 400 }}>
                       ({comma(numInstances)}{" "}
                       {numInstances !== 1
                         ? nouns.p.toLowerCase()
-                        : nouns.s.toLowerCase().replace("_", " ")}
-                      , .xlsx)
+                        : nouns.s.toLowerCase().replace("_", " ")}{" "}
+                      .xlsx)
                     </span>
                   </>
                 )}
