@@ -12,7 +12,7 @@ import CSS from "csstype";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
-import { FilterSet, Table, RadioToggle } from "../../common";
+import { FilterSet, Table, RadioToggle, InfoTooltip } from "../../common";
 import { DownloadBtn, PageHeader } from "components/project";
 import Drawer from "../../layout/drawer/Drawer";
 import { Metadata, OptionSet, execute } from "api/Queries";
@@ -622,49 +622,46 @@ const Data: FC<DataProps> = ({
                       <RadioToggle
                         horizontal
                         selectpicker={false}
-                        label={<ControlLabel>View by</ControlLabel>}
+                        label={
+                          <ControlLabel>
+                            View by{" "}
+                            <InfoTooltip
+                              id={"locationTypeTooltip"}
+                              text={
+                                <>
+                                  <p>
+                                    When <em>"Affected location"</em> is
+                                    selected, the places listed in the table
+                                    below will be the places affected by each
+                                    policy, rather than the jurisdictions that
+                                    authorized each policy, which could be
+                                    different.
+                                  </p>
+                                  <p>
+                                    When <em>"Jurisdiction"</em> is selected,
+                                    places listed will be the jurisdictions that
+                                    authorized each policy.
+                                  </p>
+                                  <p>
+                                    Any location filters you select will filter
+                                    policies by the affected locations or the
+                                    jurisdictions, whichever is selected.
+                                  </p>
+                                </>
+                              }
+                              style={{ maxWidth: "18em" }}
+                              {...{ setInfoTooltipContent }}
+                            />
+                          </ControlLabel>
+                        }
                         choices={[
                           {
                             name: "Affected location",
                             value: "affected",
-                            tooltipStyle,
-                            tooltip: (
-                              <>
-                                <p>
-                                  When <em>"Affected location"</em> is selected,
-                                  the places listed in the table below will be
-                                  the places affected by each policy, rather
-                                  than the jurisdictions that authorized each
-                                  policy, which could be different.
-                                </p>
-                                <p>
-                                  Any location filters you select will filter
-                                  policies by the affected locations that match
-                                  those filters.
-                                </p>
-                              </>
-                            ),
                           },
                           {
                             name: "Jurisdiction",
                             value: "jurisdiction",
-                            tooltipStyle,
-                            tooltip: (
-                              <>
-                                <p>
-                                  When <em>"Jurisdiction"</em> is selected, the
-                                  places listed in the table below will be the
-                                  jurisdictions that authorized each policy,
-                                  rather than the places affected by each
-                                  policy, which could be different.
-                                </p>
-                                <p>
-                                  Any location filters you select will filter
-                                  policies by the jurisdictions that match those
-                                  filters.
-                                </p>
-                              </>
-                            ),
                           },
                         ]}
                         curVal={placeType}
