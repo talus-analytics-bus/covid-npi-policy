@@ -111,3 +111,12 @@ export type MetadataRecord = {
   export?: boolean;
   class_name?: string;
 };
+
+/**
+ * Number of each instance in the COVID AMP database.
+ */
+export type CountRecords = {
+  Policy?: number;
+  Plan?: number;
+  Court_Challenge?: number;
+};
