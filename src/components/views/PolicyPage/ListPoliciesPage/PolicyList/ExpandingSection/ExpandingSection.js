@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./ExpandingSection.module.scss";
 
 const ExpandingSection = props => {
-  const { open, showCaret = false, side = "left" } = props;
+  const { open, showCaret = false, side = "left", buttonStyle = {} } = props;
 
   // store animTimer in a ref so that
   // canceling is reliable across render cycles
@@ -29,6 +29,7 @@ const ExpandingSection = props => {
   // mounts either open or closed (like when it's opening or
   // closing as part of the scroll restoration process)
   const commonStyles = {
+    ...buttonStyle,
     overflow: "hidden",
     right: side === "right" ? 0 : undefined,
     transition: `${animDuration}ms ease`,
@@ -159,7 +160,11 @@ const ExpandingSection = props => {
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
     >
-      <button className={styles.expanderButton} onClick={onClickHandler}>
+      <button
+        className={styles.expanderButton}
+        onClick={onClickHandler}
+        style={buttonStyle}
+      >
         {children[0]}
         {showCaret !== false && <Caret up={!open} />}
       </button>
