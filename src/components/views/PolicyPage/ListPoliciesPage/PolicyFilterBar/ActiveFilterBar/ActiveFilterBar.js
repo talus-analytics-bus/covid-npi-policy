@@ -37,7 +37,7 @@ const ActiveFilterBar = props => {
     setPolicyFilters,
     policyObject,
     setPolicyObject,
-    policySummaryObject,
+    policyCategories,
     policySearchResults,
     setSearchTextInputValue,
     setDateRangeControlValue,
@@ -45,35 +45,13 @@ const ActiveFilterBar = props => {
 
   const searchActive = policyFilters._text && policyFilters._text[0] !== "";
 
-  // const totalPolicyCount = Object.values(policySummaryObject).reduce(
-  //   (acc, cur) => ({
-  //     count: cur.count + acc.count,
-  //     active: cur.active + acc.active,
-  //   }),
-  //   { count: 0, active: 0 }
-  // );
-
-  const finalSummary =
-    policySummaryObject &&
-    policySummaryObject[
-      Object.keys(policySummaryObject)[
-        Object.keys(policySummaryObject).length - 1
-      ]
-    ];
-
-  const totalPolicyCount = {};
-
-  totalPolicyCount.active =
-    finalSummary &&
-    Object.values(finalSummary.active).reduce((acc, cur) => cur.size + acc, 0);
-
-  totalPolicyCount.count =
-    finalSummary &&
-    totalPolicyCount.active +
-      Object.values(finalSummary.expired).reduce(
-        (acc, cur) => cur.size + acc,
-        0
-      );
+  const totalPolicyCount = Object.values(policyCategories).reduce(
+    (acc, cur) => ({
+      count: cur.count + acc.count,
+      active: cur.active + acc.active,
+    }),
+    { count: 0, active: 0 }
+  );
 
   const filteredPolicyCount = Object.values(policyObject).reduce(
     (acc, cur) => ({
