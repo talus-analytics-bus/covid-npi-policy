@@ -129,7 +129,7 @@ const SnapshotChartSection = () => {
                   className={styles.active}
                   style={{ background: "#409384" }}
                 />
-                <span>Enacted</span>
+                <span>Active</span>
               </div>
               <div className={styles.entry}>
                 <div
