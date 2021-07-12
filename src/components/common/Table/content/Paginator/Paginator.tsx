@@ -1,22 +1,60 @@
 // standard packages
-import React, { useState } from "react";
+import { Dispatch, SetStateAction, FC } from "react";
 
 // assets and styles
 import styles from "./paginator.module.scss";
-import classNames from "classnames";
 import { comma } from "../../../../misc/Util";
+import { Pagesize } from "../../Table";
+import { PageButton } from "./PageButton/PageButton";
+import { RowNumberTracker } from "./RowNumberTracker/RowNumberTracker";
+
+interface PaginatorProps {
+  /**
+   * The current page.
+   */
+  curPage: number;
+
+  /**
+   * Function to set the current page.
+   */
+  setCurPage: Dispatch<SetStateAction<number>>;
+
+  /**
+   * The total number of records in the table, across all pages.
+   */
+  nTotalRecords: number | null;
+
+  /**
+   * The currently selected pagesize.
+   */
+  pagesize: Pagesize;
+
+  /**
+   * Function to set the currently selected pagesize.
+   */
+  setPagesize: Dispatch<SetStateAction<Pagesize>>;
+
+  /**
+   * The text to show if no records are in the table. Defaults to "No data
+   * match selected filters".
+   */
+  noDataText?: string;
+}
 
 /**
  * @method Paginator
  * Handle custom pagination for `Table` component
  */
-export const Paginator = ({
+export const Paginator: FC<PaginatorProps> = ({
   curPage,
   setCurPage,
   nTotalRecords,
   pagesize,
   setPagesize,
+  noDataText = "No data match selected filters",
 }) => {
+  if (nTotalRecords === null || nTotalRecords === 0) return <i>{noDataText}</i>;
+
   // constants
   // max records to show on 'All' selection
   const maxRecords = 1e9;
@@ -26,44 +64,10 @@ export const Paginator = ({
   const middleMax = (maxButtons - 1) / 2;
 
   // pagination buttons to show
-  const numPages = Math.ceil(nTotalRecords / pagesize);
-
-  /**
-   * Numbered button that when clicked sets current page to that number
-   * @method PageButton
-   * @param  {[type]}   [label=null]          [description]
-   * @param  {[type]}   [iconName=null]       [description]
-   * @param  {[type]}   onClick               [description]
-   * @param  {Object}   [customClassNames={}] [description]
-   * @param  {[type]}   }                     [description]
-   */
-  const PageButton = ({
-    label = null, // button label, the number
-    iconName = null, // optional: name of material icon to show
-    onClick, // callback fired when button clicked
-    customClassNames = {}, // optional: key = class name, value = true if use
-  }) => {
-    // get material icon if any
-    const icon =
-      iconName !== null ? (
-        <i className={classNames("material-icons")}>{iconName}</i>
-      ) : null;
-
-    // return page button
-    return (
-      <button
-        className={classNames(styles.pageButton, customClassNames)}
-        {...{ onClick }}
-      >
-        {icon}
-        {label}
-      </button>
-    );
-  };
+  const numPages = pagesize !== "All" ? Math.ceil(nTotalRecords / pagesize) : 1;
 
   // add "first" and "next" buttons
   // add middle buttons
-
   let firstButtonNum = Math.max(
     Math.min(Math.max(curPage - middleMax, 1), numPages - maxButtons + 1),
     1
@@ -85,7 +89,6 @@ export const Paginator = ({
     );
     i++;
   }
-
   const onLastPage = curPage >= numPages;
   const onFirstPage = curPage <= 1;
 
@@ -170,8 +173,11 @@ export const Paginator = ({
           <select
             value={pagesize}
             onChange={e => {
-              const v = e.target.value;
-              setPagesize(v);
+              const v: any = e.target.value;
+              let updatedPagesize: Pagesize;
+              if (typeof v === "string" && v === "All") updatedPagesize = "All";
+              else updatedPagesize = v;
+              setPagesize(updatedPagesize);
             }}
           >
             {pagesizeOptions.map(d => (
@@ -179,11 +185,7 @@ export const Paginator = ({
             ))}
           </select>
         </div>
-        <div className={styles.rowNumberTracker}>
-          Showing {comma(curPage * pagesize - pagesize + 1)} to{" "}
-          {comma(Math.min(curPage * pagesize, nTotalRecords))} of{" "}
-          {comma(nTotalRecords)} rows
-        </div>
+        {<RowNumberTracker {...{ pagesize, curPage, nTotalRecords }} />}
       </div>
       <div className={styles.rightSide}>
         <div className={styles.pageButtons}>

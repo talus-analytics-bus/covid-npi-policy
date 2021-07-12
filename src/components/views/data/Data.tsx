@@ -37,7 +37,7 @@ import { DataPageInfo } from "./content/types";
 import { ApiResponse, ApiResponseIndexed } from "api/responseTypes";
 import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
-import { DataColumnDef } from "components/common/Table/Table";
+import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 
 /**
@@ -145,7 +145,7 @@ const Data: FC<DataProps> = ({
   // track table pagination-relevant variables including current page, number
   // of instances (rows) in table, the ordering settings, and page size
   const [curPage, setCurPage] = useState<number>(1);
-  const [pagesize, setPagesize] = useState<number>(5);
+  const [pagesize, setPagesize] = useState<Pagesize>(5);
   const [numInstances, setNumInstances] = useState<number | null>(null);
   const [ordering, setOrdering] = useState<[string, string][]>(
     docType === "challenge"
