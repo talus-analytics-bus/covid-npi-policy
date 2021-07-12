@@ -55,8 +55,12 @@
 .headerContainer {
   display: flex;
   margin-bottom: 1rem;
+
+  .labelsHeader {
+    margin-left: 9.5%;
+  }
   .chartHeader {
-    margin-left: 16.5%;
+    margin-left: 7%;
   }
 }
 
