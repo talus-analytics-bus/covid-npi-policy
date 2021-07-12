@@ -78,20 +78,20 @@ const PolicySummary = props => {
       )}
       <div className={styles.main}>
         <header className={styles.metadata}>
-          <h1>Jurisdiction</h1>
-          <h2>{props.policy.auth_entity[0].place.level}</h2>
-          <h1>
-            Authorizing <br /> Location
-          </h1>
-          <h2>{props.policy.auth_entity[0].place.loc.split(",")[0]}</h2>
-          <h1>Effective from</h1>
+          <h1>Effective date</h1>
           <h2>{formatDate(new Date(props.policy.date_start_effective))}</h2>
-          <h1>Ended</h1>
+          <h1>End date</h1>
           <h2>
             {props.policy.date_end_actual
               ? formatDate(new Date(props.policy.date_end_actual))
               : "Active"}
           </h2>
+          <h1>
+            Authorizing <br /> Location
+          </h1>
+          <h2>{props.policy.auth_entity[0].place.loc.split(",")[0]}</h2>
+          <h1>Jurisdiction</h1>
+          <h2>{props.policy.auth_entity[0].place.level}</h2>
           <h1>Published in</h1>
           {truncateTitle ? (
             <Tippy
