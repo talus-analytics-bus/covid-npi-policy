@@ -369,7 +369,7 @@ const PolicyEnvironmentPlot = () => {
                 );
               })
               .flat()}
-          {scale && (
+          {scale && status.policiesSummary !== "error" && (
             <Slider
               {...{
                 dim,
