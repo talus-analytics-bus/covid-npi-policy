@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { FC, useRef } from "react";
+import React, { Dispatch, FC, SetStateAction, useRef } from "react";
 import styles from "../OptionControls.module.scss";
 import { Option, OptionWidget } from "../types";
 import { OptionCheckbox } from "./OptionCheckbox/OptionCheckbox";
@@ -26,7 +26,9 @@ interface OptionRadioSetProps extends OptionWidget {
    * Optional: Function to set tooltip content. If undefined, tooltip will be
    * rendered inside component.
    */
-  setInfoTooltipContent?(): void;
+  setInfoTooltipContent?:
+    | Dispatch<SetStateAction<string | null>>
+    | (() => void);
 }
 
 export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
@@ -38,7 +40,7 @@ export const OptionCheckboxSet: FC<OptionRadioSetProps> = ({
   emptyMeansAll = false,
   selectAll = false,
   clearAll = false,
-  setInfoTooltipContent,
+  setInfoTooltipContent = () => {},
 }) => {
   let setRef = useRef<HTMLDivElement>(null);
 

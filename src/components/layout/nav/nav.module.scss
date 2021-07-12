@@ -18,7 +18,9 @@
       .links {
         display: flex;
         font-size: 1rem;
-        @include spaceItemsHoriz(2rem);
+        > :not(:first-child) {
+          margin-left: 2rem;
+        }
         > div {
           position: relative;
         }
@@ -75,10 +77,6 @@
   padding: 15px;
   &.withSubmenu {
     padding-right: 0;
-    + i {
-      top: 2px;
-      position: relative;
-    }
   }
 }
 

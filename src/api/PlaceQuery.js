@@ -5,16 +5,19 @@ const API_URL = process.env.REACT_APP_METRICS_API_URL;
 /**
  * Get place data from API.
  */
-let cache;
+const cache = {};
 const PlaceQuery = async function({
   place_id = [],
   by_region = false,
   place_type = [],
 }) {
-  // if all places were requested and response was previously cached, return it
-  const gotAllPlaces = place_id.length === 0;
-  if (gotAllPlaces && cache !== undefined) {
-    return cache;
+  // if all places previously cached, return cache
+  const cacheKey =
+    place_type.sort().join(",") +
+    place_id.sort().join(",") +
+    by_region.toString();
+  if (cache[cacheKey] !== undefined) {
+    return cache[cacheKey];
   } else {
     const params = new URLSearchParams();
     params.append("by_region", by_region);
@@ -31,8 +34,8 @@ const PlaceQuery = async function({
 
     // if all places were retrieved then store this most common request in a
     // cache variable
-    if (gotAllPlaces) {
-      cache = res.data.data;
+    if (cache[cacheKey] === undefined) {
+      cache[cacheKey] = res.data.data;
     }
     return res.data.data;
   }

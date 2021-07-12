@@ -23,12 +23,13 @@
 }
 .infoTooltip {
   display: inline-flex;
-  margin: 0 0.1em;
+  margin: 0;
+  margin-left: 0.25em;
   position: relative;
   pointer-events: all;
 
   img {
-    $size: 10px;
+    $size: 0.6em;
     height: $size;
     width: $size;
     cursor: default;

@@ -1,6 +1,5 @@
 // 3rd party packages
-import React from "react";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { ReactElement } from "react";
 import { Link, LinkProps } from "react-router-dom";
 import { Moment } from "moment";
 
@@ -15,14 +14,14 @@ import {
   PolicyResolution,
   StateFeature,
 } from "components/common/MapboxMap/plugins/mapTypes";
+import { PlaceRecord } from "components/misc/dataTypes";
+import { Option } from "components/common/OptionControls/types";
 
 // local components and functions
 import { getDataQueryResults } from "components/common/MapboxMap/plugins/dataGetter";
 import { Place } from "api/Queries";
-import { PlaceRecord } from "components/misc/dataTypes";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
-import { Option } from "components/common/OptionControls/types";
 import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
 import { PolicyLink } from "./PolicyLink/PolicyLink";
 
@@ -50,7 +49,6 @@ type GetFeatureMetricProps = {
   paramArgs: Record<string, any>;
 };
 
-// TODO abstract filters and policy resolution
 export const getFeatureMetric: Function = async ({
   feature,
   mapMetrics,
@@ -160,9 +158,11 @@ export const getModelLink: Function = (
 
 /**
  * Returns a link to the policy page for the feature.
+ *
  * @param {MapFeature} feature
  * The feature for which the policies link is to be determined.
- * @returns {ActionLink}
+ *
+ *  @returns {ActionLink}
  * The link component for the policies or data page.
  */
 export const getPolicyLink: Function = async (
@@ -253,12 +253,15 @@ export const getPolicyLink: Function = async (
         // otherwise, return the appropriate data page link
         const linkFilters: Filters = {
           ...baseLinkFilters,
-          country_name: [countyPlace.country_name],
+          country_name:
+            countyPlace.country_name !== undefined
+              ? [countyPlace.country_name]
+              : [],
           area1: [countyFeature.properties.state_name],
-          area2: [countyPlace.area2],
+          area2: countyPlace.area2 !== undefined ? [countyPlace.area2] : [],
         };
         if (mapId === "us-county-plus-state")
-          linkFilters["level"] = ["Local", "State / Province"];
+          linkFilters["level"] = ["Local plus state/province"];
         else if (mapId === "us-county") linkFilters["level"] = ["Local"];
         const filterStr: string = JSON.stringify(linkFilters);
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
@@ -319,12 +322,15 @@ export const getPolicyLink: Function = async (
         </PolicyPageLink>
       );
     } else if (page === "data") {
+      const level: string[] = !countSub
+        ? ["Country"]
+        : ["State / Province", "Local"];
       const countryPlace: PlaceRecord | null = await Place({
         one: true,
         ansiFips: undefined,
         iso3: countryFeature.properties.ISO_A3,
         fields: ["country_name"],
-        level: !countSub ? ["Country"] : ["State / Province", "Local"],
+        level,
       });
       if (countryPlace === null)
         return <PolicyPageLink tooltip={NO_POLICY_FOR_LOC_MSG} />;
@@ -332,6 +338,7 @@ export const getPolicyLink: Function = async (
         const filterStr: string = JSON.stringify({
           ...baseLinkFilters,
           country_name: [countryPlace.country_name],
+          level,
         });
         const url: string = "/data?type=policy&filters_policy=" + filterStr;
         const label: string = DATA_PAGE_LINK_TEXT;

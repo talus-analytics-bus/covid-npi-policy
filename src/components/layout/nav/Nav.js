@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import classNames from "classnames";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./nav.module.scss";
 
 // assets
@@ -17,7 +17,7 @@ import { InfoTooltip } from "components/common";
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
-const Nav = ({ page, ...props }) => {
+const Nav = ({ page }) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const linksRef = useRef(null);
   const hamburgerRef = useRef(null);
@@ -161,24 +161,38 @@ const Nav = ({ page, ...props }) => {
                 >
                   Data
                 </Link>
-                <NavLink
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  activeClassName={styles.active}
-                  to={"/about/doc"}
-                >
-                  Documentation
-                </NavLink>
-                <NavLink
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  activeClassName={styles.active}
-                  to={"/about/amp"}
-                >
-                  About
-                </NavLink>
+                <HoverDropdown>
+                  <span
+                    className={classNames(
+                      dropdownMenuClasses,
+                      page !== null && page.startsWith("about")
+                        ? styles.active
+                        : ""
+                    )}
+                  >
+                    About
+                  </span>
+                  <div className={styles.navSubmenu}>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "about-doc" ? styles.active : ""}
+                      to={"/about/doc"}
+                    >
+                      Documentation
+                    </Link>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={page === "about-amp" ? styles.active : ""}
+                      to={"/about/amp"}
+                    >
+                      What is COVID AMP?
+                    </Link>
+                  </div>
+                </HoverDropdown>
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);

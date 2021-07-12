@@ -14,7 +14,7 @@ jobs:
       - checkout
 
       - run:
-          name: Installing Deployment Dependencies
+          name: Install deployment dependencies
           working_directory: /
           command: |
             sudo apt-get -y -qq update
@@ -26,11 +26,11 @@ jobs:
       - aws-cli/configure
 
       - run:
-          name: Yarn Install
+          name: Yarn install
           command: yarn install --network-timeout 1000000
 
       - run:
-          name: Set ENV Vars, Build, & Deploy
+          name: Set env vars, build, & deploy
           command: yarn run deploy
 
       - run:
@@ -49,7 +49,7 @@ jobs:
       - checkout
 
       - run:
-          name: Installing Deployment Dependencies
+          name: Install deployment dependencies
           working_directory: /
           command: |
             sudo apt-get -y -qq update
@@ -61,15 +61,15 @@ jobs:
       - aws-cli/configure
 
       - run:
-          name: Yarn Install
+          name: Yarn install
           command: yarn install --network-timeout 1000000
 
       - run:
-          name: Set ENV Vars, Build, & Deploy
+          name: Set env vars, build, & deploy
           command: yarn run deploy-test
 
       - run:
-          name: Invalidate Cache
+          name: Invalidate cache
           command: |
             aws cloudfront create-invalidation \
             --distribution-id EZNCMFWHVEZLU \

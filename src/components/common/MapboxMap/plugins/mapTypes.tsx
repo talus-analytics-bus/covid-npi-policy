@@ -1,15 +1,15 @@
 /**
  * TypeScript types used by the Map and MapboxMap components.
  */
+import { ReactNode, ReactElement } from "react";
 import {
   GeoRes,
-  MetricData,
-  OptionSetDataProps,
-  VersionDataProps,
+  MetricRecords,
+  OptionSetRecord,
+  VersionRecord,
 } from "api/queryTypes";
 import { Numeric } from "d3";
-import { ReactNode } from "react-transition-group/node_modules/@types/react";
-import { ReactElement } from "react-transition-group/node_modules/@types/react";
+import { AmpPage } from "types";
 
 /**
  * Props taken by the `Map` component, which renders a Mapbox map.
@@ -33,20 +33,13 @@ export type MapProps = {
    *
    * @param v The page to which to set the app.
    */
-  setPage(v: string): void;
+  setPage(v: AmpPage): void;
 
   /**
    * Array of version data describing the last datum dates and last update
    * dates of different data sources used in the app.
    */
-  versions: VersionDataProps[];
-
-  /**
-   * Additional props used by the Map component.
-   *
-   * TODO destructure
-   */
-  props: any;
+  versions: VersionRecord[];
 
   /**
    * Sets tooltip content.
@@ -355,6 +348,7 @@ export type ElementsOrNull =
 export type Filters = Record<string, string[]> & {
   primary_ph_measure?: string[];
   ph_measure_details?: string[];
+  dates_in_effect?: [string, string];
 };
 
 /**
@@ -366,7 +360,7 @@ export type FilterDef = {
   label: string;
   radio: boolean;
   defaultRadioValue?: string;
-  items: OptionSetDataProps[]; // TODO list of optionsets
+  items: OptionSetRecord[]; // TODO list of optionsets
   primary?: string;
 };
 
@@ -408,7 +402,7 @@ export type FillStyles = Record<string, FillStyle>;
 /**
  * Data for display in map
  */
-export type MapData = Record<string, MetricData> | null;
+export type MapData = Record<string, MetricRecords> | null;
 
 /**
  * Fields that may link a geographic feature in a Mapbox source to a

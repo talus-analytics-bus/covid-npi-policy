@@ -1,23 +1,28 @@
-@import "../../../assets/styles/vars.module.scss";
+@import "src/assets/styles/vars.module.scss";
 .style {
-  // border: $border;
-  $padding: 20px;
-  // width: max-content;
+  $padding: 1.25em;
   width: 100%;
-
   > div {
     background-color: white;
   }
 
+  // section dividers
+  hr {
+    border-top: $border;
+  }
+
+  // drawer text and open/close toggle
   .header {
     display: flex;
     position: relative;
     align-items: center;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 1.625rem;
     font-weight: 700;
-    padding: 5px 15px;
-    min-height: 88px; // TODO elegantly
+    font-family: "rawline", serif;
+    padding: 20px;
+    line-height: 0;
+    // min-height: 88px; // TODO elegantly
     @media #{$phone} {
       padding: 15px;
       button {
@@ -25,38 +30,10 @@
         right: 3px;
       }
     }
-    // text-transform: uppercase;
-    background-color: $light-blue-3;
-    color: $dark-blue;
-    h1 {
-      color: red !important;
-    }
     &:not(.noCollapse) {
       &,
       * {
         cursor: pointer;
-      }
-    }
-
-    & + .content {
-      // border-top: $border;
-    }
-    button.toggle {
-      background: none;
-      border: none;
-      padding: 0;
-      // position: absolute;
-      // right: 5px;
-      z-index: 0;
-      margin-left: 20px;
-      i {
-        font-size: 3rem;
-        position: relative;
-        vertical-align: middle;
-        line-height: 0;
-      }
-      &.flip {
-        transform: rotate(180deg);
       }
     }
 
@@ -71,11 +48,13 @@
   }
   .content {
     padding: $padding;
-    padding-top: 0;
-    // padding: $padding;
     font-size: 1rem;
     background-color: $light-gray-2;
-    @include spaceItemsVert(20px);
+    // > {
+    //   @include spaceItemsVert(1.25rem);
+    // }
+    // @include spaceItemsVert(1.75rem);
+
     min-height: 190px;
 
     &.hidden {

@@ -245,3 +245,25 @@ export const isEmpty: Function = (d: any): boolean => {
 // export const isValid = (v: any): boolean => {
 //   return v !== undefined && v !== null;
 // };
+
+export const getAndListString = (
+  arr: string[],
+  conjunction: string = "and"
+): string => {
+  if (arr === undefined || arr == null || arr.length === 0) return "";
+  else if (arr.length === 1) return arr[0];
+  else if (arr.length === 2) return `${arr[0]} ${conjunction} ${arr[1]}`;
+  else {
+    const first = arr.slice(0, arr.length - 1).join(", ");
+    return first + ", " + conjunction + " " + arr[arr.length - 1];
+  }
+};
+
+/**
+ * Returns the input string with the first character uppercase.
+ * @param s The input string
+ * @returns The string with the first character uppercase
+ */
+export const getInitCap = (s: string): string => {
+  return s.charAt(0).toUpperCase() + s.slice(1, s.length);
+};

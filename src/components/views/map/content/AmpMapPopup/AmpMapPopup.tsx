@@ -1,8 +1,9 @@
 // 3rd party packages
-import React, { FunctionComponent } from "react";
+import React, { FC } from "react";
 import { Moment } from "moment";
 
-// local components
+// local components and types
+import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
 import MapPopup, {
   ActionLink,
 } from "components/common/MapboxMap/mapPopup/MapPopup";
@@ -14,9 +15,12 @@ import {
   MapId,
   PolicyResolution,
 } from "components/common/MapboxMap/plugins/mapTypes";
-import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
 import { AmpCaseSparkline } from "./content/AmpPopupHeader/content/AmpCaseSparkline/AmpCaseSparkline";
 
+// TODO document each property below
+/**
+ * Properties for AmpMapPopup function component
+ */
 type AmpMapPopupProps = {
   mapId: MapId;
   feature: MapFeature;
@@ -38,7 +42,12 @@ type AmpMapPopupProps = {
   onClose(curPopupFeature: MapFeature): void;
 };
 
-export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
+/**
+ * Popup displayed when a geographic feature is clicked on a COVID AMP map.
+ * @param param0 Properties
+ * @returns Function component
+ */
+export const AmpMapPopup: FC<AmpMapPopupProps> = ({
   mapId,
   feature,
   featureName,
@@ -55,9 +64,10 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
   onClose,
 }) => {
   // show loading spinner in body sections if updating or not initialized
-  const updatingOrNotReady: boolean = updating || !ready;
+  const isUpdatingOrNotReady: boolean = updating || !ready;
   return (
     <MapPopup
+      showClose
       headerTitle={featureName}
       headerSub={
         <>
@@ -65,32 +75,29 @@ export const AmpMapPopup: FunctionComponent<AmpMapPopupProps> = ({
         </>
       }
       headerRightContent={
-        <AmpCaseSparkline
-          {...{ mapId, feature, dataDate, unit: "", label: "" }}
-        />
+        <AmpCaseSparkline {...{ mapId, feature, dataDate }} />
       }
-      showClose={true}
       onClose={() => onClose(feature)}
       bodySections={[
         <DistancingBodySection
+          key={"distancingBody"}
+          updating={isUpdatingOrNotReady}
+          title={getDistancingLevelLabelFromMapId(mapId)}
           {...{
-            key: "distancingBody",
-            title: getDistancingLevelLabelFromMapId(mapId),
             distancingLevel,
             modelLink,
-            updating: updatingOrNotReady,
           }}
         />,
         <PoliciesBodySection
+          key={"policiesBody"}
+          updating={updating || !ready}
+          count={policyCount}
+          categories={policyCategories}
+          subcategories={policySubcategories}
           {...{
-            key: "policiesBody",
-            categories: policyCategories,
-            subcategories: policySubcategories,
-            count: policyCount,
             policyActionLinks,
             policyResolution,
             mapId,
-            updating: updating || !ready,
           }}
         />,
       ]}
@@ -103,8 +110,12 @@ export default AmpMapPopup;
  * Given the ID of the currently displayed map, returns the label that
  * describes the distancing levels shown on the map. For example, state-level
  * distancing levels are used in county-level maps, so this is indicated.
- * @param mapId The ID of the currently displayed map
- * @returns The label describing the distancing levels shown on the map.
+ *
+ * @param mapId
+ * The ID of the currently displayed map
+ *
+ * @returns {string}
+ * The label describing the distancing levels shown on the map.
  */
 function getDistancingLevelLabelFromMapId(mapId: string): string {
   switch (mapId) {

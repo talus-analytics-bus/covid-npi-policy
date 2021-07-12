@@ -39,7 +39,9 @@ export const PolicyCount: FC<ComponentProps> = ({
           icon: (
             <PolicyCategoryIcon
               category={categories}
-              margin={"0"}
+              style={{
+                margin: "0",
+              }}
               blankIfNone={true}
             />
           ),

@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Caret } from "../../../MapOptions/OptionDrawer/content/Caret/Caret";
+import { Caret } from "components/common";
 import PanelSetContext from "./PanelSet/PanelSet";
 import styles from "./PanelStyles.module.scss";
 type TabType = "expand" | "fit";

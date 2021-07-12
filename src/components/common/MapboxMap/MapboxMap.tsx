@@ -62,7 +62,7 @@ import {
   MapStylesEntry,
   ViewportProps,
 } from "./plugins/mapTypes";
-import { MetricData, MetricDatum } from "api/queryTypes";
+import { MetricRecords, MetricRecord } from "api/queryTypes";
 import { MutableRefObject } from "react";
 
 // constants
@@ -250,7 +250,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
       if (sortOrderMetricId === undefined || sortOrderMetricId === null) return;
       else {
         const featureOrder: Record<string, number> = {};
-        const dataToSort: MetricData | undefined =
+        const dataToSort: MetricRecords | undefined =
           data !== null ? data[sortOrderMetricId] : undefined;
         if (dataToSort === undefined) return;
         dataToSort.forEach(d => {
@@ -322,7 +322,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
               data[sortOrderMetricId] === null
             )
               return;
-            data[sortOrderMetricId].forEach((d: MetricDatum) => {
+            data[sortOrderMetricId].forEach((d: MetricRecord) => {
               if (
                 d[featureLinkField] === undefined ||
                 d[featureLinkField] === null ||
@@ -1055,7 +1055,7 @@ function getMinMaxVals(data: MapData, key: string): number[] {
         ". Please ensure the min/max is provided in the API response."
     );
   } else {
-    const valsForMinMax: number[] = data[key].map((d: MetricDatum) => {
+    const valsForMinMax: number[] = data[key].map((d: MetricRecord) => {
       if (typeof d.value === "number") return d.value;
       else return parseFloat(d.value || "");
     });

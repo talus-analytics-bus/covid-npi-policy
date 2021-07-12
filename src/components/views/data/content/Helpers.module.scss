@@ -1,0 +1,26 @@
+.indented {
+    .category {
+        font-weight: 600;
+    }
+    .subcategory {
+        font-weight: normal;
+        padding-left: 1rem;
+    }
+    .targets {
+        font-style: italic;
+        font-size: 0.9rem;
+        padding-left: 2.25rem;
+    }
+}
+.text {
+    > p:not(:last-child) {
+        margin-bottom: 0.5rem;
+    }
+    .category,
+    .subcategory,
+    .targets {
+        .label {
+            font-weight: 600;
+        }
+    }
+}

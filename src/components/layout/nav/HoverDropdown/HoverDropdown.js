@@ -16,7 +16,12 @@ const NavDropDown = props => {
       side={"right"}
       onOpen={() => setExpanderOpen(true)}
       onClose={() => setExpanderOpen(false)}
-      containerStyle={{ borderRadius: "999px 5px 5px 5px" }}
+      containerStyle={{
+        borderRadius: "999px 5px 5px 5px",
+        display: "flex",
+        alignItems: "center",
+      }}
+      buttonStyle={{ display: "flex", alignItems: "center" }}
     >
       <>{children[0]}</>
       <>{children.slice(1)}</>
