@@ -14,7 +14,7 @@
 .policyModal {
   margin-left: 2rem;
   margin-right: 2rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   margin-bottom: 2rem;
 
   min-height: 80vh;
@@ -25,6 +25,17 @@
     font-weight: bold;
     font-size: 26px;
     color: #303434;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  > h3 {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #e55e37;
+    margin-bottom: 2.5em;
   }
 }

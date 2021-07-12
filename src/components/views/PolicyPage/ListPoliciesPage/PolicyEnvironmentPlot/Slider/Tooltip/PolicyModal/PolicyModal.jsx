@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 import Modal from "../../../../../Modal/Modal";
+import PolicyCategoryIcon from "components/views/PolicyPage/PolicyCategoryIcon/PolicyCategoryIcon";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -131,9 +132,15 @@ const PolicyModal = ({
       <Modal open={modalOpen} setOpen={setModalOpen}>
         <section className={styles.policyModal}>
           <h2>
-            {category} policies enacted on{" "}
-            {formatDate(sliderDate.toISOString().substring(0, 10))}
+            <PolicyCategoryIcon
+              category={category}
+              style={{ marginRight: "0.5em" }}
+            />
+            {category} policies
           </h2>
+          <h3>
+            Enacted on {formatDate(sliderDate.toISOString().substring(0, 10))}
+          </h3>
           <div className={styles.summaries}>{summaries}</div>
         </section>
       </Modal>
