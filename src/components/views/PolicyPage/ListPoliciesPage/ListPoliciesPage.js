@@ -49,7 +49,12 @@ const ListPoliciesPage = props => {
         requestSummaryObject({
           filters: {
             ...policyFilters,
-            level: state !== "national" ? ["State / Province"] : ["Country"],
+            level:
+              state === "national"
+                ? ["Country"]
+                : iso3 === "Unspecified"
+                ? ["Tribal nation"]
+                : ["State / Province"],
           },
           sort: policySort,
           summarySetter: setPolicySummaryObject,
