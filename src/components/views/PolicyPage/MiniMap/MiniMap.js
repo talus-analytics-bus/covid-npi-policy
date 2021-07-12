@@ -180,7 +180,8 @@ export const SVG = props => {
               key={index}
               fill={
                 propsCountries.includes(geometry.properties.ADM0_A3)
-                  ? "#4E8490"
+                  ? // ? "#4E8490"
+                    "#EAEAEA"
                   : "#ffffff00"
               }
               stroke={

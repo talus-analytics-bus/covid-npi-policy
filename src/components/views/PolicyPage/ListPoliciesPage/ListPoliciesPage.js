@@ -125,8 +125,6 @@ const ListPoliciesPage = props => {
   // const miniMapCounties = React.useRef(["Unspecified"]);
   const miniMapCounties = React.useRef([]);
 
-  console.log(status);
-
   return (
     <article className={styles.listPoliciesPage}>
       <Helmet>
