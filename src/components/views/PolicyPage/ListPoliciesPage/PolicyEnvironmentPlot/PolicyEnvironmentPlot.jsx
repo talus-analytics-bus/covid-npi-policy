@@ -256,8 +256,8 @@ const PolicyEnvironmentPlot = () => {
           )}
           <p>
             Click on chart to show policies that went into effect on each day
-            and the 7 day average new cases for date. Bar chart below shows
-            policies by category for selected day
+            and the 7-day average new cases for date. Bar chart below shows
+            policies by category for selected day.
           </p>
         </div>
         <Legend />

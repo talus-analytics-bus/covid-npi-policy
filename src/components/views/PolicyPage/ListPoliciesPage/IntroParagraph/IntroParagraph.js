@@ -35,7 +35,8 @@ const IntroParagraph = props => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const {
-    policySummaryObject,
+    // policySummaryObject,
+    policyCategories,
     policyStatus,
     // caseload,
     status,
@@ -65,34 +66,61 @@ const IntroParagraph = props => {
   //     lastSevenDaySum &&
   //     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
 
-  const lastDate =
-    policySummaryObject &&
-    Object.keys(policySummaryObject)[
-      Object.keys(policySummaryObject).length - 1
-    ];
+  // const lastDate =
+  //   policySummaryObject &&
+  //   Object.keys(policySummaryObject)[
+  //     Object.keys(policySummaryObject).length - 1
+  //   ];
 
-  const lastStatus = lastDate && policySummaryObject[lastDate];
+  // const lastStatus = lastDate && policySummaryObject[lastDate];
+  const lastStatus =
+    Object.keys(policyCategories).length !== 0 && policyCategories;
+
+  console.log(lastStatus);
+
+  // const policyCategoriesText =
+  //   lastStatus &&
+  //   lastStatus.active &&
+  //   (Object.keys(lastStatus.active).length === 1
+  //     ? Object.keys(lastStatus.active)
+  //         .join("")
+  //         .toLowerCase()
+  //     : Object.keys(lastStatus.active)
+  //         .map(pm => pm.toLowerCase())
+  //         .slice(0, -1)
+  //         .join(", ") +
+  //       " and " +
+  //       Object.keys(lastStatus.active)
+  //         .slice(-1)
+  //         .join("")
+  //         .toLowerCase());
 
   const policyCategoriesText =
-    lastStatus &&
-    lastStatus.active &&
-    (Object.keys(lastStatus.active).length === 1
-      ? Object.keys(lastStatus.active)
+    Object.keys(lastStatus).length === 1
+      ? Object.keys(lastStatus)
           .join("")
           .toLowerCase()
-      : Object.keys(lastStatus.active)
+      : Object.keys(lastStatus)
           .map(pm => pm.toLowerCase())
           .slice(0, -1)
           .join(", ") +
         " and " +
-        Object.keys(lastStatus.active)
+        Object.keys(lastStatus)
           .slice(-1)
           .join("")
-          .toLowerCase());
+          .toLowerCase();
 
-  const policyCount =
-    lastStatus &&
-    Object.values(lastStatus.active).reduce((acc, cur) => cur.size + acc, 0);
+  // const policyCount =
+  //   lastStatus &&
+  //   Object.values(lastStatus.active).reduce((acc, cur) => cur.size + acc, 0);
+
+  const policyCount = Object.values(lastStatus).reduce(
+    (acc, cur) => ({
+      count: cur.count + acc.count,
+      active: cur.active + acc.active,
+    }),
+    { count: 0, active: 0 }
+  );
 
   if (iso3 === "Unspecified") {
     return (
@@ -133,12 +161,12 @@ const IntroParagraph = props => {
             status.policyStatus === "loading") && (
             <>COVID-AMP is currently tracking </>
           )}
-          {numbersToWords(policyCount)} active{" "}
-          {policyCount > 1 &&
+          {numbersToWords(policyCount.active)} active{" "}
+          {policyCount.active > 1 &&
             (state !== "national"
               ? "state and county"
               : "national and local")}{" "}
-          {Object.keys(policySummaryObject).length > 1 ? "policies" : "policy"}{" "}
+          {Object.entries(lastStatus).length > 1 ? "policies" : "policy"}{" "}
           affecting {policyCategoriesText}
           {(status.policyStatus === "error" ||
             status.policyStatus === "loading") && (

@@ -40,6 +40,7 @@ const arrayFillDates = ({
 
 const buildSummaryObjectFaster = data => {
   console.time("buildSummaryObjectFaster");
+  if (data.length === 0) return undefined;
 
   // start date of earliest policy
   const startDate = new Date(data[data.length - 1].date_start_effective);

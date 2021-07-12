@@ -33,6 +33,7 @@ export const requestSummaryObject = async ({
   setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
   console.log("requestSummaryObject done");
 };
+
 // Top-Level policy categories
 export const loadPolicyCategories = async ({
   filters,
@@ -43,10 +44,6 @@ export const loadPolicyCategories = async ({
 }) => {
   console.log("loadPolicyCategories Called");
 
-  if (summarySetter) {
-    requestSummaryObject({ filters, sort, summarySetter, setStatus });
-  }
-
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
@@ -55,7 +52,7 @@ export const loadPolicyCategories = async ({
       "id",
       CATEGORY_FIELD_NAME,
       "date_end_actual",
-      "date_start_effective",
+      // "date_start_effective",
     ],
   });
 
@@ -110,6 +107,10 @@ export const loadPolicyCategories = async ({
       // copy which will trigger re-render
       return { ...prev };
     };
+
+    if (summarySetter) {
+      summarySetter(buildObject({}, policyResponse.data, true));
+    }
 
     // this duplication means that the policies are fully
     // parsed twice on page load... because I can't guarantee

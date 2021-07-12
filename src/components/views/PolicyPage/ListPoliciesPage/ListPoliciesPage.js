@@ -30,6 +30,7 @@ const ListPoliciesPage = props => {
     locationName,
     policyFilters,
     setPolicyObject,
+    setPolicyCategories,
     setPolicySummaryObject,
     setPolicySearchResults,
   } = policyContextConsumer;
@@ -58,6 +59,9 @@ const ListPoliciesPage = props => {
           filters: policyFilters,
           stateSetter: setPolicyObject,
           sort: policySort,
+          ...(status.policiesSummary === "initial" && {
+            summarySetter: setPolicyCategories,
+          }),
         });
 
       loadPolicySubCategories({
@@ -96,6 +100,7 @@ const ListPoliciesPage = props => {
     status.searchResults,
     // these setters won't change
     setPolicyObject,
+    setPolicyCategories,
     setPolicySearchResults,
     setPolicySummaryObject,
     setStatus,

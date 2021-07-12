@@ -41,6 +41,7 @@ const PolicyRouter = props => {
   const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
+  const [policyCategories, setPolicyCategories] = React.useState({});
 
   const [policySummaryObject, setPolicySummaryObject] = React.useState({});
   const [policySearchResults, setPolicySearchResults] = React.useState();
@@ -95,6 +96,8 @@ const PolicyRouter = props => {
   const policyContextValue = {
     policyObject,
     setPolicyObject,
+    policyCategories,
+    setPolicyCategories,
     caseload,
     policyStatus,
     status,
@@ -170,6 +173,8 @@ const PolicyRouter = props => {
 
     // clear policyObject
     setPolicyObject({});
+    // clear categories
+    setPolicyCategories({});
     // clear summary
     setPolicySummaryObject({});
 
