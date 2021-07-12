@@ -35,7 +35,6 @@ const IntroParagraph = props => {
   const policyContextConsumer = React.useContext(policyContext);
 
   const {
-    // policySummaryObject,
     policyCategories,
     policyStatus,
     // caseload,
@@ -54,46 +53,8 @@ const IntroParagraph = props => {
   const policyStatusName =
     status.policyStatus === "loaded" && policyStatus[0].value.toLowerCase();
 
-  //   const sevenDaySum =
-  //     status.caseload === "loaded" &&
-  //     caseload.slice(-8, -1).reduce((sum, day) => day.value + sum, 0);
-  //
-  //   const lastSevenDaySum =
-  //     status.caseload === "loaded" &&
-  //     caseload.slice(-15, -8).reduce((sum, day) => day.value + sum, 0);
-  //
-  //   const sevenDayChangePCT =
-  //     lastSevenDaySum &&
-  //     Math.round(((sevenDaySum - lastSevenDaySum) / lastSevenDaySum) * 100);
-
-  // const lastDate =
-  //   policySummaryObject &&
-  //   Object.keys(policySummaryObject)[
-  //     Object.keys(policySummaryObject).length - 1
-  //   ];
-
-  // const lastStatus = lastDate && policySummaryObject[lastDate];
   const lastStatus =
     Object.keys(policyCategories).length !== 0 && policyCategories;
-
-  console.log(lastStatus);
-
-  // const policyCategoriesText =
-  //   lastStatus &&
-  //   lastStatus.active &&
-  //   (Object.keys(lastStatus.active).length === 1
-  //     ? Object.keys(lastStatus.active)
-  //         .join("")
-  //         .toLowerCase()
-  //     : Object.keys(lastStatus.active)
-  //         .map(pm => pm.toLowerCase())
-  //         .slice(0, -1)
-  //         .join(", ") +
-  //       " and " +
-  //       Object.keys(lastStatus.active)
-  //         .slice(-1)
-  //         .join("")
-  //         .toLowerCase());
 
   const policyCategoriesText =
     Object.keys(lastStatus).length === 1
@@ -109,10 +70,6 @@ const IntroParagraph = props => {
           .slice(-1)
           .join("")
           .toLowerCase();
-
-  // const policyCount =
-  //   lastStatus &&
-  //   Object.values(lastStatus.active).reduce((acc, cur) => cur.size + acc, 0);
 
   const policyCount = Object.values(lastStatus).reduce(
     (acc, cur) => ({
