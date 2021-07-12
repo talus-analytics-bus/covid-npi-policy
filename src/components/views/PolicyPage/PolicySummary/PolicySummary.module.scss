@@ -53,7 +53,7 @@
 
   .metadata {
     display: grid;
-    width: 18em;
+    width: 19em;
     flex-shrink: 0;
     grid-template-columns: auto auto;
     column-gap: 18px;
@@ -62,6 +62,7 @@
     align-items: baseline;
 
     padding-top: 30px;
+    margin-right: 4.5em;
     div {
       padding-right: 2em;
       min-width: 12em;
