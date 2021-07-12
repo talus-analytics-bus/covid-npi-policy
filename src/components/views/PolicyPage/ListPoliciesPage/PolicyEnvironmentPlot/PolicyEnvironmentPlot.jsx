@@ -57,7 +57,12 @@ const earliestDate = (a, b) => {
 const PolicyEnvironmentPlot = () => {
   const policyContextConsumer = React.useContext(policyContext);
 
-  const { caseload, status, policySummaryObject } = policyContextConsumer;
+  const {
+    caseload,
+    status,
+    policySummaryObject,
+    locationName,
+  } = policyContextConsumer;
 
   const caseloadMax = React.useMemo(
     () => caseload && Math.max(...caseload.map(day => day.value)),
@@ -156,13 +161,13 @@ const PolicyEnvironmentPlot = () => {
 
   const scale = React.useMemo(
     () =>
-      caseloadMax &&
-      policySummaryObject && {
+      caseloadMax && {
         x: scaleTime()
           .domain([
             earliestDate(
               caseload[0].date,
-              Object.keys(policySummaryObject)[0] * msPerDay
+              policySummaryObject &&
+                Object.keys(policySummaryObject)[0] * msPerDay
             ),
             caseload.slice(-1)[0].date,
           ])
@@ -247,18 +252,28 @@ const PolicyEnvironmentPlot = () => {
     <figure>
       <div className={styles.instructionSection}>
         <div>
-          {status.caseload === "loaded" ? (
-            <h2 className={styles.caseloadHeader}>
-              Policy environment over time
-            </h2>
+          {status.policiesSummary === "error" ? (
+            <>
+              <p style={{ marginTop: "2em", fontStyle: "normal" }}>
+                COVID-AMP is not currently tracking any policies affecting{" "}
+                {locationName.trim()}. More policies are being added all the
+                time, check back soon!
+              </p>
+            </>
+          ) : status.caseload === "loaded" ? (
+            <>
+              <h2 className={styles.caseloadHeader}>
+                Policy environment over time
+              </h2>
+              <p>
+                Click on chart to show policies that went into effect on each
+                day and the 7-day average new cases for date. Bar chart below
+                shows policies by category for selected day.
+              </p>
+            </>
           ) : (
             <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
           )}
-          <p>
-            Click on chart to show policies that went into effect on each day
-            and the 7-day average new cases for date. Bar chart below shows
-            policies by category for selected day.
-          </p>
         </div>
         <Legend />
       </div>

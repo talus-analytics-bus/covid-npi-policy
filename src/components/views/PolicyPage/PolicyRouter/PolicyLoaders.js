@@ -29,8 +29,12 @@ export const requestSummaryObject = async ({
     ],
   });
 
-  summarySetter(buildSummaryObjectFaster(summaryResponse.data));
-  setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
+  const summary = buildSummaryObjectFaster(summaryResponse.data);
+
+  if (summary) {
+    setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
+    summarySetter(summary);
+  } else setStatus(prev => ({ ...prev, policiesSummary: "error" }));
   console.log("requestSummaryObject done");
 };
 

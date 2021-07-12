@@ -89,48 +89,41 @@ const IntroParagraph = props => {
 
   return (
     <div className={styles.introSection}>
-      <h3>Policy environment</h3>
-      {status.policiesSummary === "error" && (
-        <>
-          <p className={styles.introParagraph}>
-            COVID-AMP is not currently tracking any policies affecting{" "}
-            {locationName}. More policies are being added all the time, check
-            back soon!
-          </p>
-        </>
-      )}
       {status.policiesSummary === "loading" && (
         <p className={styles.introParagraph}>
           Loading policies for {locationName}
         </p>
       )}
       {status.policiesSummary === "loaded" && (
-        <p className={styles.introParagraph}>
-          {status.policyStatus === "loaded" && (
-            <>
-              {locationName} has been in{" "}
-              {/[aeiou]/.test(policyStatusName[0]) ? "an " : "a "}
-              {policyStatusName} policy status since {policyStatusDate}, based
-              on analysis of{" "}
-            </>
-          )}
-          {(status.policyStatus === "error" ||
-            status.policyStatus === "loading") && (
-            <>COVID-AMP is currently tracking </>
-          )}
-          {numbersToWords(policyCount.active)} active{" "}
-          {policyCount.active > 1 &&
-            (state !== "national"
-              ? "state and county"
-              : "national and local")}{" "}
-          {Object.entries(lastStatus).length > 1 ? "policies" : "policy"}{" "}
-          affecting {policyCategoriesText}
-          {(status.policyStatus === "error" ||
-            status.policyStatus === "loading") && (
-            <> in {locationName.trim()}</>
-          )}
-          .
-        </p>
+        <>
+          <h3>Policy environment</h3>
+          <p className={styles.introParagraph}>
+            {status.policyStatus === "loaded" && (
+              <>
+                {locationName} has been in{" "}
+                {/[aeiou]/.test(policyStatusName[0]) ? "an " : "a "}
+                {policyStatusName} policy status since {policyStatusDate}, based
+                on analysis of{" "}
+              </>
+            )}
+            {(status.policyStatus === "error" ||
+              status.policyStatus === "loading") && (
+              <>COVID-AMP is currently tracking </>
+            )}
+            {numbersToWords(policyCount.active)} active{" "}
+            {policyCount.active > 1 &&
+              (state !== "national"
+                ? "state and county"
+                : "national and local")}{" "}
+            {Object.entries(lastStatus).length > 1 ? "policies" : "policy"}{" "}
+            affecting {policyCategoriesText}
+            {(status.policyStatus === "error" ||
+              status.policyStatus === "loading") && (
+              <> in {locationName.trim()}</>
+            )}
+            .
+          </p>
+        </>
       )}
     </div>
   );
