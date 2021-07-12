@@ -47,7 +47,10 @@ const ListPoliciesPage = props => {
 
       if (status.policiesSummary === "initial")
         requestSummaryObject({
-          filters: policyFilters,
+          filters: {
+            ...policyFilters,
+            level: state !== "national" ? ["State / Province"] : ["Country"],
+          },
           sort: policySort,
           summarySetter: setPolicySummaryObject,
           setStatus,

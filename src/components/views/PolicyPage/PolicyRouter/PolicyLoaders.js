@@ -19,7 +19,7 @@ export const requestSummaryObject = async ({
   console.log("requestSummaryObject called");
   const summaryResponse = await Policy({
     method: "post",
-    filters: { ...filters, level: ["State / Province"] },
+    filters,
     ordering: [["date_start_effective", sort]],
     fields: [
       "id",
