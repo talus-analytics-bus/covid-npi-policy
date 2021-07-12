@@ -14,7 +14,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
     padding: {
       top: 4,
       bottom: 19,
-      left: 21,
+      left: 27,
       right: 5,
       axis: 3,
     },
