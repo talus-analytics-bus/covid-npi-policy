@@ -139,15 +139,15 @@ const ListPoliciesPage = props => {
         ) : (
           <h1>&nbsp;</h1>
         )}
-        {iso3 !== "Unspecified" && (
-          <figure className={styles.miniMapHolder}>
+        <figure className={styles.miniMapHolder}>
+          {iso3 !== "Unspecified" && (
             <MiniMap.SVG
               country={iso3}
               state={state}
               counties={miniMapCounties.current}
             />
-          </figure>
-        )}
+          )}
+        </figure>
       </header>
       {iso3 !== "Unspecified" && <IntroSection />}
       {status.policiesSummary !== "error" && (
