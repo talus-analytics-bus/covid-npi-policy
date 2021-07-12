@@ -1,44 +1,5 @@
 @import "src/assets/styles/vars.module.scss";
-@keyframes rotation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-@keyframes rotationExternal {
-    0% {
-        transform: rotate(0deg);
-    }
 
-    17% {
-        transform: rotate(360deg/6);
-    }
-    33% {
-        transform: rotate(2 * 360deg/6);
-    }
-    50% {
-        transform: rotate(3 * 360deg/6);
-    }
-    67% {
-        transform: rotate(4 * 360deg/6);
-    }
-    83% {
-        transform: rotate(5 * 360deg/6);
-    }
-    100% {
-        transform: rotate(6 * 360deg/6);
-    }
-}
-@keyframes rotationGif {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
 .loadingSpinner {
     position: relative;
     .spinnerImageContainer {
@@ -137,6 +98,28 @@
             }
         }
     }
+    &.inline {
+        .spinnerImageContainer {
+            position: relative;
+        }
+        .spinnerImageAndText {
+            img {
+                position: unset;
+            }
+        }
+    }
+
+    &.small {
+        .spinnerImageContainer {
+            $size: 25px;
+            width: $size;
+            height: $size;
+            img.spinnerImage {
+                height: $size;
+                width: $size;
+            }
+        }
+    }
 }
 
 .spinnerImageAndText,
@@ -160,4 +143,45 @@
 
 .children:not(.displayed) {
     display: none;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+@keyframes rotationExternal {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    17% {
+        transform: rotate(360deg/6);
+    }
+    33% {
+        transform: rotate(2 * 360deg/6);
+    }
+    50% {
+        transform: rotate(3 * 360deg/6);
+    }
+    67% {
+        transform: rotate(4 * 360deg/6);
+    }
+    83% {
+        transform: rotate(5 * 360deg/6);
+    }
+    100% {
+        transform: rotate(6 * 360deg/6);
+    }
+}
+@keyframes rotationGif {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

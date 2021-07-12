@@ -5,13 +5,7 @@ import {
   OptionCheckboxSet,
 } from "components/common/OptionControls";
 import { Option } from "components/common/OptionControls/types";
-import React, {
-  FC,
-  ReactElement,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { FC, ReactElement, useContext, useState } from "react";
 import {
   Filters,
   MapId,
@@ -29,7 +23,7 @@ import {
 import styles from "./AmpMapOptionsPanel.module.scss";
 import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
 import InfoTooltipContext from "context/InfoTooltipContext";
-import { updateFilters } from "./helpers";
+import { getFiltersForApi, updateFilters } from "./helpers";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -100,28 +94,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
 
   const [filters, setFilters] = useState<Filters>(filtersForApi || {});
 
-  // remove any categories that don't have subcats checked from the API filters
-  useEffect(() => {
-    const someCatsOrig: boolean =
-      filters.primary_ph_measure !== undefined &&
-      filters.primary_ph_measure.length > 0;
-    const updatedFiltersForApi: Filters = { ...filters };
-    if (updatedFiltersForApi.primary_ph_measure !== undefined) {
-      updatedFiltersForApi.primary_ph_measure = updatedFiltersForApi.primary_ph_measure.filter(
-        (v: string) => !noChildCats.map(o => o.value).includes(v)
-      );
-    }
-    // If some categories originally but none in updated, return no data
-    const someCatsUpdated: boolean =
-      updatedFiltersForApi.primary_ph_measure !== undefined &&
-      updatedFiltersForApi.primary_ph_measure.length > 0;
-    const returnNoData: boolean = someCatsOrig && !someCatsUpdated;
-    if (returnNoData) updatedFiltersForApi.primary_ph_measure = ["None"];
-    // update filters for API
-    if (setFiltersForApi !== undefined) setFiltersForApi(updatedFiltersForApi);
-    // eslint-disable-next-line
-  }, [filters, setFiltersForApi]);
-
   /**
    * List of possible circle metric options.
    */
@@ -149,6 +121,14 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                   filters.ph_measure_details.includes(o.value as string)
               )}
               callback={selected => {
+                if (setFiltersForApi === undefined) return;
+
+                // if any cats selected but no subcats selected, mark as indet
+                const updatedNoChildCats: Option[] = [...noChildCats].filter(
+                  (ncc: Option) => {
+                    return ncc.value !== (o.value as string);
+                  }
+                );
                 const updatedFilters: Filters = updateFilters(
                   "ph_measure_details",
                   filters,
@@ -171,12 +151,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                     updatedFilters.primary_ph_measure.push(o.value as string);
                 }
 
-                // if any cats selected but no subcats selected, mark as indet
-                const updatedNoChildCats: Option[] = [...noChildCats].filter(
-                  (ncc: Option) => {
-                    return ncc.value !== (o.value as string);
-                  }
-                );
                 if (
                   selected.length === 0 &&
                   updatedFilters !== undefined &&
@@ -186,6 +160,12 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
                   updatedNoChildCats.push(o);
 
                 setNoChildCats(updatedNoChildCats);
+
+                const updatedFiltersForApi: Filters = getFiltersForApi(
+                  updatedFilters,
+                  updatedNoChildCats
+                );
+                setFiltersForApi(updatedFiltersForApi);
               }}
               field={"ph_measure_details-" + o.value}
               emptyMeansAll={false}
@@ -202,13 +182,16 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           filters.primary_ph_measure.includes(o.value as string)
       )}
       callback={selected => {
+        if (setFiltersForApi === undefined) return;
         updateFilters(
           "primary_ph_measure",
           filters,
           setFilters,
           selected,
           catOptions,
-          subcatOptions
+          subcatOptions,
+          setFiltersForApi,
+          noChildCats
         );
       }}
       field={"primary_ph_measure"}

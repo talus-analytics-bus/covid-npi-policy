@@ -29,13 +29,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const planInfo = {
   filterDefs: [
     {
-      org_type: {
-        entity_name: "Plan",
-        field: "org_type",
-        label: "Organization type",
-      },
-    },
-    {
       // country_name: {
       //   entity_name: "Place",
       //   field: "country_name",
@@ -46,9 +39,12 @@ export const planInfo = {
         field: "area1",
         label: "State / Province",
         withGrouping: true,
-        // primary: "country_name",
         disabledText: "Choose a country",
       },
+      // NOTE The `area2` filter has limited values because the plan local area
+      // data field is often blank. Additionally, its units do not match those
+      // of the policy local area data field, e.g., some plans have a local
+      // area of "Office of the Chancellor" rather than a county or city.
       area2: {
         entity_name: "Place",
         field: "area2",
@@ -56,6 +52,13 @@ export const planInfo = {
         withGrouping: true,
         primary: "area1",
         disabledText: "Choose a state / province",
+      },
+    },
+    {
+      org_type: {
+        entity_name: "Plan",
+        field: "org_type",
+        label: "Organization type",
       },
     },
     {
@@ -72,13 +75,12 @@ export const planInfo = {
     // define initial columns which will be updated using the metadata
     const newColumns = [
       { dataField: "org_name", header: "Organization name", sort: true },
-      { dataField: "org_type", header: "Org. type", sort: true },
       { dataField: "primary_loc", header: "Org. location", sort: true },
+      { dataField: "org_type", header: "Org. type", sort: true },
       {
         dataField: "name_and_desc",
         header: "Plan name and description",
         defCharLimit: 1000,
-        sort: true,
         formatter: (cell, row) => {
           return <ShowMore text={cell} charLimit={200} />;
         },
@@ -131,7 +133,9 @@ export const planInfo = {
           }
         },
       },
-    ];
+    ].map(d => {
+      return { ...d, sortValue: () => 0 };
+    });
 
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing

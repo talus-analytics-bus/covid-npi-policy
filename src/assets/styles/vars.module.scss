@@ -83,6 +83,7 @@ $map-green-6: #c6dfda;
   mapGreen6: $map-green-6;
   noDataGray: #dedede;
   zeroGray: $zero-gray;
+  ideaBlack: $idea-black;
   // noDataGray: #eaeaea;
   // noDataGray: #c4c4c4;
 }
@@ -109,6 +110,21 @@ $map-green-6: #c6dfda;
         margin-bottom: $size;
       }
     }
+  }
+}
+
+@mixin dropdownAndSearchStyle() {
+  background-color: white;
+
+  padding: 5px 10px;
+  border: 1px solid $idea-black;
+  border-radius: 5px;
+}
+
+@mixin searchPlaceholderStyle() {
+  &::placeholder {
+    color: $idea-gray-2;
+    font-size: 1rem;
   }
 }
 
@@ -170,13 +186,17 @@ $map-green-6: #c6dfda;
   -webkit-box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.4);
 }
 
-@mixin btn-primary() {
-  border: 2px solid transparent;
-  border-radius: 4px;
+@mixin gradient-primary() {
   background: -moz-linear-gradient(top, #425379 0%, #213561 100%);
   background: -ms-linear-gradient(top, #425379 0%, #213561 100%);
   background: -o-linear-gradient(top, #425379 0%, #213561 100%);
   background: -webkit-linear-gradient(top, #425379 0%, #213561 100%);
+}
+
+@mixin btn-primary() {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  @include gradient-primary();
 
   &:hover,
   &:active {
@@ -190,21 +210,19 @@ $map-green-6: #c6dfda;
 }
 
 @mixin btn-secondary() {
-  background: -moz-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  background: -ms-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  background: -o-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  background: -webkit-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
-  &:hover {
-    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
-    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 5%) 100%);
+  @include btn-primary();
+  background: none;
+  border: 2px solid $idea-black;
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  padding: 0.5rem;
+  &:hover:not(:active) {
+    background-color: #b7c4db;
   }
   &:active {
-    background: -moz-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -o-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
-    background: -webkit-linear-gradient(top, #ffffff 0%, darken(#e4e4e4, 10%) 100%);
+    color: white;
+    @include gradient-primary();
   }
 }
 
@@ -218,7 +236,7 @@ $map-green-6: #c6dfda;
 }
 
 @mixin disabled() {
-  color: gray;
+  color: $idea-gray-2;
   pointer-events: none;
 }
 

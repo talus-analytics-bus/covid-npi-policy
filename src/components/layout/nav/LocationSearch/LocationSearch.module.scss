@@ -5,13 +5,29 @@
     width: 50vw;
     right: 0;
   }
-  .searchBar {
-    width: 100%;
-    border: 1px solid #647f79;
-    border-radius: 3px;
-    padding: 0.33rem 0.5rem;
-    &::placeholder {
-      font-style: italic;
+  .searchBarAndIcons {
+    display: flex;
+    align-items: center;
+    @include dropdownAndSearchStyle();
+    .searchBar {
+      width: 100%;
+      outline: none;
+      border: none;
+      @include searchPlaceholderStyle();
+      &::placeholder {
+        font-size: 0.9rem;
+      }
+    }
+    .icons {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: 20px;
+      pointer-events: none;
+      // magnifying glass icon
+      i {
+        position: relative;
+      }
     }
   }
 

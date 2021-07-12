@@ -1,0 +1,12 @@
+@import "src/assets/styles/vars.module.scss";
+.controlLink {
+    font-size: 0.9rem;
+    color: $selected-blue;
+    cursor: pointer;
+    &:hover {
+        color: darken($selected-blue, 10%);
+    }
+    &:active {
+        color: darken($selected-blue, 20%);
+    }
+}

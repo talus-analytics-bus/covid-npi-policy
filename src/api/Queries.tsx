@@ -10,15 +10,16 @@ import {
   DistancingLevelProps,
   ExportProps,
   GeoRes,
-  MetadataProps,
-  MetricAPIRequestProps,
-  MetricData,
-  OptionSetProps,
-  PlaceProps,
+  MetadataQueryArgs,
+  ObservationQueryArgs,
+  MetricRecords,
+  OptionSetQueryArgs,
+  PlaceQueryProps,
   PlanProps,
   PolicyListProps,
   PolicyProps,
   PolicyStatusCountsProps,
+  PolicyStatusCountsForMapProps,
 } from "./queryTypes";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 
@@ -38,14 +39,14 @@ export const Glossary = async function({
   field,
 }: {
   field: string;
-}): Promise<MetricData | boolean> {
+}): Promise<MetricRecords | boolean> {
   let req: AxiosResponse<Record<string, any>> = await axios(
     `${API_URL}/get/glossary`
   );
   const params: URLSearchParams = new URLSearchParams();
   params.append("field", field);
   const res: Record<string, any> = await req;
-  if (res.data !== undefined) return res.data.data as MetricData;
+  if (res.data !== undefined) return res.data.data as MetricRecords;
   else return false;
 };
 
@@ -102,7 +103,7 @@ export const Metadata = async function({
   method,
   fields = [],
   entity_class_name = "Policy",
-}: MetadataProps) {
+}: MetadataQueryArgs) {
   let req;
   if (method === "get") {
     const params = new URLSearchParams();
@@ -298,7 +299,7 @@ export const Challenge = async function({
   } else return false;
 };
 
-let allPlans: MetricData | null = null;
+let allPlans: MetricRecords | null = null;
 
 /**
  * Get Plan data from API.
@@ -392,6 +393,47 @@ export const DistancingLevel = async function({
   }
   const res = await req;
   if (res.data !== undefined) return res.data.data;
+  else return false;
+};
+
+/**
+ * Get policy status counts data from API specifically for Map page use.
+ */
+export const PolicyStatusCountsForMap = async function({
+  geo_res,
+  cats = [],
+  subcats = [],
+  date,
+}: PolicyStatusCountsForMapProps) {
+  if (date === undefined) throw Error("Must define `date`");
+
+  // prepare params
+  const params = new URLSearchParams();
+
+  // append list-like param values
+  cats.forEach(d => {
+    params.append("categories", d);
+  });
+  subcats.forEach(d => {
+    params.append("subcategories", d);
+  });
+  params.append("date", date);
+
+  // prepare request
+  const req = await axios.get(
+    `${API_URL}/get/policy_status_counts_for_map/${geo_res}`,
+    {
+      params,
+    }
+  );
+  const res = await req;
+  if (res !== undefined)
+    if (res.data !== undefined) {
+      const formattedRes = res.data.data;
+      formattedRes.min_all_time = res.data.min_all_time;
+      formattedRes.max_all_time = res.data.max_all_time;
+      return formattedRes;
+    } else return false;
   else return false;
 };
 
@@ -513,24 +555,26 @@ export const Export = async function({
  */
 export const OptionSet = async ({
   method,
+  optimized = false,
   fields = null,
   class_name = null,
-}: OptionSetProps): Promise<any> => {
+}: OptionSetQueryArgs): Promise<any> => {
   let req;
   if (method === "get") {
-    if (fields === null) {
+    if (!optimized && fields === null) {
       console.log("Error: `fields` is required for method GET.");
       return false;
     }
 
     // collate fields
     const params = new URLSearchParams();
-    fields.forEach(d => {
-      params.append("fields", d);
-    });
+    if (fields !== null)
+      fields.forEach(d => {
+        params.append("fields", d);
+      });
     params.set("class_name", class_name || "Policy");
-
-    req = await axios.get(`${API_URL}/get/optionset`, {
+    const route: string = optimized ? "optionset_for_data" : "optionset";
+    req = await axios.get(`${API_URL}/get/${route}`, {
       params,
     });
   } else {
@@ -538,7 +582,7 @@ export const OptionSet = async ({
     return false;
   }
   const res = await req;
-  if (res.data !== undefined) return res.data.data;
+  if (res.data !== undefined) return res.data;
   else return false;
 };
 
@@ -606,7 +650,7 @@ CaseloadProps) => {
     : "country";
 
   // prepare parameters
-  const params: MetricAPIRequestProps = {
+  const params: ObservationQueryArgs = {
     metric_id,
     spatial_resolution,
     temporal_resolution: "daily",
@@ -623,7 +667,7 @@ CaseloadProps) => {
   if (stateName !== undefined) params.place_name = stateName;
   if (ansiFips !== undefined) params.fips = ansiFips;
   // send request and return response data
-  const res: MetricData = await ObservationQuery({ ...params });
+  const res: MetricRecords = await ObservationQuery({ ...params });
   if (getAverage && windowSizeDays !== 1)
     res.forEach(d => {
       d.value = Math.round((d.value as number) / windowSizeDays);
@@ -642,7 +686,7 @@ export const execute = async function({
 }: {
   queries: Record<string, Promise<any>> | Record<string, Promise<any>[]>;
 }) {
-  const results: Record<string, any> = {};
+  const results: { [k: string]: any } = {};
   for (const [k, v] of Object.entries(queries)) {
     if (v === undefined || v === null) continue;
     if (typeof v !== "string" && v.length !== undefined) {
@@ -716,7 +760,7 @@ DeathsProps) => {
   const spatial_resolution = isState ? "state" : "country";
 
   // prepare parameters
-  const params: MetricAPIRequestProps = {
+  const params: ObservationQueryArgs = {
     metric_id,
     spatial_resolution,
     temporal_resolution: "daily",
@@ -742,7 +786,7 @@ export const Place = async ({
   level,
   iso3,
   fields,
-}: PlaceProps) => {
+}: PlaceQueryProps) => {
   // prepare params
   const params = new URLSearchParams();
   const toAdd: [string, any][] = [

@@ -8,6 +8,7 @@ import policyPageDocumentIconActive from "../../../../../assets/icons/policyPage
 import newCasesIcon from "../../../../../assets/icons/newCasesIcon.svg";
 
 import styles from "./IntroSection.module.scss";
+import { PageHeader } from "components/project";
 
 const numberFormat = new Intl.NumberFormat("en-us");
 
@@ -95,7 +96,7 @@ const IntroSection = props => {
           <title>{locationName} COVID-19 policies</title>
           <meta description={`COVID AMP policies for ${locationName}}`} />
         </Helmet>
-        <h1>{locationName} COVID-19 Policies</h1>
+        <PageHeader>{locationName} COVID-19 Policies</PageHeader>
       </div>
     );
   }
@@ -114,9 +115,9 @@ const IntroSection = props => {
         />
       </Helmet>
       {showLocName ? (
-        <h1>{locationName} COVID-19 Policies</h1>
+        <PageHeader>{locationName} COVID-19 Policies</PageHeader>
       ) : (
-        <h1>&nbsp;</h1>
+        <PageHeader>&nbsp;</PageHeader>
       )}
       <div className={styles.quickFacts}>
         {status.policiesSummary === "loading" && (

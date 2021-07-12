@@ -53,7 +53,7 @@ import MapDrape from "./content/MapDrape/MapDrape";
 // helper functions and data
 import { defaults } from "../../common/MapboxMap/plugins/data";
 import {
-  replaceMapIdState,
+  replaceMapIdState as replaceHistoryMapId,
   getParamsMapId,
   getMapTitle,
   ampMapFilterDefs,
@@ -61,6 +61,7 @@ import {
   getOverallUpdateDate,
 } from "./helpers";
 import MapPlaceContext from "./context/MapPlaceContext";
+import { OptionSetRecord } from "api/queryTypes";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -109,7 +110,7 @@ const Map: FC<MapProps> = ({
       _setMapId(v);
 
       // update URL search params
-      replaceMapIdState(history, v);
+      replaceHistoryMapId(history, v);
     },
     [history]
   );
@@ -157,14 +158,14 @@ const Map: FC<MapProps> = ({
 
   // define possible categories based on optionset API response
   const catOptions: Option[] = filterDefs[0].primary_ph_measure.items.map(i => {
-    return { name: i.label, value: i.value };
+    return { name: i.label !== undefined ? i.label : i.value, value: i.value };
   });
 
   // define possible subcategories based on optionset API response
   const subcatOptions: Option[] = filterDefs[0].ph_measure_details.items.map(
     i => {
       return {
-        name: i.label,
+        name: i.label !== undefined ? i.label : i.value,
         value: i.value,
         parent: i.group,
       };
@@ -175,7 +176,7 @@ const Map: FC<MapProps> = ({
   /**
    * Get data for page
    */
-  const getData = useCallback(async () => {
+  const getMapData = useCallback(async () => {
     const queries: Record<string, Promise<any>> = {};
     // get all country places for tooltip names, etc.
     queries.places = PlaceQuery({ place_type: ["country"] });
@@ -194,28 +195,39 @@ const Map: FC<MapProps> = ({
     });
     queries.countriesWithDistancingLevels = CountriesWithDistancingLevels();
 
-    const results = await execute({
+    const queryResults = await execute({
       queries,
     });
 
     // if page is first initializing, also retrieve filter optionset values for
     // non-date filters
-    const optionsets = results["optionsets"];
+    const optionsets: { [k: string]: OptionSetRecord[] } =
+      queryResults["optionsets"].data;
 
     // set options for filters
-    const newFilterDefs: FilterDefs[] = [...filterDefs];
-    newFilterDefs.forEach(d => {
-      for (const [k] of Object.entries(d)) {
-        if (!k.startsWith("date") && d[k].items.length === 0)
-          d[k].items = optionsets[k];
+    const updatedFilterDefs: FilterDefs[] = [...filterDefs];
+    updatedFilterDefs.forEach(filterDef => {
+      for (const [fieldName] of Object.entries(filterDef)) {
+        if (
+          !fieldName.startsWith("date") &&
+          filterDef[fieldName].items.length === 0
+        )
+          filterDef[fieldName].items = optionsets[fieldName];
       }
     });
-    setPlaces(results.places);
-    setCountyNamesByFips(results.countyNamesByFips);
-    setFilterDefs(newFilterDefs);
-    setGeoHaveData(results.countriesWithDistancingLevels);
+
+    // update datasets needed for map
+    setPlaces(queryResults.places);
+    setCountyNamesByFips(queryResults.countyNamesByFips);
+    setFilterDefs(updatedFilterDefs);
+    setGeoHaveData(queryResults.countriesWithDistancingLevels);
+
+    // set map as initialized so these datasets are not retrieved again
     setInitialized(true);
-  }, [filterDefs]);
+
+    // TODO fix dependencies -- adding `filterDefs` causes double call
+    // eslint-disable-next-line
+  }, []);
 
   // CONSTANTS // ---------------------------------------------------------- //
   // get overal last updated date of data, using most recent data
@@ -232,23 +244,24 @@ const Map: FC<MapProps> = ({
       // set current page
       setPage("policymaps");
 
+      // get map data if not already initialized
       if (!initialized) {
-        getData();
+        getMapData();
       }
     },
-    [getData, initialized, setLoading, setPage]
+    [getMapData, initialized, setLoading, setPage]
   );
 
-  // initialize URL parameter for map ID
+  // initialize URL parameter variable containing map ID
   useEffect(() => {
-    if (paramsMapId === null) replaceMapIdState(history, mapId);
+    if (paramsMapId === null) replaceHistoryMapId(history, mapId);
     else if (paramsMapId !== mapId) {
       setMapId(paramsMapId);
     }
   }, [paramsMapId, history, setMapId, mapId]);
 
   // When map ID is changed, update policy resolution to a supported one,
-  // if needed
+  // if needed -- for counties, only "geo" is supported
   useEffect(() => {
     if (mapId === "us-county" && policyResolution !== PolicyResolution.geo)
       setPolicyResolution(PolicyResolution.geo);
@@ -278,9 +291,9 @@ const Map: FC<MapProps> = ({
           ph_measure_details: [],
         });
       }
-      if (mapIsChanging)
-        // remove map changing flag
-        setMapIsChanging(false);
+
+      // set map as no longer changing if it was changing
+      if (mapIsChanging) setMapIsChanging(false);
     },
     // TODO fix dependencies
     // eslint-disable-next-line
@@ -354,8 +367,8 @@ const Map: FC<MapProps> = ({
           >
             <LoadingSpinner
               text={"Loading data"}
-              ready={!dataIsLoading || loading}
-              fill={true}
+              isReady={!dataIsLoading || loading}
+              isFill={true}
               delay={500}
             />
             <MapboxMap
@@ -383,32 +396,30 @@ const Map: FC<MapProps> = ({
                         setInfoTooltipContent,
                       }}
                     />
-                    {
-                      <PanelSet
-                        style={{
-                          gridTemplateColumns: "auto auto auto",
+                    <PanelSet
+                      style={{
+                        gridTemplateColumns: "auto auto auto",
+                      }}
+                    >
+                      <AmpMapLegendPanel
+                        {...{
+                          zoomLevel,
+                          linCircleScale,
+                          policyResolution,
                         }}
-                      >
-                        <AmpMapLegendPanel
-                          {...{
-                            zoomLevel,
-                            linCircleScale,
-                            policyResolution,
-                          }}
-                        />
-                        <AmpMapDatePanel
-                          {...{ date, setDate, ...defaults.minMaxDate }}
-                        />
-                        <AmpMapOptionsPanel
-                          {...{
-                            mapId,
-                            setMapId,
-                            catOptions,
-                            subcatOptions,
-                          }}
-                        />
-                      </PanelSet>
-                    }
+                      />
+                      <AmpMapDatePanel
+                        {...{ date, setDate, ...defaults.minMaxDate }}
+                      />
+                      <AmpMapOptionsPanel
+                        {...{
+                          mapId,
+                          setMapId,
+                          catOptions,
+                          subcatOptions,
+                        }}
+                      />
+                    </PanelSet>
                   </>
                 ),
                 plugins: {

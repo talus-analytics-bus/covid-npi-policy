@@ -19,7 +19,11 @@ import { comma, isLightColor } from "../../../misc/Util";
 
 // queries
 import ObservationQuery from "api/ObservationQuery";
-import { DistancingLevel, PolicyStatusCounts } from "api/Queries";
+import {
+  DistancingLevel,
+  PolicyStatusCounts,
+  PolicyStatusCountsForMap,
+} from "api/Queries";
 
 // assets and styles
 // import dots from "./assets/images/dots.png";
@@ -42,7 +46,7 @@ import {
   MetricMeta,
   PolicyResolution,
 } from "./mapTypes";
-import { GeoRes, MetricDatum } from "api/queryTypes";
+import { GeoRes, MetricRecord } from "api/queryTypes";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -138,11 +142,11 @@ export const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
 
 /**
  * Divides each value of a metric data series by 7 to yield the y-day average.
- * @param {MetricDatum} d
+ * @param {MetricRecord} d
  * The metric datum whose numeric value should be divided by 7
  * @returns {void}
  */
-const get7dayAvg = (d: MetricDatum): void => {
+const get7dayAvg = (d: MetricRecord): void => {
   d.value = (d.value as number) / 7.0;
 };
 
@@ -179,7 +183,10 @@ export const allMapMetrics = {
           const baseParams = {
             method: "get",
             geo_res: GeoRes.state,
-            date: filters.dates_in_effect[0],
+            date:
+              filters.dates_in_effect !== undefined
+                ? filters.dates_in_effect[0]
+                : undefined,
             state_name,
           };
           return baseParams;
@@ -225,23 +232,19 @@ export const allMapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatusCounts,
+      queryFunc: PolicyStatusCountsForMap,
 
       // params that must be passed to `queryFunc` as object
       params: {
-        func: ({
-          filters,
-          policyResolution,
-          mapId,
-        }: PolicyCountsFuncArgs): Record<string, any> => {
-          const countSub = policyResolution === PolicyResolution.subgeo;
+        func: ({ filters }: PolicyCountsFuncArgs): Record<string, any> => {
           return {
-            method: "post",
-            filters,
             geo_res: GeoRes.state,
-            count_sub: countSub,
-            include_min_max: true,
-            mapId,
+            cats: filters.primary_ph_measure,
+            subcats: filters.ph_measure_details,
+            date:
+              filters.dates_in_effect !== undefined
+                ? filters.dates_in_effect[0]
+                : undefined,
           };
         },
       },
@@ -383,24 +386,23 @@ export const allMapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatusCounts,
+      queryFunc: PolicyStatusCountsForMap,
 
       // params that must be passed to `queryFunc` as object
       params: {
         func: ({
           filters,
-          policyResolution,
           mapId,
         }: PolicyCountsFuncArgs): Record<string, any> => {
-          const countSub = policyResolution === PolicyResolution.subgeo;
           return {
-            method: "post",
-            filters,
             geo_res:
               mapId === "us-county" ? GeoRes.county : GeoRes.county_plus_state,
-            count_sub: countSub,
-            include_min_max: true,
-            mapId,
+            cats: filters.primary_ph_measure,
+            subcats: filters.ph_measure_details,
+            date:
+              filters.dates_in_effect !== undefined
+                ? filters.dates_in_effect[0]
+                : undefined,
           };
         },
       },
@@ -460,7 +462,10 @@ export const allMapMetrics = {
           return {
             method: "get",
             geo_res: GeoRes.country,
-            date: filters.dates_in_effect[0],
+            date:
+              filters.dates_in_effect !== undefined
+                ? filters.dates_in_effect[0]
+                : undefined,
             iso3,
           };
         },
@@ -505,23 +510,19 @@ export const allMapMetrics = {
     {
       // functions that, when passed `params`, returns the data for the map
       // for this metric
-      queryFunc: PolicyStatusCounts,
+      queryFunc: PolicyStatusCountsForMap,
 
       // params that must be passed to `queryFunc` as object
       params: {
-        func: ({
-          filters,
-          policyResolution,
-          mapId,
-        }: PolicyCountsFuncArgs): Record<string, any> => {
-          const countSub = policyResolution === PolicyResolution.subgeo;
+        func: ({ filters }: PolicyCountsFuncArgs): Record<string, any> => {
           return {
-            method: "post",
-            filters,
             geo_res: GeoRes.country,
-            count_sub: countSub,
-            include_min_max: true,
-            mapId,
+            cats: filters.primary_ph_measure,
+            subcats: filters.ph_measure_details,
+            date:
+              filters.dates_in_effect !== undefined
+                ? filters.dates_in_effect[0]
+                : undefined,
           };
         },
       },

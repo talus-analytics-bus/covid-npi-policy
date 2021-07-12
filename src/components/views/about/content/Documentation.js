@@ -30,7 +30,11 @@ const Documentation = ({ ...props }) => {
   const endnoteText = [
     <>
       Hill, Alison, et al. "Modeling COVID-19 Spread vs Healthcare Capacity"{" "}
-      <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+      <a
+        target="_blank"
+        href="https://alhill.shinyapps.io/COVID19seir/"
+        rel="noreferrer"
+      >
         https://alhill.shinyapps.io/COVID19seir/
       </a>
     </>,
@@ -125,7 +129,12 @@ const Documentation = ({ ...props }) => {
         <div className={styles.downloads}>
           <PrimaryButton
             {...{
-              label: "Download data dictionary (.xls)",
+              label: (
+                <span>
+                  Download data dictionary&nbsp;
+                  <em>(.xls)</em>
+                </span>
+              ),
               iconName: "get_app",
               isSmall: true,
               isSecondary: true,
@@ -137,7 +146,12 @@ const Documentation = ({ ...props }) => {
           />
           <PrimaryButton
             {...{
-              label: "Download documentation (.pdf)",
+              label: (
+                <span>
+                  Download documentation&nbsp;
+                  <em>(.pdf)</em>
+                </span>
+              ),
               iconName: "get_app",
               isSmall: true,
               isSecondary: true,
@@ -180,9 +194,22 @@ const Documentation = ({ ...props }) => {
           The complete dataset can be downloaded in an Excel file format
           directly from the site. If you are interested in establishing an API
           or other direct access, please contact us at{" "}
-          <a href="mailto:outbreaks@georgetown.edu">outbreaks@georgetown.edu</a>{" "}
+          <a
+            href="mailto:outbreaks@georgetown.edu"
+            target="_blank"
+            rel="noreferrer"
+          >
+            outbreaks@georgetown.edu
+          </a>{" "}
           or{" "}
-          <a href="mailto:info@talusanalytics.com">info@talusanalytics.com</a>.
+          <a
+            href="mailto:info@talusanalytics.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            info@talusanalytics.com
+          </a>
+          .
         </li>
         <li>
           An interactive policy map providing geospatial visualization of the
@@ -205,16 +232,20 @@ const Documentation = ({ ...props }) => {
       <p>
         This work and underlying AMP dataset are available for use under the
         Creative Commons Attribution By License agreement (
-        <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+        <a
+          target="_blank"
+          href="https://creativecommons.org/licenses/by/4.0/"
+          rel="noreferrer"
+        >
           https://creativecommons.org/licenses/by/4.0/
         </a>
         ), with appropriate reference and acknowledgement of the original
         research team, as available under the About section of{" "}
-        <a target="_blank" href="https://covid-local.org">
+        <a target="_blank" href="https://covid-local.org" rel="noreferrer">
           https://covid-local.org
         </a>{" "}
         and{" "}
-        <a target="_blank" href="https://covidamp.org">
+        <a target="_blank" href="https://covidamp.org" rel="noreferrer">
           https://covidamp.org
         </a>
         .
@@ -224,8 +255,14 @@ const Documentation = ({ ...props }) => {
         In addition to direct download from the site, we are happy to work with
         your team to provide automated access via API or other data sharing
         method. Please contact us at{" "}
-        <a href="mailto:info@talusanalytics.com">info@talusanalytics.com</a> for
-        more information.
+        <a
+          href="mailto:info@talusanalytics.com"
+          target="_blank"
+          rel="noreferrer"
+        >
+          info@talusanalytics.com
+        </a>{" "}
+        for more information.
       </p>
 
       <h2>COVID-19 policy database documentation</h2>
@@ -241,11 +278,12 @@ const Documentation = ({ ...props }) => {
         <a
           target="_blank"
           href="https://covidamp.org/export/COVID%20AMP%20data%20dictionary.xlsx"
+          rel="noreferrer"
         >
           here
         </a>
         . The complete dataset can be downloaded from the Policy data page from{" "}
-        <a target="_blank" href="http://covidamp.org/data">
+        <a target="_blank" href="http://covidamp.org/data" rel="noreferrer">
           covidamp.org/data
         </a>
         .
@@ -561,7 +599,11 @@ const Documentation = ({ ...props }) => {
         US state-level COVID-19 caseload data, new cases in the last 7 days and
         cumulative cases, are sourced from the New York Times Coronavirus
         (Covid-19) Data in the United States (
-        <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+        <a
+          target="_blank"
+          href="https://github.com/nytimes/covid-19-data"
+          rel="noreferrer"
+        >
           https://github.com/nytimes/covid-19-data
         </a>
         ). These data include confirmed cases and, where captured by public
@@ -576,7 +618,11 @@ const Documentation = ({ ...props }) => {
         cumulative cases, are sourced from the COVID-19 Data Repository by the
         Center for Systems Science and Engineering (CSSE) at Johns Hopkins
         University which holds the copyright to all data (
-        <a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">
+        <a
+          target="_blank"
+          href="https://github.com/CSSEGISandData/COVID-19"
+          rel="noreferrer"
+        >
           https://github.com/CSSEGISandData/COVID-19
         </a>
         ). These data include only confirmed cases and are updated daily.
@@ -625,11 +671,19 @@ const Documentation = ({ ...props }) => {
         infectious, recovered) model adding multiple levels of infections and an
         asymptomatic class (see Figure 1 below). The COVID-19 SEIR model used
         here was developed in collaboration with{" "}
-        <a target="_blank" href="https://covidactnow.org/resources#model">
+        <a
+          target="_blank"
+          href="https://covidactnow.org/resources#model"
+          rel="noreferrer"
+        >
           COVID Act Now
         </a>
         , originally adapted from the original{" "}
-        <a target="_blank" href="https://alhill.shinyapps.io/COVID19seir/">
+        <a
+          target="_blank"
+          href="https://alhill.shinyapps.io/COVID19seir/"
+          rel="noreferrer"
+        >
           work of Dr. Allison Hill
         </a>
         <a href="#_edn1" name="_ednref1">

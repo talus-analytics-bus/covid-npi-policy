@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 type InfoTooltipContextProps = {
-  setInfoTooltipContent(): void;
+  setInfoTooltipContent: (() => void) | Dispatch<SetStateAction<string | null>>;
 };
 
 const InfoTooltipContext = React.createContext<InfoTooltipContextProps>({

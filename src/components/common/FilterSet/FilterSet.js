@@ -4,20 +4,12 @@ import { Filter } from "../";
 // 3rd party packages
 import classNames from "classnames";
 
-// local functions
-import { getInputLabel } from "../Filter/Filter.js";
-
-// local components
-import { ShowMore } from "../";
-
 // misc
-import { comma } from "../../misc/Util";
 import { isEmpty } from "../../misc/UtilsTyped";
 
 // assets and styles
 import styles from "./filterset.module.scss";
-import crossSvg from "../../../assets/icons/cross.svg";
-import funnelSvg from "../../../assets/icons/funnel.svg";
+import { FilterSetSelections } from "./content/FilterSetSelections/FilterSetSelections";
 
 /**
  * @method FilterSet
@@ -35,7 +27,10 @@ const FilterSet = ({
   alignBottom = false,
   vertical = false,
   numInstances = null,
-  instanceNouns = null,
+  instanceNouns = {},
+  onClearAll,
+  toHide = [],
+  customLayout = false,
   ...props
 }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -58,31 +53,32 @@ const FilterSet = ({
           return primaryFilters.includes(d.group);
         });
       }
-      filterGroupComponents.push(
-        <Filter
-          {...{
-            key: v.field,
-            field: v.field,
-            label: v.label,
-            items: items,
-            radio: v.radio,
-            className: v.className,
-            defaultRadioValue: v.defaultRadioValue,
-            dateRange: v.dateRange,
-            minMaxDate: v.minMaxDate,
-            primary: v.primary,
-            disabledText: v.disabledText,
-            filters,
-            setFilters,
-            activeFilter,
-            setActiveFilter,
-            withGrouping: v.withGrouping,
-            params: v.params,
-            alignBottom,
-            ...props,
-          }}
-        />
-      );
+      if (!toHide.includes(v.field))
+        filterGroupComponents.push(
+          <Filter
+            {...{
+              key: v.field,
+              field: v.field,
+              label: v.label,
+              items: items,
+              radio: v.radio,
+              className: v.className,
+              defaultRadioValue: v.defaultRadioValue,
+              dateRange: v.dateRange,
+              minMaxDate: v.minMaxDate,
+              primary: v.primary,
+              disabledText: v.disabledText,
+              filters,
+              setFilters,
+              activeFilter,
+              setActiveFilter,
+              withGrouping: v.withGrouping,
+              params: v.params,
+              alignBottom,
+              ...props,
+            }}
+          />
+        );
     }
     filterGroupComponents.dropdowns = !filterGroupComponents.some(
       d => d.props.radio
@@ -90,138 +86,53 @@ const FilterSet = ({
     filterGroups.push(filterGroupComponents);
   });
 
-  /**
-   * Return a badge representing the filter value that can be clicked off
-   * @method getBadge
-   * @param  {[type]} label [description]
-   * @param  {[type]} field [description]
-   * @param  {[type]} value [description]
-   * @return {[type]}       [description]
-   */
-  const getBadge = ({ label, field, value }) => {
-    return (
-      <div className={styles.badge} key={field + "-" + value}>
-        <span>
-          <span className={styles.label}>{label}:</span>
-          <span className={styles.value}>
-            {" "}
-            {<ShowMore text={value} charLimit={60} />}
-          </span>
-        </span>
-        <div
-          className={styles.close}
-          onClick={() => {
-            if (field !== "Text") {
-              const newFilters = { ...filters };
-              newFilters[field] = newFilters[field].filter(v => v !== value);
-
-              if (
-                filterDefsObj[field].dateRange ||
-                newFilters[field].length === 0
-              ) {
-                delete newFilters[field];
-                setFilters(newFilters);
-              } else {
-                setFilters(newFilters);
-              }
-            } else {
-              setSearchText(null);
-            }
-          }}
-        >
-          <a style={{ backgroundImage: `url(${crossSvg})` }} type="button"></a>
-        </div>
-      </div>
-    );
-  };
-
   // display selected filters as list of badges that can be clicked off
   const filterKeys = Object.keys(filters);
   const noNonTextFilters = filterKeys.length === 1 && filterKeys[0] === "_text";
   const selectedFilters =
     props.showSelectedFilters === false ? null : (
-      <div className={styles.selectedFilters}>
-        <div className={styles.header}>
-          <div className={styles.filterIcon}>
-            <div style={{ backgroundImage: `url(${funnelSvg})` }} />
-          </div>
-          <span>
-            Selected filters{" "}
-            {numInstances !== null && instanceNouns !== null && (
-              <span>
-                ({comma(numInstances)}{" "}
-                {numInstances !== 1
-                  ? instanceNouns.p.toLowerCase()
-                  : instanceNouns.s.toLowerCase().replace("_", " ")}
-                )
-              </span>
-            )}
-          </span>
-        </div>
-
-        <div className={styles.badges}>
-          {!noNonTextFilters &&
-            Object.entries(filters).map(([field, values]) => (
-              <React.Fragment key={field + "-" + values.join("-")}>
-                {field !== "_text" &&
-                  filterDefsObj[field] !== undefined &&
-                  !filterDefsObj[field].dateRange &&
-                  values.map(value =>
-                    getBadge({
-                      label:
-                        filterDefsObj[field].labelShort ||
-                        filterDefsObj[field].label,
-                      field,
-                      value,
-                    })
-                  )}
-                {field !== "_text" &&
-                  filterDefsObj[field] !== undefined &&
-                  filterDefsObj[field].dateRange &&
-                  getBadge({
-                    label:
-                      filterDefsObj[field].labelShort ||
-                      filterDefsObj[field].label,
-                    field,
-                    value: getInputLabel({
-                      dateRange: true,
-                      dateRangeState: [
-                        { startDate: values[0], endDate: values[1] },
-                      ],
-                    }),
-                  })}
-              </React.Fragment>
-            ))}
-          {searchText !== null &&
-            searchText !== "" &&
-            getBadge({
-              label: "Text",
-              field: "Text",
-              value: searchText,
-            })}
-        </div>
-      </div>
+      <FilterSetSelections
+        {...{
+          filters,
+          searchText,
+          filterDefsObj,
+          noNonTextFilters,
+          numInstances,
+          instanceNouns,
+          setFilters,
+          setSearchText,
+          onClearAll,
+        }}
+      />
     );
 
+  const filterGroupsElement = filterGroups.map(d => (
+    <div
+      key={d.map(dd => dd.key).join("-")}
+      className={classNames(styles.filterGroup, {
+        [styles.dropdowns]: d.dropdowns,
+      })}
+    >
+      {d}
+    </div>
+  ));
+  const getWrappedElement = el => {
+    if (customLayout) return el;
+    else
+      return (
+        <div
+          className={classNames(styles.filterSet, {
+            [styles.disabled]: disabled,
+            [styles.vertical]: vertical,
+          })}
+        >
+          {el}
+        </div>
+      );
+  };
   return (
     <React.Fragment>
-      <div
-        className={classNames(styles.filterSet, {
-          [styles.disabled]: disabled,
-          [styles.vertical]: vertical,
-        })}
-      >
-        {filterGroups.map(d => (
-          <div
-            key={d.map(dd => dd.key).join("-")}
-            className={classNames(styles.filterGroup, {
-              [styles.dropdowns]: d.dropdowns,
-            })}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
+      {getWrappedElement(filterGroupsElement)}
       {children}
       {badgesToShow && selectedFilters}
     </React.Fragment>

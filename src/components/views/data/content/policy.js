@@ -15,6 +15,11 @@ import { Policy } from "api/Queries";
 // assets and styles
 // use same styles as main Data page
 import styles from "../data.module.scss";
+import {
+  getLinkedPolicyTitle,
+  getPolicyCatSubcatTarg,
+  formatFiltersForPlaceType,
+} from "./helpers";
 
 // constants
 const unspecified = (
@@ -29,17 +34,11 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const policyInfo = {
   filterDefs: [
     {
-      level: {
-        entity_name: "Place",
-        field: "level",
-        label: "Level of government",
-      },
-    },
-    {
       country_name: {
         entity_name: "Place",
         field: "country_name",
-        label: "Country",
+        label: "Country / Tribal nation",
+        withGrouping: true,
       },
       area1: {
         entity_name: "Place",
@@ -57,12 +56,11 @@ export const policyInfo = {
         primary: "area1",
         disabledText: "Choose a state / province",
       },
-    },
-    {
-      relaxing_or_restricting: {
-        entity_name: "Policy",
-        field: "relaxing_or_restricting",
-        label: "Relaxing or restricting",
+      level: {
+        entity_name: "Place",
+        field: "level",
+        label: "Geographic level",
+        advanced: true,
       },
     },
     {
@@ -74,10 +72,17 @@ export const policyInfo = {
       ph_measure_details: {
         entity_name: "Policy",
         field: "ph_measure_details",
-        label: "Policy sub-category",
+        label: "Policy subcategory",
         withGrouping: true,
         primary: "primary_ph_measure",
         disabledText: "Choose a policy category",
+      },
+    },
+    {
+      subtarget: {
+        entity_name: "Policy",
+        field: "subtarget",
+        label: "Policy target",
       },
     },
     {
@@ -90,43 +95,41 @@ export const policyInfo = {
       },
     },
   ],
-  getColumns: ({ metadata, setOrdering }) => {
+  getColumns: ({ metadata, setOrdering, placeType }) => {
     // define initial columns which will be updated using the metadata
     const newColumns = [
-      {
-        dataField: "place.level",
-        defKey: "place.level",
-        header: "Level of government",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
-        sort: true,
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.level).join("; ");
-          else return "zzz";
-        },
-        formatter: (cell, row) => {
-          if (row.place !== undefined && row.place.length > 0)
-            return row.place[0].level;
-          else return null;
-        },
-      },
+      // {
+      //   dataField: "place.level",
+      //   defKey: "place.level",
+      //   header: "Type of affected location",
+      //   placeType: "affected",
+      //   onSort: (field, order) => {
+      //     setOrdering([[field, order]]);
+      //   },
+      //   sort: true,
+      //   sortValue: (_cell, row) => {
+      //     if (row.place !== undefined)
+      //       return row.place.map(d => d.level).join("; ");
+      //     else return "zzz";
+      //   },
+      //   formatter: (_cell, row) => {
+      //     if (row.place !== undefined && row.place.length > 0)
+      //       return row.place[0].level;
+      //     else return null;
+      //   },
+      // },
       {
         dataField: "place.loc",
         defKey: "place.loc",
         header: "Affected location",
+        placeType: "affected",
         defCharLimit: 1000,
         sort: true,
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
-        sortValue: (cell, row) => {
-          if (row.place !== undefined)
-            return row.place.map(d => d.loc).join("; ");
-          else return "zzz";
-        },
-        formatter: (cell, row) => {
+        sortValue: () => 0,
+        formatter: (_cell, row) => {
           if (row.place !== undefined && row.place.length > 0)
             return (
               <ShowMore
@@ -137,32 +140,66 @@ export const policyInfo = {
           else return null;
         },
       },
+
       {
-        dataField: "name_and_desc",
-        header: "Policy name and description",
+        dataField: "auth_entity.place.loc",
+        defKey: "auth_entity.place.loc",
+        header: "Jurisdiction",
+        placeType: "jurisdiction",
         defCharLimit: 1000,
-        sort: true,
-        onSort: (field, order) => {
-          setOrdering([["name_and_desc", order]]);
-        },
-        formatter: (cell, row) => {
-          // const title =
-          //   row.policy_name !== "Unspecified" &&
-          //   row.policy_name !== "" &&
-          //   row.policy_name !== null &&
-          //   row.policy_name !== undefined
-          //     ? row.policy_name + ": "
-          //     : "";
-          return <ShowMore text={cell} charLimit={200} />;
-        },
-      },
-      {
-        dataField: "primary_ph_measure",
-        header: "Policy category",
         sort: true,
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
+        sortValue: () => 0,
+        formatter: (_cell, row) => {
+          if (row.auth_entity !== undefined)
+            return (
+              <ShowMore
+                text={row.auth_entity.map(ae => ae.place.loc).join("; ")}
+                charLimit={60}
+              />
+            );
+          else return null;
+        },
+      },
+      {
+        dataField: "auth_entity.place.level",
+        defKey: "auth_entity.place.level",
+        header: "Type of jurisdiction",
+        // placeType: "jurisdiction",
+        onSort: (field, order) => {
+          setOrdering([[field, order]]);
+        },
+        sort: true,
+        sortValue: () => 0,
+        formatter: (_cell, row) => {
+          if (row.auth_entity !== undefined)
+            return row.auth_entity.map(ae => ae.place.level).join("; ");
+          else return null;
+        },
+      },
+      {
+        dataField: "name_and_desc",
+        header: "Policy name and description",
+        defCharLimit: 1000,
+        formatter: (_cell, row) => {
+          const desc = row.desc;
+          return (
+            <p>
+              <span style={{ fontWeight: 600 }}>
+                {getLinkedPolicyTitle(row)}
+              </span>
+              <br />
+              <ShowMore text={desc} charLimit={200} />
+            </p>
+          );
+        },
+      },
+      {
+        dataField: "primary_ph_measure",
+        header: "Policy category, subcategory, and targets",
+        formatter: (_cell, row) => getPolicyCatSubcatTarg(row),
       },
       {
         dataField: "date_start_effective",
@@ -171,16 +208,13 @@ export const policyInfo = {
         onSort: (field, order) => {
           setOrdering([[field, order]]);
         },
+        sortValue: () => 0,
         formatter: v =>
           v !== null ? moment(v).format("MMM D, YYYY") : unspecified,
       },
       {
         dataField: "authority_name",
         header: "Relevant authority",
-        sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
         formatter: v => {
           // TODO REPLACE ALL
           if (v === undefined) return "";
@@ -190,9 +224,10 @@ export const policyInfo = {
       {
         dataField: "file",
         header: "PDF / Link",
-        formatter: (row, cell) => {
-          if (cell.file === undefined) return "";
-          const icons = cell.file.map((d, i) => {
+        sortValue: () => 0,
+        formatter: (_cell, row) => {
+          if (row.file === undefined) return "";
+          const icons = row.file.map((d, i) => {
             const isLocalDownload = true;
             const link = undefined;
             const hasLink = link && link !== "";
@@ -206,7 +241,11 @@ export const policyInfo = {
                   key={localDownloadLink + "-" + i}
                   className={styles.linkIcon}
                 >
-                  <a target="_blank" href={`${API_URL}${localDownloadLink}`}>
+                  <a
+                    target="_blank"
+                    href={`${API_URL}${localDownloadLink}`}
+                    rel="noreferrer"
+                  >
                     <i className={"material-icons"}>insert_drive_file</i>
                   </a>
                 </div>
@@ -214,21 +253,21 @@ export const policyInfo = {
             } else if (hasLink) {
               return (
                 <div className={styles.linkIcon}>
-                  <a target="_blank" href={link}>
+                  <a target="_blank" href={link} rel="noreferrer">
                     <i className={"material-icons"}>link</i>
                   </a>
                 </div>
               );
             } else return unspecified;
           });
-          if (cell.file && cell.file.length > 0) {
+          if (row.file && row.file.length > 0) {
             return <div className={styles.linkIcons}>{icons}</div>;
           } else {
             return unspecified;
           }
         },
       },
-    ];
+    ].filter(d => d.placeType === undefined || d.placeType === placeType);
 
     // join elements of metadata to cols, like definitions, etc.
     // and perform some data processing
@@ -268,23 +307,39 @@ export const policyInfo = {
 
   // query to use when getting entity data
   // requires method and filters arguments
-  dataQuery: ({ method, filters, page = 1, pagesize = 5, ordering = [] }) => {
-    return Policy({
-      method,
-      filters,
-      page,
-      pagesize,
-      ordering,
-      fields: [
-        "id",
-        "place",
-        "primary_ph_measure",
-        "authority_name",
-        "name_and_desc",
-        "date_start_effective",
-        "file",
-      ],
-    });
+  dataQuery: ({
+    method,
+    filters,
+    page = 1,
+    pagesize = 5,
+    ordering = [],
+    placeType,
+  }) => {
+    if (placeType === undefined)
+      throw Error("Argument `placeType` is required.");
+    else {
+      const filtersForRequest = formatFiltersForPlaceType(filters, placeType);
+      return Policy({
+        method,
+        filters: filtersForRequest,
+        page,
+        pagesize,
+        ordering,
+        fields: [
+          "id",
+          "place",
+          "auth_entity",
+          "primary_ph_measure",
+          "ph_measure_details",
+          "subtarget",
+          "authority_name",
+          "policy_name",
+          "desc",
+          "date_start_effective",
+          "file",
+        ],
+      });
+    }
   },
 
   // default field to sort tabular data by

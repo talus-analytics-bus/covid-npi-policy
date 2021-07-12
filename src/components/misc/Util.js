@@ -1,4 +1,5 @@
 import * as d3 from "d3/dist/d3.min";
+import BrowserDetection from "react-browser-detection";
 
 const Util = {};
 
@@ -42,16 +43,6 @@ export const comma = num => {
   return resultTmp;
 };
 
-export const getAndListString = (arr, conjunction = "and") => {
-  if (arr === undefined || arr == null || arr.length === 0) return "";
-  else if (arr.length === 1) return arr[0];
-  else if (arr.length === 2) return `${arr[0]} ${conjunction} ${arr[1]}`;
-  else {
-    const first = arr.slice(0, arr.length - 1).join(", ");
-    return first + ", " + conjunction + " " + arr[arr.length - 1];
-  }
-};
-
 export const isLightColor = color => {
   if (color === undefined) return false;
   // Variables for red, green, blue values
@@ -87,8 +78,9 @@ export const isLightColor = color => {
 export const getInitLower = str => {
   return str.charAt(0).toLowerCase() + str.slice(1, str.length);
 };
-export const getInitCap = str => {
-  return str.charAt(0).toUpperCase() + str.slice(1, str.length);
-};
+
+export const BrowserProvider = children => (
+  <BrowserDetection>{children}</BrowserDetection>
+);
 
 export default Util;
