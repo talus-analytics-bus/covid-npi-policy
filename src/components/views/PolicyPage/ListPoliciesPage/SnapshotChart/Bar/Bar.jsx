@@ -5,6 +5,7 @@ import PolicyCategoryIcon from "../../../PolicyCategoryIcon/PolicyCategoryIcon";
 import styles from "./Bar.module.scss";
 
 const Bar = ({ category, bar, index, dim }) => {
+  console.log(category, bar, (bar.active || 0) + (bar.expired || 0));
   return (
     <g
       key={category}
@@ -16,8 +17,10 @@ const Bar = ({ category, bar, index, dim }) => {
         key="activeExpired"
         style={{ fill: "#409384" }}
         d={`M ${dim.axes.x.scale(0)}, 0
-         L ${dim.axes.x.scale(bar.active + bar.expired || 0)}, 0
-         L ${dim.axes.x.scale(bar.active + bar.expired || 0)}, ${dim.barWidth}
+         L ${dim.axes.x.scale((bar.active || 0) + (bar.expired || 0))}, 0
+         L ${dim.axes.x.scale((bar.active || 0) + (bar.expired || 0))}, ${
+          dim.barWidth
+        }
          L ${dim.axes.x.scale(0)}, ${dim.barWidth}
         `}
       />
