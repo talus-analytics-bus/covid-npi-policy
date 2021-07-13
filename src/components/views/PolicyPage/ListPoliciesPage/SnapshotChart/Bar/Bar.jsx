@@ -15,7 +15,7 @@ const Bar = ({ category, bar, index, dim }) => {
       <path
         className={styles.barPath}
         key="activeExpired"
-        style={{ fill: "#409384" }}
+        style={{ fill: "#96C4BB" }}
         d={`M ${dim.axes.x.scale(0)}, 0
          L ${dim.axes.x.scale((bar.active || 0) + (bar.expired || 0))}, 0
          L ${dim.axes.x.scale((bar.active || 0) + (bar.expired || 0))}, ${
@@ -27,7 +27,7 @@ const Bar = ({ category, bar, index, dim }) => {
       <path
         className={styles.barPath}
         key="active"
-        style={{ fill: "#96C4BB" }}
+        style={{ fill: "#409384" }}
         d={`M ${dim.axes.x.scale(0)}, 0
          L ${dim.axes.x.scale(bar.active || 0)}, 0
          L ${dim.axes.x.scale(bar.active || 0)}, ${dim.barWidth}
