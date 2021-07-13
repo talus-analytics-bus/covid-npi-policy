@@ -1,6 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import {
+  CATEGORY_FIELD_NAME,
+  SUBCATEGORY_FIELD_NAME,
+} from "../PolicyRouter/PolicyLoaders";
+import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
+
 import styles from "./PolicySummary.module.scss";
 
 import CourtChallengeIcon from "../../../../assets/icons/CourtChallengeIcon.svg";
@@ -57,24 +63,31 @@ const PolicySummary = props => {
       }}
     >
       {props.showAllMetadata && (
-        <p className={styles.breadcrumbs}>
-          {props.path &&
-            props.path
-              .filter(
-                s =>
-                  ![
-                    "children",
-                    "Local",
-                    "Country",
-                    "State / Province",
-                  ].includes(s)
-              )
-              .slice(0, -2)
-              .map(e => (
-                <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
-              ))}
-          {props.path && props.path.slice(-3)[0]}
-        </p>
+        <h1 className={styles.title}>
+          <PolicyCategoryIcon
+            category={props.policy[CATEGORY_FIELD_NAME]}
+            style={{ marginRight: "0.5em", width: "1.5em", height: "1.5em" }}
+          />
+          {props.policy[SUBCATEGORY_FIELD_NAME]}
+        </h1>
+        // <p className={styles.breadcrumbs}>
+        //   {props.path &&
+        //     props.path
+        //       .filter(
+        //         s =>
+        //           ![
+        //             "children",
+        //             "Local",
+        //             "Country",
+        //             "State / Province",
+        //           ].includes(s)
+        //       )
+        //       .slice(0, -2)
+        //       .map(e => (
+        //         <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
+        //       ))}
+        //   {props.path && props.path.slice(-3)[0]}
+        // </p>
       )}
       <div className={styles.main}>
         <header className={styles.metadata}>
