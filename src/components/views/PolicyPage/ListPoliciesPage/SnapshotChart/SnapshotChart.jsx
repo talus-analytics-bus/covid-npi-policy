@@ -140,7 +140,10 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
       {sortedBars
         .sort((a, b) => chartLabels.indexOf(b) - chartLabels.indexOf(a))
         .map(([category, bar], index) => (
-          <Bar key={category} {...{ category, bar, index, dim }} />
+          <Bar
+            key={category}
+            {...{ category, bar, index, dim, selectedDate }}
+          />
         ))}
     </svg>
   );
