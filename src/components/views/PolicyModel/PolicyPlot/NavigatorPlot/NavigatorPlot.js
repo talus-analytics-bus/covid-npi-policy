@@ -65,9 +65,9 @@ const NavigatorPlot = props => {
 
   return (
     <>
-      <div className={styles.instructions}>
-        Use sliders to adjust timeline shown in graph below
-      </div>
+      {/* <div className={styles.instructions}> */}
+      {/* Use sliders to adjust timeline shown in graph below */}
+      {/* </div> */}
       <div className={styles.background}>
         <VictoryChart
           className={styles.navigator}

@@ -534,14 +534,17 @@ const PolicyModel = ({ setLoading, setPage }) => {
             {/* {console.log("\npolicymodel zoomDateRange")} */}
             {/* {console.log(zoomDateRange)} */}
             {curves && curves[selectedStates[0]] && (
-              <NavigatorPlot
-                curves={curves[selectedStates[0]].curves}
-                zoomDateRange={zoomDateRange}
-                setZoomDateRange={setZoomDateRange}
-                domain={domain}
-                caseLoadAxis={caseLoadAxis}
-                activeTab={activeTab}
-              />
+              <label style={{ width: "100%" }}>
+                Time Slider
+                <NavigatorPlot
+                  curves={curves[selectedStates[0]].curves}
+                  zoomDateRange={zoomDateRange}
+                  setZoomDateRange={setZoomDateRange}
+                  domain={domain}
+                  caseLoadAxis={caseLoadAxis}
+                  activeTab={activeTab}
+                />
+              </label>
             )}
           </div>
         </div>
