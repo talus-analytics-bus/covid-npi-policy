@@ -160,9 +160,12 @@ const State = props => {
           <div className={styles.viewAll}>
             <Link
               target="_blank"
-              to={`/data?type=policy&filters_policy=%7B"country_name"%3A%5B"United+States+of+America+%28USA%29"%5D%2C"area1"%3A%5B"${
+              // to={`/data?type=policy&filters_policy=%7B"country_name"%3A%5B"United+States+of+America+%28USA%29"%5D%2C"area1"%3A%5B"${
+              //   states.find(state => state.abbr === props.selectedState).name
+              // }"%5D%7D`}
+              to={`/policies/USA/${
                 states.find(state => state.abbr === props.selectedState).name
-              }"%5D%7D`}
+              }`}
             >
               View all{" "}
               {states.find(state => state.abbr === props.selectedState).name}{" "}
