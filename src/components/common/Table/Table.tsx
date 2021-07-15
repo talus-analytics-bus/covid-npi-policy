@@ -17,6 +17,11 @@ import unsorted from "../../../assets/icons/table/unsorted.svg";
 import { ReactElement } from "react";
 
 /**
+ * Type of pagesize, which can be a number (of records per page) or "All".
+ */
+export type Pagesize = number | "All";
+
+/**
  * Fields required for data column definitions.
  */
 export type DataColumnDef = {
@@ -42,8 +47,8 @@ interface TableProps {
   nTotalRecords?: number | null;
   curPage?: number;
   setCurPage?: Dispatch<SetStateAction<number>>;
-  pagesize?: number;
-  setPagesize?: Dispatch<SetStateAction<number>>;
+  pagesize?: Pagesize;
+  setPagesize?: Dispatch<SetStateAction<Pagesize>>;
   showDefinitions?: boolean;
 }
 
@@ -176,15 +181,21 @@ const Table = ({
           )}
         </ToolkitProvider>
       </div>
-      <Paginator
-        {...{
-          setPagesize,
-          pagesize,
-          curPage,
-          setCurPage,
-          nTotalRecords,
-        }}
-      />
+      {curPage !== undefined &&
+        setCurPage !== undefined &&
+        pagesize !== undefined &&
+        setPagesize !== undefined &&
+        nTotalRecords !== undefined && (
+          <Paginator
+            {...{
+              setPagesize,
+              pagesize,
+              curPage,
+              setCurPage,
+              nTotalRecords,
+            }}
+          />
+        )}
     </>
   );
 };

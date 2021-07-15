@@ -347,7 +347,5 @@ function getUrlParamAsFilters(
     return JSON.parse(v);
   } catch (e) {
     throw Error(`URL param named '${paramKey}' was invalid JSON: ${v}`);
-  } finally {
-    return null;
   }
 }
