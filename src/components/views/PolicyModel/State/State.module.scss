@@ -265,6 +265,7 @@
       .state {
         h1 {
           font-size: 32px;
+          color: #409385;
         }
 
         h2 {
@@ -285,7 +286,16 @@
       }
 
       .viewAll {
+        flex-basis: 20em;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
         > a {
+          text-align: center;
+          font-size: 14px;
+          display: block;
+          flex-shrink: 0;
           padding: 10px 30px;
           color: white;
           background: linear-gradient(
