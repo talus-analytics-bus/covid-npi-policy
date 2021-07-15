@@ -251,7 +251,7 @@ const PolicyEnvironmentPlot = () => {
   return (
     <figure>
       <div className={styles.instructionSection}>
-        <div>
+        <div className={styles.instructionParagraph}>
           {status.policiesSummary === "error" ? (
             <>
               <p style={{ marginTop: "2em", fontStyle: "normal" }}>

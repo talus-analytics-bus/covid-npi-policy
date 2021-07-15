@@ -1,7 +1,13 @@
 .instructionSection {
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   font-style: italic;
   margin-bottom: 0.5em;
+
+  .instructionParagraph {
+    max-width: 45em;
+  }
 }
 
 .svg {
