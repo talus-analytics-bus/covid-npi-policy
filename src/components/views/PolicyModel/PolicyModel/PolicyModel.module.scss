@@ -275,6 +275,15 @@
   text-transform: none;
 }
 
+.belowChart {
+  margin-top: 20px;
+  display: flex;
+
+  .source {
+    font-style: italic;
+  }
+}
+
 .documentationLink {
   color: #344269;
   margin-left: auto;
