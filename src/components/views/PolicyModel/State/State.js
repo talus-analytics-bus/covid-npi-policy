@@ -164,7 +164,9 @@ const State = props => {
                 states.find(state => state.abbr === props.selectedState).name
               }"%5D%7D`}
             >
-              View all Colorado policies
+              View all{" "}
+              {states.find(state => state.abbr === props.selectedState).name}{" "}
+              policies
             </Link>
           </div>
         </div>
