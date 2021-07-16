@@ -158,9 +158,12 @@
   justify-content: space-between;
   align-items: flex-end;
   // margin-bottom: 1.5rem;
-  background-color: #fff;
+  // background-color: #fff;
   padding: 20px;
-  border-bottom: 1px solid #5c5d60;
+  padding-right: 0;
+  // border-bottom: 1px solid #5c5d60;
+  border-top: 1px solid #fff;
+  color: white;
 
   .selectControls {
     position: relative;
@@ -241,6 +244,7 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  border-radius: 5px;
 
   .settingsBar {
     display: flex;
