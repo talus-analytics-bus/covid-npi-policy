@@ -39,6 +39,47 @@ jobs:
             aws cloudfront create-invalidation \
             --distribution-id E2APV01FSNEH6H \
             --paths "/*"
+
+  deploy-review:
+    working_directory: ~/repo
+
+    docker:
+      - image: cimg/node:lts
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev g++ build-essential
+            sudo pip3 install --upgrade setuptools pytz
+            sudo pip3 install awsebcli --upgrade
+
+      - aws-cli/install
+      - aws-cli/configure
+
+      - run:
+          name: Yarn install
+          command: yarn install --network-timeout 1000000
+
+      - run:
+          name: Set env vars & build
+          command: yarn run build:review
+
+      - run:
+          name: AWS S3 Sync s3://covid-npi-policy-review
+          command: aws s3 sync build/ s3://covid-npi-policy-review --acl public-read --delete
+
+      # - run:
+      #     name: Invalidate cache
+      #     command: |
+      #       aws cloudfront create-invalidation \
+      #       --distribution-id E2APV01FSNEH6H \
+      #       --paths "/*"
+
   deploy-test:
     working_directory: ~/repo
 
@@ -84,6 +125,11 @@ workflows:
             branches:
               only:
                 - master
+      - deploy-review:
+          filters:
+            branches:
+              only:
+                - review
       - deploy-test:
           filters:
             branches:
