@@ -17,6 +17,8 @@ const formatDate = date => {
   });
 };
 
+const labelOrder = ["enacted", "active", "expired"];
+
 const Bar = ({ category, bar, index, dim, selectedDate }) => {
   return (
     <Tippy
@@ -31,10 +33,24 @@ const Bar = ({ category, bar, index, dim, selectedDate }) => {
           </h4>
           <h5>{formatDate(new Date(selectedDate * msPerDay))}</h5>
           {Object.entries(bar)
-            .sort()
+            .sort((a, b) => labelOrder.indexOf(a[0]) - labelOrder.indexOf(b[0]))
             .map(([name, count]) => (
               <p key={name}>
-                {name.charAt(0).toUpperCase() + name.slice(1)} policies: {count}
+                <span
+                  className={styles.colorBlock}
+                  style={{
+                    background: {
+                      enacted: "#E55E37",
+                      active: "#409384",
+                      expired: "#96C4BB",
+                    }[name],
+                  }}
+                />
+                <strong>{count} </strong>
+                {name === "enacted"
+                  ? "Newly enacted"
+                  : name.charAt(0).toUpperCase() + name.slice(1)}{" "}
+                policies
               </p>
             ))}
         </div>
