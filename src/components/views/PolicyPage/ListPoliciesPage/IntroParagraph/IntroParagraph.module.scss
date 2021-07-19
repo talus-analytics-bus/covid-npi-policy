@@ -1,7 +1,10 @@
 .introSection {
   flex-basis: 75%;
-  padding-right: 2rem;
   margin-bottom: 2rem;
+
+  &:not(:last-child) {
+    padding-right: 2rem;
+  }
 
   h1 {
     margin-top: 2rem;
