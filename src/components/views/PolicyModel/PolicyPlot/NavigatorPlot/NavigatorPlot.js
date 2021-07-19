@@ -11,7 +11,14 @@ import {
 import CustomBrush from "../CustomBrush/CustomBrush";
 import styles from "./NavigatorPlot.module.scss";
 
-const plotColors = ["#49615F99", "#394C5B99", "#4D3F2D99", "#4B384A99"];
+const plotColors = [
+  "#FFF",
+  "#FFF",
+  "#49615F99",
+  "#394C5B99",
+  "#4D3F2D99",
+  "#4B384A99",
+];
 
 const NavigatorPlot = props => {
   // The actuals lines of the plot
@@ -103,11 +110,14 @@ const NavigatorPlot = props => {
             }
             padding={{ top: 0, bottom: 2, left: 0, right: 0 }}
             style={{
+              axis: {
+                stroke: "#aaa",
+              },
               tickLabels: {
                 fontFamily: "Rawline",
                 fontWeight: "500",
                 fontSize: 6,
-                fill: "#6d6d6d",
+                fill: "#FFF",
                 padding: 0.5,
               },
             }}
@@ -139,7 +149,7 @@ const NavigatorPlot = props => {
           (new Date() < props.zoomDateRange[0] ||
             new Date() > props.zoomDateRange[1]) && (
             <VictoryLine
-              style={{ data: { stroke: "skyblue", strokeWidth: 1 } }}
+              style={{ data: { stroke: "#FFF", strokeWidth: 1 } }}
               data={[
                 { x: new Date(), y: 0 },
                 { x: new Date(), y: props.caseLoadAxis[1] },
