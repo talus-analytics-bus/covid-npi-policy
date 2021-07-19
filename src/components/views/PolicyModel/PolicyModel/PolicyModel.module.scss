@@ -286,12 +286,14 @@
   display: flex;
 
   .source {
-    font-style: italic;
+    a {
+      color: #023f88;
+    }
   }
 }
 
 .documentationLink {
-  color: #344269;
+  color: #023f88;
   margin-left: auto;
   margin-bottom: 0.5rem;
 
