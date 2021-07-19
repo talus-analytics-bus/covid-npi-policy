@@ -123,9 +123,9 @@
   //   // width: 22.75em;
   // }
 
-  // .predict {
-  //   // width: 20rem;
-  // }
+  .predict {
+    max-width: 18em;
+  }
 
   // .show {
   //   // width: 20rem;
@@ -141,7 +141,7 @@
 }
 
 .titleContainer {
-  padding-bottom: 3rem;
+  padding-bottom: 40px;
   // padding-top: 1rem;
   // margin-bottom: 3rem;
   // border-bottom: 1px solid white;
@@ -161,6 +161,7 @@
   // background-color: #fff;
   padding: 20px;
   padding-right: 0;
+  padding-top: 40px;
   // border-bottom: 1px solid #5c5d60;
   border-top: 1px solid #fff;
   color: white;
