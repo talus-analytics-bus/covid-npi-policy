@@ -262,7 +262,7 @@ function getPolicyCatSubcatTargDeclarative(
             </p>
             <p className={styles.targets}>
               <span className={styles.label}>Targets: </span>
-              <span>{formatSubtargets(p.subtarget.join(" ∙ "))}</span>
+              <span>{formatSubtargets(p.subtarget.join(", "))}</span>
             </p>
           </p>
         );
