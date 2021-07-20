@@ -1,5 +1,5 @@
 import { InfoTooltip } from "components/common";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import styles from "../../OptionControls.module.scss";
 import { Option } from "../../types";
 import { IndentedChild } from "../../IndentedChild/IndentedChild";
@@ -12,6 +12,7 @@ export const OptionRadio: FC<Option> = ({
   description,
   child,
   setInfoTooltipContent = () => {},
+  infoTooltipSize,
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);
   const [inputId] = useState<string>("radio-" + Math.random().toString());
@@ -26,16 +27,21 @@ export const OptionRadio: FC<Option> = ({
           readOnly={true}
         />
         <label htmlFor={inputId}>
-          <span className={styles.optionLabel}>{name}</span>{" "}
-          {description && (
-            <InfoTooltip
-              id={inputId}
-              text={description}
-              place={"left"}
-              wide={false}
-              {...{ setInfoTooltipContent }}
-            />
-          )}
+          <span className={styles.optionLabel}>
+            <span>
+              {name}
+              {description && (
+                <InfoTooltip
+                  id={inputId}
+                  text={description}
+                  place={"left"}
+                  wide={false}
+                  iconSize={infoTooltipSize}
+                  {...{ setInfoTooltipContent }}
+                />
+              )}
+            </span>
+          </span>
         </label>
       </span>
       {checked && child && <IndentedChild>{child}</IndentedChild>}

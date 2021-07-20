@@ -63,6 +63,11 @@ export interface Option {
     | (() => void);
 
   /**
+   * Optional: The size (height and width, equal) of the info tooltip icon.
+   */
+  infoTooltipSize?: number;
+
+  /**
    * Optional: Function called on an option value to determine whether this
    * option is considered checked.
    * @param v The value of the child option.
@@ -111,6 +116,11 @@ export interface OptionWidget {
   setInfoTooltipContent?:
     | Dispatch<SetStateAction<string | null>>
     | (() => void);
+
+  /**
+   * Optional: The size (height and width, equal) of the info tooltip icon.
+   */
+  infoTooltipSize?: number;
 }
 
 export type OptionSetEntry = {

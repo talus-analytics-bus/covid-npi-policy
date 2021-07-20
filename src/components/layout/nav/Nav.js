@@ -139,9 +139,9 @@ const Nav = ({ page }) => {
                 </HoverDropdown>
                 <HoverDropdown>
                   <span className={dropdownMenuClasses}>Location</span>
-                  <div className={styles.navSubmenu}>
+                  {/* <div className={styles.navSubmenu}>
                     <LocationSearch />
-                  </div>
+                  </div> */}
                 </HoverDropdown>
                 <Link
                   onClick={() => {

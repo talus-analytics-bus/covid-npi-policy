@@ -6,7 +6,7 @@ import ReactTooltip from "react-tooltip";
 import classNames from "classnames";
 
 /**
- * Generic info tooltip
+ * Generic info tooltip.
  * @method InfoTooltip
  */
 const InfoTooltip = ({
@@ -15,7 +15,14 @@ const InfoTooltip = ({
   place = undefined,
   setInfoTooltipContent,
   wide = false,
+  iconSize = 10,
+  effect = "solid",
   style = {},
+  imgStyle = {
+    marginLeft: `${iconSize / 2}px`,
+    height: `${iconSize}px`,
+    width: `${iconSize}px`,
+  },
 }) => {
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer} style={style}>
@@ -37,6 +44,7 @@ const InfoTooltip = ({
       data-html={true}
     >
       <img
+        style={imgStyle}
         src={imgSrc}
         alt={"Info tooltip icon"}
         onMouseOver={() => {
@@ -50,15 +58,13 @@ const InfoTooltip = ({
       // `setInfoTooltipContent`.
       !bindWithFunction && (
         <ReactTooltip
-          id={id}
           key={id}
           className={styles.infoTooltipContainer}
           type="light"
-          effect="float"
-          place={place}
           delayHide={250}
           clickable={true}
           getContent={() => dataHtml}
+          {...{ id, effect, place }}
         />
       )}
     </div>

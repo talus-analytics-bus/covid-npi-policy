@@ -312,7 +312,7 @@ const App = () => {
           <ReactTooltip
             id={"infoTooltip"}
             type="light"
-            effect="float"
+            effect="solid"
             place="right"
             delayHide={250}
             clickable={true}

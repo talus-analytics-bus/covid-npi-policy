@@ -144,7 +144,4 @@
 .linkWithTooltip {
   display: flex;
   align-items: center;
-  > :not(:last-child) {
-    margin-right: 0.25rem;
-  }
 }
