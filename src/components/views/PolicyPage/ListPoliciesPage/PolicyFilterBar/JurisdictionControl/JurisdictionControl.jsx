@@ -54,6 +54,7 @@ const TargetFilter = props => {
         </span>
         <div className={styles.filterFrame}>
           <MultiSelect
+            height={300}
             showSelectedItems={false}
             items={jurisdiction.all}
             selectedItems={jurisdiction.selected}
