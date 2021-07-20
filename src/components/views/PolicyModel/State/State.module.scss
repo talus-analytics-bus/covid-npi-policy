@@ -253,6 +253,15 @@
       display: flex;
       flex-direction: column;
 
+      padding: 21px 30px;
+
+      h1 {
+        font-family: Rawline;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 26px;
+      }
+
       .stateNameRow {
         grid-area: state;
         display: flex;
@@ -298,7 +307,6 @@
         .unit,
         .caption {
           display: flex;
-          margin-right: 1em;
           align-items: baseline;
         }
 
@@ -309,6 +317,8 @@
           font-weight: 600;
           font-size: 20px;
           color: #303434;
+          margin-left: 10px;
+          margin-right: 26px;
         }
 
         .number {

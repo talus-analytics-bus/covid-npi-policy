@@ -69,7 +69,8 @@ const State = props => {
         <div className={styles.newHeader}>
           <div className={styles.stateNameRow}>
             <h1>
-              {states.find(state => state.abbr === props.selectedState).name}
+              {states.find(state => state.abbr === props.selectedState).name}{" "}
+              distancing levels and cases
             </h1>
             <div className={styles.viewAll}>
               <Link
