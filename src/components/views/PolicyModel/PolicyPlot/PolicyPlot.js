@@ -538,14 +538,14 @@ const PolicyModel = props => {
             height: "2.5%",
             top: {
               caseload: {
-                infected_a: "40%",
-                dead: "40%",
+                infected_a: "35.5%",
+                dead: "35%",
               },
               interventions: {
-                infected_a: "47.8%",
+                infected_a: "46.8%",
                 infected_b: "48.5%",
                 infected_c: "53.5%",
-                dead: "45%",
+                dead: "42.5%",
               },
             }[props.activeTab][props.selectedCurves[0]],
             left: "2.2%",
