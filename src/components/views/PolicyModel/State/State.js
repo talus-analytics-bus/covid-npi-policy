@@ -93,9 +93,7 @@ const State = props => {
             <div className={styles.caption}>
               <p className={styles.date}>
                 Cumulative cases as of{" "}
-                {props.dataDates &&
-                  formatDate(props.dataDates.last_data_update)}{" "}
-                (actual){" "}
+                {props.dataDates && formatDate(props.curves.date)} (actual){" "}
                 {(props.curves.cases / props.curves.population) * 100 >= 0.5
                   ? (
                       (props.curves.cases / props.curves.population) *
@@ -143,8 +141,7 @@ const State = props => {
             <div className={styles.caption}>
               <p className={styles.date}>
                 Cumulative deaths as of{" "}
-                {props.dataDates &&
-                  formatDate(props.dataDates.last_data_update)}{" "}
+                {props.curves && formatDate(props.curves.date)}{" "}
                 <Tippy
                   interactive={true}
                   allowHTML={true}
