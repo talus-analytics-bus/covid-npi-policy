@@ -69,6 +69,14 @@ const MiniPolicyBox = ({ policy }) => {
     ? { path: path }
     : undefined;
 
+  let policyTitle = `${policy.auth_entity[0].place.loc.split(",")[0]} 
+  ${policy[CATEGORY_FIELD_NAME]}: 
+  ${policy[SUBCATEGORY_FIELD_NAME]}`;
+
+  if (policyTitle.length > 60) {
+    policyTitle = policyTitle.slice(0, 60) + "...";
+  }
+
   return (
     <Link
       className={styles.miniPolicyBox}
@@ -79,14 +87,10 @@ const MiniPolicyBox = ({ policy }) => {
     >
       <PolicyCategoryIcon
         category={policy[CATEGORY_FIELD_NAME]}
-        style={{ marginRight: "0.5rem" }}
+        style={{ marginRight: "15px" }}
       />
       <section className={styles.description}>
-        <h1>
-          {`${policy.auth_entity[0].place.loc.split(",")[0]} 
-        ${policy[CATEGORY_FIELD_NAME]}: 
-        ${policy[SUBCATEGORY_FIELD_NAME]}`}
-        </h1>
+        <h1>{policyTitle}</h1>
         <h3>Enacted on {formatDate(new Date(policy.date_issued))}</h3>
         {/* <h2>{title}</h2> */}
       </section>
