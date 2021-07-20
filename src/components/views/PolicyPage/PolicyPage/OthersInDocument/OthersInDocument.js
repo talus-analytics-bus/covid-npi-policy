@@ -55,7 +55,7 @@ const OthersInDocument = ({ policy, path }) => {
   if (policies && policies.length > 0)
     return (
       <div>
-        <h2>Other Policies in this Document ({policies.length})</h2>
+        <h2>OTHER POLICIES IN THIS SOURCE DOCUMENT ({policies.length})</h2>
         <div className={styles.others}>
           {/* {policies &&
             policies.map(policy => (
