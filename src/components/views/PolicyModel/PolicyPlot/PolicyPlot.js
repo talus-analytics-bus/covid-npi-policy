@@ -255,6 +255,7 @@ const PolicyModel = props => {
             style={{
               data: {
                 fill: "#dadada",
+                // strokeWidth: 0.00015,
                 // {
                 //   maryland: "rgba(240,0,0,.5)",
                 //   infected_a: "rgba(0,240,0,.5)",
@@ -278,7 +279,7 @@ const PolicyModel = props => {
           <VictoryLine
             key={curveName}
             style={{
-              data: { stroke: plotColors[index], strokeWidth: 0.75 },
+              data: { stroke: plotColors[index], strokeWidth: 1.25 },
             }}
             data={data.average}
             // interpolation={'monotoneX'}
@@ -348,7 +349,7 @@ const PolicyModel = props => {
       style={{
         data: {
           stroke: interventionColors[intervention.name.split("_")[0]],
-          strokeWidth: 0.75,
+          strokeWidth: 1.5,
         },
       }}
       data={[
