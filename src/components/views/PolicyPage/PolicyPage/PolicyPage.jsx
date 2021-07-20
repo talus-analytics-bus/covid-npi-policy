@@ -88,12 +88,6 @@ const PolicyPage = props => {
             <h2>POLICY DETAILS</h2>
             <h3>Description</h3>
             <p>{policy && policy.desc}</p>
-          </div>
-          <div className={styles.right}>
-            <h3>Policy Category</h3>
-            <p>{policy && policy.primary_ph_measure}</p>
-            <h3>Policy Subcategory</h3>
-            <p>{policy && policy.ph_measure_details}</p>
             <h3>
               Policy{" "}
               {policyTargetList && policyTargetList.length > 1
@@ -102,6 +96,12 @@ const PolicyPage = props => {
             </h3>
             {policyTargetList &&
               policyTargetList.map(target => <p key={target}>{target}</p>)}
+          </div>
+          <div className={styles.right}>
+            <h3>Policy Category</h3>
+            <p>{policy && policy.primary_ph_measure}</p>
+            <h3>Policy Subcategory</h3>
+            <p>{policy && policy.ph_measure_details}</p>
           </div>
         </div>
         <div className={styles.section}>
