@@ -14,9 +14,10 @@ const LoadingState = props => {
       <header>
         <div className={styles.stateHeader}>
           <div className={styles.stateName}>
-            {states.find(state => state.abbr === props.selectedState).name}
+            {states.find(state => state.abbr === props.selectedState).name}{" "}
+            distancing levels and cases
           </div>
-          <div className={styles.spacer}></div>
+          {/* <div className={styles.spacer}></div> */}
           {/* <div className={styles.explanation}></div> */}
           {/* <div className={styles.checkbox}></div> */}
           {/* <div className={styles.cases}></div> */}
