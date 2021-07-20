@@ -18,12 +18,13 @@
 .tooltip {
   display: flex;
   flex-direction: column;
-  padding: 0 5px 5px 0;
+  padding: 5px 5px 5px 0;
 
   h4 {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     margin-bottom: 0;
+    margin-top: 0;
   }
 
   p {
@@ -37,14 +38,27 @@
     margin-left: 2.2rem;
   }
 
-  .colorBlock {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    flex-shrink: 0;
-    margin-left: 0.6em;
-    margin-right: 0.8em;
-    position: relative;
-    top: 2px;
+  .policies {
+    display: grid;
+    grid-template-columns: 1em auto 1fr;
+    row-gap: 0.5em;
+    margin-left: 0.4em;
+
+    .colorBlock {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+      // margin-left: 0.6em;
+      // margin-right: 0.8em;
+      position: relative;
+      top: 2px;
+    }
+
+    .number {
+      text-align: right;
+      margin-left: 1em;
+      margin-right: 0.3em;
+    }
   }
 }

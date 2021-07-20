@@ -1,3 +1,5 @@
+import React from "react";
+
 import PolicyCategoryIcon from "../../../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import Tippy from "@tippyjs/react";
@@ -32,27 +34,33 @@ const Bar = ({ category, bar, index, dim, selectedDate }) => {
             {category}
           </h4>
           <h5>{formatDate(new Date(selectedDate * msPerDay))}</h5>
-          {Object.entries(bar)
-            .sort((a, b) => labelOrder.indexOf(a[0]) - labelOrder.indexOf(b[0]))
-            .map(([name, count]) => (
-              <p key={name}>
-                <span
-                  className={styles.colorBlock}
-                  style={{
-                    background: {
-                      enacted: "#E55E37",
-                      active: "#409384",
-                      expired: "#96C4BB",
-                    }[name],
-                  }}
-                />
-                <strong>{count} </strong>
-                {name === "enacted"
-                  ? "Newly enacted"
-                  : name.charAt(0).toUpperCase() + name.slice(1)}{" "}
-                policies
-              </p>
-            ))}
+          <div className={styles.policies}>
+            {Object.entries(bar)
+              .sort(
+                (a, b) => labelOrder.indexOf(a[0]) - labelOrder.indexOf(b[0])
+              )
+              .map(([name, count]) => (
+                <React.Fragment key={name}>
+                  <span
+                    className={styles.colorBlock}
+                    style={{
+                      background: {
+                        enacted: "#E55E37",
+                        active: "#409384",
+                        expired: "#96C4BB",
+                      }[name],
+                    }}
+                  />
+                  <strong className={styles.number}>{count}</strong>
+                  <span>
+                    {name === "enacted"
+                      ? "Newly enacted"
+                      : name.charAt(0).toUpperCase() + name.slice(1)}{" "}
+                    policies
+                  </span>
+                </React.Fragment>
+              ))}
+          </div>
         </div>
       }
       theme={"light"}
