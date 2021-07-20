@@ -46,7 +46,7 @@ const OthersInDocument = ({ policy, path }) => {
         otherPolicy => `${otherPolicy.id}` !== `${policy.id}`
       );
 
-      setPolicies(otherPolicies.slice(0, 3));
+      setPolicies(otherPolicies);
     };
 
     if (policy && policy.policy_number) getPoliciesInDocument();
@@ -55,14 +55,14 @@ const OthersInDocument = ({ policy, path }) => {
   if (policies && policies.length > 0)
     return (
       <div>
-        <h2>Other Policies in this Document</h2>
+        <h2>Other Policies in this Document ({policies.length})</h2>
         <div className={styles.others}>
           {/* {policies &&
             policies.map(policy => (
               <MiniPolicyBox key={policy.id} policy={policy} />
             ))} */}
           {policies &&
-            policies.map(policy => (
+            policies.slice(0, 3).map(policy => (
               <PolicyLink
                 key={policy.id}
                 policy={policy}
@@ -88,8 +88,11 @@ const OthersInDocument = ({ policy, path }) => {
                 To see all other policies in this document, click the button
                 below:
               </span> */}
-              <ExploreSource {...{ policy }} className={styles.seeMore}>
-                See more
+              {/* <ExploreSource {...{ policy }} className={styles.seeMore}> */}
+              {/* See more */}
+              {/* </ExploreSource> */}
+              <ExploreSource {...{ policy }}>
+                View source document
               </ExploreSource>
             </>
           )}

@@ -86,8 +86,6 @@ const PolicyPage = props => {
           <div className={styles.left}>
             {/* <PolicyDetails {...{ policy }} /> */}
             <h2>POLICY DETAILS</h2>
-            <h3>Relevant Authority</h3>
-            <p>{policy && policy.authority_name}</p>
             <h3>Description</h3>
             <p>{policy && policy.desc}</p>
           </div>
@@ -111,7 +109,6 @@ const PolicyPage = props => {
         </div>
         {/* <div className={styles.section}> */}
         <OthersInDocument {...{ policy }} path={policyObjectPath} />
-        <ExploreSource {...{ policy }}>View source document</ExploreSource>
         {/* </div> */}
         {/* <div className={styles.right}>
           {iso3 === "USA" && (
