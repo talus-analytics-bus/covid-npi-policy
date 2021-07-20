@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import {
@@ -36,10 +36,14 @@ const PolicySummary = props => {
       .split("/")
       .slice(-2);
 
+  const [readMoreClicked, setReadMoreClicked] = useState(false);
+
   const descriptionWords = props.policy.desc.split(" ");
 
   const truncateDescription =
-    props.wordLimit && descriptionWords.length > props.wordLimit;
+    !readMoreClicked &&
+    props.wordLimit &&
+    descriptionWords.length > props.wordLimit;
 
   const description = truncateDescription
     ? descriptionWords.slice(0, props.wordLimit).join(" ") + "..."
@@ -133,7 +137,30 @@ const PolicySummary = props => {
         </header>
         <section>
           <p>
-            {description} {truncateDescription && <span>read more</span>}
+            {description}{" "}
+            {truncateDescription && (
+              <span
+                onMouseDown={e => {
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  e.preventDefault();
+                }}
+                onMouseUp={e => {
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  e.preventDefault();
+                }}
+                onClick={e => {
+                  console.log("please don't propagate");
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  e.preventDefault();
+                  setReadMoreClicked(prev => !prev);
+                }}
+              >
+                read more
+              </span>
+            )}
           </p>
           <div className={styles.policyButton}>Policy Details</div>
         </section>
