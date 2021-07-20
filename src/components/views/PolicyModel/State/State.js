@@ -66,7 +66,210 @@ const State = props => {
       )}
 
       <header>
-        <div className={styles.stateHeaderRow}>
+        <div className={styles.newHeader}>
+          <div className={styles.stateNameRow}>
+            <h1>
+              {states.find(state => state.abbr === props.selectedState).name}
+            </h1>
+            <div className={styles.viewAll}>
+              <Link
+                target="_blank"
+                to={`/policies/USA/${
+                  states.find(state => state.abbr === props.selectedState).name
+                }`}
+              >
+                View all{" "}
+                {states.find(state => state.abbr === props.selectedState).name}{" "}
+                policies
+              </Link>
+            </div>
+          </div>
+          <div className={styles.dataTable}>
+            <div className={styles.number}>
+              {formatActuals(props.curves.cases)}
+            </div>
+            <div className={styles.unit}>cases</div>
+            <div className={styles.caption}>
+              <p className={styles.date}>
+                Cumulative cases as of{" "}
+                {props.dataDates &&
+                  formatDate(props.dataDates.last_data_update)}{" "}
+                (actual){" "}
+                {(props.curves.cases / props.curves.population) * 100 >= 0.5
+                  ? (
+                      (props.curves.cases / props.curves.population) *
+                      100
+                    ).toFixed(0)
+                  : (
+                      (props.curves.cases / props.curves.population) *
+                      100
+                    ).toFixed(1)}
+                % of total population{" "}
+                <Tippy
+                  interactive={true}
+                  allowHTML={true}
+                  content={
+                    <p className={styles.ipopup}>
+                      Total number of cumulative confirmed and probable cases as
+                      of{" "}
+                      {props.dataDates &&
+                        formatDate(props.dataDates.last_data_update)}
+                      . Source:{" "}
+                      <a href={"https://github.com/nytimes/covid-19-data"}>
+                        New York Times{" "}
+                      </a>
+                    </p>
+                  }
+                  maxWidth={"30rem"}
+                  theme={"light"}
+                  placement={"bottom"}
+                  offset={[-30, 10]}
+                >
+                  <img
+                    className={styles.infoIcon}
+                    src={infoIcon}
+                    alt="More information"
+                  />
+                </Tippy>{" "}
+              </p>
+              <p className={styles.popPercent}></p>
+            </div>
+            <div className={styles.number}>
+              {props.curves.actual_deaths &&
+                formatActuals(props.curves.actual_deaths)}
+            </div>
+            <div className={styles.unit}>deaths</div>
+            <div className={styles.caption}>
+              <p className={styles.date}>
+                Cumulative deaths as of{" "}
+                {props.dataDates &&
+                  formatDate(props.dataDates.last_data_update)}{" "}
+                <Tippy
+                  interactive={true}
+                  allowHTML={true}
+                  content={
+                    <p className={styles.ipopup}>
+                      Total number of cumulative confirmed and probable deaths
+                      as of{" "}
+                      {props.dataDates &&
+                        formatDate(props.dataDates.last_data_update)}
+                      . Source:{" "}
+                      <a href={"https://github.com/nytimes/covid-19-data"}>
+                        New York Times{" "}
+                      </a>
+                    </p>
+                  }
+                  maxWidth={"30rem"}
+                  theme={"light"}
+                  placement={"bottom"}
+                  offset={[-30, 10]}
+                >
+                  <img
+                    className={styles.infoIcon}
+                    src={infoIcon}
+                    alt="More information"
+                  />
+                </Tippy>
+              </p>
+              <div className={styles.legendHolder}>
+                <label className={styles.legendLabel}>
+                  <Tippy
+                    content={
+                      <div
+                        className={
+                          props.activeTab === "caseload"
+                            ? styles.legend
+                            : styles.proposedLegend
+                        }
+                      >
+                        <div className={styles.lockdown}>
+                          <span />
+                          <p>
+                            {props.activeTab === "interventions" && "Proposed"}{" "}
+                            Lockdown policies
+                          </p>
+                        </div>
+                        <div className={styles.stay}>
+                          <span />
+                          <p>
+                            {props.activeTab === "interventions" && "Proposed"}{" "}
+                            Stay-at-home policies
+                          </p>
+                        </div>
+                        <div className={styles.safer}>
+                          <span />
+                          <p>
+                            {props.activeTab === "interventions" && "Proposed"}{" "}
+                            Safer-at-home policies
+                          </p>
+                        </div>
+                        <div className={styles.partial}>
+                          <span />
+                          <p>
+                            {props.activeTab === "interventions" && "Proposed"}{" "}
+                            Partially open policies
+                          </p>
+                        </div>
+                        <div className={styles.open}>
+                          <span />
+                          <p>
+                            {props.activeTab === "interventions" && "Proposed"}{" "}
+                            Open policies
+                          </p>
+                        </div>
+                        {/* <div className={styles.proposed}> */}
+                        {/*   <span /> */}
+                        {/*   <p>Proposed</p> */}
+                        {/* </div> */}
+                        {props.activeTab === "caseload" && (
+                          <div className={styles.daily}>
+                            <span />
+                            <p>
+                              Daily New{" "}
+                              {props.selectedCurves[0] === "infected_a"
+                                ? "Cases"
+                                : "Deaths"}
+                            </p>
+                          </div>
+                        )}
+                        {props.activeTab === "caseload" && (
+                          <div className={styles.actuals}>
+                            <span />
+                            <p>7-Day Average</p>
+                          </div>
+                        )}
+                        {props.activeTab === "interventions" && (
+                          <div className={styles.modeled}>
+                            <span />
+                            <p>
+                              Modeled{" "}
+                              {props.selectedCurves[0] === "infected_a"
+                                ? "active cases"
+                                : "cumulative deaths"}
+                            </p>
+                          </div>
+                        )}
+                        {/* <div className={styles.noPolicies}> */}
+                        {/* <span /> */}
+                        {/* <p>"What if we had done nothing" scenario</p> */}
+                        {/* </div> */}
+                      </div>
+                    }
+                    allowHTML={true}
+                    interactive={true}
+                    maxWidth={"30rem"}
+                    theme={"light"}
+                    placement={"bottom"}
+                    offset={[-30, 10]}
+                  >
+                    <h4>Legend</h4>
+                  </Tippy>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div className={styles.stateHeaderRow}>
           <div className={styles.state}>
             <h1>
               {states.find(state => state.abbr === props.selectedState).name}
@@ -172,7 +375,7 @@ const State = props => {
               policies
             </Link>
           </div>
-        </div>
+        </div> */}
       </header>
       <div className={styles.policyPlot}>
         {/* <div className={styles.inputRow}> */}
