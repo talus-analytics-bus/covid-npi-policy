@@ -9,12 +9,12 @@ h2.h2alt {
 }
 
 h3.orangeDate {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  color: #e55e37;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  text-transform: none;
+  font-family: Open Sans !important; // todo fix !important
+  font-style: normal !important; // todo fix !important
+  font-weight: 600 !important; // todo fix !important
+  font-size: 16px !important; // todo fix !important
+  color: #e55e37 !important; // todo fix !important
+  margin-top: 0 !important; // todo fix !important
+  margin-bottom: 1.5rem !important; // todo fix !important
+  text-transform: none !important; // todo fix !important
 }
