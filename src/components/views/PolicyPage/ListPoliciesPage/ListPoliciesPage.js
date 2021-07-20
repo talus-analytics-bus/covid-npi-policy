@@ -1,15 +1,15 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import {
   loadPolicySearch,
   loadPolicyCategories,
   loadPolicySubCategories,
+  requestSummaryObject,
 } from "../PolicyRouter/PolicyLoaders";
 
 import { MiniMap } from "../MiniMap/MiniMap";
-import CaseloadPlot from "../CaseloadPlotD3/CaseloadPlot";
 
-import IntroSection from "./IntroSection/IntroSection.js";
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
 import SearchResults from "./SearchResults/SearchResults";
@@ -17,6 +17,7 @@ import SearchResults from "./SearchResults/SearchResults";
 import { policyContext } from "../PolicyRouter/PolicyRouter";
 
 import styles from "./ListPoliciesPage.module.scss";
+import IntroSection from "./IntroSection/IntroSection";
 
 const ListPoliciesPage = props => {
   const { iso3, state } = useParams();
@@ -29,6 +30,7 @@ const ListPoliciesPage = props => {
     locationName,
     policyFilters,
     setPolicyObject,
+    setPolicyCategories,
     setPolicySummaryObject,
     setPolicySearchResults,
   } = policyContextConsumer;
@@ -43,6 +45,22 @@ const ListPoliciesPage = props => {
     if (!searchActive && status.policies && status.policies === "initial") {
       setStatus(prev => ({ ...prev, policies: "loading" }));
 
+      if (status.policiesSummary === "initial")
+        requestSummaryObject({
+          filters: {
+            ...policyFilters,
+            level:
+              state === "national"
+                ? ["Country"]
+                : iso3 === "Unspecified"
+                ? ["Tribal nation"]
+                : ["State / Province"],
+          },
+          sort: policySort,
+          summarySetter: setPolicySummaryObject,
+          setStatus,
+        });
+
       if (!policyFilters.subtarget)
         loadPolicyCategories({
           setStatus,
@@ -50,7 +68,7 @@ const ListPoliciesPage = props => {
           stateSetter: setPolicyObject,
           sort: policySort,
           ...(status.policiesSummary === "initial" && {
-            summarySetter: setPolicySummaryObject,
+            summarySetter: setPolicyCategories,
           }),
         });
 
@@ -90,6 +108,7 @@ const ListPoliciesPage = props => {
     status.searchResults,
     // these setters won't change
     setPolicyObject,
+    setPolicyCategories,
     setPolicySearchResults,
     setPolicySummaryObject,
     setStatus,
@@ -103,57 +122,36 @@ const ListPoliciesPage = props => {
 
   // if this array is re-created it will make the minimap
   // re-render so we only want to create it when this component mounts
-  const miniMapCounties = React.useRef(["Unspecified"]);
+  // const miniMapCounties = React.useRef(["Unspecified"]);
+  const miniMapCounties = React.useRef([]);
 
   return (
-    <article>
-      <section className={styles.introSection}>
-        <IntroSection />
-        {iso3 !== "Unspecified" && (
-          <div className={styles.miniMapHolder}>
+    <article className={styles.listPoliciesPage}>
+      <Helmet>
+        <title>{locationName}</title>
+        <meta name={`COVID-19 policies for ${locationName}`} />
+      </Helmet>
+      <header className={styles.pageHeader}>
+        {locationName !== iso3 ? (
+          <h1>{locationName} COVID-19 Policies</h1>
+        ) : (
+          <h1>&nbsp;</h1>
+        )}
+        <figure className={styles.miniMapHolder}>
+          {iso3 !== "Unspecified" && (
             <MiniMap.SVG
               country={iso3}
               state={state}
               counties={miniMapCounties.current}
             />
-          </div>
-        )}
-      </section>
-      {iso3 !== "Unspecified" && status.caseload !== "error" && (
-        <section className={styles.caseloadPlot}>
-          {/* {status.caseload === "error" && ( */}
-          {/*   <h3>No caseload data found for {locationName}</h3> */}
-          {/* )} */}
-          {(status.caseload === "loading" || status.caseload === "loaded") && (
-            <>
-              {status.caseload === "loaded" ? (
-                <h2 className={styles.caseloadHeader}>Daily COVID-19 Cases</h2>
-              ) : (
-                <h2 className={styles.caseloadHeader}>
-                  Loading COVID-19 Cases
-                </h2>
-              )}
-              <figure>
-                <CaseloadPlot />
-                <figcaption>
-                  Source:{" "}
-                  <a
-                    target="_blank"
-                    href="https://github.com/nytimes/covid-19-data"
-                  >
-                    New York Times COVID-19 Data
-                  </a>
-                </figcaption>
-              </figure>
-            </>
           )}
-        </section>
-      )}
+        </figure>
+      </header>
+      {iso3 !== "Unspecified" && <IntroSection />}
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
-          {iso3 !== "Unspecified" && <h2>Policies Affecting {locationName}</h2>}
+          {iso3 !== "Unspecified" && <h2>Explore specific policies</h2>}
           <PolicyFilterBar />
-
           {!searchActive && (
             <>
               {status.policies === "loading" && (

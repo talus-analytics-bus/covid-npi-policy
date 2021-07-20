@@ -1,12 +1,13 @@
 .activeFilterBar {
-  margin-bottom: 1rem;
+  margin-top: 32px;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
 
   .activeFilters {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 1.945em;
+    // margin-bottom: 1.945em;
   }
   .summary {
     display: flex;
@@ -16,4 +17,10 @@
       margin-left: auto;
     }
   }
+}
+
+.filterIcon {
+  position: relative;
+  top: 0.15em;
+  margin-right: 0.25em;
 }

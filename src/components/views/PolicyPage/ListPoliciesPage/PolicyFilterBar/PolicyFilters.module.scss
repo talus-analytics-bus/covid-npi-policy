@@ -13,8 +13,10 @@
   }
 
   .filterBar {
-    display: flex;
     margin-bottom: 1rem;
+    display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
   }
 }

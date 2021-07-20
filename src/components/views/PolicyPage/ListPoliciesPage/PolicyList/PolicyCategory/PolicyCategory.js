@@ -9,7 +9,7 @@ import {
 import {
   loadPolicyDescriptions,
   CATEGORY_FIELD_NAME,
-  // SUBCATEGORY_FIELD_NAME,
+  SUBCATEGORY_FIELD_NAME,
 } from "../../../PolicyRouter/PolicyLoaders";
 
 import { titleCase } from "../PolicyList";
@@ -49,7 +49,7 @@ const PolicyCategory = props => {
         filters: {
           ...policyFilters,
           [CATEGORY_FIELD_NAME]: [path[0]],
-          level: [path[2]],
+          [SUBCATEGORY_FIELD_NAME]: [path[2]],
         },
       });
     }

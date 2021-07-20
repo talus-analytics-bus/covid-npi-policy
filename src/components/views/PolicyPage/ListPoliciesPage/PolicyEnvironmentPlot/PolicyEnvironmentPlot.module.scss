@@ -1,0 +1,59 @@
+.instructionSection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-style: italic;
+  margin-bottom: 35px;
+
+  .instructionParagraph {
+    max-width: 45em;
+  }
+}
+
+.svg {
+  overflow: visible;
+  // border: 1px solid lightgrey;
+
+  .background {
+    pointer-events: none;
+  }
+
+  text {
+    pointer-events: none;
+  }
+
+  .averageLine {
+    stroke: #bdbdbd;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .dailyLines line {
+    stroke: #eaeaea;
+    // stroke-linecap: round;
+    stroke-width: 1.75;
+    // opacity: 0.6;
+  }
+
+  // rect {
+  //   stroke: grey;
+  //   stroke-width: 1;
+  //   fill: none;
+  // }
+
+  line {
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  .sliderGroup {
+    cursor: pointer;
+  }
+}
+
+.citation {
+  text-align: right;
+  font-size: 14px;
+}

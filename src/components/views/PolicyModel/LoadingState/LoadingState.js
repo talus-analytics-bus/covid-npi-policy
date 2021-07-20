@@ -16,30 +16,31 @@ const LoadingState = props => {
           <div className={styles.stateName}>
             {states.find(state => state.abbr === props.selectedState).name}
           </div>
-          <div className={styles.explanation}></div>
-          <div className={styles.checkbox}></div>
-          <div className={styles.cases}></div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}></p>
-            <p className={styles.date}></p>
-          </div>
-          <div className={styles.cases}></div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}></p>
-            <p className={styles.date}></p>
-          </div>
-          <div className={styles.explanation}></div>
-          <div className={styles.checkbox}></div>
-          <div className={styles.cases}></div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}></p>
-            <p className={styles.date}></p>
-          </div>
-          <div className={styles.cases}></div>
-          <div className={styles.casesLabel}>
-            <p className={styles.label}></p>
-            <p className={styles.date}></p>
-          </div>
+          <div className={styles.spacer}></div>
+          {/* <div className={styles.explanation}></div> */}
+          {/* <div className={styles.checkbox}></div> */}
+          {/* <div className={styles.cases}></div> */}
+          {/* <div className={styles.casesLabel}> */}
+          {/*   <p className={styles.label}></p> */}
+          {/*   <p className={styles.date}></p> */}
+          {/* </div> */}
+          {/* <div className={styles.cases}></div> */}
+          {/* <div className={styles.casesLabel}> */}
+          {/*   <p className={styles.label}></p> */}
+          {/*   <p className={styles.date}></p> */}
+          {/* </div> */}
+          {/* <div className={styles.explanation}></div> */}
+          {/* <div className={styles.checkbox}></div> */}
+          {/* <div className={styles.cases}></div> */}
+          {/* <div className={styles.casesLabel}> */}
+          {/*   <p className={styles.label}></p> */}
+          {/*   <p className={styles.date}></p> */}
+          {/* </div> */}
+          {/* <div className={styles.cases}></div> */}
+          {/* <div className={styles.casesLabel}> */}
+          {/*   <p className={styles.label}></p> */}
+          {/*   <p className={styles.date}></p> */}
+          {/* </div> */}
         </div>
         {/* <div className={styles.stateName}> */}
         {/*   {/* <h2>Loading model for</h2> */}

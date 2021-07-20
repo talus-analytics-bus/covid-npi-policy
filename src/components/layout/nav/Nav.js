@@ -53,7 +53,7 @@ const Nav = ({ page }) => {
         <div
           data-page={page}
           className={classNames(styles.navWrapper, {
-            [styles.wide]: page === "policymaps" || page === "model",
+            [styles.wide]: page === "policymaps",
             [styles.showMobileMenu]: showMobileMenu,
           })}
         >

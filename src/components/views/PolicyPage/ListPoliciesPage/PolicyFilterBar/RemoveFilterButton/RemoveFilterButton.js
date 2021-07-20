@@ -11,6 +11,7 @@ const RemoveFilterButton = props => (
     style={{
       backgroundColor: props.backgroundColor || "#3274aa",
       color: props.light ? "#333" : "#fff",
+      ...props.style,
     }}
     onClick={props.onClick}
   >

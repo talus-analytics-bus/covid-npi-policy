@@ -41,6 +41,7 @@ const PolicyRouter = props => {
   const { iso3, state } = useParams();
 
   const [policyObject, setPolicyObject] = React.useState({});
+  const [policyCategories, setPolicyCategories] = React.useState({});
 
   const [policySummaryObject, setPolicySummaryObject] = React.useState({});
   const [policySearchResults, setPolicySearchResults] = React.useState();
@@ -54,6 +55,7 @@ const PolicyRouter = props => {
   const [policyFilters, setPolicyFilters] = React.useState({
     iso3: [iso3],
     ...(state !== "national" && { area1: [state] }),
+    dates_in_effect: ["2020-01-01", new Date().toISOString().split("T")[0]],
   });
 
   const [policySort, setPolicySort] = React.useState("desc");
@@ -68,6 +70,25 @@ const PolicyRouter = props => {
     key: "selection",
   });
   const [targets, setTargets] = React.useState({ all: [], selected: [] });
+
+  const [jurisdiction, setJurisdiction] = React.useState(
+    state === "national"
+      ? {
+          all: [
+            { id: 1, value: "Country", label: "Country" },
+            { id: 2, value: "State / Province", label: "State / Province" },
+          ],
+          selected: [],
+        }
+      : {
+          all: [
+            { id: 2, value: "State / Province", label: "State" },
+            { id: 3, value: "Local", label: "Local" },
+          ],
+          selected: [],
+        }
+  );
+
   const [searchTextInputValue, setSearchTextInputValue] = React.useState(
     (policyFilters._text && policyFilters._text[0]) || ""
   );
@@ -75,6 +96,8 @@ const PolicyRouter = props => {
   const policyContextValue = {
     policyObject,
     setPolicyObject,
+    policyCategories,
+    setPolicyCategories,
     caseload,
     policyStatus,
     status,
@@ -92,6 +115,8 @@ const PolicyRouter = props => {
     setPolicySearchPage,
     targets,
     setTargets,
+    jurisdiction,
+    setJurisdiction,
     searchTextInputValue,
     setSearchTextInputValue,
     dateRangeControlValue,
@@ -113,6 +138,11 @@ const PolicyRouter = props => {
     setPolicyFilters({
       iso3: [iso3],
       ...(state !== "national" && { area1: [state] }),
+      date_start_effective: [
+        "2020-01-01",
+        "2021-07-08",
+        // new Date().toISOString().split("T")[0],
+      ],
     });
 
     // reset filters internal state
@@ -122,10 +152,29 @@ const PolicyRouter = props => {
       key: "selection",
     });
     setTargets({ all: [], selected: [] });
+    setJurisdiction(
+      state === "national"
+        ? {
+            all: [
+              { id: 1, value: "Country", label: "Country" },
+              { id: 2, value: "State / Province", label: "State / Province" },
+            ],
+            selected: [],
+          }
+        : {
+            all: [
+              { id: 2, value: "State / Province", label: "State" },
+              { id: 3, value: "Local", label: "Local" },
+            ],
+            selected: [],
+          }
+    );
     setSearchTextInputValue("");
 
     // clear policyObject
     setPolicyObject({});
+    // clear categories
+    setPolicyCategories({});
     // clear summary
     setPolicySummaryObject({});
 
@@ -229,6 +278,7 @@ const PolicyRouter = props => {
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
   // console.log(status);
+  // console.log(policyObject);
 
   return (
     <MiniMap.Provider scope={miniMapScope}>

@@ -1,42 +1,81 @@
-.introSection {
-  display: flex;
-  // margin-bottom: 2em;
-
-  .miniMapHolder {
-    flex-basis: 25%;
-    margin-top: 3rem;
+.listPoliciesPage {
+  h1 {
+    font-family: Rawline;
+    font-style: normal;
+    font-weight: bold;
+    color: #303434;
+    font-size: 32px;
+    padding-top: 2px;
+  }
+  h2 {
+    font-family: Rawline;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #303434;
   }
 }
 
-.caseloadPlot,
-.policyList {
-  // padding-right: 2rem;
-  // margin-top: 3rem;
-  margin-bottom: 2rem;
+.pageHeader {
+  margin-top: -20px;
+  // padding-bottom: 1rem;
+
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  > h2 {
-    // margin-top: 1.5rem;
-    // margin-top: 4rem;
-    margin-bottom: 1rem;
-    color: #29334b;
-    font-family: "rawline";
-    text-transform: none;
-    font-size: 28px;
-  }
+  // border-bottom: 1px solid #c4c4c4;
 }
-.caseloadPlot {
-  margin-top: 0;
-  padding-bottom: 1rem;
 
-  .caseloadHeader {
-    margin-bottom: -0.5rem;
-    margin-top: 0;
-  }
+.miniMapHolder {
+  height: 80px;
+  width: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   figcaption {
-    text-align: right;
-    font-style: italic;
+    margin-bottom: 10px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    color: #303434;
+  }
+
+  > a {
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.policyList {
+  // padding-right: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  border-top: 1px solid #c4c4c4;
+
+  h2 {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  > h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #303434;
+    font-family: "rawline";
+    text-transform: none;
+    font-weight: bold;
+    font-size: 28px;
   }
 }
 

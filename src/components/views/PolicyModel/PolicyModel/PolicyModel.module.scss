@@ -1,14 +1,15 @@
 .background {
-  background: linear-gradient(#173244, white);
+  // background: linear-gradient(#173244, white);
+  background: linear-gradient(180deg, #001e42 0%, rgba(0, 30, 66, 0) 100%);
 }
 
 .main {
-  max-width: 95rem;
+  max-width: 1300px;
   margin-left: auto;
   margin-right: auto;
-  padding: 2rem;
+  padding: 20px;
   position: relative;
-  padding-top: 150px;
+  padding-top: 1px;
 
   select {
     font-family: "Open Sans";
@@ -61,183 +62,210 @@
     margin-right: 0.25em;
   }
 
+  .title {
+    box-sizing: border-box;
+    color: white;
+    // font-weight: 300;
+    // font-size: 1.7rem;
+    text-transform: unset;
+    margin-bottom: 42px;
+    width: 10em;
+    margin-top: 2rem;
+    margin-right: 2rem;
+    font-size: 32px;
+    font-weight: 800;
+  }
+
   .wrapContainer,
   .titleContainer {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+  }
 
-    .title {
-      box-sizing: border-box;
-      color: white;
-      font-weight: 300;
-      font-size: 1.7rem;
-      text-transform: unset;
-      margin-bottom: 1.8rem;
-      width: 10em;
-      margin-top: 2rem;
-      margin-right: 2rem;
+  .visualize,
+  .predict,
+  .show {
+    // margin-top: 2rem;
+    display: flex;
+    margin-right: 1rem;
 
-      strong {
-        font-size: 3rem;
+    img {
+      height: 45px;
+      margin-right: 1rem;
+      margin-top: -3px;
+    }
+    .text {
+      color: #fff;
+
+      h2 {
+        color: inherit;
+        margin-bottom: 0.5rem;
+        font-size: 24px;
+      }
+
+      p {
+        margin-top: 1rem;
+        font-weight: 300;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .visualize,
+  .predict,
+  .show {
+    flex-basis: 30%;
+  }
+
+  // .visualize {
+  //   // width: 22.75em;
+  // }
+
+  .predict {
+    max-width: 18em;
+  }
+
+  // .show {
+  //   // width: 20rem;
+  //   // margin-right: 3rem;
+  // }
+
+  // .dataDates {
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: flex-end;
+  //   color: white;
+  // }
+}
+
+.titleContainer {
+  padding-bottom: 40px;
+  // padding-top: 1rem;
+  // margin-bottom: 3rem;
+  // border-bottom: 1px solid white;
+}
+
+.wrapContainer {
+  width: auto;
+  flex-grow: 1;
+}
+
+.controlRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  // margin-bottom: 1.5rem;
+  // background-color: #fff;
+  padding: 20px;
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: 40px;
+  // border-bottom: 1px solid #5c5d60;
+  border-top: 1px solid #fff;
+  color: white;
+
+  .selectControls {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+
+    label {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      margin-right: 2.7rem;
+      text-transform: uppercase;
+
+      &:last-of-type {
+        margin-right: 0.25rem;
+      }
+
+      select {
+        margin-top: 0.5rem;
+        color: #333;
         font-weight: 800;
       }
     }
 
-    .visualize,
-    .predict,
-    .show {
-      margin-top: 2rem;
-      display: flex;
-      margin-right: 1rem;
+    .radio {
+      margin-top: 0.45em;
 
-      img {
-        height: 45px;
-        margin-right: 1rem;
-        margin-top: -3px;
-      }
-      .text {
-        color: #fff;
-        font-size: 1.2rem;
-
-        h2 {
-          color: inherit;
-          margin-bottom: 0.5rem;
-        }
-
-        p {
-          margin-top: 1rem;
-          font-weight: 300;
-        }
+      label {
+        flex-direction: row;
+        align-items: baseline;
+        text-transform: none;
       }
     }
-
-    .visualize {
-      width: 22.75em;
-    }
-
-    .predict {
-      width: 20rem;
-    }
-
-    .show {
-      width: 20rem;
-      margin-right: 3rem;
-    }
-
-    // .dataDates {
-    //   display: flex;
-    //   flex-direction: column;
-    //   align-items: flex-end;
-    //   color: white;
-    // }
   }
+  .navigator {
+    // min-width: 50rem;
+    width: 28rem;
+    position: relative;
+    top: 3px;
 
-  .titleContainer {
-    padding-bottom: 3rem;
-    padding-top: 1rem;
-    margin-bottom: 3rem;
-    border-bottom: 1px solid white;
-  }
-
-  .wrapContainer {
-    width: auto;
-    flex-grow: 1;
-  }
-
-  .controlRow {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 1.5rem;
-
-    .selectControls {
+    label {
       position: relative;
       display: flex;
-      flex-direction: row;
-      margin-bottom: 0.5rem;
-
-      label {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        color: white;
-        margin-right: 1rem;
-
-        select {
-          margin-top: 0.5rem;
-          color: #333;
-        }
-      }
-
-      .radio {
-        margin-top: 0.45em;
-
-        label {
-          flex-direction: row;
-          align-items: baseline;
-        }
-      }
-    }
-    .navigator {
-      // min-width: 50rem;
-      width: 37rem;
+      flex-direction: column;
+      text-transform: uppercase;
     }
   }
+}
 
-  .tabrow {
+.tabrow {
+  display: flex;
+
+  button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+
+  .location {
+    // margin-left: auto;
+    margin-bottom: 1rem;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 1.1rem;
+
+      select {
+        margin-top: 0.5em;
+        padding: 0.25em 0.5em;
+        border-radius: 0.5em;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.tabarea {
+  padding: 1rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+
+  .settingsBar {
     display: flex;
 
-    button {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      padding: 1rem 2rem;
-    }
-
-    .location {
-      // margin-left: auto;
+    label {
+      display: flex;
+      flex-direction: column;
+      margin-right: 1rem;
+      margin-top: 1rem;
       margin-bottom: 1rem;
 
-      label {
-        display: flex;
-        flex-direction: column;
-        color: white;
-        font-size: 1.1rem;
-
-        select {
-          margin-top: 0.5em;
-          padding: 0.25em 0.5em;
-          border-radius: 0.5em;
-          font-size: 1.1rem;
-        }
-      }
-    }
-  }
-
-  .tabarea {
-    padding: 1rem;
-    background-color: #bde7ff;
-    display: flex;
-    flex-direction: column;
-
-    .settingsBar {
-      display: flex;
-
-      label {
-        display: flex;
-        flex-direction: column;
-        margin-right: 1rem;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-
-        select {
-          margin-top: 0.5em;
-          padding: 0.25em 0.5em;
-          border-radius: 0.5em;
-        }
+      select {
+        margin-top: 0.5em;
+        padding: 0.25em 0.5em;
+        border-radius: 0.5em;
       }
     }
   }
@@ -254,4 +282,33 @@
 .ipopup {
   font-weight: 400;
   font-style: italic;
+  text-transform: none;
+}
+
+.belowChart {
+  margin-top: 20px;
+  display: flex;
+
+  .source {
+    a {
+      color: #023f88;
+    }
+  }
+}
+
+.documentationLink {
+  color: #023f88;
+  margin-left: auto;
+  margin-bottom: 0.5rem;
+
+  svg {
+    width: 1em;
+    margin-right: 0.5em;
+    position: relative;
+    top: 0.125em;
+
+    path {
+      fill: #344269;
+    }
+  }
 }

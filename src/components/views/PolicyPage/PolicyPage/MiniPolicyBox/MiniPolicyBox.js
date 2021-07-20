@@ -77,7 +77,10 @@ const MiniPolicyBox = ({ policy }) => {
         state: linkState,
       }}
     >
-      <PolicyCategoryIcon category={policy[CATEGORY_FIELD_NAME]} />
+      <PolicyCategoryIcon
+        category={policy[CATEGORY_FIELD_NAME]}
+        style={{ marginRight: "0.5rem" }}
+      />
       <section className={styles.description}>
         <h1>
           {`${policy.auth_entity[0].place.loc.split(",")[0]} 
