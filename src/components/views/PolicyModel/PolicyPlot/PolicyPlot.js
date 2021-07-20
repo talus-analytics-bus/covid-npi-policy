@@ -581,8 +581,8 @@ const PolicyModel = props => {
             style={{
               position: "absolute",
               height: "2.5%",
-              top: "12.5%",
-              left: "2.7%",
+              top: "8.5%",
+              left: "2.35%",
             }}
           />
         </Tippy>
