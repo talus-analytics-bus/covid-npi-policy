@@ -438,7 +438,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   alt="More information"
                   style={{
                     position: "absolute",
-                    top: "2.75rem",
+                    top: "2.65rem",
                     right: "2.5rem",
                   }}
                 />
