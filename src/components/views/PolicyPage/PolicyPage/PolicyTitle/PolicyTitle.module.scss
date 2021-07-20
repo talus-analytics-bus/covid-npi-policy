@@ -5,5 +5,16 @@ h2.h2alt {
   font-size: 26px !important; // todo fix !important
   line-height: 30px !important; // todo fix !important
   color: #303434 !important; // todo fix !important
+  margin-bottom: 0.5em;
+}
+
+h3.orangeDate {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  color: #e55e37;
+  margin-top: 0;
   margin-bottom: 1.5rem;
+  text-transform: none;
 }

@@ -15,24 +15,24 @@ const formatDate = date => {
 };
 
 const PolicyTitle = ({ policy }) => (
-  <h2 className={styles.h2alt}>
-    {policy ? (
-      <>
-        {`${removeParenthetical(policy.auth_entity[0].place.loc.split(",")[0])}
-                      ${policy.primary_ph_measure}: `}
+  <>
+    <h2 className={styles.h2alt}>
+      {policy ? (
+        <>
+          {`${removeParenthetical(
+            policy.auth_entity[0].place.loc.split(",")[0]
+          )}
+          ${policy.primary_ph_measure}: `}
+          {policy.ph_measure_details}
+        </>
+      ) : (
         <br />
-        {policy.ph_measure_details}
-        <br /> {policy && "issued "}
-        {policy && formatDate(new Date(policy.date_start_effective))}
-      </>
-    ) : (
-      <>
-        <br />
-        <br />
-        <br />
-      </>
-    )}
-  </h2>
+      )}
+    </h2>
+    <h3 className={styles.orangeDate}>
+      Enacted on {policy && formatDate(new Date(policy.date_start_effective))}
+    </h3>
+  </>
 );
 
 export default PolicyTitle;
