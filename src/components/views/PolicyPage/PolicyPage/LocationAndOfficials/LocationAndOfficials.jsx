@@ -16,7 +16,10 @@ const LocationAndOfficials = ({ state, policy, policyPlace }) => (
           <h3>Relevant Authority</h3>
           <p>{policy && policy.authority_name}</p>
         </div>
-        <div className={styles.col} style={{ marginRight: "5em" }}>
+        <div
+          className={styles.col}
+          style={{ marginRight: "5em", flexShrink: 0 }}
+        >
           <h3>Authorized By</h3>
           <p>{policy && policy.auth_entity[0].office}</p>
           <h3>Official</h3>
