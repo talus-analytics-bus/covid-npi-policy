@@ -93,7 +93,7 @@ const State = props => {
             <div className={styles.caption}>
               <p className={styles.date}>
                 Cumulative cases as of{" "}
-                {props.dataDates && formatDate(props.curves.date)} (actual){" "}
+                {props.curves && formatDate(props.curves.date)} (actual){" "}
                 {(props.curves.cases / props.curves.population) * 100 >= 0.5
                   ? (
                       (props.curves.cases / props.curves.population) *
@@ -110,10 +110,8 @@ const State = props => {
                   content={
                     <p className={styles.ipopup}>
                       Total number of cumulative confirmed and probable cases as
-                      of{" "}
-                      {props.dataDates &&
-                        formatDate(props.dataDates.last_data_update)}
-                      . Source:{" "}
+                      of {props.curves && formatDate(props.curves.date)}.
+                      Source:{" "}
                       <a href={"https://github.com/nytimes/covid-19-data"}>
                         New York Times{" "}
                       </a>
@@ -148,10 +146,8 @@ const State = props => {
                   content={
                     <p className={styles.ipopup}>
                       Total number of cumulative confirmed and probable deaths
-                      as of{" "}
-                      {props.dataDates &&
-                        formatDate(props.dataDates.last_data_update)}
-                      . Source:{" "}
+                      as of {props.curves && formatDate(props.curves.date)}.
+                      Source:{" "}
                       <a href={"https://github.com/nytimes/covid-19-data"}>
                         New York Times{" "}
                       </a>
