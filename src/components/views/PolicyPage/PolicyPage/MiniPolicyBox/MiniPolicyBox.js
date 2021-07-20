@@ -85,10 +85,10 @@ const MiniPolicyBox = ({ policy }) => {
         <h1>
           {`${policy.auth_entity[0].place.loc.split(",")[0]} 
         ${policy[CATEGORY_FIELD_NAME]}: 
-        ${policy[SUBCATEGORY_FIELD_NAME]} issued 
-        ${formatDate(new Date(policy.date_issued))}`}
+        ${policy[SUBCATEGORY_FIELD_NAME]}`}
         </h1>
-        <h2>{title}</h2>
+        <h3>Enacted on {formatDate(new Date(policy.date_issued))}</h3>
+        {/* <h2>{title}</h2> */}
       </section>
     </Link>
   );
