@@ -153,9 +153,11 @@ export function getPolicyCatSubcatTarg(
 /**
  * Returns a formatted string of subtargets for presentation in the
  * user interface.
- * @param s The string of subtargets
- * @returns A formatted string of subtargets with zero-width spaces
- * padding frontslashes
+ * @param {string} s
+ * The string of subtargets
+ *
+ * @returns {string}
+ * A formatted string of subtargets with zero-width spaces padding frontslashes
  */
 function formatSubtargets(s: string): string {
   return s.replaceAll(" / ", "/").replaceAll("/", "​/​");
