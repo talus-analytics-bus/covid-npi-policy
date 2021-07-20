@@ -64,6 +64,7 @@ const OthersInDocument = ({ policy, path }) => {
           {policies &&
             policies.slice(0, 3).map(policy => (
               <PolicyLink
+                target="_blank"
                 key={policy.id}
                 policy={policy}
                 className={styles.policyLink}

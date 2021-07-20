@@ -12,7 +12,7 @@ import { policyContext } from "../../PolicyRouter/PolicyRouter";
 
 const TITLE_CHAR_LIMIT = 32;
 
-const PolicyLink = ({ policy, children, style, className }) => {
+const PolicyLink = ({ policy, children, style, className, ...props }) => {
   const { policyFilters, policyObject } = React.useContext(policyContext);
 
   const iso3 = policy.auth_entity[0].place.iso3;
@@ -58,6 +58,7 @@ const PolicyLink = ({ policy, children, style, className }) => {
 
   return (
     <Link
+      target={props.target}
       className={className}
       style={style}
       to={{
