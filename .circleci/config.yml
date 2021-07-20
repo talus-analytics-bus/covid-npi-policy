@@ -71,7 +71,7 @@ jobs:
 
       - run:
           name: AWS S3 Sync s3://covid-npi-policy-review
-          command: aws s3 sync build/ s3://covid-npi-policy-review --acl public-read --delete
+          command: aws s3 sync build/ s3://covid-npi-policy-review --delete
 
       # - run:
       #     name: Invalidate cache
