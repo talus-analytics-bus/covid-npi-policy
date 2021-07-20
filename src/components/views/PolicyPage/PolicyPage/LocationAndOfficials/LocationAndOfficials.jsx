@@ -9,10 +9,10 @@ const LocationAndOfficials = ({ state, policy, policyPlace }) => (
       <h2>JURISDICTION AND LOCATION</h2>
       <div className={styles.row} style={{ justifyContent: "space-between" }}>
         <div className={styles.col}>
-          <h3>Jurisdiction</h3>
-          <p>{policyPlace && policyPlace.level}</p>
           <h3>Authorizing Location</h3>
           <p>{policyPlace && policyPlace.loc.split(",")[0]}</p>
+          <h3>Jurisdiction</h3>
+          <p>{policyPlace && policyPlace.level}</p>
           <h3>Relevant Authority</h3>
           <p>{policy && policy.authority_name}</p>
         </div>
