@@ -11,7 +11,7 @@ const PolicyBreadcrumbs = ({ iso3, state, policyObjectPath }) => (
       <>
         <PolicyCategoryIcon
           category={policyObjectPath && policyObjectPath[0]}
-          style={{ marginRight: '0.5rem' }}
+          style={{ marginRight: "1em" }}
         />
         <Link to={`/policies/${iso3}/${state}`}>
           {policyObjectPath &&
