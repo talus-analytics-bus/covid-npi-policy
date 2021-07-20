@@ -91,9 +91,7 @@ const OthersInDocument = ({ policy, path }) => {
               {/* <ExploreSource {...{ policy }} className={styles.seeMore}> */}
               {/* See more */}
               {/* </ExploreSource> */}
-              <ExploreSource {...{ policy }}>
-                View all policies in this source document
-              </ExploreSource>
+              <ExploreSource {...{ policy }}>View all policies</ExploreSource>
             </>
           )}
         </div>
