@@ -177,8 +177,12 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      margin-right: 1rem;
+      margin-right: 2.7rem;
       text-transform: uppercase;
+
+      &:last-of-type {
+        margin-right: 0.25rem;
+      }
 
       select {
         margin-top: 0.5rem;
