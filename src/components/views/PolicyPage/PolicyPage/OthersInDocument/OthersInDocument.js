@@ -92,7 +92,7 @@ const OthersInDocument = ({ policy, path }) => {
               {/* See more */}
               {/* </ExploreSource> */}
               <ExploreSource {...{ policy }}>
-                View source document
+                View all policies in this source document
               </ExploreSource>
             </>
           )}
