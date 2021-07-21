@@ -1,22 +1,78 @@
-import React, { useEffect } from "react";
-import { renderToString } from "react-dom/server";
-import imgSrc from "./info.svg";
-import styles from "./infotooltip.module.scss";
+import { FC, ReactElement, useEffect } from "react";
 import ReactTooltip from "react-tooltip";
+import { renderToString } from "react-dom/server";
 import classNames from "classnames";
+import CSS from "csstype";
 
-// TODO in TypeScript with docs.
+// local types
+import { InfoTooltipContentSetter } from "../OptionControls/types";
+
+// styles and assets
+import styles from "./infotooltip.module.scss";
+import imgSrc from "./info.svg";
+
+interface InfoTooltipProps {
+  /**
+   * Unique ID of the tooltip.
+   */
+  id: string;
+
+  /**
+   * Content of tooltip as text or JSX.
+   */
+  text: string | ReactElement;
+
+  /**
+   * Optional: Function to set tooltip content. If undefined, tooltip will be
+   * rendered inside component.
+   */
+  setInfoTooltipContent?: InfoTooltipContentSetter;
+
+  /**
+   * Optional: The side to open the tooltip on. If undefined, auto-positioned.
+   */
+  place?: "top" | "right" | "bottom" | "left";
+
+  /**
+   * True if the tooltip should be relatively wide, false for normal.
+   */
+  wide?: boolean;
+
+  /**
+   * Sets the default tooltip effect, either "float" (follows cursor) or
+   * "solid" (immobile and position determined by target element). Note:
+   * "solid" does not currently behave as expected.
+   */
+  effect?: "float" | "solid";
+
+  /**
+   * Optional: The size in pixels of the info tooltip icon. This sets the width
+   * and height of the icon.
+   */
+  iconSize?: number;
+
+  /**
+   * Optional: Custom styles for the info tooltip image.
+   */
+  imgStyle?: CSS.Properties;
+
+  /**
+   * Optional: Custom styles for the info tooltip container.
+   */
+  style?: CSS.Properties;
+}
+
 /**
  * Generic info tooltip.
  * @method InfoTooltip
  */
-const InfoTooltip = ({
+const InfoTooltip: FC<InfoTooltipProps> = ({
   id,
   text,
   setInfoTooltipContent,
   place = undefined,
   wide = false,
-  effect = "solid",
+  effect = "float",
   iconSize = 10,
   imgStyle = {
     marginLeft: `${iconSize / 2}px`,
@@ -55,7 +111,7 @@ const InfoTooltip = ({
         src={imgSrc}
         alt={"Info tooltip icon"}
         onMouseOver={() => {
-          if (bindWithFunction) {
+          if (bindWithFunction && setInfoTooltipContent !== undefined) {
             setInfoTooltipContent(dataHtml);
           }
         }}

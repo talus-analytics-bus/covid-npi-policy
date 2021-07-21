@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 // 3rd party modules
 import ReactTooltip from "react-tooltip";
 import Modal from "reactjs-popup";
+import classNames from "classnames";
 
 // layout
 import { Nav } from "./components/layout";
@@ -21,17 +22,19 @@ import Landing from "./components/views/landing/Landing";
 
 import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
 
-// queries
+// queries and their types
 import { Version, Count, execute } from "api/Queries";
+import { VersionRecord } from "api/queryTypes";
+import { CountRecords } from "components/misc/dataTypes";
 
 // styles and assets
 import styles from "./App.module.scss";
-import classNames from "classnames";
+
+// local components, functions, and types
+import Settings from "Settings";
 import { InfoTooltipProvider } from "context/InfoTooltipContext";
 import { LoadingSpinner } from "components/common";
 import { AmpPage } from "types";
-import { VersionRecord } from "api/queryTypes";
-import { CountRecords } from "components/misc/dataTypes";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import { BrowserProvider } from "components/misc/Util";
 
@@ -312,7 +315,7 @@ const App = () => {
           <ReactTooltip
             id={"infoTooltip"}
             type="light"
-            effect="solid"
+            effect={Settings.DEFAULT_TOOLTIP_EFFECT}
             place="right"
             delayHide={250}
             clickable={true}
