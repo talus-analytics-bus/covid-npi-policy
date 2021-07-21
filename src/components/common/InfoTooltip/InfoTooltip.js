@@ -12,17 +12,17 @@ import classNames from "classnames";
 const InfoTooltip = ({
   id,
   text,
-  place = undefined,
   setInfoTooltipContent,
+  place = undefined,
   wide = false,
-  iconSize = 10,
   effect = "solid",
-  style = {},
+  iconSize = 10,
   imgStyle = {
     marginLeft: `${iconSize / 2}px`,
     height: `${iconSize}px`,
     width: `${iconSize}px`,
   },
+  style = {},
 }) => {
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer} style={style}>
