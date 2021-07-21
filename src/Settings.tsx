@@ -28,12 +28,20 @@ export type SettingsProps = {
    * column headers, false if they should be hidden and hover tooltips instead
    */
   readonly SHOW_TABLE_DEFINITIONS: boolean;
+
+  /**
+   * Sets the default tooltip effect, either "float" (follows cursor) or
+   * "solid" (immobile and position determined by target element). Note:
+   * "solid" does not currently behave as expected.
+   */
+  readonly DEFAULT_TOOLTIP_EFFECT: "float" | "solid";
 };
 const Settings: SettingsProps = {
   ALLOW_SUB_GEOS: false,
   DISABLE_POLICY_LINK_IF_ZERO: false,
   REQUIRE_EXPLICIT_MIN_MAX: true,
   SHOW_TABLE_DEFINITIONS: false,
+  DEFAULT_TOOLTIP_EFFECT: "float",
 };
 
 export default Settings;
