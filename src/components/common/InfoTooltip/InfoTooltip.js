@@ -5,6 +5,7 @@ import styles from "./infotooltip.module.scss";
 import ReactTooltip from "react-tooltip";
 import classNames from "classnames";
 
+// TODO in TypeScript with docs.
 /**
  * Generic info tooltip.
  * @method InfoTooltip
@@ -24,16 +25,22 @@ const InfoTooltip = ({
   },
   style = {},
 }) => {
+  // TODO try removing one or both rebuild calls
+  // TODO document how `bindWithFunction` is used, try to streamline it
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  }, []);
+  ReactTooltip.rebuild();
+
+  // wrap text in HTML string that includes tooltip container
   const dataHtml = renderToString(
     <div className={styles.infoTooltipContainer} style={style}>
       {text}
     </div>
   );
+
+  // bind w/ func if provided, otherwise return ReactTooltip component
   const bindWithFunction = setInfoTooltipContent !== undefined;
-  useEffect(() => {
-    ReactTooltip.rebuild();
-  }, []);
-  ReactTooltip.rebuild();
   return (
     <div
       className={classNames(styles.infoTooltip, { [styles.wide]: wide })}
