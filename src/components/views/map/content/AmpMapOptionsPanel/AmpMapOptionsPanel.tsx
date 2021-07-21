@@ -52,6 +52,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const { setInfoTooltipContent } = useContext(InfoTooltipContext);
   const [noChildCats, setNoChildCats] = useState<Option[]>([]);
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
+  const infoTooltipSize: number = 8;
 
   /**
    * The possible geographic resolutions of map that can be viewed.
@@ -71,7 +72,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           options={usSubGeoOptions}
           callback={selected => setMapId(selected[0].value as MapId)}
           selectedOptions={usSubGeoOptions.filter(o => o.value === mapId)}
-          {...{ setInfoTooltipContent }}
+          {...{ setInfoTooltipContent, infoTooltipSize }}
         />
       ),
     },
@@ -265,7 +266,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           selectedOptions={geoOptions.filter(
             o => o.isChecked !== undefined && o.isChecked(mapId)
           )}
-          {...{ setInfoTooltipContent }}
+          {...{ setInfoTooltipContent, infoTooltipSize }}
         />
       </AccordionDrawer>
       <AccordionDrawer title={getFillOptionsTitleFromMapId(mapId)}>
@@ -277,7 +278,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
             callback={selected => {
               if (setFill !== undefined) setFill(selected[0].value as string);
             }}
-            {...{ setInfoTooltipContent }}
+            {...{ setInfoTooltipContent, infoTooltipSize }}
           />
         </PerfectScrollbar>
       </AccordionDrawer>
@@ -289,7 +290,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
             circle !== null ? [circleShowOptions[0]] : [circleShowOptions[1]]
           }
           callback={updateCircle}
-          {...{ setInfoTooltipContent }}
+          {...{ setInfoTooltipContent, infoTooltipSize }}
         />
       </AccordionDrawer>
     </MapPanel>

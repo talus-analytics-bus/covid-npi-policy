@@ -1,7 +1,7 @@
 import { MapId } from "components/common/MapboxMap/plugins/mapTypes";
-import InfoTooltip from "components/misc/InfoTooltip";
+import { InfoTooltip } from "components/common";
 import moment, { Moment } from "moment";
-import React, { FC } from "react";
+import { FC } from "react";
 import styles from "./MapDrape.module.scss";
 interface MapDrapeProps {
   mapTitle: string;
@@ -30,7 +30,9 @@ export const MapDrape: FC<MapDrapeProps> = ({
           <div className={styles.secondary}>
             Data last updated on {overallUpdateDate.format("MMM D, YYYY")}
             <InfoTooltip
+              id={"drape-tooltip"}
               place={"left"}
+              style={{ maxWidth: "300px" }}
               text={
                 <div>
                   {versions

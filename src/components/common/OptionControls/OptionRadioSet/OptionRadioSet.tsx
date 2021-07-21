@@ -12,6 +12,7 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
   selectedOptions,
   callback,
   setInfoTooltipContent = () => {},
+  infoTooltipSize,
 }) => {
   return (
     <div className={classNames(styles.optionRadioSet, styles.optionWidget)}>
@@ -42,6 +43,7 @@ export const OptionRadioSet: FC<OptionRadioSetProps> = ({
               ...o,
               selectedOptions,
               setInfoTooltipContent,
+              infoTooltipSize,
             }}
           />
         ))}

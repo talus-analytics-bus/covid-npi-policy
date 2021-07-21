@@ -620,11 +620,11 @@ const Data: FC<DataProps> = ({
                       callback={setDocType}
                       horizontal={true}
                       selectpicker={false}
-                      setInfoTooltipContent={setInfoTooltipContent}
                       theme={"slim"}
                       onClick={undefined}
                       className={undefined}
                       children={undefined}
+                      {...{ setInfoTooltipContent }}
                     />
                     {docType === "policy" && (
                       <RadioToggle
@@ -632,9 +632,10 @@ const Data: FC<DataProps> = ({
                         selectpicker={false}
                         label={
                           <ControlLabel>
-                            View by{" "}
+                            View by
                             <InfoTooltip
                               id={"locationTypeTooltip"}
+                              iconSize={14}
                               text={
                                 <>
                                   <p>
