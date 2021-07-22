@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 
 import ampLogo from "../../../assets/images/amp.png";
 import policyMapsImage from "../../../assets/images/amp-screenshots/policy-maps.png";
-import policyModelImage from "../../../assets/images/amp-screenshots/policy-model.png";
-import policyDatabaseImage from "../../../assets/images/amp-screenshots/policy-database.png";
+import policyModelImage from "../../../assets/images/amp-screenshots/policy-model-4.png";
+import locationPageImage from "../../../assets/images/amp-screenshots/location-page-4.png";
+import policyDatabaseImage from "../../../assets/images/amp-screenshots/data-page-2.png";
 import ideaLogo from "../../../assets/images/logo-title.png";
 import guLogo from "../../../assets/images/logo-georgetown.png";
 import talusLogo from "../../../assets/images/logo-talus.png";
@@ -61,29 +62,35 @@ const Landing = ({ setPage, setLoading }, props) => {
             the impacts of the COVID-19 pandemic.
           </p>
         </div>
-        <div className={styles.ampColumns}>
-          <div className={styles.col}>
-            <Link to="/policymaps">
-              <img
-                className={styles.mapImage}
-                src={policyMapsImage}
-                alt="Policy Maps"
-              />
-              <span>Policy maps</span>
-            </Link>
-          </div>
-          <div className={styles.col}>
-            <Link to="/model">
-              <img src={policyModelImage} alt="Policy Model" />
-              <span>Policy model</span>
-            </Link>
-          </div>
-          <div className={styles.col}>
-            <Link to="/data">
-              <img src={policyDatabaseImage} alt="Policy Database" />
-              <span>Access data</span>
-            </Link>
-          </div>
+      </div>
+      <div className={styles.ampColumns}>
+        <div className={styles.col}>
+          <Link to="/policymaps">
+            <img
+              className={styles.mapImage}
+              src={policyMapsImage}
+              alt="Policy Maps"
+            />
+            <span>Policy maps</span>
+          </Link>
+        </div>
+        <div className={styles.col}>
+          <Link to="/data">
+            <img src={locationPageImage} alt="Policy Database" />
+            <span>View Location</span>
+          </Link>
+        </div>
+        <div className={styles.col}>
+          <Link to="/model">
+            <img src={policyModelImage} alt="Policy Model" />
+            <span>Policy model</span>
+          </Link>
+        </div>
+        <div className={styles.col}>
+          <Link to="/data">
+            <img src={policyDatabaseImage} alt="Policy Database" />
+            <span>Access data</span>
+          </Link>
         </div>
       </div>
       <div class={styles.footer}>
