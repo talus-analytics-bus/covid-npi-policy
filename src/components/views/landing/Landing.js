@@ -62,35 +62,35 @@ const Landing = ({ setPage, setLoading }, props) => {
             the impacts of the COVID-19 pandemic.
           </p>
         </div>
-      </div>
-      <div className={styles.ampColumns}>
-        <div className={styles.col}>
-          <Link to="/policymaps">
-            <img
-              className={styles.mapImage}
-              src={policyMapsImage}
-              alt="Policy Maps"
-            />
-            <span>Policy maps</span>
-          </Link>
-        </div>
-        <div className={styles.col}>
-          <Link to="/data">
-            <img src={locationPageImage} alt="Policy Database" />
-            <span>View Location</span>
-          </Link>
-        </div>
-        <div className={styles.col}>
-          <Link to="/model">
-            <img src={policyModelImage} alt="Policy Model" />
-            <span>Policy model</span>
-          </Link>
-        </div>
-        <div className={styles.col}>
-          <Link to="/data">
-            <img src={policyDatabaseImage} alt="Policy Database" />
-            <span>Access data</span>
-          </Link>
+        <div className={styles.ampColumns}>
+          <div className={styles.col}>
+            <Link to="/policymaps">
+              <img
+                className={styles.mapImage}
+                src={policyMapsImage}
+                alt="Policy Maps"
+              />
+              <span>Policy maps</span>
+            </Link>
+          </div>
+          <div className={styles.col}>
+            <Link to="/data">
+              <img src={locationPageImage} alt="Policy Database" />
+              <span>View Location</span>
+            </Link>
+          </div>
+          <div className={styles.col}>
+            <Link to="/model">
+              <img src={policyModelImage} alt="Policy Model" />
+              <span>Policy model</span>
+            </Link>
+          </div>
+          <div className={styles.col}>
+            <Link to="/data">
+              <img src={policyDatabaseImage} alt="Policy Database" />
+              <span>Access data</span>
+            </Link>
+          </div>
         </div>
       </div>
       <div class={styles.footer}>
