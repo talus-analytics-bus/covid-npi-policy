@@ -13,10 +13,11 @@
       width: 100%;
       outline: none;
       border: none;
+      font-family: "Open Sans";
       @include searchPlaceholderStyle();
-      &::placeholder {
-        font-size: 0.9rem;
-      }
+      // &::placeholder {
+      // font-size: 0.9rem;
+      // }
     }
     .icons {
       display: flex;
@@ -32,7 +33,6 @@
   }
 
   .results {
-    position: fixed;
     display: flex;
     flex-direction: column;
 
