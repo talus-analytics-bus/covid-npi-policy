@@ -144,7 +144,7 @@ const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
           placeholder="Search for location"
           {...{ onKeyPress, onKeyDown, onChange }}
           style={{
-            ...(floating && { height: "2.125em" }),
+            ...(floating && { height: "2.125em", fontSize: "" }),
           }}
         />
         <div className={styles.icons}>
@@ -158,7 +158,7 @@ const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
         </div>
       </div>
 
-      {results && (
+      {results && results.length > 0 && (
         <div
           className={styles.results}
           style={{
@@ -167,16 +167,14 @@ const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
               left: "0",
               right: "0",
               backgroundColor: "#fff",
-              padding: "0 10px 0 10px",
+              padding: "0 10px 10px 10px",
             }),
           }}
         >
-          {results.length > 0 && (
-            <div className={styles.header}>
-              <span>Place</span>
-              {/* <span>National Policy Count</span> */}
-            </div>
-          )}
+          <div className={styles.header}>
+            <span>Place</span>
+            {/* <span>National Policy Count</span> */}
+          </div>
           {results.slice(0, 4).map(r => {
             if (r.loc === undefined || r.level === null) return null;
             else

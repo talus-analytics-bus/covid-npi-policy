@@ -35,6 +35,7 @@
   .results {
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
 
     .stateResult,
     .countryResult {
