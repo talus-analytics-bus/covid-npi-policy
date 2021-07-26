@@ -21,7 +21,7 @@ const PolicyTitle = ({ policy }) => (
         <>
           {`${removeParenthetical(
             policy.auth_entity[0].place.loc.split(",")[0]
-          )}
+          )}:
           ${policy.primary_ph_measure}: `}
           {policy.ph_measure_details}
         </>
