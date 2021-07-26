@@ -1,5 +1,12 @@
 import { Dispatch, ReactElement, SetStateAction } from "react";
 
+/**
+ * Function to set tooltip content for ReactTooltip components.
+ */
+export type InfoTooltipContentSetter =
+  | Dispatch<SetStateAction<string | null>>
+  | (() => void);
+
 export interface Option {
   /**
    * The name of the option shown in radio sets, etc.
@@ -58,9 +65,12 @@ export interface Option {
    * Optional: Function to set tooltip content. If undefined, tooltip will be
    * rendered inside component.
    */
-  setInfoTooltipContent?:
-    | Dispatch<SetStateAction<string | null>>
-    | (() => void);
+  setInfoTooltipContent?: InfoTooltipContentSetter;
+
+  /**
+   * Optional: The size (height and width, equal) of the info tooltip icon.
+   */
+  infoTooltipSize?: number;
 
   /**
    * Optional: Function called on an option value to determine whether this
@@ -111,6 +121,11 @@ export interface OptionWidget {
   setInfoTooltipContent?:
     | Dispatch<SetStateAction<string | null>>
     | (() => void);
+
+  /**
+   * Optional: The size (height and width, equal) of the info tooltip icon.
+   */
+  infoTooltipSize?: number;
 }
 
 export type OptionSetEntry = {

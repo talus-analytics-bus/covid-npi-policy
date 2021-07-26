@@ -24,14 +24,11 @@
 .infoTooltip {
   display: inline-flex;
   margin: 0;
-  margin-left: 0.25em;
   position: relative;
   pointer-events: all;
+  align-items: center;
 
   img {
-    $size: 0.6em;
-    height: $size;
-    width: $size;
     cursor: default;
   }
 }
