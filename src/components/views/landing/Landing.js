@@ -12,6 +12,7 @@ import ideaLogo from "../../../assets/images/logo-title.png";
 import guLogo from "../../../assets/images/logo-georgetown.png";
 import talusLogo from "../../../assets/images/logo-talus.png";
 import ntiLogo from "../../../assets/images/logo-nti.png";
+import LocationSearch from "components/layout/nav/LocationSearch/LocationSearch";
 
 const Landing = ({ setPage, setLoading }, props) => {
   React.useEffect(() => {
@@ -63,34 +64,26 @@ const Landing = ({ setPage, setLoading }, props) => {
           </p>
         </div>
         <div className={styles.ampColumns}>
-          <div className={styles.col}>
-            <Link to="/policymaps">
-              <img
-                className={styles.mapImage}
-                src={policyMapsImage}
-                alt="Policy Maps"
-              />
-              <span>Policy maps</span>
-            </Link>
+          <Link className={styles.columnLink} to="/policymaps">
+            <img
+              className={styles.mapImage}
+              src={policyMapsImage}
+              alt="Policy Maps"
+            />
+            <span className={styles.blueButton}>Policy maps</span>
+          </Link>
+          <div className={styles.columnLink}>
+            <img src={locationPageImage} alt="Policy Database" />
+            <LocationSearch floating />
           </div>
-          <div className={styles.col}>
-            <Link to="/data">
-              <img src={locationPageImage} alt="Policy Database" />
-              <span>View Location</span>
-            </Link>
-          </div>
-          <div className={styles.col}>
-            <Link to="/model">
-              <img src={policyModelImage} alt="Policy Model" />
-              <span>Policy model</span>
-            </Link>
-          </div>
-          <div className={styles.col}>
-            <Link to="/data">
-              <img src={policyDatabaseImage} alt="Policy Database" />
-              <span>Access data</span>
-            </Link>
-          </div>
+          <Link className={styles.columnLink} to="/model">
+            <img src={policyModelImage} alt="Policy Model" />
+            <span className={styles.blueButton}>Policy model</span>
+          </Link>
+          <Link className={styles.columnLink} to="/data">
+            <img src={policyDatabaseImage} alt="Policy Database" />
+            <span className={styles.blueButton}>Access data</span>
+          </Link>
         </div>
       </div>
       <div class={styles.footer}>

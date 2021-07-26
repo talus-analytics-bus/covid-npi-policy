@@ -231,7 +231,7 @@
       grid-template-columns: 1fr;
     }
 
-    .col a {
+    .columnLink {
       // display: flex;
       // flex-direction: column;
       // align-items: center;
@@ -239,6 +239,8 @@
 
       img {
         background-color: #fff;
+        border-radius: 5px;
+        border: 1px solid #aaa;
         // $thumbnail-size: 18rem;
         // width: $thumbnail-size;
         // height: $thumbnail-size;
@@ -253,7 +255,7 @@
       // padding: 1rem;
       // }
 
-      span {
+      .blueButton {
         border: 2px solid $idea-primary-dark-blue;
         border-radius: 5px;
         font-family: "Open Sans", sans-serif;
