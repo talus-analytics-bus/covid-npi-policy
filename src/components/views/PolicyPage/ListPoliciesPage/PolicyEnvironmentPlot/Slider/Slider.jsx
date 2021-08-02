@@ -53,7 +53,7 @@ const Slider = ({
   };
 
   const handleDrag = e => {
-    if (dragStartX === 0) setCursorVisible(true);
+    if (dragStartX === 0 && !popupVisible) setCursorVisible(true);
     e.stopPropagation();
     e.preventDefault();
     const CTM = svgElement.current.getScreenCTM();
@@ -140,7 +140,6 @@ const Slider = ({
     setCursorVisible(false);
     setPopupVisible(true);
     if (e.key === "ArrowLeft") {
-      // setIntroDate(prev => prev - 1);
       let nextDate;
       setSliderX(prev => {
         nextDate = new Date(scale.x.invert(prev));
@@ -241,17 +240,16 @@ const Slider = ({
             </text>
           </>
         )}
-        {/* <Tooltip
+        <Tooltip
           {...{
             handleYPos,
-            dim,
             sliderDate,
             setCursorVisible,
             highlightPolicies,
             highlightCaseload,
             popupVisible,
           }}
-        /> */}
+        />
       </g>
       {cursorVisible && ( // date and orange box for cursor
         <g
