@@ -10,17 +10,21 @@ import PolicyCategoryIcon from "../../../../PolicyCategoryIcon/PolicyCategoryIco
 import { policyContext } from "../../../../PolicyRouter/PolicyRouter";
 import PolicyModal from "./PolicyModal/PolicyModal";
 
+const msPerDay = 86400000;
+
 const formatDate = date => {
   if (!date) return undefined;
-  return new Date(date).toLocaleString("en-de", {
+  return new Date(date.toDateString()).toLocaleString("en-de", {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
 };
 
-const formatNumber = number =>
-  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+const formatNumber = number => {
+  if (!number) return "";
+  return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+};
 
 const TooltipContent = ({
   sliderDate,
@@ -52,8 +56,9 @@ const TooltipContent = ({
       onMouseLeave={() => setCursorVisible(true)}
     >
       <header className={styles.greySection}>
+        {console.log("plot tooltip rendered")}
         <div className={styles.date}>
-          {formatDate(sliderDate.toISOString().substring(0, 10))}
+          {formatDate(new Date(sliderDate * msPerDay))}
         </div>
         <div className={styles.caseload}>
           <span className={styles.cases}>
@@ -114,7 +119,6 @@ const TooltipContent = ({
 
 const Tooltip = ({
   handleYPos,
-  dim,
   sliderDate,
   setCursorVisible,
   highlightPolicies,

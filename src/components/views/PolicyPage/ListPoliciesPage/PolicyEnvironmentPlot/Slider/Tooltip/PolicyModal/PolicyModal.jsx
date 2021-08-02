@@ -18,9 +18,11 @@ import PolicySummary from "../../../../../PolicySummary/PolicySummary";
 
 import styles from "./PolicyModal.module.scss";
 
+const msPerDay = 86400000;
+
 const formatDate = date => {
   if (!date) return undefined;
-  return new Date(date).toLocaleString("en-de", {
+  return new Date(date.toDateString()).toLocaleString("en-de", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -138,9 +140,7 @@ const PolicyModal = ({
             />
             {category} policies
           </h2>
-          <h3>
-            Enacted on {formatDate(sliderDate.toISOString().substring(0, 10))}
-          </h3>
+          <h3>Enacted on {formatDate(new Date(sliderDate * msPerDay))}</h3>
           <div className={styles.summaries}>{summaries}</div>
         </section>
       </Modal>
