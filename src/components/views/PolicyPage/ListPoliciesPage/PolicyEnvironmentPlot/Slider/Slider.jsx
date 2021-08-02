@@ -133,9 +133,39 @@ const Slider = ({
 
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.3;
 
+  // Arrow keys handling
+  const handleKeys = e => {
+    setCursorVisible(false);
+    setPopupVisible(true);
+    if (e.key === "ArrowLeft") {
+      // setIntroDate(prev => prev - 1);
+      setSliderX(prev => {
+        const nextDate = new Date(scale.x.invert(prev));
+        nextDate.setDate(nextDate.getDate() - 1);
+        setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
+        return scale.x(nextDate);
+      });
+    }
+    if (e.key === "ArrowRight") {
+      setIntroDate(prev => prev + 1);
+      setSliderX(prev => {
+        const nextDate = new Date(scale.x.invert(prev));
+        nextDate.setDate(nextDate.getDate() + 1);
+        setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
+        return scale.x(nextDate);
+      });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeys);
+    return () => {
+      window.removeEventListener("keydown", handleKeys);
+    };
+  }, []);
+
   return (
     <g
-      id="slider"
       onClick={onClickChart}
       onMouseMove={handleDrag}
       onMouseUp={handleDragEnd}
