@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 // import { useRecoilState } from "recoil";
 
+import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIcon";
 import SnapshotChart from "./SnapshotChart";
 
 import styles from "./SnapshotChartSection.module.scss";
@@ -106,7 +107,15 @@ const SnapshotChartSection = () => {
         {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
         <div className={styles.labels}>
           {chartLabels &&
-            chartLabels.map(category => <p key={category}>{category}</p>)}
+            chartLabels.map(category => (
+              <p key={category}>
+                {category}
+                <PolicyCategoryIcon
+                  category={category}
+                  style={{ marginLeft: "0.5em" }}
+                />
+              </p>
+            ))}
         </div>
         {/* <div className={styles.chartContainer}> */}
         <SnapshotChart {...{ policySummaryObject, chartLabels }} />
