@@ -51,24 +51,18 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   if (lastDate && !policySummaryObject[introDate]) selectedDate = lastDate;
 
   if (policySummaryObject && policySummaryObject[selectedDate]) {
-    // get the categories from the most recent date
-    Object.entries(
-      Object.values(policySummaryObject)[
-        Object.keys(policySummaryObject).length - 1
-      ]
-    ).forEach(([status, categories]) => {
-      Object.keys(categories).forEach(category => {
-        byCategory[category] = { [status]: 0 };
-      });
+    // fill in all categories we need to have
+    // pre-filling enacted, active, and expired here so we don't
+    // have to have an if statement in a nested loop later
+    chartLabels.forEach(label => {
+      byCategory[label] = { enacted: 0, active: 0, expired: 0 };
     });
 
     // fill the counts based on the intro section date
     Object.entries(policySummaryObject[selectedDate]).forEach(
       ([status, categories]) => {
         Object.entries(categories).map(([category, policies]) => {
-          if (!byCategory[category][status])
-            byCategory[category][status] = policies.size;
-          else byCategory[category][status] += policies.size;
+          byCategory[category][status] += policies.size;
         });
       }
     );
