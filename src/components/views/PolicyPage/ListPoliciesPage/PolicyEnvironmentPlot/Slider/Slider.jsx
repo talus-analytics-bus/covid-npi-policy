@@ -30,6 +30,7 @@ const Slider = ({
   avgCaseLoadByDate,
 }) => {
   const [introDate, setIntroDate] = useRecoilState(introDateState);
+  // const [introDate, setIntroDate] = useState();
 
   const [sliderX, setSliderX] = useState(dim.xAxis.end.x);
   const [dragStartX, setDragStartX] = useState(0);
@@ -41,6 +42,7 @@ const Slider = ({
 
   const handleDragStart = e => {
     setPopupVisible(true);
+    setCursorVisible(false);
     // prevent the text from highlighting
     e.stopPropagation();
     e.preventDefault();
@@ -51,7 +53,9 @@ const Slider = ({
   };
 
   const handleDrag = e => {
-    // setCursorVisible(true);
+    if (dragStartX === 0) setCursorVisible(true);
+    e.stopPropagation();
+    e.preventDefault();
     const CTM = svgElement.current.getScreenCTM();
     const xPos = (e.clientX - CTM.e) / CTM.a;
     const newPos = xPos - dragStartX;
@@ -59,14 +63,12 @@ const Slider = ({
     if (newPos >= dim.xAxis.start.x && newPos <= dim.xAxis.end.x) {
       if (dragStartX !== 0) {
         setSliderX(newPos);
-        const cursorDate = scale.x.invert(cursorX + 1);
+        const cursorDate = scale.x.invert(cursorX);
         setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
       }
-
       setCursorX(newPos + dragStartX);
-
       if (cursorVisible && !popupVisible) {
-        const cursorDate = scale.x.invert(cursorX + 1);
+        const cursorDate = scale.x.invert(cursorX);
         setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
       }
     }
@@ -88,7 +90,7 @@ const Slider = ({
     if (newPos >= dim.xAxis.start.x && newPos <= dim.xAxis.end.x) {
       setSliderX(newPos);
       setPopupVisible(true);
-      const cursorDate = scale.x.invert(cursorX + 1);
+      const cursorDate = scale.x.invert(cursorX);
       setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
     }
   };
@@ -113,23 +115,23 @@ const Slider = ({
   }, [popupVisible, onScroll]);
 
   // the +1 offset makes the slider visually align to the date
-  const sliderDate = scale.x.invert(sliderX + 1);
-  const cursorDate = scale.x.invert(cursorX + 1);
+  const sliderDate = Math.floor(scale.x.invert(sliderX).getTime() / msPerDay);
+  const cursorDate = Math.floor(scale.x.invert(cursorX).getTime() / msPerDay);
 
   const highlightPolicies =
-    policySummaryObject &&
-    sliderDate &&
-    policySummaryObject[Math.floor(sliderDate.getTime() / msPerDay)];
+    policySummaryObject && sliderDate && policySummaryObject[sliderDate];
 
   const cursorPolicies =
-    policySummaryObject &&
-    cursorDate &&
-    policySummaryObject[Math.floor(cursorDate.getTime() / msPerDay)];
+    policySummaryObject && cursorDate && policySummaryObject[cursorDate];
 
   const highlightCaseload =
     avgCaseLoadByDate &&
     sliderDate &&
-    Math.round(avgCaseLoadByDate[sliderDate.toISOString().substring(0, 10)]);
+    Math.round(
+      avgCaseLoadByDate[
+        new Date(sliderDate * msPerDay).toISOString().substring(0, 10)
+      ]
+    );
 
   const handleYPos = (dim.yAxis.end.y - dim.yAxis.start.y) * 0.3;
 
@@ -139,21 +141,22 @@ const Slider = ({
     setPopupVisible(true);
     if (e.key === "ArrowLeft") {
       // setIntroDate(prev => prev - 1);
+      let nextDate;
       setSliderX(prev => {
-        const nextDate = new Date(scale.x.invert(prev));
+        nextDate = new Date(scale.x.invert(prev));
         nextDate.setDate(nextDate.getDate() - 1);
-        setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
         return scale.x(nextDate);
       });
+      setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
     }
     if (e.key === "ArrowRight") {
-      setIntroDate(prev => prev + 1);
+      let nextDate;
       setSliderX(prev => {
-        const nextDate = new Date(scale.x.invert(prev));
+        nextDate = new Date(scale.x.invert(prev));
         nextDate.setDate(nextDate.getDate() + 1);
-        setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
         return scale.x(nextDate);
       });
+      setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
     }
   };
 
@@ -171,7 +174,7 @@ const Slider = ({
       onMouseUp={handleDragEnd}
       onMouseLeave={() => {
         setCursorVisible(false);
-        setIntroDate(Math.floor(sliderDate.getTime() / msPerDay));
+        setIntroDate(sliderDate);
       }}
       onMouseEnter={() => setCursorVisible(true)}
     >
@@ -186,7 +189,7 @@ const Slider = ({
         // vertical line for the cursor
         <g
           style={{
-            transform: `translateX(${cursorX}px)`,
+            transform: `translateX(${cursorX - 0.5}px)`,
           }}
         >
           <path
@@ -203,7 +206,7 @@ const Slider = ({
       )}
       <g // Slider vertical line and date
         style={{
-          transform: `translateX(${sliderX}px)`,
+          transform: `translateX(${sliderX - 0.5}px)`,
         }}
       >
         <path
@@ -234,11 +237,11 @@ const Slider = ({
                 fontSize: 9,
               }}
             >
-              {formatDate(sliderDate)}
+              {formatDate(new Date(sliderDate * msPerDay))}
             </text>
           </>
         )}
-        <Tooltip
+        {/* <Tooltip
           {...{
             handleYPos,
             dim,
@@ -248,12 +251,12 @@ const Slider = ({
             highlightCaseload,
             popupVisible,
           }}
-        />
+        /> */}
       </g>
       {cursorVisible && ( // date and orange box for cursor
         <g
           style={{
-            transform: `translateX(${cursorX}px)`,
+            transform: `translateX(${cursorX - 0.5}px)`,
           }}
         >
           <rect
@@ -274,7 +277,7 @@ const Slider = ({
               fontSize: 9,
             }}
           >
-            {formatDate(cursorDate)}
+            {formatDate(new Date(cursorDate * msPerDay))}
           </text>
         </g>
       )}
@@ -293,7 +296,7 @@ const Slider = ({
                 // stroke: "white",
                 // strokeWidth: ".5",
               }}
-              cx={scale.x(new Date(cursorDate.toISOString().substring(0, 10)))}
+              cx={scale.x(new Date(cursorDate) * msPerDay)}
               cy={dim.yAxis.end.y - index * vSpacing - circlePadding}
               r={3}
             />
@@ -311,7 +314,7 @@ const Slider = ({
                 // stroke: "white",
                 // strokeWidth: ".5",
               }}
-              cx={scale.x(new Date(sliderDate.toDateString()))}
+              cx={scale.x(new Date(sliderDate) * msPerDay)}
               cy={dim.yAxis.end.y - index * vSpacing - circlePadding}
               r={3}
             />
@@ -319,7 +322,7 @@ const Slider = ({
 
       <g
         style={{
-          transform: `translateX(${sliderX}px)`,
+          transform: `translateX(${sliderX - 0.5}px)`,
         }}
       >
         <circle
@@ -331,17 +334,21 @@ const Slider = ({
           cx={0}
           cy={handleYPos}
           r={6}
+          onClick={e => e.stopPropagation()}
+          onMouseDown={handleDragStart}
+          // onMouseEnter={() => setCursorVisible(false)}
+          // onMouseLeave={() => setCursorVisible(true)}
         />
         <rect
           ref={sliderRef}
           onClick={e => e.stopPropagation()}
           onMouseDown={handleDragStart}
-          x={-2}
+          // onMouseEnter={() => setCursorVisible(false)}
+          // onMouseLeave={() => setCursorVisible(true)}
+          x={-3}
           y={0}
-          width={4}
+          width={6}
           height={dim.yAxis.height + dim.paddingTop}
-          onMouseEnter={() => setCursorVisible(false)}
-          onMouseLeave={() => setCursorVisible(true)}
           style={{ fill: "rgba(0,0,0,0)", cursor: "pointer" }}
         />
       </g>
