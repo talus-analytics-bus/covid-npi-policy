@@ -108,13 +108,13 @@ const SnapshotChartSection = () => {
         <div className={styles.labels}>
           {chartLabels &&
             chartLabels.map(category => (
-              <p key={category}>
-                {category}
+              <span>
+                <p key={category}>{category}</p>
                 <PolicyCategoryIcon
                   category={category}
                   style={{ marginLeft: "0.5em" }}
                 />
-              </p>
+              </span>
             ))}
         </div>
         {/* <div className={styles.chartContainer}> */}
