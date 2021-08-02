@@ -8,7 +8,25 @@ const Modal = props => {
     <>
       {props.open &&
         createPortal(
-          <div className={styles.modalContainer}>
+          <div
+            className={styles.modalContainer}
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onMouseDown={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onMouseMove={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onMouseUp={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             <button
               aria-label="Close Modal"
               className={styles.modalBackground}

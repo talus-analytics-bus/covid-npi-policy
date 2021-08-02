@@ -50,22 +50,6 @@ const TooltipContent = ({
       style={{ pointerEvents: "auto" }}
       onMouseEnter={() => setCursorVisible(false)}
       onMouseLeave={() => setCursorVisible(true)}
-      onClick={e => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onMouseDown={e => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onMouseMove={e => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onMouseUp={e => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
     >
       <header className={styles.greySection}>
         <div className={styles.date}>
