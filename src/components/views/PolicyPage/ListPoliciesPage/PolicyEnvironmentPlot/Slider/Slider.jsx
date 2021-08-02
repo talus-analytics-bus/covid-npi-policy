@@ -63,8 +63,8 @@ const Slider = ({
     if (newPos >= dim.xAxis.start.x && newPos <= dim.xAxis.end.x) {
       if (dragStartX !== 0) {
         setSliderX(newPos);
-        const cursorDate = scale.x.invert(cursorX);
-        setIntroDate(Math.floor(cursorDate.getTime() / msPerDay));
+        const sliderDate = scale.x.invert(newPos);
+        setIntroDate(Math.floor(sliderDate.getTime() / msPerDay));
       }
       setCursorX(newPos + dragStartX);
       if (cursorVisible && !popupVisible) {
