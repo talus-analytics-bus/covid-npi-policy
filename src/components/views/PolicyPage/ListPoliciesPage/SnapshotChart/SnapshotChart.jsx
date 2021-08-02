@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as d3 from "d3/dist/d3.min";
 
 import Bar from "./Bar/Bar";
@@ -36,6 +36,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   };
 
   const [introDate, setIntroDate] = useRecoilState(introDateState);
+  // const [introDate, setIntroDate] = useState();
   const [lastDate, setLastDate] = useState();
 
   useEffect(() => {
@@ -73,6 +74,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   // calculate the max for the last day of the chart
   const [maxBar, setMaxBar] = useState(0);
   useEffect(() => {
+    console.count("policySummaryObject useEffect");
     const lastStatus =
       policySummaryObject &&
       Object.values(policySummaryObject)[
@@ -131,14 +133,9 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
         L ${dim.axes.x.start}, ${dim.axes.y.end - 2}
         `}
       />
-      {sortedBars
-        .sort((a, b) => chartLabels.indexOf(b) - chartLabels.indexOf(a))
-        .map(([category, bar], index) => (
-          <Bar
-            key={category}
-            {...{ category, bar, index, dim, selectedDate }}
-          />
-        ))}
+      {sortedBars.map(([category, bar], index) => (
+        <Bar key={category} {...{ category, bar, index, dim, selectedDate }} />
+      ))}
     </svg>
   );
 };
