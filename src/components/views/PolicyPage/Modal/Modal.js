@@ -10,22 +10,10 @@ const Modal = props => {
         createPortal(
           <div
             className={styles.modalContainer}
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onMouseDown={e => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onMouseMove={e => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onMouseUp={e => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            onClick={e => e.stopPropagation()}
+            onMouseDown={e => e.stopPropagation()}
+            onMouseMove={e => e.stopPropagation()}
+            onMouseUp={e => e.stopPropagation()}
           >
             <button
               aria-label="Close Modal"
