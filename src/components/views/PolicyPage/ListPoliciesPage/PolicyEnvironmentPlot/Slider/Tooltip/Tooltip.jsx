@@ -157,4 +157,10 @@ const Tooltip = ({
   );
 };
 
-export default Tooltip;
+// memo equality check
+const checkDate = (prev, next) => {
+  return prev.sliderDate === next.sliderDate;
+};
+const MemoizedTooltip = React.memo(Tooltip, checkDate);
+
+export default MemoizedTooltip;
