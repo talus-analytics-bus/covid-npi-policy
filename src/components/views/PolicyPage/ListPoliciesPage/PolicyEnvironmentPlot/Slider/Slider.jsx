@@ -8,7 +8,7 @@ const msPerDay = 86400000;
 
 const formatDate = date => {
   if (!date) return undefined;
-  return new Date(date).toLocaleString("en-de", {
+  return new Date(date.toDateString()).toLocaleString("en-de", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -204,7 +204,7 @@ const Slider = ({
                 fontSize: 9,
               }}
             >
-              {formatDate(sliderDate.toISOString().substring(0, 10))}
+              {formatDate(sliderDate)}
             </text>
           </>
         )}
@@ -244,7 +244,7 @@ const Slider = ({
               fontSize: 9,
             }}
           >
-            {formatDate(cursorDate.toISOString().substring(0, 10))}
+            {formatDate(cursorDate)}
           </text>
         </g>
       )}
@@ -281,7 +281,7 @@ const Slider = ({
                 // stroke: "white",
                 // strokeWidth: ".5",
               }}
-              cx={scale.x(new Date(sliderDate.toISOString().substring(0, 10)))}
+              cx={scale.x(new Date(sliderDate.toDateString()))}
               cy={dim.yAxis.end.y - index * vSpacing - circlePadding}
               r={3}
             />
