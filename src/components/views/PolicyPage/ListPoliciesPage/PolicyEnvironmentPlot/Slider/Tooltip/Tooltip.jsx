@@ -50,11 +50,12 @@ const TooltipContent = ({
   // };
 
   return (
-    <div
-      style={{ pointerEvents: "auto" }}
-      onMouseEnter={() => setCursorVisible(false)}
-      onMouseLeave={() => setCursorVisible(true)}
-    >
+    <div style={{ pointerEvents: "auto" }}>
+      <div
+        className={styles.cursorListener}
+        onMouseEnter={() => setCursorVisible(false)}
+        onMouseLeave={() => setCursorVisible(true)}
+      />
       <header className={styles.greySection}>
         <div className={styles.date}>
           {formatDate(new Date(sliderDate * msPerDay))}

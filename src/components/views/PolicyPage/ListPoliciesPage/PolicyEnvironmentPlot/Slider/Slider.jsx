@@ -76,6 +76,7 @@ const Slider = ({
 
   const handleDragEnd = e => {
     setDragStartX(0);
+    setCursorVisible(true);
     document.body.removeEventListener("mouseup", handleDragEnd);
   };
 
