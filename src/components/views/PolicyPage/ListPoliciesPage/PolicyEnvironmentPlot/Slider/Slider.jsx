@@ -140,22 +140,20 @@ const Slider = ({
     setCursorVisible(false);
     setPopupVisible(true);
     if (e.key === "ArrowLeft") {
-      let nextDate;
       setSliderX(prev => {
-        nextDate = new Date(scale.x.invert(prev));
+        const nextDate = new Date(scale.x.invert(prev));
         nextDate.setDate(nextDate.getDate() - 1);
         return scale.x(nextDate);
       });
-      setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
+      setIntroDate(prev => prev - 1);
     }
     if (e.key === "ArrowRight") {
-      let nextDate;
       setSliderX(prev => {
-        nextDate = new Date(scale.x.invert(prev));
+        const nextDate = new Date(scale.x.invert(prev));
         nextDate.setDate(nextDate.getDate() + 1);
         return scale.x(nextDate);
       });
-      setIntroDate(Math.floor(nextDate.getTime() / msPerDay));
+      setIntroDate(prev => prev + 1);
     }
   };
 
