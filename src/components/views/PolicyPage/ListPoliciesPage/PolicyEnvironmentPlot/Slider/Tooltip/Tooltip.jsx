@@ -56,7 +56,6 @@ const TooltipContent = ({
       onMouseLeave={() => setCursorVisible(true)}
     >
       <header className={styles.greySection}>
-        {console.log("plot tooltip rendered")}
         <div className={styles.date}>
           {formatDate(new Date(sliderDate * msPerDay))}
         </div>
@@ -163,7 +162,10 @@ const Tooltip = ({
 
 // memo equality check
 const checkDate = (prev, next) => {
-  return prev.sliderDate === next.sliderDate;
+  return (
+    prev.sliderDate === next.sliderDate &&
+    prev.popupVisible === next.popupVisible
+  );
 };
 const MemoizedTooltip = React.memo(Tooltip, checkDate);
 
