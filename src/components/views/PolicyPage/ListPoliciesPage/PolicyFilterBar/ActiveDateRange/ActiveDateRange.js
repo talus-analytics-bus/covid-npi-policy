@@ -37,15 +37,21 @@ const ActiveDateRange = props => {
   if (policyFilters.dates_in_effect)
     return (
       <div className={styles.activeDateRange}>
-        <label>
-          <strong>Dates Policy in Effect</strong>
-        </label>
-        <RemoveFilterButton onClick={resetDateRange}>
+        {/* <label> */}
+        {/* <strong>Dates Policy in Effect</strong> */}
+        {/* </label> */}
+        <RemoveFilterButton
+          light
+          backgroundColor={"#C6DFDA"}
+          onClick={resetDateRange}
+        >
           Active During:{" "}
-          {dateRangeLabel({
-            startDate: policyFilters.dates_in_effect[0],
-            endDate: policyFilters.dates_in_effect[1],
-          })}
+          <strong>
+            {dateRangeLabel({
+              startDate: policyFilters.dates_in_effect[0],
+              endDate: policyFilters.dates_in_effect[1],
+            })}
+          </strong>
         </RemoveFilterButton>
       </div>
     );

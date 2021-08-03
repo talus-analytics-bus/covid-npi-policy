@@ -255,6 +255,7 @@ const PolicyModel = props => {
             style={{
               data: {
                 fill: "#dadada",
+                // strokeWidth: 0.00015,
                 // {
                 //   maryland: "rgba(240,0,0,.5)",
                 //   infected_a: "rgba(0,240,0,.5)",
@@ -278,7 +279,7 @@ const PolicyModel = props => {
           <VictoryLine
             key={curveName}
             style={{
-              data: { stroke: plotColors[index], strokeWidth: 0.75 },
+              data: { stroke: plotColors[index], strokeWidth: 1.25 },
             }}
             data={data.average}
             // interpolation={'monotoneX'}
@@ -348,7 +349,7 @@ const PolicyModel = props => {
       style={{
         data: {
           stroke: interventionColors[intervention.name.split("_")[0]],
-          strokeWidth: 0.75,
+          strokeWidth: 1.5,
         },
       }}
       data={[
@@ -515,99 +516,6 @@ const PolicyModel = props => {
             {/* Switch to model view to add interventions */}
           </p>
         )}
-        <label className={styles.legendLabel}>
-          <Tippy
-            content={
-              <div
-                className={
-                  props.activeTab === "caseload"
-                    ? styles.legend
-                    : styles.proposedLegend
-                }
-              >
-                <div className={styles.lockdown}>
-                  <span />
-                  <p>
-                    {props.activeTab === "interventions" && "Proposed"} Lockdown
-                    policies
-                  </p>
-                </div>
-                <div className={styles.stay}>
-                  <span />
-                  <p>
-                    {props.activeTab === "interventions" && "Proposed"}{" "}
-                    Stay-at-home policies
-                  </p>
-                </div>
-                <div className={styles.safer}>
-                  <span />
-                  <p>
-                    {props.activeTab === "interventions" && "Proposed"}{" "}
-                    Safer-at-home policies
-                  </p>
-                </div>
-                <div className={styles.partial}>
-                  <span />
-                  <p>
-                    {props.activeTab === "interventions" && "Proposed"}{" "}
-                    Partially open policies
-                  </p>
-                </div>
-                <div className={styles.open}>
-                  <span />
-                  <p>
-                    {props.activeTab === "interventions" && "Proposed"} Open
-                    policies
-                  </p>
-                </div>
-                {/* <div className={styles.proposed}> */}
-                {/*   <span /> */}
-                {/*   <p>Proposed</p> */}
-                {/* </div> */}
-                {props.activeTab === "caseload" && (
-                  <div className={styles.daily}>
-                    <span />
-                    <p>
-                      Daily New{" "}
-                      {props.selectedCurves[0] === "infected_a"
-                        ? "Cases"
-                        : "Deaths"}
-                    </p>
-                  </div>
-                )}
-                {props.activeTab === "caseload" && (
-                  <div className={styles.actuals}>
-                    <span />
-                    <p>7-Day Average</p>
-                  </div>
-                )}
-                {props.activeTab === "interventions" && (
-                  <div className={styles.modeled}>
-                    <span />
-                    <p>
-                      Modeled{" "}
-                      {props.selectedCurves[0] === "infected_a"
-                        ? "active cases"
-                        : "cumulative deaths"}
-                    </p>
-                  </div>
-                )}
-                {/* <div className={styles.noPolicies}> */}
-                {/* <span /> */}
-                {/* <p>"What if we had done nothing" scenario</p> */}
-                {/* </div> */}
-              </div>
-            }
-            allowHTML={true}
-            interactive={true}
-            maxWidth={"30rem"}
-            theme={"light"}
-            placement={"bottom"}
-            offset={[-30, 10]}
-          >
-            <h4>Legend</h4>
-          </Tippy>
-        </label>
       </div>
       <Tippy
         interactive={true}
@@ -631,14 +539,14 @@ const PolicyModel = props => {
             height: "2.5%",
             top: {
               caseload: {
-                infected_a: "40%",
-                dead: "40%",
+                infected_a: "35.5%",
+                dead: "35%",
               },
               interventions: {
-                infected_a: "47.8%",
+                infected_a: "46.8%",
                 infected_b: "48.5%",
                 infected_c: "53.5%",
-                dead: "45%",
+                dead: "42.5%",
               },
             }[props.activeTab][props.selectedCurves[0]],
             left: "2.2%",
@@ -674,8 +582,8 @@ const PolicyModel = props => {
             style={{
               position: "absolute",
               height: "2.5%",
-              top: "12.5%",
-              left: "2.7%",
+              top: "8.5%",
+              left: "2.35%",
             }}
           />
         </Tippy>

@@ -70,7 +70,7 @@ export const LoadingSpinner: FC<LoadingSpinnerProps> = ({
   }, [delay, ready]);
 
   useEffect(() => {
-    setTimeout(
+    const rotationTimer = setTimeout(
       curRotation => {
         // rotate an additional 60deg every sec
         setRotation(curRotation + 60);
@@ -78,6 +78,10 @@ export const LoadingSpinner: FC<LoadingSpinnerProps> = ({
       1000,
       rotation
     );
+
+    return () => {
+      clearTimeout(rotationTimer);
+    };
   }, [rotation]);
 
   return (

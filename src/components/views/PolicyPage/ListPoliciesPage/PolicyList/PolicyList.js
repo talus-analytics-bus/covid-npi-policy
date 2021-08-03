@@ -91,8 +91,6 @@ const PolicyList = props => {
     }
   };
 
-  // console.log(policyObject);
-
   return (
     <div className={styles.policyList}>
       {policyObject &&
@@ -102,6 +100,10 @@ const PolicyList = props => {
             <React.Fragment key={categoryName}>
               {categoryName !== "Unspecified" && (
                 <div className={styles.topLevelContainer}>
+                  <a
+                    className={styles.sectionAnchor}
+                    name={`${categoryName}`}
+                  />
                   <ExpandingSection
                     open={category.open}
                     onOpen={() => {
@@ -127,7 +129,10 @@ const PolicyList = props => {
                     }}
                   >
                     <div className={styles.topLevelHeader}>
-                      <PolicyCategoryIcon category={categoryName} />
+                      <PolicyCategoryIcon
+                        category={categoryName}
+                        style={{ marginRight: "0.5rem" }}
+                      />
                       <ExpandMarker
                         arrowColor={"#29334B"}
                         backgroundColor={"#ffffff"}

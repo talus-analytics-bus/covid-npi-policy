@@ -51,6 +51,13 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   background: #fff;
 
+  .sectionAnchor {
+    position: relative;
+    // to account for the height
+    // of the nav bar
+    top: -135px;
+  }
+
   .topLevelHeader {
     display: flex;
     align-items: center;
@@ -66,18 +73,20 @@
 
     h1 {
       font-family: "rawline";
-      font-size: 24px;
-      font-weight: 600;
-      // text-transform: capitalize;
       text-transform: none;
       color: #29334b;
       width: 100%;
       display: flex;
       align-items: baseline;
 
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+
       span {
         font-weight: 400;
-        font-size: 0.75em;
+        // font-size: 0.75em;
+        font-size: 0.9em;
         margin-left: 0.5rem;
         margin-left: auto;
 
@@ -95,7 +104,7 @@
     padding-bottom: 5px;
 
     position: relative;
-    padding-left: 30px;
+    padding-left: 36px;
     padding-top: 5px;
     padding-bottom: 10px;
 

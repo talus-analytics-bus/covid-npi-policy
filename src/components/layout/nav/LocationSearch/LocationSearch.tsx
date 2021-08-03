@@ -23,7 +23,12 @@ const API_URL = process.env.REACT_APP_API_URL;
  * Provide a search bar and results list to find and select places.
  * @returns {ReactElement} LocationSearch function component
  */
-const LocationSearch: FC = (): ReactElement => {
+
+interface SearchProps {
+  floating?: boolean;
+}
+
+const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
   const [places, setPlaces] = React.useState<PlaceRecord[]>();
   const [searchValue, setSearchValue] = React.useState("");
 
@@ -123,7 +128,12 @@ const LocationSearch: FC = (): ReactElement => {
     setSearchValue(e.target.value);
   };
   return (
-    <div className={styles.searchContainer}>
+    <div
+      className={styles.searchContainer}
+      style={{
+        ...(floating && { width: "unset", position: "relative" }),
+      }}
+    >
       <div className={styles.searchBarAndIcons}>
         <input
           autoFocus
@@ -133,6 +143,9 @@ const LocationSearch: FC = (): ReactElement => {
           value={searchValue}
           placeholder="Search for location"
           {...{ onKeyPress, onKeyDown, onChange }}
+          style={{
+            ...(floating && { height: "2.125em", fontSize: "" }),
+          }}
         />
         <div className={styles.icons}>
           <XCloseBtn
@@ -145,14 +158,23 @@ const LocationSearch: FC = (): ReactElement => {
         </div>
       </div>
 
-      {results && (
-        <div className={styles.results}>
-          {results.length > 0 && (
-            <div className={styles.header}>
-              <span>Place</span>
-              {/* <span>National Policy Count</span> */}
-            </div>
-          )}
+      {results && results.length > 0 && (
+        <div
+          className={styles.results}
+          style={{
+            ...(floating && {
+              position: "absolute",
+              left: "0",
+              right: "0",
+              backgroundColor: "#fff",
+              padding: "0 10px 10px 10px",
+            }),
+          }}
+        >
+          <div className={styles.header}>
+            <span>Place</span>
+            {/* <span>National Policy Count</span> */}
+          </div>
           {results.slice(0, 4).map(r => {
             if (r.loc === undefined || r.level === null) return null;
             else

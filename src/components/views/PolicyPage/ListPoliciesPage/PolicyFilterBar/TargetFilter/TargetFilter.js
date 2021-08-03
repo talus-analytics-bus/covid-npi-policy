@@ -72,21 +72,33 @@ const TargetFilter = props => {
         },
       });
 
-      setTargets(prev => ({ ...prev, all: request.data.data.subtarget }));
+      setTargets(prev => ({
+        ...prev,
+        all: request.data.data.subtarget.map(subtarget => ({
+          ...subtarget,
+          label: subtarget.value,
+        })),
+      }));
     };
 
     getOptions();
   }, [location, setTargets]);
 
+
   return (
     <div className={styles.filter}>
+      <span className={styles.label}>POLICY TARGET</span>
       <ExpandingSection
         floating
         open={filterOpen}
         onOpen={() => setFilterOpen(true)}
         onClose={() => setFilterOpen(false)}
       >
-        <span className={styles.buttonLabel}>Filter by Target</span>
+        <span className={styles.buttonLabel}>
+          {targets.selected.length > 0
+            ? `${targets.selected.length} selected`
+            : `—`}
+        </span>
         <div className={styles.filterFrame}>
           <MultiSelect
             showSelectedItems={false}

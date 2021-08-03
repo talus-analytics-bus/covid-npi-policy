@@ -323,10 +323,8 @@ const PolicyModel = ({ setLoading, setPage }) => {
         <meta name="COVID AMP policy model for United States states and the District of Columbia" />
       </Helmet>
       <article className={styles.main}>
+        <h1 className={styles.title}>Policy model</h1>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>
-            COVID AMP <strong>Policy Model</strong>
-          </h1>
           <div className={styles.wrapContainer}>
             <div className={styles.visualize}>
               <img src={ampLogo} alt="COVID AMP Logo" />
@@ -395,48 +393,6 @@ const PolicyModel = ({ setLoading, setPage }) => {
               </select>
             </label>
             <label>
-              Choose view
-              <div
-                className={styles.radio}
-                onChange={e => setActiveTab(e.target.value)}
-              >
-                <label>
-                  <input
-                    type="radio"
-                    value="caseload"
-                    defaultChecked={activeTab === "caseload"}
-                    name="view-mode"
-                  />
-                  Current and historical data
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    value="interventions"
-                    defaultChecked={activeTab === "interventions"}
-                    name="view-mode"
-                  />
-                  Model
-                </label>
-              </div>
-            </label>
-            {/* <label> */}
-            {/*   Show COVID count by */}
-            {/*   <div */}
-            {/*     className={styles.radio} */}
-            {/*     onChange={e => setActiveTab(e.target.value)} */}
-            {/*   > */}
-            {/*     <label> */}
-            {/*       <input type="radio" value="infected_a" name="covid-count" /> */}
-            {/*       Current and historical data */}
-            {/*     </label> */}
-            {/*     <label> */}
-            {/*       <input type="radio" value="dead" name="covid-count" /> */}
-            {/*        */}
-            {/*     </label> */}
-            {/*   </div> */}
-            {/* </label> */}
-            <label>
               Show COVID count by
               <select
                 style={{ width: "15rem" }}
@@ -482,12 +438,55 @@ const PolicyModel = ({ setLoading, setPage }) => {
                   alt="More information"
                   style={{
                     position: "absolute",
-                    top: "2.75rem",
+                    top: "2.65rem",
                     right: "2.5rem",
                   }}
                 />
               </Tippy>
             </label>
+
+            <label>
+              Choose view
+              <div
+                className={styles.radio}
+                onChange={e => setActiveTab(e.target.value)}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    value="caseload"
+                    defaultChecked={activeTab === "caseload"}
+                    name="view-mode"
+                  />
+                  Current and historical data
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="interventions"
+                    defaultChecked={activeTab === "interventions"}
+                    name="view-mode"
+                  />
+                  Model
+                </label>
+              </div>
+            </label>
+            {/* <label> */}
+            {/*   Show COVID count by */}
+            {/*   <div */}
+            {/*     className={styles.radio} */}
+            {/*     onChange={e => setActiveTab(e.target.value)} */}
+            {/*   > */}
+            {/*     <label> */}
+            {/*       <input type="radio" value="infected_a" name="covid-count" /> */}
+            {/*       Current and historical data */}
+            {/*     </label> */}
+            {/*     <label> */}
+            {/*       <input type="radio" value="dead" name="covid-count" /> */}
+            {/*        */}
+            {/*     </label> */}
+            {/*   </div> */}
+            {/* </label> */}
 
             {/* <label> */}
             {/*   Reduction in contacts */}
@@ -536,14 +535,17 @@ const PolicyModel = ({ setLoading, setPage }) => {
             {/* {console.log("\npolicymodel zoomDateRange")} */}
             {/* {console.log(zoomDateRange)} */}
             {curves && curves[selectedStates[0]] && (
-              <NavigatorPlot
-                curves={curves[selectedStates[0]].curves}
-                zoomDateRange={zoomDateRange}
-                setZoomDateRange={setZoomDateRange}
-                domain={domain}
-                caseLoadAxis={caseLoadAxis}
-                activeTab={activeTab}
-              />
+              <label style={{ width: "100%" }}>
+                Time Slider
+                <NavigatorPlot
+                  curves={curves[selectedStates[0]].curves}
+                  zoomDateRange={zoomDateRange}
+                  setZoomDateRange={setZoomDateRange}
+                  domain={domain}
+                  caseLoadAxis={caseLoadAxis}
+                  activeTab={activeTab}
+                />
+              </label>
             )}
           </div>
         </div>
@@ -658,6 +660,23 @@ const PolicyModel = ({ setLoading, setPage }) => {
             }
           })}
         </section>
+        <div className={styles.belowChart}>
+          <span className={styles.source}>
+            Source for daily new cases:{" "}
+            <a target="_blank" href="https://github.com/nytimes/covid-19-data">
+              New York Times COVID-19 Data
+            </a>
+          </span>
+          <a href="/about/doc/" className={styles.documentationLink}>
+            {/* <svg x="0px" y="0px" viewBox="0 0 10.5 11.1">
+            <path
+              d="M9.4,0H1C0.5,0,0,0.5,0,1v9c0,0.6,0.5,1,1,1h8.4c0.6,0,1-0.5,1-1V1C10.5,0.5,10,0,9.4,0z M6.8,7.9
+          H2.1v-1h4.7V7.9z M8.4,5.8H2.1v-1h6.3V5.8z M8.4,3.7H2.1v-1h6.3V3.7z"
+            />
+          </svg> */}
+            Documentation
+          </a>
+        </div>
       </article>
     </div>
   );

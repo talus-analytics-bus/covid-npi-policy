@@ -1,5 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+import {
+  CATEGORY_FIELD_NAME,
+  SUBCATEGORY_FIELD_NAME,
+} from "../PolicyRouter/PolicyLoaders";
+import PolicyCategoryIcon from "../PolicyCategoryIcon/PolicyCategoryIcon";
 
 import styles from "./PolicySummary.module.scss";
 
@@ -30,10 +36,14 @@ const PolicySummary = props => {
       .split("/")
       .slice(-2);
 
+  const [readMoreClicked, setReadMoreClicked] = useState(false);
+
   const descriptionWords = props.policy.desc.split(" ");
 
   const truncateDescription =
-    props.wordLimit && descriptionWords.length > props.wordLimit;
+    !readMoreClicked &&
+    props.wordLimit &&
+    descriptionWords.length > props.wordLimit;
 
   const description = truncateDescription
     ? descriptionWords.slice(0, props.wordLimit).join(" ") + "..."
@@ -57,72 +67,104 @@ const PolicySummary = props => {
       }}
     >
       {props.showAllMetadata && (
-        <p className={styles.breadcrumbs}>
-          {props.path &&
-            props.path
-              .filter(
-                s =>
-                  ![
-                    "children",
-                    "Local",
-                    "Country",
-                    "State / Province",
-                  ].includes(s)
-              )
-              .slice(0, -2)
-              .map(e => (
-                <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
-              ))}
-          {props.path && props.path.slice(-3)[0]}
-        </p>
+        <h1 className={styles.title}>
+          <PolicyCategoryIcon
+            category={props.policy[CATEGORY_FIELD_NAME]}
+            style={{ marginRight: "0.5em", width: "1.5em", height: "1.5em" }}
+          />
+          {props.policy[SUBCATEGORY_FIELD_NAME]}
+        </h1>
+        // <p className={styles.breadcrumbs}>
+        //   {props.path &&
+        //     props.path
+        //       .filter(
+        //         s =>
+        //           ![
+        //             "children",
+        //             "Local",
+        //             "Country",
+        //             "State / Province",
+        //           ].includes(s)
+        //       )
+        //       .slice(0, -2)
+        //       .map(e => (
+        //         <React.Fragment key={e}>{e} &nbsp; 〉 </React.Fragment>
+        //       ))}
+        //   {props.path && props.path.slice(-3)[0]}
+        // </p>
       )}
-      <header className={styles.header}>
-        <div className={styles.metadata}>
-          <div>
-            <h1>Effective from</h1>
-            <h2>{formatDate(new Date(props.policy.date_start_effective))}</h2>
-          </div>
-          <div>
-            <h1>Ended</h1>
-            <h2>
-              {props.policy.date_end_actual
-                ? formatDate(new Date(props.policy.date_end_actual))
-                : "Active"}
-            </h2>
-          </div>
-          <div>
-            <h1>Published in</h1>
-            {truncateTitle ? (
-              <Tippy
-                interactive={true}
-                allowHTML={true}
-                content={
-                  <p className={styles.ipopup}>{props.policy.policy_name}</p>
-                }
-                maxWidth={"40rem"}
-                theme={"light"}
-                placement={"bottom"}
-                offset={[-30, 10]}
-              >
-                <h2>{title}</h2>
-              </Tippy>
-            ) : (
+      <div className={styles.main}>
+        <header className={styles.metadata}>
+          <h1>Effective date</h1>
+          <h2>{formatDate(new Date(props.policy.date_start_effective))}</h2>
+          <h1>End date</h1>
+          <h2>
+            {props.policy.date_end_actual
+              ? formatDate(new Date(props.policy.date_end_actual))
+              : "Active"}
+          </h2>
+          <h1>
+            Authorizing <br /> Location
+          </h1>
+          <h2>{props.policy.auth_entity[0].place.loc.split(",")[0]}</h2>
+          <h1>Jurisdiction</h1>
+          <h2>{props.policy.auth_entity[0].place.level}</h2>
+          <h1>Published in</h1>
+          {truncateTitle ? (
+            <Tippy
+              interactive={true}
+              allowHTML={true}
+              content={
+                <p className={styles.ipopup}>{props.policy.policy_name}</p>
+              }
+              maxWidth={"40rem"}
+              theme={"light"}
+              placement={"bottom"}
+              offset={[-30, 10]}
+            >
               <h2>{title}</h2>
-            )}
-          </div>
-        </div>
-        {props.policy.court_challenges && (
+            </Tippy>
+          ) : (
+            <h2>{title}</h2>
+          )}
+          {/* {props.policy.court_challenges && (
           <img
             className={styles.courtChallengeIcon}
             src={CourtChallengeIcon}
             alt="Challenged in Court"
           />
-        )}
-      </header>
-      <p>
-        {description} {truncateDescription && <span>read more</span>}
-      </p>
-      <div className={styles.policyButton}>Policy Details</div>
+        )} */}
+        </header>
+        <section>
+          <p>
+            {description}{" "}
+            {truncateDescription && (
+              <span
+                onMouseDown={e => {
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  e.preventDefault();
+                }}
+                onMouseUp={e => {
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  e.preventDefault();
+                }}
+                onClick={e => {
+                  console.log("please don't propagate");
+                  e.stopPropagation();
+                  e.nativeEvent.stopImmediatePropagation();
+                  e.preventDefault();
+                  setReadMoreClicked(prev => !prev);
+                }}
+              >
+                read more
+              </span>
+            )}
+          </p>
+          <div className={styles.policyButton}>Policy Details</div>
+        </section>
+      </div>
     </Link>
   );
 };

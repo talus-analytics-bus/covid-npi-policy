@@ -50,13 +50,15 @@ const DateRangeControl = props => {
 
   return (
     <label className={styles.searchControl}>
-      <input
-        type="text"
-        value={searchTextInputValue}
-        onChange={onChange}
-        placeholder="search"
-      />
-      <button aria-label="Clear Search" onClick={clearSearch} />
+      <div style={{ position: "relative" }}>
+        <input
+          type="text"
+          value={searchTextInputValue}
+          onChange={onChange}
+          placeholder="search"
+        />
+        <button aria-label="Clear Search" onClick={clearSearch} />
+      </div>
     </label>
   );
 };

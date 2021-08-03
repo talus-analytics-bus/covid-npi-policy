@@ -12,7 +12,7 @@
 
   .description {
     h1 {
-      font-size: 1rem;
+      font-size: 20px;
       color: #29334b;
       line-height: 1.4;
       font-weight: 600;
@@ -23,6 +23,17 @@
       font-size: 1rem;
       color: #29334b;
       font-weight: 300;
+    }
+
+    h3 {
+      font-family: Open Sans;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      color: #e55e37;
+      margin-top: 0.5em;
+      margin-bottom: 0.5rem;
+      text-transform: none;
     }
   }
 }

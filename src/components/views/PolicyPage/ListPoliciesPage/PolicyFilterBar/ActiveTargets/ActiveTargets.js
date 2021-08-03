@@ -42,21 +42,22 @@ const ActiveDateRange = props => {
       <>
         {policyFilters.subtarget.map((filter, index) => (
           <div key={filter} className={styles.activeTarget}>
-            {index === 0 ? (
-              <label>
-                <strong>
-                  Policy{" "}
-                  {policyFilters.subtarget.length === 1 ? "Target" : "Targets"}
-                </strong>
-              </label>
-            ) : (
-              <label>&nbsp;</label>
-            )}
+            {/* {index === 0 ? ( */}
+            {/*   <label> */}
+            {/*     <strong> */}
+            {/*       Policy{" "} */}
+            {/*       {policyFilters.subtarget.length === 1 ? "Target" : "Targets"} */}
+            {/*     </strong> */}
+            {/*   </label> */}
+            {/* ) : ( */}
+            {/*   <label>&nbsp;</label> */}
+            {/* )} */}
             <RemoveFilterButton
-              backgroundColor={"#4E8490"}
+              light
+              backgroundColor={"#C6DFDA"}
               onClick={() => removeTarget(filter)}
             >
-              {filter}
+              Target: <strong>{filter}</strong>
             </RemoveFilterButton>
           </div>
         ))}

@@ -7,9 +7,21 @@ import {
 
 import { Policy } from "api/Queries";
 
-import MiniPolicyBox from "../MiniPolicyBox/MiniPolicyBox";
+// import MiniPolicyBox from "../MiniPolicyBox/MiniPolicyBox";
+import ExploreSource from "../ExploreSource/ExploreSource";
 
 import styles from "./OthersInDocument.module.scss";
+import PolicyLink from "../PolicyLink/PolicyLink";
+import PolicyCategoryIcon from "../../PolicyCategoryIcon/PolicyCategoryIcon";
+
+const formatDate = date => {
+  if (!date) return undefined;
+  return date.toLocaleString("en-de", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const OthersInDocument = ({ policy, path }) => {
   const [policies, setPolicies] = React.useState();
@@ -34,7 +46,7 @@ const OthersInDocument = ({ policy, path }) => {
         otherPolicy => `${otherPolicy.id}` !== `${policy.id}`
       );
 
-      setPolicies(otherPolicies.slice(0, 3));
+      setPolicies(otherPolicies);
     };
 
     if (policy && policy.policy_number) getPoliciesInDocument();
@@ -42,13 +54,47 @@ const OthersInDocument = ({ policy, path }) => {
 
   if (policies && policies.length > 0)
     return (
-      <div className={styles.othersInDocument}>
-        <h2>Other Policies in this Document</h2>
+      <div>
+        <h2>OTHER POLICIES IN THIS SOURCE DOCUMENT ({policies.length})</h2>
         <div className={styles.others}>
-          {policies &&
+          {/* {policies &&
             policies.map(policy => (
               <MiniPolicyBox key={policy.id} policy={policy} />
+            ))} */}
+          {policies &&
+            policies.slice(0, 3).map(policy => (
+              <PolicyLink
+                target="_blank"
+                key={policy.id}
+                policy={policy}
+                className={styles.policyLink}
+              >
+                <PolicyCategoryIcon
+                  category={policy[CATEGORY_FIELD_NAME]}
+                  style={{
+                    marginRight: ".5em",
+                    height: "1.75em",
+                    width: "1.75em",
+                  }}
+                />
+                {`${policy.auth_entity[0].place.loc.split(",")[0]} 
+                  ${policy[CATEGORY_FIELD_NAME]}: 
+                  ${policy[SUBCATEGORY_FIELD_NAME]} issued 
+                  ${formatDate(new Date(policy.date_issued))}`}
+              </PolicyLink>
             ))}
+          {policy && policy.policy_name !== "Not Available" && (
+            <>
+              {/* <span className={styles.seeMoreText}>
+                To see all other policies in this document, click the button
+                below:
+              </span> */}
+              {/* <ExploreSource {...{ policy }} className={styles.seeMore}> */}
+              {/* See more */}
+              {/* </ExploreSource> */}
+              <ExploreSource {...{ policy }}>View all policies</ExploreSource>
+            </>
+          )}
         </div>
       </div>
     );

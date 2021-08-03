@@ -82,8 +82,8 @@ export const SVG = props => {
 
   // both 500 to make it square,
   // screen size will be set with CSS
-  const width = 500;
-  const height = 500;
+  const width = 250;
+  const height = 250;
 
   // let paths = null;
 
@@ -141,7 +141,7 @@ export const SVG = props => {
               propsCounties.includes(geometry.properties.name) ||
               propsCounties[0] === "Unspecified"
                 ? "#4E8490"
-                : "#ffffff"
+                : "#F2F2F2"
             }
             stroke={
               propsCounties.includes(geometry.properties.name) ||
@@ -180,7 +180,8 @@ export const SVG = props => {
               key={index}
               fill={
                 propsCountries.includes(geometry.properties.ADM0_A3)
-                  ? "#4E8490"
+                  ? // ? "#4E8490"
+                    "#EAEAEA"
                   : "#ffffff00"
               }
               stroke={

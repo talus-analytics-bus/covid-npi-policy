@@ -1,11 +1,42 @@
 import { Policy } from "api/Queries";
 import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 
+import buildSummaryObject from "./buildSummaryObject.js";
+import buildSummaryObjectFaster from "./buildSummaryObjectFaster.js";
+
 export const CATEGORY_FIELD_NAME = "primary_ph_measure";
 export const SUBCATEGORY_FIELD_NAME = "ph_measure_details";
 
 const checkPolicyActive = policy =>
   policy.date_end_actual ? new Date(policy.date_end_actual) > new Date() : true;
+
+export const requestSummaryObject = async ({
+  filters,
+  sort,
+  summarySetter,
+  setStatus,
+}) => {
+  console.log("requestSummaryObject called");
+  const summaryResponse = await Policy({
+    method: "post",
+    filters,
+    ordering: [["date_start_effective", sort]],
+    fields: [
+      "id",
+      CATEGORY_FIELD_NAME,
+      "date_end_actual",
+      "date_start_effective",
+    ],
+  });
+
+  const summary = buildSummaryObjectFaster(summaryResponse.data);
+
+  if (summary) {
+    setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
+    summarySetter(summary);
+  } else setStatus(prev => ({ ...prev, policiesSummary: "error" }));
+  console.log("requestSummaryObject done");
+};
 
 // Top-Level policy categories
 export const loadPolicyCategories = async ({
@@ -16,11 +47,17 @@ export const loadPolicyCategories = async ({
   summarySetter = false,
 }) => {
   console.log("loadPolicyCategories Called");
+
   const policyResponse = await Policy({
     method: "post",
     filters: filters,
     ordering: [["date_start_effective", sort]],
-    fields: ["id", CATEGORY_FIELD_NAME, "date_end_actual"],
+    fields: [
+      "id",
+      CATEGORY_FIELD_NAME,
+      "date_end_actual",
+      // "date_start_effective",
+    ],
   });
 
   // functional format of useEffect using previous value
@@ -77,7 +114,6 @@ export const loadPolicyCategories = async ({
 
     if (summarySetter) {
       summarySetter(buildObject({}, policyResponse.data, true));
-      setStatus(prev => ({ ...prev, policiesSummary: "loaded" }));
     }
 
     // this duplication means that the policies are fully
@@ -137,28 +173,28 @@ export const loadPolicySubCategories = async ({
         if (policy.auth_entity[0]) {
           let path = [
             policy[CATEGORY_FIELD_NAME],
-            "children",
-            filters.iso3[0] === "USA"
-              ? policy.auth_entity[0].place.level.replace(" / Province", "")
-              : policy.auth_entity[0].place.level,
+            // "children",
+            // filters.iso3[0] === "USA"
+            //   ? policy.auth_entity[0].place.level.replace(" / Province", "")
+            //   : policy.auth_entity[0].place.level,
             "children",
             policy[SUBCATEGORY_FIELD_NAME],
           ];
 
-          const place = policy.auth_entity[0].place;
-
-          if (
-            (filters.iso3[0] === "USA" && place.level === "Local") ||
-            (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
-            filters.iso3[0] === "Unspecified"
-          ) {
-            path = [
-              ...path,
-              "children",
-              policy.auth_entity[0].place.loc,
-              // policy.auth_entity[0].place.loc.split(",")[0],
-            ];
-          }
+          //           const place = policy.auth_entity[0].place;
+          //
+          //           if (
+          //             (filters.iso3[0] === "USA" && place.level === "Local") ||
+          //             (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+          //             filters.iso3[0] === "Unspecified"
+          //           ) {
+          //             path = [
+          //               ...path,
+          //               "children",
+          //               policy.auth_entity[0].place.loc,
+          //               // policy.auth_entity[0].place.loc.split(",")[0],
+          //             ];
+          //           }
 
           const active = checkPolicyActive(policy) ? 1 : 0;
 
@@ -269,10 +305,10 @@ export const loadPolicyDescriptions = async ({
     policyResponse.data.forEach(policy => {
       let path = [
         policy[CATEGORY_FIELD_NAME],
-        "children",
-        filters.iso3[0] === "USA"
-          ? policy.auth_entity[0].place.level.replace(" / Province", "")
-          : policy.auth_entity[0].place.level,
+        // "children",
+        // filters.iso3[0] === "USA"
+        //   ? policy.auth_entity[0].place.level.replace(" / Province", "")
+        //   : policy.auth_entity[0].place.level,
 
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
@@ -286,18 +322,18 @@ export const loadPolicyDescriptions = async ({
           policy[SUBCATEGORY_FIELD_NAME],
         ]);
 
-      if (
-        (filters.iso3[0] === "USA" && place.level === "Local") ||
-        (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
-        filters.iso3[0] === "Unspecified"
-      ) {
-        path = [
-          ...path,
-          "children",
-          policy.auth_entity[0].place.loc,
-          // policy.auth_entity[0].place.loc.split(",")[0],
-        ];
-      }
+      // if (
+      //   (filters.iso3[0] === "USA" && place.level === "Local") ||
+      //   (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+      //   filters.iso3[0] === "Unspecified"
+      // ) {
+      //   path = [
+      //     ...path,
+      //     "children",
+      //     policy.auth_entity[0].place.loc,
+      //     // policy.auth_entity[0].place.loc.split(",")[0],
+      //   ];
+      // }
 
       path = [...path, "children", `ID${policy.id}`];
 
@@ -352,29 +388,29 @@ export const loadFullPolicy = async ({ filters, stateSetter, sort }) => {
     policyResponse.data.forEach(policy => {
       let path = [
         policy[CATEGORY_FIELD_NAME],
-        "children",
-        filters.iso3[0] === "USA"
-          ? policy.auth_entity[0].place.level.replace(" / Province", "")
-          : policy.auth_entity[0].place.level,
+        // "children",
+        // filters.iso3[0] === "USA"
+        //   ? policy.auth_entity[0].place.level.replace(" / Province", "")
+        //   : policy.auth_entity[0].place.level,
 
         "children",
         policy[SUBCATEGORY_FIELD_NAME],
       ];
 
-      const place = policy.auth_entity[0].place;
+      // const place = policy.auth_entity[0].place;
 
-      if (
-        (filters.iso3[0] === "USA" && place.level === "Local") ||
-        (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
-        filters.iso3[0] === "Unspecified"
-      ) {
-        path = [
-          ...path,
-          "children",
-          policy.auth_entity[0].place.loc,
-          // policy.auth_entity[0].place.loc.split(",")[0],
-        ];
-      }
+      // if (
+      //   (filters.iso3[0] === "USA" && place.level === "Local") ||
+      //   (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+      //   filters.iso3[0] === "Unspecified"
+      // ) {
+      //   path = [
+      //     ...path,
+      //     "children",
+      //     policy.auth_entity[0].place.loc,
+      //     // policy.auth_entity[0].place.loc.split(",")[0],
+      //   ];
+      // }
 
       path = [...path, "children", `ID${policy.id}`];
 
@@ -435,8 +471,6 @@ export const loadPolicySearch = async ({
     ],
   });
 
-  console.log(policyResponse);
-
   if (policyResponse.n === 0) {
     setStatus(prev => ({ ...prev, searchResults: "error" }));
     stateSetter(policyResponse);
@@ -448,29 +482,29 @@ export const loadPolicySearch = async ({
       policyResponse.data.forEach(policy => {
         let path = [
           policy[CATEGORY_FIELD_NAME],
-          "children",
-          filters.iso3[0] === "USA"
-            ? policy.auth_entity[0].place.level.replace(" / Province", "")
-            : policy.auth_entity[0].place.level,
+          // "children",
+          // filters.iso3[0] === "USA"
+          //   ? policy.auth_entity[0].place.level.replace(" / Province", "")
+          //   : policy.auth_entity[0].place.level,
 
           "children",
           policy[SUBCATEGORY_FIELD_NAME],
         ];
 
-        const place = policy.auth_entity[0].place;
-
-        if (
-          (filters.iso3[0] === "USA" && place.level === "Local") ||
-          (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
-          filters.iso3[0] === "Unspecified"
-        ) {
-          path = [
-            ...path,
-            "children",
-            policy.auth_entity[0].place.loc,
-            // policy.auth_entity[0].place.loc.split(",")[0],
-          ];
-        }
+        //         const place = policy.auth_entity[0].place;
+        //
+        //         if (
+        //           (filters.iso3[0] === "USA" && place.level === "Local") ||
+        //           (filters.iso3[0] !== "USA" && place.level === "State / Province") ||
+        //           filters.iso3[0] === "Unspecified"
+        //         ) {
+        //           path = [
+        //             ...path,
+        //             "children",
+        //             policy.auth_entity[0].place.loc,
+        //             // policy.auth_entity[0].place.loc.split(",")[0],
+        //           ];
+        //         }
 
         path = [...path, "children", `ID${policy.id}`];
 

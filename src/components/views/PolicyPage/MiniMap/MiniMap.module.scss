@@ -1,4 +1,7 @@
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .placeholder {
     width: 10rem;
     height: 10rem;

@@ -3,8 +3,11 @@ import { useLocation } from "react-router-dom";
 
 import RemoveFilterButton from "../RemoveFilterButton/RemoveFilterButton";
 
-import styles from "./ActiveFilterBar.module.scss";
+import filterIcon from "./filterIcon.svg";
+
 import { policyContext } from "../../../PolicyRouter/PolicyRouter";
+
+import styles from "./ActiveFilterBar.module.scss";
 
 const numbersToWords = number =>
   ({
@@ -29,11 +32,12 @@ const ActiveFilterBar = props => {
   const {
     setStatus,
     setTargets,
+    setJurisdiction,
     policyFilters,
     setPolicyFilters,
     policyObject,
     setPolicyObject,
-    policySummaryObject,
+    policyCategories,
     policySearchResults,
     setSearchTextInputValue,
     setDateRangeControlValue,
@@ -41,7 +45,7 @@ const ActiveFilterBar = props => {
 
   const searchActive = policyFilters._text && policyFilters._text[0] !== "";
 
-  const totalPolicyCount = Object.values(policySummaryObject).reduce(
+  const totalPolicyCount = Object.values(policyCategories).reduce(
     (acc, cur) => ({
       count: cur.count + acc.count,
       active: cur.active + acc.active,
@@ -62,10 +66,12 @@ const ActiveFilterBar = props => {
       ...prev,
       dates_in_effect: undefined,
       subtarget: undefined,
+      level: undefined,
       _text: undefined,
     }));
     setTargets(prev => ({ ...prev, selected: [] }));
-    setPolicyObject(policySummaryObject);
+    setJurisdiction(prev => ({ ...prev, selected: [] }));
+    setPolicyObject({});
     setSearchTextInputValue("");
     setDateRangeControlValue({
       startDate: null,
@@ -84,28 +90,36 @@ const ActiveFilterBar = props => {
 
   const datesAndTargets = (
     <>
-      <p>
+      {/* <p>
         <strong>Filters</strong>
-      </p>
+      </p> */}
       <div className={styles.activeFilters}>{props.children}</div>
     </>
   );
 
-  if (policyFilters.subtarget || policyFilters.dates_in_effect || searchActive)
+  if (
+    policyFilters.level ||
+    policyFilters.subtarget ||
+    policyFilters.dates_in_effect ||
+    searchActive
+  )
     return (
       <div className={styles.activeFilterBar}>
-        {(policyFilters.subtarget || policyFilters.dates_in_effect) &&
-          datesAndTargets}
         <div className={styles.summary}>
           {!searchActive && !isNaN(filteredPolicyCount.count) && (
-            <p className={styles.filterSummary}>
-              Showing <strong>{filteredPolicyCount.count}</strong> out of{" "}
-              <strong>{totalPolicyCount.count}</strong>{" "}
-              {state !== "national" ? "state and county" : "national and local"}{" "}
-              policies, of which{" "}
-              <strong>{numbersToWords(filteredPolicyCount.active)}</strong> are
-              currently active.
-            </p>
+            <>
+              <img className={styles.filterIcon} src={filterIcon} />
+              <p className={styles.filterSummary}>
+                Showing <strong>{filteredPolicyCount.count}</strong> out of{" "}
+                <strong>{totalPolicyCount.count}</strong>{" "}
+                {state !== "national"
+                  ? "state and county"
+                  : "national and local"}{" "}
+                policies, of which{" "}
+                <strong>{numbersToWords(filteredPolicyCount.active)}</strong>{" "}
+                are currently active.
+              </p>
+            </>
           )}
           {searchActive && (
             <p className={styles.filterSummary}>
@@ -131,13 +145,18 @@ const ActiveFilterBar = props => {
           )}
           <RemoveFilterButton
             light
-            backgroundColor={"#eeeeee"}
+            backgroundColor={"#ffffff"}
             className={styles.reset}
             onClick={resetFilters}
+            style={{ background: "none", padding: "0.2em 0.4em" }}
           >
-            Reset All Filters
+            Clear filters
           </RemoveFilterButton>
         </div>
+        {(policyFilters.level ||
+          policyFilters.subtarget ||
+          policyFilters.dates_in_effect) &&
+          datesAndTargets}
       </div>
     );
   else return <></>;
