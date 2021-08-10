@@ -167,33 +167,30 @@ const Documentation = ({ ...props }) => {
         The COVID Analysis and Mapping of Policies (AMP) is part of the
         COVID-Local suite of free resources developed for local decision-makers.
         The COVID AMP Policy and Plan Database includes a library of polices
-        from US stataes and the District of Columbia, US local governments
+        from US states and the District of Columbia, US local governments
         (counties, cities) and national governments globally.
       </p>
       <p>
-        COVID AMP is an ongoing research effort with data collection performed
+        COVID AMP is an on-going research effort with data collection performed
         by researchers at the Georgetown University Center for Global Health
-        Science and Security and Talus Analytics. As of December 2020, data are
-        most complete for US states, and county level policy data are available
-        for select localities. This work continues to expand to include new
-        county- and state-level data across the US and country-level data
-        globally. In addition, a dataset of COVID-19-related plans published by
-        US states and other organizations is also being collated and is
-        available on the site. A related database of court cases and legal
-        challenges targeting COVID-19 policies within the United States is also
-        available on the site and will continue to be updated as the challenges
-        progress.
+        Science and Security and Talus Analytics. As of July 2021, data are most
+        complete for US states, and county-level policy data are available for
+        select localities. This work continues to expand to include new county-
+        and state-level data across the US and country-level data globally,
+        however the addition of new policies stopped on June 1, 2021. In
+        addition, a dataset of COVID-19-related plans published by US states and
+        other organizations is also being collated and is available on the site.
       </p>
 
       <p>The site includes:</p>
 
       <ol>
         <li>
-          A searchable, filterable database of all policies, plans, and court
-          challenges in the dataset, including legal and governance analysis.
-          The complete dataset can be downloaded in an Excel file format
-          directly from the site. If you are interested in establishing an API
-          or other direct access, please contact us at{" "}
+          A searchable, filterable database of all policies and plans in the
+          dataset, including legal and governance analysis. The complete dataset
+          can be downloaded in an Excel file format directly from the site. If
+          you are interested in establishing an API or other direct access,
+          please contact us at{" "}
           <a
             href="mailto:outbreaks@georgetown.edu"
             target="_blank"
@@ -213,11 +210,18 @@ const Documentation = ({ ...props }) => {
         </li>
         <li>
           An interactive policy map providing geospatial visualization of the
-          policies implemented over time. Policies can be viewed by
-          &ldquo;Distancing level&rdquo; (see Methods below for detailed
-          information about these categories) and by key policy types. All
-          policy maps include reference COVID-19 case counts, over time, either
-          as new cases in the last 7 days or cumulative cases.
+          policies implemented over time. Policies can be viewed by any
+          combination of key policy types or by “Distancing level” (see Methods
+          below for detailed information about these categories). All policy
+          maps include COVID-19 case counts, over time, either as an average of
+          new cases in the last 7 days or cumulative cases.
+        </li>
+        <li>
+          An interactive location profile that displays policies and caseload
+          over time. Each state or country that enacted policies has a page
+          displaying a timeline of cases overlaid with policies and a breakdown
+          of the policies enacted, by policy type (e.g., social distancing,
+          enabling and relief, etc.).
         </li>
         <li>
           An interactive tool to explore the intersection between policies and
@@ -266,7 +270,7 @@ const Documentation = ({ ...props }) => {
       </p>
 
       <h2>COVID-19 policy database documentation</h2>
-      <h3>Data coding process</h3>
+      <h3>Policy data coding process</h3>
       <p>
         To collect the data, the team first developed a custom data taxonomy and
         data dictionary to define key metadata and organize the dataset. These
@@ -291,15 +295,11 @@ const Documentation = ({ ...props }) => {
 
       <p>
         For the purpose of this effort, policies are defined as
-        government-issued and backed by legal authority or precedent. Plans
-        included in the dataset are documents issued by a government,
-        non-profit, for-profit, or higher education institution that provide
-        recommended actions or guidelines, but do not necessarily have legal
-        basis or authority. Policies are coded and tagged with the relevant
-        metadata manually. Each policy is tagged with a series of descriptive
-        attributes based on a review of the policy language, including (this is
-        a representative subset &ndash; see data dictionary for full description
-        of data fields):
+        government-issued and backed by legal authority or precedent. Policies
+        are coded and tagged with the relevant metadata manually. Each policy is
+        tagged with a series of descriptive attributes based on a review of the
+        policy language, including (this is a representative subset – see data
+        dictionary for full description of data fields):
       </p>
       <ul>
         <li>Policy name and description</li>
@@ -385,51 +385,55 @@ const Documentation = ({ ...props }) => {
       <p>
         The policy map visualizes the policies in effect over time as well as a
         distancing level determined by analyzing policies in place on a given
-        day (see below). A date slider at the top of the map page provides the
-        ability to select a date or date range over which to compare the
-        policies in effect in a given category, or view distancing level over
-        time. State-level data are available for 50 US states, the District of
-        Columbia, and Puerto Rico (US only view). Country-level policies are
-        available for select countries globally, including sub-national policies
-        for select locations. Expansion of coverage to additional countries is
-        ongoing and are added to the map and policy library as policies are
-        coded by the research team.
+        day (see below). A date slider on the map page provides the ability to
+        select a date or date range over which to compare the policies in effect
+        in a given category, or view distancing level over time. State-level
+        data are available for 50 US states, the District of Columbia, and
+        Puerto Rico (US only view). Country-level policies are available for
+        select countries globally, including sub-national policies for select
+        locations. Expansion of coverage to additional countries is ongoing and
+        are added to the map and policy library as policies are coded by the
+        research team.
       </p>
       <h3>Visualizing distancing level, as analyzed from policies</h3>
       <p>
         Distancing level reflects a general description of the status of an
-        area&rsquo;s COVID-19-related social distancing policies at a given
-        point in time. Distancing levels are categorized as: Lockdown,
-        Stay-at-home, Safer-at-home, Partially open, and Open. These categories
-        are intended to reflect the combination of policies that, taken
-        together, have been used to mitigate COVID in communities globally.
+        area’s COVID-19-related social distancing policies at a given point in
+        time. Distancing levels are categorized as: Lockdown, Stay-at-home,
+        Safer-at-home, Partially open, and Open. These categories are intended
+        to reflect the combination of policies that, taken together, have been
+        used to mitigate COVID in communities globally.
       </p>
 
       <p>
         The distancing status of each location is captured based on a day-by-day
         analysis of policies in effect for each state, over time, that address
-        school closures, private sector closures, and mass gatherings. To
-        determine distancing level, explicit policies are considered first, and
-        that status is used (e.g., stay-at-home policy for stay-at-home
-        distancing level) so long as it addresses the defined combinations of
         school closures, private sector closures, and mass gathering
-        restrictions listed for each distancing level below. In cases where an
-        explicit policy is in place, but subsequent policies related to social
-        distancing counteract key elements used in the definition of distancing
-        level considered here, the distancing level is determined using the
-        rules below. For example, a stay-at-home order that subsequently relaxes
-        (lifts) private sector closures prior to the end of the stay-at-home
-        order is considered in a safer-at-home status for the purposes of
-        distancing level in COVID AMP. Finally, the rules also serve as the
-        basis for determining distancing level when no explicit policy is in
-        place, but policies addressing school closures, private sector closures,
-        and mass gatherings exist. The definition for each distancing level is
-        included and the bullets that follow reflect the conditions used to
-        differentiate each status.
+        restrictions. To determine distancing level, explicit policies are
+        considered first and that status is used (e.g., stay-at-home policy for
+        stay-at-home distancing level) so long as it addresses the defined
+        combinations of school closures, private sector closures, and mass
+        gathering restrictions listed for each distancing level below. In cases
+        where an explicit policy is in place, but subsequent policies related to
+        social distancing counteract key elements used in the definition of
+        distancing level considered here, the distancing level is determined
+        using the rules below. For example, a stay-at-home order that
+        subsequently relaxes (lifts) private sector closures prior to the end of
+        the stay-at-home order is considered in a safer-at-home status for the
+        purposes of distancing level in COVID AMP. Finally, the rules also serve
+        as the basis for determining distancing level when no explicit policy is
+        in place, but policies addressing school closures, private sector
+        closures, and mass gatherings exist. The definition for each distancing
+        level is included and the bullets that follow reflect the conditions
+        used to differentiate each status.
       </p>
       <p>
         <strong>Lockdown (Phase I):</strong> Policies do not allow residents to
         leave their place of residence unless explicitly permitted to do so
+      </p>
+      <p>
+        For the purposes of determining distancing level in AMP, lockdown is
+        defined by:
       </p>
       <ul>
         <li>
@@ -449,22 +453,15 @@ const Documentation = ({ ...props }) => {
         defined by simultaneous closure of schools, private sector businesses,
         and restrictions on mass gatherings and events, as captured by the
         policy tagging completed by the research team. Stay-at-home distancing
-        level is captured based on one or more policies, as follows.
+        level is captured based on one or more policies, as follows:
       </p>
 
       <ul>
-        <li>
-          Stay-at-home order that includes all of the following:
-          <ul>
-            <li>School closures</li>
-            <li>Private sector closures</li>
-            <li>Mass gathering and/or event restrictions</li>
-          </ul>
-        </li>
+        <li>Stay-at-home order in place, targeted at the general population</li>
         <li>
           <u>OR</u> Combination of policies that include all of the following:
           <ul>
-            <li>School closure AND</li>
+            <li>School closures AND</li>
             <li>Private sector closures AND</li>
             <li>Mass gathering and/or event restrictions</li>
           </ul>
@@ -473,8 +470,8 @@ const Documentation = ({ ...props }) => {
 
       <p>
         <strong>Safer-at-home (Phase III):</strong> Policies limit activities to
-        those specifically permitted, encouraging extraprecautions and retaining
-        limits on mass gatherings
+        those specifically permitted, encouraging extra precautions and
+        retaining limits on mass gatherings
       </p>
 
       <p>
@@ -483,7 +480,7 @@ const Documentation = ({ ...props }) => {
         private sector (either as specified in a safer-at-home order or through
         a combination of stay-at-home order plus relaxed private sector
         restrictions), and ongoing mass gathering restrictions (though they may
-        be relaxed relative to stay-at-home conditions).
+        be relaxed relative to stay-at-home conditions):
       </p>
 
       <ul>
@@ -522,7 +519,9 @@ const Documentation = ({ ...props }) => {
         like enhanced cleaning protocols
       </p>
 
-      <p>Partially open distancing level is defined as:</p>
+      <p>
+        <strong>Partially open</strong> distancing level is defined as:
+      </p>
 
       <ul>
         <li>
@@ -536,10 +535,7 @@ const Documentation = ({ ...props }) => {
         <li>
           Includes reopening policies for private sector and/or mass gatherings
         </li>
-        <li>
-          Can includes face mask or adaptation and mitigation strategies
-          policies
-        </li>
+        <li>Can include face mask or adaptation and mitigation policies</li>
         <li>Schools may or may not be reopened</li>
       </ul>
 
@@ -553,13 +549,13 @@ const Documentation = ({ ...props }) => {
 
       <p>
         These conditions are similar to those prior to the pandemic for any
-        policy related to movement and interactions between individuals
+        policy related to movement and interactions between individuals:
       </p>
       <ul>
         <li>No stay-at-home or safer-at-home order in place</li>
         <li>No private sector closures, and no re-opening specific policies</li>
         <li>
-          No mass gathering restrictions, and nore-opening specific policies
+          No mass gathering restrictions, and no re-opening specific policies
         </li>
         <li>No school closures in place</li>
         <li>No face mask or adaptation and mitigation policies in place</li>
@@ -568,14 +564,15 @@ const Documentation = ({ ...props }) => {
       <p>
         To visualize policies of different types in effect over time, the map
         queries the policy dataset by date and location. Policies can be viewed
-        by category on the map:
+        by category on the map, including any combination of policies and/or
+        their subcategories:
       </p>
       <ul>
-        <li>Social distancing</li>
+        <li>Social distancing </li>
         <li>Authorization and enforcement</li>
         <li>Contact tracing/Testing</li>
         <li>Emergency declarations</li>
-        <li>Enabling and relief measures</li>
+        <li>Enabling and relief measures </li>
         <li>Face mask</li>
         <li>Military mobilization</li>
         <li>Support for public health capacity</li>
@@ -593,7 +590,28 @@ const Documentation = ({ ...props }) => {
         darkest location having the most.
       </p>
 
-      <h3>COVID-19 cases data</h3>
+      <h3>Location profiles</h3>
+      <p>
+        To view how the policy response unfolded over the course of the
+        pandemic, each country and U.S. state where policies were collected has
+        a specific page devoted to that location’s policy environment. At the
+        top of the page, a pandemic timeline of the location’s cases is overlaid
+        with policies, using the 7-day moving average of daily COVID-19 cases
+        (from the New York Times Coronavirus (Covid-19) Dataset) and the number
+        of policies enacted on each day in the selected location. A bar graph
+        below the timeline shows the breakdown of how many policies in each
+        policy category were enacted, active, or expired on a given date. By
+        default, these figures reflect the most recent date available, but users
+        can select a specific date by dragging or using arrow keys to move the
+        blue date slider. Selecting a new date adjusts the bar chart to reflect
+        the policy environment up to that point and displays a pop-up with how
+        many policies from each category were enacted on that day. Clicking on a
+        policy category in the pop-up brings up a modal with information on each
+        policy that was enacted. Below the bar chart, users can also explore and
+        view any policy enacted by that location using a search and filter tool.
+      </p>
+
+      <h3>COVID caseload data</h3>
       <h4>US map and social distancing policy model</h4>
       <p>
         US state-level COVID-19 caseload data, new cases in the last 7 days and
@@ -632,8 +650,8 @@ const Documentation = ({ ...props }) => {
       <h4>Social distancing policy model</h4>
       <p>
         The COVID AMP policy model supports users in evaluating the impact of
-        policies on the outbreak &ndash; a visualization of when (1) policies
-        were implemented in each state relative to their actual caseload and
+        policies on the outbreak – a visualization of when (1) policies were
+        implemented in each state relative to their actual caseload and
         fatalities, (2) predictive analysis for how future policy implementation
         will impact caseload, and (3) an analysis of what would have been had no
         mitigation policies been implemented. The social distancing policy model
@@ -643,26 +661,26 @@ const Documentation = ({ ...props }) => {
         dynamics of COVID outbreaks are accompanied by key designations of
         policies related to social distancing (i.e., stay-at-home,
         safer-at-home, partially open) captured from policies in place at
-        different points in the outbreak (see &ldquo;Visualizing distancing
-        level,&rdquo; above). For points in the future, users can add new social
-        distancing policies and evaluate their relative impact on the modeled
-        outcome. The AMP social distancing policy model is currently available
-        for US states at state scale.
+        different points in the outbreak (see “Visualizing distancing level,”
+        above). For points in the future, users can add new social distancing
+        policies and evaluate their relative impact on the modeled outcome. The
+        AMP social distancing policy model is currently available for US states
+        at state scale.
       </p>
 
       <p>
         For past dates, cases are sourced from confirmed and probable cases (see
-        &lsquo;COVID caseload data&rsquo; above) data from March 1 to the most
-        recent data update. Because case data is cumulative, we calculate
-        &ldquo;active&rdquo; cases by assuming patients recover 13 days after
-        their case is confirmed by testing and deriving deaths from those cases.
-        We assume approximately 25% of total confirmed cases are hospitalized
-        with equates to ~7% of total cases (symptomatic and asymptomatic.) For
-        all dates past the most recent case update, all data for cases,
-        hospitalizations, ICU patient counts, and deaths are modeled using the
-        approach below as seeded with the current case counts from reported
-        actual cases (from the New York Times Coronavirus (Covid-19) Data in the
-        United States, as described above).
+        ‘COVID caseload data’ above) data from March 1 to the most recent data
+        update. Because case data is cumulative, we calculate “active” cases by
+        assuming patients recover 13 days after their case is confirmed by
+        testing and deriving deaths from those cases. We assume approximately
+        25% of total confirmed cases are hospitalized with equates to ~7% of
+        total cases (symptomatic and asymptomatic.) For all dates past the most
+        recent case update, all data for cases, hospitalizations, ICU patient
+        counts, and deaths are modeled using the approach below as seeded with
+        the current case counts from reported actual cases (from the New York
+        Times Coronavirus (Covid-19) Data in the United States, as described
+        above).
       </p>
 
       <p>
@@ -791,8 +809,6 @@ const Documentation = ({ ...props }) => {
         Reproductive rate is an inferred model outcome and is not an input of
         the SEIR model but is used to calibrate the model state to produce a
         transmission rate (&beta;) for the given conditions in the table below.
-      </p>
-      <p>
         The probability of transmission (&beta;), representing the likelihood
         that a susceptible individual is exposed to someone who is infectious
         (and the likelihood of infection given exposure, which is not adjusted
