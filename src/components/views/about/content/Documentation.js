@@ -519,9 +519,7 @@ const Documentation = ({ ...props }) => {
         like enhanced cleaning protocols
       </p>
 
-      <p>
-        <strong>Partially open</strong> distancing level is defined as:
-      </p>
+      <p>Partially open distancing level is defined as:</p>
 
       <ul>
         <li>
