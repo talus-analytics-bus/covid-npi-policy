@@ -401,8 +401,7 @@ export const DistancingLevel = async function({
  */
 export const PolicyStatusCountsForMap = async function({
   geo_res,
-  cats = [],
-  subcats = [],
+  mapFilters = {},
   date,
 }: PolicyStatusCountsForMapProps) {
   if (date === undefined) throw Error("Must define `date`");
@@ -410,13 +409,24 @@ export const PolicyStatusCountsForMap = async function({
   // prepare params
   const params = new URLSearchParams();
 
+  // translate keys
+  const keyToParamName: Record<string, string> = {
+    cats: "categories",
+    subcats: "subcategories",
+  };
+
   // append list-like param values
-  cats.forEach(d => {
-    params.append("categories", d);
-  });
-  subcats.forEach(d => {
-    params.append("subcategories", d);
-  });
+  for (const [keyTmp, vals] of Object.entries(mapFilters)) {
+    if (vals === undefined) continue;
+
+    const key = keyToParamName[keyTmp] ?? keyTmp;
+    if (typeof vals !== "object") params.append(key, vals.toString());
+    else
+      vals.forEach(val => {
+        if (val === undefined) return;
+        params.append(key, val.toString());
+      });
+  }
   params.append("date", date);
 
   // prepare request

@@ -239,8 +239,11 @@ export const allMapMetrics = {
         func: ({ filters }: PolicyCountsFuncArgs): Record<string, any> => {
           return {
             geo_res: GeoRes.state,
-            cats: filters.primary_ph_measure,
-            subcats: filters.ph_measure_details,
+            mapFilters: {
+              cats: filters.primary_ph_measure,
+              subcats: filters.ph_measure_details,
+              subtargets: filters.subtarget,
+            },
             date:
               filters.dates_in_effect !== undefined
                 ? filters.dates_in_effect[0]
@@ -397,8 +400,11 @@ export const allMapMetrics = {
           return {
             geo_res:
               mapId === "us-county" ? GeoRes.county : GeoRes.county_plus_state,
-            cats: filters.primary_ph_measure,
-            subcats: filters.ph_measure_details,
+            mapFilters: {
+              cats: filters.primary_ph_measure,
+              subcats: filters.ph_measure_details,
+              subtargets: filters.subtarget,
+            },
             date:
               filters.dates_in_effect !== undefined
                 ? filters.dates_in_effect[0]
@@ -517,8 +523,11 @@ export const allMapMetrics = {
         func: ({ filters }: PolicyCountsFuncArgs): Record<string, any> => {
           return {
             geo_res: GeoRes.country,
-            cats: filters.primary_ph_measure,
-            subcats: filters.ph_measure_details,
+            mapFilters: {
+              cats: filters.primary_ph_measure,
+              subcats: filters.ph_measure_details,
+              subtargets: filters.subtarget,
+            },
             date:
               filters.dates_in_effect !== undefined
                 ? filters.dates_in_effect[0]

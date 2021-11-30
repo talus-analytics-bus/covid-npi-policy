@@ -63,9 +63,8 @@ export interface PolicyStatusCountsProps {
 }
 export interface PolicyStatusCountsForMapProps {
   geo_res: GeoRes;
-  cats: string[];
-  subcats: string[];
   date: string;
+  mapFilters: Record<string, string[] | string | number | boolean>;
 }
 
 export interface PlanProps extends PolicyProps {}
