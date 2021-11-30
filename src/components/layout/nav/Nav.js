@@ -13,6 +13,8 @@ import { getParamsMapId } from "components/views/map/helpers";
 
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { InfoTooltip } from "components/common";
+import NotificationDrape from "components/common/NotificationDrape/NotificationDrape";
+import OmicronDrape from "./OmicronDrape/OmicronDrape";
 
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
@@ -157,7 +159,16 @@ const Nav = ({ page }) => {
                     setShowMobileMenu(false);
                   }}
                   className={page === "data" ? styles.active : ""}
-                  to={"/data"}
+                  to={{
+                    pathname: "/data",
+                    key: Math.random().toString(),
+                    state: {
+                      routedFrom:
+                        (page === "data" ? "NavOnData-" : "NavElsewhere-") +
+                        Math.random().toString(),
+                    },
+                    search: "?type=policy",
+                  }}
                 >
                   Data
                 </Link>
@@ -193,6 +204,7 @@ const Nav = ({ page }) => {
                     </Link>
                   </div>
                 </HoverDropdown>
+                <OmicronDrape />
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);
