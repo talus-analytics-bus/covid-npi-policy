@@ -147,7 +147,9 @@ const Map: FC<MapProps> = ({
   const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(ampMapFilterDefs);
 
   // currently selected filters
-  const [filters, setFilters] = useState<Filters>({});
+  const [filters, setFilters] = useState<Filters>({
+    subtarget: ["Grocery store"],
+  });
   const prevFilters = usePrevious(filters);
 
   // country data for tooltip names

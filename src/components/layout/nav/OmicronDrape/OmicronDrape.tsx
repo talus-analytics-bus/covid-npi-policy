@@ -11,7 +11,11 @@ const DrapeContent = styled.span`
   flex-flow: row;
   align-items: center;
   font-size: 14.4px;
-  color: #333;
+  &,
+  a {
+    color: white !important;
+  }
+  /* color: #333; */
   font-family: "Open Sans", sans-serif;
 
   em {
@@ -57,12 +61,7 @@ export const OmicronDrape = () => {
         <em>NEW</em>
         <span>View current Omicron travel restrictions</span>
         <Link to={"/policymaps?mapId=global"}>On map</Link>
-        {/* // This works but refreshes the app
-          // TODO without refreshing
-        //   <a
-        //   href={dataUrl} */}
         <Link
-          // to={dataUrl}
           to={{
             pathname: "/data",
             key: Math.random().toString(),
@@ -87,19 +86,28 @@ export default OmicronDrape;
  * restrictions that are in effect today.
  * @returns {string} URL
  */
-function getSearch(): string {
+export function getOmicronFilters(): Record<string, any> {
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${today.getMonth() +
     1}-${today.getDate()}`;
   const filtersPolicy: Record<string, any> = {
     subtarget: ["Omicron"],
     dates_in_effect: [todayStr, todayStr],
+    primary_ph_measure: ["Travel restrictions"],
   };
+  return filtersPolicy;
+}
+
+/**
+ * Returns a URL that will route to the Data page showing Omicron travel
+ * restrictions that are in effect today.
+ * @returns {string} URL
+ */
+function getSearch(): string {
   const params = new URLSearchParams();
   params.append("type", "policy");
   params.append("placeType", "affected");
-  params.append("filters_policy", JSON.stringify(filtersPolicy));
+  params.append("filters_policy", JSON.stringify(getOmicronFilters()));
 
-  // return `/data`;
   return `?${params.toString()}`;
 }

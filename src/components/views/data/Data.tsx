@@ -19,6 +19,7 @@ import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
+import { getOmicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -872,20 +873,4 @@ function getPlaceTypeFromURLParams(): PlaceType | null {
       );
     }
   } else return null;
-}
-
-/**
- * Returns a URL that will route to the Data page showing Omicron travel
- * restrictions that are in effect today.
- * @returns {string} URL
- */
-function getOmicronFilters(): Record<string, any> {
-  const today = new Date();
-  const todayStr = `${today.getFullYear()}-${today.getMonth() +
-    1}-${today.getDate()}`;
-  const filtersPolicy: Record<string, any> = {
-    subtarget: ["Omicron"],
-    dates_in_effect: [todayStr, todayStr],
-  };
-  return filtersPolicy;
 }
