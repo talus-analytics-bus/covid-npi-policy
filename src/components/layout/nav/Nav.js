@@ -100,6 +100,25 @@ const Nav = ({ page }) => {
                         setShowMobileMenu(false);
                       }}
                       className={
+                        page === "policymaps" && curMapId === "global"
+                          ? styles.active
+                          : ""
+                      }
+                      to={"/policymaps?mapId=global"}
+                    >
+                      <div className={styles.linkWithTooltip}>
+                        <div>World</div>
+                        <InfoTooltip
+                          text={"View data for the world at the country level"}
+                          {...{ setInfoTooltipContent }}
+                        />
+                      </div>
+                    </Link>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={
                         page === "policymaps" && curMapId.startsWith("us")
                           ? styles.active
                           : ""
@@ -112,25 +131,6 @@ const Nav = ({ page }) => {
                           text={
                             "View data for the United States at the state and/or county level"
                           }
-                          {...{ setInfoTooltipContent }}
-                        />
-                      </div>
-                    </Link>
-                    <Link
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                      className={
-                        page === "policymaps" && curMapId === "global"
-                          ? styles.active
-                          : ""
-                      }
-                      to={"/policymaps?mapId=global"}
-                    >
-                      <div className={styles.linkWithTooltip}>
-                        <div>World</div>
-                        <InfoTooltip
-                          text={"View data for the world at the country level"}
                           {...{ setInfoTooltipContent }}
                         />
                       </div>
