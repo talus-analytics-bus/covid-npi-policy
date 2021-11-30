@@ -50,10 +50,18 @@ const customCSS = css`
 // const dataUrl: string = getDataUrl();
 
 export const OmicronDrape = () => {
-  const [show, setShow] = useState(true);
+  // already dismissed?
+  let defaultShow: boolean = true;
+  if (typeof localStorage !== "undefined") {
+    if (localStorage.getItem("omicronDrape") === "dismissed")
+      defaultShow = false;
+  }
+
+  const [show, setShow] = useState(defaultShow);
 
   const onClose = useCallback(() => {
     setShow(false);
+    // localStorage.setItem("omicronDrape", "dismissed");
   }, [setShow]);
   return (
     <NotificationDrape {...{ customCSS, show }}>
