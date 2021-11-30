@@ -74,6 +74,12 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
    */
   const geoOptions: Option[] = [
     {
+      name: "World (country-level policies)",
+      value: "global",
+      description: "View data for the world at the country level",
+      isChecked: v => v === "global",
+    },
+    {
       name: "United States",
       value: "us-county-plus-state",
       isChecked: v => {
@@ -90,12 +96,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
           {...{ setInfoTooltipContent, infoTooltipSize }}
         />
       ),
-    },
-    {
-      name: "World (country-level policies)",
-      value: "global",
-      description: "View data for the world at the country level",
-      isChecked: v => v === "global",
     },
   ];
   const curMapOptions = useContext(MapOptionContext);
