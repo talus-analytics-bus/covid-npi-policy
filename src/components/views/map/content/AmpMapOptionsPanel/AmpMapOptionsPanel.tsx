@@ -5,7 +5,13 @@ import {
   OptionCheckboxSet,
 } from "components/common/OptionControls";
 import { Option } from "components/common/OptionControls/types";
-import React, { FC, ReactElement, useContext, useState } from "react";
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   Filters,
   MapId,
@@ -24,6 +30,9 @@ import styles from "./AmpMapOptionsPanel.module.scss";
 import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { getFiltersForApi, updateFilters } from "./helpers";
+import { removeViewState } from "../../helpers";
+import useHistory from "components/common/hooks/useHistory";
+import { omicronFiltersSubs } from "components/layout/nav/OmicronDrape/OmicronDrape";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -54,10 +63,22 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
   const infoTooltipSize: number = 8;
 
+  const urlParams: URLSearchParams = new URLSearchParams(
+    window.location.search
+  );
+
+  const history = useHistory();
+
   /**
    * The possible geographic resolutions of map that can be viewed.
    */
   const geoOptions: Option[] = [
+    {
+      name: "World (country-level policies)",
+      value: "global",
+      description: "View data for the world at the country level",
+      isChecked: v => v === "global",
+    },
     {
       name: "United States",
       value: "us-county-plus-state",
@@ -76,12 +97,6 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         />
       ),
     },
-    {
-      name: "World (country-level policies)",
-      value: "global",
-      description: "View data for the world at the country level",
-      isChecked: v => v === "global",
-    },
   ];
   const curMapOptions = useContext(MapOptionContext);
   const {
@@ -95,110 +110,156 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
 
   const [filters, setFilters] = useState<Filters>(filtersForApi || {});
 
+  // when url params are updated, update API filters and filters
+  useEffect(() => {
+    if (urlParams.get("view") === "omicron_travel") {
+      if (setFill) setFill("policy_status_counts");
+      setFilters(omicronFiltersSubs);
+      if (setFiltersForApi) setFiltersForApi(omicronFiltersSubs);
+      removeViewState(history);
+    }
+  }, [history, setFiltersForApi, setFill, urlParams]);
+
   /**
    * List of possible circle metric options.
    */
   const circleOptions: Option[] = getMetricsAsOptions(mapId, "circle");
 
   const fillSubOptions: ReactElement = (
-    <OptionCheckboxSet
-      title={"Policy category"}
-      options={catOptions.map(o => {
-        const curCatSubcats: Option[] = subcatOptions.filter(
-          so => so.parent === o.value
-        );
+    <>
+      <OptionRadioSet
+        title={"Variant focus"}
+        options={[
+          { name: "All policies", value: "all" },
+          { name: "Omicron-focused only", value: "only" },
+        ]}
+        selectedOptions={
+          filters &&
+          filters.subtarget !== undefined &&
+          filters.subtarget.includes("Omicron")
+            ? [{ name: "Omicron-focused only", value: "only" }]
+            : [{ name: "All policies", value: "all" }]
+        }
+        callback={selected => {
+          if (setFiltersForApi === undefined) return;
+          // add or remove subtargets from filters
+          const newFilters: Filters = { ...filters };
+          const newFiltersForApi: Filters = { ...filtersForApi };
+          if (selected[0].value === "only") {
+            newFilters.subtarget = ["Omicron"];
+            newFiltersForApi.subtarget = ["Omicron"];
+          } else {
+            delete newFilters.subtarget;
+            delete newFiltersForApi.subtarget;
+          }
+          setFilters(newFilters);
+          setFiltersForApi(newFiltersForApi);
+        }}
+        key={"subtarget"}
+        // clearAll={false}
+        {...{ setInfoTooltipContent }}
+      />
+      <OptionCheckboxSet
+        title={"Policy category"}
+        options={catOptions.map(o => {
+          const curCatSubcats: Option[] = subcatOptions.filter(
+            so => so.parent === o.value
+          );
 
-        const newChild: Option = {
-          ...o,
+          const newChild: Option = {
+            ...o,
 
-          child: (
-            <OptionCheckboxSet
-              title={"Subcategory"}
-              options={curCatSubcats}
-              selectedOptions={curCatSubcats.filter(
-                o =>
-                  filters &&
-                  filters.ph_measure_details !== undefined &&
-                  filters.ph_measure_details.includes(o.value as string)
-              )}
-              callback={selected => {
-                if (setFiltersForApi === undefined) return;
+            child: (
+              <OptionCheckboxSet
+                title={"Subcategory"}
+                options={curCatSubcats}
+                selectedOptions={curCatSubcats.filter(
+                  o =>
+                    filters &&
+                    filters.ph_measure_details !== undefined &&
+                    filters.ph_measure_details.includes(o.value as string)
+                )}
+                callback={selected => {
+                  if (setFiltersForApi === undefined) return;
 
-                // if any cats selected but no subcats selected, mark as indet
-                const updatedNoChildCats: Option[] = [...noChildCats].filter(
-                  (ncc: Option) => {
-                    return ncc.value !== (o.value as string);
-                  }
-                );
-                const updatedFilters: Filters = updateFilters(
-                  "ph_measure_details",
-                  filters,
-                  setFilters,
-                  selected,
-                  curCatSubcats,
-                  subcatOptions
-                );
+                  // if any cats selected but no subcats selected, mark as indet
+                  const updatedNoChildCats: Option[] = [...noChildCats].filter(
+                    (ncc: Option) => {
+                      return ncc.value !== (o.value as string);
+                    }
+                  );
+                  const updatedFilters: Filters = updateFilters(
+                    "ph_measure_details",
+                    filters,
+                    setFilters,
+                    selected,
+                    curCatSubcats,
+                    subcatOptions
+                  );
 
-                // if category missing for selected subcats, add it
-                if (
-                  updatedFilters.primary_ph_measure !== undefined &&
-                  selected.length > 0
-                ) {
+                  // if category missing for selected subcats, add it
                   if (
-                    !updatedFilters.primary_ph_measure.includes(
+                    updatedFilters.primary_ph_measure !== undefined &&
+                    selected.length > 0
+                  ) {
+                    if (
+                      !updatedFilters.primary_ph_measure.includes(
+                        o.value as string
+                      )
+                    )
+                      updatedFilters.primary_ph_measure.push(o.value as string);
+                  }
+
+                  if (
+                    selected.length === 0 &&
+                    updatedFilters !== undefined &&
+                    updatedFilters.primary_ph_measure !== undefined &&
+                    updatedFilters.primary_ph_measure.includes(
                       o.value as string
                     )
                   )
-                    updatedFilters.primary_ph_measure.push(o.value as string);
-                }
+                    updatedNoChildCats.push(o);
 
-                if (
-                  selected.length === 0 &&
-                  updatedFilters !== undefined &&
-                  updatedFilters.primary_ph_measure !== undefined &&
-                  updatedFilters.primary_ph_measure.includes(o.value as string)
-                )
-                  updatedNoChildCats.push(o);
+                  setNoChildCats(updatedNoChildCats);
 
-                setNoChildCats(updatedNoChildCats);
-
-                const updatedFiltersForApi: Filters = getFiltersForApi(
-                  updatedFilters,
-                  updatedNoChildCats
-                );
-                setFiltersForApi(updatedFiltersForApi);
-              }}
-              field={"ph_measure_details-" + o.value}
-              emptyMeansAll={false}
-              selectAll={true}
-            />
-          ),
-        };
-        return newChild;
-      })}
-      selectedOptions={catOptions.filter(
-        o =>
-          filters &&
-          filters.primary_ph_measure !== undefined &&
-          filters.primary_ph_measure.includes(o.value as string)
-      )}
-      callback={selected => {
-        if (setFiltersForApi === undefined) return;
-        updateFilters(
-          "primary_ph_measure",
-          filters,
-          setFilters,
-          selected,
-          catOptions,
-          subcatOptions,
-          setFiltersForApi,
-          noChildCats
-        );
-      }}
-      field={"primary_ph_measure"}
-      clearAll={true}
-      {...{ setInfoTooltipContent }}
-    />
+                  const updatedFiltersForApi: Filters = getFiltersForApi(
+                    updatedFilters,
+                    updatedNoChildCats
+                  );
+                  setFiltersForApi(updatedFiltersForApi);
+                }}
+                field={"ph_measure_details-" + o.value}
+                emptyMeansAll={false}
+                selectAll={true}
+              />
+            ),
+          };
+          return newChild;
+        })}
+        selectedOptions={catOptions.filter(
+          o =>
+            filters &&
+            filters.primary_ph_measure !== undefined &&
+            filters.primary_ph_measure.includes(o.value as string)
+        )}
+        callback={selected => {
+          if (setFiltersForApi === undefined) return;
+          updateFilters(
+            "primary_ph_measure",
+            filters,
+            setFilters,
+            selected,
+            catOptions,
+            subcatOptions,
+            setFiltersForApi,
+            noChildCats
+          );
+        }}
+        field={"primary_ph_measure"}
+        clearAll={true}
+        {...{ setInfoTooltipContent }}
+      />
+    </>
   );
 
   /**

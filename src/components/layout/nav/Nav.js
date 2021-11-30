@@ -13,6 +13,8 @@ import { getParamsMapId } from "components/views/map/helpers";
 
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { InfoTooltip } from "components/common";
+import NotificationDrape from "components/common/NotificationDrape/NotificationDrape";
+import OmicronDrape from "./OmicronDrape/OmicronDrape";
 
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
@@ -100,6 +102,25 @@ const Nav = ({ page }) => {
                         setShowMobileMenu(false);
                       }}
                       className={
+                        page === "policymaps" && curMapId === "global"
+                          ? styles.active
+                          : ""
+                      }
+                      to={"/policymaps?mapId=global"}
+                    >
+                      <div className={styles.linkWithTooltip}>
+                        <div>World</div>
+                        <InfoTooltip
+                          text={"View data for the world at the country level"}
+                          {...{ setInfoTooltipContent }}
+                        />
+                      </div>
+                    </Link>
+                    <Link
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                      className={
                         page === "policymaps" && curMapId.startsWith("us")
                           ? styles.active
                           : ""
@@ -112,25 +133,6 @@ const Nav = ({ page }) => {
                           text={
                             "View data for the United States at the state and/or county level"
                           }
-                          {...{ setInfoTooltipContent }}
-                        />
-                      </div>
-                    </Link>
-                    <Link
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                      className={
-                        page === "policymaps" && curMapId === "global"
-                          ? styles.active
-                          : ""
-                      }
-                      to={"/policymaps?mapId=global"}
-                    >
-                      <div className={styles.linkWithTooltip}>
-                        <div>World</div>
-                        <InfoTooltip
-                          text={"View data for the world at the country level"}
                           {...{ setInfoTooltipContent }}
                         />
                       </div>
@@ -157,7 +159,16 @@ const Nav = ({ page }) => {
                     setShowMobileMenu(false);
                   }}
                   className={page === "data" ? styles.active : ""}
-                  to={"/data"}
+                  to={{
+                    pathname: "/data",
+                    key: Math.random().toString(),
+                    state: {
+                      routedFrom:
+                        (page === "data" ? "NavOnData-" : "NavElsewhere-") +
+                        Math.random().toString(),
+                    },
+                    search: "?type=policy",
+                  }}
                 >
                   Data
                 </Link>
@@ -193,6 +204,7 @@ const Nav = ({ page }) => {
                     </Link>
                   </div>
                 </HoverDropdown>
+                <OmicronDrape />
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);

@@ -59,9 +59,12 @@ import {
   ampMapFilterDefs,
   getCaseDataUpdateDate,
   getOverallUpdateDate,
+  getInitFilters,
+  removeViewState,
 } from "./helpers";
 import MapPlaceContext from "./context/MapPlaceContext";
 import { OptionSetRecord } from "api/queryTypes";
+import { url } from "inspector";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -70,6 +73,7 @@ const Map: FC<MapProps> = ({
   setPage,
   versions,
   setInfoTooltipContent,
+  urlParams,
 }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
@@ -147,7 +151,7 @@ const Map: FC<MapProps> = ({
   const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(ampMapFilterDefs);
 
   // currently selected filters
-  const [filters, setFilters] = useState<Filters>({});
+  const [filters, setFilters] = useState<Filters>(getInitFilters());
   const prevFilters = usePrevious(filters);
 
   // country data for tooltip names
@@ -210,6 +214,7 @@ const Map: FC<MapProps> = ({
       for (const [fieldName] of Object.entries(filterDef)) {
         if (
           !fieldName.startsWith("date") &&
+          filterDef[fieldName].items !== undefined &&
           filterDef[fieldName].items.length === 0
         )
           filterDef[fieldName].items = optionsets[fieldName];
@@ -252,10 +257,19 @@ const Map: FC<MapProps> = ({
     [getMapData, initialized, setLoading, setPage]
   );
 
+  // useEffect(() => {
+  //   if (initialized) {
+  //     setInitialized(false);
+  //     if (new URLSearchParams(urlParams).get("view") === "omicron_travel") {
+  //       setFilters({ subtarget: ["Omicron"] });
+  //     }
+  //   }
+  // }, [urlParams, initialized]);
+
   // initialize URL parameter variable containing map ID
   useEffect(() => {
-    if (paramsMapId === null) replaceHistoryMapId(history, mapId);
-    else if (paramsMapId !== mapId) {
+    replaceHistoryMapId(history, mapId);
+    if (paramsMapId !== mapId) {
       setMapId(paramsMapId);
     }
   }, [paramsMapId, history, setMapId, mapId]);
@@ -272,7 +286,7 @@ const Map: FC<MapProps> = ({
   useEffect(
     function updateDefaultMetrics() {
       // start loading spinner
-      setLoading(true);
+      // setLoading(true);
 
       // if circles are shown in default map view, show the default circle,
       // otherwise, set to null (show no circle)
@@ -307,20 +321,6 @@ const Map: FC<MapProps> = ({
     },
     [circle, fill]
   );
-
-  // TODO implement history handling such that "forward" returns you to the
-  // previously-selected map state
-  // // handle history
-  // useEffect(() => {
-  //   const popstateListener = function(e) {
-  //     console.log(e.state);
-  //     updateUrlParams(history, mapId);
-  //   };
-  //   window.addEventListener("popstate", popstateListener);
-  //   return () => {
-  //     window.removeEventListener("popstate", popstateListener);
-  //   };
-  // }, []);
 
   // page title and metadata
   const helmet: ReactElement = (

@@ -46,6 +46,8 @@ export type MapProps = {
    * @param tooltipContent The new content for the tooltip
    */
   setInfoTooltipContent(tooltipContent: any): void;
+
+  urlParams: string;
 };
 
 /**

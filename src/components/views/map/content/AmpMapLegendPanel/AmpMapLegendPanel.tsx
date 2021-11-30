@@ -141,7 +141,10 @@ const getFillLegendName: Function = ({
 
   const isPolicyStatus = fill === "policy_status";
   const isPolicyStatusCounts = fill === "policy_status_counts";
-
+  const omicronPrefix: string =
+    filters.subtarget !== undefined && filters.subtarget.length > 0
+      ? "Omicron-focused "
+      : "";
   if (isLockdownLevel) {
     return `Distancing level at ${nouns.level.toLowerCase()} level on ${date.format(
       "MMM D, YYYY"
@@ -154,17 +157,26 @@ const getFillLegendName: Function = ({
     const prefix = nouns.plural + " with at least one policy in effect for ";
     const suffix = ` on ${date.format("MMM D, YYYY")}`;
     if (subcategory !== undefined) {
-      return <ShowMore text={prefix + subcategory + suffix} charLimit={60} />;
+      return (
+        <ShowMore
+          text={omicronPrefix + prefix + subcategory + suffix}
+          charLimit={60}
+        />
+      );
     } else return prefix + category + suffix;
   } else if (isPolicyStatusCounts) {
     if (
       filters["primary_ph_measure"] === undefined ||
       filters["primary_ph_measure"].length === 0
-    )
-      return `Policies in effect at ${nouns.level} level on ${date.format(
+    ) {
+      const policyNoun: string =
+        filters.subtarget !== undefined && filters.subtarget.length > 0
+          ? "Omicron-focused policies"
+          : "Policies";
+      return `${policyNoun} in effect at ${nouns.level} level on ${date.format(
         "MMM D, YYYY"
       )}`;
-    else {
+    } else {
       const desc = getPolicyCatSubcatPhrase(
         filters["primary_ph_measure"] || [],
         filters["ph_measure_details"] || [],
@@ -172,7 +184,9 @@ const getFillLegendName: Function = ({
         "policies",
         true // for legend
       ).trim();
-      return getInitCap(`${desc} on ${date.format("MMM D, YYYY")}`);
+      return getInitCap(
+        `${omicronPrefix}${desc} on ${date.format("MMM D, YYYY")}`
+      );
     }
   }
   return null;
