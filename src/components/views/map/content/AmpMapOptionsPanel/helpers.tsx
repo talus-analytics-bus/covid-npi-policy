@@ -53,6 +53,9 @@ export const updateFilters = (
     ph_measure_details: [],
   };
 
+  if (filters.subtarget !== undefined)
+    updatedFilters.subtarget = filters.subtarget;
+
   // if category filter being updated:
   if (filterKey === "primary_ph_measure") {
     // update category filters

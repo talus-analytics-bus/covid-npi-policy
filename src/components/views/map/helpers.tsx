@@ -171,6 +171,13 @@ export const ampMapFilterDefs: FilterDefs[] = [
       entity_name: "Policy",
       items: [],
     },
+    subtarget: {
+      field: "subtarget",
+      label: "Omicron-related?",
+      radio: false,
+      entity_name: "Policy",
+      items: [],
+    },
   },
 ];
 
