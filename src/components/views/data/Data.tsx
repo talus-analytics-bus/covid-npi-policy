@@ -39,7 +39,9 @@ import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
 import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
+import { getUrlParamAsFilters } from "App";
 
+const OMICRON_FILTERS: Record<string, any> = getOmicronFilters();
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
  * `challenge`.
@@ -101,6 +103,15 @@ interface DataProps {
    * are being displayed.
    */
   type: DataPageType;
+
+  /**
+   * Optional: A string representing where the user was routed to Data from
+   *
+   * This is currently only used to triggere a rerender when the Omicron banner
+   * interaction takes the user to Data
+   */
+  routedFrom: string;
+  setRoutedFrom: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -128,8 +139,11 @@ const Data: FC<DataProps> = ({
   urlFilterParamsPlan,
   urlFilterParamsChallenge,
   type,
+  routedFrom,
 }) => {
   const [docType, setDocType] = useState<DataPageType>(type);
+
+  // if (docType !== type) setDocType(type);
 
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
@@ -141,6 +155,7 @@ const Data: FC<DataProps> = ({
   const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
     policyInfo as DataPageInfo
   );
+  const [forceRerender, setForceRerender] = useState<number | null>(null);
 
   // track table pagination-relevant variables including current page, number
   // of instances (rows) in table, the ordering settings, and page size
@@ -166,22 +181,30 @@ const Data: FC<DataProps> = ({
 
   // define filters to apply to data that will be retrieved for the table
   const getFiltersFromUrlParams: Function = useCallback((): Filters => {
-    // If filters are specific in the url params, and they are for the current
-    // entity class, use them. Otherwise, clear them
-    const urlFilterParams: Filters = {
-      policy: urlFilterParamsPolicy || {},
-      plan: urlFilterParamsPlan || {},
-      challenge: urlFilterParamsChallenge || {},
-    }[docType];
+    // // If filters are specific in the url params, and they are for the current
+    // // entity class, use them. Otherwise, clear them
+    // const urlFilterParams: Filters = {
+    //   policy: urlFilterParamsPolicy || {},
+    //   plan: urlFilterParamsPlan || {},
+    //   challenge: urlFilterParamsChallenge || {},
+    // }[docType];
 
-    const useUrlFilters: boolean = urlFilterParams !== null;
-    const newFilters: Filters = useUrlFilters ? urlFilterParams : {};
-    return newFilters;
+    // const useUrlFilters: boolean = urlFilterParams !== null;
+    // const newFilters: Filters = useUrlFilters ? urlFilterParams : {};
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
+      urlParams,
+      "filters_" + docType
+    );
+
+    return urlFilterParamsPolicy || {};
+    // return newFilters;
   }, [
     docType,
-    urlFilterParamsChallenge,
-    urlFilterParamsPlan,
-    urlFilterParamsPolicy,
+    // urlFilterParamsChallenge,
+    // urlFilterParamsPlan,
+    // urlFilterParamsPolicy,
   ]);
 
   const initFilters: Filters = getFiltersFromUrlParams();
@@ -437,7 +460,34 @@ const Data: FC<DataProps> = ({
     });
     // TODO fix dependencies -- adding useCallback funcs. creates inf. loop
     // eslint-disable-next-line
-  }, [docType, setLoading]);
+  }, [docType, setLoading, forceRerender]);
+
+  // Set correct initial filters based on where user routed from
+  // TODO set to "affected" if not on it already
+  useEffect(() => {
+    if (routedFrom.startsWith("OmicronDrape")) {
+      window.history.replaceState(
+        {},
+        "",
+        `/data?type=policy&placeType=affected&filters_policy=${JSON.stringify(
+          OMICRON_FILTERS
+        )}`
+      );
+      if (docType !== "policy") setDocType("policy");
+      // if (placeType !== "affected") setPlaceType("affected");
+      setForceRerender(Math.random());
+    } else if (routedFrom.startsWith("NavOnData")) {
+      window.history.replaceState(
+        {},
+        "",
+        `/data?type=policy&placeType=affected`
+      );
+      if (docType !== "policy") setDocType("policy");
+      // if (placeType !== "affected") setPlaceType("affected");
+      setForceRerender(Math.random());
+    }
+    // eslint-disable-next-line
+  }, [routedFrom]);
 
   /**
    * Update data in page and URL params.
@@ -822,4 +872,20 @@ function getPlaceTypeFromURLParams(): PlaceType | null {
       );
     }
   } else return null;
+}
+
+/**
+ * Returns a URL that will route to the Data page showing Omicron travel
+ * restrictions that are in effect today.
+ * @returns {string} URL
+ */
+function getOmicronFilters(): Record<string, any> {
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${today.getMonth() +
+    1}-${today.getDate()}`;
+  const filtersPolicy: Record<string, any> = {
+    subtarget: ["Omicron"],
+    dates_in_effect: [todayStr, todayStr],
+  };
+  return filtersPolicy;
 }

@@ -47,6 +47,7 @@ const App = () => {
   );
   const [versions, setVersions] = useState<VersionRecord[] | null>(null);
   const [counts, setCounts] = useState<CountRecords | null>(null);
+  const [routedFrom, setRoutedFrom] = useState("");
 
   // define which browsers should trigger a "please use a different browser"
   // modal, using a function that returns the modal content based on the
@@ -138,7 +139,11 @@ const App = () => {
                   <Route
                     exact
                     path="/data"
-                    render={() => {
+                    render={props => {
+                      const newRoutedFrom =
+                        (props.location.state ?? ({} as any)).routedFrom ?? "";
+                      setRoutedFrom(newRoutedFrom);
+
                       // get URL parameters as strings and JSONs, or null
                       const urlParams = new URLSearchParams(
                         window.location.search
@@ -177,6 +182,8 @@ const App = () => {
                             urlFilterParamsChallenge,
                             counts,
                             type,
+                            routedFrom,
+                            setRoutedFrom,
                           }}
                         />
                       );
@@ -335,7 +342,7 @@ export default App;
  * @returns {Object | null} Returns param val as JSON if it exists and is
  * valid JSON, otherwise null
  */
-function getUrlParamAsFilters(
+export function getUrlParamAsFilters(
   urlParams: URLSearchParams,
   paramKey: string
 ): Filters | null {
