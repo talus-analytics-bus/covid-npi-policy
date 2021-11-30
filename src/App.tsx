@@ -206,6 +206,9 @@ const App = () => {
                     exact
                     path="/policymaps"
                     render={() => {
+                      const urlParams = new URLSearchParams(
+                        window.location.search
+                      );
                       return (
                         <Map
                           {...{
@@ -214,6 +217,7 @@ const App = () => {
                             loading,
                             setLoading,
                             setInfoTooltipContent,
+                            urlParams: urlParams.toString(),
                           }}
                         />
                       );

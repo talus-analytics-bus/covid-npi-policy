@@ -5,7 +5,13 @@ import {
   OptionCheckboxSet,
 } from "components/common/OptionControls";
 import { Option } from "components/common/OptionControls/types";
-import React, { FC, ReactElement, useContext, useState } from "react";
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   Filters,
   MapId,
@@ -24,6 +30,9 @@ import styles from "./AmpMapOptionsPanel.module.scss";
 import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { getFiltersForApi, updateFilters } from "./helpers";
+import { removeViewState } from "../../helpers";
+import useHistory from "components/common/hooks/useHistory";
+import { omicronFiltersSubs } from "components/layout/nav/OmicronDrape/OmicronDrape";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -53,6 +62,12 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const [noChildCats, setNoChildCats] = useState<Option[]>([]);
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
   const infoTooltipSize: number = 8;
+
+  const urlParams: URLSearchParams = new URLSearchParams(
+    window.location.search
+  );
+
+  const history = useHistory();
 
   /**
    * The possible geographic resolutions of map that can be viewed.
@@ -95,17 +110,20 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
 
   const [filters, setFilters] = useState<Filters>(filtersForApi || {});
 
+  // when url params are updated, update API filters and filters
+  useEffect(() => {
+    if (urlParams.get("view") === "omicron_travel") {
+      if (setFill) setFill("policy_status_counts");
+      setFilters(omicronFiltersSubs);
+      if (setFiltersForApi) setFiltersForApi(omicronFiltersSubs);
+      removeViewState(history);
+    }
+  }, [history, setFiltersForApi, setFill, urlParams]);
+
   /**
    * List of possible circle metric options.
    */
   const circleOptions: Option[] = getMetricsAsOptions(mapId, "circle");
-  console.log(
-    filters &&
-      filters.subtarget !== undefined &&
-      filters.subtarget.includes("Omicron")
-      ? [{ name: "Omicron only", value: "only" }]
-      : [{ name: "All policies", value: "all" }]
-  );
 
   const fillSubOptions: ReactElement = (
     <>
@@ -113,13 +131,13 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         title={"Variant focus"}
         options={[
           { name: "All policies", value: "all" },
-          { name: "Omicron policies only", value: "only" },
+          { name: "Omicron-focused only", value: "only" },
         ]}
         selectedOptions={
           filters &&
           filters.subtarget !== undefined &&
           filters.subtarget.includes("Omicron")
-            ? [{ name: "Omicron only", value: "only" }]
+            ? [{ name: "Omicron-focused only", value: "only" }]
             : [{ name: "All policies", value: "all" }]
         }
         callback={selected => {

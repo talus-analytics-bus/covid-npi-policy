@@ -5,10 +5,15 @@ import { VersionRecord } from "api/queryTypes";
 import { defaults, metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   FilterDefs,
+  Filters,
   MapDataShapeId,
   MapId,
   validMapIds,
 } from "components/common/MapboxMap/plugins/mapTypes";
+import {
+  omicronFilters,
+  omicronFiltersSubs,
+} from "components/layout/nav/OmicronDrape/OmicronDrape";
 import { getInitLower } from "components/misc/Util";
 import moment, { Moment } from "moment";
 
@@ -42,8 +47,28 @@ export function replaceMapIdState(
 ): void {
   if (history !== undefined) {
     const stateObj: BrowserHistoryRecord = getMapHistoryState(mapId);
-    const url: string = stateObj.pathname + stateObj.search;
+    const curParams: URLSearchParams = new URLSearchParams(
+      window !== undefined ? window.location.search : ""
+    );
+    curParams.set("mapId", mapId);
+    // remove view if set
+    curParams.delete("view");
+    const url: string = stateObj.pathname + `?${curParams.toString()}`;
     history.replaceState(stateObj, title, url);
+  }
+}
+export function removeViewState(history: History): void {
+  if (history !== undefined) {
+    const curParams: URLSearchParams = new URLSearchParams(
+      window !== undefined ? window.location.search : ""
+    );
+    curParams.delete("view");
+    const url: string = window.location.pathname + `?${curParams.toString()}`;
+    history.replaceState(
+      { pathname: window.location.pathname, search: url },
+      "",
+      url
+    );
   }
 }
 
@@ -98,6 +123,17 @@ export function getParamsMapId(
         paramsMapId
     );
   } else return paramsMapId;
+}
+
+export function getInitFilters(): Filters {
+  // get init filtering from URL params and then delete the params
+  const params: URLSearchParams = new URLSearchParams(
+    window !== undefined ? window.location.search : ""
+  );
+  const view: string | null = params.get("view");
+  if (view === "omicron_travel") {
+    return omicronFiltersSubs;
+  } else return {};
 }
 
 /**

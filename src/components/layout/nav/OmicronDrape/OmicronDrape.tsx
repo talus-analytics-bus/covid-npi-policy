@@ -60,7 +60,18 @@ export const OmicronDrape = () => {
       <DrapeContent>
         <em>NEW</em>
         <span>View current Omicron travel restrictions</span>
-        {/* <Link to={"/policymaps?mapId=global"}>On map</Link> */}
+        <Link
+          to={{
+            pathname: "/policymaps",
+            key: Math.random().toString(),
+            state: {
+              routedFrom: "OmicronDrape-" + Math.random().toString(),
+            },
+            search: "?mapId=global&view=omicron_travel",
+          }}
+        >
+          On map
+        </Link>
         <Link
           to={{
             pathname: "/data",
@@ -97,6 +108,18 @@ export function getOmicronFilters(): Record<string, any> {
   };
   return filtersPolicy;
 }
+
+export const omicronFilters = getOmicronFilters();
+
+export const omicronFiltersSubs = {
+  ...omicronFilters,
+  ph_measure_details: [
+    "Domestic travel restriction",
+    "Domestic travel restrictions (interstate)",
+    "Domestic travel restrictions (intrastate)",
+    "International travel restriction",
+  ],
+};
 
 /**
  * Returns a URL that will route to the Data page showing Omicron travel

@@ -19,7 +19,7 @@ import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
-import { getOmicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
+import { omicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -42,7 +42,6 @@ import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 import { getUrlParamAsFilters } from "App";
 
-const OMICRON_FILTERS: Record<string, any> = getOmicronFilters();
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
  * `challenge`.
@@ -471,7 +470,7 @@ const Data: FC<DataProps> = ({
         {},
         "",
         `/data?type=policy&placeType=affected&filters_policy=${JSON.stringify(
-          OMICRON_FILTERS
+          omicronFilters
         )}`
       );
       if (docType !== "policy") setDocType("policy");
