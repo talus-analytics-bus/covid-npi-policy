@@ -10,12 +10,12 @@ const DrapeContent = styled.span`
   display: flex;
   flex-flow: row;
   align-items: center;
-  font-size: 14.4px;
+  font-size: 1em;
   &,
   a {
     color: white !important;
   }
-  /* color: #333; */
+  /* color: #aba8a8; */
   font-family: "Open Sans", sans-serif;
 
   em {
@@ -43,8 +43,9 @@ const customCSS = css`
   position: absolute !important;
   top: 0;
   right: 150px;
-  height: 32px;
+  /* height: 32px; */
   background-color: ${colors.orange};
+  padding: 12px 18px;
 `;
 
 // const dataUrl: string = getDataUrl();
