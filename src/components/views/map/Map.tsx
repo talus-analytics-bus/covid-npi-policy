@@ -148,7 +148,7 @@ const Map: FC<MapProps> = ({
 
   // currently selected filters
   const [filters, setFilters] = useState<Filters>({
-    subtarget: ["Grocery store"],
+    // subtarget: ["Grocery store"],
   });
   const prevFilters = usePrevious(filters);
 
