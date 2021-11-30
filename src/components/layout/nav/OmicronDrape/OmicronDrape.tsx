@@ -60,7 +60,7 @@ export const OmicronDrape = () => {
       <DrapeContent>
         <em>NEW</em>
         <span>View current Omicron travel restrictions</span>
-        <Link to={"/policymaps?mapId=global"}>On map</Link>
+        {/* <Link to={"/policymaps?mapId=global"}>On map</Link> */}
         <Link
           to={{
             pathname: "/data",
