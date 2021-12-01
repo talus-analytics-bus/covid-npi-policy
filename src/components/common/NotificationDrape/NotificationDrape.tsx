@@ -8,6 +8,7 @@ interface NotificationDrapeProps {
   onClose?: () => void;
   useDefaultCloseButton?: boolean;
   customCSS?: FlattenSimpleInterpolation;
+  narrow?: boolean;
 }
 
 const Drape = styled.div`
@@ -23,8 +24,17 @@ export const NotificationDrape: FC<NotificationDrapeProps> = ({
   show = true,
   onClose,
   useDefaultCloseButton = false,
+  narrow = false,
 }) => {
-  return <Drape {...{ customCSS, show }}>{children}</Drape>;
+  return (
+    <Drape
+      style={{ right: narrow ? "128px" : "150px" }}
+      // style={{ right: narrow ? "453px" : "150px" }}
+      {...{ customCSS, show }}
+    >
+      {children}
+    </Drape>
+  );
 };
 
 export default NotificationDrape;
