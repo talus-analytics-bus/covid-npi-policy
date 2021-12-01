@@ -111,7 +111,6 @@ interface DataProps {
    * interaction takes the user to Data
    */
   routedFrom: string;
-  setRoutedFrom: Dispatch<SetStateAction<string>>;
 }
 
 /**
