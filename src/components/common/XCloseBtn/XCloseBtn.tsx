@@ -6,12 +6,14 @@ import classNames from "classnames";
 // styles and assets
 import styles from "./XCloseBtn.module.scss";
 import crossSvg from "assets/icons/cross.svg";
+import crossSvgWhite from "assets/icons/cross-white.svg";
 
 interface XCloseBtnProps {
   onClick?(...args: any[]): void;
   title?: string;
   style?: CSS.Properties;
   show?: boolean;
+  white?: boolean;
 }
 
 /**
@@ -24,11 +26,15 @@ export const XCloseBtn: FC<XCloseBtnProps> = ({
   title = "Close",
   style = {},
   show = true,
+  white = false,
 }) => {
   return (
     <button
       className={classNames(styles.xCloseBtn, { [styles.show]: show })}
-      style={{ backgroundImage: `url(${crossSvg})`, ...style }}
+      style={{
+        backgroundImage: `url(${white ? crossSvgWhite : crossSvg})`,
+        ...style,
+      }}
       type="button"
       {...{ onClick, title }}
     ></button>

@@ -1,3 +1,4 @@
+import { XCloseBtn } from "components/common";
 import NotificationDrape from "components/common/NotificationDrape/NotificationDrape";
 import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
@@ -127,7 +128,9 @@ export const OmicronDrape: FC<OmicronDrapeProps> = ({ narrow = false }) => {
         >
           In table
         </Link>
-        <CloseButton onClick={onClose}>&#215;</CloseButton>
+        <CloseButton onClick={onClose}>
+          <XCloseBtn white style={{ margin: 0 }} />
+        </CloseButton>
       </DrapeContent>
     </NotificationDrape>
   );
