@@ -13,6 +13,7 @@ import guLogo from "../../../assets/images/logo-georgetown.png";
 import talusLogo from "../../../assets/images/logo-talus.png";
 import ntiLogo from "../../../assets/images/logo-nti.png";
 import LocationSearch from "components/layout/nav/LocationSearch/LocationSearch";
+import OmicronDrape from "components/layout/nav/OmicronDrape/OmicronDrape";
 
 const Landing = ({ setPage, setLoading }, props) => {
   React.useEffect(() => {
@@ -27,6 +28,7 @@ const Landing = ({ setPage, setLoading }, props) => {
         <meta name="COVID AMP" />
       </Helmet>
       <div className={styles.curtainRod}>
+        <OmicronDrape narrow />
         <div className={styles.drapes}>
           <a href="https://covid-local.org">
             <div className={styles.backButton}></div>

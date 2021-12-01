@@ -1,12 +1,12 @@
 import NotificationDrape from "components/common/NotificationDrape/NotificationDrape";
-import { useCallback, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 // TODO implement module declaration that handles color exports correctly
 import * as colorsTmp from "../../../../assets/styles/vars.module.scss";
 const colors = colorsTmp as any;
 
-const DrapeContent = styled.span`
+const DrapeContent = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -42,15 +42,46 @@ const CloseButton = styled.button`
 const customCSS = css`
   position: absolute !important;
   top: 0;
-  right: 150px;
   /* height: 32px; */
   background-color: ${colors.orange};
   padding: 12px 18px;
+  @media (max-width: 615px) {
+    flex-flow: column;
+    > div {
+      flex-flow: column;
+      align-items: flex-start;
+      * {
+        margin: 0 !important;
+      }
+      > button {
+        position: absolute;
+        top: 15px;
+        right: 10px;
+      }
+    }
+  }
+  @media (max-width: 1100px) {
+    top: 70px;
+    left: 0;
+    width: 100%;
+    > div {
+      width: 100%;
+
+      > button {
+        margin-left: auto !important;
+        /* position: static; */
+      }
+    }
+  }
 `;
 
 // const dataUrl: string = getDataUrl();
 
-export const OmicronDrape = () => {
+interface OmicronDrapeProps {
+  narrow?: boolean;
+}
+
+export const OmicronDrape: FC<OmicronDrapeProps> = ({ narrow = false }) => {
   // already dismissed?
   let defaultShow: boolean = true;
   if (typeof localStorage !== "undefined") {
@@ -65,7 +96,7 @@ export const OmicronDrape = () => {
     // localStorage.setItem("omicronDrape", "dismissed");
   }, [setShow]);
   return (
-    <NotificationDrape {...{ customCSS, show }}>
+    <NotificationDrape {...{ customCSS, show, narrow }}>
       <DrapeContent>
         <em>NEW</em>
         <span>View current Omicron travel restrictions</span>
