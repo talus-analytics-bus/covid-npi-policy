@@ -6,7 +6,7 @@ import styled, { css } from "styled-components";
 import * as colorsTmp from "../../../../assets/styles/vars.module.scss";
 const colors = colorsTmp as any;
 
-const DrapeContent = styled.span`
+const DrapeContent = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -45,6 +45,34 @@ const customCSS = css`
   /* height: 32px; */
   background-color: ${colors.orange};
   padding: 12px 18px;
+  @media (max-width: 615px) {
+    flex-flow: column;
+    > div {
+      flex-flow: column;
+      align-items: flex-start;
+      * {
+        margin: 0 !important;
+      }
+      > button {
+        position: absolute;
+        top: 15px;
+        right: 10px;
+      }
+    }
+  }
+  @media (max-width: 1100px) {
+    top: 70px;
+    left: 0;
+    width: 100%;
+    > div {
+      width: 100%;
+
+      > button {
+        margin-left: auto !important;
+        /* position: static; */
+      }
+    }
+  }
 `;
 
 // const dataUrl: string = getDataUrl();
