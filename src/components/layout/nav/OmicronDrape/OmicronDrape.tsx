@@ -127,7 +127,7 @@ export const OmicronDrape: FC<OmicronDrapeProps> = ({ narrow = false }) => {
         >
           In table
         </Link>
-        <CloseButton onClick={onClose}>×</CloseButton>
+        <CloseButton onClick={onClose}>&#215;</CloseButton>
       </DrapeContent>
     </NotificationDrape>
   );
