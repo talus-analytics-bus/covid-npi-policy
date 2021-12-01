@@ -45,6 +45,8 @@ const customCSS = css`
   /* height: 32px; */
   background-color: ${colors.orange};
   padding: 12px 18px;
+  margin-left: 0 !important;
+  pointer-events: all !important;
   @media (max-width: 615px) {
     flex-flow: column;
     > div {
@@ -61,12 +63,13 @@ const customCSS = css`
     }
   }
   @media (max-width: 1100px) {
-    top: 70px;
+    /* top: 70px; */
+    z-index: 10001;
     left: 0;
     width: 100%;
     > div {
       width: 100%;
-
+      right: unset !important;
       > button {
         margin-left: auto !important;
         /* position: static; */
