@@ -95,7 +95,7 @@ const Map: FC<MapProps> = ({
   // if there is a map id in the URL search params, use it as the initial value
   // otherwise use the specified default map ID
   const defaultMapId: MapId = defaults.mapId;
-  const paramsMapId: MapId | null = getParamsMapId();
+  const paramsMapId: MapId | null = getParamsMapId(defaultMapId);
   const [mapId, _setMapId] = useState<MapId>(defaultMapId);
   const prevMapId: MapId | undefined = usePrevious(mapId);
 
