@@ -92,17 +92,16 @@ const Filter = ({
     {
       startDate:
         initSelectedItems.length > 0
-          ? new Date(moment(initSelectedItems[0]))
+          ? getDateFromString(initSelectedItems[0])
           : undefined,
       endDate:
         initSelectedItems.length > 0
-          ? new Date(moment(initSelectedItems[1]))
+          ? getDateFromString(initSelectedItems[1])
           : undefined,
       key: "selection",
     },
   ];
   const [dateRangeState, setDateRangeState] = useState(initDateRangeState);
-
   const nMax = sortedItems !== undefined ? sortedItems.length : 0;
   const nCur = filterState.selectedItems.length;
 
@@ -469,3 +468,8 @@ export const getInputLabel = ({
 };
 
 export default Filter;
+function getDateFromString(v) {
+  if (v === undefined || v === null || typeof v === "object") return v;
+  const yyyymmdd = v.split("-").map(d => parseInt(d));
+  return new Date(yyyymmdd[0], yyyymmdd[1] - 1, yyyymmdd[2]);
+}
