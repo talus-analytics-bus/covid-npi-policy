@@ -26,9 +26,13 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 interface SearchProps {
   floating?: boolean;
+  autoFocus?: boolean;
 }
 
-const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
+const LocationSearch: FC<SearchProps> = ({
+  floating = false,
+  autoFocus = true,
+}) => {
   const [places, setPlaces] = React.useState<PlaceRecord[]>();
   const [searchValue, setSearchValue] = React.useState("");
 
@@ -136,8 +140,6 @@ const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
     >
       <div className={styles.searchBarAndIcons}>
         <input
-          autoFocus
-          ref={inputRef}
           className={styles.searchBar}
           type="text"
           value={searchValue}
@@ -146,6 +148,7 @@ const LocationSearch: FC<SearchProps> = ({ floating = false }) => {
           style={{
             ...(floating && { height: "2.125em", fontSize: "" }),
           }}
+          {...{ autoFocus }}
         />
         <div className={styles.icons}>
           <XCloseBtn
