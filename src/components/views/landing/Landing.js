@@ -19,7 +19,7 @@ const Landing = ({ setPage, setLoading }, props) => {
   React.useEffect(() => {
     setPage("landing");
     setLoading(false);
-    if (typeof window !== "undefined") window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }, [setPage, setLoading]);
 
   return (
