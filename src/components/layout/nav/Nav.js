@@ -204,7 +204,6 @@ const Nav = ({ page }) => {
                     </Link>
                   </div>
                 </HoverDropdown>
-                <OmicronDrape />
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);
@@ -232,6 +231,7 @@ const Nav = ({ page }) => {
                   // </a>
                 }
               </div>
+              <OmicronDrape />
             </div>
           </div>
         </div>
