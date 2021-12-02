@@ -54,12 +54,8 @@ export const ModeledNumber: FunctionComponent<Formattable> = props => {
 // format date as May 29, 2020
 export const LocalDate: FunctionComponent<Formattable> = props => {
   if (props.children === null || props.children === undefined) return null;
-  const formatted = new Date(props.children).toLocaleString("default", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+  const val: any = props.children;
+  const formatted = formatLocalDate(val);
 
   return <>{formatted}</>;
 };
@@ -116,3 +112,11 @@ export const Subtle: FunctionComponent<Formattable> = props => {
   if (props.children === null || props.children === undefined) return null;
   return <span className={styles.subtleNote}>{props.children}</span>;
 };
+export function formatLocalDate(val: any) {
+  return new Date(val).toLocaleString("default", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}

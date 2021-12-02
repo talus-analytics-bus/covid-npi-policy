@@ -8,6 +8,7 @@ import classNames from "classnames";
 import { Numeric } from "d3";
 import { getDatumByDate } from "./helpers";
 import { SparklineCustomOptions } from "../D3React/types";
+import moment from "moment";
 type ComponentProps = {
   width: number;
   height: number;
@@ -32,11 +33,14 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
   classes = [],
   customOptions = {},
 }) => {
-  // date shown in sparkline
+  // date shown in sparkline -- defaults to most recent date on or before the
+  // dataDate for which data are available
+  // const [date, setDate] = useState<Moment>(moment("2021-06-01"));
   const [date, setDate] = useState<Moment>(dataDate);
 
   // update display date when data date is updated
   useEffect(() => {
+    // setDate(moment("2021-06-01"));
     setDate(dataDate);
   }, [dataDate]);
 
@@ -66,6 +70,7 @@ export const Sparkline: FunctionComponent<ComponentProps> = ({
             height,
             data,
             dataDate,
+            // dataDate: moment("2021-06-01"),
             caption,
             footer,
             customOptions,

@@ -364,6 +364,7 @@ const Map: FC<MapProps> = ({
               setFilters,
               catOptions,
               subcatOptions,
+              versions,
             }}
           >
             <LoadingSpinner
@@ -395,6 +396,8 @@ const Map: FC<MapProps> = ({
                         overallUpdateDate,
                         versions,
                         setInfoTooltipContent,
+                        casesUpdatedMoment,
+                        circle,
                       }}
                     />
                     <PanelSet
