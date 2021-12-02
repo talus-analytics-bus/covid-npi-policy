@@ -792,11 +792,7 @@ const Data: FC<DataProps> = ({
               DownloadBtn({
                 render: tableIsReady,
                 class_name: [nouns.s],
-                classNameForApi: filtersAreDefined
-                  ? nouns.s === "Policy"
-                    ? nouns.s + "Simple"
-                    : nouns.s
-                  : "All_data_simple",
+                classNameForApi: getClassNameForApi(filtersAreDefined, nouns),
                 buttonLoading,
                 setButtonLoading,
                 searchText,
@@ -895,6 +891,19 @@ const Data: FC<DataProps> = ({
 };
 
 export default Data;
+
+function getClassNameForApi(
+  filtersAreDefined: boolean,
+  nouns: { s: string; p: string }
+): string {
+  if (!filtersAreDefined) {
+    if (nouns.s === "Policy") return "All_data_simple";
+    else return "All_data";
+  } else {
+    if (nouns.s === "Policy") return "PolicySimple";
+    else return nouns.s;
+  }
+}
 
 // NOTE: The function below is no longer used as of Fri Jul 9 2021 because
 // dynamic location type-based labeling has been removed.
