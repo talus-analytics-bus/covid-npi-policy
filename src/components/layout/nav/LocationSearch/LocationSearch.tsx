@@ -59,7 +59,7 @@ const LocationSearch: FC<SearchProps> = ({
 
       const allPlaces = [...countries.data.data, ...states.data.data];
 
-      const disallowedSubstrings = ["county", "city"];
+      const disallowedSubstrings = ["county", "city", "global"];
       const filteredPlaces: PlaceRecord[] = allPlaces.filter(
         place =>
           !disallowedSubstrings.some(sub =>
