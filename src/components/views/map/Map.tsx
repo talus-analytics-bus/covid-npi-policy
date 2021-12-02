@@ -65,6 +65,7 @@ import {
 import MapPlaceContext from "./context/MapPlaceContext";
 import { OptionSetRecord } from "api/queryTypes";
 import { url } from "inspector";
+import moment from "moment";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -126,8 +127,8 @@ const Map: FC<MapProps> = ({
 
   // set default date of map based on most recent case data
   const casesUpdatedMoment: Moment = getCaseDataUpdateDate(versions, mapId);
-  // const [date, setDate] = useState<Moment>(moment('2020-12-25'));
-  const [date, setDate] = useState<Moment>(casesUpdatedMoment);
+  const [date, setDate] = useState<Moment>(moment());
+  // const [date, setDate] = useState<Moment>(casesUpdatedMoment);
   const prevDate: Moment | undefined = usePrevious(date);
 
   // set default fill metric
@@ -363,6 +364,7 @@ const Map: FC<MapProps> = ({
               setFilters,
               catOptions,
               subcatOptions,
+              versions,
             }}
           >
             <LoadingSpinner
@@ -394,6 +396,8 @@ const Map: FC<MapProps> = ({
                         overallUpdateDate,
                         versions,
                         setInfoTooltipContent,
+                        casesUpdatedMoment,
+                        circle,
                       }}
                     />
                     <PanelSet
