@@ -3,6 +3,7 @@ import { InfoTooltip } from "components/common";
 import moment, { Moment } from "moment";
 import { FC } from "react";
 import styles from "./MapDrape.module.scss";
+import { formatLocalDate } from "components/misc/FormatAndDisplay/FormatAndDisplay";
 interface MapDrapeProps {
   mapTitle: string;
   date: Moment;
@@ -10,6 +11,7 @@ interface MapDrapeProps {
   versions: any[];
   mapId: MapId;
   setInfoTooltipContent(arg: any): void;
+  casesUpdatedMoment: Moment;
 }
 export const MapDrape: FC<MapDrapeProps> = ({
   mapId,
@@ -18,14 +20,20 @@ export const MapDrape: FC<MapDrapeProps> = ({
   overallUpdateDate,
   versions,
   setInfoTooltipContent,
+  casesUpdatedMoment,
 }) => {
+  const caseloadDataDate: Moment =
+    casesUpdatedMoment < date ? casesUpdatedMoment : date;
   return (
     <div className={styles.mapDrape}>
       <div className={styles.mapBanner}>
         <div className={styles.title}>{mapTitle}</div>
         <div className={styles.dates}>
           <div className={styles.primary}>
-            Data for {date.format("MMM D, YYYY")}
+            Policy data showing for {formatLocalDate(date)}
+          </div>
+          <div style={{ color: "red" }} className={styles.primary}>
+            Caseload data showing for {formatLocalDate(caseloadDataDate)}
           </div>
           <div className={styles.secondary}>
             Data last updated on {overallUpdateDate.format("MMM D, YYYY")}

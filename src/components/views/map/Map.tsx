@@ -396,6 +396,7 @@ const Map: FC<MapProps> = ({
                         overallUpdateDate,
                         versions,
                         setInfoTooltipContent,
+                        casesUpdatedMoment,
                       }}
                     />
                     <PanelSet
