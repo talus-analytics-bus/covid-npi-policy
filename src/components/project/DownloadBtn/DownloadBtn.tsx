@@ -67,7 +67,7 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
             );
           } else if (class_name[0] === "All_data_simple") {
             window.location.assign(
-              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export%20%28compact%29.xlsx"
+              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export%20%summary%29.xlsx"
             );
           } else {
             setButtonLoading(true);
