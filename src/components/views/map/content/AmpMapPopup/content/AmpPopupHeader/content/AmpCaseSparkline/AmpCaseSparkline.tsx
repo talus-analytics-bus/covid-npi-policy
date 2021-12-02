@@ -11,12 +11,14 @@ import {
   MapId,
   NumericObservation,
 } from "components/common/MapboxMap/plugins/mapTypes";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import styles from "./AmpCaseSparkline.module.scss";
 import { updateData, getLabelFromMapMetricId } from "./helpers";
 import MapOptionContext from "components/views/map/context/MapOptionContext";
 import { Margin } from "components/common/D3React/types";
 import { defaults } from "components/common/MapboxMap/plugins/data";
+import { VersionRecord } from "api/queryTypes";
+import { formatLocalDate } from "components/misc/FormatAndDisplay/FormatAndDisplay";
 
 interface AmpCaseSparklineProps {
   mapId: MapId;
@@ -30,11 +32,29 @@ export const AmpCaseSparkline: FC<AmpCaseSparklineProps> = ({
 }): ReactElement | null => {
   const [data, setData] = useState<NumericObservation[] | null>(null);
   const [ready, setReady] = useState<boolean>(false);
-  const { circle }: { circle: string | null } = useContext<any>(
-    MapOptionContext
-  );
+  type AmpCaseSparklineMapOptionContext = {
+    circle: string | null;
+    versions?: VersionRecord[];
+  };
+
+  const { circle, versions }: AmpCaseSparklineMapOptionContext = useContext<
+    any
+  >(MapOptionContext);
   const metricIdForSparkline: string | null | undefined =
     circle || defaults[mapId].circle;
+  // if true, use last available data point as the sparkline date instead of
+  // the date defined in props
+  const metricVersion: VersionRecord | undefined = versions?.find(
+    v =>
+      (v.map_types.includes(mapId) || v.map_types.includes("all")) &&
+      v.name.startsWith("COVID-19")
+  );
+  if (metricVersion === undefined)
+    console.error(
+      "Could not find version data for metric with ID = " + metricIdForSparkline
+    );
+  const metricLastDatumDate: Moment = moment(metricVersion?.last_datum_date);
+  const dataNotForDataDate: boolean = metricLastDatumDate < dataDate;
 
   useEffect(() => {
     if (ready) setReady(false);
@@ -69,8 +89,13 @@ export const AmpCaseSparkline: FC<AmpCaseSparklineProps> = ({
             height,
             classes: [styles.caseSparkline],
             data,
-            dataDate,
-            unit: ["case", "cases"],
+            dataDate: dataNotForDataDate ? metricLastDatumDate : dataDate,
+            unit: !dataNotForDataDate
+              ? ["case", "cases"]
+              : [
+                  `case on ${formatLocalDate(metricLastDatumDate)}`,
+                  `cases on ${formatLocalDate(metricLastDatumDate)}`,
+                ],
             label: getLabelFromMapMetricId(metricIdForSparkline),
             customOptions: {
               xMin: "2020-01-21",
