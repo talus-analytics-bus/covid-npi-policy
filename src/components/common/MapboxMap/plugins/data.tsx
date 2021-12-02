@@ -78,7 +78,8 @@ export const defaults: MapDefaults = {
   // `undefined` as value for each
   minMaxDate: {
     minDate: "2020-01-21",
-    maxDate: yesterday.format("YYYY-MM-DD"),
+    maxDate: today.format("YYYY-MM-DD"),
+    // maxDate: yesterday.format("YYYY-MM-DD"),
   },
 
   // defaults for map with ID `us`
