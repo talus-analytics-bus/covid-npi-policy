@@ -61,7 +61,7 @@ export const MapDrape: FC<MapDrapeProps> = ({
               <SecondaryDataDate
               // color={date !== caseloadDataDate ? "red" : "#333"}
               >
-                , caseload data for {formatLocalDate(caseloadDataDate)}
+                ; Caseload data for {formatLocalDate(caseloadDataDate)}
               </SecondaryDataDate>
             )}
           </span>
