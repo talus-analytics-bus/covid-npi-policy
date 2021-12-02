@@ -33,6 +33,7 @@ import { getFiltersForApi, updateFilters } from "./helpers";
 import { removeViewState } from "../../helpers";
 import useHistory from "components/common/hooks/useHistory";
 import { omicronFiltersSubs } from "components/layout/nav/OmicronDrape/OmicronDrape";
+import moment from "moment";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -62,6 +63,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const [noChildCats, setNoChildCats] = useState<Option[]>([]);
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
   const infoTooltipSize: number = 8;
+
+  const { date, setDate } = useContext(MapOptionContext);
 
   const urlParams: URLSearchParams = new URLSearchParams(
     window.location.search
@@ -114,11 +117,12 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   useEffect(() => {
     if (urlParams.get("view") === "omicron_travel") {
       if (setFill) setFill("policy_status_counts");
+      if (setDate) setDate(moment());
       setFilters(omicronFiltersSubs);
       if (setFiltersForApi) setFiltersForApi(omicronFiltersSubs);
       removeViewState(history);
     }
-  }, [history, setFiltersForApi, setFill, urlParams]);
+  }, [history, setFiltersForApi, setFill, setDate, urlParams]);
 
   /**
    * List of possible circle metric options.

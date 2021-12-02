@@ -20,6 +20,7 @@ export type MapOptionContextProps = {
   prevFilters?: Record<string, any>;
   setFilters?(newFilters: Record<string, any>): void;
   date?: Moment;
+  setDate?: Dispatch<SetStateAction<Moment>>;
   catOptions?: Option[];
   subcatOptions?: Option[];
   versions?: VersionRecord[];

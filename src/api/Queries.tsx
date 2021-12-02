@@ -546,7 +546,9 @@ export const Export = async function({
     const link = document.createElement("a");
     link.href = url;
     const dateString = moment().format("YYYY-MM-DD");
-    const fn = `COVID AMP - Data Export ${dateString}.xlsx`;
+    const fn = `COVID AMP - Data Export${
+      class_name?.includes("Summary") ? " (summary)" : ""
+    } ${dateString}.xlsx`;
     link.setAttribute("download", fn);
     document.body.appendChild(link);
     link.click();

@@ -140,8 +140,8 @@ const PolicyRouter = props => {
       ...(state !== "national" && { area1: [state] }),
       date_start_effective: [
         "2020-01-01",
-        "2021-07-08",
-        // new Date().toISOString().split("T")[0],
+        // "2021-07-08",
+        new Date().toISOString().split("T")[0],
       ],
     });
 

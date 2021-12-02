@@ -45,6 +45,7 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
   if (render)
     return (
       <PrimaryButton
+        isSecondary={class_name.includes("secondary")}
         iconName={!buttonLoading ? "get_app" : null}
         label={
           <div>
@@ -63,6 +64,10 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
           if (class_name[0] === "All_data") {
             window.location.assign(
               "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
+            );
+          } else if (class_name[0] === "All_data_summary") {
+            window.location.assign(
+              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export%20%summary%29.xlsx"
             );
           } else {
             setButtonLoading(true);
