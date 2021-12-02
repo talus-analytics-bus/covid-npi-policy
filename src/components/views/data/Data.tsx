@@ -382,6 +382,17 @@ const Data: FC<DataProps> = ({
         const optionsets: { [k: string]: OptionSetRecord[] } =
           results["optionsets"].data;
 
+        // update certain values for aesthetics
+        if (optionsets.country_name !== undefined) {
+          const global:
+            | OptionSetRecord
+            | undefined = optionsets.country_name.find(o =>
+            o.value.startsWith("Global")
+          );
+          if (global) {
+            global.label = "Global";
+          }
+        }
         // set options for filters
         const newFilterDefs: FilterDefs[] = [...entityInfoForQuery.filterDefs];
         newFilterDefs.forEach((filterDef: FilterDefs) => {
