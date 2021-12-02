@@ -5,20 +5,22 @@ import { FC } from "react";
 import styles from "./MapDrape.module.scss";
 import { formatLocalDate } from "components/misc/FormatAndDisplay/FormatAndDisplay";
 import styled from "styled-components";
-import * as colors from "../../../../../assets/styles/vars.module.scss";
+import * as colorsTmp from "../../../../../assets/styles/vars.module.scss";
+const colors: any = colorsTmp as any;
 
-const DataDate = styled.div`
+const DataDate = styled.span`
   font-weight: bold;
   font-size: 1.1em;
   font-weight: bold;
-  color: ${(colors as any).orange};
+  color: ${colors.orange};
 `;
 
 const SecondaryDataDate = styled(DataDate)`
-  color: ${({ color }) => (color ? color : "#333")};
-  font-weight: normal;
-  font-size: 0.8em;
-  font-style: italic;
+  color: ${colors.orange};
+  /* color: ${({ color }) => (color ? color : "#333")}; */
+  /* font-weight: normal; */
+  font-size: .9em;
+  /* font-style: italic; */
 `;
 interface MapDrapeProps {
   mapTitle: string;
@@ -45,10 +47,17 @@ export const MapDrape: FC<MapDrapeProps> = ({
       <div className={styles.mapBanner}>
         <div className={styles.title}>{mapTitle}</div>
         <div className={styles.dates}>
-          <DataDate>Policy data for {formatLocalDate(date)}</DataDate>
-          <SecondaryDataDate color={date !== caseloadDataDate ? "red" : "#333"}>
-            Caseload data for {formatLocalDate(caseloadDataDate)}
-          </SecondaryDataDate>
+          <span>
+            <SecondaryDataDate>
+              Policy data for {formatLocalDate(date)},
+            </SecondaryDataDate>
+            &nbsp;
+            <SecondaryDataDate
+            // color={date !== caseloadDataDate ? "red" : "#333"}
+            >
+              caseload data for {formatLocalDate(caseloadDataDate)}
+            </SecondaryDataDate>
+          </span>
           <div className={styles.secondary}>
             Data last updated on {overallUpdateDate.format("MMM D, YYYY")}
             <InfoTooltip
