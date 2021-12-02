@@ -3,7 +3,7 @@
  */
 
 // standard packages
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./dateslider.module.scss";
 
 // common components
@@ -61,6 +61,20 @@ const DateSlider = ({
   const sliderMinValue = 0;
   const sliderMaxValue = sliderMax.diff(sliderMin, "days");
 
+  /**
+   * If paused, stop playing and clear all playing timeouts (events that
+   * move the slider along the track)
+   * @method handlePause
+   * @return {[type]}    [description]
+   */
+  const handlePause = useCallback(() => {
+    setPlaying(false);
+    while (playTimeouts.length > 0) {
+      clearTimeout(playTimeouts.pop());
+    }
+    setPlayTimeouts([]);
+  }, [playTimeouts]);
+
   // EFFECT HOOKS // --------------------------------------------------------//
   // when slider date changes while playing, update all data
   useEffect(() => {
@@ -71,7 +85,8 @@ const DateSlider = ({
   useEffect(() => {
     setCurSliderDate(date);
     setCurSliderVal(date.diff(sliderMin, "days"));
-  }, [date, sliderMin]);
+    if (playing && date.isSame(moment(), "date")) handlePause();
+  }, [date, handlePause, playing, sliderMin]);
 
   // date slider and styles
   // wrapper style: optional
@@ -81,8 +96,14 @@ const DateSlider = ({
   // height is also used for rail and track
   const height = 12;
   const width = 12;
-  const railStyle = { backgroundColor: "transparent", height: height + "px" };
-  const trackStyle = { backgroundColor: "transparent", height: height + "px" };
+  const railStyle = {
+    backgroundColor: "transparent",
+    height: height + "px",
+  };
+  const trackStyle = {
+    backgroundColor: "transparent",
+    height: height + "px",
+  };
 
   // define handle style
   const handleStyle = {
@@ -210,20 +231,6 @@ const DateSlider = ({
   //   // Stop playing if playing
   //   if (playing) handlePause();
   // };
-
-  /**
-   * If paused, stop playing and clear all playing timeouts (events that
-   * move the slider along the track)
-   * @method handlePause
-   * @return {[type]}    [description]
-   */
-  const handlePause = () => {
-    setPlaying(false);
-    while (playTimeouts.length > 0) {
-      clearTimeout(playTimeouts.pop());
-    }
-    setPlayTimeouts([]);
-  };
 
   /**
    * If press fast forward or rewind, stop playing and increment or decrement
