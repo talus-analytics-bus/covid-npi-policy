@@ -184,7 +184,7 @@ const Data: FC<DataProps> = ({
 
   // track whether the download button is currently in a loading state
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [buttonLoadingSimple, setButtonLoadingSimple] = useState<boolean>(
+  const [buttonLoadingSummary, setButtonLoadingSummary] = useState<boolean>(
     false
   );
 
@@ -837,8 +837,8 @@ const Data: FC<DataProps> = ({
                 nouns.s === "Policy" ? ["secondary"] : []
               ),
               classNameForApi: filtersAreDefined ? nouns.s : "All_data",
-              buttonLoading: buttonLoadingSimple,
-              setButtonLoading: setButtonLoadingSimple,
+              buttonLoading: buttonLoadingSummary,
+              setButtonLoading: setButtonLoadingSummary,
               searchText,
               filters,
               disabled: data && data.length === 0,
@@ -908,10 +908,10 @@ function getClassNameForApi(
   nouns: { s: string; p: string }
 ): string {
   if (!filtersAreDefined) {
-    if (nouns.s === "Policy") return "All_data_simple";
+    if (nouns.s === "Policy") return "All_data_summary";
     else return "All_data";
   } else {
-    if (nouns.s === "Policy") return "PolicySimple";
+    if (nouns.s === "Policy") return "PolicySummary";
     else return nouns.s;
   }
 }
