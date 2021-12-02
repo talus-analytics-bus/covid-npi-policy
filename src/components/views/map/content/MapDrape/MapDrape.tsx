@@ -1,4 +1,7 @@
-import { MapId } from "components/common/MapboxMap/plugins/mapTypes";
+import {
+  MapDataShapeId,
+  MapId,
+} from "components/common/MapboxMap/plugins/mapTypes";
 import { InfoTooltip } from "components/common";
 import moment, { Moment } from "moment";
 import { FC } from "react";
@@ -30,6 +33,7 @@ interface MapDrapeProps {
   mapId: MapId;
   setInfoTooltipContent(arg: any): void;
   casesUpdatedMoment: Moment;
+  circle: MapDataShapeId;
 }
 export const MapDrape: FC<MapDrapeProps> = ({
   mapId,
@@ -39,6 +43,7 @@ export const MapDrape: FC<MapDrapeProps> = ({
   versions,
   setInfoTooltipContent,
   casesUpdatedMoment,
+  circle,
 }) => {
   const caseloadDataDate: Moment =
     casesUpdatedMoment < date ? casesUpdatedMoment : date;
@@ -49,14 +54,16 @@ export const MapDrape: FC<MapDrapeProps> = ({
         <div className={styles.dates}>
           <span>
             <SecondaryDataDate>
-              Policy data for {formatLocalDate(date)},
+              Policy data for {formatLocalDate(date)}
             </SecondaryDataDate>
-            &nbsp;
-            <SecondaryDataDate
-            // color={date !== caseloadDataDate ? "red" : "#333"}
-            >
-              caseload data for {formatLocalDate(caseloadDataDate)}
-            </SecondaryDataDate>
+
+            {circle && (
+              <SecondaryDataDate
+              // color={date !== caseloadDataDate ? "red" : "#333"}
+              >
+                , caseload data for {formatLocalDate(caseloadDataDate)}
+              </SecondaryDataDate>
+            )}
           </span>
           <div className={styles.secondary}>
             Data last updated on {overallUpdateDate.format("MMM D, YYYY")}

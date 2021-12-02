@@ -397,6 +397,7 @@ const Map: FC<MapProps> = ({
                         versions,
                         setInfoTooltipContent,
                         casesUpdatedMoment,
+                        circle,
                       }}
                     />
                     <PanelSet
