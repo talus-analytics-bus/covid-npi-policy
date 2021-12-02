@@ -4,6 +4,22 @@ import moment, { Moment } from "moment";
 import { FC } from "react";
 import styles from "./MapDrape.module.scss";
 import { formatLocalDate } from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import styled from "styled-components";
+import * as colors from "../../../../../assets/styles/vars.module.scss";
+
+const DataDate = styled.div`
+  font-weight: bold;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: ${(colors as any).orange};
+`;
+
+const SecondaryDataDate = styled(DataDate)`
+  color: ${({ color }) => (color ? color : "#333")};
+  font-weight: normal;
+  font-size: 0.8em;
+  font-style: italic;
+`;
 interface MapDrapeProps {
   mapTitle: string;
   date: Moment;
@@ -29,12 +45,10 @@ export const MapDrape: FC<MapDrapeProps> = ({
       <div className={styles.mapBanner}>
         <div className={styles.title}>{mapTitle}</div>
         <div className={styles.dates}>
-          <div className={styles.primary}>
-            Policy data showing for {formatLocalDate(date)}
-          </div>
-          <div style={{ color: "red" }} className={styles.primary}>
-            Caseload data showing for {formatLocalDate(caseloadDataDate)}
-          </div>
+          <DataDate>Policy data for {formatLocalDate(date)}</DataDate>
+          <SecondaryDataDate color={date !== caseloadDataDate ? "red" : "#333"}>
+            Caseload data for {formatLocalDate(caseloadDataDate)}
+          </SecondaryDataDate>
           <div className={styles.secondary}>
             Data last updated on {overallUpdateDate.format("MMM D, YYYY")}
             <InfoTooltip
