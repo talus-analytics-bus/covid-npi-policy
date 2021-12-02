@@ -364,6 +364,7 @@ const Map: FC<MapProps> = ({
               setFilters,
               catOptions,
               subcatOptions,
+              versions,
             }}
           >
             <LoadingSpinner

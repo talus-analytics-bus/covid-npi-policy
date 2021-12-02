@@ -1,3 +1,4 @@
+import { VersionRecord } from "api/queryTypes";
 import {
   MapDataShapeId,
   MapId,
@@ -21,6 +22,7 @@ export type MapOptionContextProps = {
   date?: Moment;
   catOptions?: Option[];
   subcatOptions?: Option[];
+  versions?: VersionRecord[];
 };
 
 const MapOptionContext = React.createContext<MapOptionContextProps>({});
