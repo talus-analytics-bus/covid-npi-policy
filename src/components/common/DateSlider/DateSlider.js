@@ -3,7 +3,7 @@
  */
 
 // standard packages
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./dateslider.module.scss";
 
 // common components
@@ -45,7 +45,7 @@ const DateSlider = ({
   const [playTimeouts, setPlayTimeouts] = useState([]);
 
   // define min/max slider values (moment objects)
-  const sliderMin = new moment(minDate);
+  const sliderMin = useMemo(() => new moment(minDate), [minDate]);
   const sliderMax = new moment(maxDate);
 
   // define current slider value in units of number of days since min value
@@ -66,6 +66,12 @@ const DateSlider = ({
   useEffect(() => {
     if (playing) setDate(curSliderDate);
   }, [setDate, curSliderDate, playing]);
+
+  // if date is changed, ensure slider internal vals match new date
+  useEffect(() => {
+    setCurSliderDate(date);
+    setCurSliderVal(date.diff(sliderMin, "days"));
+  }, [date, sliderMin]);
 
   // date slider and styles
   // wrapper style: optional

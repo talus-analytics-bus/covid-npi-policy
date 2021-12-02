@@ -352,6 +352,7 @@ const Map: FC<MapProps> = ({
               fill,
               circle,
               date,
+              setDate,
               filters,
               mapId,
               prevFill,
