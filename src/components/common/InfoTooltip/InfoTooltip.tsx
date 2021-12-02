@@ -10,6 +10,7 @@ import { InfoTooltipContentSetter } from "../OptionControls/types";
 // styles and assets
 import styles from "./infotooltip.module.scss";
 import imgSrc from "./info.svg";
+import imgSrcWhite from "./info-white.svg";
 
 interface InfoTooltipProps {
   /**
@@ -60,6 +61,11 @@ interface InfoTooltipProps {
    * Optional: Custom styles for the info tooltip container.
    */
   style?: CSS.Properties;
+
+  /**
+   * Optional: If true, will be white, black otherwise. Defaults to false.
+   */
+  white?: boolean;
 }
 
 /**
@@ -80,6 +86,7 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
     width: `${iconSize}px`,
   },
   style = {},
+  white = false,
 }) => {
   // TODO try removing one or both rebuild calls
   // TODO document how `bindWithFunction` is used, try to streamline it
@@ -108,7 +115,7 @@ const InfoTooltip: FC<InfoTooltipProps> = ({
     >
       <img
         style={imgStyle}
-        src={imgSrc}
+        src={white ? imgSrcWhite : imgSrc}
         alt={"Info tooltip icon"}
         onMouseOver={() => {
           if (bindWithFunction && setInfoTooltipContent !== undefined) {
