@@ -45,6 +45,7 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
   if (render)
     return (
       <PrimaryButton
+        isSecondary={class_name.includes("secondary")}
         iconName={!buttonLoading ? "get_app" : null}
         label={
           <div>

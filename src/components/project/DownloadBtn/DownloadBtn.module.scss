@@ -1,9 +1,9 @@
 .downloadBtn {
-    margin-left: auto;
+    // margin-left: auto;
     &.inactive {
         pointer-events: none;
         cursor: default;
-        opacity: 0.75;
+        opacity: 0.5;
     }
     .spinnerAndText {
         display: flex;

@@ -41,6 +41,21 @@ import { OptionSetRecord } from "api/queryTypes";
 import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 import { getUrlParamAsFilters } from "App";
+import styled from "styled-components";
+
+const DownloadButtons = styled.div`
+  display: flex;
+  flex-flow: row;
+  gap: 0 20px;
+  justify-content: end;
+  margin: 1rem 0;
+`;
+
+const InfoTooltipContent = styled.div`
+  text-align: left;
+  font-weight: normal;
+  font-size: 1rem;
+`;
 
 /**
  * The different types of data page that can be viewed: `policy`, `plan`, and
@@ -169,6 +184,9 @@ const Data: FC<DataProps> = ({
 
   // track whether the download button is currently in a loading state
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [buttonLoadingSimple, setButtonLoadingSimple] = useState<boolean>(
+    false
+  );
 
   // CONSTANTS // ---------------------------------------------------------- //
   // define nouns used to refer to entity type viewed in table
@@ -644,7 +662,7 @@ const Data: FC<DataProps> = ({
         </div>
       </div>
       {
-        <>
+        <div>
           <Drawer
             contentStyle={{
               gridTemplateAreas: `${defaultGridTemplateAreas}
@@ -769,37 +787,85 @@ const Data: FC<DataProps> = ({
             }}
           />
           {/* TODO Refactor the DownloadBtn below */}
-          {DownloadBtn({
-            render: tableIsReady,
-            class_name: [nouns.s, "secondary"],
-            classNameForApi: filtersAreDefined ? nouns.s : "All_data",
-            buttonLoading,
-            setButtonLoading,
-            searchText,
-            filters,
-            disabled: data && data.length === 0,
-            message: (
-              <span>
-                {data && data.length === 0 && (
-                  <>No {nouns.p.toLowerCase()} found</>
-                )}
-                {data && data.length > 0 && (
-                  <>
-                    <span style={{ fontWeight: 700 }}>
-                      Download {!filtersAreDefined ? "all" : "filtered"} data{" "}
-                    </span>
-                    <span style={{ fontStyle: "italic", fontWeight: 400 }}>
-                      ({comma(numInstances)}{" "}
-                      {numInstances !== 1
-                        ? nouns.p.toLowerCase()
-                        : nouns.s.toLowerCase().replace("_", " ")}{" "}
-                      .xlsx)
-                    </span>
-                  </>
-                )}
-              </span>
-            ),
-          })}
+          <DownloadButtons>
+            {nouns.s === "Policy" &&
+              DownloadBtn({
+                render: tableIsReady,
+                class_name: [nouns.s],
+                classNameForApi: filtersAreDefined
+                  ? nouns.s === "Policy"
+                    ? nouns.s + "Simple"
+                    : nouns.s
+                  : "All_data_simple",
+                buttonLoading,
+                setButtonLoading,
+                searchText,
+                filters,
+                disabled: data && data.length === 0,
+                message: (
+                  <span>
+                    {data && data.length === 0 && (
+                      <>No {nouns.p.toLowerCase()} found</>
+                    )}
+                    {data && data.length > 0 && (
+                      <>
+                        <span style={{ fontWeight: 700 }}>
+                          Download{!filtersAreDefined ? "" : ""} summary table{" "}
+                        </span>
+                        <span style={{ fontStyle: "italic", fontWeight: 400 }}>
+                          ({comma(numInstances)}{" "}
+                          {numInstances !== 1
+                            ? nouns.p.toLowerCase()
+                            : nouns.s.toLowerCase().replace("_", " ")}{" "}
+                          .xlsx)
+                        </span>
+                      </>
+                    )}
+                  </span>
+                ),
+              })}
+            {DownloadBtn({
+              render: tableIsReady,
+              class_name: [nouns.s].concat(
+                nouns.s === "Policy" ? ["secondary"] : []
+              ),
+              classNameForApi: filtersAreDefined ? nouns.s : "All_data",
+              buttonLoading: buttonLoadingSimple,
+              setButtonLoading: setButtonLoadingSimple,
+              searchText,
+              filters,
+              disabled: data && data.length === 0,
+              message: (
+                <span>
+                  <span style={{ fontWeight: 700 }}>
+                    Download all columns{" "}
+                    {(numInstances ?? 0) > 0 && (
+                      <span style={{ fontStyle: "italic", fontWeight: 400 }}>
+                        ({comma(numInstances)}{" "}
+                        {numInstances !== 1
+                          ? nouns.p.toLowerCase()
+                          : nouns.s.toLowerCase().replace("_", " ")}{" "}
+                        .xlsx)
+                      </span>
+                    )}
+                    {nouns.s === "Policy" && (
+                      <InfoTooltip
+                        id={"DownloadInfo"}
+                        iconSize={14}
+                        text={
+                          <InfoTooltipContent>
+                            Click this button to download all available data
+                            columns, including several omitted from the summary
+                            table below.
+                          </InfoTooltipContent>
+                        }
+                      />
+                    )}
+                  </span>
+                </span>
+              ),
+            })}
+          </DownloadButtons>
           {tableIsReady && (
             <Table
               showDefinitions={Settings.SHOW_TABLE_DEFINITIONS}
@@ -822,7 +888,7 @@ const Data: FC<DataProps> = ({
             />
           )}
           {!tableIsReady && <div style={{ height: "900px" }} />}
-        </>
+        </div>
       }
     </div>
   );
