@@ -236,7 +236,7 @@ export function getCaseDataUpdateDate(
   const casesUpdatedMoment: Moment = casesUpdatedDatum
     ? moment(casesUpdatedDatum.last_datum_date)
     : moment();
-  defaults.minMaxDate.maxDate = casesUpdatedMoment.format("YYYY-MM-DD");
+  // defaults.minMaxDate.maxDate = casesUpdatedMoment.format("YYYY-MM-DD");
   return casesUpdatedMoment;
 }
 
