@@ -16,6 +16,7 @@ export async function updateData(
   setReady: Function,
   circle: string | null
 ) {
+  const isCumulative: boolean = getIsCumulative(circle);
   const baseParams: CaseloadQueryArgs = {
     windowSizeDays: 7,
     fields: ["date_time", "value"],
@@ -24,8 +25,8 @@ export async function updateData(
     stateName: undefined,
     ansiFips: undefined,
     stateId: undefined,
-    getAverage: true,
-    isCumulative: getIsCumulative(circle),
+    getAverage: !isCumulative,
+    isCumulative,
   };
   setLocationParam(baseParams, mapId, feature);
   const newData = await Caseload(baseParams as any);
