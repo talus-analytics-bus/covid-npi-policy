@@ -160,7 +160,7 @@ const ListPoliciesPage = props => {
               {status.policies === "loading" && (
                 <h3>
                   <FlexRow spacing={".5em"}>
-                    <LoadingSpinner inline delay={250} />
+                    <LoadingSpinner inline />
                     <span>Loading policies for {locationName}</span>
                   </FlexRow>
                 </h3>
