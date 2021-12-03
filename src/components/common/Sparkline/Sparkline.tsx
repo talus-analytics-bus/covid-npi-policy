@@ -8,7 +8,6 @@ import classNames from "classnames";
 import { Numeric } from "d3";
 import { getDatumByDate } from "./helpers";
 import { SparklineCustomOptions } from "../D3React/types";
-import moment from "moment";
 type ComponentProps = {
   width: number;
   height: number;
