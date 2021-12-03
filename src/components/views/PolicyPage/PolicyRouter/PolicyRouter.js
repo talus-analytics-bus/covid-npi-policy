@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Switch,
@@ -17,6 +17,7 @@ import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 
 // utilities
 import { removeParenthetical } from "components/misc/UtilsTyped";
+import { LoadingSpinner } from "components/common";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -61,8 +62,10 @@ const PolicyRouter = props => {
   const [policySort, setPolicySort] = React.useState("desc");
 
   const [locationName, setLocationName] = React.useState(
-    state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
+    null
+    // state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
   );
+  const [loadedIso3, setLoadedIso3] = useState(null);
 
   const [dateRangeControlValue, setDateRangeControlValue] = React.useState({
     startDate: null,
@@ -122,6 +125,8 @@ const PolicyRouter = props => {
     dateRangeControlValue,
     setDateRangeControlValue,
     policyListScrollPos: [policyListScrollPos, setPolicyListScrollPos],
+    showCharts: iso3 !== "Unspecified" && iso3 !== "EU",
+    // showCharts: iso3 !== "Unspecified" && !["error"].includes(status.caseload),
   };
 
   // if state or country changes
@@ -129,10 +134,13 @@ const PolicyRouter = props => {
     // scroll to the top
     window.scroll(0, 0);
     setPolicyListScrollPos(0);
+    if (loadedIso3 !== iso3) return;
+    // if (status.place !== "loaded") return;
 
-    setLocationName(
-      state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
-    );
+    // setLocationName(
+    //   null
+    //   // state !== "national" ? state : iso3 === "Unspecified" ? "Non-ISO3" : iso3
+    // );
 
     // reset filters
     setPolicyFilters({
@@ -186,6 +194,7 @@ const PolicyRouter = props => {
       caseload: "initial",
       policyStatus: "initial",
       searchResults: "initial",
+      // place: "initial",
     });
 
     setCaseload();
@@ -251,7 +260,7 @@ const PolicyRouter = props => {
     };
 
     getPolicyStatus();
-  }, [iso3, state]);
+  }, [iso3, loadedIso3, state]);
 
   React.useEffect(() => {
     const getPlaceName = async () => {
@@ -261,39 +270,42 @@ const PolicyRouter = props => {
       params.append("fields", "iso3");
       params.append("include_policy_count", "true");
       params.append("level", "country");
+      params.append("iso3", iso3);
 
       const countries = await axios(`${API_URL}/get/place`, { params });
 
-      const placeName = countries.data.data.find(
-        country => country.iso3 === iso3
-      );
+      const placeName = countries.data.data[0];
       if (placeName) setLocationName(removeParenthetical(placeName.loc));
+      setLoadedIso3(iso3);
     };
-
-    if (state === "national") getPlaceName();
-    else setLocationName(state);
-  }, [state, iso3]);
+    if (loadedIso3 !== iso3) {
+      if (state === "national") getPlaceName();
+      else {
+        setLocationName(state);
+        setLoadedIso3(iso3);
+      }
+    }
+  }, [state, iso3, loadedIso3]);
 
   const miniMapScope =
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
-  // console.log(status);
-  // console.log(policyObject);
-
-  return (
-    <MiniMap.Provider scope={miniMapScope}>
-      <policyContext.Provider value={policyContextValue}>
-        <Switch>
-          <Route path={`${match.url}/:policyID`}>
-            <PolicyPage />
-          </Route>
-          <Route path={match.path}>
-            <ListPoliciesPage />
-          </Route>
-        </Switch>
-      </policyContext.Provider>
-    </MiniMap.Provider>
-  );
+  if (loadedIso3 !== iso3) return <LoadingSpinner />;
+  else
+    return (
+      <MiniMap.Provider scope={miniMapScope}>
+        <policyContext.Provider value={policyContextValue}>
+          <Switch>
+            <Route path={`${match.url}/:policyID`}>
+              <PolicyPage />
+            </Route>
+            <Route path={match.path}>
+              <ListPoliciesPage />
+            </Route>
+          </Switch>
+        </policyContext.Provider>
+      </MiniMap.Provider>
+    );
 };
 
 export default PolicyRouter;

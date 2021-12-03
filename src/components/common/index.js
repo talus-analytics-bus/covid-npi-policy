@@ -20,6 +20,7 @@ import Axes from "./D3React/Axes/Axes";
 import Sparkline from "./Sparkline/Sparkline";
 import Caret from "./Caret/Caret";
 import XCloseBtn from "./XCloseBtn/XCloseBtn";
+import { FlexRow } from "./Styled";
 export {
   Selectpicker,
   CheckboxSet,
@@ -43,4 +44,5 @@ export {
   Sparkline,
   Caret,
   XCloseBtn,
+  FlexRow,
 };

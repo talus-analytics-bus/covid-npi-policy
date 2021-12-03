@@ -49,7 +49,7 @@ const RelatedPolicies = ({ policy, path }) => {
   if (policies && policies.length > 0)
     return (
       <div className={styles.relatedPolicies}>
-        <h2>Explore Related Policies</h2>
+        <h2>Explore related policies</h2>
         <div className={styles.others}>
           {policies &&
             policies.map(policy => (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 import { useParams } from "react-router-dom";
+import { FlexRow, LoadingSpinner } from "components/common";
 
 import Legend from "./Legend/Legend";
 import Axes from "./Axes/Axes";
@@ -167,7 +168,7 @@ const PolicyEnvironmentPlot = () => {
             earliestDate(
               caseload[0].date,
               policySummaryObject &&
-                Object.keys(policySummaryObject)[0] * msPerDay
+              Object.keys(policySummaryObject)[0] * msPerDay
             ),
             caseload.slice(-1)[0].date,
           ])
@@ -272,7 +273,10 @@ const PolicyEnvironmentPlot = () => {
               </p>
             </>
           ) : (
-            <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
+            <FlexRow spacing={".5em"}>
+              <LoadingSpinner inline style={{ marginTop: 15 }} />
+              <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
+            </FlexRow>
           )}
         </div>
         <Legend />

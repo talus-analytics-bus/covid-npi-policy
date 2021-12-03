@@ -9,6 +9,8 @@ import SnapshotChart from "./SnapshotChart";
 import styles from "./SnapshotChartSection.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
+import { isEmpty } from "components/misc/UtilsTyped";
+import { FlexRow, LoadingSpinner } from "components/common";
 
 // import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
 
@@ -91,68 +93,69 @@ const SnapshotChartSection = () => {
   // const categories =
   //   lastStatus &&
   //   Object.keys(lastStatus.expired).sort((a, b) => a.localeCompare(b));
+  const ready = !isEmpty(policySummaryObject)
+  if (!ready) return <FlexRow spacing={'.5em'}><LoadingSpinner inline /><h3>Loading policy data</h3></FlexRow>; else
+    return (
+      <div>
+        <div className={styles.headerContainer}>
+          <div className={styles.labelsHeader}>
+            <h3>Policy category</h3>
+          </div>
+          <div className={styles.chartHeader}>
+            <h3>Number of policies</h3>
+          </div>
+        </div>
+        <div className={styles.sectionContainer}>
+          {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
+          {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
+          <div className={styles.labels}>
+            {chartLabels &&
+              chartLabels.map(category => (
+                <span>
+                  <p key={category}>{category}</p>
+                  <PolicyCategoryIcon
+                    category={category}
+                    style={{ marginLeft: "0.5em" }}
+                  />
+                </span>
+              ))}
+          </div>
+          {/* <div className={styles.chartContainer}> */}
+          <SnapshotChart {...{ policySummaryObject, chartLabels }} />
 
-  return (
-    <div>
-      <div className={styles.headerContainer}>
-        <div className={styles.labelsHeader}>
-          <h3>Policy category</h3>
+          {/* </div> */}
         </div>
-        <div className={styles.chartHeader}>
-          <h3>Number of policies</h3>
-        </div>
-      </div>
-      <div className={styles.sectionContainer}>
-        {/* <h2 className={styles.header2}>Policy snapshot</h2> */}
-        {/* <span className={styles.asOfDate}>As of TODO DATE</span> */}
-        <div className={styles.labels}>
-          {chartLabels &&
-            chartLabels.map(category => (
-              <span>
-                <p key={category}>{category}</p>
-                <PolicyCategoryIcon
-                  category={category}
-                  style={{ marginLeft: "0.5em" }}
-                />
-              </span>
-            ))}
-        </div>
-        {/* <div className={styles.chartContainer}> */}
-        <SnapshotChart {...{ policySummaryObject, chartLabels }} />
-
-        {/* </div> */}
-      </div>
-      <div className={styles.legendContainer}>
-        <div className={styles.legend}>
-          {policySummaryObject && (
-            <>
-              <div className={styles.entry}>
-                <div
-                  className={styles.active}
-                  style={{ background: "#E55E37" }}
-                />
-                <span>Newly enacted</span>
-              </div>
-              <div className={styles.entry}>
-                <div
-                  className={styles.active}
-                  style={{ background: "#409384" }}
-                />
-                <span>Active</span>
-              </div>
-              <div className={styles.entry}>
-                <div
-                  className={styles.total}
-                  style={{ background: "#96C4BB" }}
-                />
-                <span>Expired</span>
-              </div>
-            </>
-          )}
+        <div className={styles.legendContainer}>
+          <div className={styles.legend}>
+            {policySummaryObject && (
+              <>
+                <div className={styles.entry}>
+                  <div
+                    className={styles.active}
+                    style={{ background: "#E55E37" }}
+                  />
+                  <span>Newly enacted</span>
+                </div>
+                <div className={styles.entry}>
+                  <div
+                    className={styles.active}
+                    style={{ background: "#409384" }}
+                  />
+                  <span>Active</span>
+                </div>
+                <div className={styles.entry}>
+                  <div
+                    className={styles.total}
+                    style={{ background: "#96C4BB" }}
+                  />
+                  <span>Expired</span>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default SnapshotChartSection;

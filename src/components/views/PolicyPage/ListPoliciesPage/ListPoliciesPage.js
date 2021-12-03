@@ -9,6 +9,7 @@ import {
 } from "../PolicyRouter/PolicyLoaders";
 
 import { MiniMap } from "../MiniMap/MiniMap";
+import { FlexRow, LoadingSpinner } from "components/common";
 
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
@@ -33,6 +34,7 @@ const ListPoliciesPage = props => {
     setPolicyCategories,
     setPolicySummaryObject,
     setPolicySearchResults,
+    showCharts,
   } = policyContextConsumer;
 
   const searchActive = policyFilters._text && policyFilters._text[0] !== "";
@@ -125,6 +127,7 @@ const ListPoliciesPage = props => {
   // const miniMapCounties = React.useRef(["Unspecified"]);
   const miniMapCounties = React.useRef([]);
 
+  // if true, only the list of policies is shown, not line/bar charts
   return (
     <article className={styles.listPoliciesPage}>
       <Helmet>
@@ -132,8 +135,8 @@ const ListPoliciesPage = props => {
         <meta name={`COVID-19 policies for ${locationName}`} />
       </Helmet>
       <header className={styles.pageHeader}>
-        {locationName !== iso3 ? (
-          <h1>{locationName} COVID-19 Policies</h1>
+        {locationName !== iso3 || !showCharts ? (
+          <h1>{locationName} COVID-19 policies</h1>
         ) : (
           <h1>&nbsp;</h1>
         )}
@@ -147,18 +150,23 @@ const ListPoliciesPage = props => {
           )}
         </figure>
       </header>
-      {iso3 !== "Unspecified" && <IntroSection />}
+      {showCharts && <IntroSection />}
       {status.policiesSummary !== "error" && (
         <section className={styles.policyList}>
-          {iso3 !== "Unspecified" && <h2>Explore specific policies</h2>}
+          {showCharts && <h2>Explore specific policies</h2>}
           <PolicyFilterBar />
           {!searchActive && (
             <>
               {status.policies === "loading" && (
-                <h3>Loading policies for {locationName}</h3>
+                <h3>
+                  <FlexRow spacing={".5em"}>
+                    <LoadingSpinner inline />
+                    <span>Loading policies for {locationName}</span>
+                  </FlexRow>
+                </h3>
               )}
               {status.policies === "error" && (
-                <h3>No Policies Found in {locationName}</h3>
+                <h3>No policies found in {locationName}</h3>
               )}
               {status.policies === "loaded" && <PolicyList />}
             </>

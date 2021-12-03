@@ -82,7 +82,7 @@ const IntroParagraph = props => {
   if (iso3 === "Unspecified") {
     return (
       <div className={styles.introSection}>
-        <h1>{locationName} COVID-19 Policies</h1>
+        <h1>{locationName} COVID-19 policies</h1>
       </div>
     );
   }
