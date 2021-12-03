@@ -155,14 +155,14 @@ const circleStyles: CircleStyles = {
           return getLinearScale({
             minSize: 3,
             zeroSize: 2,
-            maxValue: 1.3e6,
+            maxValue: 1.3e6 / 7,
             featurePropertyKey: key,
           });
         else
           return getLog10Scale({
             minSize: 5,
             zeroSize: 5,
-            maxValue: 1e9,
+            maxValue: 1e9 / 7,
             featurePropertyKey: key,
           });
       },

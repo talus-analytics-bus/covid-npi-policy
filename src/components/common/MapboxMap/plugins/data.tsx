@@ -581,6 +581,7 @@ export const allMapMetrics = {
         metric_id: "77",
         temporal_resolution: "daily",
         spatial_resolution: "country",
+        transform : get7dayAvg
       },
       id: "77",
       filter: ["==", ["in", ["get", "ADM0_A3"], ["literal", ["PRI"]]], false],
