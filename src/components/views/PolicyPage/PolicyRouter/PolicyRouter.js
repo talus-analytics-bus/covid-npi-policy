@@ -290,7 +290,7 @@ const PolicyRouter = props => {
   const miniMapScope =
     iso3 === "USA" ? (state === "national" ? "world" : "USA") : "world";
 
-  if (loadedIso3 !== iso3) return <LoadingSpinner />;
+  if (loadedIso3 !== iso3) return <LoadingSpinner delay={250} />;
   else
     return (
       <MiniMap.Provider scope={miniMapScope}>

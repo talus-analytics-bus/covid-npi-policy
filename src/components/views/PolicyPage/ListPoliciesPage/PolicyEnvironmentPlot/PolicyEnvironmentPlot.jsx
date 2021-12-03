@@ -275,7 +275,7 @@ const PolicyEnvironmentPlot = () => {
           ) : (
             <FlexRow spacing={".5em"}>
               <LoadingSpinner inline style={{ marginTop: 15 }} />
-              <h2 className={styles.caseloadHeader}>Loading COVID-19 Cases</h2>
+              <h2 className={styles.caseloadHeader}>Loading COVID-19 cases</h2>
             </FlexRow>
           )}
         </div>
