@@ -1,3 +1,7 @@
+import {
+  ValidViewTypes,
+  ViewType,
+} from "components/common/MapboxMap/plugins/mapTypes";
 import { encodeString, decodeString } from "use-query-params";
 // import { DataPageType, DataPageTypeVals } from "./Data";
 
@@ -51,6 +55,7 @@ export const PlaceTypeParam = getTypedStringParam<PlaceType>(
   validPlaceTypes,
   "affected"
 );
+export const ViewTypeParam = getTypedStringParam<ViewType>(ValidViewTypes, "");
 
 interface TypedStringParam<T> {
   encode: (s: T | null | undefined) => string | null | undefined;

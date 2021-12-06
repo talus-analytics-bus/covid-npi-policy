@@ -9,13 +9,7 @@
  */
 
 // 3rd party packages
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  FC,
-  ReactElement,
-} from "react";
+import { useCallback, useEffect, useState, FC, ReactElement } from "react";
 import { Moment } from "moment";
 import { Helmet } from "react-helmet";
 
@@ -44,6 +38,7 @@ import {
   MapId,
   MapProps,
   PolicyResolution,
+  ViewType,
 } from "../../common/MapboxMap/plugins/mapTypes";
 import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
 import { Option } from "components/common/OptionControls/types";
@@ -52,7 +47,6 @@ import MapDrape from "./content/MapDrape/MapDrape";
 // helper functions and data
 import { defaults } from "../../common/MapboxMap/plugins/data";
 import {
-  getParamsMapId,
   getMapTitle,
   ampMapFilterDefs,
   getCaseDataUpdateDate,
@@ -62,6 +56,8 @@ import {
 import MapPlaceContext from "./context/MapPlaceContext";
 import { OptionSetRecord } from "api/queryTypes";
 import moment from "moment";
+import { useQueryParam } from "use-query-params";
+import { ViewTypeParam } from "../data/types";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -91,7 +87,6 @@ const Map: FC<MapProps> = ({
   // if there is a map id in the URL search params, use it as the initial value
   // otherwise use the specified default map ID
   const defaultMapId: MapId = defaults.mapId;
-  const paramsMapId: MapId | null = getParamsMapId(defaultMapId);
   const [mapId, _setMapId] = useState<MapId>(defaultMapId);
   const prevMapId: MapId | undefined = usePrevious(mapId);
 
@@ -137,8 +132,11 @@ const Map: FC<MapProps> = ({
   // definition data for filters to display in drawer content section
   const [filterDefs, setFilterDefs] = useState<FilterDefs[]>(ampMapFilterDefs);
 
+  // URL query params
+  const [view, setView] = useQueryParam<ViewType>("view", ViewTypeParam);
+
   // currently selected filters
-  const [filters, setFilters] = useState<Filters>(getInitFilters());
+  const [filters, setFilters] = useState<Filters>(getInitFilters({ view }));
   const prevFilters = usePrevious(filters);
 
   // country data for tooltip names
@@ -335,6 +333,8 @@ const Map: FC<MapProps> = ({
               catOptions,
               subcatOptions,
               versions,
+              view,
+              setView,
             }}
           >
             <LoadingSpinner

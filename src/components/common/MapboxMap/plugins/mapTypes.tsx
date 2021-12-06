@@ -12,6 +12,12 @@ import { Numeric } from "d3";
 import { AmpPage } from "types";
 
 /**
+ * Default view types for the map
+ */
+export const ValidViewTypes = ["omicron_travel", ""] as const;
+export type ViewType = typeof ValidViewTypes[number];
+
+/**
  * Props taken by the `Map` component, which renders a Mapbox map.
  */
 export type MapProps = {

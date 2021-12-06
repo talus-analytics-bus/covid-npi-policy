@@ -30,6 +30,8 @@ import styles from "./AmpMapOptionsPanel.module.scss";
 import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { getFiltersForApi, updateFilters } from "./helpers";
+import { omicronFiltersSubs } from "components/layout/nav/OmicronDrape/OmicronDrape";
+import moment from "moment";
 
 interface AmpMapOptionsPanelProps {
   /**
@@ -60,7 +62,7 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
   const [prevCircle, setPrevCircle] = useState<string | null | undefined>(null);
   const infoTooltipSize: number = 8;
 
-  const { date, setDate } = useContext(MapOptionContext);
+  const { setDate } = useContext(MapOptionContext);
 
   /**
    * The possible geographic resolutions of map that can be viewed.
@@ -99,22 +101,23 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
     setFill,
     filters: filtersForApi,
     setFilters: setFiltersForApi,
+    setView,
+    view,
   } = curMapOptions;
 
   const [filters, setFilters] = useState<Filters>(filtersForApi || {});
 
-  // TODO with useQueryParams
-
-  // // when url params are updated, update API filters and filters
-  // useEffect(() => {
-  //   if (urlParams.get("view") === "omicron_travel") {
-  //     if (setFill) setFill("policy_status_counts");
-  //     if (setDate) setDate(moment());
-  //     setFilters(omicronFiltersSubs);
-  //     if (setFiltersForApi) setFiltersForApi(omicronFiltersSubs);
-  //     removeViewState(history);
-  //   }
-  // }, [history, setFiltersForApi, setFill, setDate, urlParams]);
+  // Handle default views
+  useEffect(() => {
+    if (view === "omicron_travel") {
+      setMapId(MapId.global);
+      if (setDate) setDate(moment());
+      setFilters(omicronFiltersSubs);
+      if (setFill) setFill("policy_status_counts");
+      if (setFiltersForApi) setFiltersForApi(omicronFiltersSubs);
+      if (setView) setView("");
+    }
+  }, [setDate, setFill, setFiltersForApi, setMapId, setView, view]);
 
   /**
    * List of possible circle metric options.

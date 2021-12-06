@@ -2,6 +2,7 @@ import { VersionRecord } from "api/queryTypes";
 import {
   MapDataShapeId,
   MapId,
+  ViewType,
 } from "components/common/MapboxMap/plugins/mapTypes";
 import { Option } from "components/common/OptionControls/types";
 import { Moment } from "moment";
@@ -24,6 +25,8 @@ export type MapOptionContextProps = {
   catOptions?: Option[];
   subcatOptions?: Option[];
   versions?: VersionRecord[];
+  view?: ViewType;
+  setView?: Dispatch<SetStateAction<ViewType>>;
 };
 
 const MapOptionContext = React.createContext<MapOptionContextProps>({});

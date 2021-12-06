@@ -125,12 +125,11 @@ export function getParamsMapId(
   } else return paramsMapId;
 }
 
-export function getInitFilters(): Filters {
-  // get init filtering from URL params and then delete the params
-  const params: URLSearchParams = new URLSearchParams(
-    window !== undefined ? window.location.search : ""
-  );
-  const view: string | null = params.get("view");
+export function getInitFilters({
+  view,
+}: {
+  view: string | null | undefined;
+}): Filters {
   if (view === "omicron_travel") {
     return omicronFiltersSubs;
   } else return {};
