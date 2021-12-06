@@ -21,7 +21,6 @@ import { Helmet } from "react-helmet";
 
 // custom hooks
 import usePrevious from "components/common/hooks/usePrevious";
-import useHistory from "components/common/hooks/useHistory";
 
 // contexts
 import { MapOptionProvider } from "./context/MapOptionContext";
@@ -53,18 +52,15 @@ import MapDrape from "./content/MapDrape/MapDrape";
 // helper functions and data
 import { defaults } from "../../common/MapboxMap/plugins/data";
 import {
-  replaceMapIdState as replaceHistoryMapId,
   getParamsMapId,
   getMapTitle,
   ampMapFilterDefs,
   getCaseDataUpdateDate,
   getOverallUpdateDate,
   getInitFilters,
-  removeViewState,
 } from "./helpers";
 import MapPlaceContext from "./context/MapPlaceContext";
 import { OptionSetRecord } from "api/queryTypes";
-import { url } from "inspector";
 import moment from "moment";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
@@ -74,7 +70,6 @@ const Map: FC<MapProps> = ({
   setPage,
   versions,
   setInfoTooltipContent,
-  urlParams,
 }) => {
   // STATE // ---------------------------------------------------------------//
   // has initial data been loaded?
@@ -100,25 +95,16 @@ const Map: FC<MapProps> = ({
   const [mapId, _setMapId] = useState<MapId>(defaultMapId);
   const prevMapId: MapId | undefined = usePrevious(mapId);
 
-  // get browser history object using custom hook
-  const history: History = useHistory();
-
   /**
    * Always set map status to "changing" when map ID is changed
    */
-  const setMapId = useCallback(
-    v => {
-      // mark map as in "changing" state (prevents API requests)
-      setMapIsChanging(true);
+  const setMapId = useCallback(v => {
+    // mark map as in "changing" state (prevents API requests)
+    setMapIsChanging(true);
 
-      // update map ID
-      _setMapId(v);
-
-      // update URL search params
-      replaceHistoryMapId(history, v);
-    },
-    [history]
-  );
+    // update map ID
+    _setMapId(v);
+  }, []);
 
   // track whether to show policies at the selected geo or below it
   const [policyResolution, setPolicyResolution] = useState<PolicyResolution>(
@@ -257,23 +243,6 @@ const Map: FC<MapProps> = ({
     },
     [getMapData, initialized, setLoading, setPage]
   );
-
-  // useEffect(() => {
-  //   if (initialized) {
-  //     setInitialized(false);
-  //     if (new URLSearchParams(urlParams).get("view") === "omicron_travel") {
-  //       setFilters({ subtarget: ["Omicron"] });
-  //     }
-  //   }
-  // }, [urlParams, initialized]);
-
-  // initialize URL parameter variable containing map ID
-  useEffect(() => {
-    replaceHistoryMapId(history, mapId);
-    if (paramsMapId !== mapId) {
-      setMapId(paramsMapId);
-    }
-  }, [paramsMapId, history, setMapId, mapId]);
 
   // When map ID is changed, update policy resolution to a supported one,
   // if needed -- for counties, only "geo" is supported

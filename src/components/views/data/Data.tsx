@@ -113,7 +113,7 @@ interface DataProps {
   /**
    * Optional: A string representing where the user was routed to Data from
    *
-   * This is currently only used to triggere a rerender when the Omicron banner
+   * This is currently only used to trigger a rerender when the Omicron banner
    * interaction takes the user to Data
    */
   routedFrom: string;
