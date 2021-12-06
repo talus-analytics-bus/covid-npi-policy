@@ -7,7 +7,7 @@ import {
 import { AuthEntityRecord } from "components/misc/dataTypes";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { PlaceType } from "../types";
+import { PlaceType, validPlaceTypes } from "../types";
 
 import styles from "./Helpers.module.scss";
 
@@ -361,4 +361,47 @@ export function getOnSort(setOrdering: Function) {
       });
     };
   };
+}
+
+// NOTE: The function below is no longer used as of Fri Jul 9 2021 because
+// dynamic location type-based labeling has been removed.
+
+// /**
+//  * Returns the label to use for the location type based on the data being
+//  * viewed in the table, e.g., "affected location" or "jurisdiction" for policy
+//  * data, and "organization" for plan data.
+//  *
+//  * @param placeType The type of place selected, "affected" or "jurisdiction".
+//  * @param entityInfo The entity info object for the data type being viewed.
+//  * @returns {string} The label to use for the location type.
+//  */
+// function getLocationTypeLabel(placeType: string, entityInfo: any): string {
+//   if (entityInfo.nouns.s === "Plan") return "Organization";
+//   else return placeType === "affected" ? "Affected location" : "Jurisdiction";
+// }
+
+/**
+ * Returns the place type defined in the URL parameters, or null if none.
+ * @returns {PlaceType | null} The place type defined in the URL parameters, or
+ * null if none.
+ */
+export function getPlaceTypeFromURLParams(): PlaceType | null {
+  // get URL search parameters
+  const params: URLSearchParams = new URLSearchParams(
+    window !== undefined ? window.location.search : ""
+  );
+
+  const placeTypeTmp: string | null = params.get("placeType");
+  if (placeTypeTmp !== null) {
+    if (validPlaceTypes.includes(placeTypeTmp as PlaceType)) {
+      return placeTypeTmp as PlaceType;
+    } else {
+      throw Error(
+        "Invalid place type provided as URL param, must be one of " +
+          validPlaceTypes.join(", ") +
+          "; but found: " +
+          placeTypeTmp
+      );
+    }
+  } else return null;
 }
