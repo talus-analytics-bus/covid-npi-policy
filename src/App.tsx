@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import ReactTooltip from "react-tooltip";
 import Modal from "reactjs-popup";
 import classNames from "classnames";
+import { QueryParamProvider } from "use-query-params";
 
 // layout
 import { Nav } from "./components/layout";
@@ -125,199 +126,202 @@ const App = () => {
           <meta name="COVID AMP" />
         </Helmet>
         <BrowserRouter>
-          <Nav {...{ page }} />
-          <Switch>
-            <React.Fragment>
-              <div
-                className={classNames(
-                  styles.page,
-                  styles[page !== null ? page : ""]
-                )}
-              >
-                {
-                  // Data page
-                  <Route
-                    exact
-                    path="/data"
-                    render={props => {
-                      const newRoutedFrom =
-                        (props.location.state ?? ({} as any)).routedFrom ?? "";
-                      setRoutedFrom(newRoutedFrom);
+          <QueryParamProvider ReactRouterRoute={Route}>
+            <Nav {...{ page }} />
+            <Switch>
+              <React.Fragment>
+                <div
+                  className={classNames(
+                    styles.page,
+                    styles[page !== null ? page : ""]
+                  )}
+                >
+                  {
+                    // Data page
+                    <Route
+                      exact
+                      path="/data"
+                      render={props => {
+                        const newRoutedFrom =
+                          (props.location.state ?? ({} as any)).routedFrom ??
+                          "";
+                        setRoutedFrom(newRoutedFrom);
 
-                      // get URL parameters as strings and JSONs, or null
-                      const urlParams = new URLSearchParams(
-                        window.location.search
-                      );
-                      const type: DataPageType =
-                        urlParams.get("type") !== null
-                          ? (urlParams.get("type") as DataPageType)
-                          : "policy";
-                      const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
-                        urlParams,
-                        "filters_policy"
-                      );
-                      const urlFilterParamsPolicyLegacy: Filters | null = getUrlParamAsFilters(
-                        urlParams,
-                        "filters"
-                      );
-                      const urlFilterParamsChallenge: Filters | null = getUrlParamAsFilters(
-                        urlParams,
-                        "filters_challenge"
-                      );
-                      const urlFilterParamsPlan: Filters | null = getUrlParamAsFilters(
-                        urlParams,
-                        "filters_plan"
-                      );
-                      return (
-                        <Data
-                          {...{
-                            setLoading,
-                            loading,
-                            setPage,
-                            setInfoTooltipContent,
-                            urlFilterParamsPolicy:
-                              urlFilterParamsPolicyLegacy ||
-                              urlFilterParamsPolicy,
-                            urlFilterParamsPlan,
-                            urlFilterParamsChallenge,
-                            counts,
-                            type,
-                            routedFrom,
-                            setRoutedFrom,
-                          }}
-                        />
-                      );
-                    }}
-                  />
-                }
-                {
-                  // Root: Landing Page
-                  <Route
-                    exact
-                    path="/"
-                    render={() => {
-                      return <Landing {...{ setPage, setLoading }} />;
-                    }}
-                  />
-                }
-                {
-                  // Map page
-                  <Route
-                    exact
-                    path="/policymaps"
-                    render={() => {
-                      const urlParams = new URLSearchParams(
-                        window.location.search
-                      );
-                      return (
-                        <Map
-                          {...{
-                            versions,
-                            setPage,
-                            loading,
-                            setLoading,
-                            setInfoTooltipContent,
-                            urlParams: urlParams.toString(),
-                          }}
-                        />
-                      );
-                    }}
-                  />
-                }
-                {
-                  // About page
-                  <Route
-                    path="/about/:subpage"
-                    render={routeProps => {
-                      return (
-                        <About
-                          {...{
-                            setPage,
-                            setLoading,
-                            initTab: routeProps.match.params.subpage,
-                          }}
-                        />
-                      );
-                    }}
-                  />
-                }
-                {
-                  // Contact us page
-                  <Route
-                    exact
-                    path="/contact"
-                    render={() => {
-                      return <Contact {...{ setPage, setLoading }} />;
-                    }}
-                  />
-                }
-                {
-                  // // Documentation page
-                  // <Route
-                  //   exact
-                  //   path="/data/documentation"
-                  //   render={() => {
-                  //     return (
-                  //       <Documentation
-                  //         {...{
-                  //           setPage,
-                  //           setLoading
-                  //         }}
-                  //       />
-                  //     );
-                  //   }}
-                  // />
-                }
-                {
-                  // Model page
-                  <Route
-                    exact
-                    path="/model"
-                    render={() => {
-                      return <PolicyModel {...{ setPage, setLoading }} />;
-                    }}
-                  />
-                }
-                {/* { */}
-                {/*   // policy page */}
-                {/*   <Route */}
-                {/*     path="/policy" */}
-                {/*     render={() => { */}
-                {/*       return ( */}
-                {/*         <PolicyPage */}
-                {/*           {...{ */}
-                {/*             setPage, */}
-                {/*             setLoading, */}
-                {/*             policyPageCaseload, */}
-                {/*             setPolicyPageCaseload, */}
-                {/*           }} */}
-                {/*         /> */}
-                {/*       ); */}
-                {/*     }} */}
-                {/*   /> */}
-                {/* } */}
-                {
-                  // policy page
-                  <Route path="/policies/:iso3/:state">
-                    <PolicyRouter {...{ setPage, setLoading }} />
-                  </Route>
-                }
-              </div>
-            </React.Fragment>
-          </Switch>
-          {page !== "policymaps" && page !== "landing" && (
-            <Footer {...{ page, versions }} />
-          )}
-          {
-            // // Loading spinner
-            // <div
-            //   className={classNames(styles.loading, { [styles.on]: loading })}
-            // >
-            //   <img src={loadingSvg} alt={"Loading spinner"} />
-            // </div>
-          }
-          {<LoadingSpinner isReady={!loading} fullscreen={true} />}
-          {<BrowserProvider>{modalToShow}</BrowserProvider>}
+                        // get URL parameters as strings and JSONs, or null
+                        const urlParams = new URLSearchParams(
+                          window.location.search
+                        );
+                        const type: DataPageType =
+                          urlParams.get("type") !== null
+                            ? (urlParams.get("type") as DataPageType)
+                            : "policy";
+                        const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
+                          urlParams,
+                          "filters_policy"
+                        );
+                        const urlFilterParamsPolicyLegacy: Filters | null = getUrlParamAsFilters(
+                          urlParams,
+                          "filters"
+                        );
+                        const urlFilterParamsChallenge: Filters | null = getUrlParamAsFilters(
+                          urlParams,
+                          "filters_challenge"
+                        );
+                        const urlFilterParamsPlan: Filters | null = getUrlParamAsFilters(
+                          urlParams,
+                          "filters_plan"
+                        );
+                        return (
+                          <Data
+                            {...{
+                              setLoading,
+                              loading,
+                              setPage,
+                              setInfoTooltipContent,
+                              urlFilterParamsPolicy:
+                                urlFilterParamsPolicyLegacy ||
+                                urlFilterParamsPolicy,
+                              urlFilterParamsPlan,
+                              urlFilterParamsChallenge,
+                              counts,
+                              type,
+                              routedFrom,
+                              setRoutedFrom,
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                  }
+                  {
+                    // Root: Landing Page
+                    <Route
+                      exact
+                      path="/"
+                      render={() => {
+                        return <Landing {...{ setPage, setLoading }} />;
+                      }}
+                    />
+                  }
+                  {
+                    // Map page
+                    <Route
+                      exact
+                      path="/policymaps"
+                      render={() => {
+                        const urlParams = new URLSearchParams(
+                          window.location.search
+                        );
+                        return (
+                          <Map
+                            {...{
+                              versions,
+                              setPage,
+                              loading,
+                              setLoading,
+                              setInfoTooltipContent,
+                              urlParams: urlParams.toString(),
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                  }
+                  {
+                    // About page
+                    <Route
+                      path="/about/:subpage"
+                      render={routeProps => {
+                        return (
+                          <About
+                            {...{
+                              setPage,
+                              setLoading,
+                              initTab: routeProps.match.params.subpage,
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                  }
+                  {
+                    // Contact us page
+                    <Route
+                      exact
+                      path="/contact"
+                      render={() => {
+                        return <Contact {...{ setPage, setLoading }} />;
+                      }}
+                    />
+                  }
+                  {
+                    // // Documentation page
+                    // <Route
+                    //   exact
+                    //   path="/data/documentation"
+                    //   render={() => {
+                    //     return (
+                    //       <Documentation
+                    //         {...{
+                    //           setPage,
+                    //           setLoading
+                    //         }}
+                    //       />
+                    //     );
+                    //   }}
+                    // />
+                  }
+                  {
+                    // Model page
+                    <Route
+                      exact
+                      path="/model"
+                      render={() => {
+                        return <PolicyModel {...{ setPage, setLoading }} />;
+                      }}
+                    />
+                  }
+                  {/* { */}
+                  {/*   // policy page */}
+                  {/*   <Route */}
+                  {/*     path="/policy" */}
+                  {/*     render={() => { */}
+                  {/*       return ( */}
+                  {/*         <PolicyPage */}
+                  {/*           {...{ */}
+                  {/*             setPage, */}
+                  {/*             setLoading, */}
+                  {/*             policyPageCaseload, */}
+                  {/*             setPolicyPageCaseload, */}
+                  {/*           }} */}
+                  {/*         /> */}
+                  {/*       ); */}
+                  {/*     }} */}
+                  {/*   /> */}
+                  {/* } */}
+                  {
+                    // policy page
+                    <Route path="/policies/:iso3/:state">
+                      <PolicyRouter {...{ setPage, setLoading }} />
+                    </Route>
+                  }
+                </div>
+              </React.Fragment>
+            </Switch>
+            {page !== "policymaps" && page !== "landing" && (
+              <Footer {...{ page, versions }} />
+            )}
+            {
+              // // Loading spinner
+              // <div
+              //   className={classNames(styles.loading, { [styles.on]: loading })}
+              // >
+              //   <img src={loadingSvg} alt={"Loading spinner"} />
+              // </div>
+            }
+            {<LoadingSpinner isReady={!loading} fullscreen={true} />}
+            {<BrowserProvider>{modalToShow}</BrowserProvider>}
+          </QueryParamProvider>
         </BrowserRouter>
         {
           // Info tooltip that is displayed whenever an info tooltip icon (i)

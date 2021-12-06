@@ -1,4 +1,4 @@
-import React, {
+import {
   FC,
   Dispatch,
   SetStateAction,
@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import { useQueryParam, StringParam, JsonParam } from "use-query-params";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
@@ -42,6 +43,7 @@ import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 import { getUrlParamAsFilters } from "App";
 import styled from "styled-components";
+import { DocTypeParam } from "./DocTypeParam";
 
 const DownloadButtons = styled.div`
   display: flex;
@@ -63,7 +65,8 @@ const InfoTooltipContent = styled.div`
  *
  * NOTE: `challenge` is currently disabled.
  */
-export type DataPageType = "policy" | "plan" | "challenge";
+export const DataPageTypeVals = ["policy", "plan", "challenge"] as const;
+export type DataPageType = typeof DataPageTypeVals[number];
 
 /**
  * Minimum and maximum dates defining a range.
@@ -96,22 +99,6 @@ interface DataProps {
    * Sets the current page.
    */
   setPage: Dispatch<SetStateAction<AmpPage | null>>;
-
-  /**
-   * Defines the URL filter parameters for policy data.
-   */
-  urlFilterParamsPolicy: Filters | null;
-
-  /**
-   * Defines the URL filter parameters for plan data.
-   */
-  urlFilterParamsPlan: Filters | null;
-
-  /**
-   * Defines the URL filter parameters for court challenge data.
-   * @unused
-   */
-  urlFilterParamsChallenge: Filters | null;
 
   /**
    * The type, i.e., mode, of the data page, that determines what kind of data
@@ -149,13 +136,14 @@ const Data: FC<DataProps> = ({
   setLoading,
   setInfoTooltipContent,
   setPage,
-  urlFilterParamsPolicy,
-  urlFilterParamsPlan,
-  urlFilterParamsChallenge,
   type,
   routedFrom,
 }) => {
-  const [docType, setDocType] = useState<DataPageType>(type);
+  const [docType, setDocType] = useQueryParam<DataPageType>(
+    "type",
+    DocTypeParam
+  );
+  if (docType === undefined || docType === null) setDocType("policy");
 
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
