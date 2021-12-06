@@ -53,6 +53,7 @@ import { OptionSetRecord } from "api/queryTypes";
 import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 import styled from "styled-components";
+import DataDownloadBtn from "components/project/DownloadBtn/DataDownloadBtn";
 
 const DownloadButtons = styled.div`
   display: flex;
@@ -585,7 +586,7 @@ const Data: FC<DataProps> = ({
           {/* TODO Refactor the DownloadBtn below */}
           <DownloadButtons>
             {nouns.s === "Policy" && (
-              <DataDownloadButton
+              <DataDownloadBtn
                 class_name={[nouns.s]}
                 classNameForApi={getClassNameForApi(filtersAreDefined, nouns)}
                 message={
@@ -620,7 +621,7 @@ const Data: FC<DataProps> = ({
               />
             )}
             {
-              <DataDownloadButton
+              <DataDownloadBtn
                 class_name={[nouns.s].concat(
                   nouns.s === "Policy" ? ["secondary"] : []
                 )}
@@ -702,31 +703,3 @@ function getClassNameForApi(
     else return nouns.s;
   }
 }
-
-const DataDownloadButton: FC<any> = ({
-  class_name,
-  classNameForApi,
-  buttonLoading,
-  setButtonLoading,
-  message,
-  tableIsReady,
-  query,
-  filters,
-  data,
-}) => {
-  return (
-    <DownloadBtn
-      {...{
-        render: tableIsReady,
-        class_name,
-        classNameForApi,
-        buttonLoading,
-        setButtonLoading,
-        searchText: query.searchText,
-        filters,
-        disabled: data && data.length === 0,
-        message,
-      }}
-    />
-  );
-};
