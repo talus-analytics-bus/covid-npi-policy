@@ -142,6 +142,7 @@ const Data: FC<DataProps> = ({
     type: DocTypeParam,
     filters_policy: withDefault(JsonParam, {}),
     filters_plan: withDefault(JsonParam, {}),
+    searchText: withDefault(StringParam, ""),
     // filters_challenge: withDefault(JsonParam, {}),
   });
 
@@ -154,6 +155,12 @@ const Data: FC<DataProps> = ({
       setQuery({ ["filters_" + query.type]: v });
     },
     [query.type, setQuery]
+  );
+  const setSearchText = useCallback(
+    (v: any) => {
+      setQuery({ searchText: v });
+    },
+    [setQuery]
   );
 
   // track the type of place being viewed in the data table policies: the
@@ -194,27 +201,7 @@ const Data: FC<DataProps> = ({
   // define data and metadata for table
   const [data, setData] = useState<DataRecord[] | null>(null);
   const [metadata, setMetadata] = useState<MetadataRecord[] | null>(null);
-
-  // // define filters to apply to data that will be retrieved for the table
-  // const getFiltersFromUrlParams: Function = useCallback((): Filters => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
-  //     urlParams,
-  //     "filters_" + query.type
-  //   );
-
-  //   return urlFilterParamsPolicy || {};
-  // }, [query.type]);
-
-  // const initFilters: Filters = getFiltersFromUrlParams();
-  // const [filters, setFilters] = useState<Filters>(initFilters);
   const [showAdvanced] = useState(false);
-
-  // TODO get search text from query
-  const [searchText, setSearchText] = useState<string | null>(
-    null
-    // initFilters._text !== undefined ? initFilters._text[0] : null
-  );
 
   // min and max dates for date range pickers dynamically determined by data
   const [, setMinMaxStartDate] = useState<MinMaxDates>({
@@ -408,11 +395,11 @@ const Data: FC<DataProps> = ({
       getOptionSets: true,
       filtersForQuery: {
         ...filters,
-        _text: searchText !== null ? [searchText] : [],
+        _text: query.searchText !== null ? [query.searchText] : [],
       },
       entityInfoForQuery: entityInfo,
     });
-  }, [entityInfo, filters, getData, ordering, searchText, setLoading]);
+  }, [entityInfo, filters, getData, ordering, query.searchText, setLoading]);
 
   // update filters to contain latest search text
   useEffect(() => {
@@ -420,22 +407,22 @@ const Data: FC<DataProps> = ({
     if (
       filters._text !== undefined &&
       filters._text.length > 0 &&
-      filters._text[0] === searchText
+      filters._text[0] === query.searchText
     )
       return;
     else {
       // add search text to filters if it's not null or blank, otherwise delete
       // its field from the filters
       const updatedFilters: Filters = { ...filters };
-      if (searchText !== null && searchText !== "") {
-        updatedFilters._text = [searchText];
+      if (query.searchText !== null && query.searchText !== "") {
+        updatedFilters._text = [query.searchText];
         setFilters(updatedFilters);
       } else if (updatedFilters._text !== undefined) {
         delete updatedFilters._text;
         setFilters(updatedFilters);
       }
     }
-  }, [filters, searchText, setFilters]);
+  }, [filters, query.searchText, setFilters]);
 
   useEffect(() => {
     updateData();
@@ -444,7 +431,7 @@ const Data: FC<DataProps> = ({
   // have any filters or search text been applied?
   const filtersAreDefined = !(
     isEmpty(filters) &&
-    (searchText === null || searchText === "")
+    (query.searchText === null || query.searchText === "")
   );
 
   const tableIsReady: boolean =
@@ -565,7 +552,7 @@ const Data: FC<DataProps> = ({
                       />
                     )}
                     <Search
-                      searchText={searchText}
+                      searchText={query.searchText}
                       onChangeFunc={setSearchText}
                       {...{ loading }}
                     />
@@ -587,7 +574,7 @@ const Data: FC<DataProps> = ({
                           filterDefs,
                           filters,
                           setFilters,
-                          searchText,
+                          searchText: query.searchText,
                           setSearchText,
                           numInstances,
                         }}
@@ -607,7 +594,7 @@ const Data: FC<DataProps> = ({
                 classNameForApi: getClassNameForApi(filtersAreDefined, nouns),
                 buttonLoading,
                 setButtonLoading,
-                searchText,
+                searchText: query.searchText,
                 filters,
                 disabled: data && data.length === 0,
                 message: (
@@ -640,7 +627,7 @@ const Data: FC<DataProps> = ({
               classNameForApi: filtersAreDefined ? nouns.s : "All_data",
               buttonLoading: buttonLoadingSummary,
               setButtonLoading: setButtonLoadingSummary,
-              searchText,
+              searchText: query.searchText,
               filters,
               disabled: data && data.length === 0,
               message: (
