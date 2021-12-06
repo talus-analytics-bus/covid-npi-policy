@@ -345,6 +345,13 @@ export function formatFiltersForPlaceType(
   } else return filters;
 }
 
+/**
+ * Returns a function that sets updated ordering using the provided setter only
+ * if the ordering has changed.
+ *
+ * @param setOrdering The setter for column ordering
+ * @returns A function that sets updated ordering only if it has changed
+ */
 export function getOnSort(setOrdering: Function) {
   return () => {
     return (field: string, order: string) => {
