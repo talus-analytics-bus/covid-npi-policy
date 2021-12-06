@@ -128,6 +128,7 @@ const Data: FC<DataProps> = ({
   loading,
   setLoading,
   setInfoTooltipContent,
+  setPage,
 }) => {
   // Note: The `type` and `placeType` query params have built-in defaults,
   // see their definitions. `withDefault` is not used for them because the
@@ -423,6 +424,10 @@ const Data: FC<DataProps> = ({
       }
     }
   }, [filters, query.searchText, setFilters]);
+
+  useEffect(() => {
+    setPage("data");
+  }, []);
 
   useEffect(() => {
     updateData();
