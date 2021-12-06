@@ -15,7 +15,7 @@ const Drape = styled.div`
   display: ${({ show }) => (show ? "flex" : "none")};
   padding: 8px 15px;
   /* border-radius: 0 0 12px 12px; */
-  ${({ customCSS }) => customCSS};
+  ${({ customCSS }) => customCSS}
 `;
 
 export const NotificationDrape: FC<NotificationDrapeProps> = ({
