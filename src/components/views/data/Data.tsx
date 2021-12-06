@@ -137,7 +137,7 @@ const Data: FC<DataProps> = ({
     placeType: PlaceTypeParam,
     filters_policy: withDefault(JsonParam, {}),
     filters_plan: withDefault(JsonParam, {}),
-    searchText: withDefault(StringParam, ""),
+    searchText: withDefault(StringParam, null),
     // filters_challenge: withDefault(JsonParam, {}),
   });
 
