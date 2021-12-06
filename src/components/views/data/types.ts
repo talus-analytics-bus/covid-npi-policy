@@ -15,6 +15,16 @@ export const FilterTypeVals = [
 export type FilterType = typeof FilterTypeVals[number];
 export const DataPageTypeVals = ["policy", "plan", "challenge"] as const;
 export type DataPageType = typeof DataPageTypeVals[number];
+/**
+ * Define valid place types for use in `PlaceType
+ */
+export const validPlaceTypes = ["affected", "jurisdiction"] as const;
+
+/**
+ * The type of place in the COVID AMP dataset, either `affected` for the place
+ * affected by a policy, or `jurisdiction` for the place making the policy.
+ */
+export type PlaceType = typeof validPlaceTypes[number];
 
 /**
  * Get document type parameter from URL or return default
@@ -36,6 +46,10 @@ export type DataPageType = typeof DataPageTypeVals[number];
 export const DocTypeParam = getTypedStringParam<DataPageType>(
   DataPageTypeVals,
   "policy"
+);
+export const PlaceTypeParam = getTypedStringParam<PlaceType>(
+  validPlaceTypes,
+  "affected"
 );
 
 interface TypedStringParam<T> {

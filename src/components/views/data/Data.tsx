@@ -28,7 +28,14 @@ import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
 import { omicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
-import { DataPageType, DocTypeParam, FilterType } from "./types";
+import {
+  DataPageType,
+  DocTypeParam,
+  FilterType,
+  PlaceType,
+  PlaceTypeParam,
+  validPlaceTypes,
+} from "./types";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -115,17 +122,6 @@ interface DataProps {
 }
 
 /**
- * Define valid place types for use in `PlaceType
- */
-const validPlaceTypes = ["affected", "jurisdiction"] as const;
-
-/**
- * The type of place in the COVID AMP dataset, either `affected` for the place
- * affected by a policy, or `jurisdiction` for the place making the policy.
- */
-export type PlaceType = typeof validPlaceTypes[number];
-
-/**
  * Primary data viewing and download page for COVID AMP.
  * @param param0 Properties
  * @returns Function component
@@ -138,13 +134,19 @@ const Data: FC<DataProps> = ({
   type,
   routedFrom,
 }) => {
+  // Note: The `type` and `placeType` query params have built-in defaults,
+  // see their definitions. `withDefault` is not used for them because the
+  // library does not support robust defaults for custom types.
   const [query, setQuery] = useQueryParams({
     type: DocTypeParam,
+    placeType: PlaceTypeParam,
     filters_policy: withDefault(JsonParam, {}),
     filters_plan: withDefault(JsonParam, {}),
     searchText: withDefault(StringParam, ""),
     // filters_challenge: withDefault(JsonParam, {}),
   });
+
+  const { placeType } = query;
 
   const filters = useMemo(
     () => query[("filters_" + query.type) as FilterType],
@@ -162,11 +164,16 @@ const Data: FC<DataProps> = ({
     },
     [setQuery]
   );
+  const setPlaceType = useCallback(
+    (v: any) => {
+      setQuery({ placeType: v });
+    },
+    [setQuery]
+  );
 
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
   const defaultPlaceType: PlaceType = getPlaceTypeFromURLParams() || "affected";
-  const [placeType, setPlaceType] = useState<PlaceType>(defaultPlaceType);
 
   const entityInfo: DataPageInfo = useMemo(() => {
     return {

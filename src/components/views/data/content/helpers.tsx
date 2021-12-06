@@ -7,7 +7,7 @@ import {
 import { AuthEntityRecord } from "components/misc/dataTypes";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { PlaceType } from "../Data";
+import { PlaceType } from "../types";
 
 import styles from "./Helpers.module.scss";
 
