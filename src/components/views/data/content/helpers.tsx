@@ -405,3 +405,24 @@ export function getPlaceTypeFromURLParams(): PlaceType | null {
     }
   } else return null;
 }
+
+/**
+ * Returns the class name (a URL parameter) required by the API to return data
+ * for the given entity (defined by `nouns`) and whether filters are defined.
+ *
+ * @param filtersAreDefined Whether the data are being filters
+ * @param nouns Nouns referring to the entity whose data is being viewed
+ * @returns The class name to send to the API to request data
+ */
+export function getClassNameForApi(
+  filtersAreDefined: boolean,
+  nouns: { s: string; p: string }
+): string {
+  if (!filtersAreDefined) {
+    if (nouns.s === "Policy") return "All_data_summary";
+    else return "All_data";
+  } else {
+    if (nouns.s === "Policy") return "PolicySummary";
+    else return nouns.s;
+  }
+}

@@ -19,12 +19,15 @@ import {
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle, InfoTooltip } from "../../common";
-import { DownloadBtn, PageHeader } from "components/project";
+import { PageHeader } from "components/project";
 import Drawer from "../../layout/drawer/Drawer";
 import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
-import { safeGetFieldValsAsStrings } from "./content/helpers";
+import {
+  getClassNameForApi,
+  safeGetFieldValsAsStrings,
+} from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
 import {
   DataPageType,
@@ -690,16 +693,3 @@ const Data: FC<DataProps> = ({
 };
 
 export default Data;
-
-function getClassNameForApi(
-  filtersAreDefined: boolean,
-  nouns: { s: string; p: string }
-): string {
-  if (!filtersAreDefined) {
-    if (nouns.s === "Policy") return "All_data_summary";
-    else return "All_data";
-  } else {
-    if (nouns.s === "Policy") return "PolicySummary";
-    else return nouns.s;
-  }
-}
