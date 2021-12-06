@@ -157,14 +157,11 @@ const Data: FC<DataProps> = ({
 }) => {
   const [docType, setDocType] = useState<DataPageType>(type);
 
-  // if (docType !== type) setDocType(type);
-
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
   const defaultPlaceType: PlaceType = getPlaceTypeFromURLParams() || "affected";
   const [placeType, setPlaceType] = useState<PlaceType>(defaultPlaceType);
 
-  // TODO update type assignment when policy.js is rewritten in TSX
   // track info about the entity (policy, plan, court challenge) viewed
   const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
     policyInfo as DataPageInfo
@@ -198,17 +195,6 @@ const Data: FC<DataProps> = ({
 
   // define filters to apply to data that will be retrieved for the table
   const getFiltersFromUrlParams: Function = useCallback((): Filters => {
-    // // If filters are specific in the url params, and they are for the current
-    // // entity class, use them. Otherwise, clear them
-    // const urlFilterParams: Filters = {
-    //   policy: urlFilterParamsPolicy || {},
-    //   plan: urlFilterParamsPlan || {},
-    //   challenge: urlFilterParamsChallenge || {},
-    // }[docType];
-
-    // const useUrlFilters: boolean = urlFilterParams !== null;
-    // const newFilters: Filters = useUrlFilters ? urlFilterParams : {};
-
     const urlParams = new URLSearchParams(window.location.search);
     const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
       urlParams,
@@ -216,20 +202,11 @@ const Data: FC<DataProps> = ({
     );
 
     return urlFilterParamsPolicy || {};
-    // return newFilters;
-  }, [
-    docType,
-    // urlFilterParamsChallenge,
-    // urlFilterParamsPlan,
-    // urlFilterParamsPolicy,
-  ]);
+  }, [docType]);
 
   const initFilters: Filters = getFiltersFromUrlParams();
   const [filters, setFilters] = useState<Filters>(initFilters);
-  const [showAdvanced] = useState(
-    false
-    // initFilters["level"] !== undefined
-  );
+  const [showAdvanced] = useState(false);
 
   const [searchText, setSearchText] = useState<string | null>(
     initFilters._text !== undefined ? initFilters._text[0] : null
@@ -265,8 +242,6 @@ const Data: FC<DataProps> = ({
 
   /**
    * Get data for page.
-   *
-   * This function is memoized with `useCallback`.
    */
   const getData: Function = useCallback(
     /**
@@ -519,8 +494,6 @@ const Data: FC<DataProps> = ({
 
   /**
    * Update data in page and URL params.
-   *
-   * NOTE This function is memoized with `useCallback`.
    */
   const updateData = useCallback(() => {
     if (!loading) {
@@ -536,8 +509,6 @@ const Data: FC<DataProps> = ({
       });
 
       // update URL params string
-      // if filters are empty, clear all URL search params
-
       // get current URL params
       const urlParams = new URLSearchParams(window.location.search);
 
@@ -549,7 +520,6 @@ const Data: FC<DataProps> = ({
       // get key corresponding to the currently viewed doc type's filters
       const filtersUrlParamKey = "filters_" + docType;
 
-      // TODO make the below work with two filter sets
       // TODO create more specific types
       // Default state is the currently selected filters per the URL params
       const newState: Record<string, any> = { type: docType };
@@ -761,16 +731,6 @@ const Data: FC<DataProps> = ({
                   </>
                   {tableIsReady && (
                     <>
-                      {/* <ControlLabel>
-                        {showAdvanced && (
-                          <ControlLink
-                            style={{ marginLeft: "1rem" }}
-                            onClick={() => setShowAdvanced(false)}
-                          >
-                            hide advanced filters
-                          </ControlLink>
-                        )}
-                      </ControlLabel> */}
                       <hr />
                       <FilterSet
                         alignBottom
