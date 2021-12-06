@@ -5,10 +5,17 @@ import {
   useState,
   useCallback,
   useEffect,
+  useMemo,
 } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import { useQueryParam, StringParam, JsonParam } from "use-query-params";
+import {
+  useQueryParam,
+  StringParam,
+  JsonParam,
+  withDefault,
+  useQueryParams,
+} from "use-query-params";
 
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
@@ -21,7 +28,7 @@ import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
 import { omicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
-import { DataPageType, DocTypeParam } from "./types";
+import { DataPageType, DocTypeParam, FilterType } from "./types";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -44,6 +51,7 @@ import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 import { getUrlParamAsFilters } from "App";
 import styled from "styled-components";
+import ObservationReduxQuery from "api/ObservationReduxQuery";
 
 const DownloadButtons = styled.div`
   display: flex;
@@ -130,22 +138,37 @@ const Data: FC<DataProps> = ({
   type,
   routedFrom,
 }) => {
-  const [docType, setDocType] = useQueryParam<DataPageType>(
-    "type",
-    DocTypeParam
+  const [query, setQuery] = useQueryParams({
+    type: DocTypeParam,
+    filters_policy: withDefault(JsonParam, {}),
+    filters_plan: withDefault(JsonParam, {}),
+    // filters_challenge: withDefault(JsonParam, {}),
+  });
+
+  const filters = useMemo(
+    () => query[("filters_" + query.type) as FilterType],
+    [query]
   );
-  if (docType === undefined || docType === null) setDocType("policy");
+  const setFilters = useCallback(
+    (v: any) => {
+      setQuery({ ["filters_" + query.type]: v });
+    },
+    [query.type, setQuery]
+  );
 
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
   const defaultPlaceType: PlaceType = getPlaceTypeFromURLParams() || "affected";
   const [placeType, setPlaceType] = useState<PlaceType>(defaultPlaceType);
 
-  // track info about the entity (policy, plan, court challenge) viewed
-  const [entityInfo, setEntityInfo] = useState<DataPageInfo>(
-    policyInfo as DataPageInfo
-  );
-  const [forceRerender, setForceRerender] = useState<number | null>(null);
+  const entityInfo: DataPageInfo = useMemo(() => {
+    return {
+      policy: policyInfo as DataPageInfo,
+      plan: planInfo as DataPageInfo,
+      challenge: challengeInfo as DataPageInfo,
+    }[query.type];
+  }, [query.type]);
+  const [forceRerender] = useState<number | null>(null);
 
   // track table pagination-relevant variables including current page, number
   // of instances (rows) in table, the ordering settings, and page size
@@ -153,7 +176,7 @@ const Data: FC<DataProps> = ({
   const [pagesize, setPagesize] = useState<Pagesize>(5);
   const [numInstances, setNumInstances] = useState<number | null>(null);
   const [ordering, setOrdering] = useState<[string, string][]>(
-    docType === "challenge"
+    query.type === "challenge"
       ? [["date_of_complaint", "desc"]]
       : [["date_start_effective", "desc"]]
   );
@@ -172,23 +195,25 @@ const Data: FC<DataProps> = ({
   const [data, setData] = useState<DataRecord[] | null>(null);
   const [metadata, setMetadata] = useState<MetadataRecord[] | null>(null);
 
-  // define filters to apply to data that will be retrieved for the table
-  const getFiltersFromUrlParams: Function = useCallback((): Filters => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
-      urlParams,
-      "filters_" + docType
-    );
+  // // define filters to apply to data that will be retrieved for the table
+  // const getFiltersFromUrlParams: Function = useCallback((): Filters => {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const urlFilterParamsPolicy: Filters | null = getUrlParamAsFilters(
+  //     urlParams,
+  //     "filters_" + query.type
+  //   );
 
-    return urlFilterParamsPolicy || {};
-  }, [docType]);
+  //   return urlFilterParamsPolicy || {};
+  // }, [query.type]);
 
-  const initFilters: Filters = getFiltersFromUrlParams();
-  const [filters, setFilters] = useState<Filters>(initFilters);
+  // const initFilters: Filters = getFiltersFromUrlParams();
+  // const [filters, setFilters] = useState<Filters>(initFilters);
   const [showAdvanced] = useState(false);
 
+  // TODO get search text from query
   const [searchText, setSearchText] = useState<string | null>(
-    initFilters._text !== undefined ? initFilters._text[0] : null
+    null
+    // initFilters._text !== undefined ? initFilters._text[0] : null
   );
 
   // min and max dates for date range pickers dynamically determined by data
@@ -372,82 +397,45 @@ const Data: FC<DataProps> = ({
   );
 
   // EFFECT HOOKS // ---------—---------—---------—---------—---------—------//
-  // on initial page load, get all data and filter optionset values
-  useEffect(() => {
-    // scroll to top of page
-    window.scrollTo(0, 0);
+  // // on initial page load, get all data and filter optionset values
+  // useEffect(() => {
+  //   // scroll to top of page
+  //   window.scrollTo(0, 0);
 
-    // set loading spinner to visible
-    setLoading(true);
+  //   // set loading spinner to visible
+  //   setLoading(true);
 
-    // set current page
-    setPage("data");
-  }, [setLoading, setPage]);
+  //   // set current page
+  //   setPage("data");
+  // }, [setLoading, setPage]);
 
-  // when doc type changes, nullify columns / data / filter defs, then update
-  // those state variables based on URL params
-  useEffect(() => {
-    setLoading(true);
-    setColumns(null);
-    setData(null);
-    setFilterDefs(null);
-    setOrdering(
-      docType === "challenge"
-        ? [["date_of_complaint", "desc"]]
-        : [["date_start_effective", "desc"]]
-    );
+  // // when doc type changes, nullify columns / data / filter defs, then update
+  // // those state variables based on URL params
+  // useEffect(() => {
+  //   setLoading(true);
+  //   setColumns(null);
+  //   setData(null);
+  //   setFilterDefs(null);
+  //   setOrdering(
+  //     query.type === "challenge"
+  //       ? [["date_of_complaint", "desc"]]
+  //       : [["date_start_effective", "desc"]]
+  //   );
 
-    // TODO review types
-    const newEntityInfo: DataPageInfo = {
-      policy: policyInfo as DataPageInfo,
-      plan: planInfo as DataPageInfo,
-      challenge: challengeInfo as DataPageInfo,
-    }[docType];
-
-    // // get current URL params
-    // const urlParams: URLSearchParams = new URLSearchParams(
-    //   window.location.search
-    // );
-
-    // // update which doc type is being viewed
-    // urlParams.set("type", docType);
-    // if (docType === "policy") urlParams.set("placeType", placeType);
-    // else urlParams.delete("placeType");
-
-    // const newState: Record<string, any> = {};
-    // // TODO confirm use of Object.entries here is valid
-    // for (const [paramName, paramVal] of Object.entries(urlParams)) {
-    //   if (paramVal !== null && paramVal !== "") {
-    //     newState[paramName] = paramVal;
-    //   }
-    // }
-    // const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
-    // window.history.replaceState(newState, "", newUrl);
-
-    // const newFilters = getFiltersFromUrlParams();
-
-    // TODO update filters and search text in non-URL approach
-
-    // setFilters(newFilters);
-    // setSearchText(newFilters._text !== undefined ? newFilters._text[0] : null);
-
-    // update entity info and get data
-    setEntityInfo(newEntityInfo);
-    getData({
-      // TODO update filters and search text in non-URL approach
-      filtersForQuery: {},
-      // filtersForQuery: newFilters,
-      orderingForQuery:
-        docType === "challenge"
-          ? [["date_of_complaint", "desc"]]
-          : [["date_start_effective", "desc"]],
-      entityInfoForQuery: newEntityInfo,
-      initializingForQuery: true,
-      getOptionSets: true,
-    });
-    // TODO fix dependencies -- adding useCallback funcs. creates inf. loop
-    // eslint-disable-next-line
-  }, [docType, setLoading, forceRerender]);
+  //   getData({
+  //     // TODO update filters and search text in non-URL approach
+  //     // filtersForQuery: {},
+  //     filtersForQuery: filters,
+  //     orderingForQuery:
+  //       query.type === "challenge"
+  //         ? [["date_of_complaint", "desc"]]
+  //         : [["date_start_effective", "desc"]],
+  //     entityInfoForQuery: entityInfo,
+  //     getOptionSets: true,
+  //   });
+  //   // TODO fix dependencies -- adding useCallback funcs. creates inf. loop
+  //   // eslint-disable-next-line
+  // }, [query.type, setLoading, forceRerender]);
 
   // TODO handle Omicron routing using useQueryParam
   // // Set correct initial filters based on where user routed from
@@ -461,7 +449,7 @@ const Data: FC<DataProps> = ({
   //         omicronFilters
   //       )}`
   //     );
-  //     if (docType !== "policy") setDocType("policy");
+  //     if (query.type !== "policy") setDocType("policy");
   //     // if (placeType !== "affected") setPlaceType("affected");
   //     setForceRerender(Math.random());
   //   } else if (routedFrom.startsWith("NavOnData")) {
@@ -470,7 +458,7 @@ const Data: FC<DataProps> = ({
   //       "",
   //       `/data?type=policy&placeType=affected`
   //     );
-  //     if (docType !== "policy") setDocType("policy");
+  //     if (query.type !== "policy") setDocType("policy");
   //     // if (placeType !== "affected") setPlaceType("affected");
   //     setForceRerender(Math.random());
   //   }
@@ -480,82 +468,20 @@ const Data: FC<DataProps> = ({
   /**
    * Update data in page and URL params.
    */
-  const updateData = useCallback(
-    () => {
-      if (!loading) {
-        // update data
-        setLoading(true);
-        getData({
-          filtersForQuery: {
-            ...filters,
-            _text: searchText !== null ? [searchText] : [],
-          },
-          entityInfoForQuery: entityInfo,
-          initializingForQuery: true,
-        });
-
-        // TODO update URL params using useQueryParam hook
-
-        // // update URL params string
-        // // get current URL params
-        // const urlParams = new URLSearchParams(window.location.search);
-
-        // // get filter strings for each doc type
-        // const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
-        // const curUrlFilterParamsPlan = urlParams.get("filters_plan");
-        // // const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
-
-        // // get key corresponding to the currently viewed doc type's filters
-        // const filtersUrlParamKey = "filters_" + docType;
-
-        // // TODO create more specific types
-        // // Default state is the currently selected filters per the URL params
-        // const newState: Record<string, any> = { type: docType };
-        // if (curUrlFilterParamsPolicy !== null)
-        //   newState.filters_policy = curUrlFilterParamsPolicy;
-        // if (curUrlFilterParamsPlan !== null)
-        //   newState.filters_plan = curUrlFilterParamsPlan;
-
-        // if (isEmpty(filters) && searchText === null) {
-        //   // clear filters for current doc type and update window history
-        //   newState[filtersUrlParamKey] = "";
-        // } else {
-        //   const newFiltersForState = {
-        //     ...filters,
-        //   };
-        //   // add search text to new URL state if it's not null
-        //   if (searchText !== null) {
-        //     newFiltersForState._text = [searchText];
-        //   } else {
-        //     delete newFiltersForState._text;
-        //   }
-        //   newState[filtersUrlParamKey] = JSON.stringify(newFiltersForState);
-        // }
-        // const newUrlParams = new URLSearchParams();
-        // if (docType === "policy") newUrlParams.set("placeType", placeType);
-        // else newUrlParams.delete("placeType");
-        // for (const [k, v] of Object.entries(newState)) {
-        //   if (v !== null && v !== "") {
-        //     newUrlParams.append(k, v);
-        //   }
-        // }
-        // const newUrl =
-        //   newUrlParams.toString() !== "" ? `/data?${newUrlParams}` : "/data";
-
-        // window.history.replaceState(newState, "", newUrl);
-      }
-    },
-    [
-      // docType,
-      // entityInfo,
-      // filters,
-      // getData,
-      // loading,
-      // placeType,
-      // searchText,
-      // setLoading,
-    ]
-  );
+  const updateData = useCallback(() => {
+    if (!loading || data === null) {
+      // update data
+      setLoading(true);
+      getData({
+        getOptionSets: true,
+        filtersForQuery: {
+          ...filters,
+          _text: searchText !== null ? [searchText] : [],
+        },
+        entityInfoForQuery: entityInfo,
+      });
+    }
+  }, [data, entityInfo, filters, getData, loading, searchText, setLoading]);
 
   // update filters to contain latest search text
   useEffect(() => {
@@ -578,7 +504,7 @@ const Data: FC<DataProps> = ({
         setFilters(updatedFilters);
       }
     }
-  }, [filters, searchText]);
+  }, [filters, searchText, setFilters]);
 
   useEffect(() => {
     if (curPage !== 1) setCurPage(1);
@@ -654,8 +580,13 @@ const Data: FC<DataProps> = ({
                         // { name: "Court challenges", value: "challenge" },
                       ]}
                       labelPos={"top"}
-                      curVal={docType}
-                      callback={setDocType}
+                      curVal={query.type}
+                      callback={(v: DataPageType) => {
+                        setQuery(prev => {
+                          if (prev.type !== v) setData(null);
+                          return { type: v };
+                        });
+                      }}
                       horizontal={true}
                       selectpicker={false}
                       theme={"slim"}
@@ -664,7 +595,7 @@ const Data: FC<DataProps> = ({
                       children={undefined}
                       {...{ setInfoTooltipContent }}
                     />
-                    {docType === "policy" && (
+                    {query.type === "policy" && (
                       <RadioToggle
                         horizontal
                         selectpicker={false}

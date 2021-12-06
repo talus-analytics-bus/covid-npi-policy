@@ -7,6 +7,12 @@ import { encodeString, decodeString } from "use-query-params";
  *
  * NOTE: `challenge` is currently disabled.
  */
+export const FilterTypeVals = [
+  "filters_policy",
+  "filters_plan",
+  // "filters_challenge",
+] as const;
+export type FilterType = typeof FilterTypeVals[number];
 export const DataPageTypeVals = ["policy", "plan", "challenge"] as const;
 export type DataPageType = typeof DataPageTypeVals[number];
 
