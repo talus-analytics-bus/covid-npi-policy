@@ -344,3 +344,14 @@ export function formatFiltersForPlaceType(
     return formattedFilters;
   } else return filters;
 }
+
+export function getOnSort(setOrdering: Function) {
+  return () => {
+    return (field: string, order: string) => {
+      setOrdering((prev: string[][]) => {
+        if (prev[0][0] === field && prev[0][1] === order) return prev;
+        else return [[field, order]];
+      });
+    };
+  };
+}

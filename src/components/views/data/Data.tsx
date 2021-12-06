@@ -255,7 +255,7 @@ const Data: FC<DataProps> = ({
     async ({
       filtersForQuery,
       entityInfoForQuery,
-      orderingForQuery = ordering,
+      orderingForQuery,
       getOptionSets = false,
     }: GetDataProps): Promise<void> => {
       const method: string = "post";
@@ -392,96 +392,27 @@ const Data: FC<DataProps> = ({
       setLoading(false);
     },
     // TODO fix dependencies
-    // eslint-disable-next-line
-    [curPage, ordering, pagesize, setLoading, placeType]
+    [placeType, curPage, pagesize, metadata, setLoading]
+    // [ordering]
+    // [ordering, placeType, curPage, pagesize, metadata, setLoading]
   );
-
-  // EFFECT HOOKS // ---------—---------—---------—---------—---------—------//
-  // // on initial page load, get all data and filter optionset values
-  // useEffect(() => {
-  //   // scroll to top of page
-  //   window.scrollTo(0, 0);
-
-  //   // set loading spinner to visible
-  //   setLoading(true);
-
-  //   // set current page
-  //   setPage("data");
-  // }, [setLoading, setPage]);
-
-  // // when doc type changes, nullify columns / data / filter defs, then update
-  // // those state variables based on URL params
-  // useEffect(() => {
-  //   setLoading(true);
-  //   setColumns(null);
-  //   setData(null);
-  //   setFilterDefs(null);
-  //   setOrdering(
-  //     query.type === "challenge"
-  //       ? [["date_of_complaint", "desc"]]
-  //       : [["date_start_effective", "desc"]]
-  //   );
-
-  //   getData({
-  //     // TODO update filters and search text in non-URL approach
-  //     // filtersForQuery: {},
-  //     filtersForQuery: filters,
-  //     orderingForQuery:
-  //       query.type === "challenge"
-  //         ? [["date_of_complaint", "desc"]]
-  //         : [["date_start_effective", "desc"]],
-  //     entityInfoForQuery: entityInfo,
-  //     getOptionSets: true,
-  //   });
-  //   // TODO fix dependencies -- adding useCallback funcs. creates inf. loop
-  //   // eslint-disable-next-line
-  // }, [query.type, setLoading, forceRerender]);
-
-  // TODO handle Omicron routing using useQueryParam
-  // // Set correct initial filters based on where user routed from
-  // // TODO set to "affected" if not on it already
-  // useEffect(() => {
-  //   if (routedFrom.startsWith("OmicronDrape")) {
-  //     window.history.replaceState(
-  //       {},
-  //       "",
-  //       `/data?type=policy&placeType=affected&filters_policy=${JSON.stringify(
-  //         omicronFilters
-  //       )}`
-  //     );
-  //     if (query.type !== "policy") setDocType("policy");
-  //     // if (placeType !== "affected") setPlaceType("affected");
-  //     setForceRerender(Math.random());
-  //   } else if (routedFrom.startsWith("NavOnData")) {
-  //     window.history.replaceState(
-  //       {},
-  //       "",
-  //       `/data?type=policy&placeType=affected`
-  //     );
-  //     if (query.type !== "policy") setDocType("policy");
-  //     // if (placeType !== "affected") setPlaceType("affected");
-  //     setForceRerender(Math.random());
-  //   }
-  //   // eslint-disable-next-line
-  // }, [routedFrom]);
 
   /**
    * Update data in page and URL params.
    */
   const updateData = useCallback(() => {
-    if (!loading || data === null) {
-      // update data
-      setLoading(true);
-      getData({
-        getOptionSets: true,
-        filtersForQuery: {
-          ...filters,
-          _text: searchText !== null ? [searchText] : [],
-        },
-        entityInfoForQuery: entityInfo,
-      });
-    }
-  }, [data, entityInfo, filters, getData, loading, searchText, setLoading]);
+    // update data
+    setLoading(true);
+    getData({
+      orderingForQuery: ordering,
+      getOptionSets: true,
+      filtersForQuery: {
+        ...filters,
+        _text: searchText !== null ? [searchText] : [],
+      },
+      entityInfoForQuery: entityInfo,
+    });
+  }, [entityInfo, filters, getData, ordering, searchText, setLoading]);
 
   // update filters to contain latest search text
   useEffect(() => {
@@ -507,19 +438,8 @@ const Data: FC<DataProps> = ({
   }, [filters, searchText, setFilters]);
 
   useEffect(() => {
-    if (curPage !== 1) setCurPage(1);
-    else updateData();
-    // TODO review dependencies
-    // eslint-disable-next-line
-  }, [filters, pagesize]);
-
-  // when filters are updated, update data
-  useEffect(() => {
     updateData();
-    // TODO review dependencies -- including `updateData` causes infinite loop
-    // of calls
-    // eslint-disable-next-line
-  }, [ordering, curPage, placeType]);
+  }, [updateData]);
 
   // have any filters or search text been applied?
   const filtersAreDefined = !(

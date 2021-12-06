@@ -8,6 +8,7 @@ import moment from "moment";
 
 // common compoments
 import { ShowMore } from "../../../common";
+import { getOnSort } from "./helpers";
 
 // queries
 import { Plan } from "api/Queries";
@@ -72,6 +73,8 @@ export const planInfo = {
     },
   ],
   getColumns: ({ metadata, setOrdering }) => {
+    const onSort = getOnSort(setOrdering);
+
     // define initial columns which will be updated using the metadata
     const newColumns = [
       { dataField: "org_name", header: "Organization name", sort: true },
@@ -146,9 +149,7 @@ export const planInfo = {
     // TODO move static data processing into initial declaration of `newColumns`
     newColumns.forEach(d => {
       // add onSort function to update ordering info for API call
-      d.onSort = (field, order) => {
-        setOrdering([[field, order]]);
-      };
+      d.onSort = onSort;
 
       // static update to definition
       // TODO move static data processing into initial declaration

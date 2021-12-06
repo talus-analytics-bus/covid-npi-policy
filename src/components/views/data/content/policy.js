@@ -8,6 +8,7 @@ import moment from "moment";
 
 // common compoments
 import { ShowMore } from "../../../common";
+import { getOnSort } from "./helpers";
 
 // queries
 import { Policy } from "api/Queries";
@@ -96,6 +97,7 @@ export const policyInfo = {
     },
   ],
   getColumns: ({ metadata, setOrdering, placeType }) => {
+    const onSort = getOnSort(setOrdering);
     // define initial columns which will be updated using the metadata
     const newColumns = [
       // {
@@ -125,9 +127,7 @@ export const policyInfo = {
         placeType: "affected",
         defCharLimit: 1000,
         sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
+        onSort,
         sortValue: () => 0,
         formatter: (_cell, row) => {
           if (row.place !== undefined && row.place.length > 0)
@@ -148,9 +148,7 @@ export const policyInfo = {
         placeType: "jurisdiction",
         defCharLimit: 1000,
         sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
+        onSort,
         sortValue: () => 0,
         formatter: (_cell, row) => {
           if (row.auth_entity !== undefined)
@@ -168,9 +166,7 @@ export const policyInfo = {
         defKey: "auth_entity.place.level",
         header: "Type of jurisdiction",
         // placeType: "jurisdiction",
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
+        onSort,
         sort: true,
         sortValue: () => 0,
         formatter: (_cell, row) => {
@@ -205,9 +201,7 @@ export const policyInfo = {
         dataField: "date_start_effective",
         header: "Effective start date",
         sort: true,
-        onSort: (field, order) => {
-          setOrdering([[field, order]]);
-        },
+        onSort,
         sortValue: () => 0,
         formatter: v =>
           v !== null ? moment(v).format("MMM D, YYYY") : unspecified,
