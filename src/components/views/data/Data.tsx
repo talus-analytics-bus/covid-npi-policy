@@ -439,6 +439,7 @@ const Data: FC<DataProps> = ({
       "sep sep sep sep"
       "filter filter filter filter"
     `;
+
   return (
     <div className={styles.data}>
       <Helmet>
@@ -583,17 +584,11 @@ const Data: FC<DataProps> = ({
           />
           {/* TODO Refactor the DownloadBtn below */}
           <DownloadButtons>
-            {nouns.s === "Policy" &&
-              DownloadBtn({
-                render: tableIsReady,
-                class_name: [nouns.s],
-                classNameForApi: getClassNameForApi(filtersAreDefined, nouns),
-                buttonLoading,
-                setButtonLoading,
-                searchText: query.searchText,
-                filters,
-                disabled: data && data.length === 0,
-                message: (
+            {nouns.s === "Policy" && (
+              <DataDownloadButton
+                class_name={[nouns.s]}
+                classNameForApi={getClassNameForApi(filtersAreDefined, nouns)}
+                message={
                   <span>
                     {data && data.length === 0 && (
                       <>No {nouns.p.toLowerCase()} found</>
@@ -613,49 +608,57 @@ const Data: FC<DataProps> = ({
                       </>
                     )}
                   </span>
-                ),
-              })}
-            {DownloadBtn({
-              render: tableIsReady,
-              class_name: [nouns.s].concat(
-                nouns.s === "Policy" ? ["secondary"] : []
-              ),
-              classNameForApi: filtersAreDefined ? nouns.s : "All_data",
-              buttonLoading: buttonLoadingSummary,
-              setButtonLoading: setButtonLoadingSummary,
-              searchText: query.searchText,
-              filters,
-              disabled: data && data.length === 0,
-              message: (
-                <span>
-                  <span style={{ fontWeight: 700 }}>
-                    Download all columns{" "}
-                    {(numInstances ?? 0) > 0 && (
-                      <span style={{ fontStyle: "italic", fontWeight: 400 }}>
-                        ({comma(numInstances)}{" "}
-                        {numInstances !== 1
-                          ? nouns.p.toLowerCase()
-                          : nouns.s.toLowerCase().replace("_", " ")}{" "}
-                        .xlsx)
-                      </span>
-                    )}
-                    {nouns.s === "Policy" && (
-                      <InfoTooltip
-                        id={"DownloadInfo"}
-                        iconSize={14}
-                        text={
-                          <InfoTooltipContent>
-                            Click this button to download all available data
-                            columns, including several omitted from the summary
-                            table below.
-                          </InfoTooltipContent>
-                        }
-                      />
-                    )}
+                }
+                {...{
+                  buttonLoading,
+                  setButtonLoading,
+                  tableIsReady,
+                  query,
+                  filters,
+                  data,
+                }}
+              />
+            )}
+            {
+              <DataDownloadButton
+                class_name={[nouns.s].concat(
+                  nouns.s === "Policy" ? ["secondary"] : []
+                )}
+                classNameForApi={filtersAreDefined ? nouns.s : "All_data"}
+                message={
+                  <span>
+                    <span style={{ fontWeight: 700 }}>
+                      Download all columns{" "}
+                      {(numInstances ?? 0) > 0 && (
+                        <span style={{ fontStyle: "italic", fontWeight: 400 }}>
+                          ({comma(numInstances)}{" "}
+                          {numInstances !== 1
+                            ? nouns.p.toLowerCase()
+                            : nouns.s.toLowerCase().replace("_", " ")}{" "}
+                          .xlsx)
+                        </span>
+                      )}
+                      {nouns.s === "Policy" && (
+                        <InfoTooltip
+                          id={"DownloadInfo"}
+                          iconSize={14}
+                          text={
+                            <InfoTooltipContent>
+                              Click this button to download all available data
+                              columns, including several omitted from the
+                              summary table below.
+                            </InfoTooltipContent>
+                          }
+                        />
+                      )}
+                    </span>
                   </span>
-                </span>
-              ),
-            })}
+                }
+                buttonLoading={buttonLoadingSummary}
+                setButtonLoading={setButtonLoadingSummary}
+                {...{ tableIsReady, query, filters, data }}
+              />
+            }
           </DownloadButtons>
           {tableIsReady && (
             <Table
@@ -699,3 +702,31 @@ function getClassNameForApi(
     else return nouns.s;
   }
 }
+
+const DataDownloadButton: FC<any> = ({
+  class_name,
+  classNameForApi,
+  buttonLoading,
+  setButtonLoading,
+  message,
+  tableIsReady,
+  query,
+  filters,
+  data,
+}) => {
+  return (
+    <DownloadBtn
+      {...{
+        render: tableIsReady,
+        class_name,
+        classNameForApi,
+        buttonLoading,
+        setButtonLoading,
+        searchText: query.searchText,
+        filters,
+        disabled: data && data.length === 0,
+        message,
+      }}
+    />
+  );
+};
