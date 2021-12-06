@@ -14,7 +14,8 @@ import { Nav } from "./components/layout";
 import { Footer } from "./components/layout";
 
 // views
-import Data, { DataPageType } from "./components/views/data/Data";
+import Data from "./components/views/data/Data";
+import { DataPageType } from "components/views/data/types";
 import Map from "./components/views/map/Map";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";

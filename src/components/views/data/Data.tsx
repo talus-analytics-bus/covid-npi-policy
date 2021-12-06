@@ -21,6 +21,7 @@ import { isEmpty } from "components/misc/UtilsTyped";
 import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
 import { omicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
+import { DataPageType, DocTypeParam } from "./types";
 
 // styles and assets
 import styles from "./data.module.scss";
@@ -43,7 +44,6 @@ import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
 import { getUrlParamAsFilters } from "App";
 import styled from "styled-components";
-import { DocTypeParam } from "./DocTypeParam";
 
 const DownloadButtons = styled.div`
   display: flex;
@@ -58,15 +58,6 @@ const InfoTooltipContent = styled.div`
   font-weight: normal;
   font-size: 1rem;
 `;
-
-/**
- * The different types of data page that can be viewed: `policy`, `plan`, and
- * `challenge`.
- *
- * NOTE: `challenge` is currently disabled.
- */
-export const DataPageTypeVals = ["policy", "plan", "challenge"] as const;
-export type DataPageType = typeof DataPageTypeVals[number];
 
 /**
  * Minimum and maximum dates defining a range.
@@ -413,34 +404,39 @@ const Data: FC<DataProps> = ({
       challenge: challengeInfo as DataPageInfo,
     }[docType];
 
-    // get current URL params
-    const urlParams: URLSearchParams = new URLSearchParams(
-      window.location.search
-    );
+    // // get current URL params
+    // const urlParams: URLSearchParams = new URLSearchParams(
+    //   window.location.search
+    // );
 
-    // update which doc type is being viewed
-    urlParams.set("type", docType);
-    if (docType === "policy") urlParams.set("placeType", placeType);
-    else urlParams.delete("placeType");
+    // // update which doc type is being viewed
+    // urlParams.set("type", docType);
+    // if (docType === "policy") urlParams.set("placeType", placeType);
+    // else urlParams.delete("placeType");
 
-    const newState: Record<string, any> = {};
-    // TODO confirm use of Object.entries here is valid
-    for (const [paramName, paramVal] of Object.entries(urlParams)) {
-      if (paramVal !== null && paramVal !== "") {
-        newState[paramName] = paramVal;
-      }
-    }
-    const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
-    window.history.replaceState(newState, "", newUrl);
+    // const newState: Record<string, any> = {};
+    // // TODO confirm use of Object.entries here is valid
+    // for (const [paramName, paramVal] of Object.entries(urlParams)) {
+    //   if (paramVal !== null && paramVal !== "") {
+    //     newState[paramName] = paramVal;
+    //   }
+    // }
+    // const newUrl = urlParams.toString() !== "" ? `/data?${urlParams}` : "/data";
+    // window.history.replaceState(newState, "", newUrl);
 
-    const newFilters = getFiltersFromUrlParams();
-    setFilters(newFilters);
-    setSearchText(newFilters._text !== undefined ? newFilters._text[0] : null);
+    // const newFilters = getFiltersFromUrlParams();
+
+    // TODO update filters and search text in non-URL approach
+
+    // setFilters(newFilters);
+    // setSearchText(newFilters._text !== undefined ? newFilters._text[0] : null);
 
     // update entity info and get data
     setEntityInfo(newEntityInfo);
     getData({
-      filtersForQuery: newFilters,
+      // TODO update filters and search text in non-URL approach
+      filtersForQuery: {},
+      // filtersForQuery: newFilters,
       orderingForQuery:
         docType === "challenge"
           ? [["date_of_complaint", "desc"]]
@@ -453,107 +449,113 @@ const Data: FC<DataProps> = ({
     // eslint-disable-next-line
   }, [docType, setLoading, forceRerender]);
 
-  // Set correct initial filters based on where user routed from
-  // TODO set to "affected" if not on it already
-  useEffect(() => {
-    if (routedFrom.startsWith("OmicronDrape")) {
-      window.history.replaceState(
-        {},
-        "",
-        `/data?type=policy&placeType=affected&filters_policy=${JSON.stringify(
-          omicronFilters
-        )}`
-      );
-      if (docType !== "policy") setDocType("policy");
-      // if (placeType !== "affected") setPlaceType("affected");
-      setForceRerender(Math.random());
-    } else if (routedFrom.startsWith("NavOnData")) {
-      window.history.replaceState(
-        {},
-        "",
-        `/data?type=policy&placeType=affected`
-      );
-      if (docType !== "policy") setDocType("policy");
-      // if (placeType !== "affected") setPlaceType("affected");
-      setForceRerender(Math.random());
-    }
-    // eslint-disable-next-line
-  }, [routedFrom]);
+  // TODO handle Omicron routing using useQueryParam
+  // // Set correct initial filters based on where user routed from
+  // // TODO set to "affected" if not on it already
+  // useEffect(() => {
+  //   if (routedFrom.startsWith("OmicronDrape")) {
+  //     window.history.replaceState(
+  //       {},
+  //       "",
+  //       `/data?type=policy&placeType=affected&filters_policy=${JSON.stringify(
+  //         omicronFilters
+  //       )}`
+  //     );
+  //     if (docType !== "policy") setDocType("policy");
+  //     // if (placeType !== "affected") setPlaceType("affected");
+  //     setForceRerender(Math.random());
+  //   } else if (routedFrom.startsWith("NavOnData")) {
+  //     window.history.replaceState(
+  //       {},
+  //       "",
+  //       `/data?type=policy&placeType=affected`
+  //     );
+  //     if (docType !== "policy") setDocType("policy");
+  //     // if (placeType !== "affected") setPlaceType("affected");
+  //     setForceRerender(Math.random());
+  //   }
+  //   // eslint-disable-next-line
+  // }, [routedFrom]);
 
   /**
    * Update data in page and URL params.
    */
-  const updateData = useCallback(() => {
-    if (!loading) {
-      // update data
-      setLoading(true);
-      getData({
-        filtersForQuery: {
-          ...filters,
-          _text: searchText !== null ? [searchText] : [],
-        },
-        entityInfoForQuery: entityInfo,
-        initializingForQuery: true,
-      });
+  const updateData = useCallback(
+    () => {
+      if (!loading) {
+        // update data
+        setLoading(true);
+        getData({
+          filtersForQuery: {
+            ...filters,
+            _text: searchText !== null ? [searchText] : [],
+          },
+          entityInfoForQuery: entityInfo,
+          initializingForQuery: true,
+        });
 
-      // update URL params string
-      // get current URL params
-      const urlParams = new URLSearchParams(window.location.search);
+        // TODO update URL params using useQueryParam hook
 
-      // get filter strings for each doc type
-      const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
-      const curUrlFilterParamsPlan = urlParams.get("filters_plan");
-      // const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
+        // // update URL params string
+        // // get current URL params
+        // const urlParams = new URLSearchParams(window.location.search);
 
-      // get key corresponding to the currently viewed doc type's filters
-      const filtersUrlParamKey = "filters_" + docType;
+        // // get filter strings for each doc type
+        // const curUrlFilterParamsPolicy = urlParams.get("filters_policy");
+        // const curUrlFilterParamsPlan = urlParams.get("filters_plan");
+        // // const curUrlFilterParamsChallenge = urlParams.get("filters_challenge");
 
-      // TODO create more specific types
-      // Default state is the currently selected filters per the URL params
-      const newState: Record<string, any> = { type: docType };
-      if (curUrlFilterParamsPolicy !== null)
-        newState.filters_policy = curUrlFilterParamsPolicy;
-      if (curUrlFilterParamsPlan !== null)
-        newState.filters_plan = curUrlFilterParamsPlan;
+        // // get key corresponding to the currently viewed doc type's filters
+        // const filtersUrlParamKey = "filters_" + docType;
 
-      if (isEmpty(filters) && searchText === null) {
-        // clear filters for current doc type and update window history
-        newState[filtersUrlParamKey] = "";
-      } else {
-        const newFiltersForState = {
-          ...filters,
-        };
-        // add search text to new URL state if it's not null
-        if (searchText !== null) {
-          newFiltersForState._text = [searchText];
-        } else {
-          delete newFiltersForState._text;
-        }
-        newState[filtersUrlParamKey] = JSON.stringify(newFiltersForState);
+        // // TODO create more specific types
+        // // Default state is the currently selected filters per the URL params
+        // const newState: Record<string, any> = { type: docType };
+        // if (curUrlFilterParamsPolicy !== null)
+        //   newState.filters_policy = curUrlFilterParamsPolicy;
+        // if (curUrlFilterParamsPlan !== null)
+        //   newState.filters_plan = curUrlFilterParamsPlan;
+
+        // if (isEmpty(filters) && searchText === null) {
+        //   // clear filters for current doc type and update window history
+        //   newState[filtersUrlParamKey] = "";
+        // } else {
+        //   const newFiltersForState = {
+        //     ...filters,
+        //   };
+        //   // add search text to new URL state if it's not null
+        //   if (searchText !== null) {
+        //     newFiltersForState._text = [searchText];
+        //   } else {
+        //     delete newFiltersForState._text;
+        //   }
+        //   newState[filtersUrlParamKey] = JSON.stringify(newFiltersForState);
+        // }
+        // const newUrlParams = new URLSearchParams();
+        // if (docType === "policy") newUrlParams.set("placeType", placeType);
+        // else newUrlParams.delete("placeType");
+        // for (const [k, v] of Object.entries(newState)) {
+        //   if (v !== null && v !== "") {
+        //     newUrlParams.append(k, v);
+        //   }
+        // }
+        // const newUrl =
+        //   newUrlParams.toString() !== "" ? `/data?${newUrlParams}` : "/data";
+
+        // window.history.replaceState(newState, "", newUrl);
       }
-      const newUrlParams = new URLSearchParams();
-      if (docType === "policy") newUrlParams.set("placeType", placeType);
-      else newUrlParams.delete("placeType");
-      for (const [k, v] of Object.entries(newState)) {
-        if (v !== null && v !== "") {
-          newUrlParams.append(k, v);
-        }
-      }
-      const newUrl =
-        newUrlParams.toString() !== "" ? `/data?${newUrlParams}` : "/data";
-
-      window.history.replaceState(newState, "", newUrl);
-    }
-  }, [
-    docType,
-    entityInfo,
-    filters,
-    getData,
-    loading,
-    placeType,
-    searchText,
-    setLoading,
-  ]);
+    },
+    [
+      // docType,
+      // entityInfo,
+      // filters,
+      // getData,
+      // loading,
+      // placeType,
+      // searchText,
+      // setLoading,
+    ]
+  );
 
   // update filters to contain latest search text
   useEffect(() => {
