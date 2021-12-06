@@ -133,9 +133,6 @@ const Data: FC<DataProps> = ({
   loading,
   setLoading,
   setInfoTooltipContent,
-  setPage,
-  type,
-  routedFrom,
 }) => {
   // Note: The `type` and `placeType` query params have built-in defaults,
   // see their definitions. `withDefault` is not used for them because the
@@ -176,7 +173,6 @@ const Data: FC<DataProps> = ({
 
   // track the type of place being viewed in the data table policies: the
   // place the policy "affected", or the "jurisdiction" that made the policy
-  const defaultPlaceType: PlaceType = getPlaceTypeFromURLParams() || "affected";
 
   const entityInfo: DataPageInfo = useMemo(() => {
     return {
@@ -185,7 +181,6 @@ const Data: FC<DataProps> = ({
       challenge: challengeInfo as DataPageInfo,
     }[query.type];
   }, [query.type]);
-  const [forceRerender] = useState<number | null>(null);
 
   // track table pagination-relevant variables including current page, number
   // of instances (rows) in table, the ordering settings, and page size
