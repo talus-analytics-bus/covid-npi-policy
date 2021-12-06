@@ -24,19 +24,13 @@ import Drawer from "../../layout/drawer/Drawer";
 import { Metadata, OptionSet, execute } from "api/Queries";
 import { comma } from "../../misc/Util.js";
 import { isEmpty } from "components/misc/UtilsTyped";
-import {
-  getPlaceTypeFromURLParams,
-  safeGetFieldValsAsStrings,
-} from "./content/helpers";
+import { safeGetFieldValsAsStrings } from "./content/helpers";
 import { ControlLabel } from "components/common/OptionControls";
-import { omicronFilters } from "components/layout/nav/OmicronDrape/OmicronDrape";
 import {
   DataPageType,
   DocTypeParam,
   FilterType,
-  PlaceType,
   PlaceTypeParam,
-  validPlaceTypes,
 } from "./types";
 
 // styles and assets
@@ -58,9 +52,7 @@ import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
 import { OptionSetRecord } from "api/queryTypes";
 import { DataColumnDef, Pagesize } from "components/common/Table/Table";
 import { AmpPage } from "types";
-import { getUrlParamAsFilters } from "App";
 import styled from "styled-components";
-import ObservationReduxQuery from "api/ObservationReduxQuery";
 
 const DownloadButtons = styled.div`
   display: flex;
