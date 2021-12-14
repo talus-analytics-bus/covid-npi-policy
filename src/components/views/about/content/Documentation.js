@@ -350,6 +350,11 @@ const Documentation = ({ ...props }) => {
         in the data dictionary available from the AMP documentation page).
       </p>
 
+      <p>
+        Policies listed under the Omicron response include all travel
+        restriction policies issued on or after November 26, 2021.
+      </p>
+
       <h4>COVID-19 plan database documentation</h4>
 
       <p>
