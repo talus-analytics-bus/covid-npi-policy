@@ -1,4 +1,7 @@
+import { defaults } from "components/common/MapboxMap/plugins/data";
 import {
+  MapIdType,
+  validMapIds,
   ValidViewTypes,
   ViewType,
 } from "components/common/MapboxMap/plugins/mapTypes";
@@ -56,6 +59,10 @@ export const PlaceTypeParam = getTypedStringParam<PlaceType>(
   "affected"
 );
 export const ViewTypeParam = getTypedStringParam<ViewType>(ValidViewTypes, "");
+export const MapIdParam = getTypedStringParam<MapIdType>(
+  validMapIds,
+  defaults.mapId
+);
 
 interface TypedStringParam<T> {
   encode: (s: T | null | undefined) => string | null | undefined;

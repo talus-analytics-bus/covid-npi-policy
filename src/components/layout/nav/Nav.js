@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import styles from "./nav.module.scss";
+import { useQueryParam } from "use-query-params";
 
 // assets
 import logo from "../../../assets/images/full-amp-logo.png";
@@ -9,11 +10,9 @@ import localBanner from "../../../assets/images/local-banner.svg";
 
 import HoverDropdown from "./HoverDropdown/HoverDropdown";
 import LocationSearch from "./LocationSearch/LocationSearch";
-import { getParamsMapId } from "components/views/map/helpers";
 
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { InfoTooltip } from "components/common";
-import NotificationDrape from "components/common/NotificationDrape/NotificationDrape";
 import OmicronDrape from "./OmicronDrape/OmicronDrape";
 
 // constants
@@ -25,7 +24,7 @@ const Nav = ({ page }) => {
   const hamburgerRef = useRef(null);
 
   // CONSTANTS // ---------------------------------------------------------- //
-  const curMapId = getParamsMapId() || "";
+  const [curMapId] = useQueryParam("mapId");
 
   // CONTEXTS // ----------------------------------------------------------- //
   const { setInfoTooltipContent } = useContext(InfoTooltipContext);

@@ -36,6 +36,7 @@ import {
   Filters,
   MapDataShapeId,
   MapId,
+  MapIdType,
   MapProps,
   PolicyResolution,
   ViewType,
@@ -57,7 +58,7 @@ import MapPlaceContext from "./context/MapPlaceContext";
 import { OptionSetRecord } from "api/queryTypes";
 import moment from "moment";
 import { useQueryParam } from "use-query-params";
-import { ViewTypeParam } from "../data/types";
+import { MapIdParam, ViewTypeParam } from "../data/types";
 
 // FUNCTION COMPONENT // ----------------------------------------------------//
 const Map: FC<MapProps> = ({
@@ -86,20 +87,24 @@ const Map: FC<MapProps> = ({
   // get unique ID of map to display, e.g., 'us', 'global'
   // if there is a map id in the URL search params, use it as the initial value
   // otherwise use the specified default map ID
-  const defaultMapId: MapId = defaults.mapId;
-  const [mapId, _setMapId] = useState<MapId>(defaultMapId);
+  const [_mapId, _setMapId] = useQueryParam<MapIdType>("mapId", MapIdParam);
+  const mapId: MapId = _mapId as MapId;
+  // const [mapId, _setMapId] = useState<MapId>(initMapId as MapId);
   const prevMapId: MapId | undefined = usePrevious(mapId);
 
   /**
    * Always set map status to "changing" when map ID is changed
    */
-  const setMapId = useCallback(v => {
-    // mark map as in "changing" state (prevents API requests)
-    setMapIsChanging(true);
+  const setMapId = useCallback(
+    v => {
+      // mark map as in "changing" state (prevents API requests)
+      setMapIsChanging(true);
 
-    // update map ID
-    _setMapId(v);
-  }, []);
+      // update map ID
+      _setMapId(v);
+    },
+    [_setMapId]
+  );
 
   // track whether to show policies at the selected geo or below it
   const [policyResolution, setPolicyResolution] = useState<PolicyResolution>(

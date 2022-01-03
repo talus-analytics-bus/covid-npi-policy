@@ -69,6 +69,12 @@ export const validMapIds = [
  * Allowed map IDs corresponding to the types of maps that have
  * been implemented.
  */
+export type MapIdType = typeof validMapIds[number];
+
+/**
+ * Allowed map IDs corresponding to the types of maps that have
+ * been implemented (enumeration).
+ */
 export enum MapId {
   us_county_plus_state = "us-county-plus-state",
   us_county = "us-county",

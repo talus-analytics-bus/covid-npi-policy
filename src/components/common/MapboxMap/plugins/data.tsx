@@ -19,11 +19,7 @@ import { comma, isLightColor } from "../../../misc/Util";
 
 // queries
 import ObservationQuery from "api/ObservationQuery";
-import {
-  DistancingLevel,
-  PolicyStatusCounts,
-  PolicyStatusCountsForMap,
-} from "api/Queries";
+import { DistancingLevel, PolicyStatusCountsForMap } from "api/Queries";
 
 // assets and styles
 // import dots from "./assets/images/dots.png";
@@ -65,7 +61,6 @@ const {
 
 // define default parameters for MapboxMap
 const today = moment();
-const yesterday = moment(today).subtract(1, "days");
 export const defaults: MapDefaults = {
   // default map ID
   mapId: MapId.global,
