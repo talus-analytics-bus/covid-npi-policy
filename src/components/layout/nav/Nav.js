@@ -120,7 +120,9 @@ const Nav = ({ page }) => {
                         setShowMobileMenu(false);
                       }}
                       className={
-                        page === "policymaps" && curMapId.startsWith("us")
+                        page === "policymaps" &&
+                        curMapId !== undefined &&
+                        curMapId.startsWith("us")
                           ? styles.active
                           : ""
                       }
