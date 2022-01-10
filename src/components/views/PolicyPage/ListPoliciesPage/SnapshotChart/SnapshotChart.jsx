@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import * as d3 from "d3/dist/d3.min";
+import { defineKeyVal } from "components/misc/Util";
 
 import Bar from "./Bar/Bar";
 
 import { useRecoilState } from "recoil";
 import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
+
 
 const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
   const dim = {
@@ -62,7 +64,9 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
     // fill the counts based on the intro section date
     Object.entries(policySummaryObject[selectedDate]).forEach(
       ([status, categories]) => {
-        Object.entries(categories).map(([category, policies]) => {
+        Object.entries(categories).forEach(([category, policies]) => {
+          defineKeyVal(byCategory, category, {})
+          defineKeyVal(byCategory[category], status, 0)
           byCategory[category][status] += policies.size;
         });
       }
@@ -78,7 +82,7 @@ const SnapshotChart = ({ policySummaryObject, chartLabels }) => {
     const lastStatus =
       policySummaryObject &&
       Object.values(policySummaryObject)[
-        Object.keys(policySummaryObject).length - 1
+      Object.keys(policySummaryObject).length - 1
       ];
 
     if (lastStatus) {

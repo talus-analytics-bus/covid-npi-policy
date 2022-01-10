@@ -83,4 +83,8 @@ export const BrowserProvider = children => (
   <BrowserDetection>{children}</BrowserDetection>
 );
 
+export const defineKeyVal = (obj, key, defaultVal) => {
+  if (obj[key] === undefined) obj[key] = defaultVal;
+};
+
 export default Util;
