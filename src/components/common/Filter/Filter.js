@@ -140,6 +140,16 @@ const Filter = ({
       if (filters[field] === undefined || filters[field].length === 0) {
         setDateRangeState(initDateRangeState);
         setShowRangeSelection(false);
+      } else {
+        const [startDate, endDate] = filters[field];
+        setDateRangeState([
+          {
+            startDate: getDateFromString(startDate),
+            endDate: getDateFromString(endDate),
+            key: "selection",
+          },
+        ]);
+        setShowRangeSelection(false);
       }
     } else {
       // update filter state
