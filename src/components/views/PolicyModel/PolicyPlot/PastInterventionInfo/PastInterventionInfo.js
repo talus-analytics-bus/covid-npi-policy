@@ -73,8 +73,7 @@ const PastInterventionInfo = props => {
       if (!proposed && props.effectiveDate) {
         axios
           .post(
-            process.env.REACT_APP_API_URL +
-              "/post/policy?fields=id&fields=place",
+            process.env.REACT_APP_API_URL + "/policy?fields=id&fields=place",
             {
               filters: {
                 dates_in_effect: [

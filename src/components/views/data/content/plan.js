@@ -111,7 +111,7 @@ export const planInfo = {
             if (isLocalDownload) {
               const localDownloadLink =
                 d !== undefined
-                  ? "/get/file/redirect?id=" + d.toString()
+                  ? "/file/redirect?id=" + d.toString()
                   : undefined;
               return (
                 <div

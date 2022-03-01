@@ -151,9 +151,7 @@ const SourceSummary = ({ policy, setModalOpen }) => {
           <h2>Policies in this Document</h2>
           {policy.file && policy.file[0] && (
             <a
-              href={
-                policy && `${API_URL}/get/file/redirect?id=${policy.file[0]}`
-              }
+              href={policy && `${API_URL}/file/redirect?id=${policy.file[0]}`}
               className={styles.button}
             >
               DOWNLOAD (PDF)

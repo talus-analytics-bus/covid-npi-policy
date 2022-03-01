@@ -63,7 +63,7 @@ const TargetFilter = props => {
         .split("/")
         .slice(-2);
 
-      const request = await axios(`${API_URL}/get/optionset`, {
+      const request = await axios(`${API_URL}/optionset`, {
         params: {
           fields: "Policy.subtarget",
           geo_res: state !== "national" ? "state" : "country",
@@ -83,7 +83,6 @@ const TargetFilter = props => {
 
     getOptions();
   }, [location, setTargets]);
-
 
   return (
     <div className={styles.filter}>

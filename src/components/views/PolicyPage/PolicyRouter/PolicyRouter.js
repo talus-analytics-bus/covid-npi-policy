@@ -240,7 +240,7 @@ const PolicyRouter = props => {
       //   all_dates: true,
       // });
 
-      const testreq = await axios(`${API_URL}/get/distancing_levels`, {
+      const testreq = await axios(`${API_URL}/distancing_levels`, {
         params: {
           iso3,
           geo_res: state === "national" ? "country" : "state",
@@ -272,7 +272,7 @@ const PolicyRouter = props => {
       params.append("level", "country");
       params.append("iso3", iso3);
 
-      const countries = await axios(`${API_URL}/get/place`, { params });
+      const countries = await axios(`${API_URL}/place`, { params });
 
       const placeName = countries.data.data[0];
       if (placeName) setLocationName(removeParenthetical(placeName.loc));

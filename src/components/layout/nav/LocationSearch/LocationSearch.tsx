@@ -49,13 +49,13 @@ const LocationSearch: FC<SearchProps> = ({
       params.append("levels", "country");
       params.append("levels", "Tribal nation");
 
-      const countries = await axios(`${API_URL}/get/place`, { params });
+      const countries = await axios(`${API_URL}/place`, { params });
 
       params.append("fields", "level");
       params.set("levels", "state / province");
       params.append("iso3", "usa");
 
-      const states = await axios(`${API_URL}/get/place`, { params });
+      const states = await axios(`${API_URL}/place`, { params });
 
       const allPlaces = [...countries.data.data, ...states.data.data];
 

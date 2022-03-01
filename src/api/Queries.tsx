@@ -41,7 +41,7 @@ export const Glossary = async function({
   field: string;
 }): Promise<MetricRecords | boolean> {
   let req: AxiosResponse<Record<string, any>> = await axios(
-    `${API_URL}/get/glossary`
+    `${API_URL}/glossary`
   );
   const params: URLSearchParams = new URLSearchParams();
   params.append("field", field);
@@ -55,7 +55,7 @@ export const Glossary = async function({
  */
 export const Version = async function() {
   let req;
-  req = await axios(`${API_URL}/get/version`);
+  req = await axios(`${API_URL}/version`);
   const res = await req;
   if (res.data !== undefined) return res.data.data;
   else return false;
@@ -66,7 +66,7 @@ export const Version = async function() {
  */
 export const CountriesWithDistancingLevels = async function() {
   let req;
-  req = await axios(`${API_URL}/get/countries_with_lockdown_levels`);
+  req = await axios(`${API_URL}/countries_with_lockdown_levels`);
   const res = await req;
   if (res.data !== undefined) return res.data.data;
   else return false;
@@ -87,7 +87,7 @@ export const Count = async function({
   });
 
   let req;
-  req = await axios(`${API_URL}/get/count`, {
+  req = await axios(`${API_URL}/count`, {
     params,
   });
 
@@ -111,7 +111,7 @@ export const Metadata = async function({
       params.append("fields", d);
     });
     params.append("entity_class_name", entity_class_name);
-    req = await axios(`${API_URL}/get/metadata`, {
+    req = await axios(`${API_URL}/metadata`, {
       params,
     });
   }
@@ -153,7 +153,7 @@ export const Policy = async function({
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/policy`, {
+    req = await axios(`${API_URL}/policy`, {
       params,
     });
   } else if (method === "post") {
@@ -161,7 +161,7 @@ export const Policy = async function({
       console.log("Error: `filters` is required for method POST.");
     }
     req = await axios.post(
-      `${API_URL}/post/policy`,
+      `${API_URL}/policy`,
       { filters, ordering },
       {
         params,
@@ -205,7 +205,7 @@ export const PolicyList = async function({
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/policy_number`, {
+    req = await axios(`${API_URL}/policy_number`, {
       params,
     });
   } else if (method === "post") {
@@ -225,7 +225,7 @@ export const PolicyList = async function({
     // console.log({ filters, ordering });
     // console.log({ filtersNoUndefined, ordering });
     req = await axios.post(
-      `${API_URL}/post/policy_number`,
+      `${API_URL}/policy_number`,
       { filters: filtersNoUndefined, ordering },
       {
         params,
@@ -272,7 +272,7 @@ export const Challenge = async function({
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/challenge`, {
+    req = await axios(`${API_URL}/challenge`, {
       params,
     });
   } else if (method === "post") {
@@ -280,7 +280,7 @@ export const Challenge = async function({
       console.log("Error: `filters` is required for method POST.");
     }
     req = await axios.post(
-      `${API_URL}/post/challenge`,
+      `${API_URL}/challenge`,
       { filters, ordering },
       {
         params,
@@ -330,7 +330,7 @@ export const Plan = async function({
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/plan`, {
+    req = await axios(`${API_URL}/plan`, {
       params,
     });
   } else if (method === "post") {
@@ -338,7 +338,7 @@ export const Plan = async function({
       console.log("Error: `filters` is required for method POST.");
     }
     req = await axios.post(
-      `${API_URL}/post/plan`,
+      `${API_URL}/plan`,
       { filters, ordering },
       {
         params,
@@ -382,7 +382,7 @@ export const DistancingLevel = async function({
   // prepare request
   let req;
   if (method === "get") {
-    req = await axios(`${API_URL}/get/distancing_levels`, {
+    req = await axios(`${API_URL}/distancing_levels`, {
       params,
     });
   } else {
@@ -431,7 +431,7 @@ export const PolicyStatusCountsForMap = async function({
 
   // prepare request
   const req = await axios.get(
-    `${API_URL}/get/policy_status_counts_for_map/${geo_res}`,
+    `${API_URL}/policy_status_counts_for_map/${geo_res}`,
     {
       params,
     }
@@ -493,7 +493,7 @@ export const PolicyStatusCounts = async function({
       console.log("Error: `filters` is required for method POST.");
     }
     req = await axios.post(
-      `${API_URL}/post/policy_status_counts/${geo_res}`,
+      `${API_URL}/policy_status_counts/${geo_res}`,
       { filters },
       {
         params,
@@ -533,7 +533,7 @@ export const Export = async function({
     }
 
     req = axios({
-      url: `${API_URL}/post/export`,
+      url: `${API_URL}/export`,
       method: "POST",
       responseType: "blob",
       data: { filters },
@@ -586,7 +586,7 @@ export const OptionSet = async ({
       });
     params.set("class_name", class_name || "Policy");
     const route: string = optimized ? "optionset_for_data" : "optionset";
-    req = await axios.get(`${API_URL}/get/${route}`, {
+    req = await axios.get(`${API_URL}/${route}`, {
       params,
     });
   } else {
@@ -808,7 +808,7 @@ export const Place = async ({
     ["fields", fields],
   ];
   addParams(toAdd, params);
-  const req = await axios(`${API_URL}/get/place`, {
+  const req = await axios(`${API_URL}/place`, {
     params,
   });
   const res = await req;
