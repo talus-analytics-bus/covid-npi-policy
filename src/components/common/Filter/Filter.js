@@ -158,8 +158,16 @@ const Filter = ({
           const newFilters = curFilters.filter(
             d => filters[field].includes(d.value) || filters[field].includes(d)
           );
+          const toAddFilters = filterState.sortedItems.filter(d => {
+            return (
+              (filters[field].includes(d.value) ||
+                filters[field].includes(d)) &&
+              newFilters.find(nf => nf.value === d.value || nf.value === d) ===
+                undefined
+            );
+          });
 
-          updatedSelectedItems = newFilters;
+          updatedSelectedItems = [...newFilters, ...toAddFilters];
           setFilterState({
             ...filterState,
             selectedItems: updatedSelectedItems,
