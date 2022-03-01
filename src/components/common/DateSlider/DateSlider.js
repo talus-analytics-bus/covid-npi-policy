@@ -275,20 +275,26 @@ const DateSlider = ({
       }
       // if more than 5 marks, only keep half
       const nMarks = Object.values(marks).length;
-      if (nMarks > 5) {
-        let thresh;
-        if (nMarks > 10) {
-          thresh = 3;
-        } else if (nMarks > 5) {
-          thresh = 2;
-        }
-        let i = 0;
-
-        for (const [k] of Object.entries(marks)) {
-          if (i % thresh > 0) delete marks[k];
-          i++;
-        }
+      const mod = Math.floor(nMarks / 5);
+      let i = 0;
+      for (const [k] of Object.entries(marks)) {
+        if (i % mod > 0) delete marks[k];
+        i++;
       }
+      //  if (nMarks > 5) {
+      //    let thresh;
+      //    if (nMarks > 10) {
+      //      thresh = 3;
+      //    } else if (nMarks > 5) {
+      //      thresh = 2;
+      //    }
+      //    let i = 0;
+
+      //    for (const [k] of Object.entries(marks)) {
+      //      if (i % thresh > 0) delete marks[k];
+      //      i++;
+      //    }
+      //  }
       return marks;
     }
   };
