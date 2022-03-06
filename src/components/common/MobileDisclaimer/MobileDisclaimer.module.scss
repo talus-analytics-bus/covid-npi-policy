@@ -1,0 +1,37 @@
+@import "/src/assets/styles/vars.module.scss";
+@media screen and (min-width: 813px) {
+  .mobile {
+    display: none;
+  }
+}
+
+@media #{$phone} {
+  .largeFlag,
+  .data,
+  .home,
+  .container,
+  .browse,
+  .search,
+  .bookmarks,
+  .contact {
+    display: none !important;
+  }
+  .mobile {
+    display: flex;
+    align-items: center;
+    padding: 10%;
+    z-index: -1;
+    .disclaimer {
+      font-size: 1.2rem;
+      line-height: 1.8rem;
+      text-align: center;
+    }
+    padding-top: 150px;
+    p {
+      font-size: 1.25rem;
+      &:not(:last-child) {
+        margin-bottom: 5vw;
+      }
+    }
+  }
+}

@@ -1,187 +1,193 @@
 @import "src/assets/styles/vars.module.scss";
 
 .loadingSpinner {
-    position: relative;
-    .spinnerImageContainer {
-        position: absolute;
-        $size: 40px;
-        width: $size;
-        height: $size;
-        overflow: hidden;
-        img.spinnerImage {
-            position: absolute;
-            height: $size;
-            width: $size;
-            animation: rotation 12s infinite linear;
-        }
+  position: relative;
+  .spinnerImageContainer {
+    position: absolute;
+    $size: 40px;
+    width: $size;
+    height: $size;
+    overflow: hidden;
+    img.spinnerImage {
+      position: absolute;
+      height: $size;
+      width: $size;
+      animation: rotation 12s infinite linear;
     }
+  }
 
-    &.rightSide {
-        .spinnerImageContainer {
-            right: 0;
+  &.rightSide {
+    .spinnerImageContainer {
+      right: 0;
+    }
+  }
+  &.leftSide {
+    .spinnerImageContainer {
+      left: 0;
+    }
+  }
+  &.fullscreen {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    align-content: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.5s;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    opacity: 1;
+    pointer-events: all;
+    .spinnerImageAndText {
+      display: grid;
+      grid-auto-flow: row;
+      justify-items: center;
+      .spinnerImageContainer {
+        width: unset;
+        position: relative;
+        height: unset;
+        img.spinnerImage {
+          position: relative;
+          $fullscreenSize: 120px;
+          width: $fullscreenSize;
+          height: $fullscreenSize;
         }
+      }
+    }
+    &.hiddenFullscreen {
+      opacity: 0;
+      pointer-events: none;
     }
     &.leftSide {
-        .spinnerImageContainer {
-            left: 0;
-        }
+      img.spinnerImage {
+        left: unset;
+      }
     }
-    &.fullscreen {
-        display: grid;
-        grid-template-columns: auto;
-        grid-template-rows: auto;
-        align-content: center;
-        justify-content: center;
-        position: fixed;
-        top: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        transition: opacity 0.5s;
-        width: 100%;
-        height: 100%;
-        z-index: 4;
-        opacity: 1;
-        pointer-events: all;
-        .spinnerImageAndText {
-            display: grid;
-            grid-auto-flow: row;
-            justify-items: center;
-            .spinnerImageContainer {
-                width: unset;
-                position: relative;
-                height: unset;
-                img.spinnerImage {
-                    position: relative;
-                    $fullscreenSize: 120px;
-                    width: $fullscreenSize;
-                    height: $fullscreenSize;
-                }
-            }
-        }
-        &.hiddenFullscreen {
-            opacity: 0;
-            pointer-events: none;
-        }
-        &.leftSide {
-            img.spinnerImage {
-                left: unset;
-            }
-        }
+  }
+  &.fill {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 3;
+    display: grid;
+    pointer-events: none;
+    .spinnerImageContainer {
+      position: relative;
     }
-    &.fill {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: 3;
-        display: grid;
-        pointer-events: none;
-        .spinnerImageContainer {
-            position: relative;
+    .spinnerImageAndText {
+      @include boxShadow();
+      background-color: rgba(white, 1);
+      width: max-content;
+      padding: 1em;
+      display: grid;
+      grid-template-rows: auto auto;
+      grid-template-columns: max-content;
+      align-items: center;
+      justify-items: center;
+      text-align: center;
+      position: relative;
+      margin: auto auto;
+      img {
+        position: unset;
+        + div {
+          margin-top: 0.5em;
         }
-        .spinnerImageAndText {
-            @include boxShadow();
-            background-color: rgba(white, 1);
-            width: max-content;
-            padding: 1em;
-            display: grid;
-            grid-template-rows: auto auto;
-            grid-template-columns: max-content;
-            align-items: center;
-            justify-items: center;
-            text-align: center;
-            position: relative;
-            margin: auto auto;
-            img {
-                position: unset;
-                + div {
-                    margin-top: 0.5em;
-                }
-            }
-        }
+      }
     }
-    &.inline {
-        .spinnerImageContainer {
-            position: relative;
-        }
-        .spinnerImageAndText {
-            img {
-                position: unset;
-            }
-        }
+  }
+  &.inline {
+    .spinnerImageContainer {
+      position: relative;
     }
+    .spinnerImageAndText {
+      img {
+        position: unset;
+      }
+    }
+  }
 
-    &.small {
-        .spinnerImageContainer {
-            $size: 25px;
-            width: $size;
-            height: $size;
-            img.spinnerImage {
-                height: $size;
-                width: $size;
-            }
-        }
+  &.small {
+    .spinnerImageContainer {
+      $size: 25px;
+      width: $size;
+      height: $size;
+      img.spinnerImage {
+        height: $size;
+        width: $size;
+      }
     }
+  }
+}
+
+@media #{$phone} {
+  .loadingSpinner {
+    display: none !important;
+  }
 }
 
 .spinnerImageAndText,
 .children {
-    &.hidden {
-        transition: opacity 0.5s ease;
-        &.instantFadeout {
-            transition: opacity 0s ease;
-        }
-        opacity: 0;
-        .spinnerImageContainer {
-            height: unset;
-            width: unset;
-        }
+  &.hidden {
+    transition: opacity 0.5s ease;
+    &.instantFadeout {
+      transition: opacity 0s ease;
     }
-    &:not(.hidden) {
-        transition: opacity 0.5s ease;
-        opacity: 1;
+    opacity: 0;
+    .spinnerImageContainer {
+      height: unset;
+      width: unset;
     }
+  }
+  &:not(.hidden) {
+    transition: opacity 0.5s ease;
+    opacity: 1;
+  }
 }
 
 .children:not(.displayed) {
-    display: none;
+  display: none;
 }
 
 @keyframes rotation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes rotationExternal {
-    0% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
 
-    17% {
-        transform: rotate(360deg/6);
-    }
-    33% {
-        transform: rotate(2 * 360deg/6);
-    }
-    50% {
-        transform: rotate(3 * 360deg/6);
-    }
-    67% {
-        transform: rotate(4 * 360deg/6);
-    }
-    83% {
-        transform: rotate(5 * 360deg/6);
-    }
-    100% {
-        transform: rotate(6 * 360deg/6);
-    }
+  17% {
+    transform: rotate(360deg/6);
+  }
+  33% {
+    transform: rotate(2 * 360deg/6);
+  }
+  50% {
+    transform: rotate(3 * 360deg/6);
+  }
+  67% {
+    transform: rotate(4 * 360deg/6);
+  }
+  83% {
+    transform: rotate(5 * 360deg/6);
+  }
+  100% {
+    transform: rotate(6 * 360deg/6);
+  }
 }
 @keyframes rotationGif {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

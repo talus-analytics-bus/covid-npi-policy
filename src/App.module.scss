@@ -12,12 +12,21 @@
   // TODO elegantly -- make page at least tall enough so that footer hits
   // bottom of window
   min-height: calc(100% - 108px - 116px);
-
-  &.policymaps,
-  &.model,
+  @media not #{$phone} {
+    &.policymaps,
+    &.model {
+      max-width: unset;
+      padding: unset;
+    }
+  }
   &.landing {
-    max-width: unset;
     padding: unset;
+  }
+  // hide content if screen small
+  @media #{$phone} {
+    &[data-responsive]:not([data-responsive="true"]) {
+      display: none;
+    }
   }
 }
 

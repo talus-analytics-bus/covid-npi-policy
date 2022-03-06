@@ -73,7 +73,7 @@
       opacity: 1;
     }
     &:not(.showMobileMenu) {
-      pointer-events: none;
+      // pointer-events: none;
       .hamburger {
         pointer-events: all;
       }

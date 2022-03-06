@@ -35,6 +35,7 @@ export type SettingsProps = {
    * "solid" does not currently behave as expected.
    */
   readonly DEFAULT_TOOLTIP_EFFECT: "float" | "solid";
+  readonly RESPONSIVE_PAGES: string[];
 };
 const Settings: SettingsProps = {
   ALLOW_SUB_GEOS: false,
@@ -42,6 +43,7 @@ const Settings: SettingsProps = {
   REQUIRE_EXPLICIT_MIN_MAX: true,
   SHOW_TABLE_DEFINITIONS: false,
   DEFAULT_TOOLTIP_EFFECT: "float",
+  RESPONSIVE_PAGES: ["landing", "contact"],
 };
 
 export default Settings;
