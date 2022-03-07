@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./footer.module.scss";
+import Settings from "Settings";
 import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";
@@ -47,6 +48,9 @@ const Footer = ({ page, versions }) => {
 
   return (
     <div
+      data-page={page}
+      data-responsive={page && Settings.RESPONSIVE_PAGES.includes(page)
+      }
       className={classNames(styles.footer, {
         [styles.wide]: page === "policymaps",
       })}
@@ -60,11 +64,11 @@ const Footer = ({ page, versions }) => {
               href={d.url}
               alt={d.alt}
               className={
-                d.alt == "Talus Analytics, LLC" ? styles.talusLogo : null
-              }
+                d.alt === "Talus Analytics, LLC" ? styles.talusLogo : null
+              } rel="noreferrer"
             >
-              <img style={d.style} src={d.imgSrc} />
-              {d.alt == "Talus Analytics, LLC" && (
+              <img style={d.style} src={d.imgSrc} alt={d.alt} />
+              {d.alt === "Talus Analytics, LLC" && (
                 <div className={styles.builtBy}>Built by</div>
               )}
             </a>

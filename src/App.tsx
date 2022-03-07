@@ -39,6 +39,7 @@ import { LoadingSpinner } from "components/common";
 import { AmpPage } from "types";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import { BrowserProvider } from "components/misc/Util";
+import MobileDisclaimer from "components/common/MobileDisclaimer/MobileDisclaimer";
 
 //: React.FC
 const App = () => {
@@ -118,6 +119,7 @@ const App = () => {
     getData();
   }, []);
 
+  const pageIsResponsive = page && Settings.RESPONSIVE_PAGES.includes(page);
   if (versions === null || counts === null) return <div />;
   else
     return (
@@ -132,6 +134,7 @@ const App = () => {
             <Switch>
               <React.Fragment>
                 <div
+                  data-responsive={pageIsResponsive}
                   className={classNames(
                     styles.page,
                     styles[page !== null ? page : ""]
@@ -305,7 +308,9 @@ const App = () => {
                 </div>
               </React.Fragment>
             </Switch>
-            {page !== "policymaps" && page !== "landing" && (
+            {!pageIsResponsive && <MobileDisclaimer />}
+            {(!pageIsResponsive ||
+              (page !== "policymaps" && page !== "landing")) && (
               <Footer {...{ page, versions }} />
             )}
             {

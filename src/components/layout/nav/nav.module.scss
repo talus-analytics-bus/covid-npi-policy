@@ -44,21 +44,23 @@
     // height: 50px;
     // }
   }
-  &.wide {
-    position: fixed;
+  @media not #{$phone} {
+    &.wide {
+      position: fixed;
 
-    div {
-      max-width: unset;
-    }
-    &[data-page="policymaps"] {
-      + div {
-        height: calc(100% - 116px);
-        top: 116px;
+      div {
+        max-width: unset;
       }
-    }
-    &[data-page="model"] {
-      border-bottom: 2px solid $amp-green;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
+      &[data-page="policymaps"] {
+        + div {
+          height: calc(100% - 116px);
+          top: 116px;
+        }
+      }
+      &[data-page="model"] {
+        border-bottom: 2px solid $amp-green;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
+      }
     }
   }
   &:not(.wide) {
