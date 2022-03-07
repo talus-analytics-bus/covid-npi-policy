@@ -14,14 +14,15 @@
   min-height: calc(100% - 108px - 116px);
   @media not #{$phone} {
     &.policymaps,
-    &.model {
+    &.model,
+    &.landing {
       max-width: unset;
       padding: unset;
     }
   }
-  &.landing {
-    padding: unset;
-  }
+  // &.landing {
+  //   padding: unset;
+  // }
   // hide content if screen small
   @media #{$phone} {
     &[data-responsive]:not([data-responsive="true"]) {

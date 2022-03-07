@@ -427,7 +427,8 @@ const Data: FC<DataProps> = ({
 
   useEffect(() => {
     setPage("data");
-  }, []);
+    window.scrollTo(0, 0);
+  }, [setPage]);
 
   useEffect(() => {
     updateData();

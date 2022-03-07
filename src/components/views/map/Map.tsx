@@ -238,6 +238,7 @@ const Map: FC<MapProps> = ({
 
       // set current page
       setPage("policymaps");
+      window.scrollTo(0, 0);
 
       // get map data if not already initialized
       if (!initialized) {
