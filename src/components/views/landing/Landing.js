@@ -13,7 +13,7 @@ import guLogo from "../../../assets/images/logo-georgetown.png";
 import talusLogo from "../../../assets/images/logo-talus.png";
 import ntiLogo from "../../../assets/images/logo-nti.png";
 import LocationSearch from "components/layout/nav/LocationSearch/LocationSearch";
-import OmicronDrape from "components/layout/nav/OmicronDrape/OmicronDrape";
+// import OmicronDrape from "components/layout/nav/OmicronDrape/OmicronDrape";
 
 const Landing = ({ setPage, setLoading }, props) => {
   React.useEffect(() => {
@@ -29,7 +29,7 @@ const Landing = ({ setPage, setLoading }, props) => {
         <meta name="COVID AMP" />
       </Helmet>
       <div className={styles.curtainRod}>
-        <OmicronDrape narrow />
+        {/* <OmicronDrape narrow /> */}
         <div className={styles.drapes}>
           <a href="https://covid-local.org">
             <div className={styles.backButton}></div>
@@ -91,13 +91,17 @@ const Landing = ({ setPage, setLoading }, props) => {
       </div>
       <div class={styles.footer}>
         <div class={styles.content}>
-          <a target="_blank" href="https://ghssidea.org">
+          <a target="_blank" href="https://ghssidea.org" rel="noreferrer">
             <img
               src={ideaLogo}
               alt="International Disease and Events Analysis"
             />
           </a>
-          <a target="_blank" href="https://ghss.georgetown.edu/">
+          <a
+            target="_blank"
+            href="https://ghss.georgetown.edu/"
+            rel="noreferrer"
+          >
             <img
               src={guLogo}
               alt="Georgetown University Center for Global Health Science and Security"
@@ -107,11 +111,12 @@ const Landing = ({ setPage, setLoading }, props) => {
             target="_blank"
             href="http://talusanalytics.com/"
             className={styles.talusLogo}
+            rel="noreferrer"
           >
             <img src={talusLogo} alt="Talus Analytics, LLC" />
             <div className={styles.builtBy}>Built by</div>
           </a>
-          <a target="_blank" href="https://www.nti.org/">
+          <a target="_blank" href="https://www.nti.org/" rel="noreferrer">
             <img src={ntiLogo} alt="Nuclear Threat Initiative" />
           </a>
         </div>

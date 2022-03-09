@@ -13,7 +13,7 @@ import LocationSearch from "./LocationSearch/LocationSearch";
 
 import InfoTooltipContext from "context/InfoTooltipContext";
 import { InfoTooltip } from "components/common";
-import OmicronDrape from "./OmicronDrape/OmicronDrape";
+// import OmicronDrape from "./OmicronDrape/OmicronDrape";
 
 // constants
 const COVID_LOCAL_URL = process.env.REACT_APP_COVID_LOCAL_URL;
@@ -232,7 +232,7 @@ const Nav = ({ page }) => {
                   // </a>
                 }
               </div>
-              <OmicronDrape />
+              {/* <OmicronDrape /> */}
             </div>
           </div>
         </div>
