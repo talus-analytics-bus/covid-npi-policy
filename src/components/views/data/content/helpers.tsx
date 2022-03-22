@@ -353,13 +353,11 @@ export function formatFiltersForPlaceType(
  * @returns A function that sets updated ordering only if it has changed
  */
 export function getOnSort(setOrdering: Function) {
-  return () => {
-    return (field: string, order: string) => {
-      setOrdering((prev: string[][]) => {
-        if (prev[0][0] === field && prev[0][1] === order) return prev;
-        else return [[field, order]];
-      });
-    };
+  return (field: string, order: string) => {
+    setOrdering((prev: string[][]) => {
+      if (prev[0][0] === field && prev[0][1] === order) return prev;
+      else return [[field, order]];
+    });
   };
 }
 
@@ -398,9 +396,9 @@ export function getPlaceTypeFromURLParams(): PlaceType | null {
     } else {
       throw Error(
         "Invalid place type provided as URL param, must be one of " +
-          validPlaceTypes.join(", ") +
-          "; but found: " +
-          placeTypeTmp
+        validPlaceTypes.join(", ") +
+        "; but found: " +
+        placeTypeTmp
       );
     }
   } else return null;
