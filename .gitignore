@@ -15,3 +15,4 @@ launch.json
 
 # local dotenv files
 .env.*local
+*.env
