@@ -1,11 +1,11 @@
 import { FC, useContext, ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { InfoTooltip } from "components/common";
-import InfoTooltipContext from "context/InfoTooltipContext";
+import { InfoTooltip } from "src/components/common";
+import InfoTooltipContext from "src/context/InfoTooltipContext";
 import { PolicyLinkBaseProps } from "../helpers";
 import styles from "./PolicyLink.module.scss";
 
-interface PolicyLinkProps extends PolicyLinkBaseProps {}
+interface PolicyLinkProps extends PolicyLinkBaseProps { }
 
 export const PolicyLink: FC<PolicyLinkProps> = ({
   tooltip,

@@ -12,8 +12,8 @@ import ideaLogo from "../../../assets/images/logo-title.png";
 import guLogo from "../../../assets/images/logo-georgetown.png";
 import talusLogo from "../../../assets/images/logo-talus.png";
 import ntiLogo from "../../../assets/images/logo-nti.png";
-import LocationSearch from "components/layout/nav/LocationSearch/LocationSearch";
-// import OmicronDrape from "components/layout/nav/OmicronDrape/OmicronDrape";
+import LocationSearch from "src/components/layout/nav/LocationSearch/LocationSearch";
+// import OmicronDrape from "src/components/layout/nav/OmicronDrape/OmicronDrape";
 
 const Landing = ({ setPage, setLoading }, props) => {
   React.useEffect(() => {

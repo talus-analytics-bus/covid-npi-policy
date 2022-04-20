@@ -18,6 +18,7 @@ import React, {
   ReactNode,
   SetStateAction,
   Dispatch,
+  ReactElement,
 } from "react";
 import styles from "./mapboxmap.module.scss";
 import classNames from "classnames";
@@ -44,10 +45,10 @@ import ResetZoom from "./resetZoom/ResetZoom";
 
 // context
 import MapOptionContext from "../../views/map/context/MapOptionContext";
-import AmpMapPopupDataProvider from "components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
+import AmpMapPopupDataProvider from "src/components/views/map/content/AmpMapPopupDataProvider/AmpMapPopupDataProvider";
 import { elementIsMapCanvas } from "./plugins/helpers";
-import useEventListener from "components/views/PolicyPage/hooks/useEventListener";
-import Settings from "Settings";
+import useEventListener from "src/components/views/PolicyPage/hooks/useEventListener";
+import Settings from "src/Settings";
 import { FC } from "react";
 import {
   FeatureLinkFields,
@@ -62,7 +63,7 @@ import {
   MapStylesEntry,
   ViewportProps,
 } from "./plugins/mapTypes";
-import { MetricRecords, MetricRecord } from "api/queryTypes";
+import { MetricRecords, MetricRecord } from "src/api/queryTypes";
 import { MutableRefObject } from "react";
 
 // constants
@@ -85,12 +86,12 @@ type MapboxMapProps = {
   /**
    * Overlays shown on top of the map, such as controls.
    */
-  overlays: ReactNode[];
+  overlays: ReactElement;
 
   /**
    * A list of ISO-3 codes of countries for which data are available.
    */
-  geoHaveData: string[];
+  geoHaveData: string[] | null;
 
   /**
    * True if the scale used to set circle radii should be linear, false log.
@@ -265,7 +266,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
 
         // for global maps only:
         if (mapId === "global")
-          geoHaveData.forEach(d => {
+          geoHaveData!.forEach(d => {
             // set any geographies that have no data to 2
             if (featureOrder[d] === undefined) {
               featureOrder[d] = 2;
@@ -359,7 +360,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
         const fillStylesFunc = layerStyles.fill[key];
         const newFillColorStyle = fillStylesFunc(
           key,
-          geoHaveData,
+          geoHaveData || [],
           maxVal,
           minVal
         );
@@ -411,7 +412,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
     longlat: number[],
     finalZoom: number,
     map: any, // TODO define type
-    callback: () => void = () => {}
+    callback: () => void = () => { }
   ) => {
     // Get current zoom level.
     const curZoom = viewport.zoom;
@@ -463,7 +464,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
       bearing: 0,
       speed: 2,
       curve: 1,
-      easing: function(t: any) {
+      easing: function (t: any) {
         return t;
       },
     });
@@ -572,17 +573,17 @@ const MapboxMap: FC<MapboxMapProps> = ({
             layerListKey: "fillLayers" | "circleLayers";
             curOption: string | null | undefined;
           }[] = [
-            {
-              sourceTypeKey: "circle",
-              layerListKey: "circleLayers",
-              curOption: parseStringSafe(circle),
-            },
-            {
-              sourceTypeKey: "fill",
-              layerListKey: "fillLayers",
-              curOption: parseStringSafe(fill),
-            },
-          ];
+              {
+                sourceTypeKey: "circle",
+                layerListKey: "circleLayers",
+                curOption: parseStringSafe(circle),
+              },
+              {
+                sourceTypeKey: "fill",
+                layerListKey: "fillLayers",
+                curOption: parseStringSafe(fill),
+              },
+            ];
 
           // for each type of layer to check, hide the layer and its auxiliary
           // layers if it's not the selected option for that layer type, or
@@ -953,7 +954,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
               map.fitBounds(mapStyle.defaultFitBounds);
             }
 
-            map.on("styledataloading", function() {
+            map.on("styledataloading", function () {
               getMapData({});
             });
           }}
@@ -979,19 +980,19 @@ const MapboxMap: FC<MapboxMapProps> = ({
             </div>
           </div>
           {// map tooltip component
-          showTooltip && (
-            <div className={styles.mapboxMap}>
-              <Popup
-                longitude={cursorLngLat[0]}
-                latitude={cursorLngLat[1]}
-                closeButton={false}
-                closeOnClick={false}
-                captureScroll={true}
-              >
-                {mapPopup}
-              </Popup>
-            </div>
-          )}
+            showTooltip && (
+              <div className={styles.mapboxMap}>
+                <Popup
+                  longitude={cursorLngLat[0]}
+                  latitude={cursorLngLat[1]}
+                  closeButton={false}
+                  closeOnClick={false}
+                  captureScroll={true}
+                >
+                  {mapPopup}
+                </Popup>
+              </div>
+            )}
         </ReactMapGL>
       </>
     );
@@ -1051,8 +1052,8 @@ function getMinMaxVals(data: MapData, key: string): number[] {
     // throw error if explicit min/max required
     throw Error(
       "Min/Max observation data are missing from the data series for key = " +
-        key +
-        ". Please ensure the min/max is provided in the API response."
+      key +
+      ". Please ensure the min/max is provided in the API response."
     );
   } else {
     const valsForMinMax: number[] = data[key].map((d: MetricRecord) => {

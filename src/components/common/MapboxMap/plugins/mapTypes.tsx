@@ -7,9 +7,9 @@ import {
   MetricRecords,
   OptionSetRecord,
   VersionRecord,
-} from "api/queryTypes";
+} from "src/api/queryTypes";
 import { Numeric } from "d3";
-import { AmpPage } from "types";
+import { AmpPage } from "src/types";
 
 /**
  * Default view types for the map
@@ -30,7 +30,7 @@ export type MapProps = {
    * Sets whether the map is currently loading or not.
    * @param {boolean} v True if the map is loading, false otherwise.
    */
-  setLoading(v: boolean): void;
+  setLoading: (...args: any[]) => any;
 
   /**
    * Sets the current page of the app to the provided value.

@@ -9,7 +9,7 @@ import React from "react";
 import { ShowMore } from "../../../common";
 
 // queries
-import { Challenge } from "api/Queries";
+import { Challenge } from "src/api/Queries";
 
 // assets and styles
 // use same styles as main Data page

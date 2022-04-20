@@ -19,16 +19,16 @@ import {
 // common components and functions
 import Search from "../../common/Table/content/Search/Search";
 import { FilterSet, Table, RadioToggle, InfoTooltip } from "../../common";
-import { PageHeader } from "components/project";
+import { PageHeader } from "src/components/project";
 import Drawer from "../../layout/drawer/Drawer";
-import { Metadata, OptionSet, execute } from "api/Queries";
+import { Metadata, OptionSet, execute } from "src/api/Queries";
 import { comma } from "../../misc/Util.js";
-import { isEmpty } from "components/misc/UtilsTyped";
+import { isEmpty } from "src/components/misc/UtilsTyped";
 import {
   getClassNameForApi,
   safeGetFieldValsAsStrings,
 } from "./content/helpers";
-import { ControlLabel } from "components/common/OptionControls";
+import { ControlLabel } from "src/components/common/OptionControls";
 import {
   DataPageType,
   DocTypeParam,
@@ -38,25 +38,25 @@ import {
 
 // styles and assets
 import styles from "./data.module.scss";
-import colors from "assets/styles/vars.module.scss";
+import colors from "src/assets/styles/vars.module.scss";
 
 // constants, types, etc.
-import Settings from "Settings";
+import Settings from "src/Settings";
 import policyInfo from "./content/policy";
 import planInfo from "./content/plan";
 import challengeInfo from "./content/challenge.js";
 import {
   FilterDefs,
   Filters,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import { DataPageInfo } from "./content/types";
-import { ApiResponse, ApiResponseIndexed } from "api/responseTypes";
-import { DataRecord, MetadataRecord } from "components/misc/dataTypes";
-import { OptionSetRecord } from "api/queryTypes";
-import { DataColumnDef, Pagesize } from "components/common/Table/Table";
-import { AmpPage } from "types";
+import { ApiResponse, ApiResponseIndexed } from "src/api/responseTypes";
+import { DataRecord, MetadataRecord } from "src/components/misc/dataTypes";
+import { OptionSetRecord } from "src/api/queryTypes";
+import { DataColumnDef, Pagesize } from "src/components/common/Table/Table";
+import { AmpPage } from "src/types";
 import styled from "styled-components";
-import DataDownloadBtn from "components/project/DownloadBtn/DataDownloadBtn";
+import DataDownloadBtn from "src/components/project/DownloadBtn/DataDownloadBtn";
 
 const DownloadButtons = styled.div`
   display: flex;
@@ -354,8 +354,8 @@ const Data: FC<DataProps> = ({
           const global:
             | OptionSetRecord
             | undefined = optionsets.country_name.find(o =>
-            o.value.startsWith("Global")
-          );
+              o.value.startsWith("Global")
+            );
           if (global) {
             global.label = "Global";
           }

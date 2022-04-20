@@ -11,8 +11,8 @@ import localBanner from "../../../assets/images/local-banner.svg";
 import HoverDropdown from "./HoverDropdown/HoverDropdown";
 import LocationSearch from "./LocationSearch/LocationSearch";
 
-import InfoTooltipContext from "context/InfoTooltipContext";
-import { InfoTooltip } from "components/common";
+import InfoTooltipContext from "src/context/InfoTooltipContext";
+import { InfoTooltip } from "src/components/common";
 // import OmicronDrape from "./OmicronDrape/OmicronDrape";
 
 // constants
@@ -121,8 +121,8 @@ const Nav = ({ page }) => {
                       }}
                       className={
                         page === "policymaps" &&
-                        curMapId !== undefined &&
-                        curMapId.startsWith("us")
+                          curMapId !== undefined &&
+                          curMapId.startsWith("us")
                           ? styles.active
                           : ""
                       }

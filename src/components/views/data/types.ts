@@ -1,10 +1,10 @@
-import { defaults } from "components/common/MapboxMap/plugins/data";
+import { defaults } from "src/components/common/MapboxMap/plugins/data";
 import {
   MapIdType,
   validMapIds,
   ValidViewTypes,
   ViewType,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import { encodeString, decodeString } from "use-query-params";
 // import { DataPageType, DataPageTypeVals } from "./Data";
 

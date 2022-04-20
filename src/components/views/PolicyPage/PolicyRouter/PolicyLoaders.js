@@ -1,4 +1,4 @@
-import { Policy } from "api/Queries";
+import { Policy } from "src/api/Queries";
 import { extendObjectByPath, getObjectByPath } from "../objectPathTools";
 
 import buildSummaryObject from "./buildSummaryObject.js";

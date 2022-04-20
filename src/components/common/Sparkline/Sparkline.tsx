@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import styles from "./sparkline.module.scss";
-import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import * as FMT from "src/components/misc/FormatAndDisplay/FormatAndDisplay";
 import { SparklineChart } from "./content/SparklineChart";
 import { NumericObservation } from "../MapboxMap/plugins/mapTypes";
 import classNames from "classnames";

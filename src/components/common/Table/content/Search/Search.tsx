@@ -11,11 +11,9 @@ import React, {
 } from "react";
 import { KeyboardEvent } from "react";
 
-// local helper functions
-import { getHandleKeyPress } from "./helpers";
 
 // local components
-import { XCloseBtn } from "components/common";
+import { XCloseBtn } from "src/components/common";
 
 // assets and styles
 import styles from "./search.module.scss";

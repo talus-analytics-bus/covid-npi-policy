@@ -9,7 +9,7 @@ import {
 } from "../PolicyRouter/PolicyLoaders";
 
 import { MiniMap } from "../MiniMap/MiniMap";
-import { FlexRow, LoadingSpinner } from "components/common";
+import { FlexRow, LoadingSpinner } from "src/components/common";
 
 import PolicyFilterBar from "./PolicyFilterBar/PolicyFilterBar";
 import PolicyList from "./PolicyList/PolicyList";
@@ -55,8 +55,8 @@ const ListPoliciesPage = props => {
               state === "national"
                 ? ["Country"]
                 : iso3 === "Unspecified"
-                ? ["Tribal nation"]
-                : ["State / Province"],
+                  ? ["Tribal nation"]
+                  : ["State / Province"],
           },
           sort: policySort,
           summarySetter: setPolicySummaryObject,

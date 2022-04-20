@@ -28,7 +28,7 @@
 
 // ---------- IMPORTS ----------
 import React, { useMemo } from "react";
-import { AxesProps } from "components/common/D3React/types";
+import { AxesProps } from "src/components/common/D3React/types";
 import classNames from "classnames";
 import styles from "./Axes.module.scss";
 

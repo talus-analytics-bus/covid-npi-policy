@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import { Caret } from "../../Caret/Caret";
 import styles from "./AccordionDrawer.module.scss";
-import { getElHeight } from "components/misc/UtilsTyped";
+import { getElHeight } from "src/components/misc/UtilsTyped";
 type ComponentProps = {
   readonly title: string;
   readonly openDefault?: boolean;

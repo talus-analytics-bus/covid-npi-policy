@@ -1,10 +1,10 @@
-import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
+import { Filters } from "src/components/common/MapboxMap/plugins/mapTypes";
 import {
   DataRecord,
   PlaceRecord,
   PolicyRecord,
-} from "components/misc/dataTypes";
-import { AuthEntityRecord } from "components/misc/dataTypes";
+} from "src/components/misc/dataTypes";
+import { AuthEntityRecord } from "src/components/misc/dataTypes";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { PlaceType, validPlaceTypes } from "../types";

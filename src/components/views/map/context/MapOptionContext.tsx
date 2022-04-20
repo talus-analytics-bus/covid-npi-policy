@@ -1,10 +1,10 @@
-import { VersionRecord } from "api/queryTypes";
+import { VersionRecord } from "src/api/queryTypes";
 import {
   MapDataShapeId,
   MapId,
   ViewType,
-} from "components/common/MapboxMap/plugins/mapTypes";
-import { Option } from "components/common/OptionControls/types";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
+import { Option } from "src/components/common/OptionControls/types";
 import { Moment } from "moment";
 import React, { Dispatch, SetStateAction } from "react";
 export type MapOptionContextProps = {

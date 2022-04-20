@@ -2,9 +2,9 @@ import React, { FC } from "react";
 import { Option, OptionWidget } from "../types";
 import styles from "../OptionControls.module.scss";
 import classNames from "classnames";
-import { InfoTooltip } from "components/common";
+import { InfoTooltip } from "src/components/common";
 
-interface OptionSelectProps extends OptionWidget {}
+interface OptionSelectProps extends OptionWidget { }
 export const OptionSelect: FC<OptionSelectProps> = ({
   title,
   options,

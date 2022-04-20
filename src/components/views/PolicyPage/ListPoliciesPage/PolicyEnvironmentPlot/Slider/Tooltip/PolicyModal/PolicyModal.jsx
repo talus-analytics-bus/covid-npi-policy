@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 import Modal from "../../../../../Modal/Modal";
-import PolicyCategoryIcon from "components/views/PolicyPage/PolicyCategoryIcon/PolicyCategoryIcon";
+import PolicyCategoryIcon from "src/components/views/PolicyPage/PolicyCategoryIcon/PolicyCategoryIcon";
 
 import {
   CATEGORY_FIELD_NAME,
@@ -10,7 +10,7 @@ import {
   SUBCATEGORY_FIELD_NAME,
 } from "../../../../../PolicyRouter/PolicyLoaders";
 
-import { Policy } from "api/Queries";
+import { Policy } from "src/api/Queries";
 
 import { policyContext } from "../../../../../PolicyRouter/PolicyRouter";
 

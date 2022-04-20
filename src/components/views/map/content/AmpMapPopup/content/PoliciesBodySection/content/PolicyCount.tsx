@@ -1,9 +1,9 @@
-import { LabeledIcon } from "components/common/MapboxMap/mapPopup/content/PopupBody/LabeledIcon/LabeledIcon";
-import PolicyCategoryIcon from "components/views/PolicyPage/PolicyCategoryIcon/PolicyCategoryIcon";
+import { LabeledIcon } from "src/components/common/MapboxMap/mapPopup/content/PopupBody/LabeledIcon/LabeledIcon";
+import PolicyCategoryIcon from "src/components/views/PolicyPage/PolicyCategoryIcon/PolicyCategoryIcon";
 import React, { FC, ReactElement } from "react";
-import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
-import { NO_POLICY_FOR_LOC_MSG } from "components/views/map/content/AmpMapPopupDataProvider/helpers";
-import { Option } from "components/common/OptionControls/types";
+import * as FMT from "src/components/misc/FormatAndDisplay/FormatAndDisplay";
+import { NO_POLICY_FOR_LOC_MSG } from "src/components/views/map/content/AmpMapPopupDataProvider/helpers";
+import { Option } from "src/components/common/OptionControls/types";
 import { getPolicyCatSubcatPhrase } from "../helpers";
 
 type ComponentProps = {

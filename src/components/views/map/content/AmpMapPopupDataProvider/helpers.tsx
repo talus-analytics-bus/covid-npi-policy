@@ -13,13 +13,13 @@ import {
   MapMetric,
   PolicyResolution,
   StateFeature,
-} from "components/common/MapboxMap/plugins/mapTypes";
-import { PlaceRecord } from "components/misc/dataTypes";
-import { Option } from "components/common/OptionControls/types";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
+import { PlaceRecord } from "src/components/misc/dataTypes";
+import { Option } from "src/components/common/OptionControls/types";
 
 // local components and functions
-import { getDataQueryResults } from "components/common/MapboxMap/plugins/dataGetter";
-import { Place } from "api/Queries";
+import { getDataQueryResults } from "src/components/common/MapboxMap/plugins/dataGetter";
+import { Place } from "src/api/Queries";
 import { PolicyPageLink } from "./PolicyLink/PolicyPageLink/PolicyPageLink";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import { includeSubcatFilters } from "../AmpMapPopup/content/PoliciesBodySection/helpers";
@@ -91,16 +91,14 @@ export const getFeatureName: Function = (
     if (countyFeature.properties.state_abbrev === "DC") return featureName;
     else if (featureNameByCode !== undefined) {
       // create name from name data obtained from Metrics database Place table
-      return `${featureNameByCode[countyFeature.id]}, ${
-        countyFeature.properties.state_name
-      }`;
+      return `${featureNameByCode[countyFeature.id]}, ${countyFeature.properties.state_name
+        }`;
     }
 
     // if no name data avail., create backup name from feature properties
     else
-      return `${featureName}${getCountySuffix(countyFeature)}, ${
-        countyFeature.properties.state_name
-      }`;
+      return `${featureName}${getCountySuffix(countyFeature)}, ${countyFeature.properties.state_name
+        }`;
   }
 
   // states
@@ -368,7 +366,7 @@ export const getDistancingMapMetric: Function = (
   else {
     throw Error(
       "Could not find state-level metric for `lockdown_level`, please " +
-        "add it to variable `allMapMetrics` in file `data.js`."
+      "add it to variable `allMapMetrics` in file `data.js`."
     );
   }
 };

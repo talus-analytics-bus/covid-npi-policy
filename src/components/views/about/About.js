@@ -9,7 +9,7 @@ import Documentation from "./content/Documentation";
 
 // local components
 import { AccessibilityNote } from "../../common";
-import { DownloadBtn, PageHeader } from "components/project";
+import { DownloadBtn, PageHeader } from "src/components/project";
 
 // assets
 import talus from "../../../assets/images/logo-talus.png";

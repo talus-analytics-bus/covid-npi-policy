@@ -14,7 +14,7 @@ import Util, { percentize, isLightColor } from "../../misc/Util.js";
 // assets and styles
 import styles from "./legend.module.scss";
 import varsExports from "../../../assets/styles/vars.module.scss";
-import { getEvenSteps } from "components/misc/UtilsTyped";
+import { getEvenSteps } from "src/components/misc/UtilsTyped";
 
 /**
  * @method Legend
@@ -300,7 +300,7 @@ const Legend = ({ ...props }) => {
                       </div>
                     )}
                     {subLabels && (
-                      <span onClick={() => {}} className={styles.label}>
+                      <span onClick={() => { }} className={styles.label}>
                         {subLabels[i]}
                       </span>
                     )}

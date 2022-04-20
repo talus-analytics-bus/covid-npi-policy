@@ -1,8 +1,6 @@
 // 3rd party packages
-import classNames from "classnames";
-import PrimaryButton from "components/common/PrimaryButton/PrimaryButton";
+import { PrimaryButton } from "../../../../../PrimaryButton/PrimaryButton";
 import React, { ReactElement, FC } from "react";
-import styles from "./ClearFiltersBtn.module.scss";
 
 interface ClearFiltersBtnProps {
   onClick?(...args: any[]): void;

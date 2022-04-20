@@ -1,4 +1,4 @@
-import { LoadingSpinner } from "components/common";
+import { LoadingSpinner } from "src/components/common";
 import React, { FunctionComponent } from "react";
 import { ElementsOrNull } from "../../../../plugins/mapTypes";
 import { ActionLink } from "../../../MapPopup";

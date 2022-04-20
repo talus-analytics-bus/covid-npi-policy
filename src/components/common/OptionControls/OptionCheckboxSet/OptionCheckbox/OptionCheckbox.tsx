@@ -1,4 +1,4 @@
-import { InfoTooltip } from "components/common";
+import { InfoTooltip } from "src/components/common";
 import React, { FC, useEffect, useState } from "react";
 import styles from "../../OptionControls.module.scss";
 import { Option } from "../../types";

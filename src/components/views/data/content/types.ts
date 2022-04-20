@@ -1,4 +1,4 @@
-import { FilterDefs } from "components/common/MapboxMap/plugins/mapTypes";
+import { FilterDefs } from "src/components/common/MapboxMap/plugins/mapTypes";
 
 export type DataPageInfo = {
     [k: string]: any;

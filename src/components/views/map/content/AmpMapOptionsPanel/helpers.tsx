@@ -1,5 +1,5 @@
-import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
-import { Option } from "components/common/OptionControls/types";
+import { Filters } from "src/components/common/MapboxMap/plugins/mapTypes";
+import { Option } from "src/components/common/OptionControls/types";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -66,10 +66,10 @@ export const updateFilters = (
     const catsDoNotAddChildren: string[] =
       filters.primary_ph_measure !== undefined
         ? possibleOps
-            .filter(o =>
-              filters.primary_ph_measure?.includes(o.value as string)
-            )
-            .map(o => o.value as string)
+          .filter(o =>
+            filters.primary_ph_measure?.includes(o.value as string)
+          )
+          .map(o => o.value as string)
         : [];
 
     // update subcategory filters

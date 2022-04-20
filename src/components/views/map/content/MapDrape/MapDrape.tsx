@@ -1,12 +1,12 @@
 import {
   MapDataShapeId,
   MapId,
-} from "components/common/MapboxMap/plugins/mapTypes";
-import { InfoTooltip } from "components/common";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
+import { InfoTooltip } from "src/components/common";
 import moment, { Moment } from "moment";
 import { FC } from "react";
 import styles from "./MapDrape.module.scss";
-import { formatLocalDate } from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import { formatLocalDate } from "src/components/misc/FormatAndDisplay/FormatAndDisplay";
 import styled from "styled-components";
 import * as colorsTmp from "../../../../../assets/styles/vars.module.scss";
 const colors: any = colorsTmp as any;

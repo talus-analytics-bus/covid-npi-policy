@@ -1,4 +1,4 @@
-import { Option } from "components/common/OptionControls/types";
+import { Option } from "src/components/common/OptionControls/types";
 
 /**
  * Returns true if subcategory filters contain information and should be

@@ -11,14 +11,14 @@
 import * as d3 from "d3";
 
 // assets and styles
-import varsExports from "assets/styles/vars.module.scss";
+import varsExports from "src/assets/styles/vars.module.scss";
 
 // utilities
 import {
   getLog10Scale,
   getLinearScale,
   range,
-} from "components/misc/UtilsTyped";
+} from "src/components/misc/UtilsTyped";
 import { CircleStyles, FillStyles } from "./mapTypes";
 // import { geoHaveData } from "../MapboxMap";
 

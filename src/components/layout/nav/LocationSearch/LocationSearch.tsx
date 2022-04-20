@@ -8,13 +8,13 @@ import axios from "axios";
 import styles from "./LocationSearch.module.scss";
 
 // local helper functions
-import { removeParenthetical } from "components/misc/UtilsTyped";
+import { removeParenthetical } from "src/components/misc/UtilsTyped";
 
 // custom hooks
-import useHistory from "components/common/hooks/useHistory";
-import { PlaceRecord } from "components/misc/dataTypes";
+import useHistory from "src/components/common/hooks/useHistory";
+import { PlaceRecord } from "src/components/misc/dataTypes";
 import { KeyboardEvent } from "react";
-import { XCloseBtn } from "components/common";
+import { XCloseBtn } from "src/components/common";
 
 // constants
 const API_URL = process.env.REACT_APP_API_URL;

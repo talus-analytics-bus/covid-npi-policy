@@ -1,8 +1,8 @@
 import React, { FC, ReactElement, useContext } from "react";
-import MapOptionContext from "components/views/map/context/MapOptionContext";
-import { Legend, ShowMore } from "components/common";
-import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel";
-import { metricMeta } from "components/common/MapboxMap/plugins/data";
+import MapOptionContext from "src/components/views/map/context/MapOptionContext";
+import { Legend, ShowMore } from "src/components/common";
+import { MapPanel } from "src/components/common/MapboxMap/content/MapPanel/MapPanel";
+import { metricMeta } from "src/components/common/MapboxMap/plugins/data";
 import {
   MapId,
   MapSourcesEntry,
@@ -10,19 +10,19 @@ import {
   MetricMeta,
   MetricMetaEntry,
   PolicyResolution,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import styles from "./AmpMapLegendPanel.module.scss";
 import {
   isEmpty,
   getAndListString,
   getInitCap,
-} from "components/misc/UtilsTyped";
-import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
+} from "src/components/misc/UtilsTyped";
+import { getMapNouns } from "src/components/common/MapboxMap/MapboxMap";
 import { Moment } from "moment";
-import { getPolicyCatSubcatPhrase } from "components/views/map/content/AmpMapPopup/content/PoliciesBodySection/helpers";
-import { Option } from "components/common/OptionControls/types";
-import InfoTooltipContext from "context/InfoTooltipContext";
-import { mapSources } from "components/common/MapboxMap/plugins/sources";
+import { getPolicyCatSubcatPhrase } from "src/components/views/map/content/AmpMapPopup/content/PoliciesBodySection/helpers";
+import { Option } from "src/components/common/OptionControls/types";
+import InfoTooltipContext from "src/context/InfoTooltipContext";
+import { mapSources } from "src/components/common/MapboxMap/plugins/sources";
 
 type AmpMapLegendPanelProps = {
   linCircleScale: boolean;

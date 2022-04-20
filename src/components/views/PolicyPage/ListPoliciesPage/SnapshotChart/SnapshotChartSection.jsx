@@ -9,8 +9,8 @@ import SnapshotChart from "./SnapshotChart";
 import styles from "./SnapshotChartSection.module.scss";
 
 import { policyContext } from "../../PolicyRouter/PolicyRouter";
-import { isEmpty } from "components/misc/UtilsTyped";
-import { FlexRow, LoadingSpinner } from "components/common";
+import { isEmpty } from "src/components/misc/UtilsTyped";
+import { FlexRow, LoadingSpinner } from "src/components/common";
 
 // import { introDateState } from "../PolicyEnvironmentPlot/Slider/Slider";
 

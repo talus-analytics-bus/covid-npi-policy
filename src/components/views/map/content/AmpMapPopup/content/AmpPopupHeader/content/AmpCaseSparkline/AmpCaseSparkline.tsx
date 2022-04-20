@@ -5,20 +5,20 @@ import React, {
   useState,
   useContext,
 } from "react";
-import { LoadingSpinner, Sparkline } from "components/common";
+import { LoadingSpinner, Sparkline } from "src/components/common";
 import {
   MapFeature,
   MapId,
   NumericObservation,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import moment, { Moment } from "moment";
 import styles from "./AmpCaseSparkline.module.scss";
 import { updateData, getLabelFromMapMetricId } from "./helpers";
-import MapOptionContext from "components/views/map/context/MapOptionContext";
-import { Margin } from "components/common/D3React/types";
-import { defaults } from "components/common/MapboxMap/plugins/data";
-import { VersionRecord } from "api/queryTypes";
-import { formatLocalDate } from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import MapOptionContext from "src/components/views/map/context/MapOptionContext";
+import { Margin } from "src/components/common/D3React/types";
+import { defaults } from "src/components/common/MapboxMap/plugins/data";
+import { VersionRecord } from "src/api/queryTypes";
+import { formatLocalDate } from "src/components/misc/FormatAndDisplay/FormatAndDisplay";
 
 interface AmpCaseSparklineProps {
   mapId: MapId;
@@ -93,9 +93,9 @@ export const AmpCaseSparkline: FC<AmpCaseSparklineProps> = ({
             unit: !dataNotForDataDate
               ? ["case", "cases"]
               : [
-                  `case on ${formatLocalDate(metricLastDatumDate)}`,
-                  `cases on ${formatLocalDate(metricLastDatumDate)}`,
-                ],
+                `case on ${formatLocalDate(metricLastDatumDate)}`,
+                `cases on ${formatLocalDate(metricLastDatumDate)}`,
+              ],
             label: getLabelFromMapMetricId(metricIdForSparkline),
             customOptions: {
               xMin: "2020-01-21",

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as d3 from "d3/dist/d3.min";
-import { defineKeyVal } from "components/misc/Util";
+import { defineKeyVal } from "src/components/misc/Util";
 
 import Bar from "./Bar/Bar";
 

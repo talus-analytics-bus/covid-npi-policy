@@ -1,20 +1,20 @@
 /**
  * Helper functions for Map.tsx
  */
-import { VersionRecord } from "api/queryTypes";
-import { defaults, metricMeta } from "components/common/MapboxMap/plugins/data";
+import { VersionRecord } from "src/api/queryTypes";
+import { defaults, metricMeta } from "src/components/common/MapboxMap/plugins/data";
 import {
   FilterDefs,
   Filters,
   MapDataShapeId,
   MapId,
   validMapIds,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import {
   omicronFilters,
   omicronFiltersSubs,
-} from "components/layout/nav/OmicronDrape/OmicronDrape";
-import { getInitLower } from "components/misc/Util";
+} from "src/components/layout/nav/OmicronDrape/OmicronDrape";
+import { getInitLower } from "src/components/misc/Util";
 import moment, { Moment } from "moment";
 
 /**
@@ -118,9 +118,9 @@ export function getParamsMapId(
   if (paramsMapId !== null && !validMapIds.includes(paramsMapId)) {
     throw Error(
       "Invalid map ID provided as url param, must be one of " +
-        validMapIds.join(", ") +
-        "; but found: " +
-        paramsMapId
+      validMapIds.join(", ") +
+      "; but found: " +
+      paramsMapId
     );
   } else return paramsMapId;
 }

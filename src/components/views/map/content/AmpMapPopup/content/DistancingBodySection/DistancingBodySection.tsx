@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import BodySection, {
   BodySectionProps,
-} from "components/common/MapboxMap/mapPopup/content/PopupBody/BodySection/BodySection";
-import DistancingIcon from "components/common/MapboxMap/mapPopup/content/PopupBody/LabeledIcon/DistancingIcon/DistancingIcon";
-import { DistancingLevel } from "components/common/MapboxMap/plugins/mapTypes";
-import { ActionLink } from "components/common/MapboxMap/mapPopup/MapPopup";
+} from "src/components/common/MapboxMap/mapPopup/content/PopupBody/BodySection/BodySection";
+import DistancingIcon from "src/components/common/MapboxMap/mapPopup/content/PopupBody/LabeledIcon/DistancingIcon/DistancingIcon";
+import { DistancingLevel } from "src/components/common/MapboxMap/plugins/mapTypes";
+import { ActionLink } from "src/components/common/MapboxMap/mapPopup/MapPopup";
 
 interface DistancingBodySectionProps extends BodySectionProps {
   title: string;

@@ -1,4 +1,4 @@
-import { Filters, MapId } from "components/common/MapboxMap/plugins/mapTypes";
+import { Filters, MapId } from "src/components/common/MapboxMap/plugins/mapTypes";
 
 export interface DistancingLevelProps {
   method?: "get" | "post";
@@ -67,7 +67,7 @@ export interface PolicyStatusCountsForMapProps {
   mapFilters: Record<string, string[] | string | number | boolean>;
 }
 
-export interface PlanProps extends PolicyProps {}
+export interface PlanProps extends PolicyProps { }
 export interface PolicyProps extends PaginatedProps {
   by_category?: boolean;
   count?: boolean;

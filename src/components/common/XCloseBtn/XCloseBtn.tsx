@@ -5,8 +5,8 @@ import classNames from "classnames";
 
 // styles and assets
 import styles from "./XCloseBtn.module.scss";
-import crossSvg from "assets/icons/cross.svg";
-import crossSvgWhite from "assets/icons/cross-white.svg";
+import crossSvg from "src/assets/icons/cross.svg";
+import crossSvgWhite from "src/assets/icons/cross-white.svg";
 
 interface XCloseBtnProps {
   onClick?(...args: any[]): void;

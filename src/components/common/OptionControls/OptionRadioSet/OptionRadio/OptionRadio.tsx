@@ -1,4 +1,4 @@
-import { InfoTooltip } from "components/common";
+import { InfoTooltip } from "src/components/common";
 import { FC, useState } from "react";
 import styles from "../../OptionControls.module.scss";
 import { Option } from "../../types";
@@ -11,7 +11,7 @@ export const OptionRadio: FC<Option> = ({
   selectedOptions = [],
   description,
   child,
-  setInfoTooltipContent = () => {},
+  setInfoTooltipContent = () => { },
   infoTooltipSize,
 }) => {
   const checked: boolean = selectedOptions.some(o => o.value === value);

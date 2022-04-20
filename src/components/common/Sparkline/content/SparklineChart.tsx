@@ -9,11 +9,11 @@ import React, {
   useState,
 } from "react";
 import styles from "./SparklineChart.module.scss";
-import { Axes } from "components/common";
+import { Axes } from "src/components/common";
 import { getHandleMouseMove } from "./helpers";
-import { NumericObservation } from "components/common/MapboxMap/plugins/mapTypes";
-import { SparklineCustomOptions } from "components/common/D3React/types";
-import { parseStringAsMoment } from "components/misc/UtilsTyped";
+import { NumericObservation } from "src/components/common/MapboxMap/plugins/mapTypes";
+import { SparklineCustomOptions } from "src/components/common/D3React/types";
+import { parseStringAsMoment } from "src/components/misc/UtilsTyped";
 
 type ComponentProps = {
   width: number;
@@ -41,11 +41,11 @@ export const SparklineChart: FunctionComponent<ComponentProps> = ({
     customOptions !== undefined && customOptions.margin !== undefined
       ? customOptions.margin
       : {
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-        };
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      };
 
   // create scales based on data and space to work in
   const xMinStr: string =

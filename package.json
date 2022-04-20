@@ -61,7 +61,8 @@
     "eject": "react-scripts eject",
     "tslint": "./node_modules/.bin/tslint",
     "deploy": "CI=false npm run  build:production && aws s3 sync build/ s3://covid-npi-policy --acl public-read --delete",
-    "deploy-test": "CI=false npm run build:staging && aws s3 sync build/ s3://covid-npi-policy-test --acl public-read --delete"
+    "deploy-test": "CI=false npm run build:staging && aws s3 sync build/ s3://covid-npi-policy-test --acl public-read --delete",
+    "test": "jest"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -79,11 +80,19 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@testing-library/react": "^13.1.1",
+    "@types/jest": "^27.4.1",
     "@types/react-bootstrap-table2-toolkit": "^2.1.4",
     "d3-scale": "^3.3.0",
     "d3-time": "^2.1.1",
+    "identity-obj-proxy": "^3.0.0",
     "node-sass": "^6.0.1",
     "prettier": "^1.17.1",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1"

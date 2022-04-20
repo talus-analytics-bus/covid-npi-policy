@@ -2,7 +2,7 @@
 import React, { FC } from "react";
 
 // local components and objects
-import Settings from "Settings";
+import Settings from "src/Settings";
 import { PolicyLink } from "../PolicyLink";
 import {
   DATA_PAGE_LINK_TEXT,

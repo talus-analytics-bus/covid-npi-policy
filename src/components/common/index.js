@@ -6,7 +6,7 @@ import Table from "./Table/Table";
 import Filter from "./Filter/Filter.js";
 import FilterSet from "./FilterSet/FilterSet.js";
 import ShowMore from "./ShowMore/ShowMore.js";
-import MapboxMap from "./MapboxMap/MapboxMap.tsx";
+import MapboxMap from "./MapboxMap/MapboxMap";
 import Legend from "./Legend/Legend.js";
 import InfoTooltip from "./InfoTooltip/InfoTooltip";
 import DateSlider from "./DateSlider/DateSlider.js";
@@ -21,6 +21,7 @@ import Sparkline from "./Sparkline/Sparkline";
 import Caret from "./Caret/Caret";
 import XCloseBtn from "./XCloseBtn/XCloseBtn";
 import { FlexRow } from "./Styled";
+
 export {
   Selectpicker,
   CheckboxSet,
@@ -45,4 +46,4 @@ export {
   Caret,
   XCloseBtn,
   FlexRow,
-};
+}

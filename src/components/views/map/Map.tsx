@@ -14,13 +14,13 @@ import { Moment } from "moment";
 import { Helmet } from "react-helmet";
 
 // custom hooks
-import usePrevious from "components/common/hooks/usePrevious";
+import usePrevious from "src/components/common/hooks/usePrevious";
 
 // contexts
 import { MapOptionProvider } from "./context/MapOptionContext";
 
 // data queries
-import { OptionSet, CountriesWithDistancingLevels, execute } from "api/Queries";
+import { OptionSet, CountriesWithDistancingLevels, execute } from "src/api/Queries";
 import PlaceQuery from "../../../api/PlaceQuery";
 
 // assets and styles
@@ -42,7 +42,7 @@ import {
   ViewType,
 } from "../../common/MapboxMap/plugins/mapTypes";
 import { PanelSet } from "../../common/MapboxMap/content/MapPanel/PanelSet/PanelSet";
-import { Option } from "components/common/OptionControls/types";
+import { Option } from "src/components/common/OptionControls/types";
 import MapDrape from "./content/MapDrape/MapDrape";
 
 // helper functions and data
@@ -55,7 +55,7 @@ import {
   getInitFilters,
 } from "./helpers";
 import MapPlaceContext from "./context/MapPlaceContext";
-import { OptionSetRecord } from "api/queryTypes";
+import { OptionSetRecord } from "src/api/queryTypes";
 import moment from "moment";
 import { useQueryParam } from "use-query-params";
 import { MapIdParam, ViewTypeParam } from "../data/types";

@@ -3,18 +3,18 @@ import React, { ReactElement, FC, SetStateAction } from "react";
 
 // styles and assets
 import styles from "./FilterSetSelections.module.scss";
-import funnelSvg from "assets/icons/funnel.svg";
-import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
+import funnelSvg from "src/assets/icons/funnel.svg";
+import { Filters } from "../../../../common/MapboxMap/plugins/mapTypes";
 
 // local helper functions
-import { comma } from "components/misc/Util";
-import { getInputLabel } from "components/common/Filter/Filter";
+import { comma } from "../../../../misc/Util";
+import { getInputLabel } from "../../../../common/Filter/Filter";
 
 // local components
-import { ShowMore, XCloseBtn } from "components/common";
+import { ShowMore, XCloseBtn } from "../../../../common";
 import { Dispatch } from "react";
 import { ClearFiltersBtn } from "./content/ClearFiltersBtn/ClearFiltersBtn";
-import { getInitCap } from "components/misc/UtilsTyped";
+import { getInitCap } from "../../../../misc/UtilsTyped";
 
 /**
  * Properties for the `FilterSetSelections` function component.

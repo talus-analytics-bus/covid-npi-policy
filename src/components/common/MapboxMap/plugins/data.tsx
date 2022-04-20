@@ -18,8 +18,8 @@ import moment from "moment";
 import { comma, isLightColor } from "../../../misc/Util";
 
 // queries
-import ObservationQuery from "api/ObservationQuery";
-import { DistancingLevel, PolicyStatusCountsForMap } from "api/Queries";
+import ObservationQuery from "src/api/ObservationQuery";
+import { DistancingLevel, PolicyStatusCountsForMap } from "src/api/Queries";
 
 // assets and styles
 // import dots from "./assets/images/dots.png";
@@ -33,8 +33,8 @@ import phase4 from "./assets/icons/phase-4.png";
 import localLogo from "./assets/icons/logo-local-pill.png";
 
 // assets and styles
-import varsExports from "assets/styles/vars.module.scss";
-import ObservationReduxQuery from "api/ObservationReduxQuery";
+import varsExports from "src/assets/styles/vars.module.scss";
+import ObservationReduxQuery from "src/api/ObservationReduxQuery";
 import {
   Filters,
   MapDefaults,
@@ -42,7 +42,7 @@ import {
   MetricMeta,
   PolicyResolution,
 } from "./mapTypes";
-import { GeoRes, MetricRecord } from "api/queryTypes";
+import { GeoRes, MetricRecord } from "src/api/queryTypes";
 
 // utilities and local components
 // import { greenStepsScale } from "./layers";
@@ -1136,18 +1136,18 @@ export const metricMeta: MetricMeta = {
                           style={
                             !d.bordered
                               ? {
-                                  backgroundColor: colorRange[i],
-                                  color: isLightColor(colorRange[i])
-                                    ? "#333"
-                                    : "white",
-                                }
+                                backgroundColor: colorRange[i],
+                                color: isLightColor(colorRange[i])
+                                  ? "#333"
+                                  : "white",
+                              }
                               : {
-                                  backgroundImage: `url("${colorRange[i]}")`,
-                                  backgroundPosition: "center",
-                                  padding: "3px 10px",
-                                  border: d.border,
-                                  color: "#333",
-                                }
+                                backgroundImage: `url("${colorRange[i]}")`,
+                                backgroundPosition: "center",
+                                padding: "3px 10px",
+                                border: d.border,
+                                color: "#333",
+                              }
                           }
                           className={infostyles.rect}
                         >

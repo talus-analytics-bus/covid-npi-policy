@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./footer.module.scss";
-import Settings from "Settings";
+import Settings from "src/Settings";
 import talus from "../../../assets/images/logo-talus.png";
 import gu from "../../../assets/images/logo-georgetown.png";
 import nti from "../../../assets/images/logo-nti.svg";

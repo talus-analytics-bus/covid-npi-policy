@@ -1,4 +1,4 @@
-import { metricMeta } from "components/common/MapboxMap/plugins/data";
+import { metricMeta } from "src/components/common/MapboxMap/plugins/data";
 import {
   CaseloadQueryArgs,
   CountryFeature,
@@ -6,8 +6,8 @@ import {
   MapFeature,
   MapId,
   StateFeature,
-} from "components/common/MapboxMap/plugins/mapTypes";
-import { Caseload } from "api/Queries";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
+import { Caseload } from "src/api/Queries";
 
 export async function updateData(
   mapId: MapId,

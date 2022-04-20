@@ -15,13 +15,13 @@ import {
   MapMetric,
   PolicyResolution,
   StateFeature,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import AmpMapPopup from "../AmpMapPopup/AmpMapPopup";
 import { Moment } from "moment";
-import { ActionLink } from "components/common/MapboxMap/mapPopup/MapPopup";
+import { ActionLink } from "src/components/common/MapboxMap/mapPopup/MapPopup";
 
 // local constants
-import { allMapMetrics } from "components/common/MapboxMap/plugins/data";
+import { allMapMetrics } from "src/components/common/MapboxMap/plugins/data";
 
 // helper functions
 import {
@@ -33,15 +33,15 @@ import {
   getModelLink,
   getPolicyLink,
 } from "./helpers";
-import { execute, PolicyStatusCounts } from "api/Queries";
-import { mapStyles } from "components/common/MapboxMap/plugins/sources";
+import { execute, PolicyStatusCounts } from "src/api/Queries";
+import { mapStyles } from "src/components/common/MapboxMap/plugins/sources";
 import { PolicyDataLink } from "./PolicyLink/PolicyDataLink/PolicyDataLink";
 import MapOptionContext, {
   MapOptionContextProps,
 } from "../../context/MapOptionContext";
-import { Option } from "components/common/OptionControls/types";
-import Settings from "Settings";
-import { GeoRes } from "api/queryTypes";
+import { Option } from "src/components/common/OptionControls/types";
+import Settings from "src/Settings";
+import { GeoRes } from "src/api/queryTypes";
 import MapPlaceContext from "../../context/MapPlaceContext";
 
 type UpdateDataProps = {

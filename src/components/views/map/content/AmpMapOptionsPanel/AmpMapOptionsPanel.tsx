@@ -1,10 +1,10 @@
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel";
+import { MapPanel } from "src/components/common/MapboxMap/content/MapPanel/MapPanel";
 import {
   OptionRadioSet,
   OptionCheckboxSet,
-} from "components/common/OptionControls";
-import { Option } from "components/common/OptionControls/types";
+} from "src/components/common/OptionControls";
+import { Option } from "src/components/common/OptionControls/types";
 import React, {
   FC,
   ReactElement,
@@ -18,19 +18,19 @@ import {
   MapMetric,
   MetricMeta,
   MetricMetaEntry,
-} from "components/common/MapboxMap/plugins/mapTypes";
-import { OptionSelect } from "components/common/OptionControls/OptionSelect/OptionSelect";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
+import { OptionSelect } from "src/components/common/OptionControls/OptionSelect/OptionSelect";
 import MapOptionContext from "../../context/MapOptionContext";
 import {
   allMapMetrics,
   defaults,
   metricMeta,
-} from "components/common/MapboxMap/plugins/data";
+} from "src/components/common/MapboxMap/plugins/data";
 import styles from "./AmpMapOptionsPanel.module.scss";
-import AccordionDrawer from "components/common/MapOptions/AccordionDrawer/AccordionDrawer";
-import InfoTooltipContext from "context/InfoTooltipContext";
+import AccordionDrawer from "src/components/common/MapOptions/AccordionDrawer/AccordionDrawer";
+import InfoTooltipContext from "src/context/InfoTooltipContext";
 import { getFiltersForApi, updateFilters } from "./helpers";
-import { omicronFiltersSubs } from "components/layout/nav/OmicronDrape/OmicronDrape";
+import { omicronFiltersSubs } from "src/components/layout/nav/OmicronDrape/OmicronDrape";
 import moment from "moment";
 
 interface AmpMapOptionsPanelProps {
@@ -134,8 +134,8 @@ export const AmpMapOptionsPanel: FC<AmpMapOptionsPanelProps> = ({
         ]}
         selectedOptions={
           filters &&
-          filters.subtarget !== undefined &&
-          filters.subtarget.includes("Omicron")
+            filters.subtarget !== undefined &&
+            filters.subtarget.includes("Omicron")
             ? [{ name: "Omicron-focused only", value: "only" }]
             : [{ name: "All policies", value: "all" }]
         }

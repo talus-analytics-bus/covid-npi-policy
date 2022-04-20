@@ -4,7 +4,7 @@ import { useState } from "react";
 import CSS from "csstype";
 import styles from "./drawer.module.scss";
 import { FC } from "react";
-import { Caret } from "components/common";
+import { Caret } from "../../common";
 
 interface DrawerProps {
   title?: string | ReactElement;

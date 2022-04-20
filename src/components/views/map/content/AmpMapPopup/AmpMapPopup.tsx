@@ -3,10 +3,10 @@ import React, { FC } from "react";
 import { Moment } from "moment";
 
 // local components and types
-import * as FMT from "components/misc/FormatAndDisplay/FormatAndDisplay";
+import * as FMT from "src/components/misc/FormatAndDisplay/FormatAndDisplay";
 import MapPopup, {
   ActionLink,
-} from "components/common/MapboxMap/mapPopup/MapPopup";
+} from "src/components/common/MapboxMap/mapPopup/MapPopup";
 import DistancingBodySection from "./content/DistancingBodySection/DistancingBodySection";
 import PoliciesBodySection from "./content/PoliciesBodySection/PoliciesBodySection";
 import {
@@ -14,7 +14,7 @@ import {
   MapFeature,
   MapId,
   PolicyResolution,
-} from "components/common/MapboxMap/plugins/mapTypes";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
 import { AmpCaseSparkline } from "./content/AmpPopupHeader/content/AmpCaseSparkline/AmpCaseSparkline";
 
 // TODO document each property below

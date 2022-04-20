@@ -1,13 +1,13 @@
 import PolicyCount from "./content/PolicyCount";
-import BodySection from "components/common/MapboxMap/mapPopup/content/PopupBody/BodySection/BodySection";
+import BodySection from "src/components/common/MapboxMap/mapPopup/content/PopupBody/BodySection/BodySection";
 import React, { FunctionComponent, useContext } from "react";
-import { ActionLink } from "components/common/MapboxMap/mapPopup/MapPopup";
+import { ActionLink } from "src/components/common/MapboxMap/mapPopup/MapPopup";
 import {
   MapId,
   PolicyResolution,
-} from "components/common/MapboxMap/plugins/mapTypes";
-import { getMapNouns } from "components/common/MapboxMap/MapboxMap";
-import MapOptionContext from "components/views/map/context/MapOptionContext";
+} from "src/components/common/MapboxMap/plugins/mapTypes";
+import { getMapNouns } from "src/components/common/MapboxMap/MapboxMap";
+import MapOptionContext from "src/components/views/map/context/MapOptionContext";
 
 type PoliciesBodySectionProps = {
   categories: string[];

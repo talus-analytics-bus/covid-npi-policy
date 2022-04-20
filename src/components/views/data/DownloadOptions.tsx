@@ -1,4 +1,4 @@
-import { OptionCheckbox } from "components/common/OptionControls/OptionCheckboxSet/OptionCheckbox/OptionCheckbox";
+import { OptionCheckbox } from "src/components/common/OptionControls/OptionCheckboxSet/OptionCheckbox/OptionCheckbox";
 import React, { FC } from "react";
 
 type DownloadOptionsChoices = {

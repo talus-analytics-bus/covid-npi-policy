@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { getElHeight, getElWidth } from "components/misc/UtilsTyped";
+import { getElHeight, getElWidth } from "src/components/misc/UtilsTyped";
 import React, {
   FC,
   ReactElement,
@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Caret } from "components/common";
+import { Caret } from "src/components/common";
 import PanelSetContext from "./PanelSet/PanelSet";
 import styles from "./PanelStyles.module.scss";
 type TabType = "expand" | "fit";

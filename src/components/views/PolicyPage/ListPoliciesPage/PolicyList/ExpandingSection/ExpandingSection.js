@@ -1,4 +1,4 @@
-import { Caret } from "components/common";
+import { Caret } from "src/components/common";
 import React from "react";
 
 import styles from "./ExpandingSection.module.scss";
@@ -45,13 +45,13 @@ const ExpandingSection = props => {
   const [animationHiderStyle, setAnimationHiderStyle] = React.useState(
     open
       ? {
-          height: "auto",
-          ...commonStyles,
-        }
+        height: "auto",
+        ...commonStyles,
+      }
       : {
-          height: 0,
-          ...commonStyles,
-        }
+        height: 0,
+        ...commonStyles,
+      }
   );
 
   // useLayoutEffect because the animation needs to know

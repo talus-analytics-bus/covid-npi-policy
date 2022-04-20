@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { scaleTime, scaleLinear, line } from "d3";
 import { useParams } from "react-router-dom";
-import { FlexRow, LoadingSpinner } from "components/common";
+import { FlexRow, LoadingSpinner } from "src/components/common";
 
 import Legend from "./Legend/Legend";
 import Axes from "./Axes/Axes";

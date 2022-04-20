@@ -1,5 +1,5 @@
-import { DateSlider } from "components/common";
-import { MapPanel } from "components/common/MapboxMap/content/MapPanel/MapPanel";
+import { DateSlider } from "src/components/common";
+import { MapPanel } from "src/components/common/MapboxMap/content/MapPanel/MapPanel";
 import { Moment } from "moment";
 import React, { FC, ReactElement } from "react";
 

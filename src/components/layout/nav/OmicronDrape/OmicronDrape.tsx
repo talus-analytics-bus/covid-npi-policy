@@ -1,5 +1,5 @@
-import { XCloseBtn } from "components/common";
-import NotificationDrape from "components/common/NotificationDrape/NotificationDrape";
+import { XCloseBtn } from "src/components/common";
+import NotificationDrape from "src/components/common/NotificationDrape/NotificationDrape";
 import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";

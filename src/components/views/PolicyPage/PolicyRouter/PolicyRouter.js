@@ -8,7 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { Caseload } from "api/Queries";
+import { Caseload } from "src/api/Queries";
 
 import * as MiniMap from "../MiniMap/MiniMap";
 
@@ -16,8 +16,8 @@ import PolicyPage from "../PolicyPage/PolicyPage";
 import ListPoliciesPage from "../ListPoliciesPage/ListPoliciesPage";
 
 // utilities
-import { removeParenthetical } from "components/misc/UtilsTyped";
-import { LoadingSpinner } from "components/common";
+import { removeParenthetical } from "src/components/misc/UtilsTyped";
+import { LoadingSpinner } from "src/components/common";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -77,19 +77,19 @@ const PolicyRouter = props => {
   const [jurisdiction, setJurisdiction] = React.useState(
     state === "national"
       ? {
-          all: [
-            { id: 1, value: "Country", label: "Country" },
-            { id: 2, value: "State / Province", label: "State / Province" },
-          ],
-          selected: [],
-        }
+        all: [
+          { id: 1, value: "Country", label: "Country" },
+          { id: 2, value: "State / Province", label: "State / Province" },
+        ],
+        selected: [],
+      }
       : {
-          all: [
-            { id: 2, value: "State / Province", label: "State" },
-            { id: 3, value: "Local", label: "Local" },
-          ],
-          selected: [],
-        }
+        all: [
+          { id: 2, value: "State / Province", label: "State" },
+          { id: 3, value: "Local", label: "Local" },
+        ],
+        selected: [],
+      }
   );
 
   const [searchTextInputValue, setSearchTextInputValue] = React.useState(
@@ -163,19 +163,19 @@ const PolicyRouter = props => {
     setJurisdiction(
       state === "national"
         ? {
-            all: [
-              { id: 1, value: "Country", label: "Country" },
-              { id: 2, value: "State / Province", label: "State / Province" },
-            ],
-            selected: [],
-          }
+          all: [
+            { id: 1, value: "Country", label: "Country" },
+            { id: 2, value: "State / Province", label: "State / Province" },
+          ],
+          selected: [],
+        }
         : {
-            all: [
-              { id: 2, value: "State / Province", label: "State" },
-              { id: 3, value: "Local", label: "Local" },
-            ],
-            selected: [],
-          }
+          all: [
+            { id: 2, value: "State / Province", label: "State" },
+            { id: 3, value: "Local", label: "Local" },
+          ],
+          selected: [],
+        }
     );
     setSearchTextInputValue("");
 

@@ -11,7 +11,7 @@ import { ShowMore } from "../../../common";
 import { getOnSort } from "./helpers";
 
 // queries
-import { Policy } from "api/Queries";
+import { Policy } from "src/api/Queries";
 
 // assets and styles
 // use same styles as main Data page

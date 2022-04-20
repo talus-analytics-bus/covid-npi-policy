@@ -1,4 +1,4 @@
-import { parseStringAsMoment } from "components/misc/UtilsTyped";
+import { parseStringAsMoment } from "src/components/misc/UtilsTyped";
 import moment from "moment";
 import { NumericObservation } from "../MapboxMap/plugins/mapTypes";
 

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import moment from "moment";
-import { isEmpty } from "components/misc/UtilsTyped";
+import { isEmpty } from "src/components/misc/UtilsTyped";
 
 // local utility functions
 import ObservationQuery from "./ObservationQuery";
@@ -21,7 +21,7 @@ import {
   PolicyStatusCountsProps,
   PolicyStatusCountsForMapProps,
 } from "./queryTypes";
-import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
+import { Filters } from "src/components/common/MapboxMap/plugins/mapTypes";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -35,7 +35,7 @@ interface GetMetricIdProps {
 /**
  * Get glossary terms
  */
-export const Glossary = async function({
+export const Glossary = async function ({
   field,
 }: {
   field: string;
@@ -53,7 +53,7 @@ export const Glossary = async function({
 /**
  * Get versions of data used
  */
-export const Version = async function() {
+export const Version = async function () {
   let req;
   req = await axios(`${API_URL}/version`);
   const res = await req;
@@ -64,7 +64,7 @@ export const Version = async function() {
 /**
  * Get ISO3 codes of countries with distancing levels
  */
-export const CountriesWithDistancingLevels = async function() {
+export const CountriesWithDistancingLevels = async function () {
   let req;
   req = await axios(`${API_URL}/countries_with_lockdown_levels`);
   const res = await req;
@@ -75,7 +75,7 @@ export const CountriesWithDistancingLevels = async function() {
 /**
  * Get counts of data instances
  */
-export const Count = async function({
+export const Count = async function ({
   class_names,
 }: {
   class_names: string[];
@@ -99,7 +99,7 @@ export const Count = async function({
 /**
  * Get metadata for specified fields
  */
-export const Metadata = async function({
+export const Metadata = async function ({
   method,
   fields = [],
   entity_class_name = "Policy",
@@ -125,7 +125,7 @@ let allPolicies = null;
 /**
  * Get policy data from API.
  */
-export const Policy = async function({
+export const Policy = async function ({
   method = "get",
   page = 1,
   pagesize = 1000000,
@@ -183,7 +183,7 @@ export const Policy = async function({
 /**
  * Get policy list from API.
  */
-export const PolicyList = async function({
+export const PolicyList = async function ({
   method,
   page = 1,
   pagesize = 1000000,
@@ -216,7 +216,7 @@ export const PolicyList = async function({
     const filtersNoUndefined: Filters = {};
 
     if (filters !== null)
-      Object.entries(filters).forEach(([key, value]) => {
+      Object.entries(filters).forEach(([key, value]: any[]) => {
         if (value[0] !== undefined) {
           filtersNoUndefined[key] = value;
         }
@@ -250,7 +250,7 @@ export const PolicyList = async function({
 /**
  * Get challenge data from API.
  */
-export const Challenge = async function({
+export const Challenge = async function ({
   method = "get",
   page = 1,
   pagesize = 1000000,
@@ -304,7 +304,7 @@ let allPlans: MetricRecords | null = null;
 /**
  * Get Plan data from API.
  */
-export const Plan = async function({
+export const Plan = async function ({
   method,
   page = 1,
   pagesize = 1000000,
@@ -360,7 +360,7 @@ export const Plan = async function({
 /**
  * Get distancing level data from API.
  */
-export const DistancingLevel = async function({
+export const DistancingLevel = async function ({
   method = "get",
   geo_res,
   iso3,
@@ -399,7 +399,7 @@ export const DistancingLevel = async function({
 /**
  * Get policy status counts data from API specifically for Map page use.
  */
-export const PolicyStatusCountsForMap = async function({
+export const PolicyStatusCountsForMap = async function ({
   geo_res,
   mapFilters = {},
   date,
@@ -450,7 +450,7 @@ export const PolicyStatusCountsForMap = async function({
 /**
  * Get policy status counts data from API.
  */
-export const PolicyStatusCounts = async function({
+export const PolicyStatusCounts = async function ({
   method,
   geo_res = GeoRes.state,
   fields = [],
@@ -519,7 +519,7 @@ export const PolicyStatusCounts = async function({
 /**
  * Get export data from API.
  */
-export const Export = async function({
+export const Export = async function ({
   method,
   filters = null,
   class_name,
@@ -546,9 +546,8 @@ export const Export = async function({
     const link = document.createElement("a");
     link.href = url;
     const dateString = moment().format("YYYY-MM-DD");
-    const fn = `COVID AMP - Data Export${
-      class_name?.toLowerCase().includes("summary") ? " (summary)" : ""
-    } ${dateString}.xlsx`;
+    const fn = `COVID AMP - Data Export${class_name?.toLowerCase().includes("summary") ? " (summary)" : ""
+      } ${dateString}.xlsx`;
     link.setAttribute("download", fn);
     document.body.appendChild(link);
     link.click();
@@ -614,7 +613,7 @@ export const Caseload = async ({
   isCumulative = false, // true if cumulative values needed
   getAverage = false, // true if average for windowsize is needed
 }: // 1 and 7 are currently supported
-CaseloadProps) => {
+  CaseloadProps) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days
@@ -658,8 +657,8 @@ CaseloadProps) => {
   const spatial_resolution = isState
     ? "state"
     : isCounty
-    ? "county"
-    : "country";
+      ? "county"
+      : "country";
 
   // prepare parameters
   const params: ObservationQueryArgs = {
@@ -693,7 +692,7 @@ CaseloadProps) => {
  * @param  {[type]} queries [description]
  * @return {[type]}         [description]
  */
-export const execute = async function({
+export const execute = async function ({
   queries,
 }: {
   queries: Record<string, Promise<any>> | Record<string, Promise<any>[]>;
@@ -713,8 +712,8 @@ export const execute = async function({
             if (results[k][minMaxField] !== undefined) {
               throw Error(
                 `Field '${minMaxField}}' was already defined on results for ` +
-                  `metric with id = '${k}'. It can only be defined by one ` +
-                  `API response.`
+                `metric with id = '${k}'. It can only be defined by one ` +
+                `API response.`
               );
             }
             results[k][minMaxField] = res[minMaxField];
@@ -742,7 +741,7 @@ export const Deaths = async ({
   fields = ["date_time", "value"], // fields to return, return all if empty
   windowSizeDays = 7, // size of window over which to aggregate cases; only
 }: // 1 and 7 are currently supported
-DeathsProps) => {
+  DeathsProps) => {
   // determine metric ID based on whether country or state data requested.
   // 74: state-level new COVID-19 cases in last 7 days
   // 77: country-level new COVID-19 cases in last 7 days

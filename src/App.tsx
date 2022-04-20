@@ -15,7 +15,7 @@ import { Footer } from "./components/layout";
 
 // views
 import Data from "./components/views/data/Data";
-import { DataPageType } from "components/views/data/types";
+import { DataPageType } from "src/components/views/data/types";
 import Map from "./components/views/map/Map";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
@@ -25,21 +25,21 @@ import Landing from "./components/views/landing/Landing";
 import PolicyRouter from "./components/views/PolicyPage/PolicyRouter/PolicyRouter";
 
 // queries and their types
-import { Version, Count, execute } from "api/Queries";
-import { VersionRecord } from "api/queryTypes";
-import { CountRecords } from "components/misc/dataTypes";
+import { Version, Count, execute } from "src/api/Queries";
+import { VersionRecord } from "src/api/queryTypes";
+import { CountRecords } from "src/components/misc/dataTypes";
 
 // styles and assets
 import styles from "./App.module.scss";
 
 // local components, functions, and types
-import Settings from "Settings";
-import { InfoTooltipProvider } from "context/InfoTooltipContext";
-import { LoadingSpinner } from "components/common";
-import { AmpPage } from "types";
-import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
-import { BrowserProvider } from "components/misc/Util";
-import MobileDisclaimer from "components/common/MobileDisclaimer/MobileDisclaimer";
+import Settings from "src/Settings";
+import { InfoTooltipProvider } from "src/context/InfoTooltipContext";
+import { LoadingSpinner } from "src/components/common";
+import { AmpPage } from "src/types";
+import { Filters } from "src/components/common/MapboxMap/plugins/mapTypes";
+import { BrowserProvider } from "src/components/misc/Util";
+import MobileDisclaimer from "src/components/common/MobileDisclaimer/MobileDisclaimer";
 
 //: React.FC
 const App = () => {
@@ -311,8 +311,8 @@ const App = () => {
             {!pageIsResponsive && <MobileDisclaimer />}
             {(!pageIsResponsive ||
               (page !== "policymaps" && page !== "landing")) && (
-              <Footer {...{ page, versions }} />
-            )}
+                <Footer {...{ page, versions }} />
+              )}
             {
               // // Loading spinner
               // <div

@@ -1,5 +1,5 @@
-import TrendQuery from "api/TrendQuery.js";
-import { execute } from "api/Queries";
+import TrendQuery from "src/api/TrendQuery.js";
+import { execute } from "src/api/Queries";
 import { parseStringSafe } from "../../../misc/UtilsTyped";
 import { allMapMetrics as _mapMetrics } from "./data";
 import { Moment } from "moment";
@@ -186,14 +186,14 @@ export async function getDataQueryResults({
     const params =
       d.params.func !== undefined
         ? d.params.func({
-            date,
-            mapId,
-            filters: filtersWithDates,
-            policyResolution,
-            map,
-            state_name: stateName,
-            iso3,
-          })
+          date,
+          mapId,
+          filters: filtersWithDates,
+          policyResolution,
+          map,
+          state_name: stateName,
+          iso3,
+        })
         : { ...d.params, mapId };
     // add base data query
     queryDefs[d.id].push({

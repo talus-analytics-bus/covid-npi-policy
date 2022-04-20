@@ -14,7 +14,7 @@ import loadModels, {
 
 import parseModels from "./parseModels";
 
-import { Caseload, Deaths } from "api/Queries.tsx";
+import { Caseload, Deaths } from "src/api/Queries.tsx";
 
 // import PolicyPlot from '../PolicyPlot/PolicyPlot';
 import State from "../State/State";
@@ -118,13 +118,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
       const caseloadData =
         selectedCurves[0] === "infected_a"
           ? await Caseload({
-              stateName: stateFullName,
-              windowSizeDays: 1,
-            })
+            stateName: stateFullName,
+            windowSizeDays: 1,
+          })
           : await Deaths({
-              stateName: stateFullName,
-              windowSizeDays: 1,
-            });
+            stateName: stateFullName,
+            windowSizeDays: 1,
+          });
 
       const caseloadPoints = caseloadData.map(day => ({
         // convert dates to ISO format before parsing
@@ -248,13 +248,13 @@ const PolicyModel = ({ setLoading, setPage }) => {
     setScaleTo(
       curves
         ? Object.values(curves)
-            .map(state =>
-              state.interventions.map(
-                inter => inter.intervention_type === "intervention"
-              )
+          .map(state =>
+            state.interventions.map(
+              inter => inter.intervention_type === "intervention"
             )
-            .flat()
-            .some(el => el === true)
+          )
+          .flat()
+          .some(el => el === true)
           ? "model"
           : "actuals"
         : "actuals"
@@ -404,7 +404,7 @@ const PolicyModel = ({ setLoading, setPage }) => {
                 <option value="infected_a">
                   {
                     { caseload: "Daily cases", interventions: "Active cases" }[
-                      activeTab
+                    activeTab
                     ]
                   }
                 </option>
