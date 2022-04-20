@@ -39,6 +39,7 @@ export type PolicyLinkBaseProps = {
   to?: string;
   target?: string;
   disabled?: boolean;
+  children?: any
 };
 type GetFeatureMetricProps = {
   feature: CountyFeature | StateFeature | CountryFeature;

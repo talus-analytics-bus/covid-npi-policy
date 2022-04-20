@@ -476,7 +476,7 @@ const MapboxMap: FC<MapboxMapProps> = ({
   // prep map data: when data arguments or the mapstyle change, reload data
   // map data updater function
   const getMapData = useCallback(
-    async dataArgs => {
+    async (dataArgs: any) => {
       setDataIsLoading(true);
       const newMapData = await dataGetter({
         data,

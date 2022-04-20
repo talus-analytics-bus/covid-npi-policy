@@ -138,7 +138,7 @@ const Table = ({
       if (row.children && row.children.length > 0)
         return (
           <div className={styles.children}>
-            {row.children.map((d: Object) => (
+            {row.children.map((d: any) => (
               <div>{d}</div>
             ))}
           </div>

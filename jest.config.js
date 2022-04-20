@@ -1,14 +1,14 @@
 const { pathsToModuleNameMapper } = require("ts-jest/utils");
-const { compilerOptions } = require("./tsconfig.json");
+const { compilerOptions: { paths } } = require("./tsconfig.paths.json");
 
 module.exports = {
     preset: "ts-jest",
-    transform: {
-        "\\.[jt]sx?$": "ts-jest",
-    },
+    // transform: {
+    //     "\\.[jt]sx?$": "ts-jest",
+    // },
     testEnvironment: "jsdom",
     moduleNameMapper: {
-        ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
+        ...pathsToModuleNameMapper(paths, { prefix: "<rootDir>/" }),
         "^.+\\.(css|scss|svg|png)$": "identity-obj-proxy",
     },
 };
