@@ -3,9 +3,6 @@ const { compilerOptions: { paths } } = require("./tsconfig.paths.json");
 
 module.exports = {
     preset: "ts-jest",
-    // transform: {
-    //     "\\.[jt]sx?$": "ts-jest",
-    // },
     testEnvironment: "jsdom",
     moduleNameMapper: {
         ...pathsToModuleNameMapper(paths, { prefix: "<rootDir>/" }),
