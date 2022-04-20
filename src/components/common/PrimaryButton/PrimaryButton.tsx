@@ -69,6 +69,7 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
 
   const unwrappedButton = (
     <button
+      disabled={disabled}
       onClick={e => {
         if (onClick) onClick(e);
       }}
