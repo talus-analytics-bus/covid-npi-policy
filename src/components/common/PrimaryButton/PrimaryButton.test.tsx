@@ -11,6 +11,7 @@ it('responds to clicking', () => {
     expect(alertMock).toHaveBeenCalledTimes(1)
     alertMock.mockReset()
 })
+
 it('cannot be clicked if disabled', () => {
     // TODO fix so component not reliant on SCSS for "disabled" feature
     const alertMock = jest.spyOn(window, 'alert').mockImplementation();
