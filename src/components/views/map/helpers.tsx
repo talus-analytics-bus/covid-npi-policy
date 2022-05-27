@@ -2,7 +2,7 @@
  * Helper functions for Map.tsx
  */
 import { VersionRecord } from "api/queryTypes";
-import { defaults, metricMeta } from "components/common/MapboxMap/plugins/data";
+import { metricMeta } from "components/common/MapboxMap/plugins/data";
 import {
   FilterDefs,
   Filters,
@@ -10,10 +10,7 @@ import {
   MapId,
   validMapIds,
 } from "components/common/MapboxMap/plugins/mapTypes";
-import {
-  omicronFilters,
-  omicronFiltersSubs,
-} from "components/layout/nav/OmicronDrape/OmicronDrape";
+import { omicronFiltersSubs } from "components/layout/nav/OmicronDrape/OmicronDrape";
 import { getInitLower } from "components/misc/Util";
 import moment, { Moment } from "moment";
 
