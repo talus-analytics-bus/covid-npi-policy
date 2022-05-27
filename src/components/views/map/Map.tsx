@@ -113,8 +113,11 @@ const Map: FC<MapProps> = ({
 
   // set default date of map based on most recent case data
   const casesUpdatedMoment: Moment = getCaseDataUpdateDate(versions, mapId);
-  const [date, setDate] = useState<Moment>(moment());
-  // const [date, setDate] = useState<Moment>(casesUpdatedMoment);
+
+  // get overal last updated date of data, using most recent data
+  // series version
+  const overallUpdateDate: Moment = getOverallUpdateDate(versions, mapId);
+  const [date, setDate] = useState<Moment>(overallUpdateDate);
   const prevDate: Moment | undefined = usePrevious(date);
 
   // set default fill metric
@@ -152,7 +155,10 @@ const Map: FC<MapProps> = ({
 
   // define possible categories based on optionset API response
   const catOptions: Option[] = filterDefs[0].primary_ph_measure.items.map(i => {
-    return { name: i.label !== undefined ? i.label : i.value, value: i.value };
+    return {
+      name: i.label !== undefined ? i.label : i.value,
+      value: i.value,
+    };
   });
 
   // define possible subcategories based on optionset API response
@@ -223,11 +229,6 @@ const Map: FC<MapProps> = ({
     // TODO fix dependencies -- adding `filterDefs` causes double call
     // eslint-disable-next-line
   }, []);
-
-  // CONSTANTS // ---------------------------------------------------------- //
-  // get overal last updated date of data, using most recent data
-  // series version
-  const overallUpdateDate: Moment = getOverallUpdateDate(versions, mapId);
 
   // EFFECT HOOKS // ------------------------------------------------------- //
   // initialize page data
