@@ -61,11 +61,11 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
         customClassNames={[styles.downloadBtn, ...Object.keys(thisClassNames)]}
         onClick={(e: Event) => {
           e.stopPropagation();
-          if (class_name[0] === "All_data") {
+          if (classNameForApi === "All_data") {
             window.location.assign(
               `${process.env.REACT_APP_API_URL}/export/static/full`
             );
-          } else if (class_name[0] === "All_data_summary") {
+          } else if (classNameForApi === "All_data_summary") {
             window.location.assign(
               `${process.env.REACT_APP_API_URL}/export/static/summary`
             );
