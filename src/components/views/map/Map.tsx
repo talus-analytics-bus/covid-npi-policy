@@ -96,7 +96,7 @@ const Map: FC<MapProps> = ({
    * Always set map status to "changing" when map ID is changed
    */
   const setMapId = useCallback(
-    v => {
+    (v: any) => {
       // mark map as in "changing" state (prevents API requests)
       setMapIsChanging(true);
 

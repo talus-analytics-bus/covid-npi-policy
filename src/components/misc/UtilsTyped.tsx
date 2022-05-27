@@ -1,6 +1,5 @@
 import moment from "moment";
 import React from "react";
-import { useEffect, useRef } from "react";
 import { MapContext } from "react-map-gl";
 // import * as d3 from "d3";
 /**
@@ -12,7 +11,8 @@ import { MapContext } from "react-map-gl";
 export const parseStringSafe = (
   v: number | string | null | undefined
 ): string | null | undefined => {
-  if (v === undefined || v === null) return v;
+  if (v === undefined) return undefined;
+  else if (v === null) return null;
   else return v.toString();
 };
 

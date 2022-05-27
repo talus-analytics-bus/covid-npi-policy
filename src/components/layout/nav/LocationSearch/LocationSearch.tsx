@@ -1,5 +1,5 @@
 // 3rd party packages
-import React, { FC, KeyboardEventHandler, ReactElement } from "react";
+import React, { FC, KeyboardEventHandler } from "react";
 import Fuse, { FuseOptions } from "fuse.js";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -82,9 +82,7 @@ const LocationSearch: FC<SearchProps> = ({
   }
 
   const resultsTmp: PlaceRecord[] =
-    fuse !== undefined
-      ? (fuse.search<PlaceRecord>(searchValue) as PlaceRecord[])
-      : [];
+    fuse !== undefined ? (fuse.search(searchValue) as PlaceRecord[]) : [];
   const results: PlaceRecord[] = resultsTmp.filter(
     (pl: PlaceRecord) => pl.loc !== "United States of America (USA)"
   );
@@ -208,12 +206,12 @@ const LocationSearch: FC<SearchProps> = ({
 
 export default LocationSearch;
 
-/**
- * Focuses on the location search input element.
- * @param inputRef The React ref for the input DOM element
- */
-function focusInput(inputRef: React.RefObject<HTMLInputElement>): void {
-  if (inputRef.current !== null) {
-    inputRef.current.focus();
-  }
-}
+// /**
+//  * Focuses on the location search input element.
+//  * @param inputRef The React ref for the input DOM element
+//  */
+// function focusInput(inputRef: React.RefObject<HTMLInputElement>): void {
+//   if (inputRef.current !== null) {
+//     inputRef.current.focus();
+//   }
+// }

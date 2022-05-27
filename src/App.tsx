@@ -360,7 +360,7 @@ export function getUrlParamAsFilters(
   const v: string | null = urlParams.get(paramKey);
 
   // if null, return null
-  if (v === null) return v;
+  if (v === null) return null;
 
   // otherwise parse param value as JSON and return it
   try {

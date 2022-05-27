@@ -1128,8 +1128,8 @@ export const metricMeta: MetricMeta = {
             <table className={infostyles.distancingLevelTable}>
               <tbody>
                 {Object.values(this.valueStyling)
-                  .filter(d => d.noLegendEntry !== true)
-                  .map((d, i) => (
+                  .filter((d: any) => d.noLegendEntry !== true)
+                  .map((d: any, i) => (
                     <tr key={d.label}>
                       <td>
                         <div
