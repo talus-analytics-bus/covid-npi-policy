@@ -63,11 +63,13 @@ export const DownloadBtn: FC<DownloadBtnProps> = ({
           e.stopPropagation();
           if (class_name[0] === "All_data") {
             window.location.assign(
-              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
+              `${process.env.REACT_APP_API_URL}/export/static/full`
+              // "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export.xlsx"
             );
           } else if (class_name[0] === "All_data_summary") {
             window.location.assign(
-              "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export%20%summary%29.xlsx"
+              `${process.env.REACT_APP_API_URL}/export/static/summary`
+              // "https://ghssidea.org/downloads/COVID%20AMP%20-%20Policy%20and%20Plan%20Data%20Export%20%summary%29.xlsx"
             );
           } else {
             setButtonLoading(true);
