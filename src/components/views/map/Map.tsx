@@ -114,7 +114,7 @@ const Map: FC<MapProps> = ({
   // set default date of map based on most recent case data
   const casesUpdatedMoment: Moment = getCaseDataUpdateDate(versions, mapId);
 
-  // get overal last updated date of data, using most recent data
+  // get overall last updated date of data, using most recent data
   // series version
   const overallUpdateDate: Moment = getOverallUpdateDate(versions, mapId);
   const [date, setDate] = useState<Moment>(overallUpdateDate);
