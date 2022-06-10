@@ -56,7 +56,6 @@ import {
 } from "./helpers";
 import MapPlaceContext from "./context/MapPlaceContext";
 import { OptionSetRecord } from "api/queryTypes";
-import moment from "moment";
 import { useQueryParam } from "use-query-params";
 import { MapIdParam, ViewTypeParam } from "../data/types";
 
