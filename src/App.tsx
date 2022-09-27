@@ -1,6 +1,6 @@
 // standard modules
 import React, { useState, useEffect } from "react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 // 3rd party modules
@@ -277,7 +277,8 @@ const App = () => {
                       exact
                       path="/model"
                       render={() => {
-                        return <PolicyModel {...{ setPage, setLoading }} />;
+                        return <Redirect to="/" />;
+                        // return <PolicyModel {...{ setPage, setLoading }} />;
                       }}
                     />
                   }
