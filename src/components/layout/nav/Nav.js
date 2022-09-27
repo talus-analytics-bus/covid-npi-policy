@@ -146,15 +146,17 @@ const Nav = ({ page }) => {
                     <LocationSearch />
                   </div>
                 </HoverDropdown>
-                <Link
-                  onClick={() => {
-                    setShowMobileMenu(false);
-                  }}
-                  className={page === "model" ? styles.active : ""}
-                  to={"/model"}
-                >
-                  Model
-                </Link>
+                {
+                  // <Link
+                  //   onClick={() => {
+                  //     setShowMobileMenu(false);
+                  //   }}
+                  //   className={page === "model" ? styles.active : ""}
+                  //   to={"/model"}
+                  // >
+                  //   Model
+                  // </Link>
+                }
                 <Link
                   onClick={() => {
                     setShowMobileMenu(false);
