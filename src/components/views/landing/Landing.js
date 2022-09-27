@@ -79,10 +79,12 @@ const Landing = ({ setPage, setLoading }, props) => {
             <img src={locationPageImage} alt="Policy Database" />
             <LocationSearch floating autoFocus={false} />
           </div>
-          <Link className={styles.columnLink} to="/model">
-            <img src={policyModelImage} alt="Policy Model" />
-            <span className={styles.blueButton}>Policy model</span>
-          </Link>
+          {
+            // <Link className={styles.columnLink} to="/model">
+            //   <img src={policyModelImage} alt="Policy Model" />
+            //   <span className={styles.blueButton}>Policy model</span>
+            // </Link>
+          }
           <Link className={styles.columnLink} to="/data">
             <img src={policyDatabaseImage} alt="Policy Database" />
             <span className={styles.blueButton}>Access data</span>
