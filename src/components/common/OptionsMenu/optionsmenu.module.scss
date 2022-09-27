@@ -259,7 +259,7 @@ $wrapperWidth: 350px; // width of options relative to avail space
   }
 
   // right mode - menu hovers on right side of screen
-  &.right {
+  .right {
     .edge {
       left: unset;
       right: $wrapperWidth;
