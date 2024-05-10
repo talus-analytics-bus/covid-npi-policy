@@ -13,7 +13,7 @@ import { DownloadBtn, PageHeader } from "components/project";
 
 // assets
 import talus from "../../../assets/images/logo-talus.png";
-import georgetown from "../../../assets/images/logo-georgetown.png";
+import georgetown from "../../../assets/images/logo-georgetown-tall.png";
 import nti from "../../../assets/images/logo-nti.png";
 import can from "../../../assets/images/logo-can.png";
 

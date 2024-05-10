@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./footer.module.scss";
 import Settings from "Settings";
 import talus from "../../../assets/images/logo-talus.png";
-import gu from "../../../assets/images/logo-georgetown.png";
+import gu from "../../../assets/images/logo-georgetown-long.png";
 import nti from "../../../assets/images/logo-nti.svg";
 import idea from "../../../assets/images/logo-title.png";
 import classNames from "classnames";
@@ -34,23 +34,12 @@ const Footer = ({ page, versions }) => {
       alt:
         "Georgetown University Center for Global Health Science and Security",
     },
-    {
-      imgSrc: talus,
-      url: "http://talusanalytics.com/",
-      alt: "Talus Analytics, LLC",
-    },
-    {
-      imgSrc: nti,
-      url: "https://www.nti.org/about/biosecurity/",
-      alt: "Nuclear Threat Initiative",
-    },
   ];
 
   return (
     <div
       data-page={page}
-      data-responsive={page && Settings.RESPONSIVE_PAGES.includes(page)
-      }
+      data-responsive={page && Settings.RESPONSIVE_PAGES.includes(page)}
       className={classNames(styles.footer, {
         [styles.wide]: page === "policymaps",
       })}
@@ -65,7 +54,8 @@ const Footer = ({ page, versions }) => {
               alt={d.alt}
               className={
                 d.alt === "Talus Analytics, LLC" ? styles.talusLogo : null
-              } rel="noreferrer"
+              }
+              rel="noreferrer"
             >
               <img style={d.style} src={d.imgSrc} alt={d.alt} />
               {d.alt === "Talus Analytics, LLC" && (

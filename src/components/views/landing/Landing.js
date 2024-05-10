@@ -9,7 +9,7 @@ import policyModelImage from "../../../assets/images/amp-screenshots/policy-mode
 import locationPageImage from "../../../assets/images/amp-screenshots/location-page-4.png";
 import policyDatabaseImage from "../../../assets/images/amp-screenshots/data-page-2.png";
 import ideaLogo from "../../../assets/images/logo-title.png";
-import guLogo from "../../../assets/images/logo-georgetown.png";
+import guLogo from "../../../assets/images/logo-georgetown-long.png";
 import talusLogo from "../../../assets/images/logo-talus.png";
 import ntiLogo from "../../../assets/images/logo-nti.png";
 import LocationSearch from "components/layout/nav/LocationSearch/LocationSearch";
