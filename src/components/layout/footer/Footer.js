@@ -65,32 +65,9 @@ const Footer = ({ page, versions }) => {
           ))}
         </div>
         <div className={styles.dataAsOf}>
-          {
-            // TODO set date dynamically from API
-          }
-          {lastUpdatedDatePolicy && (
-            <span>
-              Policy and plan data last updated{" "}
-              {new moment(lastUpdatedDatePolicy).format("MMM D, YYYY")}
-            </span>
-          )}
-          .{" "}
-          {lastUpdatedDatePolicy && (
-            <span>
-              COVID-19 case data last updated{" "}
-              {new moment(lastUpdatedDateCases).format("MMM D, YYYY")}
-              {lastUpdatedCases.last_datum_date !== null && (
-                <span>
-                  {" "}
-                  with data available through{" "}
-                  {moment(lastUpdatedCases.last_datum_date).format(
-                    "MMM D, YYYY"
-                  )}
-                </span>
-              )}
-            </span>
-          )}
-          .
+          <span>
+            Policy data were collected from 21 January 2020 to 30 June 2022.
+          </span>
         </div>
       </div>
     </div>
