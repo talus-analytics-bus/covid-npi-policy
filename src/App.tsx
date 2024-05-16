@@ -16,7 +16,7 @@ import { Footer } from "./components/layout";
 // views
 import Data from "./components/views/data/Data";
 import { DataPageType } from "components/views/data/types";
-import Map from "./components/views/map/Map";
+// import Map from "./components/views/map/Map";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
@@ -209,24 +209,24 @@ const App = () => {
                     />
                   }
                   {
-                    // Map page
-                    <Route
-                      exact
-                      path="/policymaps"
-                      render={() => {
-                        return (
-                          <Map
-                            {...{
-                              versions,
-                              setPage,
-                              loading,
-                              setLoading,
-                              setInfoTooltipContent,
-                            }}
-                          />
-                        );
-                      }}
-                    />
+                    // // Map page
+                    // <Route
+                    //   exact
+                    //   path="/policymaps"
+                    //   render={() => {
+                    //     return (
+                    //       <Map
+                    //         {...{
+                    //           versions,
+                    //           setPage,
+                    //           loading,
+                    //           setLoading,
+                    //           setInfoTooltipContent,
+                    //         }}
+                    //       />
+                    //     );
+                    //   }}
+                    // />
                   }
                   {
                     // policy coverage page

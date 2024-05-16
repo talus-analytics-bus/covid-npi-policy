@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import { MapContext } from "react-map-gl";
+// import { MapContext } from "react-map-gl";
 // import * as d3 from "d3";
 /**
  * Parses a value as a string or, if it is null or undefined, returns itself.
@@ -16,12 +16,12 @@ export const parseStringSafe = (
   else return v.toString();
 };
 
-// Hook
-// https://usehooks.com/usePrevious/
-export const useMap = () => {
-  const { map } = React.useContext(MapContext);
-  return map;
-};
+// // Hook
+// // https://usehooks.com/usePrevious/
+// export const useMap = () => {
+//   const { map } = React.useContext(MapContext);
+//   return map;
+// };
 
 export const removeParenthetical = (value: string) => {
   return value.replace(/\([A-Z-]*\)/, "");
