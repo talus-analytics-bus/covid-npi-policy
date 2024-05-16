@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
+import styled from "styled-components";
 import { AmpPage } from "types";
 
 const useSetPageAndDisableLoading = (
@@ -20,10 +21,21 @@ interface PolicyCoverageProps {
   setLoading: SetLoading;
 }
 
+const MapContainer = styled.div`
+  position: relative;
+  height: calc(100vh - 116px);
+  top: 116px;
+  width: 100%;
+`;
+
 const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   useSetPageAndDisableLoading(setPage, setLoading);
 
-  return <h1>Policy Coverage Map Page</h1>;
+  return (
+    <MapContainer>
+      <p>hi</p>
+    </MapContainer>
+  );
 };
 
 export default PolicyCoverage;

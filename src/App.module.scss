@@ -15,6 +15,7 @@
   @media not #{$phone} {
     &.policymaps,
     &.model,
+    &.policycoverage,
     &.landing {
       max-width: unset;
       padding: unset;
