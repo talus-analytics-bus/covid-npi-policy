@@ -40,6 +40,7 @@ import { AmpPage } from "types";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import { BrowserProvider } from "components/misc/Util";
 import MobileDisclaimer from "components/common/MobileDisclaimer/MobileDisclaimer";
+import PolicyCoverage from "components/views/PolicyCoverage/PolicyCoverage";
 
 //: React.FC
 const App = () => {
@@ -228,6 +229,23 @@ const App = () => {
                     />
                   }
                   {
+                    // policy coverage page
+                    <Route
+                      exact
+                      path="/policycoverage"
+                      render={() => {
+                        return (
+                          <PolicyCoverage
+                            {...{
+                              setPage,
+                              setLoading,
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                  }
+                  {
                     // About page
                     <Route
                       path="/about/:subpage"
@@ -311,7 +329,9 @@ const App = () => {
             </Switch>
             {!pageIsResponsive && <MobileDisclaimer />}
             {(!pageIsResponsive ||
-              (page !== "policymaps" && page !== "landing")) && (
+              (page !== "policymaps" &&
+                page !== "landing" &&
+                page !== "policycoverage")) && (
               <Footer {...{ page, versions }} />
             )}
             {

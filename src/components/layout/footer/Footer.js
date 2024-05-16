@@ -11,6 +11,7 @@ import classNames from "classnames";
 import moment from "moment";
 
 const Footer = ({ page, versions }) => {
+  console.log("Footer.js, page: ", page);
   // get last updated date
   const lastUpdatedPolicy = versions.find(d => d.name === "Policy data");
   const lastUpdatedCases = versions.find(
@@ -41,7 +42,7 @@ const Footer = ({ page, versions }) => {
       data-page={page}
       data-responsive={page && Settings.RESPONSIVE_PAGES.includes(page)}
       className={classNames(styles.footer, {
-        [styles.wide]: page === "policymaps",
+        [styles.wide]: ["policymaps", "policycoverage"].includes(page),
       })}
     >
       <div className={styles.content}>

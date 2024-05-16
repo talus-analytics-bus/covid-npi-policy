@@ -75,6 +75,14 @@ const Landing = ({ setPage, setLoading }, props) => {
             />
             <span className={styles.blueButton}>Policy maps</span>
           </Link>
+          <Link className={styles.columnLink} to="/policycoverage">
+            <img
+              className={styles.mapImage}
+              src={policyMapsImage}
+              alt="Policy Maps"
+            />
+            <span className={styles.blueButton}>Policy coverage</span>
+          </Link>
           <div className={styles.columnLink}>
             <img src={locationPageImage} alt="Policy Database" />
             <LocationSearch floating autoFocus={false} />
