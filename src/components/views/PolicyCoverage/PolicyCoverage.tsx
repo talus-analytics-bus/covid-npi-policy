@@ -87,6 +87,16 @@ enum MapType {
   World = "World",
 }
 
+const usMapBounds = [
+  [-21.155989509715667, 15.597516194781097],
+  [20.240006846583366, -20.418786807120235],
+] as [[number, number], [number, number]];
+
+const worldMapBounds = [
+  [-141.78623293980732, 60.46188253859922],
+  [179.97107965372615, -54.77460938717267],
+] as [[number, number], [number, number]];
+
 const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   useSetPageAndDisableLoading(setPage, setLoading);
 
@@ -134,9 +144,12 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   }, []);
 
   const handleChangeMapType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!mapRef.current) return;
     if (event.target.value === "USA") {
+      mapRef.current.fitBounds(usMapBounds);
       setMapType(MapType.USA);
     } else {
+      mapRef.current.fitBounds(worldMapBounds);
       setMapType(MapType.World);
     }
   };
@@ -160,10 +173,7 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
           longitude: 0,
           latitude: 15,
           zoom: 0,
-          bounds: [
-            [-150, -60],
-            [150, 70],
-          ],
+          bounds: worldMapBounds,
           // these bounds are weird due to a bug in mapbox with non-mercator projections:
           // https://github.com/mapbox/mapbox-gl-js/issues/11284
           // bounds: [
