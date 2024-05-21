@@ -6,14 +6,14 @@ export const usMapBounds = [
   [20.240006846583366, -20.418786807120235],
 ] as [[number, number], [number, number]];
 
-interface UsaMapProps {
+export const STATE_FILL_LAYER_ID = `us-states-fill`;
+
+interface UsaMapLayerProps {
   mapType: MapType;
   hoveredPlaceName: string;
 }
 
-export const STATE_FILL_LAYER_ID = `us-states-fill`;
-
-const UsaMapLayer = ({ mapType, hoveredPlaceName }: UsaMapProps) => {
+const UsaMapLayer = ({ mapType, hoveredPlaceName }: UsaMapLayerProps) => {
   const stateFill: FillLayer = {
     id: STATE_FILL_LAYER_ID,
     type: `fill` as `fill`,

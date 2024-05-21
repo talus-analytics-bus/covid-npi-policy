@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { AmpPage } from "types";
 
+import "mapbox-gl/dist/mapbox-gl.css";
+
 // "react-map-gl@5.3.16"
 
 import Map, { LngLat, MapLayerMouseEvent, MapRef } from "react-map-gl";
