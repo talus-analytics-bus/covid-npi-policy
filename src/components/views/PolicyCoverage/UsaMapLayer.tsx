@@ -1,4 +1,5 @@
 import { FillLayer, Layer, LineLayer, Source } from "react-map-gl";
+import { MapType } from "./PolicyCoverage";
 
 export const usMapBounds = [
   [-21.155989509715667, 15.597516194781097],
@@ -6,12 +7,13 @@ export const usMapBounds = [
 ] as [[number, number], [number, number]];
 
 interface UsaMapProps {
+  mapType: MapType;
   hoveredPlaceName: string;
 }
 
 export const STATE_FILL_LAYER_ID = `us-states-fill`;
 
-const UsaMapLayer = ({ hoveredPlaceName }: UsaMapProps) => {
+const UsaMapLayer = ({ mapType, hoveredPlaceName }: UsaMapProps) => {
   const stateFill: FillLayer = {
     id: STATE_FILL_LAYER_ID,
     type: `fill` as `fill`,
@@ -21,6 +23,9 @@ const UsaMapLayer = ({ hoveredPlaceName }: UsaMapProps) => {
       "fill-outline-color": "white",
     },
     filter: ["==", "type", "state"],
+    layout: {
+      visibility: mapType === MapType.USA ? "visible" : "none",
+    },
   };
 
   const stateBorders: LineLayer = {
@@ -40,7 +45,11 @@ const UsaMapLayer = ({ hoveredPlaceName }: UsaMapProps) => {
 
   return (
     <Source id="us-states" type="vector" url="mapbox://lobenichou.albersusa">
-      <Layer key={stateFill.id} {...stateFill} beforeId="state-points" />
+      <Layer
+        key={stateFill.id}
+        {...stateFill}
+        // beforeId="state-points"
+      />
       <Layer key={stateBorders.id} {...stateBorders} />
     </Source>
   );

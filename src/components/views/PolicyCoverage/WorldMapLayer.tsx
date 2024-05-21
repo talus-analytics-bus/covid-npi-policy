@@ -7,24 +7,45 @@ export const worldMapBounds = [
 ] as [[number, number], [number, number]];
 
 interface WorldMapProps {
+  mapType: MapType;
   hoveredPlaceName: string;
 }
 
 export const COUNTRY_FILL_LAYER_ID = `world-countries-fill`;
 
-const WorldMapLayer = ({ hoveredPlaceName }: WorldMapProps) => {
-  const countryFill = {
+import coverage_by_place from "data/coverage_by_place";
+import { FillLayer, LineLayer } from "mapbox-gl";
+import { MapType } from "./PolicyCoverage";
+
+type CoverageLevel = typeof coverage_by_place[number]["coverage"];
+
+const coverageColors: Record<CoverageLevel, string> = {
+  "No data": "rgba(212, 216, 220, 1)",
+  Partial: "rgba(107, 182, 167, 1)",
+  Complete: "rgba(54, 120, 108, 1)",
+};
+
+const WorldMapLayer = ({ mapType, hoveredPlaceName }: WorldMapProps) => {
+  const countryColorMatch = [];
+  for (const { iso3, coverage } of coverage_by_place) {
+    if (iso3 === "Unspecified") continue;
+    countryColorMatch.push(iso3, coverageColors[coverage]);
+  }
+  countryColorMatch.push("white");
+
+  const countryFill: FillLayer = {
     id: COUNTRY_FILL_LAYER_ID,
     type: `fill` as `fill`,
     "source-layer": `countries_slim_v13c03`,
     paint: {
-      "fill-color": "rgba(54, 120, 108, .85)",
       "fill-outline-color": "white",
+      "fill-color": ["match", ["get", "ISO_A3"], ...countryColorMatch],
     },
-    // filter: ["==", "type", "country"],
   };
 
-  const countryBorders = {
+  console.log(countryFill);
+
+  const countryBorders: LineLayer = {
     id: `world-countries-outline`,
     type: `line` as `line`,
     "source-layer": `countries_slim_v13c03`,
@@ -41,8 +62,13 @@ const WorldMapLayer = ({ hoveredPlaceName }: WorldMapProps) => {
       type="vector"
       url="mapbox://nicoletalus.92q1pclg"
     >
-      <Layer key={countryFill.id} {...countryFill} beforeId="country-label" />
-      <Layer key={countryBorders.id} {...countryBorders} />
+      <Layer
+        key={countryFill.id}
+        {...countryFill}
+        // beforeId="country-label"
+        layout={{ visibility: mapType === MapType.World ? "visible" : "none" }}
+      />
+      <Layer key={countryBorders.id} {...countryBorders} visibility={false} />
     </Source>
   );
 };

@@ -80,7 +80,7 @@ interface PolicyCoverageProps {
   setLoading: SetLoading;
 }
 
-enum MapType {
+export enum MapType {
   USA = "USA",
   World = "World",
 }
@@ -94,13 +94,16 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
 
   const mapRef = useRef<MapRef>(null);
 
-  const onHover = useCallback((event: MapLayerMouseEvent) => {
-    if (mapType === MapType.USA)
-      setHoveredPlaceName(event.features?.[0]?.properties?.state_name ?? " ");
-    if (mapType === MapType.World) {
-      setHoveredPlaceName(event.features?.[0]?.properties?.ISO_A3 ?? " ");
-    }
-  }, []);
+  const onHover = useCallback(
+    (event: MapLayerMouseEvent) => {
+      if (mapType === MapType.USA)
+        setHoveredPlaceName(event.features?.[0]?.properties?.state_name ?? " ");
+      if (mapType === MapType.World) {
+        setHoveredPlaceName(event.features?.[0]?.properties?.ISO_A3 ?? " ");
+      }
+    },
+    [mapType]
+  );
 
   const onClick = useCallback((event: MapLayerMouseEvent) => {
     const iso3 = event.features?.[0]?.properties?.ISO_A3;
@@ -129,8 +132,10 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   };
 
   let mapStyle = "mapbox://styles/nicoletalus/ckp5qwi392djb18qbvlf0hiku";
+  let interactiveLayer = COUNTRY_FILL_LAYER_ID;
   if (mapType === MapType.USA) {
     mapStyle = "mapbox://styles/nicoletalus/ckq9vwu8t0w4w17k0nwj4z9kz";
+    interactiveLayer = STATE_FILL_LAYER_ID;
   }
 
   return (
@@ -138,7 +143,7 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
       <Map
         ref={mapRef}
         mapboxAccessToken={MAPBOX_ACCESS_TOKEN!}
-        mapStyle={mapStyle}
+        // mapStyle={mapStyle}
         projection={{ name: "mercator" }}
         interactive={true}
         initialViewState={{
@@ -150,17 +155,11 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
         maxZoom={5}
         minZoom={0}
         onMouseMove={onHover}
-        interactiveLayerIds={[
-          mapType === MapType.USA ? STATE_FILL_LAYER_ID : COUNTRY_FILL_LAYER_ID,
-        ]}
+        interactiveLayerIds={[STATE_FILL_LAYER_ID, COUNTRY_FILL_LAYER_ID]}
         onClick={onClick}
       >
-        {mapType === MapType.USA && (
-          <UsaMapLayer hoveredPlaceName={hoveredPlaceName} />
-        )}
-        {mapType === MapType.World && (
-          <WorldMapLayer hoveredPlaceName={hoveredPlaceName} />
-        )}
+        <UsaMapLayer {...{ mapType, hoveredPlaceName }} />
+        <WorldMapLayer {...{ mapType, hoveredPlaceName }} />
 
         {
           // <NavigationControl position="top-left" showCompass={false} />
