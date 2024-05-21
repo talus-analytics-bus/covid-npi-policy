@@ -914,7 +914,7 @@ export default [
     loc: "Lao People's Democratic Republic (LAO)",
     iso3: "LAO",
     n_policies: 2,
-    coverage: null,
+    coverage: "No data",
   },
   {
     id: 107834,
@@ -2379,4 +2379,4 @@ export default [
     n_policies: 13,
     coverage: "Partial",
   },
-];
+] as const;
