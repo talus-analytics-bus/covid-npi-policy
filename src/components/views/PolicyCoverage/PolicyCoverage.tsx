@@ -131,12 +131,10 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
     }
   };
 
-  let mapStyle = "mapbox://styles/nicoletalus/ckp5qwi392djb18qbvlf0hiku";
-  let interactiveLayer = COUNTRY_FILL_LAYER_ID;
-  if (mapType === MapType.USA) {
-    mapStyle = "mapbox://styles/nicoletalus/ckq9vwu8t0w4w17k0nwj4z9kz";
-    interactiveLayer = STATE_FILL_LAYER_ID;
-  }
+  // let mapStyle = "mapbox://styles/nicoletalus/ckp5qwi392djb18qbvlf0hiku";
+  // if (mapType === MapType.USA) {
+  //   mapStyle = "mapbox://styles/nicoletalus/ckq9vwu8t0w4w17k0nwj4z9kz";
+  // }
 
   return (
     <MapContainer>
