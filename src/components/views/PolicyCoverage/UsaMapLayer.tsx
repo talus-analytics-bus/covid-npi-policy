@@ -20,7 +20,7 @@ const UsaMapLayer = ({ hoveredPlaceName }: UsaMapProps) => {
       "fill-color": "rgba(54, 120, 108, .85)",
       "fill-outline-color": "white",
     },
-    filter: ["match", ["get", "type"], ["state"], true, false],
+    filter: ["==", "type", "state"],
   };
 
   const stateBorders: LineLayer = {
