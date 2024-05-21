@@ -15,6 +15,7 @@ import Map, {
   NavigationControl,
   Source,
 } from "react-map-gl";
+import UsaMapLayer, { STATE_FILL_LAYER_ID, usMapBounds } from "./UsaMapLayer";
 
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -89,11 +90,6 @@ enum MapType {
   World = "World",
 }
 
-const usMapBounds = [
-  [-21.155989509715667, 15.597516194781097],
-  [20.240006846583366, -20.418786807120235],
-] as [[number, number], [number, number]];
-
 const worldMapBounds = [
   [-141.78623293980732, 60.46188253859922],
   [179.97107965372615, -54.77460938717267],
@@ -106,36 +102,21 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   const [hoveredPlaceName, setHoveredPlaceName] = React.useState(" ");
   const [popupState, setPopupState] = React.useState<PopupState | null>(null);
 
-  const mapRef = useRef<MapRef | null>(null);
-
-  // const outlineLayer = {
-  //   id: `countries-outline`,
-  //   type: `line` as `line`,
-  //   source: `countries_v13c-6uk894`,
-  //   "source-layer": "countries_v13c-6uk894",
-  //   paint: {
-  //     "line-color": "blue",
-  //     "line-width": 2,
-  //   },
-  //   // beforeId: "country-label",
-  // };
+  const mapRef = useRef<MapRef>(null);
 
   const onHover = useCallback((event: MapLayerMouseEvent) => {
-    console.log(event.features?.[0]?.properties?.state_name ?? " ");
-    console.log(event.features?.[0]);
-    console.log(mapRef.current?.getStyle().layers);
-    setHoveredPlaceName(event.features?.[0]?.properties?.state_name ?? " ");
-    // setHoveredAbbrev(event.features?.[0]?.properties?.ISO_A3 ?? " ");
+    if (mapType === MapType.USA)
+      setHoveredPlaceName(event.features?.[0]?.properties?.state_name ?? " ");
+    if (mapType === MapType.World) {
+      console.log(event.features?.[0]);
+      console.log(mapRef.current?.getStyle().layers);
+    }
   }, []);
 
   const onClick = useCallback((event: MapLayerMouseEvent) => {
     const iso3 = event.features?.[0]?.properties?.ISO_A3;
 
-    if (
-      !iso3 ||
-      !event.lngLat
-      // || !countriesRecievedAndDisbursed.some(c => c.iso3 === iso3)
-    ) {
+    if (!iso3 || !event.lngLat) {
       setPopupState(null);
       return;
     }
@@ -163,32 +144,6 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
     mapStyle = "mapbox://styles/nicoletalus/ckq9vwu8t0w4w17k0nwj4z9kz";
   }
 
-  const stateFill: FillLayer = {
-    id: `us-states-fill`,
-    type: `fill` as `fill`,
-    "source-layer": "albersusa",
-    paint: {
-      "fill-color": "rgba(54, 120, 108, .85)",
-      "fill-outline-color": "white",
-    },
-    filter: ["match", ["get", "type"], ["state"], true, false],
-  };
-
-  const stateBorders: LineLayer = {
-    id: `us-states-outline`,
-    type: `line` as `line`,
-    "source-layer": `albersusa`,
-    paint: {
-      "line-color": `white`,
-      "line-width": 2,
-    },
-    filter: [
-      "all",
-      ["==", "type", "state"],
-      ["==", "state_name", hoveredPlaceName],
-    ],
-  };
-
   return (
     <MapContainer>
       <Map
@@ -206,17 +161,13 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
         maxZoom={5}
         minZoom={0}
         onMouseMove={onHover}
-        interactiveLayerIds={[stateFill.id]}
+        interactiveLayerIds={[
+          mapType === MapType.USA ? STATE_FILL_LAYER_ID : "",
+        ]}
         onClick={onClick}
       >
-        <Source
-          id="us-states"
-          type="vector"
-          url="mapbox://lobenichou.albersusa"
-        >
-          <Layer key={stateFill.id} {...stateFill} beforeId="state-points" />
-          <Layer key={stateBorders.id} {...stateBorders} />
-        </Source>
+        <UsaMapLayer hoveredPlaceName={hoveredPlaceName} />
+
         {/* This source provides country shapes and their ISO codes */}
 
         {
