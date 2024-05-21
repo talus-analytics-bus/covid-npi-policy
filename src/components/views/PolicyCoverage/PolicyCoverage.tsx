@@ -6,7 +6,9 @@ import { AmpPage } from "types";
 // "react-map-gl@5.3.16"
 
 import Map, {
+  FillLayer,
   Layer,
+  LineLayer,
   LngLat,
   MapLayerMouseEvent,
   MapRef,
@@ -101,7 +103,7 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   useSetPageAndDisableLoading(setPage, setLoading);
 
   const [mapType, setMapType] = React.useState(MapType.World);
-  const [hoveredISO, setHoveredISO] = React.useState(" ");
+  const [hoveredPlaceName, setHoveredPlaceName] = React.useState(" ");
   const [popupState, setPopupState] = React.useState<PopupState | null>(null);
 
   const mapRef = useRef<MapRef | null>(null);
@@ -119,9 +121,11 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   // };
 
   const onHover = useCallback((event: MapLayerMouseEvent) => {
-    console.log(event.features);
+    console.log(event.features?.[0]?.properties?.state_name ?? " ");
+    console.log(event.features?.[0]);
     console.log(mapRef.current?.getStyle().layers);
-    setHoveredISO(event.features?.[0]?.properties?.ISO_A3 ?? " ");
+    setHoveredPlaceName(event.features?.[0]?.properties?.state_name ?? " ");
+    // setHoveredAbbrev(event.features?.[0]?.properties?.ISO_A3 ?? " ");
   }, []);
 
   const onClick = useCallback((event: MapLayerMouseEvent) => {
@@ -159,13 +163,37 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
     mapStyle = "mapbox://styles/nicoletalus/ckq9vwu8t0w4w17k0nwj4z9kz";
   }
 
+  const stateFill: FillLayer = {
+    id: `us-states-fill`,
+    type: `fill` as `fill`,
+    "source-layer": "albersusa",
+    paint: {
+      "fill-color": "rgba(54, 120, 108, .85)",
+      "fill-outline-color": "white",
+    },
+    filter: ["match", ["get", "type"], ["state"], true, false],
+  };
+
+  const stateBorders: LineLayer = {
+    id: `us-states-outline`,
+    type: `line` as `line`,
+    "source-layer": `albersusa`,
+    paint: {
+      "line-color": `white`,
+      "line-width": 2,
+    },
+    filter: [
+      "all",
+      ["==", "type", "state"],
+      ["==", "state_name", hoveredPlaceName],
+    ],
+  };
+
   return (
     <MapContainer>
       <Map
         ref={mapRef}
         mapboxAccessToken={MAPBOX_ACCESS_TOKEN!}
-        // mapStyle="mapbox://styles/ryan-talus/clddahzv7007j01qbgn0bba8w"
-        // mapStyle="mapbox://styles/nicoletalus/ckp5qwi392djb18qbvlf0hiku"
         mapStyle={mapStyle}
         projection={{ name: "mercator" }}
         interactive={true}
@@ -174,25 +202,30 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
           latitude: 15,
           zoom: 0,
           bounds: worldMapBounds,
-          // these bounds are weird due to a bug in mapbox with non-mercator projections:
-          // https://github.com/mapbox/mapbox-gl-js/issues/11284
-          // bounds: [
-          //   [350, 70],
-          //   [-90, -45],
-          // ],
         }}
         maxZoom={5}
         minZoom={0}
         onMouseMove={onHover}
-        // interactiveLayerIds={[countryLayer.id]}
+        interactiveLayerIds={[stateFill.id]}
         onClick={onClick}
       >
-        {/* This source provides country shapes and their ISO codes */}
         <Source
-          id="country-borders"
+          id="us-states"
           type="vector"
-          url="mapbox://nicoletalus.3a8qy0w1"
-        />
+          url="mapbox://lobenichou.albersusa"
+        >
+          <Layer key={stateFill.id} {...stateFill} beforeId="state-points" />
+          <Layer key={stateBorders.id} {...stateBorders} />
+        </Source>
+        {/* This source provides country shapes and their ISO codes */}
+
+        {
+          // <Source
+          //   id="country-borders"
+          //   type="vector"
+          //   url="mapbox://nicoletalus.3a8qy0w1"
+          // />
+        }
 
         {
           // <Source
