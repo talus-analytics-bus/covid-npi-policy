@@ -40,11 +40,7 @@ const UsaMapLayer = ({ hoveredPlaceName }: UsaMapProps) => {
 
   return (
     <Source id="us-states" type="vector" url="mapbox://lobenichou.albersusa">
-      <Layer
-        key={stateFill.id}
-        {...stateFill}
-        // beforeId="state-points"
-      />
+      <Layer key={stateFill.id} {...stateFill} beforeId="state-points" />
       <Layer key={stateBorders.id} {...stateBorders} />
     </Source>
   );

@@ -5,17 +5,12 @@ import { AmpPage } from "types";
 
 // "react-map-gl@5.3.16"
 
-import Map, {
-  FillLayer,
-  Layer,
-  LineLayer,
-  LngLat,
-  MapLayerMouseEvent,
-  MapRef,
-  NavigationControl,
-  Source,
-} from "react-map-gl";
+import Map, { LngLat, MapLayerMouseEvent, MapRef } from "react-map-gl";
 import UsaMapLayer, { STATE_FILL_LAYER_ID, usMapBounds } from "./UsaMapLayer";
+import WorldMapLayer, {
+  COUNTRY_FILL_LAYER_ID,
+  worldMapBounds,
+} from "./WorldMapLayer";
 
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -90,11 +85,6 @@ enum MapType {
   World = "World",
 }
 
-const worldMapBounds = [
-  [-141.78623293980732, 60.46188253859922],
-  [179.97107965372615, -54.77460938717267],
-] as [[number, number], [number, number]];
-
 const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
   useSetPageAndDisableLoading(setPage, setLoading);
 
@@ -108,8 +98,7 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
     if (mapType === MapType.USA)
       setHoveredPlaceName(event.features?.[0]?.properties?.state_name ?? " ");
     if (mapType === MapType.World) {
-      console.log(event.features?.[0]);
-      console.log(mapRef.current?.getStyle().layers);
+      setHoveredPlaceName(event.features?.[0]?.properties?.ISO_A3 ?? " ");
     }
   }, []);
 
@@ -162,43 +151,17 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
         minZoom={0}
         onMouseMove={onHover}
         interactiveLayerIds={[
-          mapType === MapType.USA ? STATE_FILL_LAYER_ID : "",
+          mapType === MapType.USA ? STATE_FILL_LAYER_ID : COUNTRY_FILL_LAYER_ID,
         ]}
         onClick={onClick}
       >
-        <UsaMapLayer hoveredPlaceName={hoveredPlaceName} />
+        {mapType === MapType.USA && (
+          <UsaMapLayer hoveredPlaceName={hoveredPlaceName} />
+        )}
+        {mapType === MapType.World && (
+          <WorldMapLayer hoveredPlaceName={hoveredPlaceName} />
+        )}
 
-        {/* This source provides country shapes and their ISO codes */}
-
-        {
-          // <Source
-          //   id="country-borders"
-          //   type="vector"
-          //   url="mapbox://nicoletalus.3a8qy0w1"
-          // />
-        }
-
-        {
-          // <Source
-          //   id="country-borders"
-          //   type="vector"
-          //   url="mapbox://ryan-talus.2o1iyjoj"
-          // >
-        }
-        {/* This layer paints all colors including grey background color */}
-        {
-          // <Layer
-          //   key={outlineLayer.id}
-          //   {...outlineLayer}
-          //   filter={["==", "ISO_A3", hoveredISO]}
-          // />
-        }
-        {
-          // <Layer key={countryLayer.id} {...countryLayer} />
-        }
-        {
-          // </Source>
-        }
         {
           // <NavigationControl position="top-left" showCompass={false} />
           // {popupState && <MapPopup popupState={popupState} mapType={mapType} />}
@@ -221,6 +184,7 @@ const PolicyCoverage = ({ setPage, setLoading }: PolicyCoverageProps) => {
         </MapSwitcherLabel>
         <MapSwitcherLabel>
           <input
+            defaultChecked
             type="radio"
             name="mapType"
             value={MapType.World}
