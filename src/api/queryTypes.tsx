@@ -111,7 +111,7 @@ export type VersionRecord = {
   /**
    * Last of map types for which the data are applicable.
    */
-  map_types: (MapId | "all")[];
+  // map_types: (MapId | "all")[];
 };
 
 export type OptionSetRecord = {

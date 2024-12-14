@@ -54,7 +54,7 @@ const Nav = ({ page }) => {
         <div
           data-page={page}
           className={classNames(styles.navWrapper, {
-            [styles.wide]: page === "policymaps",
+            [styles.wide]: ["policymaps", "policycoverage"].includes(page),
             [styles.showMobileMenu]: showMobileMenu,
           })}
         >
@@ -90,7 +90,9 @@ const Nav = ({ page }) => {
                   <span
                     className={classNames(
                       dropdownMenuClasses,
-                      page === "policymaps" ? styles.active : ""
+                      ["policymaps", "policycoverage"].includes(page)
+                        ? styles.active
+                        : ""
                     )}
                   >
                     Map
@@ -101,7 +103,8 @@ const Nav = ({ page }) => {
                         setShowMobileMenu(false);
                       }}
                       className={
-                        page === "policymaps" && curMapId === "global"
+                        ["policymaps", "policycoverage"].includes(page) &&
+                        curMapId === "global"
                           ? styles.active
                           : ""
                       }
@@ -120,7 +123,7 @@ const Nav = ({ page }) => {
                         setShowMobileMenu(false);
                       }}
                       className={
-                        page === "policymaps" &&
+                        ["policymaps", "policycoverage"].includes(page) &&
                         curMapId !== undefined &&
                         curMapId.startsWith("us")
                           ? styles.active

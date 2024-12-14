@@ -16,7 +16,7 @@ import { Footer } from "./components/layout";
 // views
 import Data from "./components/views/data/Data";
 import { DataPageType } from "components/views/data/types";
-import Map from "./components/views/map/Map";
+// import Map from "./components/views/map/Map";
 import About from "./components/views/about/About.js";
 import Contact from "./components/views/contact/Contact.js";
 import PolicyModel from "./components/views/PolicyModel/PolicyModel/PolicyModel";
@@ -40,6 +40,7 @@ import { AmpPage } from "types";
 import { Filters } from "components/common/MapboxMap/plugins/mapTypes";
 import { BrowserProvider } from "components/misc/Util";
 import MobileDisclaimer from "components/common/MobileDisclaimer/MobileDisclaimer";
+import PolicyCoverage from "components/views/PolicyCoverage/PolicyCoverage";
 
 //: React.FC
 const App = () => {
@@ -208,19 +209,36 @@ const App = () => {
                     />
                   }
                   {
-                    // Map page
+                    // // Map page
+                    // <Route
+                    //   exact
+                    //   path="/policymaps"
+                    //   render={() => {
+                    //     return (
+                    //       <Map
+                    //         {...{
+                    //           versions,
+                    //           setPage,
+                    //           loading,
+                    //           setLoading,
+                    //           setInfoTooltipContent,
+                    //         }}
+                    //       />
+                    //     );
+                    //   }}
+                    // />
+                  }
+                  {
+                    // policy coverage page
                     <Route
                       exact
-                      path="/policymaps"
+                      path="/policycoverage"
                       render={() => {
                         return (
-                          <Map
+                          <PolicyCoverage
                             {...{
-                              versions,
                               setPage,
-                              loading,
                               setLoading,
-                              setInfoTooltipContent,
                             }}
                           />
                         );
@@ -311,7 +329,9 @@ const App = () => {
             </Switch>
             {!pageIsResponsive && <MobileDisclaimer />}
             {(!pageIsResponsive ||
-              (page !== "policymaps" && page !== "landing")) && (
+              (page !== "policymaps" &&
+                page !== "landing" &&
+                page !== "policycoverage")) && (
               <Footer {...{ page, versions }} />
             )}
             {

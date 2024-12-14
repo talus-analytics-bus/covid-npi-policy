@@ -73,6 +73,8 @@ const LocationSearch: FC<SearchProps> = ({
     getPlaces();
   }, []);
 
+  console.log(places);
+
   let fuse;
   if (places) {
     const options: Fuse.FuseOptions<PlaceRecord> = {

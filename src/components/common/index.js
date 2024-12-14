@@ -6,7 +6,7 @@ import Table from "./Table/Table";
 import Filter from "./Filter/Filter.js";
 import FilterSet from "./FilterSet/FilterSet.js";
 import ShowMore from "./ShowMore/ShowMore.js";
-import MapboxMap from "./MapboxMap/MapboxMap.tsx";
+// import MapboxMap from "./MapboxMap/MapboxMap.tsx";
 import Legend from "./Legend/Legend.js";
 import InfoTooltip from "./InfoTooltip/InfoTooltip";
 import DateSlider from "./DateSlider/DateSlider.js";
@@ -30,7 +30,7 @@ export {
   Filter,
   FilterSet,
   ShowMore,
-  MapboxMap,
+  // MapboxMap,
   Legend,
   InfoTooltip,
   DateSlider,

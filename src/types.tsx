@@ -11,5 +11,6 @@ export type AmpPage =
   | "data"
   | "landing"
   | "policymaps"
+  | "policycoverage"
   | "model"
   | "policy";
